@@ -399,8 +399,10 @@ def test_how_it_works_is_four_photo_cards_of_the_examples_real_output(tmp_path):
         or s.startswith("/static/twin/qwen__basil__")
         for s in srcs
     )
-    # the credits page, not "#made-with" right under it, where the tap moved nothing (21 Oct)
-    assert '<a href="/credits">What it\'s made with</a>' in how and "#made-with" not in how
+    # no link at all (21 Oct, Kash: "do we even need the link to go to a separate page? We
+    # already have that info below"): Made with is the next section, and the nav has About
+    pill = how.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
+    assert pill == "Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory"
     assert "Forest and Kim Starr" in _credits(home)
 
 

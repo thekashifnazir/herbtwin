@@ -24,7 +24,7 @@ import httpx
 from herbtwin.config import Settings
 from herbtwin.search import TIMEOUT_S as SEARCH_TIMEOUT_S
 from herbtwin.search import SearchFailed, Tavily, is_trusted
-from herbtwin.stages.web_how import names_a_chemical
+from herbtwin.stages.web_how import PEST_PRODUCTS, names_a_chemical
 
 log = logging.getLogger(__name__)
 
@@ -91,16 +91,15 @@ _NEVER = re.compile(
     # what a pest, weed or disease product is called, and the brands sold that way (#338
     # review: "Bug Clear Ultra", "Resolva", "Roundup" passed the chemical words)
     r"slugs?|snails?|weeds?|pests?|insects?|bugs?|aphids?|fung\w*|mould|mildew|"
-    r"bug clear|rose clear|resolva|roundup|weedol|pathclear|provado|invigorator|doff|"
+    # and the brands sold that way, and pesticide actives that end in no "-cide" (#345
+    # review: "Derris powder"): web_how.PEST_PRODUCTS, shared with the main card's reason.
+    # Pyrethrum, the -thrins, sulphur, copper sulphate and Bordeaux are names_a_chemical's
+    rf"{PEST_PRODUCTS}|"
     # and what such a product is sold as (#338 integrator review: "vine weevil protection",
     # "Bayer protection", "Ant bait station")
-    r"provanto|bayer|weevils?|baits?|control|repel\w*|treatments?|\w+cides?|"
+    r"bayer|weevils?|baits?|control|repel\w*|treatments?|\w+cides?|"
     # a powder only as a pest product (bone meal powder and powder-coated trellis pass)
     r"ants?|(?:insect|dusting|pest|flea|louse|lice)\s+powders?|neem|"
-    # pesticide actives that end in no "-cide" (#345 review: "Derris powder"); pyrethrum,
-    # the -thrins, sulphur, copper sulphate and Bordeaux are web_how.names_a_chemical's
-    r"derris|rotenone|acetamiprid|imidacloprid|thiacloprid|metaldehyde|ferric phosphate|"
-    r"nicotine|glyphosate|glufosinate|diquat|paraquat|"
     # a wound paint after pruning: the RHS advises against them (#352 review)
     r"sealants?|(?:wound|pruning|tree) paints?)\b",
     re.I,

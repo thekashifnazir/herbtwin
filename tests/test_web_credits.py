@@ -19,32 +19,33 @@ AUTHORS = ["Johnathon Ridden", "Forest and Kim Starr", "Максим Шумск�
 
 
 def test_credits_page_names_every_author_with_source_and_licence(tmp_path):
+    # the credits are About's last section now (21 Oct); /credits lands on it
     page = _spot_client(tmp_path)[0].get("/credits")
-    assert page.status_code == 200
-    body = page.text.split("<h1>Credits and models</h1>", 1)[1]
+    assert page.status_code == 200 and page.url.path == "/about"
+    body = page.text.split('<section class="made-with about-credits" id="credits"', 1)[1]
     for author in AUTHORS:
         assert author in body, author
     for name, url in LICENCES.items():
         assert f'<a href="{url}" rel="noopener noreferrer">{name}</a>' in body, name
     assert "Qwen-Image-Edit" in body and "basil from Forest and Kim Starr's (CC BY 3.0 US)" in body
     assert "© UKRI" in body and "Open Government Licence" in body  # BGS, with the spot on
-    assert "Open-Meteo.com" in body and "NVIDIA Nemotron 3 Super" in body
+    models = page.text.split('id="made-with"', 1)[1].split("</section>", 1)[0]
+    assert "Open-Meteo.com" in body and '<div class="made-groups">' in models
+    assert "<strong>NVIDIA Nemotron 3 Super</strong>" in models
 
 
-def test_every_page_links_credits_from_its_footer(tmp_path):
+def test_every_page_links_about_and_credits_from_its_footer(tmp_path):
     c = _client(tmp_path, [], [])
-    for path in ("/", "/privacy", "/credits"):
+    for path in ("/", "/privacy", "/about"):
         foot = c.get(path).text.split('<footer class="foot">', 1)[1]
-        assert '<a href="/credits">Credits</a>' in foot, path
+        assert '<a href="/about">About</a>' in foot, path
+        assert '<a href="/about#credits">Credits</a>' in foot, path
 
 
 def test_each_image_group_on_home_links_to_the_credits_it_needs(tmp_path):
     home = _spot_client(tmp_path)[0].get("/").text
-    # "Photo credits" opens the fold; the pill's "What it's made with" opens the credits page
-    link = re.compile(
-        r'<a class="credits-link" href="#credits">Photo credits</a>'
-        r"|<a href=\"/credits\">What it's made with</a>"
-    )
+    # "Photo credits" by each group opens the fold (the pill's link went on 21 Oct)
+    link = re.compile(r'<a class="credits-link" href="#credits">Photo credits</a>')
     twin = home.split('<figure class="home-twin">', 1)[1].split("</figure>", 1)[0]
     how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
     samples = home.split('<div class="home-chips"', 1)[1].split('<fieldset class="home-where">', 1)[
@@ -86,7 +87,7 @@ def test_the_judge_picks_link_their_photo_credits(tmp_path):
     picks = page.split('<div class="judge-picks">', 1)[1].split("</form>", 1)[0]
     after = page.split('<div class="judge-picks">', 1)[1].split('id="judge-said"', 1)[0]
     assert "Forest and Kim Starr" not in picks  # the credit lines live in one place
-    assert '<a href="/credits">Photo credits</a>' in after
+    assert '<a href="/about#credits">Photo credits</a>' in after
 
 
 def test_credits_name_only_what_this_site_uses(tmp_path):
@@ -98,17 +99,18 @@ def test_credits_name_only_what_this_site_uses(tmp_path):
     assert "ElevenLabs" in str(macro(voice_on=True)) and "ElevenLabs" not in str(macro())
 
 
-def test_the_credits_page_has_its_own_headings_and_list_style(tmp_path):
+def test_the_about_page_has_its_own_headings_and_the_credits_open_last(tmp_path):
     from herbtwin.web import style
 
-    page = _client(tmp_path, [], []).get("/credits").text
+    page = _client(tmp_path, [], []).get("/about").text
     levels = [int(n) for n in re.findall(r"<h([1-6])\b", page)]
     assert levels[0] == 1 and all(b <= a + 1 for a, b in zip(levels, levels[1:], strict=False))
-    assert '<h2 id="made-with-h">Made with</h2>' in page and "<h3>Sample photos</h3>" in page
-    assert (
-        '<div class="credits-page">' in page
-        and '<details class="made-credits" id="credits" open>' in page
-    )
+    assert '<h2 id="made-with-h">The models, and what each does</h2>' in page
+    credits = page.split('<section class="made-with about-credits" id="credits"', 1)[1]
+    assert '<h2 id="credits-h">Credits</h2>' in credits and "<h3>Sample photos</h3>" in credits
+    assert "<details" not in credits  # open on About, never folded
+    assert "<section" not in credits  # the page's last section
+    assert page.count('id="credits"') == 1 and page.count('id="made-with"') == 1
     assert ".made-with .made-credits { padding: 0 16px 16px; }" in style.CSS
 
 

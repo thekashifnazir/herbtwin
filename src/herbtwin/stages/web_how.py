@@ -68,6 +68,51 @@ _FEED = re.compile(
 )
 
 
+# pest and weed products by brand or active ingredient, with no chemical word in them
+# ("Provado", "metaldehyde"): the shop links' _NEVER list (#338, #345), shared
+PEST_PRODUCTS = (
+    r"bug clear|rose clear|resolva|roundup|weedol|pathclear|provado|invigorator|doff|provanto|"
+    r"derris|rotenone|acetamiprid|imidacloprid|thiacloprid|metaldehyde|ferric phosphate|"
+    r"nicotine|glyphosate|glufosinate|diquat|paraquat"
+)
+# in advice text, also what such a product is called (Opus review of the advisor lines, 21
+# Oct: "slug pellets", "bug killer", "horticultural oil", "potassium bicarbonate" passed),
+# and the home-made sprays (soapy water, washing-up liquid, garlic or milk): no source of
+# ours backs one on an edible herb
+_PEST_PRODUCT = re.compile(
+    rf"\b(?:{PEST_PRODUCTS}|slug pellets?|\w*killers?|horticultural oils?|oil sprays?|"
+    r"(?:potassium |sodium )?bicarbonate(?: of soda)?|bicarb|baking[- ]soda|"
+    r"soap(?!\s+dish)\w*|washing[- ]up liquid|dish(?:washing)? (?:liquid|detergent)|detergents?|"
+    r"home[- ]?made (?:sprays?|mix\w*|remed\w*)|(?:garlic|chilli|chili|milk|vinegar) sprays?|"
+    r"vinegar|rubbing alcohol|methylated spirits?|surgical spirits?|baking powder|"
+    r"(?:bug|insect|pest|mildew|organic|natural|fungus|fungal) sprays?|"
+    # and what the integrator's review of #379 found: a washing-up liquid by brand, the
+    # biological controls (the answer never suggests a product for pests), household
+    # chemicals, and "a systemic" on its own
+    r"fairy(?: liquid)?|nemasys|nematodes?|biological controls?|predatory mites?|"
+    r"bacillus thuringiensis|bt|diatomaceous earth|sluggo|bleach|hydrogen peroxide|peroxide|"
+    r"systemics?|"
+    # pesticide actives with no "-cide" or "-thrin" in them (re-review of #379: malathion), and
+    # a feed sprayed on the leaves ("a foliar feed of Epsom salts spray")
+    r"malathion|chlorpyrifos|carbaryl|spinosad|abamectin|thiamethoxam|clothianidin|"
+    r"fipronil|tebuconazole|myclobutanil|mancozeb|chlorothalonil|captan|"
+    r"foliar (?:feeds?|sprays?)|epsom salts? sprays?)\b",
+    re.I,
+)
+# a kitchen cure only as a spray or a wash: "a garlic solution", "diluted milk", "one part
+# milk to nine parts water", "rapeseed oil" wiped on (review). Milk or oil alone is no spray
+_KITCHEN = re.compile(r"\b(?:garlic|chill?i|milk|oils?|alcohol|spirits?|vinegar)\b", re.I)
+_APPLIED = re.compile(
+    r"\b(?:spray\w*|solution|dilut\w*|mix\w*|wip\w*|wash\w*|dab\w*|brush\w*|parts?)\b", re.I
+)
+
+
+def names_a_pest_product(text: str) -> bool:
+    """True when advice text names a pest or weed product, by brand, active or kind, or a
+    home-made spray. Shared with the main card's reason (answer.py)."""
+    return bool(_PEST_PRODUCT.search(text)) or bool(_KITCHEN.search(text) and _APPLIED.search(text))
+
+
 def names_a_chemical(text: str) -> bool:
     """True when the text names a chemical treatment (a feed such as sulphate of potash is
     not one). Shared with the shop links (shops.py)."""

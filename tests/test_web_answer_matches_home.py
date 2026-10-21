@@ -34,7 +34,7 @@ def test_the_answer_names_who_decided_it_in_view(tmp_path):
     page = _render(_full_plan(tmp_path), advised_by="NVIDIA Nemotron 3 Super")
     line = (
         '<p class="decided-by">Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory · '
-        '<a href="/credits">What it\'s made with</a></p>'
+        '<a href="/about#made-with">What it\'s made with</a></p>'
     )
     assert line in page
     card = page.split('class="card main-action"', 1)[1].split("</section>", 1)[0]

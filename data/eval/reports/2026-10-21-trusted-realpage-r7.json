@@ -1,0 +1,1578 @@
+{
+ "prereg": "data/eval/prereg/2026-10-21-trusted-realpage-r7.md",
+ "frozen": "f961713f",
+ "scored_at": "2026-10-21T22:56:38.915683+00:00",
+ "items": 216,
+ "sentences": 100,
+ "negatives": 205,
+ "false_agrees": 4,
+ "false_agree_wilson95": [
+  0.0076,
+  0.0491
+ ],
+ "verdict": "FAIL",
+ "positives": 11,
+ "recall": 0.0,
+ "recall_wilson95": [
+  0.0,
+  0.2588
+ ],
+ "no_form": 1,
+ "latency_p50_s": 1.39,
+ "latency_p95_s": 2.12,
+ "spent_usd": 0.1356,
+ "false_agree_items": [
+  {
+   "id": 7035,
+   "sentence": "To encourage a fresh flush of tasty new leaves, cut the whole plant down to just above the base.",
+   "action": "prune"
+  },
+  {
+   "id": 7036,
+   "sentence": "To encourage a fresh flush of tasty new leaves, cut the whole plant down to just above the base.",
+   "action": "prune"
+  },
+  {
+   "id": 7103,
+   "sentence": "Save the trimmings to propagate new plants or dry them for cooking.",
+   "action": "prune"
+  },
+  {
+   "id": 7104,
+   "sentence": "Save the trimmings to propagate new plants or dry them for cooking.",
+   "action": "prune"
+  }
+ ],
+ "agree_ids": [
+  7035,
+  7036,
+  7103,
+  7104
+ ],
+ "by_half": {
+  "soil_known": {
+   "negatives": 101,
+   "false_agrees": 2,
+   "false_agree_wilson95": [
+    0.0054,
+    0.0693
+   ],
+   "positives": 7,
+   "recall": 0.0
+  },
+  "soil_not_known": {
+   "negatives": 104,
+   "false_agrees": 2,
+   "false_agree_wilson95": [
+    0.0053,
+    0.0674
+   ],
+   "positives": 4,
+   "recall": 0.0
+  }
+ },
+ "recall_target": 0.5,
+ "forms": {
+  "rosemary|Add crocks to the bottom of pots to aid drainage.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|Add enough water to keep the evenly moist.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "evenly moist"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|Allow at least a few extra weeks either way to take account of regional weather variations.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lemon balm|As lemon balm is a herbaceous , it naturally dies down over winter, so cut back the faded stems by early spring, before new growth appears.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "over winter"
+    },
+    {
+     "kind": "month_range",
+     "value": "early spring"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "before new growth appears"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tarragon|Basil is fussy \u2013 grow it in good light but avoid strong midday sun and water carefully.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "basil",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Basil thrives in rich, light, well-drained soils and prefers a sunny, sheltered position.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Bay is generally low maintenance, though it may need winter protection in colder regions.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "other",
+     "value": "colder regions"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "bay|Bay is often grown in containers, in which case it needs regular watering and feeding too.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Bay likes free-draining soil and a warm, sheltered site, especially in winter.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Bay trees are becoming increasingly popular as topiary, due to their resilience to regular pruning.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Because snails and slugs favor seedlings and plants with succulent foliage, you will need to vigilantly protect them.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "succulent foliage"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|Begin sprays before infection occurs to be effective.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "before infection occurs"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Best time to \u2018shape\u2019 the plant is in summer, after flowering when you can cut it back, but be careful about going into the older woody parts, unless you leave leaf buds it will not grow back.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    },
+    {
+     "kind": "other",
+     "value": "after flowering"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "woody"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "bay|Consider buying a topiary frame if you haven't tried the technique before and prune several times over the growing season for the best results.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "if you haven't tried the technique before"
+    },
+    {
+     "kind": "month_range",
+     "value": "over the growing season"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "garlic chives|Damaged areas dry up and give the foliage a scorched appearance.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "coriander|Destroy crop residue immediately after harvest.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "immediately after harvest"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Destroy crop residue immediately after harvest.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after harvest"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|Dig up the plant and bin it.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|Don't let the plants sit in water though, as this can cause the roots to rot.": {
+   "action": "withhold_water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "sit in water"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Don\u2019t prune sage in autumn as this many kill the plant.": {
+   "action": "prune",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|Drip irrigation instead of using sprinklers will keep your soils well drained and protect against diseases such as root rot.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "root rot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|For more water-saving tips, see our guides below.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|For water-saving tips, see our guides below.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tarragon|French tarragon usually requires some protection from wet UK winters.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winters"
+    },
+    {
+     "kind": "outdoor",
+     "value": "UK winters"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|Good coverage essential.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Grow thyme in well-drained soil in full sun.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "well-drained soil"
+    },
+    {
+     "kind": "other",
+     "value": "full sun"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "dill|Herbs with a more trailing form can be grown in hanging baskets.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "trailing herbs",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "trailing form"
+    },
+    {
+     "kind": "container",
+     "value": "hanging baskets"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "rosemary|Holes in leaves and tiny elongated eggs left by 8mm-long green beetles with purple stripes.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "8mm-long green beetles with purple stripes"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|How can I prune a giant bay tree?": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|However they rarely cause significant damage to the plants so it's best to leave them for natural predators to control, just remember to shake the foliage thoroughly after harvesting to ensure they don't end up in your kitchen, and wash leaves before eating them.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after harvesting"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|If any plant has basil downy mildew, remove and destroy the plant immediately.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "basil downy mildew"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|If leek rust is a problem, avoid growing leeks, garlic or onions in the same spot.": {
+   "action": "remove_plant",
+   "polarity": "dont",
+   "applies_to": "plant_group",
+   "group": "leeks, garlic or onions",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "leek rust"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "oregano|If the compost is too dry, the pot will be light, so water the plant sparingly in the morning (not at night as the water may freeze).": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "If the compost is too dry"
+    },
+    {
+     "kind": "container",
+     "value": "the pot"
+    },
+    {
+     "kind": "other",
+     "value": "in the morning (not at night as the water may freeze)"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|If the compost is too dry, the pot will be light, so water the plant sparingly in the morning (not at night as the water may freeze).": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "If the compost is too dry"
+    },
+    {
+     "kind": "container",
+     "value": "the pot"
+    },
+    {
+     "kind": "other",
+     "value": "in the morning (not at night as the water may freeze)"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|If you're growing your plant in a container, give it a weekly feed from March until May with liquid seaweed.": {
+   "action": "feed",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "container"
+    },
+    {
+     "kind": "month_range",
+     "value": "March until May"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|If you're worried, you could try growing pennyroyal, Mentha pulegium as a sacrificial crop, or simply remove beetles and larvae by hand and squish them.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "pennyroyal",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "beetles and larvae"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "rosemary|In cold winters, bring plants under cover for protection.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "In cold winters"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|In containers, the can dry out quickly, so check regularly over the summer \u2013 aim to keep the compost slightly moist but not saturated.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "month_range",
+     "value": "over the summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|In high-rainfall areas or during particularly wet winters, protect plants in the ground with cloches.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "during particularly wet winters"
+    },
+    {
+     "kind": "other",
+     "value": "In high-rainfall areas"
+    },
+    {
+     "kind": "container",
+     "value": "plants in the ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "dill|In hot, dry conditions, dill tends to flower prematurely (bolt), which limits further leaf growth, so additional watering is required during dry spells.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "In hot, dry conditions"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "during dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|In winter, excess rain can cause the roots to rot, so move plants in containers to a sheltered spot, such as in the rain-shadow of a wall.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "In winter"
+    },
+    {
+     "kind": "container",
+     "value": "plants in containers"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "bay|It can be clipped annually to maintain a neat, compact shape or pruned more heavily to reshape or reduce its size.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "bay|It's best to do this over two years as bay can be slow to bounce back \u2013 cut half the stems back in year one and the rest in year two.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "over two years"
+    },
+    {
+     "kind": "other",
+     "value": "year one"
+    },
+    {
+     "kind": "other",
+     "value": "year two"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|Keep rosemary plants well watered during dry spells and feed with a general fertiliser during the growing season.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "month_range",
+     "value": "growing season"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|Keep the root zone moist and take care not to overwater to the extent that soils are soggy.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_wet",
+     "value": "soils are soggy"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tarragon|Mediterranean herbs love lots of sun and good drainage.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "Mediterranean herbs",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|Move containers into a shaded spot during hot, sunny spells, to reduce the need for watering.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot, sunny spells"
+    },
+    {
+     "kind": "container",
+     "value": "containers"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|Move containers to a more sheltered spot over winter, such as near a building in a rain shadow.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "over winter"
+    },
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "outdoor",
+     "value": "plants grown outside"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "bay|Old plants can be rejuvenated by cutting them back hard in late spring.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "Old plants"
+    },
+    {
+     "kind": "month_range",
+     "value": "late spring"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|Old, faded stems can be cut back anytime from late autumn until spring, just before new shoots emerge.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late autumn until spring, just before new shoots emerge"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|Once established in the ground, they shouldn't need any additional watering \u2013 except during exceptionally prolonged dry spells.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "exceptionally prolonged dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|Once established, thyme won\u2019t need watering.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|Once it's infected plants, there's no cure so it's best to dispose of the plants.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "infected"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Only treatments suitable for edible plants (as described on the label) should be used.": null,
+  "thyme|Only treatments suitable for edible plants (as described on the label) should be used.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "suitable for edible plants (as described on the label)"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Parsnips, celery, parsley and celeriac also attract carrot fly, so avoid growing these crops near your carrots, as the fly will be able to detect them more easily and will also have an easy job to go from one crop to the next.": {
+   "action": "remove_plant",
+   "polarity": "dont",
+   "applies_to": "plant_group",
+   "group": "parsley, parsnips, celery, celeriac",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "avoid growing these crops near your carrots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|Pick off the adult beetles and larvae by hand and destroy.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "beetles and larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "coriander|Plants growing in containers dry out more rapidly than those in the ground, so check plants daily and water as needed, aiming to keep the just moist.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "container plants",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "other",
+     "value": "daily"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Plants in containers need particular attention, as the compost can dry out very quickly in warm weather, so check the compost regularly and aim to keep it evenly moist.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "plants in containers",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "warm weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|Proper watering is very important.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "coriander|Provide protection from slugs and snails, particularly in damp weather, and cover with cloches or biodegradable fleece if the weather is still cold.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    },
+    {
+     "kind": "other",
+     "value": "particularly in damp weather"
+    },
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "if the weather is still cold"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Providing well-drained soil and good air circulation will reduce the possibility of pests and foliar diseases.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Prune bay in summer with secateurs.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "coriander|Remove infested culls and weedy species around fields that may harbor the aphid between crops.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphid"
+    },
+    {
+     "kind": "outdoor",
+     "value": "fields"
+    },
+    {
+     "kind": "other",
+     "value": "between crops"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Remove infested culls and weedy species around fields that may harbor the aphid between crops.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphid"
+    },
+    {
+     "kind": "outdoor",
+     "value": "fields"
+    },
+    {
+     "kind": "other",
+     "value": "between crops"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tarragon|Remove what remains of the previous year's growth in spring, cutting it back to the lowest new shoots near the base.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "lowest new shoots near the base"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "dill|Repot herbs when roots grow through the drainage hole.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "when roots grow through the drainage hole"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|Requires a sunny sheltered position if grown outdoors.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "outdoor",
+     "value": "grown outdoors"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|Rosemary requires little maintenance during the year except cutting back after flowering to prevent plants becoming straggly and woody.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Sage is drought tolerant once established and shouldn\u2019t need additional watering when growing in the ground.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|Save the trimmings to propagate new plants or dry them for cooking.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "oregano|Some potential insect pests include leaf miners, thrips, and cutworms.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|Take a few leafy stems from the outside of a plant, snipping them near the base with scissors or secateurs.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "coriander|Take care not to overwater, as coriander dislikes soggy conditions.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "not to overwater"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tarragon|Tarragon, especially French tarragon, is generally considered a short-lived , so divide plants every few years or take to ensure you always have young, productive plants.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "short-lived"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|The RHS believes that avoiding pests, diseases and weeds by good practice in cultivation methods, selection, and encouraging or introducing natural enemies, should be the first line of control.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|The crop includes some winter herbs; parsley, chervil and coriander can all see the winter through with a little protection in a greenhouse or under a cloch.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "winter herbs",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "container",
+     "value": "greenhouse"
+    },
+    {
+     "kind": "other",
+     "value": "under a cloch"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "bay|The easiest way to deal with the problem is to simply remove the leaves.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "bay|The insect causes damage on numerous hosts including almond, apple, apricot, aspen, bay, citrus, cottonwood, coyote brush, fig, fuchsia, grape, holly, maple, oleander, olive, palm, peppertree, pistachio, plum, pomegranate, poplar, privet, prune, rose, and strawberry tree.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|The pathogen that causes downy mildew is not a true fungus but a water mold.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|This basil plant is a tender perennial so will need protection over winter.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "over winter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Three rows of drip irrigation laid down on bare soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Thyme is drought tolerant and rarely needs watering, except when newly planted or when growing in containers in hot, dry weather.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "newly planted"
+    },
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot, dry weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lemon balm|To encourage a fresh flush of tasty new leaves, cut the whole plant down to just above the base.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|To extend the harvesting period, pot up a clump and bring it indoors over winter, keeping it on a sunny windowsill.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "over winter"
+    },
+    {
+     "kind": "indoor",
+     "value": "on a sunny windowsill"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|To grow well, parsley needs moist but not soil or , so you may need to water young plants to help them establish, and during hot, dry spells in summer.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young plants"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot, dry spells in summer"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "basil|To prolong the leafy harvests, remove any flowers that start to form.": {
+   "action": "deadhead",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "flowers that start to form"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|Too much water is more likely to be a problem \u2013 the roots will rot in damp conditions, especially in winter, so be sure to choose a planting spot with free-draining soil.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "soil_wet",
+     "value": "damp conditions"
+    },
+    {
+     "kind": "other",
+     "value": "free-draining soil"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|Trimming creeping thyme.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "coriander|Try to water early in the morning or in the evening to minimise moisture loss from the soil/compost, ideally using stored rainwater.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "early in the morning or in the evening"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|Water newly planted chives during dry spells in their first summer.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "newly planted"
+    },
+    {
+     "kind": "month_range",
+     "value": "first summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Water newly planted sage during dry spells in the first year after planting.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "newly planted"
+    },
+    {
+     "kind": "month_range",
+     "value": "first year after planting"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|Water regularly but avoid overwatering, as seedlings are prone to fungal diseases such as damping off.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "oregano|Wet conditions kill more herbs in winter than the cold, so place container-grown perennials such as oregano, thyme, sage and rosemary in a sheltered position against a wall or the side of the house or garage.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "container-grown perennials",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "container-grown"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "perennials"
+    },
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "other",
+     "value": "Wet conditions"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|Wet conditions kill more herbs in winter than the cold, so place container-grown perennials such as oregano, thyme, sage and rosemary in a sheltered position against a wall or the side of the house or garage.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "container-grown perennials",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "perennials"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|What can be done to avoid it?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|When grown as a culinary herb, it's usually treated as an annual and discarded after its first year.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "grown as a culinary herb"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "after its first year"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|When mint finishes flowering, cut the whole plant down to about 5cm (2in) from the base.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "When mint finishes flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|When the seedlings have several leaves, move them into their own 7.5cm (3in) pot of peat-free multi-purpose or plant several in a larger pot, 7.5cm (3in) apart.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "have several leaves"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|You can reduce watering by moving pots to a shadier spot in hot weather.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot weather"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  }
+ }
+}

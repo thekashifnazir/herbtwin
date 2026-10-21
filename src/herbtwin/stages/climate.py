@@ -13,6 +13,7 @@ from datetime import date
 import httpx
 
 from herbtwin.bng import cell_of
+from herbtwin.http_retry import get_with_one_retry
 
 ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
 FIRST_WINTER, WINTERS = 1991, 30
@@ -56,7 +57,7 @@ def typical_coldest_night(lat: float, lon: float, *, client: httpx.Client | None
     own = client is None
     client = client or httpx.Client(timeout=20)
     try:
-        resp = client.get(ARCHIVE_URL, params=params)
+        resp = get_with_one_retry(client, ARCHIVE_URL, params=params, what="open-meteo archive")
     except httpx.HTTPError as e:
         raise ClimateError(f"climate archive request failed: {e}") from e
     finally:

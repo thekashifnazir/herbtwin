@@ -58,9 +58,9 @@ involves in plain words.</p>
     postcode, Tavily gets that town's name, to find pages that list gardeners there.</li>
   <li><strong>Google Maps</strong> gets the town you typed only if you tap "Find garden
     centres near" under an answer: it opens a map search in a new tab. We send it nothing.</li>
-  <li><strong>ElevenLabs</strong> turns the answer into speech when you press "Hear it from
+  {% if voice_on %}<li><strong>ElevenLabs</strong> turns the answer into speech when you press "Hear it from
     your plant". It gets only the words the plant says: no photo, location or account
-    details, and never your voice.</li>
+    details, and never your voice.</li>{% endif %}
   <li><strong>Cloudflare</strong> and <strong>Google Cloud</strong> carry and run the site.</li>
   <li><strong>Nebius AI Cloud</strong> runs the daily reminder job: for each reminder due,
     it reads your sign-in email address, the plant's name and the action from Supabase and

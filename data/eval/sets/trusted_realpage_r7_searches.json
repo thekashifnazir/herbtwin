@@ -1,0 +1,405 @@
+{
+ "basil winter protection": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil",
+  "sentences": [
+   "This basil plant is a tender perennial so will need protection over winter.",
+   "Don't let the plants sit in water though, as this can cause the roots to rot."
+  ]
+ },
+ "mint cutting back": {
+  "url": "https://www.rhs.org.uk/herbs/mint/grow-your-own",
+  "sentences": [
+   "When mint finishes flowering, cut the whole plant down to about 5cm (2in) from the base.",
+   "Old, faded stems can be cut back anytime from late autumn until spring, just before new shoots emerge."
+  ]
+ },
+ "rosemary overwatering": {
+  "url": "https://www.gardenersworld.com/news/cold-snap-warning-practical-tips-to-rescue-vulnerable-herbs",
+  "sentences": [
+   "Wet conditions kill more herbs in winter than the cold, so place container-grown perennials such as oregano, thyme, sage and rosemary in a sheltered position against a wall or the side of the house or garage.",
+   "If the compost is too dry, the pot will be light, so water the plant sparingly in the morning (not at night as the water may freeze)."
+  ]
+ },
+ "sage cutting back": {
+  "url": "https://herbsociety.org.uk/sage-advice",
+  "sentences": [
+   "Best time to \u2018shape\u2019 the plant is in summer, after flowering when you can cut it back, but be careful about going into the older woody parts, unless you leave leaf buds it will not grow back.",
+   "Don\u2019t prune sage in autumn as this many kill the plant."
+  ]
+ },
+ "thyme overwatering": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/creeping-thyme",
+  "sentences": [
+   "Trimming creeping thyme."
+  ]
+ },
+ "parsley watering": {
+  "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+  "sentences": [
+   "To grow well, parsley needs moist but not soil or , so you may need to water young plants to help them establish, and during hot, dry spells in summer.",
+   "Plants in containers need particular attention, as the compost can dry out very quickly in warm weather, so check the compost regularly and aim to keep it evenly moist.",
+   "Move containers into a shaded spot during hot, sunny spells, to reduce the need for watering.",
+   "For more water-saving tips, see our guides below."
+  ]
+ },
+ "chives cutting back": {
+  "url": "https://www.rhs.org.uk/herbs/chives/grow-your-own",
+  "sentences": [
+   "To extend the harvesting period, pot up a clump and bring it indoors over winter, keeping it on a sunny windowsill."
+  ]
+ },
+ "coriander winter protection": {
+  "url": "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+  "sentences": [
+   "Provide protection from slugs and snails, particularly in damp weather, and cover with cloches or biodegradable fleece if the weather is still cold."
+  ]
+ },
+ "oregano cutting back": null,
+ "tarragon winter protection": {
+  "url": "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+  "sentences": [
+   "French tarragon usually requires some protection from wet UK winters.",
+   "Tarragon, especially French tarragon, is generally considered a short-lived , so divide plants every few years or take to ensure you always have young, productive plants."
+  ]
+ },
+ "lemon balm cutting back": {
+  "url": "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+  "sentences": [
+   "To encourage a fresh flush of tasty new leaves, cut the whole plant down to just above the base.",
+   "As lemon balm is a herbaceous , it naturally dies down over winter, so cut back the faded stems by early spring, before new growth appears."
+  ]
+ },
+ "bay winter protection": {
+  "url": "https://www.rhs.org.uk/herbs/bay/grow-your-own",
+  "sentences": [
+   "Bay is generally low maintenance, though it may need winter protection in colder regions.",
+   "It can be clipped annually to maintain a neat, compact shape or pruned more heavily to reshape or reduce its size.",
+   "Bay is often grown in containers, in which case it needs regular watering and feeding too.",
+   "Bay likes free-draining soil and a warm, sheltered site, especially in winter."
+  ]
+ },
+ "dill watering": {
+  "url": "https://www.rhs.org.uk/herbs/dill/grow-your-own",
+  "sentences": [
+   "In hot, dry conditions, dill tends to flower prematurely (bolt), which limits further leaf growth, so additional watering is required during dry spells."
+  ]
+ },
+ "garlic chives watering": null,
+ "basil basil downy mildew control": {
+  "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/basil-downy-mildew",
+  "sentences": [
+   "The pathogen that causes downy mildew is not a true fungus but a water mold.",
+   "Begin sprays before infection occurs to be effective.",
+   "If any plant has basil downy mildew, remove and destroy the plant immediately."
+  ]
+ },
+ "mint mint rust control": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-mint",
+  "sentences": [
+   "Dig up the plant and bin it."
+  ]
+ },
+ "rosemary rosemary beetle control": {
+  "url": "https://www.gardenersworld.com/how-to/solve-problems/rosemary-beetle",
+  "sentences": [
+   "Holes in leaves and tiny elongated eggs left by 8mm-long green beetles with purple stripes.",
+   "Pick off the adult beetles and larvae by hand and destroy."
+  ]
+ },
+ "sage powdery mildew control": {
+  "url": "https://plants.ces.ncsu.edu/plants/salvia-officinalis",
+  "sentences": [
+   "Providing well-drained soil and good air circulation will reduce the possibility of pests and foliar diseases."
+  ]
+ },
+ "parsley aphids control": {
+  "url": "https://ipm.ucanr.edu/pdf/pmg/pmgcilantroparsley.pdf",
+  "sentences": [
+   "Remove infested culls and weedy species around fields that may harbor the aphid between crops.",
+   "Destroy crop residue immediately after harvest."
+  ]
+ },
+ "chives leek rust control": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-chives",
+  "sentences": [
+   "Once it's infected plants, there's no cure so it's best to dispose of the plants.",
+   "If leek rust is a problem, avoid growing leeks, garlic or onions in the same spot."
+  ]
+ },
+ "thyme root rot control": {
+  "url": "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+  "sentences": [
+   "In high-rainfall areas or during particularly wet winters, protect plants in the ground with cloches.",
+   "Move containers to a more sheltered spot over winter, such as near a building in a rain shadow."
+  ]
+ },
+ "oregano mint rust control": {
+  "url": "https://extension.psu.edu/herb-garden-plants-oregano",
+  "sentences": [
+   "Some potential insect pests include leaf miners, thrips, and cutworms."
+  ]
+ },
+ "lemon balm powdery mildew control": {
+  "url": "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+  "sentences": []
+ },
+ "bay bay sucker control": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/bay-grow-guide",
+  "sentences": [
+   "The easiest way to deal with the problem is to simply remove the leaves."
+  ]
+ },
+ "basil grey mould control": {
+  "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/basil-downy-mildew",
+  "sentences": [
+   "The pathogen that causes downy mildew is not a true fungus but a water mold.",
+   "Begin sprays before infection occurs to be effective.",
+   "If any plant has basil downy mildew, remove and destroy the plant immediately."
+  ]
+ },
+ "mint blue mint beetle control": {
+  "url": "https://www.gardenersworld.com/how-to/solve-problems/mint-leaf-beetle",
+  "sentences": [
+   "If you're worried, you could try growing pennyroyal, Mentha pulegium as a sacrificial crop, or simply remove beetles and larvae by hand and squish them."
+  ]
+ },
+ "coriander aphids control": {
+  "url": "https://ipm.ucanr.edu/pdf/pmg/pmgcilantroparsley.pdf",
+  "sentences": [
+   "Remove infested culls and weedy species around fields that may harbor the aphid between crops.",
+   "Destroy crop residue immediately after harvest."
+  ]
+ },
+ "tarragon rust control": null,
+ "basil sunny position": {
+  "url": "https://pfaf.org/user/Plant.aspx?LatinName=Ocimum+basilicum",
+  "sentences": [
+   "Basil thrives in rich, light, well-drained soils and prefers a sunny, sheltered position.",
+   "Requires a sunny sheltered position if grown outdoors."
+  ]
+ },
+ "mint watering": {
+  "url": "https://www.rhs.org.uk/herbs/mint/grow-your-own",
+  "sentences": [
+   "Add enough water to keep the evenly moist.",
+   "You can reduce watering by moving pots to a shadier spot in hot weather.",
+   "For water-saving tips, see our guides below."
+  ]
+ },
+ "rosemary cutting back": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+  "sentences": [
+   "Rosemary requires little maintenance during the year except cutting back after flowering to prevent plants becoming straggly and woody.",
+   "Save the trimmings to propagate new plants or dry them for cooking.",
+   "Add crocks to the bottom of pots to aid drainage.",
+   "Keep rosemary plants well watered during dry spells and feed with a general fertiliser during the growing season.",
+   "In cold winters, bring plants under cover for protection."
+  ]
+ },
+ "sage overwatering": {
+  "url": "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+  "sentences": [
+   "Water newly planted sage during dry spells in the first year after planting.",
+   "Sage is drought tolerant once established and shouldn\u2019t need additional watering when growing in the ground.",
+   "In containers, the can dry out quickly, so check regularly over the summer \u2013 aim to keep the compost slightly moist but not saturated.",
+   "In winter, excess rain can cause the roots to rot, so move plants in containers to a sheltered spot, such as in the rain-shadow of a wall."
+  ]
+ },
+ "thyme cutting back": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-thyme",
+  "sentences": [
+   "Once established, thyme won\u2019t need watering.",
+   "If you're growing your plant in a container, give it a weekly feed from March until May with liquid seaweed.",
+   "Grow thyme in well-drained soil in full sun."
+  ]
+ },
+ "parsley winter protection": {
+  "url": "https://stories.rbge.org.uk/archives/383",
+  "sentences": [
+   "The crop includes some winter herbs; parsley, chervil and coriander can all see the winter through with a little protection in a greenhouse or under a cloch."
+  ]
+ },
+ "chives watering": {
+  "url": "https://www.rhs.org.uk/herbs/chives/grow-your-own",
+  "sentences": [
+   "Water newly planted chives during dry spells in their first summer.",
+   "Once established in the ground, they shouldn't need any additional watering \u2013 except during exceptionally prolonged dry spells."
+  ]
+ },
+ "coriander watering": {
+  "url": "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+  "sentences": [
+   "Plants growing in containers dry out more rapidly than those in the ground, so check plants daily and water as needed, aiming to keep the just moist.",
+   "Take care not to overwater, as coriander dislikes soggy conditions.",
+   "Try to water early in the morning or in the evening to minimise moisture loss from the soil/compost, ideally using stored rainwater."
+  ]
+ },
+ "oregano overwatering": {
+  "url": "https://www.gardenersworld.com/news/cold-snap-warning-practical-tips-to-rescue-vulnerable-herbs",
+  "sentences": [
+   "Wet conditions kill more herbs in winter than the cold, so place container-grown perennials such as oregano, thyme, sage and rosemary in a sheltered position against a wall or the side of the house or garage.",
+   "If the compost is too dry, the pot will be light, so water the plant sparingly in the morning (not at night as the water may freeze)."
+  ]
+ },
+ "tarragon cutting back": {
+  "url": "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+  "sentences": [
+   "Remove what remains of the previous year's growth in spring, cutting it back to the lowest new shoots near the base."
+  ]
+ },
+ "lemon balm overwatering": {
+  "url": "https://www.rhs.org.uk/about-us/pdfs/publications/the-garden/indices/the-garden-index-2011.pdf",
+  "sentences": []
+ },
+ "bay cutting back": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/bay-grow-guide",
+  "sentences": [
+   "Prune bay in summer with secateurs.",
+   "Old plants can be rejuvenated by cutting them back hard in late spring.",
+   "It's best to do this over two years as bay can be slow to bounce back \u2013 cut half the stems back in year one and the rest in year two.",
+   "Bay trees are becoming increasingly popular as topiary, due to their resilience to regular pruning.",
+   "Consider buying a topiary frame if you haven't tried the technique before and prune several times over the growing season for the best results.",
+   "How can I prune a giant bay tree?"
+  ]
+ },
+ "dill winter protection": {
+  "url": "https://extension.psu.edu/growing-herbs-indoors",
+  "sentences": [
+   "Repot herbs when roots grow through the drainage hole.",
+   "Herbs with a more trailing form can be grown in hanging baskets."
+  ]
+ },
+ "garlic chives cutting back": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/garlic-chives",
+  "sentences": []
+ },
+ "basil overwatering": {
+  "url": "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+  "sentences": [
+   "Water regularly but avoid overwatering, as seedlings are prone to fungal diseases such as damping off.",
+   "When the seedlings have several leaves, move them into their own 7.5cm (3in) pot of peat-free multi-purpose or plant several in a larger pot, 7.5cm (3in) apart."
+  ]
+ },
+ "mint overwatering": {
+  "url": "https://ipm.ucanr.edu/home-and-landscape/cultural-tips-for-growing-mint",
+  "sentences": [
+   "Proper watering is very important.",
+   "Drip irrigation instead of using sprinklers will keep your soils well drained and protect against diseases such as root rot.",
+   "Keep the root zone moist and take care not to overwater to the extent that soils are soggy.",
+   "Three rows of drip irrigation laid down on bare soil."
+  ]
+ },
+ "rosemary winter protection": {
+  "url": "https://www.gardenersworld.com/news/cold-snap-warning-practical-tips-to-rescue-vulnerable-herbs",
+  "sentences": [
+   "Wet conditions kill more herbs in winter than the cold, so place container-grown perennials such as oregano, thyme, sage and rosemary in a sheltered position against a wall or the side of the house or garage."
+  ]
+ },
+ "sage watering": {
+  "url": "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+  "sentences": [
+   "Water newly planted sage during dry spells in the first year after planting.",
+   "Sage is drought tolerant once established and shouldn\u2019t need additional watering when growing in the ground.",
+   "In containers, the can dry out quickly, so check regularly over the summer \u2013 aim to keep the compost slightly moist but not saturated.",
+   "In winter, excess rain can cause the roots to rot, so move plants in containers to a sheltered spot, such as in the rain-shadow of a wall."
+  ]
+ },
+ "thyme watering": {
+  "url": "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+  "sentences": [
+   "Thyme is drought tolerant and rarely needs watering, except when newly planted or when growing in containers in hot, dry weather.",
+   "Too much water is more likely to be a problem \u2013 the roots will rot in damp conditions, especially in winter, so be sure to choose a planting spot with free-draining soil."
+  ]
+ },
+ "parsley cutting back": {
+  "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+  "sentences": [
+   "Take a few leafy stems from the outside of a plant, snipping them near the base with scissors or secateurs.",
+   "When grown as a culinary herb, it's usually treated as an annual and discarded after its first year."
+  ]
+ },
+ "basil aphids control": {
+  "url": "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+  "sentences": [
+   "To prolong the leafy harvests, remove any flowers that start to form."
+  ]
+ },
+ "mint powdery mildew control": {
+  "url": "https://www.rhs.org.uk/disease/mint-rust",
+  "sentences": [
+   "The RHS believes that avoiding pests, diseases and weeds by good practice in cultivation methods, selection, and encouraging or introducing natural enemies, should be the first line of control."
+  ]
+ },
+ "rosemary scale insects control": {
+  "url": "https://ipm.ucanr.edu/pdf/misc/some_organic_pesticides_mg_handout.pdf",
+  "sentences": [
+   "Good coverage essential."
+  ]
+ },
+ "parsley carrot fly control": {
+  "url": "https://www.gardenersworld.com/plants/10-ways-to-avoid-carrot-root-fly",
+  "sentences": [
+   "Parsnips, celery, parsley and celeriac also attract carrot fly, so avoid growing these crops near your carrots, as the fly will be able to detect them more easily and will also have an easy job to go from one crop to the next."
+  ]
+ },
+ "chives allium leaf miner control": {
+  "url": "https://www.gardenorganic.org.uk/news/take-part-in-our-allium-leaf-miner-survey",
+  "sentences": [
+   "What can be done to avoid it?",
+   "Allow at least a few extra weeks either way to take account of regional weather variations."
+  ]
+ },
+ "bay scale insects control": {
+  "url": "https://ipm.ucanr.edu/home-and-landscape/black-scale",
+  "sentences": [
+   "The insect causes damage on numerous hosts including almond, apple, apricot, aspen, bay, citrus, cottonwood, coyote brush, fig, fuchsia, grape, holly, maple, oleander, olive, palm, peppertree, pistachio, plum, pomegranate, poplar, privet, prune, rose, and strawberry tree."
+  ]
+ },
+ "dill aphids control": {
+  "url": "https://extension.psu.edu/herbs-make-good-plant-partners-and-companions",
+  "sentences": []
+ },
+ "garlic chives leek rust control": {
+  "url": "https://www.rhs.org.uk/biodiversity/allium-leaf-miner",
+  "sentences": [
+   "Damaged areas dry up and give the foliage a scorched appearance."
+  ]
+ },
+ "tarragon powdery mildew control": {
+  "url": "https://www.gardenersworld.com/plants/five-ways-to-keep-herbs-productive",
+  "sentences": [
+   "Mediterranean herbs love lots of sun and good drainage.",
+   "Basil is fussy \u2013 grow it in good light but avoid strong midday sun and water carefully."
+  ]
+ },
+ "thyme rosemary beetle control": {
+  "url": "https://www.rhs.org.uk/propagation/propagating-herbs",
+  "sentences": [
+   "Only treatments suitable for edible plants (as described on the label) should be used."
+  ]
+ },
+ "sage rosemary beetle control": {
+  "url": "https://www.rhs.org.uk/propagation/propagating-herbs",
+  "sentences": [
+   "Only treatments suitable for edible plants (as described on the label) should be used."
+  ]
+ },
+ "lemon balm sage and ligurian leafhoppers control": {
+  "url": "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+  "sentences": []
+ },
+ "oregano powdery mildew control": null,
+ "coriander slugs and snails control": null,
+ "basil slugs and snails control": {
+  "url": "https://ipm.ucanr.edu/home-and-landscape/snails-and-slugs",
+  "sentences": [
+   "Because snails and slugs favor seedlings and plants with succulent foliage, you will need to vigilantly protect them."
+  ]
+ },
+ "mint aphids control": {
+  "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-mint",
+  "sentences": [
+   "However they rarely cause significant damage to the plants so it's best to leave them for natural predators to control, just remember to shake the foliage thoroughly after harvesting to ensure they don't end up in your kitchen, and wash leaves before eating them."
+  ]
+ }
+}

@@ -22,6 +22,7 @@ from typing import Literal
 import httpx
 from PIL import Image, ImageOps
 
+from herbtwin.http_retry import get_with_one_retry
 from herbtwin.light import ExposureTags
 from herbtwin.schemas import Location
 
@@ -241,7 +242,7 @@ def geocode(place: str, *, client: httpx.Client | None = None) -> Location:
     params = {"name": place.strip(), "count": 1, "language": "en", "format": "json"}
     client = client or httpx.Client(timeout=10)
     try:
-        resp = client.get(GEOCODE_URL, params=params)
+        resp = get_with_one_retry(client, GEOCODE_URL, params=params, what="open-meteo geocoding")
     except httpx.HTTPError as e:
         raise GeocodeError(f"place lookup failed for {place!r}: {e}") from e
     finally:

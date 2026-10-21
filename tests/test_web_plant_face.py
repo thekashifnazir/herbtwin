@@ -44,9 +44,22 @@ def test_the_face_beside_the_voice_wears_the_answers_mood(tmp_path):
         assert 'aria-hidden="true"' in voice.split("<svg", 1)[1].split(">", 1)[0]
 
 
-def test_no_voice_no_face(tmp_path):
-    page = _page(_unsure_record(tmp_path), voice=False)
-    assert 'id="voice"' not in page
+def test_with_the_voice_off_the_face_stays_on_its_own_in_the_answers_mood(tmp_path):
+    # 21 Oct: the voice went (Kash: "yeah let's get rid then"); the faces stay
+    for action, mood in (("leave_normal", "content"), ("shelter", "cold"), ("water", "dry"),
+                         ("prune", "trim"), ("treat_or_remove", "poorly"),
+                         ("ask_first", "unsure")):  # fmt: skip
+        (tmp_path / action).mkdir()
+        page = _page(_with_main(tmp_path, action), voice=False)
+        assert 'id="voice"' not in page and 'class="hear"' not in page
+        assert _mood(page, '<p class="plant-mood" id="plant-mood">') == mood, action
+        face = page.split('<p class="plant-mood" id="plant-mood">', 1)[1].split("</p>", 1)[0]
+        assert 'aria-hidden="true"' in face.split(">", 1)[0]  # decoration: the answer says it
+        assert "<button" not in face and "<a " not in face  # no new button
+        card = page.split('class="card main-action"', 1)[1].split("</section>", 1)[0]
+        assert 'id="plant-mood"' in card  # in the main card, where the voice was
+        assert len(re.findall(r'class="[^"]*\bprimary\b', card)) <= 1
+    assert ".answer-page .voice .face, .answer-page .plant-mood .face { width: 48px;" in style.CSS
 
 
 def test_i_did_it_gives_a_real_action_an_ending(tmp_path):
@@ -207,7 +220,7 @@ def test_the_face_is_big_enough_to_notice():
         body = next(b for at, s, b in rules if not at and s == sel)
         return int(re.search(r"width: (\d+)px", body).group(1))
 
-    assert 40 <= size(".answer-page .voice .face") <= 48
+    assert 40 <= size(".answer-page .voice .face, .answer-page .plant-mood .face") <= 48
     assert size(".answer-page .i-did .face") >= 36
 
 

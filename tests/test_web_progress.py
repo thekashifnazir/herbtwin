@@ -423,7 +423,7 @@ def test_the_wait_page_footer_has_the_site_footers_links():
         r'<a href="([^"]+)"', base.split('<footer class="foot">')[1].split("</footer>")[0]
     )
     wait = re.findall(r'<a href="([^"]+)"', progress._END.split('<footer class="foot">')[1])
-    assert wait == site and "/credits" in wait
+    assert wait == site and "/about" in wait and "/about#credits" in wait
 
 
 def test_the_wait_shows_the_photo_back_from_the_first_paint():

@@ -172,8 +172,8 @@ SORRY = "something went wrong on our side"
 _END = (
     '</div></div></div></main>\n<footer class="foot"><div class="wrap">'
     # the same links as base.html's footer (Credits was missing here, 19 Oct small print)
-    '<span class="foot-mark" aria-hidden="true">herbtwin</span><a href="/privacy">Privacy</a>'
-    '<a href="/credits">Credits</a>'
+    '<span class="foot-mark" aria-hidden="true">herbtwin</span><a href="/about">About</a>'
+    '<a href="/privacy">Privacy</a><a href="/about#credits">Credits</a>'
     '<a href="https://open-meteo.com/" rel="noopener noreferrer">Weather data by Open-Meteo.com</a>'
     "</div></footer>\n</body></html>\n"
 )

@@ -968,7 +968,7 @@ def create_app(
                 "keep_as": keep_as,
                 "keep_elsewhere": KEEP_ELSEWHERE if keep_elsewhere else None,
                 "reminder_saved": reminder_saved,
-                "voice": settings.elevenlabs_api_key is not None,
+                "voice": settings.voice_on,
                 # "Add photos for a surer answer" (_more_photos.html): a plant answer whose
                 # first photo is still held (its hour, signed in or out)
                 "more_photos_on": rec.answer is not None
@@ -1006,7 +1006,7 @@ def create_app(
                 "ask_sharing": ask_sharing,
                 "spot_on": settings.spot_enabled,
                 "plantbook_on": plantbook_on(settings),
-                "voice_on": settings.elevenlabs_api_key is not None,
+                "voice_on": settings.voice_on,
                 "tavily_on": settings.tavily_key is not None,  # the same switch search reads
                 "check_on": trusted_check_on(settings),
             },
@@ -1028,19 +1028,25 @@ def create_app(
 
     @app.get("/privacy", response_class=HTMLResponse)
     def privacy(request: Request):
-        return TEMPLATES.TemplateResponse(request, "privacy.html")
+        return TEMPLATES.TemplateResponse(request, "privacy.html", {"voice_on": settings.voice_on})
 
-    @app.get("/credits", response_class=HTMLResponse)
-    def credits_page(request: Request):
-        """Every photo, illustration, data source and model, with its licence (the footer
-        links here from every page)."""
+    @app.get("/credits", include_in_schema=False)
+    def credits_page():
+        """The credits are About's last section now (21 Oct, Kash): an old link lands there."""
+        return RedirectResponse("/about#credits", status_code=301)
+
+    @app.get("/about", response_class=HTMLResponse)
+    def about(request: Request):
+        """What herbtwin is, how it works, the models and what each does, how it was tested,
+        what didn't work and what isn't done, then every credit with its licence (the
+        footer links here from every page)."""
         return TEMPLATES.TemplateResponse(
             request,
-            "credits.html",
+            "about.html",
             {
                 "spot_on": settings.spot_enabled,
                 "plantbook_on": plantbook_on(settings),
-                "voice_on": settings.elevenlabs_api_key is not None,
+                "voice_on": settings.voice_on,
                 "tavily_on": settings.tavily_key is not None,
                 "check_on": trusted_check_on(settings),
             },
@@ -2353,7 +2359,7 @@ def create_app(
         audio is kept, so a replay costs nothing. On a voice failure the words still come
         back with a 503, so the browser can speak them itself."""
         key = settings.elevenlabs_api_key
-        if key is None:
+        if key is None or not settings.voice_on:  # switched off (21 Oct): no voice at all
             raise HTTPException(404, "Not Found")
         if not _same_site(request, app.state.site_url):
             raise HTTPException(403, "That request did not come from this site.")

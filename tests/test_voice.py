@@ -193,10 +193,14 @@ def test_the_cache_keeps_a_voice_for_its_owner_and_its_answer_only():
     assert cache.get("a", None, "u1") is None  # the oldest went first
 
 
-def _client(tmp_path, advise, key=KEY):
+def _client(tmp_path, advise, key=KEY, on=True):
+    # the voice is switched off by default since 21 Oct: these tests switch it on, to keep
+    # the way back working
     env = {"HERBTWIN_HOME_LAT": "51.5", "HERBTWIN_HOME_LON": "-0.12"}
     if key:
         env["HERBTWIN_ELEVENLABS_API_KEY"] = key
+    if on:
+        env["HERBTWIN_VOICE_ENABLED"] = "1"
     deps = Deps(
         observe_adapter=MockAdapter([json.dumps(OBS)]),
         advise_adapter=MockAdapter(advise),
@@ -605,3 +609,18 @@ def test_the_plant_never_speaks_a_web_pages_quote_as_its_own():
     assert "grey mould" not in voice._answer_text(rec)
     rec.answer.do[0].if_you_do_from = "outcome_table"
     assert "grey mould" in voice._answer_text(rec)
+
+
+@respx.mock
+def test_a_key_alone_no_longer_turns_the_voice_on(tmp_path):
+    # 21 Oct, Kash: "yeah let's get rid then": it read the answer out, at $0.05 a play. The
+    # key may stay set on the live site; the switch, off by default, keeps it all away
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c = _client(tmp_path, [json.dumps(ADV)] * 3, on=False)
+    rid = _first(c)
+    page = c.get(f"/answers/{rid}").text
+    assert 'class="hear"' not in page and 'id="voice"' not in page
+    assert c.post(f"/api/answers/{rid}/voice").status_code == 404
+    assert "ElevenLabs" not in c.get("/privacy").text
+    assert "ElevenLabs" not in c.get("/about").text and "ElevenLabs" not in c.get("/").text
+    assert load_settings({"HERBTWIN_ELEVENLABS_API_KEY": KEY}).voice_on is False

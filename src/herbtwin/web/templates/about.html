@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% from "_credits.html" import made_cards, credit_lists %}
+{# About (21 Oct, Kash: "like my other hackathon projects"): why it was built, what it does,
+   how it's built, the models and what each does, how we know it works, what didn't work,
+   what's next, accessibility, who made it, then every credit with its licence (/credits
+   lands here). Every claim is one the Devpost story or a report in the repo makes. #}
+{% block title %}About · herbtwin{% endblock %}
+{% block page %}about-page has-band{% endblock %}
+{% block wrap %} wide{% endblock %}
+{% block main %}
+<div class="page-band">
+<h1>About herbtwin</h1>
+<p class="lead">Is your herb thirsty, cold, or just having a bad month? Photo it and herbtwin checks your weather and the season, then says what to do and how sure it is.</p>
+<p class="actions"><a class="button primary" href="/">Check a plant</a></p>
+</div>
+
+<ul class="about-stats band-overlap" aria-label="In numbers">
+  <li class="ink"><strong>2%</strong><span>"Treat it" when the expert didn't, from Nemotron 3 Super (150 expert questions; Ultra 12.7%)</span></li>
+  <li class="ink"><strong>0 of 149</strong><span>False alarms on healthy plants from the problem check</span></li>
+  <li class="ink"><strong>0.846</strong><span>Plant named right first time (149 photos, 15 kinds)</span></li>
+  <li class="ink"><strong>$0.0040</strong><span>Model cost of one example answer (about $0.0177 on Nemotron 3 Ultra)</span></li>
+</ul>
+
+<div class="about">
+<section aria-labelledby="why">
+  <h2 id="why">herbtwin, and why I built it</h2>
+  <p>It started in my own garden: herbs in a trough and pots. This autumn the oregano died and the purple sage nearly did, and I could not tell what was normal for October. Most plant apps name the plant and list generic care; they rarely say "leave it", or how sure they are. The wrong answer costs a plant: watering a dormant herb, or spraying a tired one.</p>
+  <p>herbtwin is for UK hobby growers with herbs outdoors: basil by the back door, rosemary in a border, parsley in a raised bed. The season norms, frost data and soil maps are all UK.</p>
+</section>
+
+<section aria-labelledby="what">
+  <h2 id="what">What it does</h2>
+  <ol class="about-steps">
+    <li><strong>You send a photo and a place.</strong> A UK town, a postcode, or the photo's own location. Up to 3 photos of the same plant go together, as one read.</li>
+    <li><strong>It tries each choice on the plant's twin.</strong> A small water-and-frost model of your plant, run over the next 2 weeks of your weather: water it, water it lightly, move it to shade or sun, bring it in, or leave it. Indoors there is no forecast test, and the advice is for room conditions.</li>
+    <li><strong>Three advisors weigh it.</strong> NVIDIA Nemotron 3 Super is asked the same question three times, each on its own, from the same evidence. How far they agree feeds how sure the answer is.</li>
+    <li><strong>You get one thing to do first, and how sure we are.</strong> Sometimes that is "leave it, this is normal for the season": in about a fifth of expert answers, it is. The page says "our best read, about half the time" or "not sure, check first, about 1 in 3", and what would help.</li>
+  </ol>
+  <p>Under the answer you can ask about the plant, check the advice again with what you add, and, signed in, get an email when it is time to check. The next photo asks "Did you do it?" and checks whether the advice worked.{% if spot_on %} A second door, <strong>What can I grow here?</strong>, takes a photo of a bed and lists what to sow or plant this month, from UK soil, frost and sun maps.{% endif %}</p>
+  <p>No account needed. A read takes about 15 to 35 seconds, and the site has daily read caps. Signed out, nothing is kept on disk (see <a href="/privacy">Privacy</a>).</p>
+</section>
+
+<section aria-labelledby="built">
+  <h2 id="built">How it's built</h2>
+  <ol class="about-flow" aria-label="The steps of a read">
+    <li>Photo and place</li>
+    <li>Read the photo</li>
+    <li>Species, problem check, care facts, season, weather</li>
+    <li>The twin: 6 choices × 14 days</li>
+    <li>Nemotron 3 Super, asked 3 times</li>
+    {% if check_on %}<li>Trusted-page check</li>{% endif %}
+    <li>The answer, streamed</li>
+  </ol>
+  <p>Python 3.12 and FastAPI. One adapter over Nebius Token Factory's OpenAI-compatible API carries every model call, so a model is one id in config. "Is it normal now?" comes from 360 cited month-by-month rows for 30 plants. Reminder emails run as a Nebius AI Cloud Serverless Job, and the public eval reports sit in Nebius Object Storage.</p>
+</section>
+
+<section class="made-with" id="made-with" aria-labelledby="made-with-h">
+  <h2 id="made-with-h">The models, and what each does</h2>
+  <p class="made-note">Every model an answer calls runs on Nebius Token Factory. Each Nemotron size's job was set by a measurement.</p>
+  {{ made_cards(voice_on=voice_on, tavily_on=tavily_on, check_on=check_on) }}
+  <ul class="about-calls">
+    <li><strong>Super decides, because it over-treated least.</strong> On 150 expert questions it said "treat it" when the expert didn't in 2% of answers. Ultra, the largest, did in 12.7%, and was no better on the main action.</li>
+    {% if check_on %}<li><strong>Ultra checks a trusted page instead.</strong> It reads up to six sentences of one trusted gardening page that Tavily finds, without seeing our advice; plain code decides whether one backs the answer, and only then is it quoted, word for word. It passed on the fifth pre-registered round (4 false agrees in 435).</li>{% endif %}
+    <li><strong>Nano talks.</strong> It runs the chat on your answer: 10 of 10 on our what-if check, in about half Super's time.</li>
+    <li><strong>GLM-5.3-Flash reads the photo.</strong> Four NVIDIA vision models named the plant less often: Nemotron 3.5 Super VL 0.627 against GLM's 0.846, and the other three 0.54 to 0.59 against 0.867 on an earlier prompt. Nemotron 3.5 Super VL is the first we will try again: it is 5 times faster.</li>
+  </ul>
+  <div class="about-receipt">
+    <h3>What an answer costs</h3>
+    <p>Every answer shows which model did each step, how long it took and what it cost, under "How we worked it out". One example read, of a basil photo on 21 Oct: GLM-5.3-Flash read the photo in 17.4 s for $0.0016, and the three Nemotron 3 Super advisors took 6.0 s for $0.0024. That is <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> had every step run on Nemotron 3 Ultra.</p>
+    <p class="made-note">One example, not an average. The Ultra figure is an estimate: the same tokens at Ultra's listed price, and a different model would use a different number of tokens.</p>
+  </div>
+</section>
+
+<section aria-labelledby="works">
+  <h2 id="works">How I know it works</h2>
+  <p>The costly mistake is doing too much. In about a fifth of expert answers the right advice is "leave it", so the first rows matter most.</p>
+  <div class="about-table"><table>
+    <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th></tr></thead>
+    <tbody>
+      <tr><td>Says "treat it" when the expert did not (150 Stack Exchange questions, one ask each)</td><td><strong>Super 2%</strong> (Ultra 12.7%, Nano 7.3%)</td></tr>
+      <tr><td>Problem check on 149 healthy and 102 problem photos</td><td><strong>0 false alarms</strong>; 33 named right, 0 wrong</td></tr>
+      <tr><td>"Did you do it?" two-photo check</td><td><strong>38 of 38</strong> changes seen, 0 of 32 false</td></tr>
+      <tr><td>Plant named right first time (149 GBIF photos, 15 kinds)</td><td><strong>0.846</strong></td></tr>
+      <tr><td>Confidence ranks right advice above wrong (624 held-out expert questions)</td><td><strong>0.63</strong> (AUROC)</td></tr>
+      <tr><td>Main action matches the expert's (150 Stack Exchange questions; 200 from MIRAGE, a published plant-care benchmark)</td><td><strong>0.43</strong> and <strong>0.41</strong> (ceiling about 0.8)</td></tr>
+      <tr><td>Chat answers right, with and without Tavily search (30 factual herb questions)</td><td><strong>25</strong> with, 15 without</td></tr>
+      {% if spot_on %}<tr><td>What can I grow here?, against the RHS monthly picks</td><td><strong>0.90</strong> in the top two lists, 0 hard errors</td></tr>{% endif %}
+    </tbody>
+  </table></div>
+  <p>The expert questions are text only, with no photo, place or weather, so they score Nemotron without the twin. Several tests were pre-registered: the rules were written down before the run. More than 3,700 automated tests run before every push.</p>
+  <h3>An expert's review</h3>
+  <p>I paid a professional gardener, with over 3 years' hands-on experience, to grade the advice on 3 openly licensed photos: oregano, mint and basil, assumed to be in a UK garden in mid-October. All three first actions were graded Acceptable, 3 out of 5 overall. What changed because of it: a herb that rests through winter now gets "a light tidy" instead of a cut back; with the soil unknown, "don't water" became "check first"; a tender basil left out from October to March, with a cold night ahead, leads with bringing it in; and keeping a plant apart leads only for damage the photo shows. The advice was not graded again after these changes.</p>
+  <p>The gardener called our "7 in 10" overstated, so we measured it: on 624 held-out expert questions it matched the expert 51% of the time. It was retired, and the answer now says "our best read, about half the time". Three photos is small, and it is one expert's view.</p>
+  <h3>A real user</h3>
+  <p>A former tree surgeon tried the app and asked where to get the things it tells you to use. That became the shops card under the answer: a product or range page at a UK garden retailer for what the answer asks you to do, never for a pest or disease.</p>
+</section>
+
+<section aria-labelledby="didnt">
+  <h2 id="didnt">What didn't work</h2>
+  <p>Each has its report in the repo.</p>
+  <ul class="about-list">
+    <li><strong>Specialist advisors</strong> (season, soil and water, pests and health) failed all three rules they were judged on, on 774 expert questions, so the three asks stay plain.</li>
+    <li><strong>The trusted-page check</strong> failed four pre-registered rounds before the fifth passed; on real pages it then backed nothing at all, so a quote is rare.</li>
+    <li><strong>"7 in 10"</strong> matched the expert 51% of the time, so it was retired.</li>
+    <li><strong>Nemotron 3 Ultra as the advisor</strong> over-treated in 12.7% of answers (Super 2%).</li>
+    <li><strong>Four NVIDIA vision models</strong> named the plant less often than GLM-5.3-Flash: 0.54 to 0.627, against 0.846 to 0.867 on the same prompts.</li>
+    <li><strong>Nano on our own GPU</strong> agreed with Token Factory on 81% of answers but matched the expert 4.8 points less often.</li>
+    <li><strong>Cosmos video</strong> did not show the change asked for, where an image editor did (5 of 6).</li>
+  </ul>
+</section>
+
+<section aria-labelledby="whats-next">
+  <h2 id="whats-next">What's next</h2>
+  <ul class="about-list">
+    <li><strong>A twin for indoor plants.</strong> Indoors gets advice for room conditions, with no forecast test.</li>
+    <li><strong>A Nemotron photo reader.</strong> Nemotron 3.5 Super VL first: 5 times faster than GLM, but behind on naming the plant.</li>
+    <li><strong>More problems named.</strong> The problem check still doesn't name slugs.</li>
+    <li><strong>A real screen-reader test</strong>, and a beginners' user test on the final site.</li>
+    <li><strong>More than one server.</strong> The live site runs one instance, with daily caps.</li>
+  </ul>
+</section>
+
+<section aria-labelledby="access">
+  <h2 id="access">Accessibility</h2>
+  <p>An automated check (axe-core, WCAG 2.0 to 2.2, A and AA) of the home, wait, answer and "What can I grow here?" pages, in light and dark, found one miss: the dark-mode "(optional)" by "Where is it?" at 3.98:1, now 5.4:1, with a test. Every home-page keyboard stop shows a focus ring, buttons are at least 44 px, nothing scrolls sideways at 320 px, and the page's motion is off under Reduce Motion. Not yet done: a real screen reader.</p>
+</section>
+
+<section aria-labelledby="who">
+  <h2 id="who">Who made it</h2>
+  <p>Built by Kashif Nazir for the NVIDIA × Nebius hackathon. I attended the London event in person. The first commit is 2 Oct 2026, and all the app's code, data, evals and site date from then.</p>
+</section>
+
+<section class="made-with about-credits" id="credits" aria-labelledby="credits-h">
+  <h2 id="credits-h">Credits</h2>
+  <p class="made-note">Every photo, picture, data source and model herbtwin uses, with who made it and its licence.</p>
+  {{ credit_lists(spot_on=spot_on, plantbook_on=plantbook_on) }}
+</section>
+</div>
+{% endblock %}

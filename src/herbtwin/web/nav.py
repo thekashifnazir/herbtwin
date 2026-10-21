@@ -13,7 +13,7 @@ from herbtwin.web.accounts import ACCESS, REFRESH
 
 UNSET = object()
 # the two jobs and sign-in, by address: the page a visitor is on is marked
-HERE = {"/": "check", "/plants": "plants", "/auth/sign-in": "sign-in"}
+HERE = {"/": "check", "/plants": "plants", "/about": "about", "/auth/sign-in": "sign-in"}
 
 
 def has_session(request) -> bool:

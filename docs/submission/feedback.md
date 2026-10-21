@@ -1,7 +1,7 @@
 # Feedback: Nebius Token Factory, Nebius AI Cloud and NVIDIA models
 
 For the Devpost feedback field (Most Valuable Feedback). Written from herbtwin's logged
-runs, 2 to 19 Oct 2026 (our friction log, the probe write-ups in `docs/reference/` and the
+runs, 2 to 22 Oct 2026 (our friction log, the probe write-ups in `docs/reference/` and the
 eval reports in `data/eval/reports/`), plus Kash's own account of the consoles, credits
 and the outage, given on 19 Oct. Every result below was measured by us; prices are Token
 Factory's and Nebius's list prices, except where Kash's estimate is named. Each problem
@@ -34,7 +34,7 @@ The short version is the next section.
   - NVIDIA Nemotron 3 Super (`nvidia/nemotron-3-super-120b-a12b`): the advisor, asked
     three times per photo read, plus refine.
   - NVIDIA Nemotron 3 Nano (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, reasoning off): the
-    follow-up chat's tool loop and the plant's spoken line.
+    follow-up chat's tool loop.
   - GLM-5.3-Flash reads the photo, with DeepSeek V4.1 Flash as the backup.
   - All our paid evals: 696 public photos through GLM for $0.44; advice runs on 350
     expert questions for under $1 each; four backup photo models scored on the same 150
@@ -45,8 +45,8 @@ The short version is the next section.
   Cosmos 3 image-to-video and Qwen-Image-Edit (the "in about a week" pictures in the
   app), Cosmos Reason on the photo step, a LoRA fine-tune of Nemotron 3 Nano 4B, and
   Magpie TTS.
-- The voice itself is ElevenLabs: Token Factory serves no speech model, and Magpie did
-  not install on a job (below).
+- A spoken plant voice ran on ElevenLabs until we dropped the feature on 21 Oct: Token
+  Factory serves no speech model, and Magpie did not install on a job (below).
 
 ## What worked well
 
@@ -126,6 +126,10 @@ The short version is the next section.
   minutes, 19 Oct) was not something we could get from the CLI, and the billing page has no
   line per job: it showed 4.71 B300 GPU-hours for the period ($23.98), so we derived the
   job's cost from its own log at that rate (about $1.63).
+- **It now shows on our page.** Each answer lists which model did each step, its time and
+  its cost, against the same tokens at Nemotron 3 Ultra's price (#374, 21 Oct): one
+  example read was $0.0040 against about $0.0177. Every one of those figures comes from
+  our hand-copied table, so a price change on your side would make our page wrong.
 - **Ask.** Prices in `/v1/models` or a pricing endpoint, and cost in `usage`; for jobs,
   the billed cost of a finished job from the CLI or API.
 
@@ -237,7 +241,7 @@ job template per NVIDIA model (Magpie, Cosmos, NeMo fine-tune) that installs cle
 - **Nemotron 3 Nano Omni** on two photos ("did it change?"): it said the second photo
   showed more change whichever order we sent them in (posture 1 of 10). Our order-swap
   check caught it, but it means no answer.
-- **Magpie TTS Multilingual 357M** for the plant voice: on a Mac CPU, word error rate
+- **Magpie TTS Multilingual 357M** for the plant voice (a feature since dropped): on a Mac CPU, word error rate
   3.1% on raw text but 0.35% with text normalisation; numbers and "°C" 0 of 15 right
   raw, 15 of 15 normalised. Normalisation is off by default and nothing warns you.
 - **Nemotron 3 Ultra as the advisor**: on 150 Stack Exchange questions (one ask each)
@@ -277,6 +281,32 @@ released Cosmos pipeline, and a note on Omni's two-image order bias in its model
   Factory's model cards carry capability tags (its docs point to a "JSON mode" tag); more
   guidance on what each model is good for (vision, tool calling, reasoning) would save
   trial runs.
+
+### 13. Rate limits: nothing to size against, and no retry guidance
+
+- **What happened.** Before judging we planned for several judges at once: 5 answers in
+  flight are 15 advisor calls. We had no per-key or per-model rate limit to plan against,
+  and no guidance on whether a 429 carries `Retry-After`. Our client ran with the SDK's
+  retries off on purpose (a second long wait could pass Cloud Run's 300 s page limit), so
+  a 429 would have dropped an advisor, and three would have dropped the answer. On 21 Oct we added one retry
+  on a 429 or 5xx after a jittered 0.5 to 1.5 s wait, or the server's `Retry-After` if
+  sent, never more than 3 s (#375).
+- **Ask.** Publish each key's limits per model (requests and tokens per minute), show
+  them in the console, send `Retry-After` on every 429, and say whether a rejected call is
+  billed.
+
+### 14. Model ids: inconsistent, and no display name
+
+- **What happened.** `/v1/models` (28 models on 22 Oct) gives only `id`, `created`,
+  `object` and `owned_by`. The Nemotron ids mix casing and separators:
+  `nvidia/nemotron-3-super-120b-a12b`, `nvidia/Nemotron-3-Ultra-550b-a55b`,
+  `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, `nvidia/Nemotron-3.5-Super-VL` and
+  `nvidia/Nemotron-3_5-Lightning`.
+- **Impact.** To say "Decided by NVIDIA Nemotron 3 Super" on the page, and to name each
+  step's model in the receipt, we keep our own id-to-name map. An id typed from memory
+  is easy to get wrong ("3.5" or "3_5").
+- **Ask.** One id style, plus `display_name`, `family`, `modality` and price fields in
+  `/v1/models`.
 
 ## Zero to hello world
 

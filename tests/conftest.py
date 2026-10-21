@@ -23,3 +23,11 @@ def jpeg_with_exif(tmp_path) -> Path:
 @pytest.fixture
 def jpeg_no_exif(tmp_path) -> Path:
     return _jpeg(tmp_path / "screenshot.jpg", exif=False)
+
+
+@pytest.fixture(autouse=True)
+def _no_real_retry_wait(monkeypatch):
+    """The Open-Meteo retry's pause (up to 3 s) never really sleeps in tests."""
+    from herbtwin import http_retry
+
+    monkeypatch.setattr(http_retry, "_sleep", lambda s: None)

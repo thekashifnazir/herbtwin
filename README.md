@@ -1,18 +1,36 @@
+<!--
+Screenshots to add when the design is final (Kash, 22 Oct: not yet). Put the files in
+docs/screenshots/ and use markdown images with a long, descriptive alt text.
+
+1. Hero, under the live link: the answer page for a sample photo, headline first
+   ("Leave it. This is normal for October"), how sure it is, and the What next card.
+   A short GIF of a read (home, sample tap, wait screen, answer) could replace it.
+2. "What it does", beside step 2: the wait screen mid-read: steps as they happen, the
+   model named on each, the twin's verdicts and "Advisor 2 of 3".
+3. "What it costs to run": the answer's "Which model did each step" receipt, with its
+   all-Ultra estimate.
+4. "Where it came from": the About page.
+5. "What it does", last paragraph: the "What can I grow here?" spot page for the raised
+   bed sample (Good now, Worth a try, Coming up; sun hours; soil).
+
+Video slots, as link lines under the live link:
+- 30-second demo: **Watch it in 30 seconds:** <URL>
+- 3-minute Devpost video: **The 3-minute tour:** <URL>
+-->
+
 # herbtwin
 
-[![Licence: MIT](https://img.shields.io/badge/licence-MIT-green.svg)](LICENSE)
+Is your herb thirsty, cold, or just having a bad month? Send one photo and a place, and
+herbtwin tells you the one thing to do now and how sure it is. Sometimes the right
+answer is to leave it alone. It is built for UK gardeners with herbs outdoors.
 
-Built with NVIDIA Nemotron 3 Super and Nemotron 3 Nano on Nebius Token Factory.
+**[Open the site →](https://herbtwin.kashifnazir.com)** No account needed: tap a sample
+photo, and the answer arrives in about 15 to 35 seconds.
 
-herbtwin looks at one photo of a herb or garden plant and says what it needs now: water
-it, hold off, shelter it, treat it, or leave it because what you see is normal for the
-season. It is built for UK gardeners with herbs outdoors, and it says how sure it is.
-
-- **Live demo:** https://herbtwin.kashifnazir.com
-- **Judges:** start with [JUDGES.md](JUDGES.md) (what to try in five minutes, sample
-  photos, known limits). The judges' code is in the submission form, not in this repo.
-- Built for the NVIDIA x Nebius hackathon. Licence: [MIT](LICENSE) for the code; data
-  licences and credits below.
+Built solo in October 2026 for the Nebius × NVIDIA Global AI Hackathon, with NVIDIA
+Nemotron 3 Super, Nano and Ultra on Nebius Token Factory. Judges: start with
+[JUDGES.md](JUDGES.md) (what to try in five minutes, the sample photos, known limits).
+The judges' code is in the submission form, not in this repo.
 
 ## What it does
 
@@ -27,20 +45,69 @@ season. It is built for UK gardeners with herbs outdoors, and it says how sure i
    The reasons and evidence sit below, folded.
 4. **Says how sure it is**: two levels, each with what it matched in a test on 624
    held-out expert questions: "our best read, about half the time" (0.51) or "not sure,
-   check first, about 1 in 3" (0.31), and what would make it surer. A gardener found the
-   old "about 7 in 10" overstated; the test agreed, so it went. A rough read (a poor photo
-   the plant can't be named from) is never "our best read".
+   check first, about 1 in 3" (0.31), and what would make it surer. A rough read (a poor
+   photo the plant can't be named from) is never "our best read".
 
 After the answer you can **refine** ("the soil is damp 2 cm down") and the advice is
 checked again, or **ask** a what-if ("what if I move it inside?"), answered by running
 the plant model and, when it helps, by searching trusted gardening sites with Tavily.
-**Hear it from your plant** reads the answer aloud in the plant's own voice: Nemotron 3
-Nano writes one short line from the answer already given, and ElevenLabs speaks it.
 Signed in, answers are kept per plant, a later photo asks "Did you do it?", and a
 reminder email can be sent when it is time to check again. **What can I grow here?**
 reads a photo of a bed or pot and suggests crops for that spot and month.
 
-## How it works
+## Decisions worth explaining
+
+**Super decides because the biggest model was the keenest to treat.** On 150 expert
+questions, Nemotron 3 Ultra told people to treat a plant when the expert did not in
+12.7% of answers; Super did in 2%, and matched the expert's main action as often or
+better. So Super writes the advice, asked three times, and Ultra got the job it passed a
+pre-registered test for: checking whether a trusted gardening page says the same.
+
+**Every choice is tried on a twin before the advice is written.** The twin is a small
+water and frost model of the plant: code rolls six choices (water, water lightly, shade,
+sun, bring in, leave it) over the next 14 days of forecast, and the advisor gets the
+result as evidence. On 120 scripted cases, Super took the twin's better choice on the
+risky ones in 84 of 84 answers with the twin and 78 of 84 without.
+
+**"Leave it" is an answer.** Of 774 expert answers on Stack Exchange, 150 say leave it,
+it's normal, and 66 say stop watering; only 37 say water. An app that always finds
+something to fix is wrong exactly where it costs a plant, so herbtwin checks what is
+normal for the month before it advises.
+
+**The confidence says what it measured.** A professional gardener called our old "7 in
+10" overstated. A pre-registered test on 624 held-out questions agreed (it matched the
+expert 51% of the time), so the answer now says "our best read, about half the time" or
+"not sure, check first, about 1 in 3".
+
+**A non-NVIDIA model reads the photo, because it measured better.** Four NVIDIA vision
+models named the plant 0.54 to 0.63 of the time against GLM-5.3-Flash's 0.85 to 0.87, so
+GLM reads the photo and Nemotron does the reasoning and the talking. What failed is kept
+and published: [docs/reference/nvidia-models.md](docs/reference/nvidia-models.md) and the
+"What didn't work" section of the Devpost story.
+
+## Where the AI is
+
+| Piece | Used for |
+|---|---|
+| **NVIDIA Nemotron 3 Super** (`nvidia/nemotron-3-super-120b-a12b`) | The advisor (three asks per read) and refine |
+| **NVIDIA Nemotron 3 Nano** (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, reasoning off) | The follow-up chat's tool loop ("what if I water it?" runs the plant model): 10/10 on the what-if check, about twice as fast as Super ([docs/reference/chat-on-nano.md](docs/reference/chat-on-nano.md)) |
+| **NVIDIA Nemotron 3 Ultra** (`nvidia/Nemotron-3-Ultra-550b-a55b`, thinking off) | The trusted-page check: it reads each sentence of a trusted gardening page found with Tavily into a fixed form, and code decides whether the page says the same as the answer. If so, the answer quotes the sentence; confidence never changes. 0 of 191 false agrees on real pages (pre-registered, 19 Oct) |
+| **Nebius Token Factory** | Serves every language and vision model the app calls (Nemotron, GLM, DeepSeek), through its OpenAI-compatible API. One dedicated endpoint (1x H100, about $0.60) was used to test Nemotron 3 Nano Omni on our photos |
+| **GLM-5.3-Flash / DeepSeek V4.1 Flash** (on Token Factory, not NVIDIA models) | Reading the photo, the problem check, and comparing two photos for "Did you do it?". GLM names the plant better than every NVIDIA vision model we tested, including Nemotron 3.5 Super VL on Token Factory (0.846 against 0.627), so GLM reads photos, with DeepSeek as the backup when GLM fails or is slow |
+| **Nebius AI Cloud Serverless Jobs** | The daily reminder job, started by GitHub Actions from an image in Nebius Container Registry, with its keys from a Nebius MysteryBox secret ([docs/REMINDERS.md](docs/REMINDERS.md)). GPU jobs also rendered the eight "in about a week" pictures (Qwen-Image-Edit) and ran three NVIDIA probes: Cosmos Reason on the photo step, a LoRA-tuned Nemotron 3 Nano 4B as the advisor, and Nemotron 3 Nano self-hosted with vLLM, which agreed with Token Factory on 81% of answers (passing the pre-registered bar) but scored slightly worse against the expert answers ([report](data/eval/reports/2026-10-19-nano-selfhost.md)) |
+| **Nebius Object Storage** | A public, read-only mirror of the evaluation reports and labelled sets, so a judge can fetch any number's report without the repo ([docs/reference/eval-bucket-public.md](docs/reference/eval-bucket-public.md)) |
+| **Tavily** | The chat's web search (trusted gardening sites only), the trusted-page check's search, a fallback for finding a plant's RHS page, and two shortcuts under the answer: shops for what it asks you to do, and gardeners near a town you typed |
+
+Also tested and not used live (details in
+[docs/reference/nvidia-models.md](docs/reference/nvidia-models.md)): Nemotron 3 Ultra as
+the advisor (above); Nemotron 3.5 Lightning for the chat, which flooded tool calls; and a
+LoRA-tuned Nemotron 3 Nano 4B, inside the noise of Super but needing an always-on GPU to
+serve.
+
+## Architecture
+
+One photo runs the whole chain with no person in it. Every model call goes through one
+adapter over Token Factory's OpenAI-compatible API, so a model is one id in config.
 
 ```mermaid
 flowchart LR
@@ -55,47 +122,28 @@ flowchart LR
     ANS --> RF[Refine<br/>Nemotron 3 Super]
     ANS --> ASK[Ask about this plant<br/>Nemotron 3 Nano,<br/>plant model, Tavily]
     ANS --> TP[Trusted-page check<br/>Tavily + Nemotron 3 Ultra,<br/>a quote only]
-    ANS --> V[Plant voice<br/>Nemotron 3 Nano writes,<br/>ElevenLabs speaks]
     ANS -. signed in .-> REM[Reminder email<br/>Nebius Serverless Job]
 ```
 
 The advisor is asked the same question three times; how far the three answers agree is
-one input to the confidence score. The page streams each step as it happens, so a read
-(about 15 to 35 seconds on the live site) never looks stuck.
-
-### What NVIDIA and Nebius do
-
-| Piece | Used for |
-|---|---|
-| **NVIDIA Nemotron 3 Super** (`nvidia/nemotron-3-super-120b-a12b`) | The advisor (three asks per read) and refine |
-| **NVIDIA Nemotron 3 Nano** (`nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, reasoning off) | The follow-up chat's tool loop ("what if I water it?" runs the plant model): 10/10 on the what-if check, about twice as fast as Super ([docs/reference/chat-on-nano.md](docs/reference/chat-on-nano.md)). It also writes the plant's spoken line |
-| **NVIDIA Nemotron 3 Ultra** (`nvidia/Nemotron-3-Ultra-550b-a55b`, thinking off) | The trusted-page check: it reads each sentence of a trusted gardening page found with Tavily into a fixed form, and code decides whether the page says the same as the answer. If so, the answer quotes the sentence; confidence never changes. 0 of 191 false agrees on real pages (pre-registered, 19 Oct) |
-| **Nebius Token Factory** | Serves every language and vision model the app calls (Nemotron, GLM, DeepSeek), through its OpenAI-compatible API. The one model it does not run is the voice: ElevenLabs speaks the line. One dedicated endpoint (1x H100, about $0.60) was used to test Nemotron 3 Nano Omni on our photos |
-| **GLM-5.3-Flash / DeepSeek V4.1 Flash** (on Token Factory, not NVIDIA models) | Reading the photo, the problem check, and comparing two photos for "Did you do it?". GLM names the plant better than every NVIDIA vision model we tested, including Nemotron 3.5 Super VL on Token Factory (0.846 against 0.627), so GLM reads photos, with DeepSeek as the backup when GLM fails or is slow |
-| **Nebius AI Cloud Serverless Jobs** | The daily reminder job, started by GitHub Actions from an image in Nebius Container Registry, with its keys from a Nebius MysteryBox secret ([docs/REMINDERS.md](docs/REMINDERS.md)). GPU jobs also rendered the eight "in about a week" pictures (Qwen-Image-Edit) and ran three NVIDIA probes: Cosmos Reason on the photo step, a LoRA-tuned Nemotron 3 Nano 4B as the advisor, and Nemotron 3 Nano self-hosted with vLLM, which agreed with Token Factory on 81% of answers (passing the pre-registered bar) but scored slightly worse against the expert answers ([report](data/eval/reports/2026-10-19-nano-selfhost.md)) |
-| **Nebius Object Storage** | A public, read-only mirror of the evaluation reports and labelled sets, so a judge can fetch any number's report without the repo ([docs/reference/eval-bucket-public.md](docs/reference/eval-bucket-public.md)) |
-| **ElevenLabs** (`eleven_flash_v2_5`) | Speaks the plant's line, one British voice per herb. If it is down, the browser's own voice reads it |
-
-NVIDIA models: [docs/reference/nvidia-models.md](docs/reference/nvidia-models.md) (which
-ones we use, which we tested and why they lost). In short: NVIDIA's vision models read
-our photos less well than GLM. Species top-1 on the live prompt: Nemotron 3.5 Super VL
-0.627 (Token Factory per token) against GLM's 0.846. On the earlier prompt: Nemotron 3
-Nano Omni 0.587 (a Token Factory dedicated endpoint) and Cosmos-Reason2-32B 0.574 (an AI
-Cloud GPU) against GLM's 0.867. So Nemotron does the reasoning and the talking, not the
-seeing.
-
-Also tested and not used live (details in the same file): Nemotron 3 Ultra
-(`nvidia/Nemotron-3-Ultra-550b-a55b`) as the advisor, no better on the main action
-(0.393 against Super's 0.440) and over-treating far more often (0.127 against 0.020);
-Nemotron 3.5 Lightning for the chat, which flooded tool calls; a LoRA-tuned Nemotron 3
-Nano 4B, inside the noise of Super but needing an always-on GPU to serve; and Magpie TTS
-for the voice, clear once the text was normalised but not run on a Nebius GPU within
-budget.
+one input to the confidence score. The page streams each step as it happens, and names the
+model on the photo and advisor steps, so a read never looks stuck.
 
 The site runs on Google Cloud Run (London) behind Cloudflare. Accounts and history are in
 Supabase; sign-in and reminder emails go through Resend. Tracing is LangSmith.
 
-### Where Token Factory sped the work up
+## What it costs to run
+
+Each answer shows its own bill under "How we worked it out": which model did each step,
+how long it took and what it cost, against an estimate of the same tokens on Nemotron 3
+Ultra. One example read (run locally, without the trusted-page check) cost $0.0040 in
+model time: $0.0016 for GLM-5.3-Flash to read the photo and $0.0024 for Super's three
+asks, against about $0.0177 on Ultra. Tavily searches and hosting are not in that figure.
+
+The live site has daily read caps per visitor and a total model budget, counted in
+Supabase. The reminder job costs under a cent a day as a Nebius Serverless Job.
+
+Where Token Factory sped the work up:
 
 - **Paid evals cost cents, so the species and advice rates below carry 95% bootstrap
   intervals.** 696 photos (513 public, 183 from our own garden) through GLM cost $0.44 in total. A 150 to 200 question
@@ -111,10 +159,10 @@ Supabase; sign-in and reminder emails go through Resend. Tracing is LangSmith.
   switched the live backup by id. Moving the chat from Super to Nano was the same kind of
   change, after a 10-case check that cost about $0.07.
 - **One bill for the whole chain.** The photo read, the problem check, the three
-  advisor asks, the chat and the plant's line all go through one Token Factory key, so a
+  advisor asks and the chat all go through one Token Factory key, so a
   free public demo needed only a daily cap and one budget stop.
 
-## Run it locally
+## Running it
 
 Needs Python 3.12 and [uv](https://docs.astral.sh/uv/).
 
@@ -134,8 +182,8 @@ HERBTWIN_FAST_MODEL=nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B
 HERBTWIN_NO_THINKING_MODELS=nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B
 ```
 
-The last two put the chat and the plant's line on Nemotron 3 Nano with reasoning off;
-leave them out and both use the advisor model.
+The last two put the chat on Nemotron 3 Nano with reasoning off; leave them out and it
+uses the advisor model.
 
 Then:
 
@@ -147,7 +195,7 @@ and open http://localhost:8000 (the address `HERBTWIN_SITE_URL` expects). The de
 backend, `mock`, is for the tests only and answers nothing on its own; `ollama` runs against local models. Everything else in
 `.env.example` is optional: search (`HERBTWIN_SEARCH_ENABLED=1` plus a Tavily, Exa or
 TinyFish key; Tavily also needs `HERBTWIN_TAVILY_ENABLED=1`), Supabase sign-in and
-history, Resend email, the plant's voice (`HERBTWIN_ELEVENLABS_API_KEY`), "What can I grow
+history, Resend email, "What can I grow
 here?" (`HERBTWIN_SPOT_ENABLED=1`), LangSmith tracing, and the site caps.
 
 ### Deploying your own copy
@@ -291,11 +339,33 @@ Reduce Motion. Not yet done: a test with a real screen reader.
   how sure it is.
 - The live site runs one instance and caps reads per day; see [JUDGES.md](JUDGES.md#5-known-limits).
 
-## Repository layout
+## Where to look
 
-- `src/herbtwin/`: the app. `stages/` holds the pipeline steps, `web/` the FastAPI site.
-- `tests/`: offline tests (live and Supabase tests are opt-in markers).
-- `scripts/`: data builders and eval runners.
-- `data/`: shipped data (above) and eval reports.
-- `docs/`: design specs (`docs/superpowers/specs/`), reference notes (`docs/reference/`),
-  Supabase and reminder setup.
+If you're reading the code, the parts worth your time:
+
+- `src/herbtwin/pipeline.py` — the chain: runs the stages, streams each step, and keeps
+  going when one fails.
+- `src/herbtwin/stages/` — one file per step: `observe.py` (the photo), `research.py`
+  (care facts, the RHS page), `environment.py` (weather), `twin.py` with
+  `plant_model.py` (the twin), `advise.py` (the three asks), `trusted_page.py` and
+  `trusted_check.py` (Ultra reads, code decides).
+- `src/herbtwin/confidence.py` — how sure it is, from agreement and fitted weights.
+- `src/herbtwin/receipt.py` — each answer's model, time and cost per step.
+- `src/herbtwin/adapters/` — the one seam every model call goes through.
+- `src/herbtwin/web/` — the FastAPI site and its templates.
+- `scripts/` and `data/eval/` — the eval runners and every report behind a number above.
+- `tests/` — offline tests; live and Supabase tests are opt-in markers.
+
+## Where it came from
+
+I attended the Nebius × NVIDIA event at Builders & Brews London, and built herbtwin on
+my own in October 2026. It started in my own garden: herbs in a trough and pots. This
+autumn the oregano died and the purple sage nearly did, and I couldn't tell what was
+normal for October. A professional gardener graded its advice, and a former tree surgeon
+tried it over the phone; what they said changed it. The full story is in
+the private working repo's `devpost.md`.
+
+## Licence
+
+MIT for the code: see [LICENSE](LICENSE). Data licences and credits are listed above and
+in [NOTICE](NOTICE).

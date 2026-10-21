@@ -61,6 +61,9 @@ class Settings:
     resend_api_key: str | None = None
     # the plant reads its answer aloud through ElevenLabs; unset, no voice button
     elevenlabs_api_key: str | None = None
+    # and only with this on (21 Oct, Kash: "yeah let's get rid then"; it read the answer out
+    # and cost $0.05 a play): off by default, so the voice is gone but can come back
+    voice_enabled: bool = False
     mail_from: str | None = None
     alert_email: str | None = None
     # signs the unsubscribe link in reminder emails (D65); unset, no reminders at all
@@ -90,6 +93,11 @@ class Settings:
     def tavily_key(self) -> str | None:
         """The Tavily key, only while HERBTWIN_TAVILY_ENABLED is on. Every Tavily use reads this."""
         return self.tavily_api_key if self.tavily_enabled else None
+
+    @property
+    def voice_on(self) -> bool:
+        """The plant's voice: switched on (HERBTWIN_VOICE_ENABLED) and an ElevenLabs key set."""
+        return self.voice_enabled and self.elevenlabs_api_key is not None
 
     @property
     def accounts_enabled(self) -> bool:
@@ -289,6 +297,7 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
         reminder_secret=(env.get("HERBTWIN_REMINDER_SECRET") or "").strip() or None,
         resend_api_key=env.get("HERBTWIN_RESEND_API_KEY") or None,
         elevenlabs_api_key=(env.get("HERBTWIN_ELEVENLABS_API_KEY") or "").strip() or None,
+        voice_enabled=_switch(env, "HERBTWIN_VOICE_ENABLED"),
         mail_from=(env.get("HERBTWIN_MAIL_FROM") or "").strip() or None,
         alert_email=(env.get("HERBTWIN_ALERT_EMAIL") or "").strip() or None,
         langsmith_project=(env.get("HERBTWIN_LANGSMITH_PROJECT") or "").strip() or "herbtwin-dev",

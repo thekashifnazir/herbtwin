@@ -189,8 +189,7 @@ answer appears in **My plants**.
 ## 6. Where Nebius is used
 
 - **Token Factory** runs every language and vision model call: reading the photo, the
-  advisor, refine, chat, the plant's spoken line and the "Did you do it?" comparison.
-  The voice itself is ElevenLabs, not Token Factory.
+  advisor, refine, chat and the "Did you do it?" comparison.
 - **Nebius AI Cloud** runs the daily reminder job as a Serverless Job, started each
   morning by a GitHub Actions workflow from an image in Nebius Container Registry. See
   [`docs/REMINDERS.md`](docs/REMINDERS.md).

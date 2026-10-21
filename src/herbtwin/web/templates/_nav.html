@@ -7,6 +7,7 @@
   <ul class="nav-jobs">
     <li><a href="/"{% if here == "check" %} aria-current="page"{% endif %}>Check a plant</a></li>
     {% if signed_in %}<li><a href="/plants"{% if here == "plants" %} aria-current="page"{% endif %}>My plants</a></li>{% endif %}
+    <li><a href="/about"{% if here == "about" %} aria-current="page"{% endif %}>About</a></li>
   </ul>
   {% if signed_in %}<form class="nav-account" method="post" action="/auth/sign-out"><button class="link" type="submit">Sign out</button></form>
   {% elif accounts %}<a class="nav-account" href="/auth/sign-in"{% if here == "sign-in" %} aria-current="page"{% endif %}>Sign in</a>{% endif %}

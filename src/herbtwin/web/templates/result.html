@@ -290,7 +290,7 @@
          answer (stages/trusted_page.py); nothing when unsure, off, late or broken #}
       {% if rec.trusted and rec.trusted.quote %}<p class="sources-line trusted-quote">A trusted page says the same: &ldquo;{{ rec.trusted.quote }}&rdquo; ({{ said_by([rec.trusted.url]) }}, found with Tavily)</p>{% endif %}
       {# who decided it, in view (19 Oct pre-walk: the answer never named NVIDIA or Nebius) #}
-      {% if advised_by %}<p class="decided-by">Decided by {{ advised_by }} on Nebius Token Factory · <a href="/credits">What it's made with</a></p>{% endif %}
+      {% if advised_by %}<p class="decided-by">Decided by {{ advised_by }} on Nebius Token Factory · <a href="/about#made-with">What it's made with</a></p>{% endif %}
       {# the plant reads this answer aloud: its own words, never new advice; shown once the
          script runs, so a page without it never offers a button that does nothing #}
       {% if voice %}{% set obs = rec.observation %}{% set pname = obs.species[0].common_name|lower if obs and obs.species else "plant" %}
@@ -354,7 +354,10 @@
         audio.addEventListener("play", talk(true));
         for (const e of ["pause", "ended", "error"]) audio.addEventListener(e, talk(false));
       })();
-      </script>{% endif %}
+      </script>
+      {#- no voice (switched off, 21 Oct): the plant's face on its own, where its voice was; the
+          answer's own mood, never a new judgement, and decoration for a screen reader #}
+      {%- else %}<p class="plant-mood" id="plant-mood">{{ plant_face(mood) }}</p>{% endif %}
     </section>
     {# the photo check named one of this plant's listed problems: our words for what it
        looks like, and a nudge to check before treating #}
@@ -370,7 +373,7 @@
         <figure><img src="/static/twin/{{ twin.pair.dont }}" alt="Illustration of your plant left as it is" loading="lazy">
           <figcaption>{{ twin.dont_label }}</figcaption></figure>
       </div>
-      <p class="note">Illustration for our sample photo, not a prediction. · <a href="/credits">Photo credits</a></p>
+      <p class="note">Illustration for our sample photo, not a prediction. · <a href="/about#credits">Photo credits</a></p>
     </section>{% endif %}
     {% if a.do|length > 1 %}<section class="also" aria-labelledby="also-do">
       <h2 id="also-do">Also do</h2>

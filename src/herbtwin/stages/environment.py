@@ -7,6 +7,7 @@ from datetime import date
 
 import httpx
 
+from herbtwin.http_retry import get_with_one_retry
 from herbtwin.schemas import DailyWeather, Environment
 
 OPEN_METEO_URL = "https://api.open-meteo.com/v1/forecast"
@@ -51,7 +52,7 @@ def fetch_environment(
     own = client is None
     client = client or httpx.Client(timeout=20)
     try:
-        resp = client.get(OPEN_METEO_URL, params=params)
+        resp = get_with_one_retry(client, OPEN_METEO_URL, params=params, what="open-meteo forecast")
     except httpx.HTTPError as e:
         raise EnvironmentError_(f"open-meteo request failed: {e}") from e
     finally:

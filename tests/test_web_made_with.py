@@ -25,24 +25,35 @@ def _home_with(tmp_path, env: dict) -> str:
 
 
 def _cards(html: str) -> list[tuple[str, str]]:
-    cards = html.split('<ul class="made-cards">', 1)[1].split("</ul>", 1)[0]
-    return re.findall(r'<span class="job">([^<]+)</span><strong>([^<]+)</strong>', cards)
+    groups = html.split('<div class="made-groups">', 1)[1].split("</div>\n</div>", 1)[0]
+    return re.findall(r'<span class="job">([^<]+)</span><strong>([^<]+)</strong>', groups)
 
 
-def test_made_with_shows_the_six_in_view_with_nvidia_first():
+def _groups(html: str) -> dict[str, list[str]]:
+    groups = html.split('<div class="made-groups">', 1)[1].split("</div>\n</div>", 1)[0]
+    out = {}
+    for head, body in re.findall(r"<h3>([^<]+)</h3>(.*?)</ul>", groups, flags=re.S):
+        out[head] = re.findall(r"<strong>([^<]+)</strong>", body)
+    return out
+
+
+def test_made_with_groups_the_nvidia_models_the_other_model_and_the_services():
+    # 21 Oct, Kash: "we should make it better designed": three groups, NVIDIA first
     made = str(
-        TEMPLATES.env.get_template("_credits.html").module.made_with(voice_on=True, tavily_on=True)
+        TEMPLATES.env.get_template("_credits.html").module.made_with(
+            voice_on=True, tavily_on=True, check_on=True
+        )
     )
-    assert _cards(made) == [
-        ("Decides", "NVIDIA Nemotron 3 Super"),
-        ("Reads the photo", "GLM-5.3-Flash"),
-        ("Answers questions", "NVIDIA Nemotron 3 Nano"),
-        ("Searches", "Tavily"),
-        ("Speaks", "ElevenLabs"),
-        ("Forecasts", "Open-Meteo"),
-    ]
+    assert _groups(made) == {
+        "NVIDIA models on Nebius Token Factory": [
+            "NVIDIA Nemotron 3 Super", "NVIDIA Nemotron 3 Nano", "NVIDIA Nemotron 3 Ultra",
+        ],
+        "Other model": ["GLM-5.3-Flash"],
+        "Services": ["Tavily", "ElevenLabs", "Open-Meteo"],
+    }  # fmt: skip
+    assert ("Decides", "NVIDIA Nemotron 3 Super") in _cards(made)
     assert "All models run on Nebius Token Factory." in made
-    assert made.count('<li class="nv">') == 2  # the two NVIDIA cards carry the green tint
+    assert made.count('<li class="nv">') == 3  # the NVIDIA cards carry the green tint
     # the licences stay one tap away, folded: a data table and a photo list with thumbnails
     fold = made.split('<details class="made-credits" id="credits">', 1)[1]
     assert '<dl class="made-data">' in fold and '<ul class="made-photos">' in fold
@@ -65,8 +76,26 @@ def test_the_credits_fold_has_its_own_padding_and_stacks_on_a_phone():
     css = style.CSS
     assert ".made-with .made-credits { padding: 0 16px 16px; }" in css
     phone = css.split(".made-with .made-photos img", 1)[1]
-    assert ".made-with .made-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }" in phone
     assert ".made-with .made-data div { grid-template-columns: 1fr; gap: 0; }" in phone
+
+
+def test_the_cards_share_one_grid_so_each_is_the_same_size():
+    # 21 Oct: 7 cards wrapped into cramped 3-across tiles of uneven heights
+    css = style.CSS
+    assert "grid-auto-rows: 1fr;" in css.split(".made-with .made-cards {", 1)[1].split("}", 1)[0]
+    wide = css.split("@media (min-width: 960px) { .made-groups {", 1)[1].split("} }", 1)[0]
+    assert "grid-template-columns: repeat(4, minmax(0, 1fr));" in wide
+    assert ".made-group { display: grid; grid-template-columns: subgrid;" in wide
+    assert (
+        ".made-with .made-group .made-cards { grid-column: 1 / -1; grid-template-columns: subgrid;"
+        in wide
+    )
+    assert (
+        ".made-with .made-cards li { display: flex; flex-direction: column; gap: 4px; margin: 0;"
+        in css
+    )
+    # the data and the photos side by side, once there is room
+    assert "@media (min-width: 720px) { .made-credit-cols { grid-template-columns: repeat(2," in css
 
 
 def test_the_first_load_rises_in_once_a_session_and_never_with_reduced_motion(tmp_path):

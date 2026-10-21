@@ -134,7 +134,7 @@ def test_a_bank_photo_renders_the_twin_figure(tmp_path):
     # 18 Oct judge walk: "twin" was only in the logo; the model's lines now say whose it is
     assert "Tested on your plant&#39;s twin:" in text and "Our 2-week forecast" not in text
     # the picture's credit is one tap away, with the rest (19 Oct small-print plan)
-    assert '<a href="/credits">Photo credits</a>' in text
+    assert '<a href="/about#credits">Photo credits</a>' in text
 
 
 @respx.mock

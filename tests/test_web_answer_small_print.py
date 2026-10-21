@@ -33,7 +33,7 @@ def test_the_twin_lead_is_said_once_then_a_twin_chip(tmp_path):
 def test_the_twin_picture_note_is_short_and_links_its_credits():
     src = _source()
     assert "Illustration for our sample photo, not a prediction. · " in src
-    assert '<a href="/credits">Photo credits</a>' in src and "twin.pair.credit" not in src
+    assert '<a href="/about#credits">Photo credits</a>' in src and "twin.pair.credit" not in src
 
 
 def test_how_sure_is_listed_once(tmp_path):

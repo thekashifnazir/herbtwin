@@ -44,3 +44,20 @@ def test_failures_are_climate_errors(resp):
     respx.get(ARCHIVE_URL).mock(return_value=resp)
     with pytest.raises(ClimateError):
         typical_coldest_night(51.4787, -0.2956)
+
+
+@respx.mock
+def test_a_busy_archive_is_retried_once():
+    climate._cache.clear()
+    days = _days(date(1991, 7, 1), 365 * 30 + 8)
+    route = respx.get(ARCHIVE_URL).mock(
+        side_effect=[
+            httpx.Response(503, text="The service is overloaded"),
+            httpx.Response(
+                200, json={"daily": {"time": days, "temperature_2m_min": [-2.0] * len(days)}}
+            ),
+        ]
+    )
+    assert typical_coldest_night(51.4787, -0.2956) == -2.0
+    assert route.call_count == 2
+    climate._cache.clear()

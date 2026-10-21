@@ -11,6 +11,7 @@ from __future__ import annotations
 import calendar
 import logging
 import re
+import unicodedata
 from collections import Counter
 from collections.abc import Mapping
 from functools import cache
@@ -76,6 +77,9 @@ ALSO_BECAUSE: dict[str, str] = {
     "mulch": "a mulch keeps the roots moist and protected.",
     "humidity": "dry air can stress it.",
     "rotate": "turning it keeps the growth even.",
+    # only when every line the advisors gave was dropped (the reason checks below)
+    "leave_normal": "nothing in the photo needs a change now: keep to its usual care.",
+    "ask_first": "we need a little more from you before we say what to do.",
 }
 # a sourced "how" that says there is no cure: treating it means pulling it out and binning it
 # (basil downy mildew). "Treat it." over that line, beside "Also do: Protect it", read as a
@@ -140,6 +144,255 @@ _CLOSING_CUT = re.compile(
     re.I,
 )
 _BRACKET_CUT = re.compile(rf"\s*\((?:and\s+)?{_FOR_GROWTH}[^()]*\)", re.I)
+
+
+# any other cut for a resting herb: "Cut it back hard to the base." is no cut for growth,
+# yet the page says the main cut-back waits for spring (safety review of the advisor
+# lines, 21 Oct). Taking cuttings is no cut of the plant, and a tidy of dead stems is the
+# light tidy itself, unless it goes hard or low as well
+_MORE_CUT = r"(?:shorten|snip|lop|chop|hack)\w*"  # "Hack it back." (review of #386)  # "Shorten all the stems by two thirds" (review)
+_ANY_CUT = re.compile(rf"\b(?!cuttings?\b)(?:{_CUT}|{_MORE_CUT})\b", re.I)
+# hard by its own words beside the cut ("cut it back hard", "a hard prune", "prune
+# heavily"), never "heavily infested leaves"; or low or by a share of the plant
+_HARD_CUT = re.compile(
+    rf"\b(?:{_CUT}|{_MORE_CUT})\b(?:\s+\w+){{0,3}}?\s+(?:hard|severely|heavily)\b|"
+    rf"\b(?:hard|severe|heavy)[- ](?:{_CUT}|{_MORE_CUT})|"
+    r"\b(?:right (?:back|down)|down to|to the (?:base|ground|soil)|to (?:old|bare) wood|"
+    r"by (?:half|a third|a quarter|two[- ]thirds|\d+ ?%))\b",
+    re.I,
+)
+_DEAD = re.compile(
+    r"\b(?:dead|damaged|diseased|dying|broken|spent|faded|withered|wizened|shrivel\w*|"
+    r"brown\w*|yellow\w*|black\w*|mushy|rott\w*|spotted|infected|affected)\b",
+    re.I,
+)
+
+
+# a hard cut in other words (integrator review of #379: "Take it down to the soil", "Reduce
+# it to a third of its height", "Remove half the foliage")
+_TAKE_DOWN = re.compile(
+    r"\b(?:take|cut|bring) (?:it|them|the \w+) (?:right |all the way )?down\b|"
+    r"\breduce (?:it|them|the \w+) (?:by|to)\b|"
+    r"\bremove (?:about |around )?(?:half|a third|two[- ]thirds|most|much|all) (?:of )?"
+    r"(?:the |its )?(?:foliage|growth|leaves|stems|shoots|plant)\b|"
+    # and stripped, scalped or a share taken off (re-review of #379: "Strip the lower leaves",
+    # "Take a third off", "Defoliate it", "Scalp it")
+    r"\bstrip(?:ped|ping)? (?:off |away )?(?:it|them|(?:the |its |most |all )?(?:\w+ )?"
+    r"(?:leaves|foliage|stems|shoots))\b|"
+    r"\btake (?:a third|half|two[- ]thirds|a quarter|most) (?:of (?:it|them|the \w+) )?off\b|"
+    r"\bdefoliat\w*|\bscalp\w*",
+    re.I,
+)
+# "Cut back lightly in spring.": for later, as a held-off cut is
+_IN_SPRING = re.compile(r"\b(?:in|until|till|from|by) (?:the )?(?:early |late )?spring\b", re.I)
+
+
+def _cuts_while_resting(sentence: str) -> bool:
+    """A hard cut, or a cut told as a job and not of dead stems; a cut held off for spring,
+    or only mentioned ("going woody for lack of pruning"), is no cut now."""
+    if _TAKE_DOWN.search(sentence):
+        return True
+    if not _ANY_CUT.search(sentence) or _HOLDS_OFF.search(sentence) or _IN_SPRING.search(sentence):
+        return False
+    told = _CUT_TOLD.search(sentence) is not None
+    return bool(_HARD_CUT.search(sentence)) or (told and not _DEAD.search(sentence))
+
+
+# a command for another job than the card's, at the start or after a clause break: "Leave
+# it." over "The plant looks healthy, so water it tomorrow morning." told them two things
+# (safety review of the advisor lines, 21 Oct). Only with what a command takes after it
+# ("water it", "feed monthly"): "Light and water are both fine" and "needs light and
+# water to grow" are no command
+_CLAUSE = (
+    # a dash breaks a clause too: "It looks healthy - water it", "Looks healthy\u2014prune it"
+    r"(?:^\W*|[,;:]\s+|\s*[-\u2013\u2014]\s*|\b(?:and|so|then|but|or|though)\s+)"
+    r"(?:(?:first|then|now|also|and|so|just|please|gently|lightly|simply|carefully|really|"
+    r"you (?:should|could|can|may|might|need to|will need to|ought to|really ought to)|"
+    r"you['\u2019]ll need to|consider|ought to|should|must|"
+    r"i['\u2019]?d|i would|we['\u2019]?d|make sure (?:to|you)|be sure to|try to|remember to|"
+    r"it['\u2019]?s (?:best|worth|a good idea) to|it is (?:best|worth|a good idea) to)\b,?\s+)*"
+)
+_TAKES = (
+    r"\s+(?:it|them|the|your|its|this|these|those|any|all|some|with|well|lightly|sparingly|"
+    r"thoroughly|deeply|regularly|weekly|monthly|fortnightly|now|today|tomorrow|soon|back|out|off|"
+    r"away|in|into|on|under|indoors|inside|affected|infected|dead|damaged|old|lower)\b"
+)
+_JOBS: tuple[tuple[str, frozenset[str]], ...] = tuple(
+    (verbs, frozenset(fits))
+    for verbs, fits in (
+        # never dont_water: "Hold off watering." over "...so water it well tomorrow" (review)
+        (r"water", {"water"}),
+        (r"feed", {"feed"}),
+        # "cut back on feeding" is no cut
+        (
+            r"(?:cut|prune|trim|pinch|shear|clip|shorten|snip|lop|chop|hack)"
+            r"(?!\s+(?:back|down)\s+on\b)",
+            {"prune", "treat_or_remove"},
+        ),
+        (r"repot|pot", {"repot", "change_soil"}),
+        # and "move it into a bigger pot"
+        (r"move|bring", {"move_light", "shelter", "isolate", "repot", "change_soil"}),
+        (r"spray|mist", {"treat_or_remove", "humidity"}),
+        (r"treat", {"treat_or_remove"}),
+        # off a leaf as a check finds them, or off the plant as a cut
+        (r"remove", {"treat_or_remove", "prune", "check_pests"}),
+        (r"mulch", {"mulch"}),
+        (r"turn|rotate", {"rotate"}),
+    )
+)
+# "give it a good drink", "give it a liquid feed": the job as a noun after "give it a"
+_GIVES = (
+    (r"give (?:it|them) (?:an? )?(?:\w+ ){0,2}(?:drink|watering|soak)", frozenset({"water"})),
+    (r"give (?:it|them) (?:an? )?(?:\w+ ){0,2}feed(?:ing)?", frozenset({"feed"})),
+)
+_COMMANDS = tuple(
+    (re.compile(rf"{_CLAUSE}(?:{v}){_TAKES}", re.I), fits) for v, fits in _JOBS
+) + tuple((re.compile(rf"{_CLAUSE}{g}\b", re.I), fits) for g, fits in _GIVES)
+_CUT_TOLD = next(p for p, fits in _COMMANDS if "prune" in fits)
+_OPENS = tuple((re.compile(rf"^\W*(?:{v})\b", re.I), fits) for v, fits in _JOBS)
+# a card that holds back: any other job beside it argues with it. On a card that does a job,
+# a sentence opening with that job may join a second one, as the advisor wrote it ("Move the
+# basil to a brighter spot and pinch out the stem tips"); the also-do cards say the same
+# (test_seedlings_are_never_told_to_pinch_out_their_tips keeps it for a grown plant)
+_HOLDS = frozenset({"leave_normal", "dont_water", "check_pests", "ask_first"})
+# a job for a later season is advice for then, not a second job now: "Feed it when the
+# weather warms up." under "Leave it" in January (test_a_reason_never_names_the_wrong_season).
+# Never "until": "feed it weekly until the weather cools" is a job now (review)
+_LATER = re.compile(
+    r"\b(?:when|once|after|from) (?:the )?(?:weather|temperatures?|spring|summer|growth|"
+    r"new growth|days|nights|frosts?|season)\b|\bin (?:the )?(?:spring|summer)\b|"
+    r"\bnext (?:spring|summer|year|season)\b|\b(?:in|from) (?:march|april|may|june)\b",
+    re.I,
+)
+
+
+# a job asked for without a command's shape (integrator review of #379): "watering it
+# tomorrow would help", "consider repotting it" (the job's -ing with what it is done to),
+# and "could do with a good water", "needs a bigger pot" (the job as a noun after an ask).
+# Never the job named as a cause: "stress from watering", "overwatering"
+_ASKS: tuple[tuple[re.Pattern[str], frozenset[str]], ...] = tuple(
+    (
+        re.compile(
+            rf"\b(?:{doing})ing (?:it|them|the (?:plant|pot|herb|leaves|stems|shoots)s?|your \w+)"
+            rf"\b|\b(?:do with|give (?:it|them)|needs?|could use|benefit from) (?:an? )?"
+            rf"(?:\w+ ){{0,2}}(?:{asked})\b",
+            re.I,
+        ),
+        frozenset(fits),
+    )
+    for doing, asked, fits in (
+        (r"water", r"water|drink|soak|watering", {"water"}),
+        (r"feed", r"feed|feeding", {"feed"}),
+        (
+            r"prun|trimm|cutt|pinch|clipp|shear|snipp",
+            r"trim|prune|haircut|cut back",
+            {"prune", "treat_or_remove"},
+        ),
+        (r"re-?pott", r"repot|bigger pot|new pot|larger pot", {"repot", "change_soil"}),
+        (r"mov|bring", r"move", {"move_light", "shelter", "isolate", "repot", "change_soil"}),
+        (r"spray|mist", r"spray|misting", {"treat_or_remove", "humidity"}),
+        (r"mulch", r"mulch", {"mulch"}),
+    )
+)
+
+
+# a job said not to be done is no second job: "no need to water it", "for lack of pruning",
+# and "Stop watering the plants" is the Hold off watering card's own
+_NOT_DONE = re.compile(
+    r"\b(?:don['\u2019]?t|do not|no need to|never|avoid|without|lack of|no|not|stop|"
+    r"reduce|hold off|cut (?:back|down) on)"
+    r"(?:\s+\w+){0,3}?\s+$",
+    re.I,
+)
+
+
+# the job urged or put in the passive (re-review of #379: "Best to repot it now", "Let's
+# repot", "Worth pruning", "It should be repotted", "Repotting is recommended", "A good prune
+# would help", "You might want to cut it back")
+_URGE = (
+    r"(?:best|better|time|wise|advisable|a good idea|good idea|(?:would|will) be good) to|"
+    r"let['\u2019]?s|worth|go ahead and|"
+    r"(?:you )?(?:might|may|could|will|would) (?:want|wish|like) to|consider|"
+    r"recommend(?:ed)?(?: to| that you| you)?|should|ought to|needs? to|ha(?:ve|s) to|must"
+)
+_URGED: tuple[tuple[re.Pattern[str], frozenset[str]], ...] = tuple(
+    (
+        re.compile(
+            rf"\b(?:{_URGE})\s+(?:{job})|\b(?:should|must|needs? to|ought to) be (?:{job})|"
+            rf"\b(?:{job})\s+(?:is|are|would be|will be|seems?) (?:recommended|advised|advisable|"
+            rf"needed|best|wise|a good idea|worth\w*)|\b(?:{job})\s+(?:would|will|should|could|"
+            r"might|may) help|"
+            # "A trim wouldn't hurt."
+            rf"\b(?:{job})\s+(?:wouldn['\u2019]?t|would not|won['\u2019]?t|will not|can['\u2019]?t) hurt",
+            re.I,
+        ),
+        frozenset(fits),
+    )
+    for job, fits in (
+        (r"water\w*", {"water"}),
+        (r"feed\w*|fertili[sz]\w*", {"feed"}),
+        (
+            r"(?:prun|trim|pinch|clip|shear|snip)\w*|cut(?:ting)?\b(?!tings)",
+            {"prune", "treat_or_remove"},
+        ),
+        (r"re-?pot\w*", {"repot", "change_soil"}),
+        (r"mov(?:e|ed|ing)\b|bring\w*|relocat\w*", {"move_light", "shelter", "isolate", "repot"}),
+        (r"spray\w*|mist(?:ing|ed)?\b", {"treat_or_remove", "humidity"}),
+        (r"mulch\w*", {"mulch"}),
+    )
+)
+
+
+def _commands_another(sentence: str, primary: str) -> bool:
+    if primary == "other" or _LATER.search(sentence):  # "other" is no one job to keep to
+        return False
+    if primary not in _HOLDS and any(p.match(sentence) and primary in f for p, f in _OPENS):
+        return False
+    return any(p.search(sentence) and primary not in fits for p, fits in _COMMANDS) or any(
+        primary not in fits and not _NOT_DONE.search(sentence[: m.start()])
+        for p, fits in _ASKS + _URGED
+        for m in p.finditer(sentence)
+    )
+
+
+# a word hidden from the checks: a zero-width space or a soft hyphen inside it ("ne\u200bem"),
+# wide or styled letters (NFKC), or spaced out ("n e e m") (integrator review of #379)
+# a kind of chemical said not to be used is no chemical on the page: "Avoid chemical sprays.",
+# "Do not use pesticides." (re-review of #379). Only the kind: a product named beside it
+# ("…and use neem oil instead") is still found
+_SAID_NOT = re.compile(
+    r"\b(?:avoid|do not use|don['\u2019]?t use|never use|no need for|without|not|no)\s+"
+    r"(?:any\s+|the\s+|using\s+)?(?:harsh\s+|strong\s+)?"
+    r"(?:chemical\w*|pesticid\w*|insecticid\w*|fungicid\w*|herbicid\w*)"
+    r"(?:\s+(?:sprays?|treatments?|products?|controls?))?",
+    re.I,
+)
+_HIDDEN = dict.fromkeys(map(ord, "\u00ad\u200b\u200c\u200d\u2060\ufeff"))
+_SPACED = re.compile(r"(?<!\w)(?:\w[ .\-]){2,}\w(?!\w)")
+
+
+def _plain_letters(sentence: str) -> str:
+    text = unicodedata.normalize("NFKC", sentence).translate(_HIDDEN)
+    return _SPACED.sub(lambda m: re.sub(r"[ .\-]", "", m.group()), text)
+
+
+def _unsafe(sentence: str, rest: bool, primary: str | None = None) -> bool:
+    """A line of the advisor's that never stands on the page as ours: a chemical, a pest
+    product or a home-made spray; for a resting herb a cut that is no tidy; and, given the
+    card's job, a command for another one."""
+    from herbtwin.stages.web_how import (  # noqa: PLC0415 (web_how -> chat -> this module)
+        names_a_chemical,
+        names_a_pest_product,
+    )
+
+    sentence = _plain_letters(sentence)
+    named = _SAID_NOT.sub(" ", sentence)
+    return (
+        names_a_chemical(named)
+        or names_a_pest_product(named)
+        or (rest and _cuts_while_resting(sentence))
+        or (primary is not None and _commands_another(sentence, primary))
+    )
 
 
 def winter_rest(plant_key: str | None, month: int) -> bool:
@@ -241,7 +494,12 @@ _FEW = re.compile(
 # keeping it apart, in the advisors' own words: never said of a bed plant (#304 review)
 _APART = re.compile(
     r"\b(?:apart|away from (?:your |the |its )?other plants|isolat\w*|quarantin\w*|"
-    r"separate (?:it|them|the plant))\b",
+    r"separate (?:it|them|the plant))\b|"
+    # and away from the others in any words: "move it away from the others", "away from your
+    # other herbs", "at a distance from nearby plants" (safety review of the advisor lines)
+    r"\b(?:away|distance|separate) from (?:\w+ ){0,4}(?:plants?|herbs?|others|ones|rest|"
+    r"neighbou?rs)\b|"
+    r"\b(?:move|moving|put|keep|set|place) (?:it|them|the (?:plant|herb|pot)s?) away\b",
     re.I,
 )
 # harm that is only a pest's when a pest is there too: "leaves yellowing from aphids", but
@@ -686,6 +944,8 @@ def reply_to(answer: Answer, question: str | None, month: int) -> str:
             sentence = _said_now(part, month, rest) if part else None
             if not sentence or why_not_a_reason(sentence) is not None:
                 continue
+            if _unsafe(sentence, rest):  # no spray or product, no hard cut while it rests
+                continue
             if answer.in_ground and _APART.search(sentence):  # a bed plant stays put (#304)
                 continue
             plain = _plain(sentence)
@@ -720,14 +980,17 @@ def _reason(
     month: int,
     quiet: bool = False,
     rest: bool = False,
+    primary: str | None = None,
+    safe: bool = True,
 ) -> str:
     """The advisor's first sentence, unless it only repeats what the person told us (it
-    did, live) or names the wrong season: then the next one, or none. Their words are never
-    shown as our reason."""
+    did, live), names the wrong season or is `_unsafe` for the card's job (`primary`): then
+    the next one, or none. Their words are never shown as our reason. `safe=False` skips
+    that check, to tell a line it took from one that was never there."""
     said = _plain(told_question or "")
     for part in _sentences(answer):
         sentence = _said_now(part, month, rest)
-        if not sentence:
+        if not sentence or (safe and _unsafe(sentence, rest, primary)):
             continue
         if (why := why_not_a_reason(sentence)) is not None:
             # the kind and length only: the advisor's text can echo the person's own note
@@ -850,13 +1113,16 @@ def _main_reason(
     runs = [panel.chosen] + [
         r for r in panel.runs if r is not panel.chosen and r.advice.primary == panel.primary
     ]
-    first = _reason(panel.chosen.advice.answer, told_question, month, rest=rest)
-    # the rest rule took its only line (a cut for growth): look further, as for a placeholder
-    cut = rest and not first and bool(_reason(panel.chosen.advice.answer, told_question, month))
+    job = panel.primary
+    first = _reason(panel.chosen.advice.answer, told_question, month, rest=rest, primary=job)
+    # the rest rule or the safety check took every line (a cut for growth, a spray, another
+    # job's command): look further, as for a placeholder
+    raw = _reason(panel.chosen.advice.answer, told_question, month, safe=False)
+    cut = not first and bool(raw)
     if first or not (_has_placeholder(panel.chosen.advice.answer) or cut):
         return first  # a reason, or none on purpose (it only echoed the person's note)
     for run in runs[1:]:
-        if said := _reason(run.advice.answer, told_question, month, rest=rest):
+        if said := _reason(run.advice.answer, told_question, month, rest=rest, primary=job):
             return said
     view = views.get(panel.primary)
     if view is not None and view.why:
@@ -1067,7 +1333,10 @@ def build_answer(
             else ALSO_BECAUSE.get(panel.primary, "")
         )
     said = {
-        _reason(r.advice.answer, told_question, month, quiet=True, rest=no_cut) for r in panel.runs
+        _reason(
+            r.advice.answer, told_question, month, quiet=True, rest=no_cut, primary=panel.primary
+        )
+        for r in panel.runs
     }
     if assessment.photo_issue and reason and reason in said:
         # a rough read: "the plant looks healthy" from a blurred photo is a guess, said as

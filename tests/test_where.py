@@ -285,3 +285,12 @@ def test_a_sample_photo_with_no_place_is_set_in_london():
     # one changed byte is not a sample
     other = (SAMPLES / "1-parsley-healthy.jpg").read_bytes() + b"\0"
     assert resolve_location(other, device=None, place=None, home=None) == (None, [])
+
+
+@respx.mock
+def test_a_busy_place_lookup_is_retried_once():
+    route = respx.get(GEOCODE_URL).mock(
+        side_effect=[httpx.Response(503), httpx.Response(200, json=LEEDS)]
+    )
+    assert geocode("Leeds").label == "Leeds, GB"
+    assert route.call_count == 2

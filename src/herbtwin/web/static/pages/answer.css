@@ -391,7 +391,8 @@
    small burst of leaves when motion is welcome. Decorative: the words say it all. */
 .answer-page .face { flex: none; overflow: visible; }
 /* big enough to notice (18 Oct final look: at 32 px the drawing read as about 20 px) */
-.answer-page .voice .face { width: 48px; height: 48px; }
+.answer-page .voice .face, .answer-page .plant-mood .face { width: 48px; height: 48px; }
+.answer-page .plant-mood { margin: 12px 0 0; line-height: 0; }  /* the face alone, with no voice */
 .answer-page .i-did .face { width: 40px; height: 40px; }
 .answer-page .face .head { fill: var(--soft); stroke: var(--primary); stroke-width: 2; }
 .answer-page .face .sprout { fill: var(--primary); }
