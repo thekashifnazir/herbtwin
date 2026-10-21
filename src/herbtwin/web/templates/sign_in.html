@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Sign in · herbtwin{% endblock %}
+{% block main %}
+<h1>Sign in</h1>
+<p class="lead">We email you a link. No password.</p>
+<form method="post" action="/auth/sign-in" class="card">
+  <label>Your email
+    <input type="email" name="email" required maxlength="254" autocomplete="email">
+  </label>
+  <button class="primary" type="submit">Email me a link</button>
+</form>
+{# short (19 Oct walk), and still says sharing is its own yes or no before anyone signs in #}
+<p class="muted">Signed in, the plants you keep stay with their answers and chat. Delete them any time. Sharing how advice turned out is a separate yes or no, never your photos. <a href="/privacy">Privacy</a></p>
+{% endblock %}

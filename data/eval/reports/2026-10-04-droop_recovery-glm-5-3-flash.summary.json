@@ -1,0 +1,45 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.04587,
+  "failed_ids": [],
+  "git_sha": "756e55e",
+  "largest_disagreements": [],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 20211,
+  "metrics": {
+    "spearman_basil": {
+      "hi": null,
+      "lo": null,
+      "skipped": null,
+      "value": -0.7715929828771749
+    },
+    "spearman_fittonia": {
+      "hi": null,
+      "lo": null,
+      "skipped": null,
+      "value": -0.353342329397788
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 63,
+  "n_total": 63,
+  "pred_histogram": {
+    "0": 38,
+    "1": 9,
+    "2": 14,
+    "3": 2
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-droop_recovery-glm-5-3-flash",
+  "set": "droop_recovery",
+  "tags": {
+    "safe-to-train": 63
+  },
+  "temperature": 0
+}

@@ -1,0 +1,141 @@
+Expert check of plant-care advice from an app (5 photos)
+
+I'm building a plant-care app for UK home gardeners, mostly culinary herbs in pots and gardens, for a hackathon. For each of the 5 plant photos attached (photo-s012.jpg etc.), the app gave the advice below. I need a horticulturist or experienced professional gardener (UK experience ideal) to grade it. The expert's own judgement is the point: please don't grade with AI.
+
+For each photo, please give:
+1. What you see: the main problem, or "healthy", in one line.
+2. The app's first action (the headline): Right / Acceptable / Wrong / Harmful, with one line why.
+3. Anything wrong, misleading or confusing elsewhere in the advice (quote the line).
+4. What you would tell the owner to do first, in one or two sentences.
+5. Overall grade, 1 (useless or harmful) to 5 (what I'd tell them myself).
+
+Deliverable: a spreadsheet or CSV, one row per photo (photo id, what you see, first-action grade, issues, your first step, overall grade), plus a short paragraph of general comments on the advice style.
+
+Context: assume a UK garden in mid-October; the owner gave no other information. The advice text is exactly what the app shows (the app's page shows the same text in cards). The photos are public Creative Commons photos (credits below), not mine. I'd like to quote the overall results (grades and short quotes) in a public hackathon write-up, so please confirm that's fine.
+
+
+==== Photo s012 (Oregano), file photo-s012.jpg
+Credit: Photo by Srijani Ghosh, Gardening & Landscaping Stack Exchange, https://gardening.stackexchange.com/q/43827, CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
+
+App's advice:
+**TODAY**
+
+## Move it to better light.
+
+Move the oregano to a brighter location (e.g., a sunny south‑facing window or add a grow light) and trim the leggy, woody stems to encourage bushier growth.
+
+**Could go either way · about 5 in 10** Do the quick check first, or take the low-risk step.
+
+### Also do
+
+**THIS WEEK** · **Cut it back**
+
+Dies back further and rests through winter; new shoots from the base in March to April
+
+*From gardening sources:* Trimming off the flower stems when the flowers are over keeps plants neat. (less sure)
+
+### Keep an eye on
+
+Not normal now: black dusty pustules on leaves and stems. Also not normal: crown soft and mushy. Send a new photo if you see either.
+
+==== Photo s014 (Mint), file photo-s014.jpg
+Credit: Photo by rsa0809999, Gardening & Landscaping Stack Exchange, https://gardening.stackexchange.com/q/53211, CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
+
+App's advice:
+**TODAY**
+
+## Keep it away from your other plants.
+
+Isolate the pot to keep any possible pest from spreading and inspect the leaves and stems for pests to determine if treatment is needed.
+
+**Likely right · about 7 in 10**
+
+### Also do
+
+**THIS WEEK** · **Check for pests**
+
+Look under the leaves and along the stems: a photo cannot show everything.
+
+### Don't
+
+**Water it**
+
+Worse than leaving it.
+
+*Our 2-week forecast:* stays moist without watering; extra water risks waterlogged roots
+
+### Keep an eye on
+
+Not normal now: orange, yellow or black pustules on leaves and stems. Also not normal: rhizomes soft, dark and mushy instead of firm and pale. Send a new photo if you see either.
+
+==== Photo s021 (Rosemary), file photo-s021.jpg
+Credit: Photo by Jeeyoung Jeon, Gardening & Landscaping Stack Exchange, https://gardening.stackexchange.com/q/46241, CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0/
+
+App's advice:
+## Leave it for now and keep an eye on it.
+
+Leave the rosemary as is; the scattered yellow leaves are normal and the soil surface dry suits its low water need.
+
+*Our 2-week forecast:* no dry days or frost in the next 2 weeks
+
+**Could go either way · about 5 in 10** Do the quick check first, or take the low-risk step.
+
+### Don't
+
+**Water it**
+
+Worse than leaving it.
+
+*Our 2-week forecast:* stays moist without watering; extra water risks waterlogged roots
+
+### Keep an eye on
+
+Not normal now: metallic purple-and-green striped beetles or grey larvae, shoot tips chewed to brown stumps. Also not normal: leaves yellow or grey and wilt while compost is wet, stem base dark and soft. Send a new photo if you see either.
+
+==== Photo s052 (Basil), file photo-s052.jpg
+Credit: Photo by simbabque, Gardening & Landscaping Stack Exchange, https://gardening.stackexchange.com/q/26966, CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0/
+
+App's advice:
+**TODAY**
+
+## Cut it back.
+
+Prune off the flower spikes to stop bolting and encourage leaf growth; move the pot to a sheltered spot overnight to protect against chilling temperatures (forecast lows near 8‑10 °C).
+
+**Likely right · about 7 in 10**
+
+### Also do
+
+**THIS WEEK** · **Protect it (shelter or bring in)**
+
+The weather could harm it.
+
+*Our 2-week forecast:* cold risk Saturday if left out; shelter avoids it
+
+### Keep an eye on
+
+Not normal now: yellow patches between leaf veins with grey-purple fuzz on the leaf underside, outdoors as well as under cover; the patches later turn brown or black. Also not normal: leaves yellowing between the veins or blackening in a mild spell before any cold night. Send a new photo if you see either.
+
+==== Photo s063 (Sage), file photo-s063.jpg
+Credit: Photo by Chandan Hebbale (iNaturalist user chandan-hebbale), https://www.inaturalist.org/observations/72184069, CC0 1.0 (no rights reserved) https://creativecommons.org/publicdomain/zero/1.0/
+
+App's advice:
+## Leave it for now and keep an eye on it.
+
+The sage looks healthy; no action needed.
+
+*Our 2-week forecast:* no dry days or frost in the next 2 weeks
+
+**Could go either way · about 5 in 10** Do the quick check first, or take the low-risk step.
+
+### Don't
+
+**Water it**
+
+Worse than leaving it.
+
+*Our 2-week forecast:* stays moist without watering; extra water risks waterlogged roots
+
+### Keep an eye on
+
+Not normal now: metallic purple-and-green striped beetles or grey larvae, shoot tips chewed to brown stumps. Also not normal: leaves yellow or grey and wilt while compost is wet, stem base dark and soft. Send a new photo if you see either.

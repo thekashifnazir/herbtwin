@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Delete my account · herbtwin{% endblock %}
+{% block main %}
+<h1>Delete my account</h1>
+<p class="lead">This deletes your sign-in and every plant, answer and photo in it. It cannot be undone.</p>
+<form method="post" action="/account/delete" class="card">
+  <label>Type <strong>delete</strong> to confirm <input name="confirm" autocomplete="off" required></label>
+  <p><button class="danger" type="submit">Delete my account and everything in it</button></p>
+</form>
+<p><a class="back" href="/plants">Back to my plants</a></p>
+{% endblock %}

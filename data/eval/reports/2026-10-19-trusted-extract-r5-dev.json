@@ -1,0 +1,2659 @@
+{
+ "prereg": "data/eval/prereg/2026-10-19-trusted-extract-r5.md",
+ "split": "dev",
+ "selected": "ultra+E0+cond:ultra",
+ "grid": [
+  {
+   "config": "super-vl+E1",
+   "stages": 2,
+   "negatives": 415,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 71,
+   "recall": 0.507,
+   "recall_wilson95": [
+    0.3934,
+    0.62
+   ],
+   "latency_p50_s": 0.61,
+   "latency_p95_s": 0.82,
+   "usd_per_answer": 0.000385,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/217",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields_stage1": {
+    "action": 0.831,
+    "polarity": 0.949,
+    "applies_to": 0.977,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.554,
+    "sentences": 177
+   },
+   "fields": {
+    "action": 0.831,
+    "polarity": 0.949,
+    "applies_to": 0.977,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.554,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "ultra+E0",
+   "stages": 2,
+   "negatives": 415,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 71,
+   "recall": 0.6479,
+   "recall_wilson95": [
+    0.5318,
+    0.7488
+   ],
+   "latency_p50_s": 0.94,
+   "latency_p95_s": 1.09,
+   "usd_per_answer": 0.000862,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/217",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields_stage1": {
+    "action": 0.768,
+    "polarity": 0.949,
+    "applies_to": 0.96,
+    "hedged": 1.0,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.695,
+    "sentences": 177
+   },
+   "fields": {
+    "action": 0.768,
+    "polarity": 0.949,
+    "applies_to": 0.96,
+    "hedged": 1.0,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.695,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "super-vl+E1+cond:super-vl",
+   "stages": 3,
+   "negatives": 415,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 71,
+   "recall": 0.6338,
+   "recall_wilson95": [
+    0.5176,
+    0.7363
+   ],
+   "latency_p50_s": 1.08,
+   "latency_p95_s": 1.39,
+   "usd_per_answer": 0.000528,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/217",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields_stage1": {
+    "action": 0.831,
+    "polarity": 0.949,
+    "applies_to": 0.977,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.554,
+    "sentences": 177
+   },
+   "fields": {
+    "action": 0.831,
+    "polarity": 0.949,
+    "applies_to": 0.977,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.605,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "super-vl+E1+cond:ultra",
+   "stages": 3,
+   "negatives": 415,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 71,
+   "recall": 0.6479,
+   "recall_wilson95": [
+    0.5318,
+    0.7488
+   ],
+   "latency_p50_s": 1.09,
+   "latency_p95_s": 1.47,
+   "usd_per_answer": 0.000861,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/217",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields_stage1": {
+    "action": 0.831,
+    "polarity": 0.949,
+    "applies_to": 0.977,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.554,
+    "sentences": 177
+   },
+   "fields": {
+    "action": 0.831,
+    "polarity": 0.949,
+    "applies_to": 0.977,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.644,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "ultra+E0+cond:ultra",
+   "stages": 3,
+   "negatives": 415,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 71,
+   "recall": 0.7183,
+   "recall_wilson95": [
+    0.6046,
+    0.8096
+   ],
+   "latency_p50_s": 1.4,
+   "latency_p95_s": 1.9,
+   "usd_per_answer": 0.001265,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/217",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields_stage1": {
+    "action": 0.768,
+    "polarity": 0.949,
+    "applies_to": 0.96,
+    "hedged": 1.0,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.695,
+    "sentences": 177
+   },
+   "fields": {
+    "action": 0.768,
+    "polarity": 0.949,
+    "applies_to": 0.96,
+    "hedged": 1.0,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.734,
+    "sentences": 177
+   }
+  }
+ ],
+ "redteam_of_selected": {
+  "config": "ultra+E0+cond:ultra",
+  "stages": 3,
+  "negatives": 11,
+  "false_agrees": 0,
+  "false_agree_rate": 0.0,
+  "false_agree_wilson95": [
+   0.0,
+   0.2588
+  ],
+  "positives": 5,
+  "recall": 0.8,
+  "recall_wilson95": [
+   0.3755,
+   0.9638
+  ],
+  "latency_p50_s": 1.33,
+  "latency_p95_s": 2.29,
+  "usd_per_answer": 0.001469,
+  "no_form": 0,
+  "false_agrees_by_kind": {
+   "do": "0/11"
+  },
+  "false_agree_ids": []
+ },
+ "spent_usd": 0.4104,
+ "forms_of_selected": {
+  "Give the pot a thorough soak whenever the compost feels dry to the touch.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "the compost feels dry to the touch"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water parsley deeply if the soil has dried out.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "if the soil has dried out"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "When the top few centimetres are dry, water mint generously.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "When the top few centimetres are dry"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If the compost is dry, water coriander straight away to stop it bolting.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "If the compost is dry"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water chives well in prolonged dry weather.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "prolonged dry weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "During long dry spells, give rosemary an occasional deep watering.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "During long dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water parsley every evening during a heatwave.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "during a heatwave"
+    },
+    {
+     "kind": "other",
+     "value": "every evening"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "In hot weather, water pots of basil twice a day.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "In hot weather"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If the compost is soggy, stop watering until it has dried out.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_wet",
+     "value": "If the compost is soggy"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Hold off watering rosemary while the soil is still wet.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_wet",
+     "value": "while the soil is still wet"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "When heavy rain is forecast, there is no need to water beds.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "rain_forecast",
+     "value": "When heavy rain is forecast"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Skip watering pots of thyme if rain is due.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "rain_forecast",
+     "value": "if rain is due"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If rain is forecast, leave watering for another day.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "rain_forecast",
+     "value": "If rain is forecast"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If a frost is forecast, drape fleece over basil overnight.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "If a frost is forecast"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Bring pots of coriander into a porch when a cold night is on the way.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "when a cold night is on the way"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Cover young parsley with a cloche when frost threatens.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young"
+    },
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "when frost threatens"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Move pots of sage against a house wall before a hard frost.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "before a hard frost"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Lift basil pots indoors if night temperatures will fall below 8C.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "if night temperatures will fall below 8C"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Never leave basil out on a frosty night.": {
+   "action": "protect_cold",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "frosty night"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Once the cold spell has passed, take the fleece off.": {
+   "action": "protect_cold",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "cold spell"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If downy mildew appears on basil, remove the affected plants straight away.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "downy mildew"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Where downy mildew strikes, pull up and bin the worst plants.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "downy mildew"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If the leaves are mottled with downy mildew, bin the plant.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "downy mildew"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If rust shows on mint, cut the stems to the ground and bin them.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rust"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Mint with rust pustules should have its affected shoots removed.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rust"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If aphids cluster on the tips, wipe them off with a damp cloth.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    },
+    {
+     "kind": "other",
+     "value": "cluster on the tips"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Where aphids are a problem, squash small colonies by hand.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "When aphids appear, hose them off with a jet of water.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If you find rosemary beetle, shake the plant over a sheet and destroy the beetles.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rosemary beetle"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Pick off rosemary beetle larvae by hand whenever you see them.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rosemary beetle larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Thin coriander seedlings to 5cm apart once they can be handled.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "other",
+     "value": "once they can be handled"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "When seedlings appear, keep the compost just moist.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water seedlings from below if the compost has dried.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "soil_dry",
+     "value": "if the compost has dried"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Indoors, move basil to the brightest windowsill you have.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "Indoors"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Grown indoors, parsley needs moving close to a bright window.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "Grown indoors"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Indoors, water basil less in winter.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "Indoors"
+    },
+    {
+     "kind": "month_range",
+     "value": "winter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If the plant is outdoors, bring it in before frost.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "outdoor",
+     "value": "If the plant is outdoors"
+    },
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "before frost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Basil kept outdoors should come inside once nights fall below 10C.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "outdoor",
+     "value": "kept outdoors"
+    },
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "once nights fall below 10C"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "In pots, water rosemary only when the compost is nearly dry.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    },
+    {
+     "kind": "soil_dry",
+     "value": "when the compost is nearly dry"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Container-grown mint needs watering every day in hot weather.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "Container-grown"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Move potted basil into the greenhouse when frost is forecast.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "when frost is forecast"
+    },
+    {
+     "kind": "container",
+     "value": "potted"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water pots of parsley daily in summer.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    },
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "When a wet spell is forecast, move pots of thyme under cover.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "rain_forecast",
+     "value": "When a wet spell is forecast"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If frost has blackened the tips, cut them back in spring.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "frost has blackened the tips"
+    },
+    {
+     "kind": "month_range",
+     "value": "spring"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Shade parsley in a heatwave.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "in a heatwave"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Keep coriander out of hot afternoon sun.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "hot afternoon sun"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Feed basil every fortnight in summer.": {
+   "action": "feed",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Repot rosemary into gritty compost in spring.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Harvest basil leaves regularly from the top.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water basil generously and often.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Keep parsley well watered throughout its life.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Give mint a good drink every few days.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water rosemary only sparingly.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Keep thyme on the dry side at all times.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Let sage dry out well between waterings.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "dry out well between waterings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Move the basil pot to your sunniest window.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    },
+    {
+     "kind": "indoor",
+     "value": "windowsill indoors"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Shift coriander into a spot with more light.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Put parsley where it gets morning sun.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "morning sun"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Protect basil from cold with a layer of fleece.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "cold"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Shelter pots of sage from icy winds.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "icy winds"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Remove any shoots killed by disease and bin them.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "disease"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Destroy rosemary beetles and their larvae.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rosemary beetles and their larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Cut out stems spotted with rust.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rust"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Pinch out the tips of basil to keep it bushy.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Shorten leggy mint stems by half.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "leggy"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Trim chives back to fresh growth.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Clip thyme lightly to keep it compact.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Some yellowing of older parsley leaves is quite normal.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Mint dying back in late autumn is entirely natural.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Leave chives alone; they will regrow in spring.": {
+   "action": "none",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Bring tender herbs indoors before the first frost.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "tender herbs",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "before the first frost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Fleece tender herbs whenever frost is forecast.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "tender herbs",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "whenever frost is forecast"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "tender"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Keep Mediterranean herbs dry through the winter.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "Mediterranean herbs",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "Mediterranean herbs"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water leafy herbs freely in summer.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "leafy herbs",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "leafy"
+    },
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Trim leafy herbs often to keep them productive.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "leafy herbs",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Mediterranean herbs need little water.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "Mediterranean herbs",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "You might water basil a little more in a warm spell.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "in a warm spell"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "It can help to fleece young basil on cold nights.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "cold nights"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "young"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "Some herbs may benefit from a light trim now.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "herbs",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "now"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "Perhaps move parsley somewhere brighter if it looks pale.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "if it looks pale"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "You could remove a few of the worst leaves.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "It's often worth watering mint in a dry week.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "a dry week"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "Sow coriander outdoors in April.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "April"
+    },
+    {
+     "kind": "outdoor",
+     "value": "outdoors"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Cut sage back by a third in spring.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Give mint a summer trim to keep leaves fresh.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water basil every morning in summer.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    },
+    {
+     "kind": "other",
+     "value": "every morning"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "In winter keep rosemary almost dry.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Fleece thyme in the depths of winter.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Deadhead chives through the summer.": {
+   "action": "deadhead",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "through the summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Move basil outdoors in early summer.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "early summer"
+    },
+    {
+     "kind": "outdoor",
+     "value": "outdoors"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Never water basil late at night.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "late at night"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Do not cut rosemary back into old wood.": {
+   "action": "prune",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "old wood"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "There is no need to fleece established sage.": {
+   "action": "protect_cold",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Avoid moving basil into cold, draughty rooms.": {
+   "action": "protect_cold",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "cold, draughty rooms"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Don't remove the flowers if you want coriander seed.": {
+   "action": "deadhead",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "if you want coriander seed"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "You needn't water mint planted in damp ground.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_wet",
+     "value": "damp ground"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Don't let parsley go short of water in summer.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Avoid trimming thyme in late autumn.": {
+   "action": "prune",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Don't destroy the hoverfly larvae among the aphids.": {
+   "action": "treat_or_remove",
+   "polarity": "dont",
+   "applies_to": "other_plant",
+   "group": "hoverfly larvae",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "There's no reason to bring rosemary indoors in the south.": {
+   "action": "bring_in",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "in the south"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Never water sage from overhead in winter.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "other",
+     "value": "from overhead"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "In the ground, rosemary rarely needs watering.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Basil loves heat and bright light.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Parsley appreciates a moisture-retentive soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Rosemary relishes a hot, dry spot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Mint thrives in damp ground.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Thyme is at its best in full sun.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Coriander prefers cool, bright conditions.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Sage needs very free-draining soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Chives are tolerant of light shade.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Basil dislikes cold, wet compost.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Mint prefers partial shade.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Thyme needs little water once established.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Plants in containers need watering more often than those in the ground.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Many cooks keep a pot of basil on the kitchen windowsill.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Some growers fleece rosemary every November.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "every November"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Plenty of gardeners water herbs every evening.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "herbs",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "every evening"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Commercial growers cut chives several times a year.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Downy mildew can wipe out basil in a week.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Rust on mint is spread by spores in the soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Overwatering is a common way to lose rosemary.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Frost turns basil leaves black.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Pinching out encourages side shoots.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Coriander bolts quickly in hot weather.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Sage is evergreen in most winters.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Rosemary beetle feeds mainly in autumn and spring.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Gardeners often grow basil on a sunny patio.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Should you water basil from below?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Does rosemary need protecting in winter?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "When should I cut back mint?": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Watering basil in pots": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "How do I get rid of aphids on parsley?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Can basil survive outdoors in October?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Water courgettes daily once they start fruiting.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "courgettes",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "fruiting"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Pinch out the side shoots of cordon tomatoes.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "cordon tomatoes",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Fleece early potatoes against late frost.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "early potatoes",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "late frost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Remove blighted potato foliage and bin it.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "potato",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "blight"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Move citrus trees indoors for the winter.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "citrus trees",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "outdoor",
+     "value": "citrus trees"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Bring pelargoniums indoors in autumn.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "pelargoniums",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "autumn"
+    },
+    {
+     "kind": "outdoor",
+     "value": "plants grown outside"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Prune roses hard in March.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "roses",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "March"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water basil thoroughly when the compost surface is dry.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "when the compost surface is dry"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "If parsley wilts on a dry day, give it a long drink.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "if it wilts"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "on a dry day"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "In dry spells, water mint at the base every few days.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water container herbs morning and evening in very hot weather.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "container herbs",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "very hot weather"
+    },
+    {
+     "kind": "container",
+     "value": "container"
+    },
+    {
+     "kind": "other",
+     "value": "morning and evening"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Let wet compost drain before watering rosemary again.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_wet",
+     "value": "wet compost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Don't water if heavy rain is forecast.": {
+   "action": "withhold_water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "rain_forecast",
+     "value": "heavy rain is forecast"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Fleece basil on nights when frost is forecast.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "when frost is forecast"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Bring parsley pots under cover if a cold night is coming.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "if a cold night is coming"
+    },
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Uncover plants again once frosts have passed.": {
+   "action": "protect_cold",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "frosts have passed"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Bin basil plants that show downy mildew.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "downy mildew"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Cut rusty mint stems to the ground.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Rub off aphids where they gather on shoot tips.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Collect and destroy rosemary beetles when you see them.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rosemary beetles"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Thin parsley seedlings to 15cm apart.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "On a windowsill indoors, turn the pot every few days so all sides get light.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "on a windowsill indoors"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Water mint in pots more often than in the ground.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Move tender herbs under cover before frost.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "tender herbs",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "before frost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "It may be worth fleecing sage in a hard winter.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "other",
+     "value": "hard winter"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "Water parsley regularly.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Keep rosemary on the dry side.": {
+   "action": "withhold_water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Give basil the sunniest spot you can.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Protect sage pots from freezing winds.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "freezing winds"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Remove diseased leaves promptly.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Pinch out basil flower buds.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Dieback of mint in autumn is normal.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Sow parsley in spring.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Trim thyme in summer after flowering.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "after flowering"
+    },
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "In winter, water sage hardly at all.": {
+   "action": "water_less",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "In winter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Never prune sage hard in autumn.": {
+   "action": "prune",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Don't water coriander at midday.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "midday"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "There's no need to cover thyme in a mild winter.": {
+   "action": "protect_cold",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "winter"
+    },
+    {
+     "kind": "other",
+     "value": "mild"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "Basil craves warmth.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Rosemary prefers lean, dry soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Many people grow mint in a bucket to stop it spreading.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Some gardeners water parsley daily.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Is basil an annual?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "Water tomatoes at the base, not over the leaves.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "other_plant",
+   "group": "tomatoes",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  }
+ }
+}

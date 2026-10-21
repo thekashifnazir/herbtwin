@@ -1,0 +1,81 @@
+{
+  "date": "2026-10-14",
+  "observe_model": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "observe_fallback_model": "",
+  "per_class": 24,
+  "seed": 7,
+  "classes": {
+    "basil_downy_mildew": {
+      "n": 24,
+      "none": 18,
+      "right": 6
+    },
+    "mint_rust": {
+      "n": 24,
+      "right": 11,
+      "none": 13
+    },
+    "powdery_mildew_herbs": {
+      "n": 24,
+      "wrong": 1,
+      "none": 21,
+      "error": 2
+    },
+    "aphids_on_herbs": {
+      "n": 6,
+      "none": 4,
+      "right": 2
+    },
+    "slugs_snails": {
+      "n": 24,
+      "none": 24
+    },
+    "healthy": {
+      "n": 150,
+      "none": 150
+    },
+    "judges": {
+      "n": 5,
+      "none": 4,
+      "right": 1
+    }
+  },
+  "wrong_names": {
+    "powdery_mildew_herbs": {
+      "sage and ligurian leafhoppers": 1
+    }
+  },
+  "healthy_false_alarm_rate": 0.0,
+  "judges": {
+    "1-parsley-healthy.jpg": {
+      "want": null,
+      "got": null,
+      "symptoms": "",
+      "error": null
+    },
+    "3-basil-yellow-leaves.jpg": {
+      "want": "basil downy mildew",
+      "got": null,
+      "symptoms": "",
+      "error": null
+    },
+    "4-rosemary-beetles.jpg": {
+      "want": "rosemary beetle",
+      "got": "rosemary beetle",
+      "symptoms": "beetle infestation; chewed leaf tips; brown leaf tips; linear green leaves; brown tips; textured surface",
+      "error": null
+    },
+    "5-coriander-flowering.jpg": {
+      "want": null,
+      "got": null,
+      "symptoms": "",
+      "error": null
+    },
+    "6-basil-downy-mildew.jpg": {
+      "want": "basil downy mildew",
+      "got": null,
+      "symptoms": "",
+      "error": null
+    }
+  }
+}

@@ -1,0 +1,207 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = tokenfactory2 minus tokenfactory; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "tokenfactory": "nano30b-tf-p7ba.jsonl",
+    "tokenfactory2": "nano30b-tf2-p7ba.jsonl"
+  },
+  "n_paired": 148,
+  "ask_first_primary": {
+    "tokenfactory": 0,
+    "tokenfactory2": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "tokenfactory": 0.3581081081081081,
+      "tokenfactory2": 0.3581081081081081,
+      "diff": 0.0,
+      "lo": -0.033783783783783786,
+      "hi": 0.033783783783783786,
+      "n": 148
+    },
+    "primary_in_truth": {
+      "tokenfactory": 0.5608108108108109,
+      "tokenfactory2": 0.5675675675675675,
+      "diff": 0.006756756756756757,
+      "lo": -0.033783783783783786,
+      "hi": 0.0472972972972973,
+      "n": 148
+    },
+    "jaccard": {
+      "tokenfactory": 0.2971364221364221,
+      "tokenfactory2": 0.30399774774774774,
+      "diff": 0.006861325611325612,
+      "lo": -0.012620656370656371,
+      "hi": 0.02608858858858859,
+      "n": 148
+    },
+    "over_treatment": {
+      "tokenfactory": 0.18243243243243243,
+      "tokenfactory2": 0.19594594594594594,
+      "diff": 0.013513513513513514,
+      "lo": -0.04054054054054054,
+      "hi": 0.06756756756756757,
+      "n": 148
+    },
+    "water_conflict": {
+      "tokenfactory": 0.05405405405405406,
+      "tokenfactory2": 0.07432432432432433,
+      "diff": 0.02027027027027027,
+      "lo": -0.013513513513513514,
+      "hi": 0.05405405405405406,
+      "n": 148
+    },
+    "unguarded_water_conflict": {
+      "tokenfactory": 0.0,
+      "tokenfactory2": 0.0,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 148
+    },
+    "asked_when_expert_asked": {
+      "tokenfactory": 1.0,
+      "tokenfactory2": 1.0,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 31
+    },
+    "primary_ok_if_asked_too": {
+      "tokenfactory": 0.3581081081081081,
+      "tokenfactory2": 0.3581081081081081,
+      "diff": 0.0,
+      "lo": -0.033783783783783786,
+      "hi": 0.033783783783783786,
+      "n": 148
+    }
+  },
+  "primary_agreement": {
+    "n": 148,
+    "agree": 124,
+    "rate": 0.8378378378378378,
+    "lo": 0.777027027027027,
+    "hi": 0.8986486486486487,
+    "differ": [
+      {
+        "id": "actions_se/1116",
+        "tokenfactory": "change_soil",
+        "tokenfactory2": "feed"
+      },
+      {
+        "id": "actions_se/1337",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/1372",
+        "tokenfactory": "feed",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/14143",
+        "tokenfactory": "move_light",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/16113",
+        "tokenfactory": "prune",
+        "tokenfactory2": "move_light"
+      },
+      {
+        "id": "actions_se/2028",
+        "tokenfactory": "treat_or_remove",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/2368",
+        "tokenfactory": "water",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/24061",
+        "tokenfactory": "move_light",
+        "tokenfactory2": "water"
+      },
+      {
+        "id": "actions_se/24741",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/25042",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/28764",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "water"
+      },
+      {
+        "id": "actions_se/29344",
+        "tokenfactory": "treat_or_remove",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/29374",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "water"
+      },
+      {
+        "id": "actions_se/31035",
+        "tokenfactory": "water",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/34896",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "water"
+      },
+      {
+        "id": "actions_se/35742",
+        "tokenfactory": "prune",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/41890",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "move_light"
+      },
+      {
+        "id": "actions_se/42721",
+        "tokenfactory": "leave_normal",
+        "tokenfactory2": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/56143",
+        "tokenfactory": "other",
+        "tokenfactory2": "leave_normal"
+      },
+      {
+        "id": "actions_se/56544",
+        "tokenfactory": "treat_or_remove",
+        "tokenfactory2": "prune"
+      },
+      {
+        "id": "actions_se/59226",
+        "tokenfactory": "treat_or_remove",
+        "tokenfactory2": "water"
+      },
+      {
+        "id": "actions_se/64329",
+        "tokenfactory": "treat_or_remove",
+        "tokenfactory2": "isolate"
+      },
+      {
+        "id": "actions_se/64936",
+        "tokenfactory": "isolate",
+        "tokenfactory2": "other"
+      },
+      {
+        "id": "actions_se/9002",
+        "tokenfactory": "water",
+        "tokenfactory2": "leave_normal"
+      }
+    ]
+  }
+}

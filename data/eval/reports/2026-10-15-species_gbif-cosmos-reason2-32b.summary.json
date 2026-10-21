@@ -1,0 +1,71 @@
+{
+  "backend": "ollama",
+  "constant_prediction": null,
+  "cost_usd": 0,
+  "failed_ids": [
+    "species_gbif/6131045175",
+    "species_gbif/6422054314"
+  ],
+  "git_sha": "23389bd",
+  "largest_disagreements": [
+    "species_gbif/2574080210",
+    "species_gbif/3355260351",
+    "species_gbif/3415379929",
+    "species_gbif/3912032612",
+    "species_gbif/3994136587"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 3136,
+  "metrics": {
+    "genus_top1": {
+      "hi": 0.8108108108108109,
+      "lo": 0.668918918918919,
+      "skipped": 0,
+      "value": 0.7432432432432432
+    },
+    "top1": {
+      "hi": 0.6554054054054054,
+      "lo": 0.49324324324324326,
+      "skipped": 0,
+      "value": 0.5743243243243243
+    },
+    "top3": {
+      "hi": 0.7094594594594594,
+      "lo": 0.5472972972972973,
+      "skipped": 0,
+      "value": 0.6283783783783784
+    }
+  },
+  "model": "nvidia/Cosmos-Reason2-32B",
+  "n_error": 0,
+  "n_failed": 2,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 148,
+  "n_total": 150,
+  "per_species_top1": {
+    "acer palmatum": 0.9,
+    "allium schoenoprasum": 1.0,
+    "allium tuberosum": 0.1,
+    "artemisia dracunculus": 0.5,
+    "coriandrum sativum": 0.9,
+    "dryopteris filix-mas": 0.0,
+    "melissa officinalis": 0.8,
+    "mentha spicata": 0.3,
+    "ocimum basilicum": 0.8,
+    "origanum vulgare": 0.778,
+    "petroselinum crispum": 0.8,
+    "polystichum setiferum": 0.0,
+    "salvia officinalis": 0.7,
+    "salvia rosmarinus": 1.0,
+    "thymus vulgaris": 0.0
+  },
+  "prompt_hash": "44ea8edaea55",
+  "run_id": "2026-10-15-species_gbif-cosmos-reason2-32b",
+  "set": "species_gbif",
+  "tags": {
+    "safe-to-train": 150
+  },
+  "temperature": 0
+}

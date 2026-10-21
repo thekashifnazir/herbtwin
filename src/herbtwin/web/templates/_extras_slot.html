@@ -1,0 +1,29 @@
+{# Tavily extras under the plan (shops.py, local_help.py), loaded after the page opens so they
+   never hold up the answer. With script the section shows at once, labelled, and says it is
+   looking; then the fragment, or "nothing to buy" (21 Oct, Kash: "where is the shops
+   area?"). Without script there is no request and nothing shows. `hidden` stays in the
+   markup and the class is skipped too, so the rater text (answer_text.plan_text) never
+   reads it. Styled by static/pages/extras.css #}
+{% if extras_on %}<section class="extras" id="extras" aria-labelledby="extras-h" data-src="/answers/{{ rec.record_id }}/extras" hidden>
+  <h2 id="extras-h">Where to get it</h2>
+  <p class="extras-said muted" role="status">Looking for shops for this…</p>
+  <div class="extras-found"></div>
+</section>
+<script>
+(() => {
+  const s = document.getElementById("extras");
+  if (!s || !window.fetch) return;
+  const said = s.querySelector(".extras-said"), found = s.querySelector(".extras-found");
+  s.hidden = false;
+  const none = () => { said.textContent = "Nothing you need to buy for this one."; };
+  fetch(s.dataset.src, {headers: {"X-Herbtwin-Fetch": "1"}})
+    .then((r) => (r.status === 200 ? r.text() : ""))
+    .then((html) => {
+      if (!html.trim()) return none();
+      found.innerHTML = html;
+      said.textContent = "";  // the found blocks say what they are
+      said.hidden = true;
+    })
+    .catch(none);  // extras only: a failure says there is nothing, never an error
+})();
+</script>{% endif %}

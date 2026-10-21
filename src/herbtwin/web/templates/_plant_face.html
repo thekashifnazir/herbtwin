@@ -1,0 +1,21 @@
+{# The plant's face: a small line drawing whose mood matches the answer (18 Oct judge
+   ideas 5 and 5b). content: leave it, or a small good job; cold: protect it; dry: water
+   it; trim: cut it back, scissors ready; poorly: treat it or keep it apart, worried brows;
+   unsure: check first, puzzled with one raised brow and a "?". Never cross (21 Oct, Kash:
+   "why is the plant face cross?": level dot eyes and a flat mouth read as cross).
+   Decorative: the words beside it always say the same thing. #}
+{% macro plant_face(mood) %}<svg class="face {{ mood }}" viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" focusable="false">
+  <path class="sprout" d="M20 9 C20 5 23 3 27 3 C27 7 24 9 20 9 Z M20 9 C20 6 17 4 13 4 C13 7 16 9 20 9 Z"/>
+  <circle class="head" cx="20" cy="23" r="13"/>
+  {% if mood == "content" %}<path class="line" d="M13 21 q2.5 -3 5 0 M22 21 q2.5 -3 5 0"/><path class="line" d="M15 27 q5 5 10 0"/>
+  {% elif mood == "cold" %}<circle class="eye" cx="15.5" cy="21" r="1.6"/><circle class="eye" cx="24.5" cy="21" r="1.6"/><path class="line" d="M14 29 l2 -2 l2 2 l2 -2 l2 2 l2 -2 l2 2"/><path class="line brr" d="M3 18 l3 2 M3 24 l3 -1 M37 18 l-3 2 M37 24 l-3 -1"/>
+  {# thirsty, not cross: flat eyes over a frown read as grumpy; round eyes, a small "oh" #}
+  {% elif mood == "dry" %}<circle class="eye" cx="15.5" cy="21" r="1.6"/><circle class="eye" cx="24.5" cy="21" r="1.6"/><ellipse class="line" cx="20" cy="28.5" rx="2.5" ry="2.2"/><path class="drop" d="M31 12 q2 3 0 5 q-2 -2 0 -5 Z"/>
+  {# happy eyes and a grin, with scissors up by the leaves #}
+  {% elif mood == "trim" %}<path class="line" d="M13 21 q2.5 -3 5 0 M22 21 q2.5 -3 5 0"/><path class="line" d="M15 27 q5 5 10 0"/><g class="snip"><circle cx="32.5" cy="13" r="1.8"/><circle cx="37.5" cy="13" r="1.8"/><path d="M33.5 11.5 L38 3 M36.5 11.5 L32 3"/></g>
+  {# worried, not cross: the brows rise toward the middle; a small wavy mouth #}
+  {% elif mood == "poorly" %}<path class="line brow" d="M12 17 L17 15 M23 15 L28 17"/><circle class="eye" cx="15.5" cy="21" r="1.6"/><circle class="eye" cx="24.5" cy="21" r="1.6"/><path class="line" d="M15 29 q2.5 -2 5 0 q2.5 2 5 0"/>
+  {# puzzled: one brow raised over a higher eye, a lopsided mouth, a "?" beside the head #}
+  {% else %}<path class="line brow" d="M22 15 q2.5 -2.5 5 -0.5"/><circle class="eye" cx="15.5" cy="21" r="1.6"/><circle class="eye" cx="24.5" cy="20" r="1.6"/><path class="line" d="M16 29 q4 1 8 -2"/><path class="mark" d="M32 6 q0 -3 3 -3 q3 0 3 3 q0 2 -3 3 v2 M35 14.5 v0.1"/>
+  {% endif %}
+</svg>{% endmacro %}

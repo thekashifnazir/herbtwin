@@ -1,0 +1,107 @@
+{
+  "advise_cost_usd": 2.221483,
+  "backend": "tokenfactory",
+  "git_sha": "dc1fb457",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.7159090909090909,
+      "lo": 0.5738636363636364,
+      "n": 176,
+      "value": 0.6477272727272727
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.37606435338993477,
+      "lo": 0.33110003691399037,
+      "n": 774,
+      "value": 0.35296388581272303
+    },
+    "over_treatment": {
+      "hi": 0.06459948320413436,
+      "lo": 0.03488372093023256,
+      "n": 774,
+      "value": 0.04909560723514212
+    },
+    "primary_in_truth": {
+      "hi": 0.6085271317829457,
+      "lo": 0.5387596899224806,
+      "n": 774,
+      "value": 0.5736434108527132
+    },
+    "primary_match": {
+      "hi": 0.44315245478036175,
+      "lo": 0.3733850129198966,
+      "n": 774,
+      "value": 0.4082687338501292
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.44315245478036175,
+      "lo": 0.3733850129198966,
+      "n": 774,
+      "value": 0.4082687338501292
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.01808785529715762,
+      "lo": 0.003875968992248062,
+      "n": 774,
+      "value": 0.0103359173126615
+    },
+    "water_conflict": {
+      "hi": 0.05426356589147287,
+      "lo": 0.025839793281653745,
+      "n": 774,
+      "value": 0.040051679586563305
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 774,
+  "n_total": 774,
+  "pred_primary": {
+    "dont_water": 88,
+    "leave_normal": 243,
+    "move_light": 48,
+    "other": 159,
+    "prune": 67,
+    "shelter": 8,
+    "treat_or_remove": 114,
+    "water": 47
+  },
+  "pred_primary_fine": {
+    "change_soil": 61,
+    "dont_water": 88,
+    "feed": 32,
+    "humidity": 9,
+    "isolate": 4,
+    "leave_normal": 243,
+    "move_light": 48,
+    "mulch": 10,
+    "other": 20,
+    "prune": 67,
+    "repot": 27,
+    "shelter": 8,
+    "treat_or_remove": 110,
+    "water": 47
+  },
+  "prompt_hash": "ba9e03c80e31",
+  "run_id": "super-se774-roles",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 59,
+    "dont_water": 66,
+    "leave_normal": 150,
+    "move_light": 43,
+    "other": 183,
+    "prune": 62,
+    "shelter": 14,
+    "treat_or_remove": 160,
+    "water": 37
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = with_glm_photo minus text_only; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "text_only": "2026-10-04-super-se-photo150-text.jsonl",
+    "with_glm_photo": "2026-10-04-super-se-photo150-glm.jsonl"
+  },
+  "n_paired": 150,
+  "ask_first_primary": {
+    "text_only": 65,
+    "with_glm_photo": 29
+  },
+  "metrics": {
+    "primary_match": {
+      "text_only": 0.26,
+      "with_glm_photo": 0.34,
+      "diff": 0.08,
+      "lo": -0.006666666666666667,
+      "hi": 0.16666666666666666,
+      "n": 150
+    },
+    "primary_in_truth": {
+      "text_only": 0.49333333333333335,
+      "with_glm_photo": 0.5866666666666667,
+      "diff": 0.09333333333333334,
+      "lo": 0.0,
+      "hi": 0.18,
+      "n": 150
+    },
+    "jaccard": {
+      "text_only": 0.256952380952381,
+      "with_glm_photo": 0.28850793650793655,
+      "diff": 0.03155555555555556,
+      "lo": -0.031111111111111114,
+      "hi": 0.09355555555555556,
+      "n": 150
+    },
+    "over_treatment": {
+      "text_only": 0.02,
+      "with_glm_photo": 0.06,
+      "diff": 0.04,
+      "lo": 0.006666666666666667,
+      "hi": 0.08,
+      "n": 150
+    },
+    "water_conflict": {
+      "text_only": 0.04666666666666667,
+      "with_glm_photo": 0.05333333333333334,
+      "diff": 0.006666666666666667,
+      "lo": -0.02666666666666667,
+      "hi": 0.04,
+      "n": 150
+    },
+    "asked_when_expert_asked": {
+      "text_only": 0.46153846153846156,
+      "with_glm_photo": 0.1282051282051282,
+      "diff": -0.3333333333333333,
+      "lo": -0.48717948717948717,
+      "hi": -0.1794871794871795,
+      "n": 39
+    },
+    "primary_ok_if_asked_too": {
+      "text_only": 0.26,
+      "with_glm_photo": 0.34,
+      "diff": 0.08,
+      "lo": -0.006666666666666667,
+      "hi": 0.16666666666666666,
+      "n": 150
+    },
+    "hedge_had_answer": {
+      "text_only": 0.0,
+      "with_glm_photo": 0.06666666666666667,
+      "diff": 0.06666666666666667,
+      "lo": 0.0,
+      "hi": 0.2,
+      "n": 15
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.050404,
+  "failed_ids": [],
+  "git_sha": "6143762",
+  "largest_disagreements": [
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_017",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_032",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_083",
+    "decline_indoor/Spider_Plant_Leaf_Tip_Necrosis/Spider_Plant_Leaf_Tip_Necrosis_009",
+    "decline_indoor/Spider_Plant_Leaf_Tip_Necrosis/Spider_Plant_Leaf_Tip_Necrosis_010"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 1197,
+  "metrics": {
+    "balanced_accuracy": {
+      "hi": 0.8942307692307692,
+      "lo": 0.7741935483870968,
+      "skipped": 0,
+      "value": 0.8333333333333333
+    },
+    "precision": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "skipped": 0,
+      "value": 1.0
+    },
+    "recall": {
+      "hi": 0.7884615384615384,
+      "lo": 0.5483870967741935,
+      "skipped": 0,
+      "value": 0.6666666666666666
+    },
+    "specificity": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "skipped": 0,
+      "value": 1.0
+    }
+  },
+  "model": "nvidia/Nemotron-3.5-Super-VL",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 120,
+  "n_total": 120,
+  "pred_histogram": {
+    "0": 80,
+    "1": 17,
+    "2": 13,
+    "3": 10
+  },
+  "prompt_hash": "35b1b37a0ad4",
+  "run_id": "2026-10-17-decline_indoor-nemotron-3-5-super-vl",
+  "set": "decline_indoor",
+  "tags": {
+    "safe-to-train": 120
+  },
+  "temperature": 0
+}

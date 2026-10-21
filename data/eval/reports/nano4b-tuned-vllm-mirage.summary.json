@@ -1,0 +1,104 @@
+{
+  "backend": "ollama",
+  "git_sha": "e74d519",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.6111111111111112,
+      "lo": 0.3888888888888889,
+      "n": 72,
+      "value": 0.5
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.3704642857142857,
+      "lo": 0.29410714285714284,
+      "n": 200,
+      "value": 0.3323690476190476
+    },
+    "over_treatment": {
+      "hi": 0.04,
+      "lo": 0.005,
+      "n": 200,
+      "value": 0.02
+    },
+    "primary_in_truth": {
+      "hi": 0.7,
+      "lo": 0.56,
+      "n": 200,
+      "value": 0.63
+    },
+    "primary_match": {
+      "hi": 0.49,
+      "lo": 0.345,
+      "n": 200,
+      "value": 0.42
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.49,
+      "lo": 0.345,
+      "n": 200,
+      "value": 0.42
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.015,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.005
+    },
+    "water_conflict": {
+      "hi": 0.065,
+      "lo": 0.01,
+      "n": 200,
+      "value": 0.035
+    }
+  },
+  "model": "nano4b-tuned:think",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 200,
+  "n_total": 200,
+  "pred_primary": {
+    "dont_water": 14,
+    "leave_normal": 67,
+    "move_light": 8,
+    "other": 49,
+    "prune": 33,
+    "shelter": 8,
+    "treat_or_remove": 14,
+    "water": 7
+  },
+  "pred_primary_fine": {
+    "change_soil": 18,
+    "dont_water": 14,
+    "feed": 12,
+    "leave_normal": 67,
+    "move_light": 8,
+    "mulch": 3,
+    "other": 14,
+    "prune": 33,
+    "repot": 2,
+    "shelter": 8,
+    "treat_or_remove": 14,
+    "water": 7
+  },
+  "prompt_hash": "7ba44f01d95b",
+  "run_id": "nano4b-tuned-vllm-mirage",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 44,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

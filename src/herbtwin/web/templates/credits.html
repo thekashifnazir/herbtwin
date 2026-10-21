@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% from "_credits.html" import made_with %}
+{% block title %}Credits and models · herbtwin{% endblock %}
+{% block main %}
+<h1>Credits and models</h1>
+<p>Every photo, picture, data source and model herbtwin uses, with who made it and its licence.</p>
+<div class="credits-page">{{ made_with(spot_on=spot_on, plantbook_on=plantbook_on, voice_on=voice_on, tavily_on=tavily_on, open=true, check_on=check_on) }}</div>
+{% endblock %}

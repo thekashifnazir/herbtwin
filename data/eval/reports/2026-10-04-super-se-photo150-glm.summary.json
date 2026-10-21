@@ -1,0 +1,88 @@
+{
+  "advise_cost_usd": 0.086189,
+  "backend": "tokenfactory",
+  "git_sha": "242be85",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.2564102564102564,
+      "lo": 0.02564102564102564,
+      "n": 39,
+      "value": 0.1282051282051282
+    },
+    "hedge_had_answer": {
+      "hi": 0.1111111111111111,
+      "lo": 0.0,
+      "n": 27,
+      "value": 0.037037037037037035
+    },
+    "jaccard": {
+      "hi": 0.33706349206349207,
+      "lo": 0.24257142857142858,
+      "n": 150,
+      "value": 0.28850793650793655
+    },
+    "over_treatment": {
+      "hi": 0.1,
+      "lo": 0.02666666666666667,
+      "n": 150,
+      "value": 0.06
+    },
+    "primary_in_truth": {
+      "hi": 0.6666666666666666,
+      "lo": 0.5066666666666667,
+      "n": 150,
+      "value": 0.5866666666666667
+    },
+    "primary_match": {
+      "hi": 0.42,
+      "lo": 0.26666666666666666,
+      "n": 150,
+      "value": 0.34
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.42,
+      "lo": 0.26666666666666666,
+      "n": 150,
+      "value": 0.34
+    },
+    "water_conflict": {
+      "hi": 0.09333333333333334,
+      "lo": 0.02,
+      "n": 150,
+      "value": 0.05333333333333334
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b+photo-zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "observe_backend": "tokenfactory",
+  "observe_cost_usd": 0.110868,
+  "pred_primary": {
+    "ask_first": 29,
+    "dont_water": 20,
+    "leave_normal": 22,
+    "move_light": 7,
+    "other": 18,
+    "prune": 8,
+    "shelter": 3,
+    "treat_or_remove": 34,
+    "water": 9
+  },
+  "prompt_hash": "d9fd7599abe0",
+  "run_id": "2026-10-04-super-se-photo150-glm",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 14,
+    "dont_water": 14,
+    "leave_normal": 27,
+    "move_light": 9,
+    "other": 27,
+    "prune": 9,
+    "shelter": 2,
+    "treat_or_remove": 39,
+    "water": 9
+  }
+}

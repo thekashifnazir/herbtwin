@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = with_glm_photo minus text_only; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "text_only": "2026-10-04-advice-actions_se-photo-subset-text-only.jsonl",
+    "with_glm_photo": "2026-10-04-advice-actions_se-photo-subset-with-glm-photo.jsonl"
+  },
+  "n_paired": 546,
+  "ask_first_primary": {
+    "text_only": 304,
+    "with_glm_photo": 220
+  },
+  "metrics": {
+    "primary_match": {
+      "text_only": 0.2490842490842491,
+      "with_glm_photo": 0.2783882783882784,
+      "diff": 0.029304029304029304,
+      "lo": 0.0,
+      "hi": 0.06043956043956044,
+      "n": 546
+    },
+    "primary_in_truth": {
+      "text_only": 0.43040293040293043,
+      "with_glm_photo": 0.46153846153846156,
+      "diff": 0.031135531135531136,
+      "lo": -0.0018315018315018315,
+      "hi": 0.0641025641025641,
+      "n": 546
+    },
+    "jaccard": {
+      "text_only": 0.26278998778998774,
+      "with_glm_photo": 0.28773402523402525,
+      "diff": 0.02494403744403744,
+      "lo": 0.005522123379266236,
+      "hi": 0.0459619745334031,
+      "n": 546
+    },
+    "over_treatment": {
+      "text_only": 0.11721611721611722,
+      "with_glm_photo": 0.17765567765567766,
+      "diff": 0.06043956043956044,
+      "lo": 0.03663003663003663,
+      "hi": 0.08608058608058608,
+      "n": 546
+    },
+    "water_conflict": {
+      "text_only": 0.04212454212454213,
+      "with_glm_photo": 0.05128205128205128,
+      "diff": 0.009157509157509158,
+      "lo": -0.005494505494505495,
+      "hi": 0.023809523809523808,
+      "n": 546
+    },
+    "asked_when_expert_asked": {
+      "text_only": 0.6621621621621622,
+      "with_glm_photo": 0.4797297297297297,
+      "diff": -0.18243243243243243,
+      "lo": -0.2635135135135135,
+      "hi": -0.10810810810810811,
+      "n": 148
+    },
+    "primary_ok_if_asked_too": {
+      "text_only": 0.26556776556776557,
+      "with_glm_photo": 0.304029304029304,
+      "diff": 0.038461538461538464,
+      "lo": 0.009157509157509158,
+      "hi": 0.0695970695970696,
+      "n": 546
+    },
+    "hedge_had_answer": {
+      "text_only": 0.1787709497206704,
+      "with_glm_photo": 0.2011173184357542,
+      "diff": 0.0223463687150838,
+      "lo": -0.0111731843575419,
+      "hi": 0.055865921787709494,
+      "n": 179
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "backend": "ollama",
+  "git_sha": "559112f",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.625,
+      "lo": 0.4027777777777778,
+      "n": 72,
+      "value": 0.5138888888888888
+    },
+    "jaccard": {
+      "hi": 0.3358452380952381,
+      "lo": 0.2665952380952381,
+      "n": 200,
+      "value": 0.30175
+    },
+    "over_treatment": {
+      "hi": 0.09,
+      "lo": 0.025,
+      "n": 200,
+      "value": 0.055
+    },
+    "primary_in_truth": {
+      "hi": 0.645,
+      "lo": 0.505,
+      "n": 200,
+      "value": 0.575
+    },
+    "primary_match": {
+      "hi": 0.415,
+      "lo": 0.285,
+      "n": 200,
+      "value": 0.35
+    },
+    "water_conflict": {
+      "hi": 0.025,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.01
+    }
+  },
+  "model": "qwen3:14b:no-think",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 200,
+  "n_total": 200,
+  "pred_primary": {
+    "ask_first": 82,
+    "dont_water": 1,
+    "leave_normal": 8,
+    "move_light": 5,
+    "other": 36,
+    "prune": 21,
+    "shelter": 30,
+    "treat_or_remove": 12,
+    "water": 5
+  },
+  "prompt_hash": "d9fd7599abe0",
+  "run_id": "2026-10-04-advice-actions_mirage-qwen3-14b-no-think",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 44,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

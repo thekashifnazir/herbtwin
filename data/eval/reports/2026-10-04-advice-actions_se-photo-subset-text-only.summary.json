@@ -1,0 +1,73 @@
+{
+  "backend": "ollama",
+  "git_sha": "4a74bd1",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.7364864864864865,
+      "lo": 0.5878378378378378,
+      "n": 148,
+      "value": 0.6621621621621622
+    },
+    "jaccard": {
+      "hi": 0.28723617652189076,
+      "lo": 0.23776382347810918,
+      "n": 546,
+      "value": 0.26278998778998774
+    },
+    "over_treatment": {
+      "hi": 0.1446886446886447,
+      "lo": 0.09157509157509157,
+      "n": 546,
+      "value": 0.11721611721611722
+    },
+    "primary_in_truth": {
+      "hi": 0.47435897435897434,
+      "lo": 0.39194139194139194,
+      "n": 546,
+      "value": 0.43040293040293043
+    },
+    "primary_match": {
+      "hi": 0.2857142857142857,
+      "lo": 0.21428571428571427,
+      "n": 546,
+      "value": 0.2490842490842491
+    },
+    "water_conflict": {
+      "hi": 0.05860805860805861,
+      "lo": 0.02564102564102564,
+      "n": 546,
+      "value": 0.04212454212454213
+    }
+  },
+  "model": "qwen3:14b:no-think",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 546,
+  "n_total": 546,
+  "pred_primary": {
+    "ask_first": 304,
+    "dont_water": 10,
+    "leave_normal": 46,
+    "move_light": 21,
+    "other": 15,
+    "prune": 24,
+    "shelter": 18,
+    "treat_or_remove": 87,
+    "water": 21
+  },
+  "prompt_hash": "d9fd7599abe0",
+  "run_id": "2026-10-04-advice-actions_se-photo-subset-text-only",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 50,
+    "dont_water": 52,
+    "leave_normal": 103,
+    "move_light": 25,
+    "other": 109,
+    "prune": 31,
+    "shelter": 12,
+    "treat_or_remove": 136,
+    "water": 28
+  }
+}

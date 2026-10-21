@@ -1,0 +1,200 @@
+{
+  "agreement": {
+    "off": 0.9361111111111111,
+    "on": 0.9402777777777778
+  },
+  "app_on": {
+    "leave_when_fine": {
+      "hi": 0.9807692307692307,
+      "lo": 0.8782051282051282,
+      "n": 156,
+      "value": 0.9358974358974359
+    },
+    "over_treat": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 240,
+      "value": 0.0
+    },
+    "protect_when_needed": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "n": 84,
+      "value": 1.0
+    },
+    "twin_match": {
+      "hi": 0.9875,
+      "lo": 0.925,
+      "n": 240,
+      "value": 0.9583333333333334
+    }
+  },
+  "arms": {
+    "off": {
+      "leave_when_fine": {
+        "hi": 0.9935897435897436,
+        "lo": 0.9102564102564102,
+        "n": 156,
+        "value": 0.9551282051282052
+      },
+      "over_treat": {
+        "hi": 0.0,
+        "lo": 0.0,
+        "n": 240,
+        "value": 0.0
+      },
+      "protect_when_needed": {
+        "hi": 0.9880952380952381,
+        "lo": 0.8452380952380952,
+        "n": 84,
+        "value": 0.9285714285714286
+      },
+      "twin_match": {
+        "hi": 0.9791666666666666,
+        "lo": 0.9083333333333333,
+        "n": 240,
+        "value": 0.9458333333333333
+      }
+    },
+    "on": {
+      "leave_when_fine": {
+        "hi": 0.9807692307692307,
+        "lo": 0.8782051282051282,
+        "n": 156,
+        "value": 0.9358974358974359
+      },
+      "over_treat": {
+        "hi": 0.0,
+        "lo": 0.0,
+        "n": 240,
+        "value": 0.0
+      },
+      "protect_when_needed": {
+        "hi": 1.0,
+        "lo": 1.0,
+        "n": 84,
+        "value": 1.0
+      },
+      "twin_match": {
+        "hi": 0.9875,
+        "lo": 0.925,
+        "n": 240,
+        "value": 0.9583333333333334
+      }
+    }
+  },
+  "by_scenario": {
+    "benign": {
+      "off": 1.0,
+      "on": 1.0
+    },
+    "dry": {
+      "off": 0.975,
+      "on": 1.0
+    },
+    "frost": {
+      "off": 0.8,
+      "on": 0.9
+    },
+    "near": {
+      "off": 0.925,
+      "on": 0.85
+    },
+    "uk_frost": {
+      "off": 0.975,
+      "on": 1.0
+    },
+    "wet": {
+      "off": 1.0,
+      "on": 1.0
+    }
+  },
+  "diff": {
+    "leave_when_fine": {
+      "hi": 0.02564102564102564,
+      "lo": -0.07051282051282051,
+      "n": 156,
+      "value": -0.019230769230769232
+    },
+    "over_treat": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 240,
+      "value": 0.0
+    },
+    "protect_when_needed": {
+      "hi": 0.15476190476190477,
+      "lo": 0.011904761904761904,
+      "n": 84,
+      "value": 0.07142857142857142
+    },
+    "twin_match": {
+      "hi": 0.05416666666666667,
+      "lo": -0.025,
+      "n": 240,
+      "value": 0.0125
+    }
+  },
+  "git_sha": "617a435",
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_ok": 480,
+  "n_rows": 480,
+  "repeats": 2,
+  "risky_cases": [
+    "basil/dry/ground",
+    "basil/dry/pot",
+    "basil/frost/ground",
+    "basil/frost/pot",
+    "basil/uk_frost/ground",
+    "basil/uk_frost/pot",
+    "chives/dry/ground",
+    "chives/dry/pot",
+    "coriander/dry/ground",
+    "coriander/dry/pot",
+    "coriander/frost/ground",
+    "coriander/frost/pot",
+    "coriander/uk_frost/ground",
+    "coriander/uk_frost/pot",
+    "lemon balm/dry/ground",
+    "lemon balm/dry/pot",
+    "lemon balm/frost/ground",
+    "lemon balm/frost/pot",
+    "mint/dry/ground",
+    "mint/dry/pot",
+    "mint/frost/ground",
+    "mint/frost/pot",
+    "oregano/dry/ground",
+    "oregano/dry/pot",
+    "oregano/frost/ground",
+    "oregano/frost/pot",
+    "parsley/dry/ground",
+    "parsley/dry/pot",
+    "parsley/frost/ground",
+    "parsley/frost/pot",
+    "rosemary/dry/ground",
+    "rosemary/dry/pot",
+    "rosemary/frost/ground",
+    "rosemary/frost/pot",
+    "sage/dry/ground",
+    "sage/dry/pot",
+    "sage/frost/ground",
+    "sage/frost/pot",
+    "thyme/dry/ground",
+    "thyme/dry/pot",
+    "thyme/frost/ground",
+    "thyme/frost/pot"
+  ],
+  "risky_flips": {
+    "away": [],
+    "of": 42,
+    "sign_test_p": 0.125,
+    "to_twin": [
+      "basil/frost/ground",
+      "basil/frost/pot",
+      "basil/uk_frost/pot",
+      "thyme/dry/ground"
+    ]
+  },
+  "run_id": "2026-10-18-twin-at-scale",
+  "spent_this_run_usd": 0.0
+}

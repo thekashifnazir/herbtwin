@@ -1,0 +1,70 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = always_answer minus old_prompt; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "old_prompt": "2026-10-04-super-se-text-150.jsonl",
+    "always_answer": "2026-10-04-super-se-always-150.jsonl"
+  },
+  "n_paired": 150,
+  "ask_first_primary": {
+    "old_prompt": 45,
+    "always_answer": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "old_prompt": 0.38666666666666666,
+      "always_answer": 0.3933333333333333,
+      "diff": 0.006666666666666667,
+      "lo": -0.07333333333333333,
+      "hi": 0.08,
+      "n": 150
+    },
+    "primary_in_truth": {
+      "old_prompt": 0.5933333333333334,
+      "always_answer": 0.6,
+      "diff": 0.006666666666666667,
+      "lo": -0.06666666666666667,
+      "hi": 0.08,
+      "n": 150
+    },
+    "jaccard": {
+      "old_prompt": 0.339968253968254,
+      "always_answer": 0.34130158730158733,
+      "diff": 0.001333333333333335,
+      "lo": -0.04488888888888888,
+      "hi": 0.04522222222222222,
+      "n": 150
+    },
+    "over_treatment": {
+      "old_prompt": 0.04,
+      "always_answer": 0.03333333333333333,
+      "diff": -0.006666666666666667,
+      "lo": -0.04666666666666667,
+      "hi": 0.03333333333333333,
+      "n": 150
+    },
+    "water_conflict": {
+      "old_prompt": 0.04,
+      "always_answer": 0.05333333333333334,
+      "diff": 0.013333333333333334,
+      "lo": 0.0,
+      "hi": 0.03333333333333333,
+      "n": 150
+    },
+    "asked_when_expert_asked": {
+      "old_prompt": 0.375,
+      "always_answer": 0.3125,
+      "diff": -0.0625,
+      "lo": -0.21875,
+      "hi": 0.09375,
+      "n": 32
+    },
+    "primary_ok_if_asked_too": {
+      "old_prompt": 0.38666666666666666,
+      "always_answer": 0.3933333333333333,
+      "diff": 0.006666666666666667,
+      "lo": -0.07333333333333333,
+      "hi": 0.08,
+      "n": 150
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.134579,
+  "failed_ids": [],
+  "git_sha": "82c063e",
+  "largest_disagreements": [
+    "species_gbif/4606806501",
+    "species_gbif/4852525714",
+    "species_gbif/4993771888",
+    "species_gbif/5206130708",
+    "species_gbif/5230907367"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 9384,
+  "metrics": {
+    "genus_top1": {
+      "hi": 0.9533333333333334,
+      "lo": 0.86,
+      "skipped": 0,
+      "value": 0.9066666666666666
+    },
+    "top1": {
+      "hi": 0.92,
+      "lo": 0.8133333333333334,
+      "skipped": 0,
+      "value": 0.8666666666666667
+    },
+    "top3": {
+      "hi": 0.98,
+      "lo": 0.9066666666666666,
+      "skipped": 0,
+      "value": 0.9466666666666667
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "per_species_top1": {
+    "acer palmatum": 1.0,
+    "allium schoenoprasum": 0.9,
+    "allium tuberosum": 1.0,
+    "artemisia dracunculus": 0.4,
+    "coriandrum sativum": 1.0,
+    "dryopteris filix-mas": 0.9,
+    "melissa officinalis": 0.9,
+    "mentha spicata": 1.0,
+    "ocimum basilicum": 1.0,
+    "origanum vulgare": 1.0,
+    "petroselinum crispum": 0.8,
+    "polystichum setiferum": 0.4,
+    "salvia officinalis": 1.0,
+    "salvia rosmarinus": 1.0,
+    "thymus vulgaris": 0.7
+  },
+  "prompt_hash": "44ea8edaea55",
+  "run_id": "2026-10-12-species_gbif-glm-5-3-flash",
+  "set": "species_gbif",
+  "tags": {
+    "safe-to-train": 150
+  },
+  "temperature": 0
+}

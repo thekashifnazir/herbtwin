@@ -1,0 +1,175 @@
+/* "What could grow here" (templates/spot.html, scoped under .spot-page): three jobs, the
+   verdict, the top picks, then the two questions and the folded details. Its wait card on
+   the streamed progress page (.spot-wait), and the two spot questions wherever they appear,
+   the spot pages and under a plant answer alike (.compass, .rose, .squeeze from
+   _spot_questions.html). Colour carries meaning beside words only. Tokens only. */
+
+/* ---------- the verdict: the heading, a small sheet, a line per group ---------- */
+.spot-page .sheet { display: grid; grid-template-columns: max-content 1fr; gap: 0 16px; margin: 12px 0 16px;
+  border-top: 1px solid var(--border); }
+.spot-page .sheet div { display: contents; }
+.spot-page .sheet dt, .spot-page .sheet dd { margin: 0; padding: 6px 0; border-bottom: 1px solid var(--border); }
+.spot-page .sheet dt { color: var(--muted-fg); font-size: 16px; line-height: 1.75; }
+.spot-page .sheet dd { font-weight: 500; }
+/* each group's name is coloured like its tile: the colour means the same as the words
+   beside it (green good now, amber worth a try, clay not here) */
+.spot-page .verdict { list-style: none; margin: 0 0 16px; padding: 0; }
+.spot-page .verdict a, .spot-page .verdict strong { font-weight: 700; color: var(--fg); }
+.spot-page .verdict .tone-good a { color: var(--ok); }
+.spot-page .verdict .tone-check a { color: var(--warn); }
+.spot-page .verdict .tone-no a { color: var(--clay); }
+.spot-page .verdict .tone-later a { color: var(--fg); }
+.spot-page .note { color: var(--muted-fg); font-size: 16px; margin-bottom: 8px; }
+.spot-page .told-said { color: var(--ok); font-weight: 500; }
+.spot-page .told-said:empty { display: none; }
+.spot-page .told-said:focus { outline: none; }   /* focused by script to be read out, not to be used */
+.spot-page .spot-fix { display: flex; flex-wrap: wrap; gap: 0 12px; margin: 16px 0 0; }
+.spot-page .spot-fix label { flex: 1 1 12rem; color: var(--muted-fg); font-size: 16px; font-weight: 400; }
+
+/* ---------- the top picks: a compact row per crop, only what is not fine ---------- */
+.spot-page .tier h2 { margin-top: 32px; }
+.spot-page .picks { list-style: none; margin: 0 0 12px; padding: 0; background: var(--card);
+  border: 1px solid var(--border); border-left: 4px solid var(--border); border-radius: 12px; }
+.spot-page .picks.tone-good { border-left-color: var(--primary); }
+.spot-page .picks.tone-check { border-left-color: var(--warn-line); }
+.spot-page .pick { margin: 0; padding: 4px 16px 8px; }
+.spot-page .pick + .pick { border-top: 1px solid var(--border); }
+.spot-page .pick-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0 12px;
+  min-height: 44px; }
+.spot-page .pick .what { margin: 0; padding: 6px 0; line-height: 1.3; }
+.spot-page .pick .name { margin-right: 6px; font-family: var(--display); font-size: 19px; }
+.spot-page .pick .do { color: var(--muted-fg); font-size: 16px; white-space: nowrap; }
+.spot-page .pick .src { display: inline-flex; align-items: center; min-height: 44px; font-size: 16px;
+  color: var(--muted-fg); }
+.spot-page .pick .src:hover { color: var(--primary); }
+.spot-page .pick .chips { gap: 6px; margin: 0 0 6px; }
+.spot-page .pick .chip { background: var(--muted); font-weight: 500; }
+.spot-page .pick .chip.check { background: var(--warn-bg); color: var(--warn); box-shadow: inset 0 0 0 1px var(--warn-line); }
+.spot-page .because { margin: 0 0 4px; color: var(--muted-fg); font-size: 16px; line-height: 1.4; }
+/* the rest of a group folds into a plain details, its rows flush inside */
+.spot-page details.more { border-radius: 12px; }
+.spot-page details.more > .picks { margin: 0; border: 0; border-radius: 0 0 12px 12px; background: none; }
+.spot-page details.more > summary, .spot-page .spot-details summary { padding: 8px 16px; }
+.spot-page .lead-note { margin-top: 24px; }
+
+/* ---------- sharpen it: the two questions, their own block ---------- */
+.spot-page .sharpen { margin-top: 40px; }
+.spot-page .ask { margin-top: 12px; }
+.spot-page .ask .actions { margin-bottom: 0; }
+.spot-page .ask fieldset { min-width: 0; margin: 0 0 12px; padding: 0; border: 0; }
+.spot-page .ask .actions button { background: var(--card); border-color: var(--input); }   /* soft on a soft tray would vanish */
+
+/* ---------- the details, folded ---------- */
+.spot-page .spot-details { margin-top: 40px; }
+.spot-page .spot-details details > :not(summary) { margin-left: 16px; margin-right: 16px; }
+.spot-page .spot-details details > .picks { margin: 0; border: 0; border-radius: 0 0 var(--surface) var(--surface);
+  background: none; }
+.spot-page .spot-details details > .picks .pick { padding-left: 0; padding-right: 0; }
+.spot-page .not-here { border-left: 4px solid var(--clay); }
+.spot-page .not-here summary { color: var(--clay); }
+.spot-page .not-here ul { padding-left: 1.25em; }
+.spot-page .sun-table { font-size: 16px; table-layout: fixed; }
+.spot-page .sun-table caption { padding: 0 0 8px; color: var(--muted-fg); text-align: left; }
+.spot-page .sun-table th, .spot-page .sun-table td { padding: 6px 0; text-align: center; }
+.spot-page .credits { color: var(--muted-fg); font-size: 16px; }
+.spot-page .spot-again { margin-top: 32px; }
+
+/* ---------- a wide screen: the verdict and picks left, the questions and details right ---------- */
+@media (min-width: 960px) {
+  .spot-page .spot-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(22rem, 26rem);
+    column-gap: 56px; align-items: start; }
+  .spot-page .spot-hero, .spot-page .spot-picks { grid-column: 1; }
+  .spot-page .spot-side { grid-column: 2; grid-row: 1 / span 2; }
+  .spot-page .spot-side > :first-child { margin-top: 8px; }
+  .spot-page .spot-again { grid-column: 1 / -1; }
+}
+
+/* ---------- the wait card on the progress page ---------- */
+.spot-wait { margin: 24px 0; color: var(--fg); }
+.spot-wait .actions { margin-bottom: 0; }
+
+/* ---------- the two questions: big tiles, the picked one filled ---------- */
+.compass fieldset, .squeeze { min-width: 0; margin: 0 0 12px; padding: 0; border: 0; }
+.compass legend, .squeeze legend { padding: 0; margin: 0 0 4px; }
+.compass .hint, .squeeze .hint { margin: 0 0 8px; }
+
+.rose { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 17rem; margin: 8px 0 0; }
+.rose label { position: relative; margin: 0; font-weight: 700; }
+.rose input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.rose label > span:first-of-type { display: flex; align-items: center; justify-content: center; min-height: 52px;
+  padding: 4px; border: 1px solid var(--input); border-radius: 12px; background: var(--card);
+  line-height: 1.2; text-align: center; }
+.rose label:hover > span:first-of-type { border-color: var(--fg); }
+.rose .unsure > span { font-size: 16px; font-weight: 500; }
+.rose input:checked + span { background: var(--primary); border-color: var(--primary); color: var(--primary-fg); }
+.rose input:focus-visible + span { outline: 2px solid var(--ring); outline-offset: 2px; }
+.rose .here { display: flex; align-items: center; justify-content: center; }   /* the spot itself */
+.rose .here::before { content: ""; width: 12px; height: 12px; border: 3px solid var(--bg); border-radius: 50%;
+  background: var(--pin); }
+.rose .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.squeeze label { display: flex; align-items: flex-start; min-height: 48px; margin: 0 0 8px; padding: 12px 14px;
+  border: 1px solid var(--input); border-radius: 12px; background: var(--card); font-weight: 400; line-height: 1.35;
+  cursor: pointer; }
+.squeeze label:hover { border-color: var(--fg); }
+.squeeze input { flex: none; margin: 0 10px 0 0; vertical-align: 0; }
+.squeeze label:has(input:checked) { border-color: var(--primary); box-shadow: inset 0 0 0 1px var(--primary);
+  font-weight: 500; }
+.squeeze label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
+.squeeze input:focus-visible { outline: 0; }
+
+@media (forced-colors: active) {
+  .rose input:checked + span { outline: 3px solid Highlight; }
+}
+/* "pot or ground?" after a backup read: plain card buttons on the amber tray */
+.spot-page .setting-check .actions button { background: var(--card); }
+
+/* ---------- the band and the verdict tiles (16 Oct: the home page's look) ----------
+   "What could grow here" sits on the green band; the verdict is a row of inked tiles over
+   its edge, each with how many crops are in the group, coloured by what it means. */
+.spot-page .page-band + .spot-layout .spot-hero:has(> .verdict:first-child) { position: relative; margin-top: -48px; }
+.spot-page .verdict { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.25rem, 1fr)); gap: 14px;
+  margin-bottom: 24px; }
+.spot-page .verdict li { padding: 14px 16px 16px; border: 1.5px solid var(--fg); border-radius: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--card); font-size: 16px; line-height: 1.35; }
+.spot-page .verdict .n { display: block; margin-bottom: 6px; font: 700 40px/1 var(--display);
+  font-variant-numeric: tabular-nums; color: var(--fg); }
+.spot-page .verdict a, .spot-page .verdict strong { font-size: 18px; }
+.spot-page .verdict .tone-good { background: var(--soft); }
+.spot-page .verdict .tone-good .n { color: var(--ok); }
+.spot-page .verdict .tone-check { background: var(--warn-bg); }
+.spot-page .verdict .tone-check .n { color: var(--warn); }
+.spot-page .verdict .tone-later { background: var(--sky); }
+.spot-page .verdict .tone-later .n { color: var(--sky-fg); }
+.spot-page .verdict .tone-no { background: var(--clay-bg); }
+.spot-page .verdict .tone-no .n { color: var(--clay); }
+.spot-page .verdict .tone-none { background: var(--muted); }
+/* the crop lists: the same ink edge, the group's colour kept as a thick left edge */
+.spot-page .spot-picks > .tier > .picks { border: 1.5px solid var(--fg); border-left: 6px solid var(--border);
+  box-shadow: 5px 5px 0 var(--ink-shadow); }
+.spot-page .spot-picks > .tier > .picks.tone-good { border-left-color: var(--primary); }
+.spot-page .spot-picks > .tier > .picks.tone-check { border-left-color: var(--warn); }
+@media (max-width: 720px) { .spot-page .page-band + .spot-layout .spot-hero:has(> .verdict:first-child) { margin-top: -40px; }
+  .spot-page .verdict { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* the Sun row's year (sun_arc.py): a faint range band, the middle line, the photo month's
+   dot; month initials sit under it as page text, never small text inside the drawing.
+   Static: nothing moves, so nothing to calm for reduced motion */
+.spot-page .sun-arc { margin: -8px 0 16px; max-width: 26rem; }
+.spot-page .sun-arc svg { display: block; width: 100%; height: auto; }
+.spot-page .sun-arc .range { fill: var(--soft); }
+.spot-page .sun-arc .mid { fill: none; stroke: var(--primary); stroke-width: 2; }
+.spot-page .sun-arc .now { fill: var(--primary); stroke: var(--card); stroke-width: 2; }
+.spot-page .sun-arc .months { display: grid; grid-template-columns: repeat(12, 1fr); margin: 2px 0 0;
+  padding: 0; list-style: none; color: var(--muted-fg); font-size: 16px; line-height: 1.2; text-align: center; }
+.spot-page .sun-arc .months .now { color: var(--primary); font-weight: 700; }
+.spot-page .sun-arc figcaption { margin-top: 4px; color: var(--muted-fg); font-size: 16px; }
+
+/* timing where the RHS and Garden Organic differ: the RHS window with a "±" that opens the
+   other source's (19 Oct small-print plan); explained once above the list */
+.spot-page .differ { margin: 4px 0 0; }
+.spot-page .differ summary { cursor: pointer; color: var(--muted-fg); font-size: 16px; }
+.spot-page .differ p { margin: 4px 0 0; color: var(--muted-fg); font-size: 16px; }
+.spot-page .differ-key { margin: 0 0 8px; }
+.spot-page .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; }

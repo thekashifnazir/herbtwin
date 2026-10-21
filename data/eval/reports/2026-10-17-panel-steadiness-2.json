@@ -1,0 +1,905 @@
+{
+  "spent_usd": 0.18201524999999996,
+  "rows": [
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "repeat": 0,
+      "species": "petroselinum crispum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.00392
+    },
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "repeat": 1,
+      "species": "petroselinum crispum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "prune",
+        "prune",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.00632
+    },
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "repeat": 2,
+      "species": "petroselinum crispum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "prune",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.00889
+    },
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "repeat": 3,
+      "species": "petroselinum crispum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "prune",
+        "prune",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.01175
+    },
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "repeat": 4,
+      "species": "petroselinum crispum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "prune",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.01511
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "repeat": 0,
+      "species": "ocimum basilicum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "prune",
+        "prune",
+        "shelter"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.019
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "repeat": 1,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "shelter",
+        "shelter"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.02198
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "repeat": 2,
+      "species": "ocimum basilicum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "prune",
+        "shelter",
+        "shelter"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.02609
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "repeat": 3,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "prune",
+        "shelter"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.03016
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "repeat": 4,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "shelter",
+        "shelter"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.03342
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "repeat": 0,
+      "species": "salvia rosmarinus",
+      "action": "treat_or_remove",
+      "coarse": "treat_or_remove",
+      "headline": "Treat it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "treat_or_remove",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.03902
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "repeat": 1,
+      "species": "salvia rosmarinus",
+      "action": "treat_or_remove",
+      "coarse": "treat_or_remove",
+      "headline": "Treat it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "treat_or_remove",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.04222
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "repeat": 2,
+      "species": "salvia rosmarinus",
+      "action": "treat_or_remove",
+      "coarse": "treat_or_remove",
+      "headline": "Treat it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "treat_or_remove",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.04541
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "repeat": 3,
+      "species": "salvia rosmarinus",
+      "action": "treat_or_remove",
+      "coarse": "treat_or_remove",
+      "headline": "Treat it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "treat_or_remove",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.04921
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "repeat": 4,
+      "species": "salvia rosmarinus",
+      "action": "treat_or_remove",
+      "coarse": "treat_or_remove",
+      "headline": "Treat it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "treat_or_remove",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.05286
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "repeat": 0,
+      "species": "coriandrum sativum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it. This is normal for October.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.05665
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "repeat": 1,
+      "species": "coriandrum sativum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it. This is normal for October.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.06036
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "repeat": 2,
+      "species": "coriandrum sativum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it. This is normal for October.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.06325
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "repeat": 3,
+      "species": "coriandrum sativum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it. This is normal for October.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.06581
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "repeat": 4,
+      "species": "coriandrum sativum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it. This is normal for October.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.06879
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "repeat": 0,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.07508
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "repeat": 1,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "treat_or_remove",
+        "shelter"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.07994
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "repeat": 2,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.08462
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "repeat": 3,
+      "species": "ocimum basilicum",
+      "action": "shelter",
+      "coarse": "shelter",
+      "headline": "Protect it from the weather.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "shelter",
+        "treat_or_remove",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.08946
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "repeat": 4,
+      "species": "ocimum basilicum",
+      "action": "treat_or_remove",
+      "coarse": "treat_or_remove",
+      "headline": "Treat it.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "treat_or_remove",
+        "shelter",
+        "treat_or_remove"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.09301
+    },
+    {
+      "photo": "c014.jpg",
+      "repeat": 0,
+      "species": "petroselinum crispum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "dont_water",
+        "dont_water"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.09994
+    },
+    {
+      "photo": "c014.jpg",
+      "repeat": 1,
+      "species": "petroselinum crispum",
+      "action": "move_light",
+      "coarse": "move_light",
+      "headline": "Move it to better light.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "move_light",
+        "move_light",
+        "move_light"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.10323
+    },
+    {
+      "photo": "c014.jpg",
+      "repeat": 2,
+      "species": "petroselinum crispum",
+      "action": "feed",
+      "coarse": "other",
+      "headline": "Feed it.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "other",
+        "move_light",
+        "other"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.10702
+    },
+    {
+      "photo": "c014.jpg",
+      "repeat": 3,
+      "species": "petroselinum crispum",
+      "action": "move_light",
+      "coarse": "move_light",
+      "headline": "Move it to better light.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "move_light",
+        "other",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.10997
+    },
+    {
+      "photo": "c014.jpg",
+      "repeat": 4,
+      "species": "petroselinum crispum",
+      "action": "move_light",
+      "coarse": "move_light",
+      "headline": "Move it to better light.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "move_light",
+        "move_light",
+        "move_light"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.11304
+    },
+    {
+      "photo": "c028.jpg",
+      "repeat": 0,
+      "species": "melissa officinalis",
+      "action": "move_light",
+      "coarse": "move_light",
+      "headline": "Move it to better light.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "move_light",
+        "move_light",
+        "move_light"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.11852
+    },
+    {
+      "photo": "c028.jpg",
+      "repeat": 1,
+      "species": "melissa officinalis",
+      "action": "move_light",
+      "coarse": "move_light",
+      "headline": "Move it to better light.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "move_light",
+        "other",
+        "move_light"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.12261
+    },
+    {
+      "photo": "c028.jpg",
+      "repeat": 2,
+      "species": "melissa officinalis",
+      "action": "water",
+      "coarse": "water",
+      "headline": "Water it.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "water",
+        "move_light",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.12667
+    },
+    {
+      "photo": "c028.jpg",
+      "repeat": 3,
+      "species": "melissa officinalis",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 1,
+      "total": 3,
+      "asks": [
+        "prune",
+        "move_light",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.13085
+    },
+    {
+      "photo": "c028.jpg",
+      "repeat": 4,
+      "species": "melissa officinalis",
+      "action": "move_light",
+      "coarse": "move_light",
+      "headline": "Move it to better light.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "move_light",
+        "move_light",
+        "move_light"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.13361
+    },
+    {
+      "photo": "c086.jpg",
+      "repeat": 0,
+      "species": "allium tuberosum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "prune",
+        "leave_normal",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.13729
+    },
+    {
+      "photo": "c086.jpg",
+      "repeat": 1,
+      "species": "allium tuberosum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "prune",
+        "prune",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.14076
+    },
+    {
+      "photo": "c086.jpg",
+      "repeat": 2,
+      "species": "allium tuberosum",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "prune",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.14361
+    },
+    {
+      "photo": "c086.jpg",
+      "repeat": 3,
+      "species": "allium tuberosum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "prune",
+        "prune",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.14838
+    },
+    {
+      "photo": "c086.jpg",
+      "repeat": 4,
+      "species": "allium tuberosum",
+      "action": "prune",
+      "coarse": "prune",
+      "headline": "Cut it back.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "prune",
+        "prune",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.15169
+    },
+    {
+      "photo": "c118.jpg",
+      "repeat": 0,
+      "species": "salvia rosmarinus",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.15545
+    },
+    {
+      "photo": "c118.jpg",
+      "repeat": 1,
+      "species": "salvia rosmarinus",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.15882
+    },
+    {
+      "photo": "c118.jpg",
+      "repeat": 2,
+      "species": "salvia rosmarinus",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.16154
+    },
+    {
+      "photo": "c118.jpg",
+      "repeat": 3,
+      "species": "salvia rosmarinus",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.16378
+    },
+    {
+      "photo": "c118.jpg",
+      "repeat": 4,
+      "species": "salvia rosmarinus",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.16637
+    },
+    {
+      "photo": "c134.jpg",
+      "repeat": 0,
+      "species": "salvia officinalis",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.17052
+    },
+    {
+      "photo": "c134.jpg",
+      "repeat": 1,
+      "species": "salvia officinalis",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.17311
+    },
+    {
+      "photo": "c134.jpg",
+      "repeat": 2,
+      "species": "salvia officinalis",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.17563
+    },
+    {
+      "photo": "c134.jpg",
+      "repeat": 3,
+      "species": "salvia officinalis",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 3,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "leave_normal"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.17851
+    },
+    {
+      "photo": "c134.jpg",
+      "repeat": 4,
+      "species": "salvia officinalis",
+      "action": "leave_normal",
+      "coarse": "leave_normal",
+      "headline": "Leave it for now and keep an eye on it.",
+      "agree": 2,
+      "total": 3,
+      "asks": [
+        "leave_normal",
+        "leave_normal",
+        "prune"
+      ],
+      "side": null,
+      "side_coarse": null,
+      "spent_usd": 0.18202
+    }
+  ]
+}

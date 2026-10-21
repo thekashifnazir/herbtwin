@@ -1,0 +1,41 @@
+{
+ "decision": 0.6,
+ "why": "0.6 catches the most heavy blur among admissible cut-offs: move to it",
+ "rates": {
+  "0.6": {
+   "fa": 0.03333333333333333,
+   "catch": 0.9533333333333334,
+   "catch_medium": 0.6333333333333333,
+   "missed": 0.013333333333333334,
+   "guard": 0
+  },
+  "0.7": {
+   "fa": 0.05333333333333334,
+   "catch": 0.9866666666666667,
+   "catch_medium": 0.82,
+   "missed": 0.0033333333333333335,
+   "guard": 0
+  },
+  "0.8": {
+   "fa": 0.06,
+   "catch": 1.0,
+   "catch_medium": 0.92,
+   "missed": 0.0,
+   "guard": 0
+  },
+  "0.9": {
+   "fa": 0.06,
+   "catch": 1.0,
+   "catch_medium": 0.98,
+   "missed": 0.0,
+   "guard": 0
+  },
+  "1.01": {
+   "fa": 0.06666666666666667,
+   "catch": 1.0,
+   "catch_medium": 1.0,
+   "missed": 0.0,
+   "guard": 0
+  }
+ }
+}

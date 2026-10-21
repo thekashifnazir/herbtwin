@@ -1,0 +1,571 @@
+{% extends "base.html" %}
+{% from "_credits.html" import made_with %}
+{% from "_nav.html" import site_nav %}
+{% block title %}herbtwin{% endblock %}
+{% block page %}home-page{% endblock %}
+{% block nav %}{{ site_nav(person, accounts) }}{% endblock %}
+{% block wrap %} wide{% endblock %}
+{% block main %}
+{# the first load of a session: the hero rises in and the twin splits (19 Oct home pass);
+   set before the band paints, never with reduced motion, and never without a script. The
+   rise (`intro-go`) waits for the real fonts so it never plays in a stand-in face, and gives
+   up after 600 ms: the words are there from the first paint either way (H1 fix). Fonts that
+   land after the first frame skip it too: the rise starts 16 px down, so on words already
+   painted it would read as a jump (#313 review) #}
+<script>try { if (!sessionStorage.getItem("herbtwin-intro-seen") && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+  const root = document.documentElement;
+  root.classList.add("first-load"); sessionStorage.setItem("herbtwin-intro-seen", "1");
+  if (document.fonts && document.fonts.load) {
+    let painted = false;  // set in the first frame's callback, so it errs toward stillness
+    requestAnimationFrame(() => { painted = true; });
+    const fonts = Promise.all([document.fonts.load('800 1em "Fira Sans Extra Condensed"'),
+      document.fonts.load('400 1em "Alegreya Sans"'), document.fonts.load('700 1em "Alegreya Sans"')]).then(() => true);
+    const late = new Promise((ok) => setTimeout(ok, 600, false));
+    Promise.race([fonts, late]).then((go) => { if (go && !painted) root.classList.add("intro-go"); }, () => { /* no fonts: no rise */ });
+  }
+} } catch { /* no storage: no intro */ }</script>
+<div class="home-band">
+<section class="home-hero">
+  <p class="home-eyebrow">Is your herb perturbed?</p>
+  <h1>What does this plant need?</h1>
+  <p class="lead"><strong>One photo, one thing to do.</strong> Outdoors, each choice is tried first on your plant's <strong>twin</strong>, a small water-and-frost model, against the next 2 weeks of weather.</p>
+</section>
+
+<form class="home-form" method="post" action="/analyse" enctype="multipart/form-data">
+  <label class="home-photo">Choose a photo
+    <span class="hint">A herb or garden plant, close up. JPEG or PNG.</span>
+    <input type="file" name="photo" id="photo" accept="image/jpeg,image/png" required>
+    <span class="home-chosen" id="photo-chosen" hidden>
+      <img id="photo-thumb" alt="">
+      <span><span class="home-chosen-name" id="photo-name"></span>
+        <span class="button home-chosen-again" aria-hidden="true">Choose a different photo</span></span>
+    </span>
+  </label>
+  {# more photos of the same plant (21 Oct, a gardener tester: "if you want a more detailed
+     answer, give me more photos"): up to two closer looks, read with the main photo in its
+     one call. With script it waits for the first photo and lists each one picked, with a
+     Remove; without, the plain file field takes up to two and the server checks the count #}
+  <div class="home-more" id="home-more">
+    <label class="home-more-add"><span>Add another photo of the same plant <span class="home-more-opt">(optional)</span></span>
+      <input type="file" name="more" id="more" accept="image/jpeg,image/png" multiple aria-describedby="more-hint"></label>
+    <p class="small home-more-hint" id="more-hint">Up to 2 more, such as a leaf close up or the soil. More photos, a closer answer.</p>
+    <ul class="home-more-list" id="more-list" hidden></ul>
+    <p class="small home-more-said" id="more-said" role="status" aria-live="polite"></p>
+  </div>
+  {# no herb to hand: the samples sit right by the photo card, one tap from the top (19 Oct
+     home pass: they were 3,800 px down on a phone). A tap loads the real file (see script) #}
+  <div class="home-chips" role="group" aria-labelledby="home-chips-h">
+    <p class="home-chips-h" id="home-chips-h"><strong>No herb to hand? Try one of ours:</strong></p>
+    <div class="home-chip-row">
+    <a class="home-pick" href="/static/samples/1-parsley-healthy.jpg" data-sample="1-parsley-healthy.jpg"><img src="/static/samples/1-parsley-healthy-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Parsley</span></a>
+    <a class="home-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg"><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Basil flowering</span></a>
+    <a class="home-pick" href="/static/samples/4-rosemary-beetles.jpg" data-sample="4-rosemary-beetles.jpg"><img src="/static/samples/4-rosemary-beetles-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Rosemary beetles</span></a>
+    <a class="home-pick" href="/static/samples/5-coriander-flowering.jpg" data-sample="5-coriander-flowering.jpg"><img src="/static/samples/5-coriander-flowering-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Coriander</span></a>
+    <a class="home-pick" href="/static/samples/6-basil-downy-mildew.jpg" data-sample="6-basil-downy-mildew.jpg"><img src="/static/samples/6-basil-downy-mildew-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Basil mildew</span></a>
+    {% if spot_on %}<a class="home-pick" href="/static/samples/7-pea-bed.jpg" data-sample="7-pea-bed.jpg" data-go="go-spot"><img src="/static/samples/7-pea-bed-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Raised bed</span></a>{% endif %}
+    </div>
+    <p class="small"><a class="credits-link" href="#credits">Photo credits</a></p>
+  </div>
+  <fieldset class="home-where"><legend>Where is it? <span class="muted">(optional)</span></legend>
+    {# the photo's own location, read in this browser to say so up front (display only: the
+       server reads it again, and a place typed or chosen here beats it). Indoors or out is
+       read from the photo itself (19 Oct, Kash's walk) #}
+    {# found: green with a tick; none: an amber "check" note, never an error, saying what a
+       place adds (21 Oct, Kash: "make it more obvious that no location was picked up, and so
+       they can add it if they want more info"). No place name: naming one would send the
+       photo's position somewhere before the person presses the button #}
+    <div role="status" aria-live="polite"><p class="home-photo-place" id="photo-place" hidden><svg class="where-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.8 10.2l2.2 2.2 4.2-4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Location found in your photo (rounded to about 1 km).</span>
+      <button class="quiet" type="button" id="where-else" aria-controls="where-pick" aria-expanded="false">Use somewhere else</button></p>
+    <div class="home-no-place" id="no-photo-place" hidden><svg class="where-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 6.5v4.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="14" r="1.3" fill="currentColor"/></svg><p><strong>No location in this photo.</strong> Add a town for weather-checked advice: frost, rain and what's normal this month.</p></div></div>
+    <div class="home-where-pick" id="where-pick">
+      <p class="home-locate"><button class="quiet" type="button" id="locate" hidden>Use my location</button>
+        <span id="located" class="small" role="status" aria-live="polite"></span></p>
+      <label>or a town or postcode <input name="place" maxlength="100"></label>
+    </div>
+    <input type="hidden" name="lat" id="lat"><input type="hidden" name="lon" id="lon">
+  </fieldset>
+  {% if spot_on %}<div class="actions home-go">
+    <button class="primary big" type="submit">What does my plant need?<span class="home-go-for" id="go-plant">One plant, close up</span></button>
+    <button class="big" type="submit" formaction="/spots">What can I grow here?<span class="home-go-for" id="go-spot">A bed, pot or border</span></button>
+  </div>
+  {% else %}<div class="actions home-go"><button class="primary big" type="submit" id="go-plant">Analyse</button></div>{% endif %}
+</form>
+
+{% if ask_sharing %}<form class="tray home-ask" id="ask" method="post" action="/account/sharing">
+  <div class="home-ask-q">
+    <p><strong>Help improve advice for everyone?</strong> We'd share how past advice turned out, never your photos.</p>
+    <input type="hidden" name="back" value="/">
+    <div class="actions"><button type="submit" name="share" value="yes">Yes</button>
+      <button type="submit" name="share" value="no">No</button></div>
+    <p class="small muted">Only the plant, the month, a rough region (about 100 km) and how the advice went. No photos, no typed text, nothing with your name or email. Change it any time on My plants.</p>
+  </div>
+  <p class="home-ask-said" id="ask-said" role="status" aria-live="polite" tabindex="-1"></p>
+</form>{% endif %}
+
+<figure class="home-twin">
+  <div class="home-twin-frame" id="twin-frame">
+    <img src="/static/twin/qwen__basil__if_you_do.jpg" width="1184" height="896" loading="eager"
+         alt="Basil plant thriving: the 'if you protect it' twin">
+    <img class="home-twin-dont" src="/static/twin/qwen__basil__if_you_dont.jpg" width="1184" height="896"
+         alt="Basil plant cold-damaged: the 'if you don't' twin">
+    <span class="home-twin-tag l">If you protect it</span><span class="home-twin-tag r">If you don't</span>
+    <span class="home-twin-tag ex">Example</span>
+    {# the handle says it moves, with or without motion: the slider itself is invisible #}
+    <span class="home-twin-grip" aria-hidden="true">◀ drag ▶</span>
+    <input class="home-twin-range" id="twin-range" type="range" min="0" max="100" value="50"
+           aria-label="Compare if you protect it and if you don't">
+  </div>
+  <figcaption><strong>Example:</strong> basil in 7 days, protected or not. An illustration, not a prediction; your own answer says it in words. · <a class="credits-link" href="#credits">Photo credits</a></figcaption>
+</figure>
+</div>
+
+<section class="home-example" aria-labelledby="home-example-tab">
+<p class="home-example-tab" id="home-example-tab">Example</p>
+<p class="home-example-in">
+  <img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="56" height="42" loading="lazy"
+       alt="The basil photo this example starts from">
+  <strong>A basil photo, a cold week in London</strong> <span class="home-example-arrow" aria-hidden="true">→</span>
+</p>
+<article class="card home-sample" aria-label="Example answer">
+  <h2>Basil</h2>
+  <p class="home-sample-head">Shelter it from the cold nights this week.</p>
+  <p class="small">How sure we are: Our best read. Right about half the time in our tests.</p>
+  <p class="home-sample-do"><span class="tag">TODAY</span> <strong>Move it somewhere sheltered</strong></p>
+  <ul class="home-sample-more">
+    <li><span class="tag">Also do</span> <span>Pick the best leaves now: basil won't last a frost.</span></li>
+    <li><span class="tag tag-dont">Don't</span> <span>Water it late in the day.</span></li>
+    <li><span class="tag tag-watch">Keep an eye on</span> <span>Yellow patches with grey-purple fuzz underneath.</span></li>
+  </ul>
+</article>
+
+<div class="home-bento" role="group" aria-label="The evidence behind the example answer">
+  <div class="card home-tile home-tile-wide">
+    <h2>Why it's our best read</h2>
+    <p class="home-tile-big">About half the time</p>
+    <ul class="home-factors">
+      <li class="up"><span aria-hidden="true">▲</span> The photo is clear</li>
+      <li class="up"><span aria-hidden="true">▲</span> 3 of 3 advisors agree</li>
+      <li class="up"><span aria-hidden="true">▲</span> A forecast is available</li>
+      <li class="down"><span aria-hidden="true">▼</span> Pot or ground unknown</li>
+      <li class="miss"><span aria-hidden="true">?</span> How the soil feels 2 cm down</li>
+    </ul>
+  </div>
+  <div class="card home-tile">
+    <h2>Cold nights</h2>
+    <p class="home-tile-big">3 °C</p>
+    <p class="small muted">Nights from Wednesday; basil is hurt by anything under 10 °C.</p>
+  </div>
+  <div class="card home-tile home-tile-wide">
+    <h2>Next 2 weeks vs leaving it</h2>
+    <ul class="home-outlook">
+      <li class="better"><span class="home-verdict"><span aria-hidden="true">▲</span> Better</span>
+        <strong>Protect it</strong><span class="small muted">Cold risk Wednesday</span></li>
+      <li><span class="home-verdict"><span aria-hidden="true">=</span> Same</span><strong>Water it</strong></li>
+      <li><span class="home-verdict"><span aria-hidden="true">=</span> Same</span><strong>Move to better light</strong></li>
+    </ul>
+  </div>
+</div>
+</section>
+
+{# how it works, at a glance: one photo through the 4 steps, each card carrying a real
+   piece of the example's output (18 Oct judge ideas, item 12). Only the openly licensed
+   basil sample and the twin pictures drawn from it, never anyone's own garden #}
+<section class="home-how" aria-labelledby="home-how-h">
+  <h2 id="home-how-h">How it works</h2>
+  <ol class="home-how-cards">
+    <li><figure><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The basil photo">
+      <span class="home-how-chip">Found basil</span></figure>
+      <h3>Your photo</h3><p class="small muted">A vision model names the plant and reads its leaves and soil.</p></li>
+    <li><figure class="cold"><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The same basil, tinted for a cold week">
+      <span class="home-how-chip">3 °C nights from Wed</span></figure>
+      <h3>Your weather</h3><p class="small muted">The next 2 weeks where it grows, night by night.</p></li>
+    <li><figure><img src="/static/twin/qwen__basil__if_you_dont.jpg" width="1184" height="896" loading="lazy" alt="The basil's twin left out in the cold">
+      <span class="home-how-tag">If left out</span><span class="home-how-chip">Twin: shelter ✓ better</span></figure>
+      <h3>The twin tests each choice</h3><p class="small muted">Watering, sheltering and moving it, tried on the twin first.</p></li>
+    <li><figure><img src="/static/twin/qwen__basil__if_you_do.jpg" width="1184" height="896" loading="lazy" alt="The basil's twin sheltered and thriving">
+      <span class="home-how-chip">Shelter it this week · our best read</span></figure>
+      <h3>The answer</h3><p class="small muted">One thing to do, and how sure we are.</p></li>
+  </ol>
+  {# the one models line kept in view, as a pill: it is what the judges check. Its link opens
+     the credits page, as the answer page's does: "#made-with" sat right under the pill, so
+     the tap moved nothing (21 Oct, Kash: "this link doesn't go anywhere") #}
+  <p class="home-how-sources">Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory · <a href="/credits">What it's made with</a></p>
+</section>
+
+{# who and what it runs on, then every licence, folded (19 Oct home pass); /credits shows
+   the same section with the fold open #}
+{{ made_with(spot_on=spot_on, plantbook_on=plantbook_on, voice_on=voice_on, tavily_on=tavily_on, check_on=check_on) }}
+{% endblock %}
+{% block foot %}<span class="home-giant" aria-hidden="true">herbtwin</span>{% endblock %}
+{% block script %}
+<script>
+{% include "_photo_gps.js" %}
+(() => {
+  // H2: only what starts below the first screen is marked (.home-later), so nothing in the
+  // first viewport is ever held back: the twin from 1100 px up, the example on a tall screen
+  // (#313 review). Each marked block rises in (home.css) the moment any of it shows, and the
+  // ones that arrive together go one after another. No script, no observer or Reduce Motion:
+  // nothing is marked, all of it shows
+  if (!window.IntersectionObserver || !matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
+  const blocks = ".home-twin, .home-example-in, .home-sample, .home-tile, .home-how > h2, " +
+    ".home-how-cards > li, .home-how-sources, .made-with > *";
+  const arrive = new IntersectionObserver((entries) => {
+    entries.filter((x) => x.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+      .forEach((x, i) => {
+        x.target.style.setProperty("--reveal-delay", Math.min(i, 3) * 80 + "ms");
+        x.target.classList.add("home-in");
+        arrive.unobserve(x.target);
+      });
+  }, {threshold: 0});
+  document.querySelectorAll(blocks).forEach((e) => {
+    if (e.getBoundingClientRect().top > innerHeight) { e.classList.add("home-later"); arrive.observe(e); }
+  });
+})();
+(() => {
+  // the chosen photo, shown back: a local object URL for display only. The file itself is
+  // sent exactly as picked, never resized or re-encoded: the plant reader needs the detail.
+  const input = document.getElementById("photo"), box = input.closest(".home-photo"),
+        chosen = document.getElementById("photo-chosen"), thumb = document.getElementById("photo-thumb"),
+        named = document.getElementById("photo-name");
+  let shown = null;
+  input.addEventListener("change", () => {
+    if (shown) { URL.revokeObjectURL(shown); shown = null; }
+    const file = input.files && input.files[0];
+    box.classList.toggle("has-photo", Boolean(file));
+    chosen.hidden = !file;
+    if (!file) { thumb.removeAttribute("src"); named.textContent = ""; return; }
+    shown = URL.createObjectURL(file);
+    thumb.src = shown;
+    named.textContent = file.name;  // a sample's plain name: the where script
+  });
+})();
+(() => {
+  // more photos of the same plant: up to MAX_MORE beside the main one, kept in the "more"
+  // field exactly as picked (never resized: the plant reader needs the detail). Each shows
+  // as a small thumbnail with its own Remove; a new pick adds to them, never replaces them
+  const MAX_MORE = 2;
+  const main = document.getElementById("photo"), box = document.getElementById("home-more"),
+        input = document.getElementById("more"), list = document.getElementById("more-list"),
+        said = document.getElementById("more-said"), add = box && box.querySelector(".home-more-add");
+  if (!main || !box || !input || !window.DataTransfer) return;  // the plain field still works
+  box.classList.add("ready");
+  let kept = [], urls = [];
+  const left = () => kept.length >= MAX_MORE
+    ? `${kept.length + 1} photos: that's the most we read.`
+    : `${kept.length + 1} of ${MAX_MORE + 1} photos.`;
+  const sync = (news) => {
+    const dt = new DataTransfer();
+    kept.forEach((f) => dt.items.add(f));
+    input.files = dt.files;
+    urls.forEach((u) => URL.revokeObjectURL(u));
+    urls = kept.map((f) => URL.createObjectURL(f));
+    list.replaceChildren(...kept.map((f, i) => {
+      const li = document.createElement("li"), img = document.createElement("img"),
+            gone = document.createElement("button");
+      img.src = urls[i]; img.alt = ""; img.width = 56; img.height = 56;
+      gone.type = "button"; gone.className = "quiet"; gone.textContent = "Remove";
+      gone.setAttribute("aria-label", `Remove photo ${i + 2}, ${f.name}`);
+      gone.addEventListener("click", () => {
+        kept.splice(i, 1);
+        sync(`Photo removed. ${left()}`);
+        const next = list.querySelector("button");
+        (next || input).focus();
+      });
+      li.append(img, gone);
+      return li;
+    }));
+    list.hidden = !kept.length;
+    const full = kept.length >= MAX_MORE;
+    add.hidden = full;  // the field stays in the form (a disabled one would not be sent)
+    input.tabIndex = full ? -1 : 0;
+    if (news !== undefined) said.textContent = news;
+  };
+  // an extra photo is shrunk here (long side 2400 px, JPEG 0.85) so three phone photos stay
+  // well under the upload limit; the main photo is never touched, its EXIF (place, time,
+  // light) is read on the server. A photo that can't be drawn is sent as it is
+  const LONG = 2400, TOTAL = 28 * 1024 * 1024;
+  const shrink = async (file) => {
+    try {
+      const pic = await createImageBitmap(file);  // orientation applied, as the page shows it
+      const scale = Math.min(1, LONG / Math.max(pic.width, pic.height));
+      if (scale === 1 && file.size < 2e6) return file;
+      const c = document.createElement("canvas");
+      c.width = Math.round(pic.width * scale); c.height = Math.round(pic.height * scale);
+      c.getContext("2d").drawImage(pic, 0, 0, c.width, c.height);
+      const blob = await new Promise((ok) => c.toBlob(ok, "image/jpeg", 0.85));
+      return blob ? new File([blob], file.name.replace(/\.\w+$/, "") + ".jpg", {type: "image/jpeg"}) : file;
+    } catch { return file; }
+  };
+  input.addEventListener("change", async () => {
+    const picked = Array.from(input.files || []), room = MAX_MORE - kept.length;
+    const take = picked.slice(0, Math.max(room, 0)), added = take.length, out = picked.length - added;
+    kept = kept.concat(take);  // in the field at once: a send before the shrink still has them
+    const over = `We read ${MAX_MORE + 1} photos at most, so ${out} ${out === 1 ? "was" : "were"} left out.`;
+    sync(picked.length ? `${added === 1 ? "Photo" : added + " photos"} added. ${out ? over : left()}` : undefined);
+    const small = await Promise.all(take.map(shrink));
+    if (small.some((f, i) => f !== take[i])) {  // swapped in only where still kept
+      kept = kept.map((f) => (take.includes(f) ? small[take.indexOf(f)] : f));
+      sync();
+    }
+  });
+  // offered once there is a photo to add to; Back may bring the picks back with the page
+  const show = () => { box.hidden = !(main.files && main.files[0]); };
+  main.addEventListener("change", () => {
+    // a sample is never the same plant as the photos picked before it
+    const sample = main.herbtwinSample && main.files && main.herbtwinSample.file === main.files[0];
+    if (sample && kept.length) { kept = []; sync("Extra photos cleared for the sample."); }
+    show();
+  });
+  addEventListener("pageshow", () => {
+    input.disabled = false;  // set on send for the bed answer, below
+    kept = Array.from(input.files || []).slice(0, MAX_MORE);
+    sync();
+    show();
+  });
+  show();
+  // the bed answer ("What can I grow here?") reads one photo: the closer looks stay here
+  input.form.addEventListener("submit", (e) => {
+    input.disabled = Boolean(e.submitter && e.submitter.getAttribute("formaction"));
+    const total = [...(main.files || []), ...(input.disabled ? [] : kept)].reduce((n, f) => n + f.size, 0);
+    if (total > TOTAL) {  // the server says so too; this keeps the picks
+      e.preventDefault();
+      said.textContent = "These photos are too big together. Remove one and try again.";
+      (list.querySelector("button") || input).focus();
+    }
+  });
+})();
+(() => {
+  // say which location the answer will use, as soon as a photo is picked: the photo's own,
+  // or London for a sample (where.is_sample), with the choices folded behind "Use somewhere
+  // else"; or none, so the choices show. Then the button to press comes into view (judge
+  // pre-walk, 19 Oct: it sat below the fold)
+  const input = document.getElementById("photo"), pick = document.getElementById("where-pick");
+  if (!window.herbtwinPhotoGps || !input || !pick) return;  // no script: the choices just show
+  const uses = document.getElementById("photo-place"), none = document.getElementById("no-photo-place"),
+        other = document.getElementById("where-else"), place = input.form.elements.place,
+        lat = document.getElementById("lat");
+  const said = {
+    photo: ["Location found in your photo (rounded to about 1 km).", "Your photo's location is used unless you choose somewhere else here."],
+    sample: ["Sample photo: set in London.", "London is used unless you choose somewhere else here."],
+  };
+  // the samples by SHA-256 (where.sample_files): one picked through the file picker, or
+  // restored by the browser without this page's state, is still known as a sample
+  const samples = {{ sample_files()|tojson }};
+  const named = document.getElementById("photo-name");
+  const sampleOf = async (file) => {
+    if (input.herbtwinSample && input.herbtwinSample.file === file) return input.herbtwinSample;
+    if (!window.crypto || !crypto.subtle || file.size > 2000000) return null;  // no secure context
+    try {
+      const hex = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", await file.arrayBuffer())),
+                             (b) => b.toString(16).padStart(2, "0")).join("");
+      const name = samples[hex], tile = name && document.querySelector(`.home-pick[data-sample="${name}"]`);
+      return name ? {file, name: tile ? tile.textContent.trim() : name, go: tile ? tile.dataset.go || "" : ""} : null;
+    } catch { return null; }
+  };
+  let asked = 0;
+  const show = (where) => {
+    const chosen = Boolean(place.value.trim() || lat.value);  // already chose: theirs wins anyway
+    const open = other.getAttribute("aria-expanded") === "true";
+    uses.hidden = !where || chosen;
+    if (where) uses.querySelector("span").textContent = said[where][open ? 1 : 0];
+    none.hidden = Boolean(where) || chosen || !input.files || !input.files[0];
+    pick.hidden = Boolean(where) && !chosen && !open;
+  };
+  const read = async (e) => {
+    const file = input.files && input.files[0], mine = ++asked;
+    if (!file) return show(null);
+    // a tile's sample is known at once, so the scroll below happens inside its click
+    const sample = input.herbtwinSample && input.herbtwinSample.file === file ? input.herbtwinSample : await sampleOf(file);
+    let gps = null;
+    if (!sample) {
+      try { gps = window.herbtwinPhotoGps(await file.slice(0, 262144).arrayBuffer()); } catch { /* none */ }
+    }
+    if (mine !== asked) return;  // a newer pick wins
+    // a sample by its plain name, not "3-basil-yellow-leaves.jpg" (judge pre-walk, 19 Oct)
+    named.textContent = sample ? `Sample photo: ${sample.name}` : file.name;
+    show(sample ? "sample" : gps ? "photo" : null);
+    if (e.type !== "change") return;  // a restored page keeps its scroll
+    const go = document.getElementById((sample && sample.go) || "go-plant");
+    const button = go && (go.closest("button") || go);
+    if (button) button.scrollIntoView({block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+  };
+  other.addEventListener("click", () => {
+    other.setAttribute("aria-expanded", "true");
+    other.hidden = true;
+    pick.hidden = false;
+    read({type: "open"});
+    place.focus();
+  });
+  input.addEventListener("change", read);
+  addEventListener("pageshow", read);  // back/forward can restore a picked file
+})();
+(() => {
+  // on "What does my plant need?", a small copy of the photo stays in this tab so the
+  // answer page can show it back (result.html); the upload itself is untouched
+  const input = document.getElementById("photo"), thumb = document.getElementById("photo-thumb");
+  input.form.addEventListener("submit", e => {
+    try {
+      window.sessionStorage.removeItem("herbtwin-photo-pending");
+      const by = e.submitter;
+      if (by && by.getAttribute("formaction")) return;  // the spot button: no answer page
+      if (!thumb.complete || !thumb.naturalWidth) return;
+      const square = (pic, side) => {  // a square crop from the middle, like the band shows it
+        const scale = side / Math.min(pic.naturalWidth, pic.naturalHeight);
+        const w = Math.round(pic.naturalWidth * scale), h = Math.round(pic.naturalHeight * scale);
+        const c = document.createElement("canvas");
+        c.width = side; c.height = side;
+        c.getContext("2d").drawImage(pic, (side - w) / 2, (side - h) / 2, w, h);
+        return c.toDataURL("image/jpeg", 0.8);
+      };
+      const src = square(thumb, 320);
+      const more = Array.from(document.querySelectorAll("#more-list img"))
+        .filter((pic) => pic.complete && pic.naturalWidth).map((pic) => square(pic, 160));
+      window.sessionStorage.setItem("herbtwin-photo-pending", JSON.stringify({src, more, at: Date.now()}));
+    } catch { /* no storage or canvas: the answer shows without the photo */ }
+  });
+})();
+(() => {
+  // the twin divider: a real range input laid over the pair, so drag and arrow keys both work
+  const range = document.getElementById("twin-range"), frame = document.getElementById("twin-frame");
+  if (!range || !frame) return;
+  const set = () => frame.style.setProperty("--cut", range.value + "%");
+  range.addEventListener("input", set);
+  set();
+  // the hint: nothing says the divider moves, so the first time it is seen it eases 15%
+  // left and back, once a visit. Never with reduced motion, never after a touch
+  if (!window.IntersectionObserver || !matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
+  // the first load of a session: the twin splits instead (19 Oct home pass). It opens on the
+  // healthy plant and the divider sweeps to its place, which shows it moves, so no nudge
+  const intro = document.documentElement.classList.contains("first-load");
+  if (!intro) {
+    try { if (sessionStorage.getItem("herbtwin-slider-hinted")) return; } catch { /* no storage: hint anyway */ }
+  }
+  // only a real move counts: on a phone the finger that scrolls the page often lands on
+  // the full-width range, and a pointerdown alone used to cancel the hint before it ran
+  let touched = false;
+  range.addEventListener("input", () => { touched = true; });
+  // it sweeps 20 points past its place, so the "don't" side shows properly, then settles
+  // back on the range's value; 1.4 s in all, and the grip pops as it lands (21 Oct, Kash:
+  // "make it more engaging")
+  const sweep = () => {
+    try { sessionStorage.setItem("herbtwin-slider-hinted", "1"); } catch { /* fine */ }
+    const to = Number(range.value), past = Math.max(0, to - 20), start = performance.now(), ms = 1400, k = 0.6;
+    const inOut = (x) => x < 0.5 ? 4 * x ** 3 : 1 - (2 - 2 * x) ** 3 / 2, out = (x) => (1 - (1 - x) ** 3);
+    const step = (now) => {
+      if (touched) return set();  // a finger stops it where the finger is
+      const t = Math.min((now - start) / ms, 1);
+      const cut = t < k ? 100 - (100 - past) * inOut(t / k) : past + (to - past) * out((t - k) / (1 - k));
+      frame.style.setProperty("--cut", cut + "%");
+      if (t < 1) requestAnimationFrame(step); else { set(); frame.classList.add("swept"); }
+    };
+    requestAnimationFrame(step);
+  };
+  if (intro) frame.style.setProperty("--cut", "100%");  // the healthy plant, until it splits
+  const nudge = () => {
+    try { sessionStorage.setItem("herbtwin-slider-hinted", "1"); } catch { /* fine */ }
+    const from = Number(range.value), start = performance.now(), ms = 1100;
+    const step = (now) => {
+      if (touched) return set();
+      const t = Math.min((now - start) / ms, 1);
+      frame.style.setProperty("--cut", from - 15 * Math.sin(Math.PI * t) + "%");  // out and back
+      if (t < 1) requestAnimationFrame(step); else set();
+    };
+    requestAnimationFrame(step);
+  };
+  const seen = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    seen.disconnect();
+    setTimeout(() => { if (touched) set(); else if (intro) sweep(); else nudge(); }, intro ? 200 : 600);
+  }, {threshold: intro ? 0.3 : 0.6});  // the intro must split even half in view
+  seen.observe(frame);
+})();
+(() => {
+  // a sample tile loads the real photo into the form (untouched, same as picking it);
+  // where a File can't be assigned the tile stays a plain link to the image
+  // a bed tile points at "What can I grow here?" (data-go), a plant tile at the plant button
+  const input = document.getElementById("photo");
+  if (!input || !window.fetch || !window.DataTransfer) return;
+  document.querySelectorAll(".home-pick").forEach(tile => {
+    tile.addEventListener("click", async e => {
+      e.preventDefault();  // before the first await, or the link navigates anyway
+      try {
+        const dt = new DataTransfer();
+        const r = await fetch(tile.href);
+        if (!r.ok) throw new Error(String(r.status));
+        const blob = await r.blob();
+        dt.items.add(new File([blob], tile.dataset.sample, {type: blob.type || "image/jpeg"}));
+        input.files = dt.files;
+        // which sample and which button it is for, by the very file (a later pick is a photo)
+        input.herbtwinSample = {file: input.files[0], name: tile.textContent.trim(), go: tile.dataset.go || ""};
+      } catch { location.href = tile.href; return; }  // can't load it: open the image instead
+      input.dispatchEvent(new Event("change", {bubbles: true}));
+      const go = document.getElementById(tile.dataset.go || "go-plant");  // brought into view by the where script
+      if (go) (go.closest("button") || go).focus({preventScroll: true});
+    });
+  });
+})();
+(() => {
+  // a credits link opens the folded Credits and models at the foot, then goes there
+  const box = document.getElementById("credits");
+  if (!box) return;
+  const open = () => { if (location.hash === "#credits") box.open = true; };
+  document.querySelectorAll(".credits-link").forEach(a => a.addEventListener("click", () => { box.open = true; }));
+  addEventListener("hashchange", open);
+  open();
+})();
+(() => {
+  // the sharing ask saves in the background, so the photo already picked stays picked
+  const ask = document.getElementById("ask");
+  if (!ask || !window.fetch) return;
+  const said = document.getElementById("ask-said");
+  ask.addEventListener("submit", async e => {
+    const pressed = e.submitter;
+    if (!pressed || !pressed.value) return;  // an old browser: let the form post as usual
+    e.preventDefault();
+    const body = new URLSearchParams(new FormData(ask));
+    body.set("share", pressed.value);
+    ask.querySelectorAll("button").forEach(b => { b.disabled = true; });
+    try {
+      const r = await fetch(ask.action, {method: "POST", body, headers: {"X-Herbtwin-Fetch": "1"}});
+      // only a 204 means saved: an expired sign-in is a redirect that fetch follows to a 200
+      if (r.status !== 204) throw new Error(String(r.status));
+      ask.querySelector(".home-ask-q").hidden = true;
+      said.classList.remove("err");
+      said.textContent = pressed.value === "yes"
+        ? "Thank you: we'll share how past advice turned out. Change it any time on My plants."
+        : "Thanks: nothing is shared. Change it any time on My plants.";
+      said.focus();  // the pressed button is gone; keep keyboard focus here
+    } catch {
+      ask.querySelectorAll("button").forEach(b => { b.disabled = false; });
+      said.classList.add("err");
+      said.textContent = "Could not save that. Try again.";
+    }
+  });
+})();
+(() => {
+  const go = document.getElementById("locate"), said = document.getElementById("located"),
+        lat = document.getElementById("lat"), lon = document.getElementById("lon"),
+        place = go.form.elements.place;
+  // no location here: the button stays hidden; the note's "Add a town" still holds
+  if (!navigator.geolocation) return;
+  go.hidden = false;
+  // the last one used wins: the server takes the device first, so a town typed after it
+  // clears it, and the device clears the town (#271 review)
+  place.addEventListener("input", () => {
+    if (!lat.value || !place.value.trim()) return;
+    lat.value = ""; lon.value = "";
+    said.textContent = "We'll use the town you typed.";
+  });
+  go.onclick = () => {
+    said.textContent = "Finding you…";
+    navigator.geolocation.getCurrentPosition(
+      p => { lat.value = p.coords.latitude.toFixed(2);
+             lon.value = p.coords.longitude.toFixed(2);
+             place.value = "";
+             said.textContent = "Got it. We'll use where you are now."; },
+      () => { said.textContent = "Not available: type a town instead."; });
+  };
+})();
+</script>
+{% endblock %}

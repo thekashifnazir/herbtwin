@@ -1,0 +1,11 @@
+.git
+.env
+.worktrees
+.venv
+.superpowers
+data/photos
+data/packs
+traces.db
+tests
+docs
+state

@@ -1,0 +1,101 @@
+{
+  "backend": "ollama",
+  "git_sha": "e74d519",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "n": 72,
+      "value": 1.0
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.31475233309404166,
+      "lo": 0.2502392916965781,
+      "n": 199,
+      "value": 0.28225652069873175
+    },
+    "over_treatment": {
+      "hi": 0.22613065326633167,
+      "lo": 0.12562814070351758,
+      "n": 199,
+      "value": 0.17587939698492464
+    },
+    "primary_in_truth": {
+      "hi": 0.6030150753768844,
+      "lo": 0.46733668341708545,
+      "n": 199,
+      "value": 0.5376884422110553
+    },
+    "primary_match": {
+      "hi": 0.4020100502512563,
+      "lo": 0.271356783919598,
+      "n": 199,
+      "value": 0.33668341708542715
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.4020100502512563,
+      "lo": 0.271356783919598,
+      "n": 199,
+      "value": 0.33668341708542715
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 199,
+      "value": 0.0
+    },
+    "water_conflict": {
+      "hi": 0.01507537688442211,
+      "lo": 0.0,
+      "n": 199,
+      "value": 0.005025125628140704
+    }
+  },
+  "model": "nano4b-base:think",
+  "n_error": 0,
+  "n_failed": 1,
+  "n_missing": 0,
+  "n_ok": 199,
+  "n_total": 200,
+  "pred_primary": {
+    "leave_normal": 82,
+    "move_light": 5,
+    "other": 18,
+    "prune": 33,
+    "shelter": 4,
+    "treat_or_remove": 49,
+    "water": 8
+  },
+  "pred_primary_fine": {
+    "change_soil": 2,
+    "feed": 6,
+    "leave_normal": 82,
+    "move_light": 5,
+    "mulch": 1,
+    "prune": 33,
+    "repot": 9,
+    "shelter": 4,
+    "treat_or_remove": 49,
+    "water": 8
+  },
+  "prompt_hash": "7ba44f01d95b",
+  "run_id": "nano4b-base-vllm-mirage",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 43,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

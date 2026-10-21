@@ -1,0 +1,68 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.106782,
+  "failed_ids": [],
+  "git_sha": "756e55e",
+  "largest_disagreements": [
+    "droop_soybean/11-46_18_09_2019_17_37_14",
+    "droop_soybean/11-46_19_09_2019_15_34_03",
+    "droop_soybean/11-46_20_09_2019_10_06_06",
+    "droop_soybean/11-46_20_09_2019_10_36_08",
+    "droop_soybean/11-46_20_09_2019_17_51_24"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 8722,
+  "metrics": {
+    "exact": {
+      "hi": 0.3988439306358382,
+      "lo": 0.11650485436893204,
+      "skipped": 0,
+      "value": 0.2111111111111111
+    },
+    "mae": {
+      "hi": 1.3822393822393821,
+      "lo": 0.7428571428571429,
+      "skipped": 0,
+      "value": 1.1555555555555554
+    },
+    "qwk": {
+      "hi": 0.3733333333333333,
+      "lo": 0.0,
+      "skipped": 0,
+      "value": 0.28455284552845517
+    },
+    "within_one": {
+      "hi": 0.890625,
+      "lo": 0.527363184079602,
+      "skipped": 0,
+      "value": 0.6666666666666666
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 180,
+  "n_total": 180,
+  "pred_histogram": {
+    "0": 141,
+    "1": 16,
+    "2": 23
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-droop_soybean-glm-5-3-flash",
+  "set": "droop_soybean",
+  "tags": {
+    "safe-to-train": 180
+  },
+  "temperature": 0,
+  "truth_histogram": {
+    "0": 30,
+    "1": 60,
+    "2": 60,
+    "3": 30
+  }
+}

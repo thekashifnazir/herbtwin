@@ -1,0 +1,26 @@
+{
+ "d9748d9ecbf21018702e59b86e90750c6c444f15632e5a048c0004d522c9281e": {
+  "do": "qwen__parsley__if_you_do.jpg",
+  "dont": "qwen__parsley__if_you_dont.jpg",
+  "credit": "Source photo: Johnathon Ridden (CC0), rendered by Qwen-Image-Edit.",
+  "care": "water"
+ },
+ "686f3b121c9676d0aafa29ead578fe66985924c74e9e0a70576dab29b2b50580": {
+  "do": "qwen__basil__if_you_do.jpg",
+  "dont": "qwen__basil__if_you_dont.jpg",
+  "credit": "Source photo: Forest and Kim Starr (CC BY 3.0 US), rendered by Qwen-Image-Edit.",
+  "care": "shelter"
+ },
+ "2ebf176d2cc5788dd9817502d541a83702f82348406fbab856c23fe23df8687e": {
+  "do": "qwen__beetles__if_you_do.jpg",
+  "dont": "qwen__beetles__if_you_dont.jpg",
+  "credit": "Source photo: Максим Шумских (CC BY 4.0), rendered by Qwen-Image-Edit.",
+  "care": "treat_or_remove"
+ },
+ "4e0c1fab9dbe4a0877eaa5818472ad2db8640e09e9c792bbca85a4a1268f1510": {
+  "do": "qwen__coriander__if_you_do.jpg",
+  "dont": "qwen__coriander__if_you_dont.jpg",
+  "credit": "Source photo: Ian Wolfe (CC0), rendered by Qwen-Image-Edit.",
+  "care": "water"
+ }
+}

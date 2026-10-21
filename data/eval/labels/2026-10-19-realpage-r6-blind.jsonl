@@ -1,0 +1,192 @@
+{"id": 6001, "label": "no", "reason": "Describes pests; no cold protection instruction."}
+{"id": 6002, "label": "no", "reason": "Greenhouse ventilation, not cold protection."}
+{"id": 6003, "label": "no", "reason": "Flower removal, not cold protection."}
+{"id": 6004, "label": "no", "reason": "Harvest timing fact, not an instruction to cut back."}
+{"id": 6005, "label": "no", "reason": "Regular picking is not cutting back."}
+{"id": 6006, "label": "no", "reason": "Harvest tip, not cutting back."}
+{"id": 6007, "label": "no", "reason": "Picking statement, not cutting back."}
+{"id": 6008, "label": "no", "reason": "Bring indoors for harvest, not cutting back."}
+{"id": 6009, "label": "no", "reason": "Wildlife fact, nothing about watering."}
+{"id": 6010, "label": "no", "reason": "Flower fact, nothing about watering."}
+{"id": 6011, "label": "no", "reason": "General growing fact, no cut-back instruction."}
+{"id": 6012, "label": "no", "reason": "Harvesting young leaves is not cutting back."}
+{"id": 6013, "label": "no", "reason": "Layering propagation, different action."}
+{"id": 6014, "label": "no", "reason": "General fact for established plants; not a pot instruction to withhold."}
+{"id": 6015, "label": "no", "reason": "Spring feeding, different action and timing."}
+{"id": 6016, "label": "no", "reason": "Shade tolerance fact, no watering."}
+{"id": 6017, "label": "no", "reason": "Placement fact, no watering."}
+{"id": 6018, "label": "no", "reason": "Sowing instruction, not watering."}
+{"id": 6019, "label": "no", "reason": "Transplanting seedlings, not watering."}
+{"id": 6020, "label": "no", "reason": "Soil choice, not watering."}
+{"id": 6021, "label": "no", "reason": "Remove flowers, not watering."}
+{"id": 6022, "label": "no", "reason": "Web boilerplate, irrelevant."}
+{"id": 6023, "label": "no", "reason": "Promotional text, irrelevant."}
+{"id": 6024, "label": "no", "reason": "Sowing instruction, not cutting back."}
+{"id": 6025, "label": "no", "reason": "Site choice, not cutting back."}
+{"id": 6026, "label": "no", "reason": "Sowing timing, not cold protection."}
+{"id": 6027, "label": "no", "reason": "Plant size fact, not cold protection."}
+{"id": 6028, "label": "no", "reason": "Succession sowing, not cold protection."}
+{"id": 6029, "label": "no", "reason": "Overwatering warning, not cold protection."}
+{"id": 6030, "label": "no", "reason": "Spring sowing, not cutting back."}
+{"id": 6031, "label": "no", "reason": "Germination fact, irrelevant."}
+{"id": 6032, "label": "no", "reason": "Seedling handling, not cutting back."}
+{"id": 6033, "label": "no", "reason": "Sowing in spring, not cutting back."}
+{"id": 6034, "label": "no", "reason": "Division, not cutting back."}
+{"id": 6035, "label": "no", "reason": "Planting divisions, not cutting back."}
+{"id": 6036, "label": "no", "reason": "Cuttings timing, not cold protection."}
+{"id": 6037, "label": "no", "reason": "Division, different action and plant list."}
+{"id": 6038, "label": "no", "reason": "Signpost to other pages, no instruction."}
+{"id": 6039, "label": "no", "reason": "About garlic medicinal use, different plant."}
+{"id": 6040, "label": "no", "reason": "About sage medicinal use, different plant."}
+{"id": 6041, "label": "no", "reason": "Medicinal use, not cutting back."}
+{"id": 6042, "label": "no", "reason": "Different plant (Portuguese laurel)."}
+{"id": 6043, "label": "no", "reason": "Different plant, no cold protection."}
+{"id": 6044, "label": "no", "reason": "Different plant description."}
+{"id": 6045, "label": "no", "reason": "Waters only in dry spells; no dry spell reported."}
+{"id": 6046, "label": "no", "reason": "Harvest timing, not watering."}
+{"id": 6047, "label": "no", "reason": "Affiliate disclaimer, irrelevant."}
+{"id": 6048, "label": "no", "reason": "Affiliate link text, irrelevant."}
+{"id": 6049, "label": "no", "reason": "Heading question, no instruction."}
+{"id": 6050, "label": "no", "reason": "General description, no treatment."}
+{"id": 6051, "label": "no", "reason": "Companion planting, not treating mildew."}
+{"id": 6052, "label": "no", "reason": "States proneness to mildew, no treatment instruction."}
+{"id": 6053, "label": "no", "reason": "Varieties fact, no treatment."}
+{"id": 6054, "label": "no", "reason": "Defines disease, no treatment instruction."}
+{"id": 6055, "label": "no", "reason": "Host range fact, no treatment."}
+{"id": 6056, "label": "no", "reason": "Symptom timing fact, no treatment."}
+{"id": 6057, "label": "no", "reason": "Beetle life cycle fact, no treatment."}
+{"id": 6058, "label": "no", "reason": "Life cycle fact, no treatment."}
+{"id": 6059, "label": "no", "reason": "Feeding fact, no treatment instruction."}
+{"id": 6060, "label": "no", "reason": "About capsid bugs, different problem."}
+{"id": 6061, "label": "no", "reason": "Truncated, about apple capsid."}
+{"id": 6062, "label": "no", "reason": "Describes powdery mildew, no treatment."}
+{"id": 6063, "label": "no", "reason": "Describes aphids, no treatment."}
+{"id": 6064, "label": "no", "reason": "Truncated damage description, no treatment."}
+{"id": 6065, "label": "no", "reason": "About carrot fly, different problem."}
+{"id": 6066, "label": "no", "reason": "Host range fact, no treatment."}
+{"id": 6067, "label": "no", "reason": "Truncated symptom description, no treatment."}
+{"id": 6068, "label": "no", "reason": "Different disease, no treatment."}
+{"id": 6069, "label": "no", "reason": "Cause of root rot, no treatment instruction."}
+{"id": 6070, "label": "no", "reason": "Cloches for in-ground plants; preventive, not treatment."}
+{"id": 6071, "label": "no", "reason": "Moving containers is prevention, not treating rot."}
+{"id": 6072, "label": "no", "reason": "Says rust can affect oregano; no treatment."}
+{"id": 6073, "label": "no", "reason": "Host range fact, no treatment."}
+{"id": 6074, "label": "no", "reason": "Truncated symptom description."}
+{"id": 6075, "label": "no", "reason": "About mint moth, different problem."}
+{"id": 6076, "label": "no", "reason": "Truncated, about moths, no treatment."}
+{"id": 6077, "label": "no", "reason": "Question about wasps, no instruction."}
+{"id": 6078, "label": "no", "reason": "Wasp fact, no treatment."}
+{"id": 6079, "label": "no", "reason": "Describes bay sucker, no treatment instruction."}
+{"id": 6080, "label": "no", "reason": "Life cycle fact, no treatment."}
+{"id": 6081, "label": "no", "reason": "Bringing indoors, not treating grey mould."}
+{"id": 6082, "label": "no", "reason": "Overpotting warning, not treatment."}
+{"id": 6083, "label": "no", "reason": "Container suitability fact."}
+{"id": 6084, "label": "no", "reason": "Distribution fact, no treatment."}
+{"id": 6085, "label": "no", "reason": "Distribution fact, no treatment."}
+{"id": 6086, "label": "no", "reason": "Identification confusion, no treatment."}
+{"id": 6087, "label": "no", "reason": "Cuttings timing, not treating rust."}
+{"id": 6088, "label": "no", "reason": "Division, not treating rust."}
+{"id": 6089, "label": "no", "reason": "Signpost text, no instruction."}
+{"id": 6090, "label": "no", "reason": "Describes pests, not moving to light."}
+{"id": 6091, "label": "no", "reason": "Greenhouse ventilation, not light."}
+{"id": 6092, "label": "no", "reason": "Flower removal, not moving to light."}
+{"id": 6093, "label": "no", "reason": "Harvest timing fact, not watering."}
+{"id": 6094, "label": "no", "reason": "Picking advice, not watering."}
+{"id": 6095, "label": "no", "reason": "Harvest tip, not watering."}
+{"id": 6096, "label": "no", "reason": "Picking statement, not watering."}
+{"id": 6097, "label": "no", "reason": "Bringing pots indoors is not watering."}
+{"id": 6098, "label": "no", "reason": "Fact about bees; no pruning instruction."}
+{"id": 6099, "label": "no", "reason": "Fact about flowers; no pruning instruction."}
+{"id": 6100, "label": "no", "reason": "General care fact; says nothing about holding off watering."}
+{"id": 6101, "label": "no", "reason": "About harvesting, not watering."}
+{"id": 6102, "label": "no", "reason": "About layering, not watering."}
+{"id": 6103, "label": "no", "reason": "About watering, not cutting back."}
+{"id": 6104, "label": "no", "reason": "Feeding in spring, not cutting back."}
+{"id": 6105, "label": "no", "reason": "About shade tolerance, not cold protection."}
+{"id": 6106, "label": "no", "reason": "Fact about where it grows; no cold protection."}
+{"id": 6107, "label": "no", "reason": "Sowing instruction, not cold protection."}
+{"id": 6108, "label": "no", "reason": "Transplanting seedlings, not cold protection."}
+{"id": 6109, "label": "no", "reason": "Site choice, not cold protection."}
+{"id": 6110, "label": "no", "reason": "Removing flowers, not cold protection."}
+{"id": 6111, "label": "no", "reason": "Web boilerplate, unrelated."}
+{"id": 6112, "label": "no", "reason": "Promotional text, unrelated."}
+{"id": 6113, "label": "no", "reason": "Sowing instruction, not watering."}
+{"id": 6114, "label": "no", "reason": "Soil preference, not an instruction to water."}
+{"id": 6115, "label": "no", "reason": "Sowing timing, not watering."}
+{"id": 6116, "label": "no", "reason": "Fact about size, not watering."}
+{"id": 6117, "label": "no", "reason": "Sowing schedule, not watering."}
+{"id": 6118, "label": "no", "reason": "Warns against overwatering; does not say water."}
+{"id": 6119, "label": "no", "reason": "Spring sowing, not watering."}
+{"id": 6120, "label": "no", "reason": "Germination fact, unrelated."}
+{"id": 6121, "label": "no", "reason": "Pricking out seedlings, not watering."}
+{"id": 6122, "label": "no", "reason": "Sowing timing, unrelated."}
+{"id": 6123, "label": "no", "reason": "Division timing, not watering."}
+{"id": 6124, "label": "no", "reason": "Planting divisions, not watering."}
+{"id": 6125, "label": "no", "reason": "Taking cuttings is propagation, not cutting back."}
+{"id": 6126, "label": "no", "reason": "Division, not cutting back; tarragon not named."}
+{"id": 6127, "label": "no", "reason": "Navigation text, no instruction."}
+{"id": 6128, "label": "no", "reason": "About garlic medicinal use, different plant."}
+{"id": 6129, "label": "no", "reason": "About sage medicinal use, different plant."}
+{"id": 6130, "label": "no", "reason": "Medicinal use of lemon balm, not watering."}
+{"id": 6131, "label": "no", "reason": "About Portuguese laurel, different plant."}
+{"id": 6132, "label": "no", "reason": "About Portuguese laurel, different plant."}
+{"id": 6133, "label": "no", "reason": "Leaf description, no pruning instruction."}
+{"id": 6134, "label": "no", "reason": "About watering in dry spells, not cold protection."}
+{"id": 6135, "label": "no", "reason": "Harvest timing, not cold protection."}
+{"id": 6136, "label": "no", "reason": "Affiliate boilerplate, unrelated."}
+{"id": 6137, "label": "no", "reason": "Affiliate boilerplate, unrelated."}
+{"id": 6138, "label": "no", "reason": "Heading question, no instruction."}
+{"id": 6139, "label": "no", "reason": "Describes pests, not watering."}
+{"id": 6140, "label": "no", "reason": "Greenhouse ventilation, not holding off watering."}
+{"id": 6141, "label": "no", "reason": "Removing flowers, not watering."}
+{"id": 6142, "label": "no", "reason": "Harvest timing, not watering."}
+{"id": 6143, "label": "no", "reason": "Picking advice, not watering."}
+{"id": 6144, "label": "no", "reason": "Harvest advice, not watering."}
+{"id": 6145, "label": "no", "reason": "Harvest fact, not watering."}
+{"id": 6146, "label": "no", "reason": "Bring pots indoors; plant is in a bed; not watering."}
+{"id": 6147, "label": "no", "reason": "Fact about bees; no cold protection."}
+{"id": 6148, "label": "no", "reason": "Fact about flowers; no cold protection."}
+{"id": 6149, "label": "no", "reason": "General care fact; does not say water."}
+{"id": 6150, "label": "no", "reason": "Harvesting, not watering."}
+{"id": 6151, "label": "no", "reason": "Layering, not watering."}
+{"id": 6152, "label": "no", "reason": "Says thyme won't need watering; contradicts."}
+{"id": 6153, "label": "no", "reason": "Spring feeding, not watering."}
+{"id": 6154, "label": "no", "reason": "Shade tolerance, not cutting back."}
+{"id": 6155, "label": "no", "reason": "Fact about where it grows, not cutting back."}
+{"id": 6156, "label": "no", "reason": "Sowing, not cutting back."}
+{"id": 6157, "label": "no", "reason": "Transplanting seedlings, not cutting back."}
+{"id": 6158, "label": "no", "reason": "Site choice, not cutting back."}
+{"id": 6159, "label": "no", "reason": "Removing flower heads is not cutting the plant back."}
+{"id": 6160, "label": "no", "reason": "Names aphids as a problem; no treatment instruction."}
+{"id": 6161, "label": "no", "reason": "Greenhouse ventilation for fungus, not aphid treatment."}
+{"id": 6162, "label": "no", "reason": "Removing flowers, not aphid-affected parts."}
+{"id": 6163, "label": "no", "reason": "About rosemary beetle origin; not scale treatment."}
+{"id": 6164, "label": "no", "reason": "Truncated fragment, no instruction."}
+{"id": 6165, "label": "no", "reason": "Leafhoppers, different pest; no instruction."}
+{"id": 6166, "label": "no", "reason": "List of affected plants; no instruction."}
+{"id": 6167, "label": "no", "reason": "Heading question, no instruction."}
+{"id": 6168, "label": "no", "reason": "Describes carrot fly; no treatment instruction."}
+{"id": 6169, "label": "no", "reason": "Describes damage; no treatment instruction."}
+{"id": 6170, "label": "no", "reason": "History of pest; no instruction."}
+{"id": 6171, "label": "no", "reason": "Describes larvae damage; no treatment instruction."}
+{"id": 6172, "label": "no", "reason": "Describes consequences; no instruction."}
+{"id": 6173, "label": "no", "reason": "Depends on lead-in; larvae of unnamed pest, not clearly scale."}
+{"id": 6174, "label": "no", "reason": "Describes greenfly problem; no treatment instruction."}
+{"id": 6175, "label": "no", "reason": "Describes aphid damage; no treatment instruction."}
+{"id": 6176, "label": "yes", "reason": "Instructs squashing greenfly colonies, i.e. treat aphids."}
+{"id": 6177, "label": "no", "reason": "Bolting fact, not aphid treatment."}
+{"id": 6178, "label": "no", "reason": "Watering to prevent bolting, not aphid treatment."}
+{"id": 6179, "label": "no", "reason": "Truncated fragment about larvae, not leek rust."}
+{"id": 6180, "label": "no", "reason": "Elephant garlic bulbs, unrelated."}
+{"id": 6181, "label": "no", "reason": "Planting timing for garlic, unrelated."}
+{"id": 6182, "label": "no", "reason": "Describes mildew cause; no treatment instruction."}
+{"id": 6183, "label": "no", "reason": "Describes symptoms; no treatment instruction."}
+{"id": 6184, "label": "no", "reason": "Says beetle can be a problem; no treatment instruction."}
+{"id": 6185, "label": "no", "reason": "Leafhopper damage, different pest."}
+{"id": 6186, "label": "no", "reason": "Restricts treatment type; does not instruct treating."}
+{"id": 6187, "label": "no", "reason": "Seedling protection, not beetle treatment."}
+{"id": 6188, "label": "no", "reason": "About parsley pests and mesh, different plant/pest."}
+{"id": 6189, "label": "no", "reason": "Trial observation, no instruction."}
+{"id": 6190, "label": "no", "reason": "Trial observation of mildew; no treatment instruction."}
+{"id": 6191, "label": "no", "reason": "General cultural practices; no aphid treatment instruction."}
+{"id": 6192, "label": "no", "reason": "Referral text, no instruction."}

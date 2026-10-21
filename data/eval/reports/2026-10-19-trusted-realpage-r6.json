@@ -1,0 +1,1387 @@
+{
+ "prereg": "data/eval/prereg/2026-10-19-trusted-realpage-r6.md",
+ "frozen": "72c23bf",
+ "scored_at": "2026-10-19T17:35:29.993188+00:00",
+ "items": 192,
+ "sentences": 116,
+ "negatives": 191,
+ "false_agrees": 0,
+ "false_agree_wilson95": [
+  0.0,
+  0.0197
+ ],
+ "verdict": "PASS",
+ "positives": 1,
+ "recall": 0.0,
+ "recall_wilson95": [
+  0.0,
+  0.7935
+ ],
+ "no_form": 3,
+ "latency_p50_s": 1.57,
+ "latency_p95_s": 2.88,
+ "spent_usd": 0.128,
+ "false_agree_items": [],
+ "agree_ids": [],
+ "forms": {
+  "bay|Adults mate and lay eggs in spring, which hatch into scaley nymphs that produce lots of white, woolly wax.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|Affected plants often develop secondary infections and rot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|Allium leaf mining fly was first detected in Britain in 2002, it has become widespread in England and parts of Wales.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Also examine the underside of leaves to locate and control the larvae before they develop into adults.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|Alternative text should describe the visual content of the image.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|Aphids are sap-sucking insects with many predators and are the basis for many food chains.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sage|Apple capsid can cause...": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "Apple capsid"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "dill|As well as the usual temptation for slugs and snails, young dill plants can be plagued by greenfly.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "young"
+    },
+    {
+     "kind": "named_problem",
+     "value": "greenfly"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Basil is a popular, half-hardy to tender herb used in a variety of summer dishes, and works particularly well when eaten with tomatoes.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Basil is generally easy to grow, but slugs, snails and aphids can cause problems.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs, snails and aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Bay trees are susceptible to the bay tree sucker (Trioza alacris) which is a type of sap-sucking bug around 2mm in length, similar to an aphid.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|Carrot fly is a small black-bodied fly whose larvae feed on the roots of carrots and related plants, such as parsnip, parsley, celery and celeriac.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|Choose deep fertile soil in sun or partial shade.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "deep fertile soil"
+    },
+    {
+     "kind": "other",
+     "value": "sun or partial shade"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|Choose rich moist soil in a sunny site.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_wet",
+     "value": "moist soil"
+    },
+    {
+     "kind": "other",
+     "value": "rich moist soil"
+    },
+    {
+     "kind": "other",
+     "value": "sunny site"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Choose the young, soft shoot tips for the most intense flavour.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young, soft shoot tips"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "coriander|Coriander is easy to grow from seed sown outdoors, in the ground or in containers, from spring onwards.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Cultural practices such as proper site selection, soil preparation, planting, and watering are important for plant health, pest management, and pest reduction when growing mint.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tarragon|Cuttings of some herbs such as bay, marjoram, mint, rosemary, sage, tarragon and thyme can be taken from late summer to early autumn.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "herbs",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late summer to early autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "dill|Dill doesn't need much regular maintenance, but it does need watering during dry spells.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "dill|Dill is also prone to bolting and flowering prematurely.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tarragon|Divide hardy herbs such as oregano, mint and thyme in spring or after flowering in late summer.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "hardy herbs",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring or after flowering in late summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Division in March or October.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "March or October"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|During mid-summer, rosemary beetle can be present on host plants as adult beetles that usually do little or no feeding.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "mid-summer"
+    },
+    {
+     "kind": "named_problem",
+     "value": "rosemary beetle"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "adult beetles"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "garlic chives|Early planting often reduces the occurrence of solo bulbs.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "garlic chives|Elephant garlic sometimes doesn't divide into cloves, producing just a large single-clove (solo) bulb.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|For more information on culinary herbs, contact your local UC Cooperative Extension location for resources such as this Environmental Horticulture Note on Culinary Herb Profiles (PDF).": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tarragon|French tarragon is relatively trouble-free apart from powdery mildew which can occur when plants are stressed due to lack of water.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "powdery mildew"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "stressed due to lack of water"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lemon balm|Garlic(Allium sativum) is effective against many fungal infections, is used to treat toothache, earache, coughs and colds and has been shown to reduce blood pressure.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "Garlic (Allium sativum)",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Germination usually takes place within 2 weeks.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Herbs can easily rot off if overpotted.": {
+   "action": "repot",
+   "polarity": "dont",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "overpotted"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "coriander|If you grow it purely for leaves, then treat it like a short-term salad crop and sow small batches every month or so, to provide continual leafy harvests from mid-summer to early autumn.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "grow it purely for leaves"
+    },
+    {
+     "kind": "month_range",
+     "value": "mid-summer to early autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|If you're growing your plant in a container, give it a weekly feed from March until May with liquid seaweed.": {
+   "action": "feed",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "container"
+    },
+    {
+     "kind": "month_range",
+     "value": "March until May"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|In high-rainfall areas or during particularly wet winters, protect plants in the ground with cloches.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "In high-rainfall areas or during particularly wet winters"
+    },
+    {
+     "kind": "container",
+     "value": "in the ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rosemary|In late summer they commence feeding, mating and laying eggs.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|It has glossy, narrow, pointed leaves that grow on maroon stems, which develop their colouration as they mature.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|It has nectar/pollen rich flowers.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|It is often confused with alder leaf beetle and fuchsia flea beetle.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|It may also be grown with tomatoes, used as a companion plant to deter whitefly.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "bay|It's also known as the Portugal laurel or cherry bay, and is an excellent choice for hedges due to its attractive foliage and ability to grow well in a variety of conditions.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "dill|Keep plants well watered and avoid root disturbance to help prevent this.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "to help prevent this"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Layer plants in spring or autumn by pegging low stems into the soil to root.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring or autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|Leek rust is a common fungal disease of leeks and garlic, but also affects onions and chives.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lemon balm|Lemon balm (Melissa officinalis) tea is used to relieve headaches and to aid digestion and is said to help improve the memory, and reduce anxiety, irritability and insomnia.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Mint leaves can be harvested from late spring to autumn, before the stems die back over winter.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late spring to autumn"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "before the stems die back over winter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "oregano|Mint moth caterpillars feed on a range of small herbaceous plants in the mint family.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "mint family plants",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Mint rust infects several mint species as well as some related plants including marjoram and savory.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Mint rust is a common fungal disease of garden mint, but also affects marjoram and savory.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "mint, marjoram, savory",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "rust"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Mint rust is a disease caused by the fungus Puccinia menthae.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Mint rust symptoms can be expected from spring until autumn.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "from spring until autumn"
+    },
+    {
+     "kind": "named_problem",
+     "value": "rust"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tarragon|More information can be found on our page for propagating herbs, our selection of growing guides and The Herb Society website.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Most herbs are suitable for container cultivation.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "herbs",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "container"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Move containers to a more sheltered spot over winter, such as near a building in a rain shadow.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "over winter"
+    },
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "outdoor",
+     "value": "plants grown outside"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "bay|My bay tree is covered in wasps.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Native to dry scrub in Africa and Asia, basil requires a lot of heat to thrive, and can be prone to downy mildew.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Once established, thyme won\u2019t need watering.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|Onion downy mildew is a disease of onions and related crops that damages foliage and bulbs, resulting in loss of yield or even a complete failure of w...": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "onions and related crops",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "Onion downy mildew"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Only treatments suitable for edible plants (as described on the label) should be used.": null,
+  "sage|Parsley can suffer from aphids and carrot fly \u2013 grow under fleece or insect-proof mesh where these pests are troublesome.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "parsley",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids and carrot fly"
+    },
+    {
+     "kind": "other",
+     "value": "where these pests are troublesome"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Parsley is equally happy in a veg bed or grown in a pot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|Pick regularly to keep plants compact and ensure they produce lots of fresh new growth.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chives|Pick up a pack of free organic seeds and grow Yeo own herbs!": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "herbs",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Plants affected - Carrot, parsnip, parsley, celeriac and celery.": null,
+  "coriander|Plants are compact, so make ideal gap-fillers on the veg plot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "bay|Portuguese laurel (Prunus lusitanica) is a beautiful evergreen shrub or small tree native to Portugal, Spain and western France.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Powdery mildew and leafhoppers were present and towards the end of the season leaf spots became more of an aesthetic problem.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sage|Powdery mildews are a group of related fungi which attack a wide range of plants, causing a white, dusty coating on leaves, stems and flowers.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Prick out the seedlings into individual pots when they are large enough to handle and plant them out into their permanent positions in early summer.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "large enough to handle"
+    },
+    {
+     "kind": "month_range",
+     "value": "early summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Protect young seedlings from birds, slugs and snails.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "named_problem",
+     "value": "birds"
+    },
+    {
+     "kind": "named_problem",
+     "value": "slugs"
+    },
+    {
+     "kind": "named_problem",
+     "value": "snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Regular harvesting of young leaves encourages bushy new growth.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Remove any flower heads that appear.": {
+   "action": "deadhead",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "thyme|Rosemary beetle can be a problem on lavender, sage and thyme as well as rosemary.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "Rosemary beetle"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|Rosmarinus \u2018Officinalis\u2019 is known for attracting bees.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|Rusty brown scars ring the tap roots of carrot and other susceptible vegetables, making them inedible, and susceptible to secondary rots.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "carrot and other susceptible vegetables",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "carrot fly"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|Sage and Ligurian leafhoppers can cause a coarse pale mottling on sage, rosemary, lavender and related plants in the spring and summer.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sage|Sage is easy to grow and needs little maintenance once established in a sunny position with free-draining soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Sage leafhopper is also responsible for causing fine, yellow flecking on the foliage of many aromatic plants including sage, mints, lavender, bergamot, marjoram, oregano, rosemary, basil, thyme and lemon balm.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lemon balm|Sage(Salvia officinalis) is used to make a gargle for sore throats, infected gums and mouth ulcers and a hot infusion for colds.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "garlic chives|See our affiliates FAQs.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Seed - sow early spring at 10 - 13\u00b0c and only just cover the seed.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "early spring"
+    },
+    {
+     "kind": "other",
+     "value": "at 10 - 13\u00b0c"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sage|Some capsid bugs can affect plants by giving the foliage a tattered and distorted appearance and causing flower buds to abort.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|Some tender herbs such as basil can only be grown if brought indoors into a warm, bright frost-free greenhouse, conservatory or a sunny windowsill.": null,
+  "chives|Sow chive seed 0.5cm deep and thin or transplant seedlings to 25cm apart.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Sow parsley seed 0.1cm deep in pots.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "coriander|Take care not to overwater, as coriander dislikes soggy conditions.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "not to overwater"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|The beetle is widespread in mainland Europe and it may spread further in Britain.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "dill|The best method of treatment is to squash the colonies of greenfly with your fingers.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "greenfly"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "mint|The blue mint beetle, Chrysolina coerulans, was found breeding in Britain in 2011, it has now been found in southern and eastern England and in Edinburgh.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|The eggs hatch after about ten days and both adults and larvae will feed on the foliage throughout autumn to spring during periods of mild weather.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|The fungal disease mint rust can affect oregano, and occasionally insects may feed on the leaves \u2013 see Common problems below for more details.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|The fungus causes bright orange, raised spots (pustules)...": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|The fungus causes dusty orange, yellow and black spots on l...": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|The larvae and a...": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "garlic chives|The larvae bore into the stems a...": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chives|The larvae bore into the stems and bulbs of leeks, onions, chives and garlic.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|The larvae of carrot fly can make a large proportion of carrots and allied vegetable crops inedible.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "carrots and allied vegetable crops",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|The more you pick, the more they\u2019ll produce.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "oregano|The oregano and marjoram plants were generally pest and disease free.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rosemary|The rosemary beetle (Chrysolina americana) originates from southern Europe, and has become widespread in Britain since the mid-1990s.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|The sap sucking can cause a lack of plant vigour, distorted...": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "sap sucking"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|The seed can also be sown in situ in late spring.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late spring"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "bay|The wasps will be attracted to insects.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tarragon|The white coating on leaves is quite easily recognisable and will cause leaves to drop.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "white coating on leaves"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Their presence can be tolerated by gardeners and the adult moths...": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|There are many varieties to choose from, however, some of which have been bred to withstand cooler conditions.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "dill|These sap sucking aphids will coat the plant with their sticky honeydew.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "thyme|Thyme dislikes damp conditions, especially in winter, which can cause the roots to rot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "mint|To continue harvesting through winter, bring potted plants indoors in autumn and place them on a sunny windowsill.": {
+   "action": "bring_in",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "autumn"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    },
+    {
+     "kind": "indoor",
+     "value": "on a sunny windowsill"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "basil|To prolong the leafy harvests, remove any flowers that start to form.": {
+   "action": "deadhead",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Transplant seedings when 5-10cm tall to 15cm apart in rows or larger pots.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "5-10cm tall"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "parsley|Unlike many herbs, parsley will happily growing partial shade, making it a perfect plant to slot around your veg garden.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "oregano|Very easy, larger divisions can be planted out direct into their permanent positions.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "garlic chives|We may receive commission via affiliate links for purchases made.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "garlic chives|What are garlic chives?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "parsley|What is carrot fly?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "basil|When growing basil in a greenhouse, ventilate well to help reduce problems with fungal diseases.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "greenhouse"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "dill|You can start harvesting leaves about six weeks after sowing.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "about six weeks after sowing"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  }
+ }
+}

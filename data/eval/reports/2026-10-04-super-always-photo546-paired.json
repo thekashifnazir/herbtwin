@@ -1,0 +1,70 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = with_glm_photo minus text_only; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "text_only": "2026-10-04-super-always-photo546-text.jsonl",
+    "with_glm_photo": "2026-10-04-super-always-photo546-glm.jsonl"
+  },
+  "n_paired": 543,
+  "ask_first_primary": {
+    "text_only": 0,
+    "with_glm_photo": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "text_only": 0.3701657458563536,
+      "with_glm_photo": 0.36279926335174956,
+      "diff": -0.007366482504604052,
+      "lo": -0.04419889502762431,
+      "hi": 0.03130755064456722,
+      "n": 543
+    },
+    "primary_in_truth": {
+      "text_only": 0.5451197053406999,
+      "with_glm_photo": 0.565377532228361,
+      "diff": 0.020257826887661142,
+      "lo": -0.01841620626151013,
+      "hi": 0.06261510128913444,
+      "n": 543
+    },
+    "jaccard": {
+      "text_only": 0.3356667835949604,
+      "with_glm_photo": 0.3393273699903534,
+      "diff": 0.003660586395393026,
+      "lo": -0.020039317138764653,
+      "hi": 0.029463006811073108,
+      "n": 543
+    },
+    "over_treatment": {
+      "text_only": 0.04604051565377532,
+      "with_glm_photo": 0.058931860036832415,
+      "diff": 0.01289134438305709,
+      "lo": -0.0055248618784530384,
+      "hi": 0.03130755064456722,
+      "n": 543
+    },
+    "water_conflict": {
+      "text_only": 0.0570902394106814,
+      "with_glm_photo": 0.049723756906077346,
+      "diff": -0.007366482504604052,
+      "lo": -0.027624309392265192,
+      "hi": 0.01289134438305709,
+      "n": 543
+    },
+    "asked_when_expert_asked": {
+      "text_only": 0.4217687074829932,
+      "with_glm_photo": 0.38095238095238093,
+      "diff": -0.04081632653061224,
+      "lo": -0.1360544217687075,
+      "hi": 0.05442176870748299,
+      "n": 147
+    },
+    "primary_ok_if_asked_too": {
+      "text_only": 0.3701657458563536,
+      "with_glm_photo": 0.36279926335174956,
+      "diff": -0.007366482504604052,
+      "lo": -0.04419889502762431,
+      "hi": 0.03130755064456722,
+      "n": 543
+    }
+  }
+}

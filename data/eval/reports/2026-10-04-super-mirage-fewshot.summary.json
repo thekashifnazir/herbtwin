@@ -1,0 +1,95 @@
+{
+  "advise_cost_usd": 0.189542,
+  "backend": "tokenfactory",
+  "few_shot_ids": [
+    "actions_se/2249",
+    "actions_se/9742",
+    "actions_se/453",
+    "actions_se/16103",
+    "actions_se/3478",
+    "actions_se/57694"
+  ],
+  "few_shot_shown": true,
+  "git_sha": "242be85",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.4583333333333333,
+      "lo": 0.2361111111111111,
+      "n": 72,
+      "value": 0.3472222222222222
+    },
+    "hedge_had_answer": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 57,
+      "value": 0.0
+    },
+    "jaccard": {
+      "hi": 0.3377380952380953,
+      "lo": 0.2624404761904762,
+      "n": 200,
+      "value": 0.2990833333333333
+    },
+    "over_treatment": {
+      "hi": 0.025,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.01
+    },
+    "primary_in_truth": {
+      "hi": 0.685,
+      "lo": 0.55,
+      "n": 200,
+      "value": 0.62
+    },
+    "primary_match": {
+      "hi": 0.465,
+      "lo": 0.325,
+      "n": 200,
+      "value": 0.395
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.465,
+      "lo": 0.325,
+      "n": 200,
+      "value": 0.395
+    },
+    "water_conflict": {
+      "hi": 0.07,
+      "lo": 0.015,
+      "n": 200,
+      "value": 0.04
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b+fewshot6",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 200,
+  "n_total": 200,
+  "pred_primary": {
+    "ask_first": 66,
+    "dont_water": 7,
+    "leave_normal": 25,
+    "move_light": 4,
+    "other": 40,
+    "prune": 30,
+    "shelter": 10,
+    "treat_or_remove": 6,
+    "water": 12
+  },
+  "prompt_hash": "2ee6b7e37470",
+  "run_id": "2026-10-04-super-mirage-fewshot",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 44,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

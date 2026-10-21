@@ -1,0 +1,66 @@
+{
+  "backend": "ollama",
+  "constant_prediction": 0,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "e558326",
+  "largest_disagreements": [
+    "droop_soybean/11-46_18_09_2019_15_07_09",
+    "droop_soybean/11-46_18_09_2019_15_52_11",
+    "droop_soybean/11-46_18_09_2019_16_07_11",
+    "droop_soybean/11-46_18_09_2019_16_52_13",
+    "droop_soybean/11-46_18_09_2019_17_37_14"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 13442,
+  "metrics": {
+    "exact": {
+      "hi": 0.37572254335260113,
+      "lo": 0.057777777777777775,
+      "skipped": 0,
+      "value": 0.16666666666666666
+    },
+    "mae": {
+      "hi": 1.958955223880597,
+      "lo": 0.7699115044247787,
+      "skipped": 0,
+      "value": 1.5
+    },
+    "qwk": {
+      "hi": 2.220446049250313e-16,
+      "lo": -2.220446049250313e-16,
+      "skipped": 0,
+      "value": 0.0
+    },
+    "within_one": {
+      "hi": 0.8762886597938144,
+      "lo": 0.2805755395683453,
+      "skipped": 0,
+      "value": 0.5
+    }
+  },
+  "model": "qwen2.5vl:7b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 13,
+  "n_ok": 180,
+  "n_total": 180,
+  "pred_histogram": {
+    "0": 180
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-droop_soybean-qwen2-5vl-7b",
+  "set": "droop_soybean",
+  "tags": {
+    "safe-to-train": 180
+  },
+  "temperature": 0,
+  "truth_histogram": {
+    "0": 30,
+    "1": 60,
+    "2": 60,
+    "3": 30
+  }
+}

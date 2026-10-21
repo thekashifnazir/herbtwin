@@ -1,0 +1,812 @@
+{% extends "base.html" %}
+{% from "_plant_face.html" import plant_face %}
+{% from "_nav.html" import site_nav %}
+{# The answer page in three blocks. 1, what to do: the one main action, big, then Also do,
+   Don't and Keep an eye on, each with its own colour and its own words. 2, help us be
+   surer: the asks and ONE text box with two buttons, "Check the advice again" (the refine
+   form) and "Ask about this plant" (the chat, by script), the chat so far, did-it and the
+   reminder, all in one fold that opens from a single line, in small headed sections. 3, the details, folded. Phones read 1, 2, 3 in one column; from 960px
+   block 1 is the left column and blocks 2 and 3 the right (static/pages/answer.css). #}
+{% block title %}{% set obs = rec.observation %}{% if obs and obs.is_plant and obs.species %}{{ plant_name(obs.species[0].name, obs.species[0].common_name) }}{{ " (not sure)" if name_in_doubt(rec) else "" }} · herbtwin{% else %}Your answer · herbtwin{% endif %}{% endblock %}
+{% block page %}answer-page has-band{% endblock %}
+{% block nav %}{{ site_nav(person=signed_in, accounts=accounts) }}{% endblock %}
+{% block wrap %} wide{% endblock %}
+{% block main %}
+{% import "_spot_questions.html" as spotq %}
+{% set obs = rec.observation %}{% set a = rec.answer %}
+{# a repo path ("docs/reference/...") means our own compiled notes: say so, not the path #}
+{# a source as words: our notes by name, a web page as a link named by its site, never a raw
+   URL as text (18 Oct judge walk) #}
+{# a link reads by who wrote it, once each: "RHS, AHDB, UF/IFAS" (19 Oct small-print plan:
+   "rhs.org.uk" came twice among bare host names) #}
+{% set source_names = {"rhs.org.uk": "RHS", "archive.ahdb.org.uk": "AHDB", "ahdb.org.uk": "AHDB", "ask.ifas.ufl.edu": "UF/IFAS", "homegarden.cahnr.uconn.edu": "UConn", "frontiersin.org": "Frontiers", "gardenorganic.org.uk": "Garden Organic"} %}
+{% macro said_by(sources) %}{% set shown = namespace(names=[], items=[]) %}{% for x in sources %}{% if x.startswith("https://") or x.startswith("http://") %}{% set host = x.split("/")[2]|replace("www.", "", 1) %}{% set name = source_names.get(host, host) %}{% set href = x %}{% else %}{% set name = "our care notes" if x.startswith("docs/") else "Open Plantbook" if x.startswith("openplantbook:") else "OpenPlantDB (CC0)" if x.startswith("openplantdb") else x %}{% set href = "" %}{% endif %}{% if name not in shown.names %}{% set shown.names = shown.names + [name] %}{% set shown.items = shown.items + [(name, href)] %}{% endif %}{% endfor %}{% for name, href in shown.items %}{% if href %}<a href="{{ href }}" rel="noopener noreferrer">{{ name }}</a>{% else %}{{ name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
+
+{% macro your_photo(solo=false) %}<img class="your-photo ink{{ ' solo' if solo else '' }}" id="your-photo" alt="Your photo" width="480" height="360" hidden data-answer="{{ rec.record_id }}"><span class="your-more" id="your-more" hidden></span>{% endmacro %}
+{% set mark = {"raises": "▲", "lowers": "▼", "missing": "?", "neutral": "·"} %}
+{% set tag = {"today": "TODAY", "this_week": "THIS WEEK", "keep_an_eye": "KEEP AN EYE"} %}
+{# what we expect if you do it, led by where it comes from rather than an arrow (13 Oct
+   walkthrough: "→ cold risk Mon" read as code) #}
+{# "Tested on your plant's twin:" in full the first time on a page, then a "Twin" chip
+   (19 Oct small-print plan: it was said 3 to 4 times per answer) #}
+{% set said = namespace(twin=false) %}
+{% macro ifdo(c, quiet=false) %}<p class="ifdo">{% if c.if_you_do_from == "plant_model" and said.twin %}<span class="tag twin-chip">Twin</span>{% else %}<span class="lead">{{ {"plant_model": "Tested on your plant's twin", "outcome_table": "From gardening sources", "norm_rule": "From gardening sources", "web_search": "From a gardening page"}.get(c.if_you_do_from, "What to expect") }}:</span>{% endif %}{% if c.if_you_do_from == "plant_model" %}{% set said.twin = true %}{% endif %}{% if c.if_you_do_from == "web_search" %} “{{ c.if_you_do }}”{% if c.if_you_do_url %} — <a href="{{ c.if_you_do_url }}" rel="noopener noreferrer nofollow">{{ source_names.get(c.site, c.site) }}</a> (found with {{ {"tavily": "Tavily", "exa": "Exa", "tinyfish": "TinyFish"}.get(c.found_with, c.found_with) }}){% endif %}{% else %} {{ c.if_you_do }}{% if c.less_sure and not quiet %} <span class="lowc">(less sure)</span>{% endif %}{% endif %}</p>{% endmacro %}
+{% set label = {"water": "Water it", "dont_water": "Hold off watering", "move_light": "Move it to better light", "shelter": "Protect it (shelter or bring in)", "treat_or_remove": "Treat it", "prune": "Cut it back", "leave_normal": "Leave it", "ask_first": "Check first", "feed": "Feed it", "repot": "Repot it", "change_soil": "Refresh the soil", "check_pests": "Check for pests", "isolate": "Keep it apart", "mulch": "Mulch it", "humidity": "Raise humidity", "rotate": "Turn the pot", "other": "Something else"} %}
+{% if obs and obs.bare_bed %}
+  {# bare ground, an empty bed or a pot of compost: no plant to advise on, so it leads with the
+     spot answer from the same read (a pot's is for a pot: spot.spot_from_record) #}
+  <div class="page-band">
+  <h1>This looks like a {{ "pot" if obs.container == "pot" else "bed" }}, ready for planting</h1>
+  {% if spot_on %}<p class="lead">There's no plant to advise on yet, so here's the next best thing: what would grow well here now, from its sun, soil and the season.</p>
+  <p class="actions"><a class="button primary" href="/answers/{{ rec.record_id }}/spot">See what grows here</a> <a class="button quiet" href="/">It's one plant: try a closer photo</a></p>
+  {% else %}<p class="lead">We couldn't see a plant to advise on. Take a closer photo of the plant you want help with.</p>
+  <p class="actions"><a class="button primary" href="/">Try a closer photo</a></p>{% endif %}
+  </div>
+  <p class="record">Ref {{ rec.record_id }}</p>
+{% elif obs and slugs %}
+  {# a slug or snail with no plant (asked for 17 Oct): say what we saw and what to photo next #}
+  <div class="page-band">
+  <h1>Slugs seen</h1>
+  <p class="lead">This photo shows a slug or snail but no plant, so there's no plant to advise on yet. On a plant they leave {{ slugs.signs }} (<a href="{{ slugs.source }}">RHS</a>).</p>
+  <p class="actions"><a class="button primary" href="/">Photo the plant they were on</a></p>
+  </div>
+  <p class="record">Ref {{ rec.record_id }}</p>
+{% elif obs and not obs.is_plant %}
+  <div class="page-band">
+  <h1>No plant found in this photo</h1>
+  <p class="lead">Take a photo that shows the whole plant.</p>
+  <p class="actions"><a class="button primary" href="/">Try another photo</a></p>
+  </div>
+  <p class="record">Ref {{ rec.record_id }}</p>
+{% elif not obs %}
+  <div class="page-band">
+  <h1>Could not read the photo</h1>
+  <p class="lead">We couldn't read that photo this time. Try again, or try another one: a JPEG or PNG, close enough to see the leaves.</p>
+  <p class="actions"><a class="button primary" href="/">Try another photo</a></p>
+  </div>
+  <p class="record">Ref {{ rec.record_id }}</p>
+{% else %}
+  {% set top = obs.species[0] if obs.species else none %}
+  <div class="page-band">
+  {# a name that is a guess says so: a rough read (judge walk of #269: a blurred coriander
+     came back "Mint"), or one plant of several read under 0.6 (pipeline.name_in_doubt) #}
+  {# answer first (design wave 1, A): the name a gardener knows is the big one; the Latin
+     goes in the line under it with the place and date #}
+  {% set names = plant_parts(top.name, top.common_name) if top else ("", "") %}
+  <h1>{% if top %}{{ names[0] }}{% if name_in_doubt(rec) %} (not sure){% endif %}{% else %}Unidentified plant{% endif %}</h1>
+  {# where it grows, in words: "pot" also meant a trough (18 Oct judge run), so a pot is "in
+     a container". A pot the read saw wins over a mixed scene: pots of different herbs on a
+     patio came out "in a bed or border" (Kash's live test, 21 Oct; Observation.in_bed) #}
+  {% set held = "in a bed or border" if obs.in_bed else {"pot": "in a container", "ground": "in the ground"}.get(obs.container, "") %}
+  {# indoors there is no ground or border: after "Wrong? Switch" the read's own words could say
+     "Indoor, in the ground" (19 Oct judge walk of #269) #}
+  {% if obs.setting == "indoor" %}{% set held = "in a container" if obs.container == "pot" else "" %}{% endif %}
+  {# "(no date in the photo)" is said once, under "What the plant model assumes" #}
+  {% set when = rec.taken_at.day ~ " " ~ rec.taken_at.strftime("%b") %}
+  {% set place = ((rec.location.label or rec.location.source)|replace(", GB", "")) if rec.location else "" %}
+  {# no place outdoors: a friendly ask with a town box on the band, not "place unknown"; indoors
+     the place changes nothing, so it says nothing (21 Oct, Kash: the band was "hard to see") #}
+  {% set ask_place = a and not rec.location and obs.setting != "indoor" %}
+  {# what the answer card offers, worked out before the band so the band's town ask knows
+     whether the card already has the one main button (review of #364: with the place the
+     only question, neither had it) #}
+  {% if a %}
+  {# the two levels the page shows, and what each matched on 624 held-out expert questions
+     (19 Oct answer-quality check; the words Kash approved) #}
+  {% set best = a.level == "sure" %}
+  {# the questions that would make it surer, one tap away: each select, and the place box #}
+  {# only what is still unanswered: answering the soil can bring in "last watered", and the
+     count went up (19 Oct judge walk of #269) #}
+  {% set told_as = {"aspect": "heading", "soil_texture": "squeeze"} %}{% set open = namespace(n=0) %}
+  {% for q in asks if q != "question" and not (rec.told and rec.told[told_as.get(q, q)]) %}{% set open.n = open.n + 1 %}{% endfor %}
+  {# the place is asked on the band when it is missing, so it is not counted again here, nor
+     asked again in the fold, nor lifts the fold on a phone when it was the only question
+     (21 Oct, Kash: the ask said once; review of the band PR) #}
+  {% set place_on_band = ask_place and a.tell_me_key == "location" %}
+  {% set quick = open.n + (1 if a.tell_me_key == "location" and not place_on_band else 0) %}
+  {% set asks_open = a.level != "sure" and a.tell_me and quick %}
+  {# a rough read, said before the headline: what is wrong with the photo, and what to send #}
+  {% set retake = {"blurry": ("This photo is blurry", "Send a sharper photo"), "dark": ("This photo is dark", "Send a brighter photo"), "small": ("The plant is small in this photo", "Send a closer photo"), "unclear": ("This photo is hard to read", "Send a clearer photo")}.get(a.photo_issue) %}
+  {# every low answer can be made surer: with no one fact named, the form still takes
+     what the person can tell us (design wave 1, C). Once they have told us something it
+     stops asking: they answered, and nagging again reads as not listening #}
+  {% set tell_more = not best and not asks_open and not retake and not place_on_band and not (rec.told and not rec.told.is_empty()) %}
+  {% set card_leads = retake or asks_open or tell_more %}
+  {% endif %}
+  {% if names[1] %}<p class="latin"><i>{{ names[1] }}</i></p>{% endif %}
+  {# where it grows, the date and the place as a row of chips, white on a lighter green, not
+     a small muted line (21 Oct, Kash: "a lot of text not clear to the eye") #}
+  <p class="where">
+    {%- if obs.setting in ("indoor", "outdoor") %}<span class="chip setting">{{ obs.setting|capitalize }}s{% if rec.told and rec.told.setting %} (you said){% endif %}</span> {% endif %}
+    {%- if held %}<span class="chip held">{{ held|capitalize }}</span> {% endif -%}
+    <span class="chip when">{{ when }}</span>
+    {%- if place %} <span class="chip place">{{ place }}</span>{% endif -%}
+  </p>
+  {# indoors there is no forecast and no twin run (pipeline: weather_missing "indoors"); say so
+     up front, not only inside the folded Compare #}
+  {% if obs.setting == "indoor" %}<p class="note indoor-note">Indoors: advice for room conditions, without the forecast test.</p>{% endif %}
+  {# what was told rides along in each band form, so a switch or a town loses none of it #}
+  {% macro told_fields(t, setting=false) %}
+    {%- if t %}{% for q in ("soil_feel", "last_watered", "changed", "squeeze", "question") if t[q] %}<input type="hidden" name="{{ q }}" value="{{ t[q] }}">{% endfor %}
+    {%- if t.heading %}{% set h = t.heading %}{% if h.direction %}<input type="hidden" name="direction" value="{{ h.direction }}">{% else %}<input type="hidden" name="heading" value="{{ h.heading }}"><input type="hidden" name="pitch" value="{{ h.pitch if h.pitch is not none else '' }}"><input type="hidden" name="accuracy" value="{{ h.accuracy if h.accuracy is not none else '' }}">{% endif %}{% endif %}
+    {%- if setting and t.setting %}<input type="hidden" name="setting" value="{{ t.setting }}">{% endif %}{% endif %}
+  {%- endmacro %}
+  {# the switch (19 Oct, Kash): the read can be wrong about indoors or out; it re-runs the
+     advice with it forced, keeping what else was told (indoors: no forecast). The chip above
+     says which it is, so the switch only says what it does (21 Oct, Kash: "Looks like
+     outdoors" repeated "Outdoor"; "Wrong? Switch" did not say what would happen) #}
+  {% if a %}{% set t = rec.told %}<form class="note setting-switch" method="post" action="/answers/{{ rec.record_id }}/refine">
+    {{- told_fields(t) }}
+    {%- if obs.setting in ("indoor", "outdoor") %}{% set other = "outdoor" if obs.setting == "indoor" else "indoor" %}
+    <input type="hidden" name="setting" value="{{ other }}"><button type="submit" class="switch">{{ other|capitalize }}s? Switch and we'll redo the advice for an {{ other }} plant</button>
+    {%- else %}
+    <span>Indoors or outdoors? We'll redo the advice to fit.</span> <button type="submit" class="switch" name="setting" value="indoor">Indoors</button> <button type="submit" class="switch" name="setting" value="outdoor">Outdoors</button>{% endif %}
+  </form>
+  {% if ask_place %}<form class="place-ask" method="post" action="/answers/{{ rec.record_id }}/refine">
+    {{- told_fields(t, setting=true) }}
+    <label for="band-place">We don't know where this is: add a town for weather-checked advice.</label>
+    <span class="place-row"><input id="band-place" type="text" name="place" maxlength="80" placeholder="Town or postcode" autocomplete="address-level2" required><button type="submit" class="button{{ '' if card_leads else ' primary' }}">Check the advice</button></span>
+  </form>{% endif %}
+  <script>
+  (() => {
+    // each band form reloads the page after the advice is redone: say it started, send it once
+    for (const form of document.currentScript.parentElement.querySelectorAll("form.setting-switch, form.place-ask")) {
+      form.addEventListener("submit", (e) => {
+        if (form.dataset.busy) { e.preventDefault(); return; }
+        form.dataset.busy = "1";
+        for (const b of form.querySelectorAll("button")) b.setAttribute("aria-disabled", "true");
+        (e.submitter || form.querySelector("button")).textContent = "Checking the advice…";
+      });
+      // back from the next page: the browser may restore this one as it was left
+      const labels = [...form.querySelectorAll("button")].map((b) => b.textContent);
+      addEventListener("pageshow", () => {
+        delete form.dataset.busy;
+        form.querySelectorAll("button").forEach((b, i) => { b.textContent = labels[i]; b.removeAttribute("aria-disabled"); });
+      });
+    }
+  })();
+  </script>{% endif %}
+  {# the light we measured, a moment not a verdict, and how (21 Oct gardener test); a quiet
+     line under the band's two actions, so the switch sits by the chip it changes #}
+  {% set lit = light_said(rec.light) %}{% if lit %}<p class="note light-read">{{ lit }}</p>{% endif %}
+  {% if spot_on and obs.in_bed and obs.setting != "indoor" %}<p class="note bed-offer">Looks like a bed or border? <a class="band-go" href="/answers/{{ rec.record_id }}/spot">See what else could grow here</a></p>{% endif %}
+  {% for n in rec.notes if not how_led(n) %}<p class="note">{{ n }}</p>{% endfor %}
+  {# signed in, back from the sign-in link: keep it only by this tap, which names the account,
+     so a sign-in someone else arranged cannot carry the answer off (claims.py) #}
+  {% if keep_as %}<form class="note keep-form" method="post" action="/answers/{{ rec.record_id }}/keep"><button type="submit">Keep this in My plants</button> <span>Signed in as {{ keep_as }}.</span></form>
+  {%- elif keep_elsewhere %}<p class="note">{{ keep_elsewhere }}</p>{% endif %}
+  {# just kept from signed out: the photo was never stored, so offer the tab's own copy; it
+     is sent only when the person taps (claims.py) #}
+  {% if kept %}<p class="note kept" id="kept" data-answer="{{ rec.record_id }}"><strong>Kept in My plants.</strong>
+    <span class="kept-photo" hidden>Add your photo to this plant? <button type="button" class="quiet">Add my photo</button></span>
+    <span class="kept-none" hidden>Kept without a photo: send one next time to add it.</span>
+    <span class="kept-said" role="status"></span></p>
+  <script>
+  window.addEventListener("load", () => {
+    const box = document.getElementById("kept"), id = box.dataset.answer;
+    const offer = box.querySelector(".kept-photo"), none = box.querySelector(".kept-none");
+    const said = box.querySelector(".kept-said");
+    let src = null;
+    try { src = window.sessionStorage.getItem("herbtwin-photo:" + id); } catch { /* no storage */ }
+    if (!src || !src.startsWith("data:image/jpeg;base64,")) { none.hidden = false; return; }
+    offer.hidden = false;
+    offer.querySelector("button").addEventListener("click", async () => {
+      offer.hidden = true;
+      const bytes = Uint8Array.from(atob(src.split(",")[1]), (c) => c.charCodeAt(0));
+      const form = new FormData();
+      form.append("photo", new Blob([bytes], { type: "image/jpeg" }), "photo.jpg");
+      const r = await fetch(`/answers/${id}/photo`, { method: "POST", body: form });
+      said.textContent = r.ok ? "Photo added to your plant." : "The photo could not be added; send it next time.";
+    });
+  });
+  </script>{% endif %}
+  {# the stage's own message is for the logs and traces (a raw API error can be JSON):
+     the page says what is missing in plain words #}
+  {% if failed.get("environment") %}<p class="note">Weather unavailable this time, so there is no 2-week forecast for the plant.</p>
+  {#- a place but no forecast (a photo older than the weather record): the empty Compare is
+      hidden now, so the band says it once (#277 review) #}
+  {%- elif a and rec.environment is none and rec.location and obs.setting != "indoor" and a.headline != no_cure_headline %}<p class="note no-forecast">No 2-week forecast for this photo, so the choices were not tested against the weather.</p>{% endif %}
+  {% if failed.get("research") %}<p class="note">Species facts unavailable this time, so general care thresholds were used.</p>{% endif %}
+  </div>
+  {# the evidence: in block 3 under an answer, on its own when the advice failed #}
+  {% set evidence %}<details class="evidence fold"><summary><span class="fold-head"><span class="fold-title">Weather, forecast and sources</span>
+    <span class="fold-peek">What the photo showed{% if rec.season and not (obs and obs.setting == "indoor") %}, the season{% endif %} and where the care facts came from</span></span></summary>
+    {% set droop = ["not drooping", "a little droopy", "droopy", "badly wilted"] %}
+    {% set decline = ["healthy-looking", "a little tired", "declining", "badly declining"] %}
+    <p>From the photo: {{ droop[obs.water_stress] }}, {{ decline[obs.decline] }}{% if obs.leaf_colour != "not_visible" %} · leaves {{ obs.leaf_colour|replace("_", " ") }}{% endif %}{% if obs.soil_surface != "not_visible" %} · soil surface {{ obs.soil_surface|replace("_", " ") }}{% endif %}{% if obs.symptoms %} · seen: {{ obs.symptoms|join(", ") }}{% endif %}</p>
+    {# what the season is, then who says so (judge live walk of rev 00040: "Season: RHS, our care notes") #}
+    {# its main state in plain words: never "normal dieback and active growth" or "evergreen hold" #}
+    {% set season_said = {"active_growth": "growing", "flowering": "flowering", "bolting_risk": "may run to seed", "normal_dieback": "dying back", "dormant": "resting", "regrowth": "growing again", "leaf_fall": "dropping its leaves", "evergreen_hold": "holding its leaves"} %}
+    {% if rec.season and not (obs and obs.setting == "indoor") %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(rec.season.sources) }}</p>{% endif %}
+    {% if rec.pack and rec.pack.sources %}<p>Care facts: {{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
+    {% if rec.problem %}{% set src = rec.problem.source %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
+    <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}. Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.</p>{% endif %}
+    {# the per-choice numbers are in "Compare all choices" in words; the model's working
+       assumptions fold away here (17 Oct re-walk: raw action names and 0.00s) #}
+    {% if a and a.assumptions %}<details class="assumptions"><summary>What the plant model assumes</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
+    {% set missed = {"environment": "the weather", "research": "the species facts", "twin": "the plant model", "advise": "the advice", "observe": "the photo read", "problem": "the closer photo check"} %}
+    {% for f in rec.failures %}<p class="note">Not available this time: {{ missed.get(f.stage, "one step") }}.</p>{% endfor %}
+    <p class="record">Ref {{ rec.record_id }}</p>
+  </details>{% endset %}
+  {% if a %}
+    {% set first = a.do[0] if a.do else none %}
+    {# the plant's mood for its face: its own answer, never a new judgement. Every action is
+       named here, so none falls to "unsure" by accident (21 Oct, Kash: "why is the plant
+       face cross?"); a small good job is content #}
+    {% set moods = {"leave_normal": "content", "dont_water": "content", "shelter": "cold", "water": "dry",
+                    "prune": "trim", "treat_or_remove": "poorly", "isolate": "poorly",
+                    "ask_first": "unsure", "check_pests": "unsure", "other": "unsure",
+                    "feed": "content", "mulch": "content", "repot": "content", "change_soil": "content",
+                    "rotate": "content", "humidity": "content", "move_light": "content"} %}
+    {% set mood = moods.get(first.action, "unsure") if first else "content" %}
+    {# a word badge, not a meter: 2 steps read as "2 out of 2" (21 Oct, gardener test) #}
+    {% set level_label = "Our best read" if best else "Not sure, check first" %}
+    {% set level_line = "Right about half the time in our tests." if best else "Right about 1 in 3 times in our tests." %}
+    {% set record = "about half the time" if best else "about 1 in 3 times" %}
+    <div class="answer-cols{{ ' ask-up' if a.level == 'not_sure' and a.tell_me and not (place_on_band and not quick) else '' }}">
+    {# the photo you sent, from this browser tab's own copy (index.html keeps it on send):
+       never sent again, so nothing new is stored; hidden where the tab has no copy. Big,
+       above the main card on a phone and beside it from 960px, not a thumbnail in the band
+       (21 Oct, Kash: "actual plant picture is tiny") #}
+    {{ your_photo() }}
+    <div class="plan">
+    {# block 1: what to do. The main card has a green head so it reads as THE answer. #}
+    <section class="card main-action" aria-labelledby="main-action">
+      <div class="head">
+      {# after Check the advice again: say plainly that it ran and what it did #}
+      {% if rec.refined_from %}{% if rec.refined_from != a.headline %}<p class="checked">Changed after what you told us. Was: <s>{{ rec.refined_from }}</s></p>
+      {% else %}{% set feel = a.factors|selectattr("name", "equalto", "soil_feel")|first %}
+      <p class="checked">{% if not (rec.told and rec.told.soil_feel) %}Checked again with what you told us: same advice.{% elif feel and feel.effect != "lowers" %}Checked again: same advice, and the soil feel fits it.{% else %}Checked again: same advice.{% endif %}</p>{% endif %}{% endif %}
+      {% if retake %}<p class="rough-read">{{ retake[0] }}, so this is a rough read. {{ retake[1] }} for a firmer answer.</p>{% endif %}
+      {# leaving it is not a job for today: no time tag on it #}
+      {% if first and first.action != "leave_normal" %}<span class="tag">{{ tag[first.when] }}</span>{% endif %}
+      <h2 id="main-action">{{ a.headline }}</h2>
+      </div>
+      {% if first and first.because %}<p class="because">{{ first.because[:1]|upper }}{{ first.because[1:] }}</p>{% endif %}
+      {% if first and first.if_you_do != no_data %}{{ ifdo(first, quiet=a.headline == no_cure_headline) }}{% endif %}
+      {# after the twin's line, so it never reads as tested on the twin (review of the tray PR) #}
+      {% if a.tray_check %}<p class="because">{{ tray_check }}</p>{% endif %}
+      {% if a.trend %}<p class="note">{{ a.trend[:1]|upper }}{{ a.trend[1:] }}.</p>{% endif %}
+      {# "Our best read" needs no gloss ("Go ahead" only repeated the headline); the others say what to do about it #}
+      {# "about 3 in 10" read as a score for the plant (19 Oct, Kash): say whose sureness it is.
+         Two words, no number: "about 7 in 10" over-claimed (19 Oct answer-quality check) #}
+      {# the colon and full stop are for screen readers and the rater text only: on screen the
+         badge sits under the heading, so it reads "How sure we are: Our best read. Right…" #}
+      <p class="sure"><strong>How sure we are<span class="sr-only">:</span></strong>
+      <span class="badge {{ 'best' if best else 'check' }}">{{ level_label }}<span class="sr-only">.</span></span>
+      <span class="badge-line">{{ level_line }}</span>
+      {#- the one thing that lowered it most, here beside the level, not two screens down
+         (design wave 1, C); "tell us below" only when no Make-surer button says it (21 Oct,
+         Kash: "Add where it is" was said three times) #}
+      {%- if not best %}{% set doubt = top_doubt(a) %}<span>{% if doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not place_on_band %}{{ " " if doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
+      {% if tell_more %}<p class="make-surer"><a class="button primary" href="#refine">Make this surer: tell us more</a></p>{% endif %}
+      {% if retake or asks_open %}<p class="make-surer">{% if retake %}<a class="button primary" href="/">{{ retake[1] }}</a>{% endif %}
+        {%- if asks_open %} <a class="button{{ '' if retake else ' primary' }}" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
+      {# where the care facts came from, in view: the built-in herbs' own file, or the page Tavily
+         found, said only when it did (19 Oct judge walk: the seed herbs never search) #}
+      {% if rec.pack and rec.pack.sources %}{% set found = namespace(on=[]) %}{% if rec.pack.found_with == "tavily" %}{% for x in rec.pack.sources if x.startswith("https://") %}{% set found.on = found.on + [x] %}{% endfor %}{% endif %}
+      <p class="sources-line">Sources: {% if found.on %}{{ said_by(found.on) }} (found with Tavily){% else %}{{ said_by(rec.pack.sources) }}{% endif %}</p>{% endif %}
+      {# a trusted page's own sentence, as written, when code finds it says the same as this
+         answer (stages/trusted_page.py); nothing when unsure, off, late or broken #}
+      {% if rec.trusted and rec.trusted.quote %}<p class="sources-line trusted-quote">A trusted page says the same: &ldquo;{{ rec.trusted.quote }}&rdquo; ({{ said_by([rec.trusted.url]) }}, found with Tavily)</p>{% endif %}
+      {# who decided it, in view (19 Oct pre-walk: the answer never named NVIDIA or Nebius) #}
+      {% if advised_by %}<p class="decided-by">Decided by {{ advised_by }} on Nebius Token Factory · <a href="/credits">What it's made with</a></p>{% endif %}
+      {# the plant reads this answer aloud: its own words, never new advice; shown once the
+         script runs, so a page without it never offers a button that does nothing #}
+      {% if voice %}{% set obs = rec.observation %}{% set pname = obs.species[0].common_name|lower if obs and obs.species else "plant" %}
+      <div class="voice" id="voice" data-url="/api/answers/{{ rec.record_id }}/voice" hidden>
+        {# the plant's face beside its voice; it wobbles while the voice plays #}
+        {{ plant_face(mood) }}<button type="button" class="hear">Hear it from your {{ pname }}</button>
+        <audio preload="none" controls hidden></audio>
+        <p class="said" hidden></p>
+      </div>
+      <script>
+      (() => {
+        const box = document.getElementById("voice");
+        const button = box.querySelector(".hear"), audio = box.querySelector("audio");
+        const said = box.querySelector(".said"), label = button.textContent;
+        box.hidden = false;
+        const show = (text) => { said.textContent = text; said.hidden = !text; };
+        // ElevenLabs down: the browser's own voice reads the same words
+        const speakHere = (text) => {
+          if (!("speechSynthesis" in window) || !text) return false;
+          const u = new SpeechSynthesisUtterance(text);
+          u.lang = "en-GB";
+          speechSynthesis.speak(u);
+          return true;
+        };
+        let wordsOnly = "";  // the voice service failed: the browser reads these instead
+        button.addEventListener("click", async () => {
+          if (audio.src) { audio.currentTime = 0; audio.play().catch(() => {}); return; }
+          if (wordsOnly) { speakHere(wordsOnly); return; }
+          button.disabled = true;
+          button.textContent = "Getting its voice…";
+          try {
+            const r = await fetch(box.dataset.url, {method: "POST", headers: {"X-Herbtwin-Fetch": "1"}});
+            const body = await r.json().catch(() => ({}));
+            if (r.ok) {
+              show(body.text);
+              audio.src = body.audio;
+              // a phone may refuse to start sound this long after the tap: its own player
+              // is there to press, and a refusal is not an error
+              audio.hidden = false;
+              audio.play().catch(() => {});
+            } else if (body.text) {
+              show(body.text);
+              wordsOnly = body.text;
+              if (!speakHere(body.text)) show(body.detail);
+            } else {
+              show(body.detail || "The voice is not available right now.");
+            }
+          } catch {
+            show("Could not reach the server. Try again.");
+          } finally {
+            button.disabled = false;
+            button.textContent = label;
+          }
+        });
+      })();
+      </script>
+      <script>
+      (() => {
+        const box = document.getElementById("voice"), audio = box.querySelector("audio");
+        const talk = (on) => () => box.classList.toggle("speaking", on);
+        audio.addEventListener("play", talk(true));
+        for (const e of ["pause", "ended", "error"]) audio.addEventListener(e, talk(false));
+      })();
+      </script>{% endif %}
+    </section>
+    {# the photo check named one of this plant's listed problems: our words for what it
+       looks like, and a nudge to check before treating #}
+    {% if rec.problem %}<section class="tray warn seen-problem" aria-labelledby="seen-problem"><h2 id="seen-problem">{{ "Looks like" if rec.problem.sure else "Could be" }} {{ rec.problem.name }}</h2><p>{{ rec.problem.looks_like[:1]|upper }}{{ rec.problem.looks_like[1:] }}.</p><p>Check a few leaves before {{ "removing it" if a and a.headline == no_cure_headline else "treating" }}: the photo alone can be wrong.</p></section>{% endif %}
+    {# the twin stills: two illustrated futures of this photo's plant, when it is in the
+       bank and the plant model ran — "branch" stills, captioned by the model's view #}
+    {% if twin %}<section class="twin" aria-labelledby="twin">
+      <h2 id="twin">Your plant in ~7 days</h2>
+      {% if twin.model_line %}<p class="because">{% if said.twin %}<span class="tag twin-chip">Twin</span>{% else %}Tested on your plant's twin:{% set said.twin = true %}{% endif %} {{ twin.model_line }}.</p>{% endif %}
+      <div class="twin-pair">
+        <figure><img src="/static/twin/{{ twin.pair.do }}" alt="Illustration of your plant if you follow the advice" loading="lazy">
+          <figcaption>{{ twin.do_label }}</figcaption></figure>
+        <figure><img src="/static/twin/{{ twin.pair.dont }}" alt="Illustration of your plant left as it is" loading="lazy">
+          <figcaption>{{ twin.dont_label }}</figcaption></figure>
+      </div>
+      <p class="note">Illustration for our sample photo, not a prediction. · <a href="/credits">Photo credits</a></p>
+    </section>{% endif %}
+    {% if a.do|length > 1 %}<section class="also" aria-labelledby="also-do">
+      <h2 id="also-do">Also do</h2>
+      {% for c in a.do[1:] %}<div class="item"><span class="tag later">{{ tag[c.when] }}</span>
+        <h3>{{ "Give it a light tidy" if c.action == "prune" and a.winter_rest else label[c.action] }}</h3>
+        <p class="because">{{ c.because[:1]|upper }}{{ c.because[1:] }}</p>
+        {% if c.if_you_do != no_data %}{{ ifdo(c) }}{% endif %}</div>{% endfor %}
+    </section>{% endif %}
+    {% if a.dont %}<section class="dont" aria-labelledby="dont">
+      {# the soil unknown: the check, never a blanket rule (expert review, 19 Oct, s014 mint) #}
+      <h2 id="dont">{% if a.dont_if_dry %}Check first{% else %}Don't{% endif %}</h2>
+      <div class="item"><h3>{{ dont_if_dry(obs.container if obs else "unknown") if a.dont_if_dry else label[a.dont.action] }}</h3>
+        <p class="because">{{ a.dont.because[:1]|upper }}{{ a.dont.because[1:] }}</p>
+        {% if a.dont.if_you_do != no_data %}{{ ifdo(a.dont) }}{% endif %}</div>
+    </section>{% endif %}
+    {# only with signs to watch for: on its own, "Send a new photo if it changes" was filler
+       that What next says better, and its "Add where it is" link the main card's button said
+       again (21 Oct, Kash) #}
+    {% set signs, after = watch_list(a.watch or "") %}
+    {% if signs %}<section class="watch" aria-labelledby="watch">
+      <h2 id="watch">Keep an eye on</h2>
+      <ul>{% for s in signs %}<li>{{ s }}</li>{% endfor %}</ul>{% if after %}<p>{{ after }}</p>{% endif %}
+    </section>{% endif %}
+    {# indoors: what is normal on a windowsill this month and how to look after it, from our
+       indoor table (21 Oct, a gardener: indoor "doesn't have much info") #}
+    {% if a.indoor %}<section class="indoor-now" aria-labelledby="indoor-now">
+      <h2 id="indoor-now">Indoors in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][a.indoor.month - 1] }}</h2>
+      <p>{{ a.indoor.normal }}</p>
+      <ul>{% for t in a.indoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
+      <p class="note">From {{ said_by(a.indoor.sources) }}</p>
+    </section>{% endif %}
+    {# see it by part (21 Oct, gardener test: they wanted the advice by part of the setup):
+       the lines above, sorted by part (answer.by_part), never new advice. Folded, so it
+       shown only with two parts or more; left out of the rater text. Open from the start: it is
+       the plan said part by part (21 Oct, Kash: "should be open as a lot of good info") #}
+    {% set parts = by_part(a, label, obs.container if obs else "unknown") %}
+    {% if parts %}<details class="by-part" open><summary>See it by part: {{ parts|map(attribute=0)|join(", ")|lower }}</summary>
+      {% for part, items in parts %}<div class="row"><p class="part">{{ part }}</p>
+        <ul>{% for it in items %}<li data-kind="{{ it.kind }}">{% if it.kind == "dont" %}<strong>Don't:</strong> {% elif it.kind == "check" %}<strong>Check first:</strong> {% elif it.kind == "watch" %}<strong>Keep an eye on:</strong> {% endif %}{{ it.text }}</li>{% endfor %}</ul></div>
+      {% endfor %}</details>{% endif %}
+    {# what next (design wave 1, D): the plan ends by saying what to do after it. "I did it"
+       lives here, after the reader has the whole plan, not inside the main card #}
+    <section class="next-step ink" aria-labelledby="next-step">
+      <h2 id="next-step">What next</h2>
+      <p>In a few days, send a new photo of the same plant to see how it is doing.</p>
+      {% include "_more_photos.html" %}
+        {# "I did it": the answer gets an ending. Shown by the script, so a page without it never
+         offers a button that does nothing; nothing is stored or sent #}
+      {% if first and first.action not in ("leave_normal", "dont_water", "ask_first", "check_pests", "other") %}<div class="i-did" id="i-did" hidden>
+        {# inside the scripted block: without a script there is no button to point at #}
+        <p class="done-it">Done it? Tell us.</p>
+        <button type="button" class="quiet">I did it</button>
+        <p class="thanks" role="status" tabindex="-1"><span class="burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>{{ plant_face("content") }}<span class="said"></span></p>
+        {# signed out only. With the keep link, signing in then tapping "Keep this in My plants"
+           carries this answer over (#254); without it (no keep cookie in this browser) it says
+           to send the photo again. The email is an opt-in tick box after that #}
+        {% if keep %}<p class="keep"><a href="{{ keep }}">Sign in to keep this plant; you can then ask for an email when it's time to check again</a></p>
+        {%- elif accounts and not signed_in %}<p class="keep"><a href="/auth/sign-in">Sign in, then send this photo again, to keep this plant; you can then ask for an email when it's time to check again</a></p>{% endif %}
+      </div>
+      <script>
+      (() => {
+        const box = document.getElementById("i-did"), button = box.querySelector("button");
+        const thanks = box.querySelector(".thanks"), said = thanks.querySelector(".said");
+        box.hidden = false;
+        button.addEventListener("click", () => {
+          thanks.classList.add("shown");
+          said.textContent = "Thanks for looking after me.";
+          button.hidden = true;
+          box.querySelector(".done-it").hidden = true;  // asked and answered (#311 review)
+          thanks.focus();  // the button is gone: keep keyboard and reader users in place
+        });
+      })();
+      </script>{% endif %}
+      <p><a class="button quiet" href="/">Send another photo</a></p>
+    </section>
+    {# what else could grow here: a card of its own under What next, not a small link at the
+       foot of the details (21 Oct, Kash on rev 00050: "this is great, why is it hidden behind
+       a very small hard to find hyperlink?"). Not indoors: the windowsill list offers one
+       crop, a dead end from a basil (19 Oct walk). An outlined button: the page keeps one green one #}
+    {% if spot_on and rec.location and not (rec.observation and rec.observation.setting == "indoor") %}<section class="spot-card ink" aria-labelledby="spot-card-h">
+      <h2 id="spot-card-h">What could grow here</h2>
+      <p>This spot's sun through the year, its frost and soil, and the crops that suit it this month.</p>
+      <p><a class="button spot-go" href="/answers/{{ rec.record_id }}/spot">See what grows here</a></p>
+    </section>{% endif %}
+    {% include "_extras_slot.html" %}
+    </div>
+
+    <div class="side">
+    <hr class="divider">
+    {# block 2: help us be surer. One text box, two jobs: the form posts it as the refine's
+       question; the chat script sends the same text to the chat API. Without a script the
+       Ask button stays hidden and the text goes with the refine. #}
+    <section class="ask chat" id="chat" aria-labelledby="refine" data-url="/api/answers/{{ rec.record_id }}/chat">
+      {# one line until tapped (21 Oct, gardener test: the page was busy). It starts open when
+         shutting it would hide what you were doing: a chat, a told question, a did-it ask or
+         its reply, a "Check the advice again" that just ran, or a reminder just saved without
+         a script. Also when the main card says "Answer the question below" with no button to
+         the fold (review of #337) #}
+      {% set mid_way = chat or (rec.told and rec.told.question) or (check and (check.ask or check.line)) or rec.refined_from or reminder_saved or (not best and a.tell_me and not asks_open and not place_on_band) %}
+      <details class="tell-more"{% if mid_way %} open{% endif %}>
+      <summary>Want a more exact answer? Tell us more</summary>
+      <h2 id="refine">Tell us more and we'll check the advice</h2>
+      {# in sections, each with a small heading and left out when empty (21 Oct, Kash on rev
+         00049: "section it out better"): the did-it check-in, where it is, what's changed,
+         asking, reminders. Still ONE refine form: the box goes with both buttons. Colour
+         says what each is: green to send, amber for the fact that would make it surer #}
+      {% if check and (check.ask or check.line) %}<div class="part did"><h3>Your last advice</h3>
+      {% if check.ask %}<form class="tray did-it" method="post" action="/answers/{{ rec.record_id }}/did-it"><p>{{ check.ask }}</p>
+        <div class="actions">{% for v, t in (("yes", "Yes"), ("partly", "Partly"), ("no", "No"), ("skip", "Skip")) %}<button{% if v == "skip" %} class="quiet"{% endif %} name="did_it" value="{{ v }}">{{ t }}</button>{% endfor %}</div></form>
+      {% else %}<p class="tray">{{ check.line }}</p>{% endif %}</div>{% endif %}
+      <form class="refine" method="post" action="/answers/{{ rec.record_id }}/refine">
+      {# the fact that would help most goes in the group whose fields answer it; indoors or
+         outside has no field of its own, so it sits over the box (review of 8e0282d9). The
+         place, when the band asks for it, is asked there only (#364) #}
+      {% set tray_in = none %}{% if a.tell_me and not place_on_band %}{% set tray_in = "where" if a.tell_me_key in ("location", "aspect") else ("changed" if a.tell_me_key in ("soil_feel", "soil_texture") else ("chat" if a.tell_me_key == "setting" else "top")) %}{% endif %}
+      {% set tray %}<div class="tray warn"><p>{{ a.tell_me }}</p>{% if a.tell_me_key == "location" %}
+        <label>Where is it?<input type="text" name="place" maxlength="80" placeholder="UK town or postcode"></label>{% endif %}</div>{% endset %}
+      {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?"} %}
+      {% set selects = asks|reject("in", ("question", "aspect", "soil_texture"))|list %}
+      {% set has_where = tray_in == "where" or "aspect" in asks %}
+      {% set has_changed = tray_in == "changed" or selects or "soil_texture" in asks %}
+      {% if tray_in == "top" %}{{ tray }}{% endif %}
+      {% if "aspect" not in asks and rec.told and rec.told.heading %}
+      {% set h = rec.told.heading %}{% if h.direction %}<input type="hidden" name="direction" value="{{ h.direction }}">{% else %}<input type="hidden" name="heading" value="{{ h.heading }}"><input type="hidden" name="pitch" value="{{ h.pitch if h.pitch is not none else '' }}"><input type="hidden" name="accuracy" value="{{ h.accuracy if h.accuracy is not none else '' }}">{% endif %}{% endif %}
+      {% if "soil_texture" not in asks and rec.told and rec.told.squeeze %}<input type="hidden" name="squeeze" value="{{ rec.told.squeeze }}">{% endif %}
+      {% for q in ("soil_feel", "last_watered", "changed") if q not in asks and rec.told and rec.told[q] %}<input type="hidden" name="{{ q }}" value="{{ rec.told[q] }}">{% endfor %}
+      {% if rec.told and rec.told.setting %}<input type="hidden" name="setting" value="{{ rec.told.setting }}">{% endif %}
+      {% if has_where %}<div class="part where{{ ' needed' if tray_in == 'where' else '' }}"><h3>Where it is</h3>
+      {% if tray_in == "where" %}{{ tray }}{% endif %}
+      {% if "aspect" in asks %}{{ spotq.compass_field(compass_first) }}{% endif %}</div>{% endif %}
+      {% if has_changed %}<div class="part changed{{ ' needed' if tray_in == 'changed' else '' }}"><h3>What's changed</h3>
+      {% if tray_in == "changed" %}{{ tray }}{% endif %}
+      {% for q in selects %}<label>{{ titles[q] }}
+        <select name="{{ q }}"><option value="">choose…</option>
+        {% for v, text in choices[q].items() %}<option value="{{ v }}"{% if rec.told and rec.told[q] == v %} selected{% endif %}>{{ text }}</option>{% endfor %}
+        </select></label>{% endfor %}
+      {% if "soil_texture" in asks %}{{ spotq.squeeze_field(choices["squeeze"], rec.told.squeeze if rec.told else none) }}{% endif %}</div>{% endif %}
+      {# one green button in the panel: asking is the quiet one (21 Oct, Kash). Their names
+         say what each does, so no explainer line under them. With groups above, "Check the
+         advice again" closes them, so it reads as their send; the box still goes with it #}
+      {% set check_button %}<button class="primary big" type="submit">Check the advice again</button>{% endset %}
+      {% if has_where or has_changed %}<div class="actions send">
+        {{ check_button }}
+      </div>{% endif %}
+      <div class="part chat{{ ' needed' if tray_in == 'chat' else '' }}"><h3>Ask a question</h3>
+      {% if tray_in == "chat" %}{{ tray }}{% endif %}
+      <label>Tell us something, or ask a question (optional)<textarea name="question" maxlength="{{ [max_question, max_chat]|min }}" rows="3" placeholder="{{ 'What if I move it to a brighter window?' if obs.setting == 'indoor' else 'What if I move it inside?' }}">{{ rec.told.question if rec.told and rec.told.question else "" }}</textarea></label>
+      <div class="actions">
+        {% if not (has_where or has_changed) %}{{ check_button }}
+        {% endif %}<button class="big quiet ask-chat" type="button" hidden>Ask about this plant</button>
+      </div>
+      {# "Ask about this plant" made plain (19 Oct, Kash): three to tap, through the chat #}
+      <div class="starters" hidden><h4>Or tap a question to ask</h4>
+        <div class="actions">{% for q in starters(rec) %}<button type="button" class="starter">{{ q }}</button>{% endfor %}</div></div>
+      <p class="chatnote" role="status" aria-live="polite"></p>
+      {% if rec.told and rec.told.question %}{% set reply = reply_to(a, rec.told.question, rec.taken_at.month) %}<div class="asked"><p class="msg user">{{ "You asked" if is_question(rec.told.question) else "You said" }}: {{ rec.told.question }}</p>{% if reply %}<p class="msg assistant">{{ reply }}</p>{% endif %}</div>{% endif %}
+      <div class="chatlog"{% if not chat %} hidden{% endif %}><h4>Your questions</h4>{% for m in chat %}<p class="msg {{ m.role }}">{{ m.content }}
+        {#- a kept reply's sources, as the script's add() shows a new one (judge walk of #269:
+            the links went on reload); chat_sources comes with the chat backend's own PR -#}
+        {%- if m.role == "assistant" and chat_sources is defined %}{% for s in chat_sources(m.tools) if s.url.startswith("https://") %}<br><a href="{{ s.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ s.title or s.url }}</a>{% if s.provider == "tavily" %} (found with Tavily){% endif %}{% endfor %}{% endif %}</p>{% endfor %}</div>
+      </div>
+      </form>
+      {% if reminder %}<div class="part remind"><h3>Reminders</h3>
+      {% if reminder.sent %}<p class="tray">We emailed you a reminder for this answer.</p>
+      {% else %}<form class="reminder" method="post" action="/answers/{{ rec.record_id }}/reminder"><label><input type="checkbox" name="on" value="1"{% if reminder.on %} checked{% endif %}> Email me when it's time to check again</label><p role="status" aria-live="polite">{% if reminder.on %}Reminder on: we'll email you when it's time.{% endif %}</p><noscript><button type="submit">Save</button></noscript></form>{% endif %}</div>{% endif %}
+      </details>
+    </section>
+    <script>
+    (() => {
+      // the main card's buttons that ask for more go to #refine, inside the fold: open it
+      // first, so they land on it open (a browser may do this itself; not all do)
+      const fold = document.querySelector("#chat > details.tell-more");
+      if (!fold) return;
+      const open = () => { if (location.hash === "#refine") fold.open = true; };
+      for (const a of document.querySelectorAll('a[href="#refine"]')) a.addEventListener("click", () => { fold.open = true; });
+      addEventListener("hashchange", open);
+      open();
+    })();
+    </script>
+    {% if reminder and not reminder.sent %}<script>
+    (() => {
+      // tick or untick saves at once; the result is said in the status line (aria-live)
+      const form = document.querySelector(".answer-page form.reminder");
+      if (!form) return;
+      const box = form.elements.on, said = form.querySelector("[role=status]");
+      box.addEventListener("change", async () => {
+        const body = new URLSearchParams(new FormData(form));
+        box.disabled = true;
+        said.classList.remove("err");
+        said.textContent = "Saving…";
+        try {
+          const r = await fetch(form.action, {method: "POST", body, headers: {"X-Herbtwin-Fetch": "1"}});
+          if (!r.ok) throw new Error(String(r.status));
+          said.textContent = box.checked ? "Reminder on: we'll email you when it's time." : "Reminder off.";
+        } catch {
+          box.checked = !box.checked;
+          said.classList.add("err");
+          said.textContent = "Could not save that. Try again.";
+        } finally {
+          box.disabled = false;
+        }
+      });
+    })();
+    </script>{% endif %}
+    <script>
+    (() => {
+      // "Ask about this plant": the same text box, sent to the chat API; the reply joins the log
+      const box = document.getElementById("chat");
+      if (!box) return;
+      const form = box.querySelector("form.refine"), ask = box.querySelector(".ask-chat");
+      const log = box.querySelector(".chatlog"), note = box.querySelector(".chatnote");
+      const buttons = form.querySelectorAll(".actions button");  // the starters too
+      const check = form.querySelector("button[type=submit]"), checkText = check.textContent;
+      const noteText = note.textContent;
+      const motion = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+      ask.hidden = false;
+      // Check the advice again reloads the page after ~15 s: show it started, and stop a
+      // second press sending it twice
+      form.addEventListener("submit", (e) => {
+        if (form.dataset.busy) { e.preventDefault(); return; }
+        form.dataset.busy = "1";
+        check.textContent = "Checking the advice…";
+        note.textContent = "Checking the advice again with what you told us. This takes about 15 seconds.";
+        for (const b of buttons) b.setAttribute("aria-disabled", "true");
+      });
+      // back from the next page: the browser may restore this one as it was left
+      addEventListener("pageshow", () => {
+        delete form.dataset.busy;
+        check.textContent = checkText;
+        note.textContent = noteText;
+        for (const b of buttons) b.removeAttribute("aria-disabled");
+      });
+      const starters = box.querySelector(".starters");
+      starters.hidden = false;
+      for (const b of starters.querySelectorAll(".starter")) {
+        b.addEventListener("click", () => { form.question.value = b.textContent; ask.click(); });
+      }
+      // Enter asks; Shift+Enter is a new line (typing a word in a composing keyboard is neither)
+      form.question.addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" || e.shiftKey || e.isComposing || e.keyCode === 229) return;  // 229: Safari's IME
+        e.preventDefault();
+        ask.click();
+      });
+      const add = (role, text, sources) => {
+        const p = document.createElement("p");
+        p.className = "msg " + role;
+        p.textContent = text;
+        for (const s of sources || []) {
+          if (!String(s.url).startsWith("https://")) continue;
+          const a = document.createElement("a");
+          a.href = s.url; a.textContent = s.title || s.url;
+          a.rel = "noopener noreferrer nofollow"; a.target = "_blank";
+          p.append(document.createElement("br"), a);
+          if (s.provider === "tavily") p.append(" (found with Tavily)");
+        }
+        log.hidden = false;
+        log.appendChild(p);
+        return p;
+      };
+      ask.addEventListener("click", async () => {
+        const text = form.question.value.trim();
+        if (!text) { note.textContent = "Type your question in the box first."; form.question.focus(); return; }
+        if (form.dataset.busy) { note.textContent = "Still checking the advice. Ask once it has loaded."; return; }
+        for (const b of buttons) b.disabled = true;
+        ask.textContent = "Asking…";
+        note.textContent = "Thinking…";
+        const mine = add("user", text);
+        try {
+          const r = await fetch(box.dataset.url, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({message: text}),
+          });
+          const body = await r.json();
+          if (!r.ok) { mine.remove(); note.textContent = body.detail || "Something went wrong."; return; }
+          add("assistant", body.reply, body.sources);
+          // asked and answered: the log keeps it, the box is free. A fact they told us stays,
+          // for one tap on "Check the advice again" (the chat API's `fact`)
+          if (!body.fact) form.question.value = "";
+          note.textContent = (body.note ? body.note + " " : "") + body.left + " questions left.";
+          mine.scrollIntoView({block: "start", behavior: motion});  // the reply is under the box
+        } catch {
+          mine.remove();
+          note.textContent = "Could not reach the server. Try again.";
+        } finally {
+          if (!log.querySelector(".msg")) log.hidden = true;
+          for (const b of buttons) b.disabled = false;
+          ask.textContent = "Ask about this plant";
+        }
+      });
+    })();
+    </script>
+
+    <hr class="divider">
+    {# block 3: the details, folded #}
+    <section class="details" aria-labelledby="details">
+      <h2 id="details">How we worked it out</h2>
+      {# who "the advisors" are, before anything says what they did (21 Oct gardener test) #}
+      <p class="advisors">{{ advisors_said(advised_by, a.advisor_roles) }}</p>
+      {# what each advisor said: its call only, never its raw words (21 Oct, Kash on rev
+         00049: "what does each mean?") #}
+      {% set said = advisor_lines(rec, label) %}{% if said.lines %}<div class="advisor-said">
+        <h3>What each advisor said</h3>
+        <ul>{% for x in said.lines %}<li>{{ x.who }}: <strong>{{ x.action }}.</strong></li>{% endfor %}</ul>
+        {% if said.note %}<p class="note">{{ said.note }}</p>{% endif %}
+      </div>{% endif %}
+      {# which model did each step, its time and its cost, then the same tokens at Nemotron 3
+         Ultra's price (21 Oct, judging video: "which models are being used", and savings
+         "only feel real compared to a baseline"). Open, never folded away #}
+      {% set mm = model_map(rec) %}{% if mm %}<div class="model-map">
+        <h3>Which model did each step</h3>
+        <ul>{% for r in mm.rows %}<li><span class="mm-what"><strong>{{ r.step }}</strong> <span class="mm-model">{{ r.model }}</span></span><span class="mm-cost">{{ r.seconds }} · {{ r.cost }}</span></li>{% endfor %}</ul>
+        <p class="mm-total">This answer cost <strong>{{ mm.total }}</strong> in model time{% if mm.unpriced %}, not counting {{ mm.unpriced|join(" and ") }} (price not listed){% endif %}. On NVIDIA Nemotron 3 Ultra for every step it would have cost about <strong>{{ mm.baseline }}</strong>.</p>
+        <p class="note">The Ultra figure is an estimate: the same tokens at Ultra's listed price. A different model would use a different number of tokens.</p>
+      </div>{% endif %}
+      {# how the lead was chosen, when a rule of ours chose it: here, not in the band, where
+         it explained our workings before the reader had the advice (design wave 1, A) #}
+      {% for n in rec.notes if how_led(n) %}<p class="note how-led">{{ n }}</p>{% endfor %}
+      {#- each fold says what is in it before it opens (21 Oct, Kash on rev 00050: "not great
+         once opened and not"): a title, then one line of what it holds #}
+      {% if a.chips %}{% set up = a.chips|selectattr("effect", "equalto", "raises")|map(attribute="name")|map("lower")|list %}
+      {%- set down = a.chips|selectattr("effect", "in", ["lowers", "missing"])|map(attribute="name")|map("lower")|list %}
+      <details class="why fold {{ 'fold-good' if best else 'fold-check' }}"><summary><span class="fold-head"><span class="fold-title">{% if best %}Why it's our best read{% else %}Why we're not sure{% endif %}</span>
+        <span class="fold-peek">{% if up %}Helped: {{ up[:3]|join(", ") }}{% endif %}{% if up and down %} · {% endif %}{% if down %}Held back: {{ down[:3]|join(", ") }}{% endif %}{% if not up and not down %}What raised or lowered how sure we are{% endif %}</span></span></summary>
+        <p class="small">In our tests on 624 questions answered by experts, answers at this level matched the expert's first step {{ record }}.</p>
+        <ul>{% for effect, said in (("raises", "Helped"), ("lowers", "Lowered it"), ("missing", "Missing"), ("neutral", "No effect on how sure we are")) %}
+          {%- set chips = a.chips|selectattr("effect", "equalto", effect)|list %}
+          {#- one bullet per factor, no brackets inside brackets (19 Oct small-print re-check) #}
+          {%- if chips %}<li>{{ mark[effect] }} {{ said }}<ul>{% for c in chips %}<li><strong>{{ c.name }}</strong>{% if c.why %}: {{ c.why|join("; ") }}{% endif %}</li>{% endfor %}</ul></li>{% endif %}{% endfor %}</ul>
+      </details>{% endif %}
+      {# an empty Compare is hidden: indoors the band already says there is no forecast test,
+         and with no place the main card asks for one (judge walk of #272) #}
+      {% if a.compare or a.headline == no_cure_headline %}
+      {% set cmp = namespace(better=[]) %}{% for r in a.compare if r.vs_leaving_it == "better" and r.action != "leave_normal" %}{% set cmp.better = cmp.better + [label[r.action]|lower] %}{% endfor %}
+      <details class="compare fold fold-twin"><summary><span class="fold-head"><span class="fold-title">Compare all choices (next 2 weeks)</span>
+        <span class="fold-peek">{% if not a.compare %}No cure, so the choices don't apply{% elif cmp.better %}Better than leaving it: {{ cmp.better[:2]|join(", ") }}{% else %}None beat leaving it{% endif %}{% if a.compare %}, tested on your plant's twin{% endif %}</span></span></summary>
+        {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
+           a tap on a choice shows its line (idea 3, 18 Oct) #}
+        {% set tc = twin_chart(rec, label) if a.compare else none %}
+        {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ tc.shown }}">
+          <svg viewBox="0 0 340 150" role="img" aria-labelledby="twin-chart-cap">
+            <text class="axis" x="4" y="26">wet</text><text class="axis" x="4" y="126">dry</text>
+            <line class="frame" x1="34" y1="22" x2="34" y2="122"/><line class="frame" x1="34" y1="122" x2="332" y2="122"/>
+            {% for w_x, w in tc.weeks %}<text class="axis" x="{{ w_x }}" y="140" text-anchor="{{ 'start' if loop.first else 'end' if loop.last else 'middle' }}">{{ w }}</text>{% endfor %}
+            {# leaving it's cold nights, faint and always there: the reason sheltering wins shows
+               before any tap (18 Oct pre-deploy check) #}
+            {% for ln in tc.lines if ln.action == "leave_normal" and ln.cold %}<g class="base-cold">
+              {% for b in ln.cold %}<rect x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
+              <text x="{{ ln.left_out[0] }}" y="16" text-anchor="{{ ln.left_out[1] }}">{{ ln.cold_label }} if left out</text>
+            </g>{% endfor %}
+            {% for ln in tc.lines %}<g class="twin-line{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">
+              {% for b in ln.cold %}<rect class="cold" x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
+              {% if ln.cold_label %}<text class="cold-label" x="{{ ln.cold_x }}" y="16">{{ ln.cold_label }}</text>{% endif %}
+              <polyline points="{{ ln.points }}"/>
+            </g>{% endfor %}
+            <line class="needs" x1="34" y1="{{ tc.needs_y }}" x2="332" y2="{{ tc.needs_y }}"/>
+            <text class="axis needs-label" x="330" y="{{ tc.needs_y - 4 }}" text-anchor="end">needs water</text>
+            {% for ln in tc.lines if ln.action == "leave_normal" %}<polyline class="base" points="{{ ln.points }}"/>{% endfor %}
+            <clipPath id="twin-dot"><circle cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="9"/></clipPath>
+            <circle class="today" cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="10"/>
+            <image id="twin-chart-photo" x="{{ tc.today[0] - 9 }}" y="{{ tc.today[1] - 9 }}" width="18" height="18" clip-path="url(#twin-dot)" preserveAspectRatio="xMidYMid slice" hidden/>
+          </svg>
+          <figcaption><span id="twin-chart-cap">Soil water over 2 weeks. Dashed: leaving it. Blue: cold nights. Tap a choice to draw it.</span>
+            <span class="sr-only" id="twin-chart-said" aria-live="polite">{% for ln in tc.lines if ln.action == tc.shown %}{{ ln.said }}{% endfor %}</span></figcaption>
+          <template id="twin-chart-words">{% for ln in tc.lines %}<span data-line="{{ ln.action }}">{{ ln.said }}</span>{% endfor %}</template>
+        </figure>{% endif %}
+        {% if a.compare %}<div class="scroll"><table><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr>
+        {% set drawn = tc.lines|map(attribute="action")|list if tc else [] %}
+        {% for r in a.compare %}<tr><td>{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-pressed="{{ 'true' if r.action == tc.shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="{{ r.vs_leaving_it }}">{{ "baseline" if r.action == "leave_normal" else r.vs_leaving_it }}</td><td>{{ r.why }}</td></tr>{% endfor %}
+        </table></div>{% else %}<p>Not compared: there is no cure, so the choices don't apply.</p>{% endif %}</details>
+      {% endif %}
+        {% if tc %}<script>
+        // Compare: a tap on a choice draws its line; the photo, when this tab has it, is the dot on Today
+        (() => {
+          const fig = document.getElementById("twin-chart"), said = document.getElementById("twin-chart-said");
+          const words = document.getElementById("twin-chart-words").content;
+          const picks = document.querySelectorAll(".twin-pick");
+          for (const b of picks) b.addEventListener("click", () => {
+            const line = b.dataset.line;
+            for (const g of fig.querySelectorAll(".twin-line")) g.classList.toggle("on", g.dataset.line === line);
+            for (const p of picks) p.setAttribute("aria-pressed", String(p === b));
+            const w = words.querySelector(`[data-line="${line}"]`);
+            said.textContent = w ? w.textContent : "";
+          });
+          const photo = document.getElementById("your-photo"), dot = document.getElementById("twin-chart-photo");
+          const show = () => { if (photo && !photo.hidden && photo.src) { dot.setAttribute("href", photo.src); dot.removeAttribute("hidden"); } };
+          show();
+          if (photo) new MutationObserver(show).observe(photo, {attributes: true, attributeFilter: ["src", "hidden"]});
+        })();
+        </script>{% endif %}
+      {{ evidence }}
+      {# "Send another photo" is said once, in What next (21 Oct, Kash) #}
+    </section>
+    </div>
+    </div>
+  {% else %}
+    {# no advice this time: still the photo you sent, so keeping this answer can keep it too
+       (declutter review) #}
+    {{ your_photo(solo=true) }}
+    {% if failed.get("advise") %}<section class="card main-action" aria-labelledby="main-action">
+      <h2 id="main-action">Could not form advice</h2>
+      <p>The advisor didn't give a usable answer this time. The weather and plant facts below still hold: try again in a minute.</p>
+    </section>{% endif %}
+    {{ evidence }}
+    <p><a class="button quiet" href="/">Send another photo</a></p>
+  {% endif %}
+{% endif %}
+{% endblock %}
+{% block photo_copy %}<script>
+(() => {
+  // the photo you sent: index.html left a small copy in this tab; the first answer page
+  // after the send claims it for its own id, so a reload or refine keeps showing it
+  const img = document.getElementById("your-photo");
+  try {
+    const store = window.sessionStorage;
+    if (!img) { store.removeItem("herbtwin-photo-pending"); return; }  // no plant answer
+    const mine = "herbtwin-photo:" + img.dataset.answer;
+    const pending = JSON.parse(store.getItem("herbtwin-photo-pending") || "null");
+    const more = "herbtwin-photo-more:" + img.dataset.answer;  // the closer looks, if any
+    if (pending && !store.getItem(mine) && Date.now() - pending.at < 10 * 60 * 1000) {
+      store.setItem(mine, pending.src);
+      if (Array.isArray(pending.more) && pending.more.length) store.setItem(more, JSON.stringify(pending.more.slice(0, 2)));
+    }
+    store.removeItem("herbtwin-photo-pending");
+    const src = store.getItem(mine);
+    if (!src || !src.startsWith("data:image/jpeg;base64,")) return;
+    img.src = src; img.hidden = false;
+    const ok = (s) => typeof s === "string" && s.startsWith("data:image/jpeg;base64,");
+    const box = document.getElementById("your-more"), extra = JSON.parse(store.getItem(more) || "[]");
+    if (!box || !Array.isArray(extra)) return;
+    extra.filter(ok).slice(0, 2).forEach((s, k) => {
+      const e = document.createElement("img");
+      e.src = s; e.alt = "Your photo " + (k + 2); e.width = e.height = 96;
+      box.append(e);
+    });
+    box.hidden = !box.children.length;
+  } catch { /* no storage here (private mode, full): the answer shows without the photo */ }
+})();
+</script>{% endblock %}

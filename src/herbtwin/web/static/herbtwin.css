@@ -1,0 +1,339 @@
+/* herbtwin's one stylesheet. Inlined into every page (base.html and the streamed progress
+   page), so there is no cache to bust. Colours, type and shape are the design repo's
+   "Soft: press green" style. Change a colour here, in the tokens, never in a page. */
+
+@font-face { font-family: Alegreya; font-weight: 700; font-display: swap;
+  src: url(/static/fonts/alegreya-700.woff2) format("woff2"); }
+@font-face { font-family: "Alegreya Sans"; font-weight: 400; font-display: swap;
+  src: url(/static/fonts/alegreya-sans-400.woff2) format("woff2"); }
+@font-face { font-family: "Alegreya Sans"; font-weight: 500; font-display: swap;
+  src: url(/static/fonts/alegreya-sans-500.woff2) format("woff2"); }
+@font-face { font-family: "Alegreya Sans"; font-weight: 700; font-display: swap;
+  src: url(/static/fonts/alegreya-sans-700.woff2) format("woff2"); }
+/* the home headline only: poster condensed, next to its OFL licence */
+@font-face { font-family: "Fira Sans Extra Condensed"; font-weight: 800; font-display: swap;
+  src: url(/static/fonts/fira-condensed-800.woff2) format("woff2"); }
+
+:root {
+  color-scheme: light;
+  --bg: #F5F3EE;          /* the page: warm white paper */
+  --fg: #1C1B19;          /* ink */
+  --card: #FFFFFF;
+  --muted: #ECEAE5;       /* quiet panels, table heads */
+  --muted-fg: #5C5850;    /* secondary text, AA on every surface and the trays */
+  --primary: #1A7A48;     /* print green: the one main action, links */
+  --primary-fg: #FFFFFF;
+  --soft: #E2F0E7;        /* green tray, chips */
+  --soft-strong: #C9E3D2; /* secondary buttons: a shade deeper than the tray */
+  --soft-line: #3E8A5E;   /* their edge, 3:1 on the page, a card and the tray */
+  --border: #CBC9C5;
+  --input: #8C887F;       /* field outlines, 3:1 */
+  --ring: #1A7A48;
+  --danger: #B91C1C;      /* delete and errors only */
+  --danger-fg: #FFFFFF;
+  --ok: #1D7041;
+  --warn: #995700;        /* "check first" text */
+  --warn-bg: #FBF0DA;     /* "check first" tray */
+  --warn-line: #E7C98B;
+  --pin: #D6431F;         /* the compass pin: decoration, never meaning */
+  --clay: #9A4A2A;        /* "Don't": a muted clay edge and label, never error red */
+  --clay-bg: #F6E9E2;
+  --band: #1F4D33;        /* the site header: deep green, white wordmark and nav */
+  --band-fg: #FFFFFF;
+  --band-muted: #CFE3D6;
+  --band-btn: #F5F3EE;    /* the main action on the band: a cream pill */
+  --band-btn-fg: #1F4D33;
+  --band-line: #CFE3D6;   /* secondary outlines on the band */
+  --poster: "Fira Sans Extra Condensed", "Arial Narrow", sans-serif;
+  --shadow: 0 1px 2px rgb(0 0 0 / .06), 0 8px 24px rgb(0 0 0 / .08);
+  --display: Alegreya, Georgia, serif;
+  --sans: "Alegreya Sans", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  --pill: 999px;
+  --surface: 16px;
+  --measure: 38rem;       /* the reading column */
+  --frame: 72rem;         /* the header, footer and wide pages */
+}
+
+/* dark follows the phone; a neutral slate night, only the greens carry over */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0E141B;
+    --fg: #E8EEF4;
+    --card: #151D26;
+    --muted: #1E2833;
+    --muted-fg: #8E9CAC;
+    --primary: #6CCF97;
+    --primary-fg: #08190F;
+    --soft: #1C3527;
+    --soft-strong: #24513A;
+    --soft-line: #4F9C72;
+    --border: #475362;
+    --input: #657486;
+    --ring: #6CCF97;
+    --danger: #EF4444;
+    --danger-fg: #0C0A09;
+    --ok: #86D9A6;
+    --warn: #F0BE66;
+    --warn-bg: #2A2418;
+    --warn-line: #6B5528;
+    --pin: #FF7A57;
+    --clay: #E39A76;
+    --clay-bg: #2B1F1A;
+    --band: #12291C;
+    --band-fg: #E8EEF4;
+    --band-muted: #A9C7B4;
+    --band-btn: #E8EEF4;
+    --band-btn-fg: #12291C;
+    --band-line: #A9C7B4;
+    --shadow: none;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }  /* a short page keeps the frame where a long one has it */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 17px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+img { max-width: 100%; height: auto; }
+[hidden] { display: none !important; }   /* buttons are inline-flex; hidden must still hide */
+
+/* ---------- frame: header band, main column, footer ----------
+   The frame is 72rem on every page, so the wordmark and nav sit in the same place
+   everywhere. `main .wrap` holds a 38rem reading column at the frame's left edge; for a
+   page that needs the room (answers, spots, home), the page adds ` wide` to it with
+   `{% block wrap %} wide{% endblock %}` and gets the whole 72rem. `.cols` then splits it:
+   one column on phones; at 960px and up the first child is the main column and the
+   second (an `<aside>`) a 22rem side column beside it. See static/pages/README.md. */
+.wrap { max-width: var(--frame); margin: 0 auto; padding: 0 16px; }
+main .wrap { padding-right: max(16px, calc(min(100%, var(--frame)) - var(--measure) + 16px)); }
+main .wrap.wide { padding-right: 16px; }
+@media (min-width: 960px) {
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 22rem); gap: 0 56px;
+    align-items: start; }
+  .cols > * { min-width: 0; }
+}
+
+/* the header band: deep green, white wordmark and nav. Phones: the wordmark and the
+   account on the first row, the three jobs on the second. Wide: one row. */
+.site { position: relative; background: var(--band); color: var(--band-fg); }
+.site .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px;
+  min-height: 60px; padding-top: 8px; padding-bottom: 4px; }
+.site :focus-visible { outline-color: var(--band-fg); }
+.wordmark { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-right: auto;
+  font: 700 24px/1 var(--display); letter-spacing: -0.015em; color: var(--band-fg); text-decoration: none; }
+.wordmark svg { width: 26px; height: 26px; color: var(--band-fg); }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0 24px; flex: 1 1 100%; margin: 0;
+  font-size: 17px; font-weight: 500; }
+.nav-jobs { display: flex; flex-wrap: wrap; gap: 0 20px; margin: 0; padding: 0; list-style: none; }
+.nav-jobs li { margin: 0; }
+.nav a, .nav .link { display: inline-flex; align-items: center; min-height: 44px; padding: 0;
+  color: var(--band-fg); font: inherit; text-decoration: none; }
+.nav a:hover, .nav .link:hover { color: var(--band-fg); text-decoration: underline;
+  text-decoration-thickness: 1px; text-underline-offset: 6px; }
+/* the page you are on: a bar under the word, like a tab, not colour alone */
+.nav a[aria-current="page"] { box-shadow: inset 0 -3px 0 var(--band-fg); }
+.nav a[aria-current="page"]:hover { text-decoration: none; }
+.nav-account { position: absolute; top: 8px; right: 16px; margin: 0; }
+@media (min-width: 720px) {
+  .site .wrap { flex-wrap: nowrap; padding-bottom: 8px; }
+  .wordmark { margin-right: 16px; }
+  .nav { flex: 1 1 auto; justify-content: space-between; }
+  .nav-account { position: static; }
+}
+@media (min-width: 720px) and (max-width: 960px) { .nav-jobs { gap: 0 16px; } }
+@media (prefers-color-scheme: dark) { .site { border-bottom: 1px solid var(--border); } }
+/* "Skip to content": off screen until a keyboard reaches it, then a chip over the band */
+.skip { position: absolute; left: 16px; top: -100px; z-index: 10; padding: 10px 16px; border-radius: var(--pill);
+  background: var(--card); color: var(--fg); font-weight: 700; }
+.skip:focus { top: 8px; }
+#content:focus { outline: none; }   /* the skip target: focus lands here, the ring would box the page */
+main { padding: 32px 0 48px; }
+.foot { border-top: 1px solid var(--border); padding: 16px 0 32px; font-size: 16px; color: var(--muted-fg); }
+.foot a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted-fg); }
+/* a link inside a sentence gets a 44px tap height without moving the text: inline padding
+   adds to the hit area, not the line (19 Oct pre-walk: "Photo credits" was 82 x 20) */
+.credits-link, .home-how-sources a, .answer-page :is(.decided-by, .sources-line, .note:not(.bed-offer), details p, figcaption) a { padding-block: 12px; }
+/* their focus marks the words, not the tap box: a ring round the padding sat 12px over the
+   lines above and below. The transparent outline still shows in forced colours. On the
+   green surfaces (the bands, home's "Decided by" pill) it inverts: the ring's green is 1.8:1 there */
+:is(.credits-link, .home-how-sources a, .answer-page :is(.decided-by, .sources-line, .note:not(.bed-offer), details p, figcaption) a):focus-visible {
+  outline: 2px solid transparent; background-color: var(--ring); background-clip: content-box;
+  color: var(--primary-fg); }
+:is(.page-band, .home-band, .home-how-sources) :is(.credits-link, .home-how-sources a, .answer-page :is(.decided-by, .sources-line, .note:not(.bed-offer), details p, figcaption) a):focus-visible {
+  background-color: var(--band-fg); color: var(--band); }
+.foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; }
+/* the wordmark on every page's footer (17 Oct: Kash, one product across pages); home keeps
+   its giant one, pages/home.css */
+.foot-mark { font: 800 clamp(2.4rem, 7vw, 4rem)/0.9 var(--poster); color: var(--soft-strong); margin-right: 8px; }
+.back { display: inline-flex; align-items: center; min-height: 44px; }
+
+/* ---------- type ---------- */
+h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.015em; line-height: 1.12;
+  margin: 0 0 12px; text-wrap: balance; }
+h1 { font-size: clamp(32px, 8vw, 44px); }
+h2 { font-size: 26px; margin-top: 40px; }
+h3 { font-size: 21px; margin-top: 28px; }
+h1 + h2, h2:first-child, h3:first-child { margin-top: 0; }
+p, ul, ol, dl, table, figure { margin: 0 0 16px; }
+ul, ol { padding-left: 1.25em; }
+li + li { margin-top: 4px; }
+.lead { font-size: 20px; line-height: 1.5; color: var(--fg); }
+small, .small { font-size: 16px; }  /* notes and hints: never under 16px */
+.muted { color: var(--muted-fg); }
+.err { color: var(--danger); font-weight: 500; }
+.done { color: var(--ok); font-weight: 500; }
+a { color: var(--primary); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+strong, b { font-weight: 700; }
+code { font: 15px var(--mono); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 32px 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- controls: pills, 44px tall, one green main action per screen ---------- */
+button, .button, #next {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 8px 20px; border: 1px solid var(--soft-line); border-radius: var(--pill);
+  background: var(--soft-strong); color: var(--fg); font: 500 16px/1.2 var(--sans);
+  text-decoration: none; cursor: pointer; text-align: center;
+  transition: background-color 120ms cubic-bezier(.2, 0, 0, 1);
+}
+button:hover, .button:hover { background: color-mix(in srgb, var(--soft-strong) 90%, var(--fg) 10%); }
+.primary, #next { background: var(--primary); color: var(--primary-fg); border-color: transparent; }
+.primary:hover, #next:hover { background: color-mix(in srgb, var(--primary) 86%, var(--bg)); }
+.quiet { background: transparent; border-color: var(--border); }
+.quiet:hover { background: var(--muted); }
+.danger { background: transparent; color: var(--danger); border-color: currentColor; }
+.danger:hover { background: var(--danger); color: var(--danger-fg); border-color: var(--danger); }
+.link { min-height: 44px; padding: 0; border: 0; background: none; color: var(--primary);
+  font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+.link:hover { background: none; text-decoration-thickness: 2px; }
+.big { min-height: 56px; padding: 12px 28px; font-size: 18px; }
+.wide { width: 100%; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 16px 0; }
+
+:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+
+label { display: block; margin: 0 0 12px; font-weight: 500; }
+label small, .hint { display: block; font-weight: 400; color: var(--muted-fg); }
+input[type=text], input[type=email], input[type=password], input[type=search], input:not([type]),
+select, textarea {
+  display: block; width: 100%; max-width: 100%; min-height: 44px; margin-top: 4px; padding: 10px 16px;
+  border: 1px solid var(--input); border-radius: 12px; background: var(--card); color: var(--fg);
+  font: 400 17px/1.4 var(--sans);
+}
+textarea { min-height: 88px; resize: vertical; }
+input[type=file] { display: block; width: 100%; margin-top: 4px; font: inherit; color: var(--muted-fg); }
+input[type=file]::file-selector-button {
+  min-height: 44px; margin-right: 12px; padding: 8px 20px; border: 0; border-radius: var(--pill);
+  background: var(--primary); color: var(--primary-fg); font: 500 16px var(--sans); cursor: pointer;
+}
+input[type=checkbox], input[type=radio] { width: 22px; height: 22px; margin: 0 8px 0 0;
+  vertical-align: -5px; accent-color: var(--primary); }
+fieldset { margin: 0 0 16px; padding: 16px; border: 1px solid var(--border); border-radius: var(--surface); }
+legend { padding: 0 6px; font-weight: 700; }
+
+/* ---------- surfaces ---------- */
+.card { margin: 0 0 16px; padding: 20px; border-radius: var(--surface); background: var(--card);
+  box-shadow: var(--shadow); }
+@media (prefers-color-scheme: dark) { .card { border: 1px solid var(--border); } }
+.card > :last-child, .tray > :last-child, fieldset > :last-child { margin-bottom: 0; }
+.tray { margin: 0 0 16px; padding: 16px 20px; border-radius: var(--surface); background: var(--soft); }
+.tray.warn { background: var(--warn-bg); border: 1px solid var(--warn-line); }
+.tray.warn strong:first-child { color: var(--warn); }
+.chip, .tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px;
+  border-radius: var(--pill); background: var(--soft); font-size: 14px; font-weight: 700; line-height: 1.5; }
+.tag.warn { background: var(--warn-bg); color: var(--warn); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
+.chips li { margin: 0; }
+
+details { margin: 0 0 16px; border: 1px solid var(--border); border-radius: var(--surface); background: var(--card); }
+summary { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 20px; cursor: pointer;
+  font-weight: 700; list-style: none; }
+/* a flex summary loses the browser's triangle (Safari keeps its own), so draw one chevron
+   at the far end: down when shut, up when open */
+summary::-webkit-details-marker { display: none; }
+summary::after { content: ""; flex: none; width: 8px; height: 8px; margin: 0 2px 4px auto;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); }
+details[open] > summary::after { margin-bottom: -4px; transform: rotate(-135deg); }
+details[open] summary { border-bottom: 1px solid var(--border); }
+details > :not(summary) { margin-left: 20px; margin-right: 20px; }
+details > :nth-child(2) { margin-top: 16px; }
+details > :last-child { margin-bottom: 20px; }
+
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--muted); font-weight: 700; }
+
+/* ---------- the progress page: a calm list of steps, the newest one marked ---------- */
+.progress ol { list-style: none; margin: 24px 0; padding: 0; }
+.progress ol > li { position: relative; margin: 0; padding: 8px 0 8px 36px; color: var(--muted-fg); }
+.progress ol > li::before { content: ""; position: absolute; left: 6px; top: 16px; width: 12px; height: 12px;
+  border-radius: 50%; background: var(--primary); opacity: .4; }
+.progress ol > li:not(:last-of-type)::after { content: ""; position: absolute; left: 11px; top: 30px; bottom: -14px;
+  width: 2px; background: var(--border); }
+/* `now` is set by the stream as each step arrives (progress.py); without script, the
+   last step, until the read ends (done or failed): then nothing is being worked on */
+.progress li.now, html:not(.js) .progress-steps:not(:has(> .err, > .ready)) ol:last-of-type > li:last-of-type { color: var(--fg); font-weight: 700; }
+.progress li.now::before, html:not(.js) .progress-steps:not(:has(> .err, > .ready)) ol:last-of-type > li:last-of-type::before { opacity: 1;
+  box-shadow: 0 0 0 4px var(--soft); animation: now 1.6s ease-in-out infinite; }
+@keyframes now { 50% { box-shadow: 0 0 0 8px var(--soft); } }
+.progress .waited { margin: 4px 0 14px; color: var(--band-fg); font-variant-numeric: tabular-nums; }
+.progress-steps { max-width: 38rem; }  /* the reading column, as before the band */
+.progress-steps ol { margin: 8px 0 0; } /* the steps sit on the card, under the band */
+@media (prefers-reduced-motion: reduce) { .progress li::before { animation: none !important; } }
+
+/* a plain hairline between parts of a page (it replaced Quadrat's ruler tape, 13 Oct) */
+.divider { display: block; height: 0; margin: 32px 0; border: 0; border-top: 1px solid var(--border); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* "Hear it from your plant": a secondary button under the answer, the words it said below */
+.voice { display: grid; gap: 8px; justify-items: start; margin-top: 12px; }
+.voice audio { width: 100%; max-width: 360px; }
+.voice .said { margin: 0; color: var(--muted-fg); font-style: italic; }
+.voice .said::before { content: "\201C"; }
+.voice .said::after { content: "\201D"; }
+
+/* ---------- the poster band and inked cards: the home page's look, on result pages ----------
+   A page opens with `.page-band` straight under the header (same green, full bleed), its
+   heading in the poster face; the first card below pulls up over the band's edge
+   (`.band-overlap`). `.ink` is the home tiles' edge: an ink line and a hard shadow, so a
+   card stands off the paper. Lime is for the one thing to press on the band. */
+:root { --lime: #C9F27B; --lime-fg: #12291C; --ink-shadow: var(--fg);
+  --sky: #E3EEF6; --sky-fg: #2F6690; }
+@media (prefers-color-scheme: dark) { :root { --ink-shadow: #000; --sky: #1B2B3A; --sky-fg: #8CC2EE; } }
+.has-band { overflow-x: clip; }   /* 100vw counts a classic scrollbar: clip it, never scroll */
+.has-band main { padding-top: 0; }
+/* the band's full bleed (50% - 50vw) holds only in a centred column: a page that keeps the
+   38rem reading column (message.html: the limit and not-found pages) has a wide right
+   padding, so its band sat 279px left and stopped short on the right (21 Oct, Kash at 2000px).
+   A wrap that holds a band is centred, as a wide one is */
+main .wrap:has(> .page-band) { padding-right: 16px; }
+.page-band { margin: 0 calc(50% - 50vw); padding: 12px max(16px, calc(50vw - var(--frame) / 2 + 16px)) 72px;
+  background: var(--band); color: var(--band-fg); }
+.page-band :focus-visible { outline-color: var(--band-fg); }
+.page-band h1 { margin: 0 0 10px; font: 800 clamp(2.3rem, 6vw, 4.2rem)/0.95 var(--poster); letter-spacing: 0; }
+.page-band p { max-width: 46rem; color: var(--band-muted); }
+.page-band a { color: var(--band-fg); }
+.page-band .band-go { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 20px;
+  border-radius: var(--pill); background: var(--lime); color: var(--lime-fg); font-weight: 700; text-decoration: none; }
+.page-band .band-go:hover { background: #B8E866; color: var(--lime-fg); }
+.band-overlap { position: relative; margin-top: -48px; }
+.ink { border: 1.5px solid var(--fg); box-shadow: 5px 5px 0 var(--ink-shadow); }
+@media (max-width: 720px) { .page-band { padding-bottom: 60px; } .band-overlap { margin-top: -40px; } }
+/* buttons on the band: lime for the one to press, an outline for the other */
+.page-band .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.page-band .button.primary { background: var(--lime); border-color: var(--lime); color: var(--lime-fg); }
+.page-band .button.primary:hover { background: #B8E866; border-color: #B8E866; }
+.page-band .button:not(.primary) { background: transparent; border: 2px solid var(--band-line); color: var(--band-fg); }
+.page-band .button:not(.primary):hover { background: rgb(255 255 255 / .08); }

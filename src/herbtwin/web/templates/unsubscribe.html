@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Stop a reminder · herbtwin{% endblock %}
+{% block main %}
+<h1>Stop this reminder?</h1>
+<p class="lead">Stop the reminder email for this answer? You will get no email about it.</p>
+<form method="post" action="/reminders/unsubscribe"><input type="hidden" name="a" value="{{ a }}"><input type="hidden" name="t" value="{{ t }}"><button class="primary" type="submit">Stop this reminder</button></form>
+{% endblock %}

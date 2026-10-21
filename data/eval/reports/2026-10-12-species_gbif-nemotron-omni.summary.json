@@ -1,0 +1,68 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "82c063e",
+  "largest_disagreements": [
+    "species_gbif/2963848468",
+    "species_gbif/3355260351",
+    "species_gbif/3415379929",
+    "species_gbif/3912032612",
+    "species_gbif/3994136587"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 1897,
+  "metrics": {
+    "genus_top1": {
+      "hi": 0.7533333333333333,
+      "lo": 0.6066666666666667,
+      "skipped": 0,
+      "value": 0.68
+    },
+    "top1": {
+      "hi": 0.6666666666666666,
+      "lo": 0.5066666666666667,
+      "skipped": 0,
+      "value": 0.5866666666666667
+    },
+    "top3": {
+      "hi": 0.7533333333333333,
+      "lo": 0.6066666666666667,
+      "skipped": 0,
+      "value": 0.68
+    }
+  },
+  "model": "dedicated/nvidia/Nemotron-3-Nano-Omni-2j6OgDCI6TwX",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 1,
+  "n_ok": 150,
+  "n_total": 150,
+  "per_species_top1": {
+    "acer palmatum": 0.9,
+    "allium schoenoprasum": 0.9,
+    "allium tuberosum": 0.0,
+    "artemisia dracunculus": 0.2,
+    "coriandrum sativum": 1.0,
+    "dryopteris filix-mas": 0.2,
+    "melissa officinalis": 0.0,
+    "mentha spicata": 1.0,
+    "ocimum basilicum": 0.9,
+    "origanum vulgare": 0.2,
+    "petroselinum crispum": 0.8,
+    "polystichum setiferum": 0.1,
+    "salvia officinalis": 0.7,
+    "salvia rosmarinus": 1.0,
+    "thymus vulgaris": 0.9
+  },
+  "prompt_hash": "44ea8edaea55",
+  "run_id": "2026-10-12-species_gbif-nemotron-omni",
+  "set": "species_gbif",
+  "tags": {
+    "safe-to-train": 150
+  },
+  "temperature": 0
+}

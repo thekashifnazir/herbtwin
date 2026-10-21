@@ -1,0 +1,14 @@
+{# The site nav on the header band: the two jobs, then the account. Pages call
+   `site_nav(person=None, accounts=True, here="")` (it is `nav.site_nav`, which fills in what
+   a page leaves out from the request); base.html calls it for pages that don't. #}
+{% set site_nav = nav_for_page %}
+{% macro links(signed_in, accounts, here) %}
+<nav class="nav" aria-label="Site">
+  <ul class="nav-jobs">
+    <li><a href="/"{% if here == "check" %} aria-current="page"{% endif %}>Check a plant</a></li>
+    {% if signed_in %}<li><a href="/plants"{% if here == "plants" %} aria-current="page"{% endif %}>My plants</a></li>{% endif %}
+  </ul>
+  {% if signed_in %}<form class="nav-account" method="post" action="/auth/sign-out"><button class="link" type="submit">Sign out</button></form>
+  {% elif accounts %}<a class="nav-account" href="/auth/sign-in"{% if here == "sign-in" %} aria-current="page"{% endif %}>Sign in</a>{% endif %}
+</nav>
+{% endmacro %}

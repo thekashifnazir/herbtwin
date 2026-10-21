@@ -1,0 +1,62 @@
+{
+  "backend": "ollama",
+  "constant_prediction": null,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "23389bd",
+  "largest_disagreements": [
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_010",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_015",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_025",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_027",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_028"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 3110,
+  "metrics": {
+    "balanced_accuracy": {
+      "hi": 0.9416666666666667,
+      "lo": 0.8389830508474576,
+      "skipped": 0,
+      "value": 0.8916666666666666
+    },
+    "precision": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "skipped": 0,
+      "value": 1.0
+    },
+    "recall": {
+      "hi": 0.8833333333333333,
+      "lo": 0.6779661016949152,
+      "skipped": 0,
+      "value": 0.7833333333333333
+    },
+    "specificity": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "skipped": 0,
+      "value": 1.0
+    }
+  },
+  "model": "nvidia/Cosmos-Reason2-32B",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 120,
+  "n_total": 120,
+  "pred_histogram": {
+    "0": 73,
+    "2": 2,
+    "3": 45
+  },
+  "prompt_hash": "44ea8edaea55",
+  "run_id": "2026-10-15-decline_indoor-cosmos-reason2-32b",
+  "set": "decline_indoor",
+  "tags": {
+    "safe-to-train": 120
+  },
+  "temperature": 0
+}

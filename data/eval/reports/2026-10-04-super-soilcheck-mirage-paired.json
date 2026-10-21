@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = soil_check minus always_answer; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "always_answer": "2026-10-04-super-mirage-always.jsonl",
+    "soil_check": "2026-10-04-super-mirage-soilcheck.jsonl"
+  },
+  "n_paired": 200,
+  "ask_first_primary": {
+    "always_answer": 0,
+    "soil_check": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "always_answer": 0.445,
+      "soil_check": 0.445,
+      "diff": 0.0,
+      "lo": -0.05,
+      "hi": 0.05,
+      "n": 200
+    },
+    "primary_in_truth": {
+      "always_answer": 0.675,
+      "soil_check": 0.65,
+      "diff": -0.025,
+      "lo": -0.085,
+      "hi": 0.035,
+      "n": 200
+    },
+    "jaccard": {
+      "always_answer": 0.3402797619047619,
+      "soil_check": 0.3249404761904762,
+      "diff": -0.015339285714285713,
+      "lo": -0.04846428571428572,
+      "hi": 0.019041666666666665,
+      "n": 200
+    },
+    "over_treatment": {
+      "always_answer": 0.005,
+      "soil_check": 0.01,
+      "diff": 0.005,
+      "lo": 0.0,
+      "hi": 0.015,
+      "n": 200
+    },
+    "water_conflict": {
+      "always_answer": 0.055,
+      "soil_check": 0.015,
+      "diff": -0.04,
+      "lo": -0.07,
+      "hi": -0.01,
+      "n": 200
+    },
+    "unguarded_water_conflict": {
+      "always_answer": 0.04,
+      "soil_check": 0.0,
+      "diff": -0.04,
+      "lo": -0.07,
+      "hi": -0.015,
+      "n": 200
+    },
+    "asked_when_expert_asked": {
+      "always_answer": 0.3055555555555556,
+      "soil_check": 0.4166666666666667,
+      "diff": 0.1111111111111111,
+      "lo": -0.013888888888888888,
+      "hi": 0.2361111111111111,
+      "n": 72
+    },
+    "primary_ok_if_asked_too": {
+      "always_answer": 0.445,
+      "soil_check": 0.445,
+      "diff": 0.0,
+      "lo": -0.05,
+      "hi": 0.05,
+      "n": 200
+    }
+  }
+}

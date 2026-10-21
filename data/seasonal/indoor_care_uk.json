@@ -1,0 +1,807 @@
+[
+  {
+    "group": "soft herbs",
+    "plants": [
+      "ocimum basilicum",
+      "petroselinum crispum",
+      "coriandrum sativum",
+      "anethum graveolens",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis"
+    ],
+    "months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "normal": "Slower growth and smaller leaves are normal on a windowsill now: the light is weak. Some herbs, like parsley, keep cropping with enough light and warmth; short-lived ones fade.",
+    "tips": [
+      "Light: your sunniest windowsill; don't leave it behind closed curtains at night.",
+      "Water: only when the top of the compost feels dry; a cool room needs it less often.",
+      "Warmth: off the radiator shelf and out of cold draughts; basil wants a warm room.",
+      "Picking: take a few leaves or shoot tips at a time, so it stays bushy."
+    ],
+    "also_do": "move_light",
+    "because": "the light is weakest now, and a herb indoors needs all it can get.",
+    "if_you_do": "More light means sturdier growth instead of pale, stretched stems.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care",
+      "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+      "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+      "https://www.rhs.org.uk/herbs/chives/grow-your-own",
+      "https://hgic.clemson.edu/factsheet/herbs/",
+      "https://www.rhs.org.uk/herbs/coriander/grow-your-own"
+    ]
+  },
+  {
+    "group": "soft herbs",
+    "plants": [
+      "ocimum basilicum",
+      "petroselinum crispum",
+      "coriandrum sativum",
+      "anethum graveolens",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis"
+    ],
+    "months": [
+      3,
+      4,
+      5
+    ],
+    "normal": "Growth picks up as the days lengthen: new shoots and bigger leaves are normal now.",
+    "tips": [
+      "Light: a bright windowsill; south or west facing suits most herbs.",
+      "Water: keep the compost moist but never soggy; it needs water more often as it grows.",
+      "Feeding: a balanced liquid feed now and then while it grows, not a high-potash one.",
+      "Pots: when it fills its pot, go only 5 to 10 cm wider."
+    ],
+    "also_do": "feed",
+    "because": "it is growing again, and houseplant feeding starts in March.",
+    "if_you_do": "Steadier growth and more leaves to pick through spring and summer.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/containers",
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://hgic.clemson.edu/factsheet/herbs/"
+    ]
+  },
+  {
+    "group": "soft herbs",
+    "plants": [
+      "ocimum basilicum",
+      "petroselinum crispum",
+      "coriandrum sativum",
+      "anethum graveolens",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis"
+    ],
+    "months": [
+      6,
+      7,
+      8
+    ],
+    "normal": "Fast growth is normal now, and some herbs try to flower or run to seed indoors.",
+    "tips": [
+      "Light: bright, but hot midday sun through the glass can scorch soft leaves.",
+      "Water: check every day or two in hot weather; water in the morning if you can.",
+      "Picking: pinch out shoot tips often, so it stays bushy.",
+      "Feeding: carry on with a balanced feed until October."
+    ],
+    "also_do": "move_light",
+    "because": "hot sun through the glass can scorch soft leaves in summer.",
+    "if_you_do": "Out of the midday glare, the leaves are less likely to scorch.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/herbs/containers",
+      "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+      "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+      "https://hgic.clemson.edu/factsheet/herbs/"
+    ]
+  },
+  {
+    "group": "soft herbs",
+    "plants": [
+      "ocimum basilicum",
+      "petroselinum crispum",
+      "coriandrum sativum",
+      "anethum graveolens",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis"
+    ],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "Growth slows as the days shorten; that is normal on a windowsill. Short-lived herbs go pale in low light and may be near their end.",
+    "tips": [
+      "Light: move it to your sunniest windowsill as the light drops.",
+      "Water: less often as growth slows; let the top of the compost dry first.",
+      "Warmth: once the heating comes on, keep it off the radiator shelf.",
+      "Feeding: from November, once a month at most."
+    ],
+    "also_do": "move_light",
+    "because": "the light is dropping fast, and a herb indoors needs all it can get.",
+    "if_you_do": "More light means sturdier growth instead of pale, stretched stems.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care",
+      "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+      "https://hgic.clemson.edu/factsheet/herbs/"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "laurus nobilis",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "origanum vulgare",
+      "artemisia dracunculus"
+    ],
+    "months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "normal": "Little or no new growth is normal now. These herbs do better in a cool, bright room than a warm, dim one.",
+    "tips": [
+      "Light: the brightest windowsill you have, ideally in a cool room.",
+      "Water: sparingly; let the top of the compost dry, and never let the pot stand in water.",
+      "Warmth: well away from radiators; a warm, dim room gives weak growth."
+    ],
+    "also_do": "move_light",
+    "because": "the light is weakest now, and these herbs want all of it.",
+    "if_you_do": "More light means sturdier growth instead of pale, stretched stems.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "laurus nobilis",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "origanum vulgare",
+      "artemisia dracunculus"
+    ],
+    "months": [
+      3,
+      4,
+      5
+    ],
+    "normal": "New shoots are normal now as the days lengthen.",
+    "tips": [
+      "Light: as much as possible; a sunny windowsill.",
+      "Water: when the top of the compost is dry; it never wants to be soggy.",
+      "Pots: when it fills its pot, go only 5 to 10 cm wider."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/herbs/containers",
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/plants/bay-tree/growing-guide"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "laurus nobilis",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "origanum vulgare",
+      "artemisia dracunculus"
+    ],
+    "months": [
+      6,
+      7,
+      8
+    ],
+    "normal": "Steady growth is normal; these herbs like sun and compost that is never wet for long.",
+    "tips": [
+      "Light: full sun suits them, but watch for scorch through the glass on the hottest days.",
+      "Water: when the top of the compost is dry; more often in hot spells.",
+      "Feeding: a balanced feed now and then, not a high-potash one."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/herbs/containers",
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "laurus nobilis",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "origanum vulgare",
+      "artemisia dracunculus"
+    ],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "Growth slows as the days shorten; that is normal.",
+    "tips": [
+      "Light: the sunniest spot you have as the light fades.",
+      "Water: less as growth slows; never let it sit wet.",
+      "Warmth: off the radiator shelf once the heating comes on."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "leafy houseplants",
+    "plants": [
+      "spathiphyllum",
+      "chlorophytum comosum",
+      "epipremnum aureum",
+      "monstera deliciosa",
+      "ficus lyrata"
+    ],
+    "months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "normal": "Little new growth is normal in winter: the light is low. Brown leaf edges can mean too little water or a radiator too close.",
+    "tips": [
+      "Light: out of dark corners to a brighter spot, and not behind closed curtains at night.",
+      "Water: less than in summer, when the top of the compost is dry; use water at room temperature.",
+      "Air: central heating dries the air; stand it on a tray of damp gravel or group plants together.",
+      "Warmth: away from radiators, fires and cold draughts.",
+      "Feeding: little or none until March."
+    ],
+    "also_do": "humidity",
+    "because": "central heating dries the air, which some houseplants struggle with.",
+    "if_you_do": "A tray of damp gravel or plants grouped together keep the air round the leaves moister.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care"
+    ]
+  },
+  {
+    "group": "leafy houseplants",
+    "plants": [
+      "spathiphyllum",
+      "chlorophytum comosum",
+      "epipremnum aureum",
+      "monstera deliciosa",
+      "ficus lyrata"
+    ],
+    "months": [
+      3,
+      4,
+      5
+    ],
+    "normal": "New leaves are normal now as the light improves.",
+    "tips": [
+      "Light: bright, out of hot midday sun.",
+      "Water: more often as it grows; still let the top of the compost dry first.",
+      "Feeding: start again in March, following the label.",
+      "Repotting: spring is the time; most need a bigger pot every two to three years."
+    ],
+    "also_do": "repot",
+    "because": "spring is the time to pot on, if the roots fill the pot or the compost dries out very fast.",
+    "if_you_do": "A slightly bigger pot and fresh compost give it room to grow through summer.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "leafy houseplants",
+    "plants": [
+      "spathiphyllum",
+      "chlorophytum comosum",
+      "epipremnum aureum",
+      "monstera deliciosa",
+      "ficus lyrata"
+    ],
+    "months": [
+      6,
+      7,
+      8
+    ],
+    "normal": "Steady new growth is normal now.",
+    "tips": [
+      "Light: out of strong sun through the glass, which can scorch leaves.",
+      "Water: check more often in warm spells; never leave the pot standing in water.",
+      "Air: mist it often in hot weather, or use a tray of damp gravel.",
+      "Feeding: regularly until October, following the label."
+    ],
+    "also_do": "feed",
+    "because": "it is growing, and houseplants are fed from March to October.",
+    "if_you_do": "Steadier growth through summer.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "leafy houseplants",
+    "plants": [
+      "spathiphyllum",
+      "chlorophytum comosum",
+      "epipremnum aureum",
+      "monstera deliciosa",
+      "ficus lyrata"
+    ],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "Growth slows as the days shorten; that is normal.",
+    "tips": [
+      "Light: move it closer to a window as the light drops.",
+      "Water: less often as growth slows.",
+      "Warmth: when the heating comes on, keep it off radiators and out of draughts.",
+      "Feeding: from November, once a month at most."
+    ],
+    "also_do": "move_light",
+    "because": "the light is dropping, and a brighter spot keeps it growing steadily.",
+    "if_you_do": "More light in winter means less weak, stretched growth.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care"
+    ]
+  },
+  {
+    "group": "succulents",
+    "plants": [
+      "aloe vera"
+    ],
+    "months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "normal": "A rest is normal now: no new growth, and compost dry for weeks, is fine until early March.",
+    "tips": [
+      "Light: a sunny windowsill all year.",
+      "Water: little or none until March.",
+      "Warmth: fine in a heated room, but not on the radiator shelf; dry air doesn't bother it."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "succulents",
+    "plants": [
+      "aloe vera"
+    ],
+    "months": [
+      3,
+      4,
+      5
+    ],
+    "normal": "Growth starts again from March as the light improves.",
+    "tips": [
+      "Light: a sunny windowsill.",
+      "Water: when the compost is dry to the touch.",
+      "Repotting: spring is the time, into a pot only a little bigger."
+    ],
+    "also_do": "repot",
+    "because": "spring is the time to repot, if it has filled its pot.",
+    "if_you_do": "Fresh compost and a pot only a little bigger keep it growing without sitting wet.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "succulents",
+    "plants": [
+      "aloe vera"
+    ],
+    "months": [
+      6,
+      7,
+      8
+    ],
+    "normal": "Slow, steady growth is normal now.",
+    "tips": [
+      "Light: a sunny windowsill.",
+      "Water: when the compost is dry to the touch, then let it drain.",
+      "Feeding: once a month, April to September."
+    ],
+    "also_do": "feed",
+    "because": "it is growing, and a monthly feed from April to September is enough.",
+    "if_you_do": "Steady growth through summer.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "succulents",
+    "plants": [
+      "aloe vera"
+    ],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "Growth slows ahead of the winter rest.",
+    "tips": [
+      "Light: a sunny windowsill.",
+      "Water: less and less from October; no feed after September.",
+      "Warmth: away from radiators once the heating comes on."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "christmas cactus",
+    "plants": [
+      "schlumbergera"
+    ],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "From mid-September a rest is normal, until flower buds appear: cool nights and dark evenings help the buds form.",
+    "tips": [
+      "Light: bright but not full sun; no lamp near it after dark, or it may not flower.",
+      "Water: only once the compost has dried a few centimetres down.",
+      "Warmth: a cool room, about 12 to 15°C, helps it set buds.",
+      "Feeding: stop at the end of September."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/christmas-cactus/how-to-grow"
+    ]
+  },
+  {
+    "group": "christmas cactus",
+    "plants": [
+      "schlumbergera"
+    ],
+    "months": [
+      11,
+      12,
+      1
+    ],
+    "normal": "Flowering is normal from late November to late January.",
+    "tips": [
+      "Light: bright, out of direct midday sun.",
+      "Water: when the top of the compost is dry; too much water can make buds drop.",
+      "Warmth: keep it steady; temperature swings and cold draughts make buds drop.",
+      "Air: mist it now and then, or stand it on a tray of damp gravel."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/christmas-cactus/how-to-grow"
+    ]
+  },
+  {
+    "group": "christmas cactus",
+    "plants": [
+      "schlumbergera"
+    ],
+    "months": [
+      2
+    ],
+    "normal": "A second rest after flowering is normal, until late March.",
+    "tips": [
+      "Light: bright but not full sun.",
+      "Water: only once the compost has dried a few centimetres down.",
+      "Warmth: a cool room, about 12 to 15°C, never below 10°C."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/christmas-cactus/how-to-grow"
+    ]
+  },
+  {
+    "group": "christmas cactus",
+    "plants": [
+      "schlumbergera"
+    ],
+    "months": [
+      3
+    ],
+    "normal": "Its rest ends late in March, the time to repot.",
+    "tips": [
+      "Light: bright but not full sun.",
+      "Water: only once the compost has dried a few centimetres down.",
+      "Repotting: at the end of March, if it has filled its pot."
+    ],
+    "also_do": "repot",
+    "because": "the end of March is the time to repot a Christmas cactus.",
+    "if_you_do": "Fresh compost at the start of its growing months.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/christmas-cactus/how-to-grow"
+    ]
+  },
+  {
+    "group": "christmas cactus",
+    "plants": [
+      "schlumbergera"
+    ],
+    "months": [
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "normal": "Growth is normal now: new segments form through summer.",
+    "tips": [
+      "Light: bright, but not full sun.",
+      "Water: regularly, when the top of the compost starts to dry.",
+      "Warmth: 18 to 20°C suits it while it grows.",
+      "Feeding: from April to the end of September."
+    ],
+    "also_do": "feed",
+    "because": "it is growing, and it is fed from April to the end of September.",
+    "if_you_do": "Steady growth through summer.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/christmas-cactus/how-to-grow"
+    ]
+  },
+  {
+    "group": "moth orchid",
+    "plants": [
+      "phalaenopsis"
+    ],
+    "months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "normal": "A flower spike now is normal: a moth orchid can flower at any time of year.",
+    "tips": [
+      "Light: bright light helps it flower; an east or west windowsill is ideal.",
+      "Water: about once a week.",
+      "Warmth: above 16°C, away from radiators and draughts; cold makes buds drop.",
+      "Feeding: sparingly or not at all in winter."
+    ],
+    "also_do": "move_light",
+    "because": "bright winter light encourages it to flower.",
+    "if_you_do": "A better chance of a flower spike in the coming months.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care"
+    ]
+  },
+  {
+    "group": "moth orchid",
+    "plants": [
+      "phalaenopsis"
+    ],
+    "months": [
+      3,
+      4,
+      5
+    ],
+    "normal": "New leaves and roots are normal now.",
+    "tips": [
+      "Light: bright, but out of direct sun, which can scorch the leaves.",
+      "Water: about once a week.",
+      "Repotting: any time it needs it; fresh orchid compost every couple of years.",
+      "Feeding: regularly while it grows."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide"
+    ]
+  },
+  {
+    "group": "moth orchid",
+    "plants": [
+      "phalaenopsis"
+    ],
+    "months": [
+      6,
+      7,
+      8
+    ],
+    "normal": "Steady leaf and root growth is normal.",
+    "tips": [
+      "Light: out of direct sun, which can scorch the leaves.",
+      "Water: about once a week.",
+      "Air: mist it daily in hot weather, or stand it on damp gravel."
+    ],
+    "also_do": "humidity",
+    "because": "hot weather dries the air it grows in.",
+    "if_you_do": "Daily misting or a tray of damp gravel gives it the moist air it likes.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide"
+    ]
+  },
+  {
+    "group": "moth orchid",
+    "plants": [
+      "phalaenopsis"
+    ],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "A moth orchid can flower at any time of year, so no spike now is normal too.",
+    "tips": [
+      "Light: bright, out of direct sun.",
+      "Water: about once a week.",
+      "Warmth: if it hasn't flowered for a while, a spot about 5°C cooler for a month can start a spike."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide"
+    ]
+  },
+  {
+    "group": "any indoor plant",
+    "plants": [],
+    "months": [
+      11,
+      12,
+      1,
+      2
+    ],
+    "normal": "Little new growth is normal in winter: daylight is weak.",
+    "tips": [
+      "Light: out of dark corners to a brighter spot, and not behind closed curtains at night.",
+      "Water: less than in summer, when the top of the compost is dry.",
+      "Air: central heating dries the air; a tray of damp gravel or grouping plants helps.",
+      "Warmth: away from radiators, fires and cold draughts.",
+      "Feeding: little or none until March."
+    ],
+    "also_do": "move_light",
+    "because": "winter light is weak, and a dark corner gives weak, pale growth.",
+    "if_you_do": "More light in winter means less weak, stretched growth.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care"
+    ]
+  },
+  {
+    "group": "any indoor plant",
+    "plants": [],
+    "months": [
+      3,
+      4,
+      5
+    ],
+    "normal": "New growth is normal as the days lengthen.",
+    "tips": [
+      "Light: bright, out of hot midday sun.",
+      "Water: more often as it grows; still let the top of the compost dry first.",
+      "Feeding: start again in March, following the label.",
+      "Repotting: spring is the time, if the roots fill the pot."
+    ],
+    "also_do": null,
+    "because": null,
+    "if_you_do": null,
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "any indoor plant",
+    "plants": [],
+    "months": [
+      6,
+      7,
+      8
+    ],
+    "normal": "Steady growth is normal now.",
+    "tips": [
+      "Light: out of strong sun through the glass, which can scorch leaves.",
+      "Water: check more often in warm spells; never leave the pot standing in water.",
+      "Feeding: regularly until October, following the label."
+    ],
+    "also_do": "feed",
+    "because": "it is growing, and houseplants are fed from March to October.",
+    "if_you_do": "Steadier growth through summer.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+    ]
+  },
+  {
+    "group": "any indoor plant",
+    "plants": [],
+    "months": [
+      9,
+      10
+    ],
+    "normal": "Growth slows as the days shorten; that is normal.",
+    "tips": [
+      "Light: move it closer to a window as the light drops.",
+      "Water: less often as growth slows.",
+      "Warmth: when the heating comes on, keep it off radiators and out of draughts.",
+      "Feeding: from November, once a month at most."
+    ],
+    "also_do": "move_light",
+    "because": "the light is dropping, and a brighter spot keeps it growing steadily.",
+    "if_you_do": "More light in winter means less weak, stretched growth.",
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/plants/types/houseplants/growing-guide",
+      "https://www.rhs.org.uk/plants/types/houseplants/winter-interest-houseplants-care"
+    ]
+  }
+]

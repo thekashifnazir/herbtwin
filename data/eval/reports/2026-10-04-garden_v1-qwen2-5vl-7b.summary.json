@@ -1,0 +1,69 @@
+{
+  "backend": "ollama",
+  "constant_prediction": null,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "e558326",
+  "largest_disagreements": [
+    "garden_v1/c021",
+    "garden_v1/c058",
+    "garden_v1/c060",
+    "garden_v1/c062",
+    "garden_v1/c063"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 11633,
+  "metrics": {
+    "exact": {
+      "hi": 0.7482014388489209,
+      "lo": 0.31901840490797545,
+      "skipped": 0,
+      "value": 0.5355191256830601
+    },
+    "mae": {
+      "hi": 0.8333333333333334,
+      "lo": 0.28169014084507044,
+      "skipped": 0,
+      "value": 0.546448087431694
+    },
+    "qwk": {
+      "hi": 0.5383096366508688,
+      "lo": -0.04029262802476086,
+      "skipped": 0,
+      "value": 0.28230964160733674
+    },
+    "within_one": {
+      "hi": 0.9829545454545454,
+      "lo": 0.8153153153153153,
+      "skipped": 0,
+      "value": 0.9180327868852459
+    }
+  },
+  "model": "qwen2.5vl:7b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 1,
+  "n_ok": 183,
+  "n_total": 183,
+  "pred_histogram": {
+    "0": 145,
+    "1": 35,
+    "2": 1,
+    "3": 2
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-garden_v1-qwen2-5vl-7b",
+  "set": "garden_v1",
+  "tags": {
+    "owner": 183
+  },
+  "temperature": 0,
+  "truth_histogram": {
+    "0": 90,
+    "1": 67,
+    "2": 24,
+    "3": 2
+  }
+}

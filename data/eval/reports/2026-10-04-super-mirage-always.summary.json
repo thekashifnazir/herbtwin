@@ -1,0 +1,85 @@
+{
+  "advise_cost_usd": 0.13929,
+  "backend": "tokenfactory",
+  "git_sha": "24c13b7",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.4166666666666667,
+      "lo": 0.19444444444444445,
+      "n": 72,
+      "value": 0.3055555555555556
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.37794047619047616,
+      "lo": 0.30142857142857143,
+      "n": 200,
+      "value": 0.3402797619047619
+    },
+    "over_treatment": {
+      "hi": 0.015,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.005
+    },
+    "primary_in_truth": {
+      "hi": 0.74,
+      "lo": 0.61,
+      "n": 200,
+      "value": 0.675
+    },
+    "primary_match": {
+      "hi": 0.515,
+      "lo": 0.375,
+      "n": 200,
+      "value": 0.445
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.515,
+      "lo": 0.375,
+      "n": 200,
+      "value": 0.445
+    },
+    "water_conflict": {
+      "hi": 0.09,
+      "lo": 0.025,
+      "n": 200,
+      "value": 0.055
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 200,
+  "n_total": 200,
+  "pred_primary": {
+    "dont_water": 14,
+    "leave_normal": 72,
+    "move_light": 8,
+    "other": 37,
+    "prune": 36,
+    "shelter": 11,
+    "treat_or_remove": 6,
+    "water": 16
+  },
+  "prompt_hash": "462dda0ce414",
+  "run_id": "2026-10-04-super-mirage-always",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 44,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

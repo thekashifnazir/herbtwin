@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Sign in · herbtwin{% endblock %}
+{% block main %}
+<h1>Sign in to herbtwin</h1>
+<p class="lead">Press the button to finish signing in on this device.</p>
+<form method="post" action="/auth/callback">
+  <input type="hidden" name="token_hash" value="{{ token_hash }}">
+  <input type="hidden" name="type" value="{{ kind }}">
+  <button class="primary big" type="submit">Sign in</button>
+</form>
+{% endblock %}

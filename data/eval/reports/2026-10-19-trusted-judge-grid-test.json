@@ -1,0 +1,55 @@
+{
+ "prereg": "data/eval/prereg/2026-10-19-trusted-judge-grid.md",
+ "split": "test",
+ "items": 242,
+ "result": {
+  "config": "super-vl+P0",
+  "nvidia": true,
+  "negatives": 175,
+  "false_agrees": 6,
+  "false_agree_rate": 0.0343,
+  "false_agree_wilson95": [
+   0.0158,
+   0.0728
+  ],
+  "positives": 67,
+  "recall": 0.6269,
+  "recall_wilson95": [
+   0.5072,
+   0.7328
+  ],
+  "latency_p50_s": 0.25,
+  "latency_p95_s": 0.5,
+  "usd_per_answer": 6.3e-05,
+  "false_agrees_by_category": {
+   "another plant": "0/4",
+   "condition": "4/46",
+   "how or when to water": "0/5",
+   "leave it: not normal or mixed": "0/4",
+   "light: a liking": "0/3",
+   "liking or need": "0/10",
+   "negated or described hold-off": "0/5",
+   "negation": "0/13",
+   "negation (curly)": "0/6",
+   "not this action or not an instruction": "2/10",
+   "other season": "0/19",
+   "propagation, sowing or planting": "0/8",
+   "question or heading": "0/6",
+   "removal that is not treating this plant": "0/9",
+   "seed or crop storage": "0/2",
+   "shelter: not now or not cold": "0/4",
+   "water: not ours": "0/4",
+   "what others do or a general fact": "0/17"
+  },
+  "false_agree_ids": [
+   70,
+   73,
+   88,
+   97,
+   273,
+   281
+  ],
+  "ships": false
+ },
+ "spent_usd": 0.0153
+}

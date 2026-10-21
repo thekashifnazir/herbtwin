@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = glm_photo minus qwen25vl_photo; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "qwen25vl_photo": "2026-10-04-advice-actions_se-photo-subset-with-photo.jsonl",
+    "glm_photo": "2026-10-04-advice-actions_se-photo-subset-with-glm-photo.jsonl"
+  },
+  "n_paired": 538,
+  "ask_first_primary": {
+    "qwen25vl_photo": 255,
+    "glm_photo": 217
+  },
+  "metrics": {
+    "primary_match": {
+      "qwen25vl_photo": 0.26765799256505574,
+      "glm_photo": 0.2788104089219331,
+      "diff": 0.011152416356877323,
+      "lo": -0.01858736059479554,
+      "hi": 0.040892193308550186,
+      "n": 538
+    },
+    "primary_in_truth": {
+      "qwen25vl_photo": 0.45724907063197023,
+      "glm_photo": 0.4646840148698885,
+      "diff": 0.007434944237918215,
+      "lo": -0.024163568773234202,
+      "hi": 0.03903345724907063,
+      "n": 538
+    },
+    "jaccard": {
+      "qwen25vl_photo": 0.2761875258157786,
+      "glm_photo": 0.2882331681123503,
+      "diff": 0.012045642296571664,
+      "lo": -0.007447483330382959,
+      "hi": 0.03235454652740898,
+      "n": 538
+    },
+    "over_treatment": {
+      "qwen25vl_photo": 0.09479553903345725,
+      "glm_photo": 0.17472118959107807,
+      "diff": 0.07992565055762081,
+      "lo": 0.055762081784386616,
+      "hi": 0.10594795539033457,
+      "n": 538
+    },
+    "water_conflict": {
+      "qwen25vl_photo": 0.03903345724907063,
+      "glm_photo": 0.05204460966542751,
+      "diff": 0.013011152416356878,
+      "lo": 0.0,
+      "hi": 0.026022304832713755,
+      "n": 538
+    },
+    "asked_when_expert_asked": {
+      "qwen25vl_photo": 0.5510204081632653,
+      "glm_photo": 0.47619047619047616,
+      "diff": -0.07482993197278912,
+      "lo": -0.14965986394557823,
+      "hi": -0.006802721088435374,
+      "n": 147
+    },
+    "primary_ok_if_asked_too": {
+      "qwen25vl_photo": 0.2843866171003718,
+      "glm_photo": 0.3048327137546468,
+      "diff": 0.020446096654275093,
+      "lo": -0.00929368029739777,
+      "hi": 0.05018587360594796,
+      "n": 538
+    },
+    "hedge_had_answer": {
+      "qwen25vl_photo": 0.15853658536585366,
+      "glm_photo": 0.1951219512195122,
+      "diff": 0.036585365853658534,
+      "lo": 0.0,
+      "hi": 0.07926829268292683,
+      "n": 164
+    }
+  }
+}

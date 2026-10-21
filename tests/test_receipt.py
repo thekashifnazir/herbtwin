@@ -1,0 +1,187 @@
+"""Each answer's model map and receipt (21 Oct, judging video: show "which models are being
+used", and savings "only feel real compared to a baseline")."""
+
+import json
+import re
+
+import httpx
+import pytest
+import respx
+
+from herbtwin import receipt
+from herbtwin.pipeline import analyse_with_reading, decide, resettle
+from herbtwin.receipt import usd
+from herbtwin.schemas import AnalysisRecord, StepCost
+from herbtwin.stages.environment import OPEN_METEO_URL
+from herbtwin.web.style import CSS
+from tests.test_pipeline import ADV, JPEG, OBS, SAMPLE, WHEN, _deps
+from tests.test_web_answer_page import _full_plan, _render
+
+SUPER = "nvidia/nemotron-3-super-120b-a12b"
+VL = "nvidia/Nemotron-3.5-Super-VL"
+
+
+def _row(i, stage, model, tin, tout, ms=1000):
+    pin, pout = receipt.PRICING.get(model, (0.0, 0.0))
+    return dict(
+        id=i, stage=stage, model=model, latency_ms=ms, input_tokens=tin, output_tokens=tout,
+        cost_usd=(tin * pin + tout * pout) / 1e6,
+    )  # fmt: skip
+
+
+def _receipt(advisors=3) -> list[StepCost]:
+    rows = [_row(1, "observe", VL, 2000, 300, ms=4200)]
+    rows += [_row(2 + i, "advise", SUPER, 3000, 400, ms=9000) for i in range(advisors)]
+    kept = [
+        StepCost(stage="research", model="Our plant data", ms=3),
+        StepCost(stage="weather", model="Open-Meteo", ms=640),
+    ]
+    models = receipt.from_rows(rows, receipt.MODEL_STAGES)
+    return receipt.assemble(kept, models, {"advise": 9500})
+
+
+def test_the_receipt_round_trips_and_an_answer_kept_before_it_still_loads(tmp_path):
+    rec = _full_plan(tmp_path)
+    rec.receipt = _receipt()
+    back = AnalysisRecord.model_validate_json(rec.model_dump_json())
+    assert back.receipt == rec.receipt and back.receipt[0].model == VL
+    old = json.loads(rec.model_dump_json())
+    del old["receipt"]  # as every answer stored before 21 Oct
+    assert AnalysisRecord.model_validate(old).receipt is None
+    assert receipt.model_map(AnalysisRecord.model_validate(old)) is None
+    assert 'class="model-map"' not in _render(AnalysisRecord.model_validate(old))
+
+
+def test_steps_come_in_the_order_the_read_runs_with_the_advisors_timed_together():
+    steps = _receipt()
+    assert [s.stage for s in steps] == ["observe", "research", "weather", "advise"]
+    advise = steps[-1]
+    assert advise.calls == 3 and advise.tokens_in == 9000 and advise.tokens_out == 1200
+    assert advise.ms == 9500  # side by side: the wall time, not 3 x 9 s
+    assert steps[0].ms == 4200
+
+
+def test_the_cost_and_the_ultra_baseline_are_the_same_tokens_priced_twice():
+    steps = _receipt()
+    # VL: 2000 in at $0.30/M + 300 out at $0.90/M; Super: 9000 in at $0.30 + 1200 out at $0.90
+    cost = (2000 * 0.30 + 300 * 0.90 + 9000 * 0.30 + 1200 * 0.90) / 1e6
+    assert sum(s.cost_usd for s in steps) == pytest.approx(cost)  # services cost 0
+    # the same 11000 in and 1500 out at Ultra's $1.00 / $3.00 per million
+    assert receipt.baseline_usd(steps) == pytest.approx((11000 * 1.00 + 1500 * 3.00) / 1e6)
+    m = receipt.model_map(AnalysisRecord.model_validate({**_bare(), "receipt": steps}))
+    assert m.total == "$0.0047" and m.baseline == "$0.0155"
+
+
+def _bare() -> dict:
+    return dict(
+        record_id="a" * 32, taken_at="2026-10-21T09:00:00", observation=None, environment=None,
+        pack=None, state=None,
+    )  # fmt: skip
+
+
+def test_a_model_with_no_listed_price_says_so_never_zero():
+    rows = [_row(1, "observe", "acme/unlisted-vision", 2000, 300), _row(2, "advise", SUPER, 10, 10)]
+    steps = receipt.from_rows(rows, receipt.MODEL_STAGES)
+    assert steps[0].cost_usd is None and steps[1].cost_usd is not None
+    m = receipt.model_map(AnalysisRecord.model_validate({**_bare(), "receipt": steps}))
+    assert m.rows[0].cost == "price not listed" and m.rows[0].model == "unlisted-vision"
+    assert m.unpriced == ["unlisted-vision"]
+    # out of the baseline too, so the two figures are the same tokens: 10 in, 10 out on Ultra
+    assert m.baseline == usd((10 * 1.00 + 10 * 3.00) / 1e6)
+
+
+@pytest.mark.parametrize(
+    ("advisors", "said"), [(0, None), (1, "One advisor"), (3, "Three advisors")]
+)
+def test_the_map_shows_on_the_answer_page_for_any_number_of_advisors(tmp_path, advisors, said):
+    rec = _full_plan(tmp_path)
+    rec.receipt = _receipt(advisors)
+    page = _render(rec)
+    mm = page.split('<div class="model-map">', 1)[1].split("</div>", 1)[0]
+    assert "<h3>Which model did each step</h3>" in mm
+    assert (
+        '<li><span class="mm-what"><strong>Read the photo</strong> '
+        '<span class="mm-model">NVIDIA Nemotron 3.5 Super VL</span></span>'
+        '<span class="mm-cost">4.2 s · $0.0009</span></li>' in mm
+    )
+    assert '<strong>Checked the weather</strong> <span class="mm-model">Open-Meteo</span>' in mm
+    assert "0.6 s · no model" in mm
+    if said:
+        assert (
+            f'<strong>{said}</strong> <span class="mm-model">NVIDIA Nemotron 3 Super</span>' in mm
+        )
+    else:
+        assert "advisor" not in mm.lower()
+    assert "This answer cost <strong>$" in mm and "On NVIDIA Nemotron 3 Ultra for every step" in mm
+    assert "same tokens at Ultra's listed price" in mm
+    # in "How we worked it out", after what each advisor said, and never in a closed fold
+    details = page.split('id="details"', 1)[1]
+    assert 'class="model-map"' in details
+    assert "<details" not in details.split('class="model-map"', 1)[0].rsplit("</details>", 1)[-1]
+
+
+def test_nothing_in_the_map_is_under_16px():
+    rules = re.findall(r"\.answer-page \.model-map[^{]*\{[^}]*\}", CSS)
+    assert len(rules) >= 8
+    sizes = [int(px) for r in rules for px in re.findall(r"font-size: (\d+)px", r)]
+    assert sizes and min(sizes) >= 16
+
+
+@respx.mock
+def test_a_read_keeps_its_receipt_and_a_refine_counts_only_its_own_advisors(tmp_path):
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 6)
+    rec, reading = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN)
+    stages = [s.stage for s in rec.receipt]
+    assert stages == ["observe", "research", "weather", "twin", "advise"]
+    assert rec.receipt[0].model == "mock" and rec.receipt[0].cost_usd is None  # mock: no price
+    assert rec.receipt[-1].calls == 3
+    again = decide(deps, reading)  # a refine: the same read, the advisors asked again
+    assert [s.stage for s in again.receipt] == stages
+    assert again.receipt[-1].calls == 3  # its own 3 asks, not 6
+    assert again.receipt[0].calls == 1  # the one photo read it was made from
+
+
+def test_a_step_that_failed_is_left_off_the_map():
+    # 21 Oct local read: the weather service was out for the day, and the map still listed it
+    rec = AnalysisRecord.model_validate(_bare())
+    with receipt.timed(rec, "weather"):
+        pass
+    assert [s.stage for s in rec.receipt] == ["weather"]
+    with pytest.raises(RuntimeError), receipt.timed(rec, "weather"):  # a new place, then a fail
+        raise RuntimeError("open-meteo returned 429")
+    assert rec.receipt == []
+
+
+@respx.mock
+def test_switching_to_indoors_drops_the_weather_line(tmp_path):
+    # review: the weather is dropped for an indoor plant, so its line must go too
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 6)
+    _, reading = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN)
+    indoors = decide(deps, resettle(deps, reading, "indoor"))
+    assert [s.stage for s in indoors.receipt] == ["observe", "research", "advise"]
+
+
+@respx.mock
+def test_a_reading_rebuilt_from_a_stored_answer_gets_no_map(tmp_path):
+    # review: its read's steps are not known, so a part of the cost would read as the whole
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
+    rec, reading = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN)
+    reading.rec.receipt = None  # as reading_from builds it: the stored answer kept none
+    assert decide(deps, reading).receipt is None
+
+
+@respx.mock
+def test_a_broken_trace_store_never_stops_an_answer(tmp_path, caplog):
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
+
+    def broken(run_id):
+        raise OSError("disk gone")
+
+    deps.trace_store.rows = broken
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN)
+    assert rec.answer is not None and rec.failures == []
+    assert "receipt failed" in caplog.text

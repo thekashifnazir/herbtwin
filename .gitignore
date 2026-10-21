@@ -1,0 +1,42 @@
+# secrets: copy .env.example to .env and keep your keys there
+.env
+.env.local
+.env.*.local
+
+# python and uv
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# the Cloudflare Worker (edge/)
+node_modules/
+.wrangler/
+
+# os and editors
+.DS_Store
+.idea/
+.vscode/
+
+# large public downloads the data and eval scripts fetch (scripts/, docs/data-catalogue.md)
+data/external/
+
+# what the app and scripts write while they run: photos, caches, traces, eval rows
+data/cases/
+data/photos/
+data/packs/
+data/pages/
+data/pool/
+data/train/
+data/risk_gate/
+data/soil_photos/
+data/eval/runs/
+data/eval/sets/*.tmp
+traces.db

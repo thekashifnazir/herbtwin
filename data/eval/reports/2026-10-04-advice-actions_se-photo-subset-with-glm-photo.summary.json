@@ -1,0 +1,75 @@
+{
+  "backend": "ollama",
+  "git_sha": "1664c80",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.5608108108108109,
+      "lo": 0.39864864864864863,
+      "n": 148,
+      "value": 0.4797297297297297
+    },
+    "jaccard": {
+      "hi": 0.3136156171870458,
+      "lo": 0.26316864352578634,
+      "n": 546,
+      "value": 0.28773402523402525
+    },
+    "over_treatment": {
+      "hi": 0.21062271062271062,
+      "lo": 0.14652014652014653,
+      "n": 546,
+      "value": 0.17765567765567766
+    },
+    "primary_in_truth": {
+      "hi": 0.5054945054945055,
+      "lo": 0.42124542124542125,
+      "n": 546,
+      "value": 0.46153846153846156
+    },
+    "primary_match": {
+      "hi": 0.31684981684981683,
+      "lo": 0.24175824175824176,
+      "n": 546,
+      "value": 0.2783882783882784
+    },
+    "water_conflict": {
+      "hi": 0.0695970695970696,
+      "lo": 0.03296703296703297,
+      "n": 546,
+      "value": 0.05128205128205128
+    }
+  },
+  "model": "qwen3:14b:no-think+photo-zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 546,
+  "n_total": 546,
+  "observe_backend": "tokenfactory",
+  "observe_cost_usd": 0.40051,
+  "pred_primary": {
+    "ask_first": 220,
+    "dont_water": 17,
+    "leave_normal": 66,
+    "move_light": 29,
+    "other": 15,
+    "prune": 23,
+    "shelter": 17,
+    "treat_or_remove": 122,
+    "water": 37
+  },
+  "prompt_hash": "d9fd7599abe0",
+  "run_id": "2026-10-04-advice-actions_se-photo-subset-with-glm-photo",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 50,
+    "dont_water": 52,
+    "leave_normal": 103,
+    "move_light": 25,
+    "other": 109,
+    "prune": 31,
+    "shelter": 12,
+    "treat_or_remove": 136,
+    "water": 28
+  }
+}

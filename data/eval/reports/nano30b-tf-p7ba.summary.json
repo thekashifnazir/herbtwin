@@ -1,0 +1,104 @@
+{
+  "advise_cost_usd": 0.013888,
+  "backend": "tokenfactory",
+  "git_sha": "fa701d0",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "n": 31,
+      "value": 1.0
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.3365320677820678,
+      "lo": 0.25901973401973405,
+      "n": 148,
+      "value": 0.2971364221364221
+    },
+    "over_treatment": {
+      "hi": 0.25,
+      "lo": 0.12162162162162163,
+      "n": 148,
+      "value": 0.18243243243243243
+    },
+    "primary_in_truth": {
+      "hi": 0.6351351351351351,
+      "lo": 0.4797297297297297,
+      "n": 148,
+      "value": 0.5608108108108109
+    },
+    "primary_match": {
+      "hi": 0.43243243243243246,
+      "lo": 0.28378378378378377,
+      "n": 148,
+      "value": 0.3581081081081081
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.43243243243243246,
+      "lo": 0.28378378378378377,
+      "n": 148,
+      "value": 0.3581081081081081
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 148,
+      "value": 0.0
+    },
+    "water_conflict": {
+      "hi": 0.08783783783783784,
+      "lo": 0.02027027027027027,
+      "n": 148,
+      "value": 0.05405405405405406
+    }
+  },
+  "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "n_error": 0,
+  "n_failed": 2,
+  "n_missing": 0,
+  "n_ok": 148,
+  "n_total": 150,
+  "pred_primary": {
+    "dont_water": 1,
+    "leave_normal": 44,
+    "move_light": 16,
+    "other": 6,
+    "prune": 11,
+    "shelter": 3,
+    "treat_or_remove": 50,
+    "water": 17
+  },
+  "pred_primary_fine": {
+    "change_soil": 3,
+    "dont_water": 1,
+    "feed": 2,
+    "isolate": 2,
+    "leave_normal": 44,
+    "move_light": 16,
+    "other": 1,
+    "prune": 11,
+    "shelter": 3,
+    "treat_or_remove": 48,
+    "water": 17
+  },
+  "prompt_hash": "7ba44f01d95b",
+  "run_id": "nano30b-tf-p7ba",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 6,
+    "dont_water": 18,
+    "leave_normal": 27,
+    "move_light": 9,
+    "other": 28,
+    "prune": 10,
+    "shelter": 4,
+    "treat_or_remove": 37,
+    "water": 9
+  }
+}

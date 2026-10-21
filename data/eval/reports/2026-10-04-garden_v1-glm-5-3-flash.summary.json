@@ -1,0 +1,69 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.117099,
+  "failed_ids": [],
+  "git_sha": "756e55e",
+  "largest_disagreements": [
+    "garden_v1/c001",
+    "garden_v1/c004",
+    "garden_v1/c005",
+    "garden_v1/c008",
+    "garden_v1/c009"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 10739,
+  "metrics": {
+    "exact": {
+      "hi": 0.6018957345971564,
+      "lo": 0.33986928104575165,
+      "skipped": 0,
+      "value": 0.48633879781420764
+    },
+    "mae": {
+      "hi": 0.8211382113821138,
+      "lo": 0.4505928853754941,
+      "skipped": 0,
+      "value": 0.6120218579234973
+    },
+    "qwk": {
+      "hi": 0.5638559993607074,
+      "lo": 0.17757009345794383,
+      "skipped": 0,
+      "value": 0.40555726263114
+    },
+    "within_one": {
+      "hi": 0.9558011049723757,
+      "lo": 0.8201438848920863,
+      "skipped": 0,
+      "value": 0.9016393442622951
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 183,
+  "n_total": 183,
+  "pred_histogram": {
+    "0": 39,
+    "1": 78,
+    "2": 65,
+    "3": 1
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-garden_v1-glm-5-3-flash",
+  "set": "garden_v1",
+  "tags": {
+    "owner": 183
+  },
+  "temperature": 0,
+  "truth_histogram": {
+    "0": 90,
+    "1": 67,
+    "2": 24,
+    "3": 2
+  }
+}

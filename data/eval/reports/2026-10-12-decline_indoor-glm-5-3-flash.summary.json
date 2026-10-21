@@ -1,0 +1,63 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.112546,
+  "failed_ids": [],
+  "git_sha": "82c063e",
+  "largest_disagreements": [
+    "decline_indoor/Snake_Plant_Healthy/Snake_Plant_Healthy_052",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_017",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_024",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_036",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_061"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 10863,
+  "metrics": {
+    "balanced_accuracy": {
+      "hi": 0.936026936026936,
+      "lo": 0.8207013574660633,
+      "skipped": 0,
+      "value": 0.8833333333333333
+    },
+    "precision": {
+      "hi": 0.9636363636363636,
+      "lo": 0.7945205479452054,
+      "skipped": 0,
+      "value": 0.8833333333333333
+    },
+    "recall": {
+      "hi": 0.9607843137254902,
+      "lo": 0.8,
+      "skipped": 0,
+      "value": 0.8833333333333333
+    },
+    "specificity": {
+      "hi": 0.9636363636363636,
+      "lo": 0.7962962962962963,
+      "skipped": 0,
+      "value": 0.8833333333333333
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 6,
+  "n_ok": 120,
+  "n_total": 120,
+  "pred_histogram": {
+    "0": 60,
+    "1": 43,
+    "2": 14,
+    "3": 3
+  },
+  "prompt_hash": "44ea8edaea55",
+  "run_id": "2026-10-12-decline_indoor-glm-5-3-flash",
+  "set": "decline_indoor",
+  "tags": {
+    "safe-to-train": 120
+  },
+  "temperature": 0
+}

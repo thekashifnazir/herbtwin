@@ -1,0 +1,78 @@
+{
+  "baselines": {
+    "preferred_is_earlier": 0.776,
+    "preferred_is_longer": 0.68
+  },
+  "first_position_rate": 0.5128205128205128,
+  "git_sha": "56e9638",
+  "judge": "tokenfactory:nvidia/Nemotron-3-Ultra-550b-a55b",
+  "metrics": {
+    "accuracy": {
+      "hi": 0.7886944818304172,
+      "lo": 0.706359945872801,
+      "n": 743,
+      "n_pairs": 375,
+      "skipped": 0,
+      "value": 0.7496635262449529
+    },
+    "accuracy_counting_unparseable_as_half": {
+      "hi": 0.786,
+      "lo": 0.7033333333333334,
+      "n": 750,
+      "n_pairs": 375,
+      "skipped": 0,
+      "value": 0.7473333333333333
+    },
+    "accuracy_diagnosis": {
+      "hi": 0.7782805429864253,
+      "lo": 0.6674157303370787,
+      "n": 446,
+      "n_pairs": 226,
+      "skipped": 0,
+      "value": 0.7219730941704036
+    },
+    "accuracy_herb": {
+      "hi": 0.8413173652694611,
+      "lo": 0.7259036144578314,
+      "n": 333,
+      "n_pairs": 167,
+      "skipped": 0,
+      "value": 0.7837837837837838
+    },
+    "accuracy_preferred_is_later": {
+      "hi": 0.7784431137724551,
+      "lo": 0.5903614457831325,
+      "n": 166,
+      "n_pairs": 84,
+      "skipped": 0,
+      "value": 0.6867469879518072
+    },
+    "accuracy_preferred_is_shorter": {
+      "hi": 0.7478991596638656,
+      "lo": 0.5847457627118644,
+      "n": 236,
+      "n_pairs": 120,
+      "skipped": 0,
+      "value": 0.6652542372881356
+    },
+    "accuracy_strong_pairs": {
+      "hi": 0.8326923076923077,
+      "lo": 0.735632183908046,
+      "n": 521,
+      "n_pairs": 262,
+      "skipped": 0,
+      "value": 0.783109404990403
+    }
+  },
+  "n_error": 0,
+  "n_failed": 7,
+  "n_ok": 743,
+  "n_pairs": 375,
+  "n_pairs_both_orders": 368,
+  "n_rows": 750,
+  "position_consistency": 0.907608695652174,
+  "prompt_hash": "ac831a1b9c3e",
+  "run_id": "2026-10-17-pairs_se-nemotron-ultra",
+  "spent_this_run_usd": 0.122432,
+  "tie_rate": 0.0026917900403768506
+}

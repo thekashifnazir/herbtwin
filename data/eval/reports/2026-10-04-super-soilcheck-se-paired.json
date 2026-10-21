@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = soil_check minus always_answer; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "always_answer": "2026-10-04-super-se-always-150.jsonl",
+    "soil_check": "2026-10-04-super-se-soilcheck-150.jsonl"
+  },
+  "n_paired": 150,
+  "ask_first_primary": {
+    "always_answer": 0,
+    "soil_check": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "always_answer": 0.3933333333333333,
+      "soil_check": 0.41333333333333333,
+      "diff": 0.02,
+      "lo": -0.05333333333333334,
+      "hi": 0.09333333333333334,
+      "n": 150
+    },
+    "primary_in_truth": {
+      "always_answer": 0.6,
+      "soil_check": 0.6066666666666667,
+      "diff": 0.006666666666666667,
+      "lo": -0.06666666666666667,
+      "hi": 0.08,
+      "n": 150
+    },
+    "jaccard": {
+      "always_answer": 0.34130158730158733,
+      "soil_check": 0.3633174603174603,
+      "diff": 0.022015873015873013,
+      "lo": -0.021190476190476194,
+      "hi": 0.06601587301587301,
+      "n": 150
+    },
+    "over_treatment": {
+      "always_answer": 0.03333333333333333,
+      "soil_check": 0.04666666666666667,
+      "diff": 0.013333333333333334,
+      "lo": -0.02,
+      "hi": 0.05333333333333334,
+      "n": 150
+    },
+    "water_conflict": {
+      "always_answer": 0.05333333333333334,
+      "soil_check": 0.03333333333333333,
+      "diff": -0.02,
+      "lo": -0.05333333333333334,
+      "hi": 0.006666666666666667,
+      "n": 150
+    },
+    "unguarded_water_conflict": {
+      "always_answer": 0.05333333333333334,
+      "soil_check": 0.013333333333333334,
+      "diff": -0.04,
+      "lo": -0.07333333333333333,
+      "hi": -0.013333333333333334,
+      "n": 150
+    },
+    "asked_when_expert_asked": {
+      "always_answer": 0.3125,
+      "soil_check": 0.375,
+      "diff": 0.0625,
+      "lo": -0.125,
+      "hi": 0.21875,
+      "n": 32
+    },
+    "primary_ok_if_asked_too": {
+      "always_answer": 0.3933333333333333,
+      "soil_check": 0.41333333333333333,
+      "diff": 0.02,
+      "lo": -0.05333333333333334,
+      "hi": 0.09333333333333334,
+      "n": 150
+    }
+  }
+}

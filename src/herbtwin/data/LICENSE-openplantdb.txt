@@ -1,0 +1,1 @@
+openplantdb_herbs.json is derived from https://github.com/cwfrazier1/openplantdb, released under CC0 1.0.

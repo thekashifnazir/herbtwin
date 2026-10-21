@@ -1,0 +1,73 @@
+{
+  "backend": "ollama",
+  "git_sha": "559112f",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.6931818181818182,
+      "lo": 0.5454545454545454,
+      "n": 176,
+      "value": 0.6193181818181818
+    },
+    "jaccard": {
+      "hi": 0.31788482834994464,
+      "lo": 0.27064927607563266,
+      "n": 774,
+      "value": 0.29388560764529753
+    },
+    "over_treatment": {
+      "hi": 0.13695090439276486,
+      "lo": 0.0917312661498708,
+      "n": 774,
+      "value": 0.11369509043927649
+    },
+    "primary_in_truth": {
+      "hi": 0.5012919896640827,
+      "lo": 0.4289405684754522,
+      "n": 774,
+      "value": 0.46511627906976744
+    },
+    "primary_match": {
+      "hi": 0.3152454780361757,
+      "lo": 0.25064599483204136,
+      "n": 774,
+      "value": 0.28294573643410853
+    },
+    "water_conflict": {
+      "hi": 0.05813953488372093,
+      "lo": 0.028423772609819122,
+      "n": 774,
+      "value": 0.04263565891472868
+    }
+  },
+  "model": "qwen3:14b:no-think",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 774,
+  "n_total": 774,
+  "pred_primary": {
+    "ask_first": 356,
+    "dont_water": 14,
+    "leave_normal": 81,
+    "move_light": 40,
+    "other": 64,
+    "prune": 46,
+    "shelter": 34,
+    "treat_or_remove": 106,
+    "water": 33
+  },
+  "prompt_hash": "d9fd7599abe0",
+  "run_id": "2026-10-04-advice-actions_se-qwen3-14b-no-think",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 59,
+    "dont_water": 66,
+    "leave_normal": 150,
+    "move_light": 43,
+    "other": 183,
+    "prune": 62,
+    "shelter": 14,
+    "treat_or_remove": 160,
+    "water": 37
+  }
+}

@@ -1,0 +1,1137 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = oct21 minus oct19; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "oct19": "super-se774-p7ba.jsonl",
+    "oct21": "super-se774-p7ba-r2.jsonl"
+  },
+  "n_paired": 774,
+  "ask_first_primary": {
+    "oct19": 0,
+    "oct21": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "oct19": 0.41214470284237725,
+      "oct21": 0.42377260981912146,
+      "diff": 0.011627906976744186,
+      "lo": -0.014211886304909561,
+      "hi": 0.03617571059431524,
+      "n": 774
+    },
+    "primary_in_truth": {
+      "oct19": 0.5917312661498708,
+      "oct21": 0.5943152454780362,
+      "diff": 0.002583979328165375,
+      "lo": -0.02454780361757106,
+      "hi": 0.031007751937984496,
+      "n": 774
+    },
+    "jaccard": {
+      "oct19": 0.3566168327796234,
+      "oct21": 0.3586024978466839,
+      "diff": 0.001985665067060416,
+      "lo": -0.016036052663959643,
+      "hi": 0.01981204626553464,
+      "n": 774
+    },
+    "over_treatment": {
+      "oct19": 0.04521963824289406,
+      "oct21": 0.04392764857881137,
+      "diff": -0.0012919896640826874,
+      "lo": -0.011627906976744186,
+      "hi": 0.00904392764857881,
+      "n": 774
+    },
+    "water_conflict": {
+      "oct19": 0.037467700258397935,
+      "oct21": 0.028423772609819122,
+      "diff": -0.00904392764857881,
+      "lo": -0.01937984496124031,
+      "hi": 0.0,
+      "n": 774
+    },
+    "unguarded_water_conflict": {
+      "oct19": 0.00516795865633075,
+      "oct21": 0.003875968992248062,
+      "diff": -0.0012919896640826874,
+      "lo": -0.006459948320413436,
+      "hi": 0.003875968992248062,
+      "n": 774
+    },
+    "asked_when_expert_asked": {
+      "oct19": 0.6704545454545454,
+      "oct21": 0.6420454545454546,
+      "diff": -0.028409090909090908,
+      "lo": -0.09090909090909091,
+      "hi": 0.028409090909090908,
+      "n": 176
+    },
+    "primary_ok_if_asked_too": {
+      "oct19": 0.41214470284237725,
+      "oct21": 0.42377260981912146,
+      "diff": 0.011627906976744186,
+      "lo": -0.014211886304909561,
+      "hi": 0.03617571059431524,
+      "n": 774
+    }
+  },
+  "primary_agreement": {
+    "n": 774,
+    "agree": 564,
+    "rate": 0.7286821705426356,
+    "lo": 0.6963824289405685,
+    "hi": 0.7596899224806202,
+    "differ": [
+      {
+        "id": "actions_se/1084",
+        "oct19": "repot",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/11079",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/11205",
+        "oct19": "shelter",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/11308",
+        "oct19": "leave_normal",
+        "oct21": "isolate"
+      },
+      {
+        "id": "actions_se/1219",
+        "oct19": "water",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/1269",
+        "oct19": "change_soil",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/13321",
+        "oct19": "change_soil",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/13354",
+        "oct19": "change_soil",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/13377",
+        "oct19": "leave_normal",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/13572",
+        "oct19": "repot",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/13601",
+        "oct19": "water",
+        "oct21": "isolate"
+      },
+      {
+        "id": "actions_se/1372",
+        "oct19": "move_light",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/13854",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/13863",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/13921",
+        "oct19": "humidity",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/13922",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/13979",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/14011",
+        "oct19": "change_soil",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/1407",
+        "oct19": "mulch",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/14143",
+        "oct19": "feed",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/14269",
+        "oct19": "change_soil",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/14333",
+        "oct19": "change_soil",
+        "oct21": "humidity"
+      },
+      {
+        "id": "actions_se/1440",
+        "oct19": "move_light",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/14440",
+        "oct19": "dont_water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/14598",
+        "oct19": "leave_normal",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/14706",
+        "oct19": "dont_water",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/14861",
+        "oct19": "treat_or_remove",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/14877",
+        "oct19": "dont_water",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/14949",
+        "oct19": "water",
+        "oct21": "humidity"
+      },
+      {
+        "id": "actions_se/1512",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/1562",
+        "oct19": "change_soil",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/16103",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/16151",
+        "oct19": "treat_or_remove",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/16270",
+        "oct19": "move_light",
+        "oct21": "humidity"
+      },
+      {
+        "id": "actions_se/17371",
+        "oct19": "move_light",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/18181",
+        "oct19": "move_light",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/19326",
+        "oct19": "prune",
+        "oct21": "shelter"
+      },
+      {
+        "id": "actions_se/19523",
+        "oct19": "dont_water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/19884",
+        "oct19": "mulch",
+        "oct21": "shelter"
+      },
+      {
+        "id": "actions_se/1990",
+        "oct19": "treat_or_remove",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/20049",
+        "oct19": "prune",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/20344",
+        "oct19": "water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/2065",
+        "oct19": "other",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/20685",
+        "oct19": "treat_or_remove",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/21870",
+        "oct19": "move_light",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/22037",
+        "oct19": "other",
+        "oct21": "isolate"
+      },
+      {
+        "id": "actions_se/22151",
+        "oct19": "water",
+        "oct21": "repot"
+      },
+      {
+        "id": "actions_se/22796",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/2321",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/23229",
+        "oct19": "water",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/23574",
+        "oct19": "change_soil",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/24004",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/24063",
+        "oct19": "water",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/24444",
+        "oct19": "move_light",
+        "oct21": "shelter"
+      },
+      {
+        "id": "actions_se/2601",
+        "oct19": "leave_normal",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/26848",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/26912",
+        "oct19": "prune",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/26973",
+        "oct19": "feed",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/27138",
+        "oct19": "leave_normal",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/27172",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/27381",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/27437",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/27539",
+        "oct19": "dont_water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/2861",
+        "oct19": "leave_normal",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/28841",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/28861",
+        "oct19": "isolate",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/28893",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/28927",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/2904",
+        "oct19": "other",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/2918",
+        "oct19": "change_soil",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/29260",
+        "oct19": "repot",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/29344",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/29511",
+        "oct19": "repot",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/30094",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/30116",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/3029",
+        "oct19": "dont_water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/30670",
+        "oct19": "other",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/31115",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/31246",
+        "oct19": "change_soil",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/31329",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/32729",
+        "oct19": "leave_normal",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/32774",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/32775",
+        "oct19": "water",
+        "oct21": "humidity"
+      },
+      {
+        "id": "actions_se/33589",
+        "oct19": "repot",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/34247",
+        "oct19": "change_soil",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/34295",
+        "oct19": "change_soil",
+        "oct21": "repot"
+      },
+      {
+        "id": "actions_se/34464",
+        "oct19": "treat_or_remove",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/34666",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/3478",
+        "oct19": "water",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/35095",
+        "oct19": "water",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/3532",
+        "oct19": "other",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/35345",
+        "oct19": "humidity",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/35580",
+        "oct19": "dont_water",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/35582",
+        "oct19": "prune",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/35675",
+        "oct19": "water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/35742",
+        "oct19": "repot",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/35815",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/36004",
+        "oct19": "prune",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/36964",
+        "oct19": "leave_normal",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/3764",
+        "oct19": "feed",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/38223",
+        "oct19": "isolate",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/38337",
+        "oct19": "change_soil",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/38673",
+        "oct19": "change_soil",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/38932",
+        "oct19": "leave_normal",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/38979",
+        "oct19": "repot",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/39654",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/39771",
+        "oct19": "feed",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/39827",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/40890",
+        "oct19": "leave_normal",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/41044",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/4109",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/41147",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/4117",
+        "oct19": "leave_normal",
+        "oct21": "shelter"
+      },
+      {
+        "id": "actions_se/41277",
+        "oct19": "leave_normal",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/41320",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/41452",
+        "oct19": "feed",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/4172",
+        "oct19": "treat_or_remove",
+        "oct21": "mulch"
+      },
+      {
+        "id": "actions_se/42244",
+        "oct19": "treat_or_remove",
+        "oct21": "isolate"
+      },
+      {
+        "id": "actions_se/42592",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/42721",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/4274",
+        "oct19": "other",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/42772",
+        "oct19": "treat_or_remove",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/43361",
+        "oct19": "prune",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/43430",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/43657",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/43989",
+        "oct19": "leave_normal",
+        "oct21": "repot"
+      },
+      {
+        "id": "actions_se/44193",
+        "oct19": "dont_water",
+        "oct21": "shelter"
+      },
+      {
+        "id": "actions_se/44214",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/4533",
+        "oct19": "other",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/46192",
+        "oct19": "leave_normal",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/46213",
+        "oct19": "repot",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/4640",
+        "oct19": "feed",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/46796",
+        "oct19": "repot",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/47225",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/47228",
+        "oct19": "repot",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/47384",
+        "oct19": "water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/47471",
+        "oct19": "dont_water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/47585",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/47784",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/47860",
+        "oct19": "move_light",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/4804",
+        "oct19": "move_light",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/48351",
+        "oct19": "leave_normal",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/4841",
+        "oct19": "prune",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/48592",
+        "oct19": "change_soil",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/4902",
+        "oct19": "feed",
+        "oct21": "mulch"
+      },
+      {
+        "id": "actions_se/49271",
+        "oct19": "change_soil",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/49911",
+        "oct19": "treat_or_remove",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/505",
+        "oct19": "mulch",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/5080",
+        "oct19": "feed",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/51050",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/51051",
+        "oct19": "repot",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/51164",
+        "oct19": "repot",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/51168",
+        "oct19": "leave_normal",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/5125",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/5130",
+        "oct19": "leave_normal",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/51633",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/51671",
+        "oct19": "feed",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/5195",
+        "oct19": "leave_normal",
+        "oct21": "repot"
+      },
+      {
+        "id": "actions_se/5202",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/52134",
+        "oct19": "treat_or_remove",
+        "oct21": "move_light"
+      },
+      {
+        "id": "actions_se/52349",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/5266",
+        "oct19": "leave_normal",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/53026",
+        "oct19": "prune",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/53120",
+        "oct19": "prune",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/5395",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/54540",
+        "oct19": "move_light",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/54554",
+        "oct19": "leave_normal",
+        "oct21": "mulch"
+      },
+      {
+        "id": "actions_se/55633",
+        "oct19": "dont_water",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/55716",
+        "oct19": "water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/56050",
+        "oct19": "treat_or_remove",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/56098",
+        "oct19": "dont_water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/5638",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/56413",
+        "oct19": "change_soil",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/56416",
+        "oct19": "other",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/56516",
+        "oct19": "humidity",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/56537",
+        "oct19": "repot",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/56543",
+        "oct19": "shelter",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/568",
+        "oct19": "leave_normal",
+        "oct21": "other"
+      },
+      {
+        "id": "actions_se/57040",
+        "oct19": "feed",
+        "oct21": "repot"
+      },
+      {
+        "id": "actions_se/57774",
+        "oct19": "other",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/5780",
+        "oct19": "leave_normal",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/59485",
+        "oct19": "water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/59606",
+        "oct19": "humidity",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/5968",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/60935",
+        "oct19": "water",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/61592",
+        "oct19": "repot",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/61763",
+        "oct19": "other",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/61877",
+        "oct19": "leave_normal",
+        "oct21": "shelter"
+      },
+      {
+        "id": "actions_se/61941",
+        "oct19": "leave_normal",
+        "oct21": "prune"
+      },
+      {
+        "id": "actions_se/62086",
+        "oct19": "humidity",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/63366",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/63484",
+        "oct19": "change_soil",
+        "oct21": "treat_or_remove"
+      },
+      {
+        "id": "actions_se/64273",
+        "oct19": "change_soil",
+        "oct21": "feed"
+      },
+      {
+        "id": "actions_se/643",
+        "oct19": "leave_normal",
+        "oct21": "mulch"
+      },
+      {
+        "id": "actions_se/64542",
+        "oct19": "other",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/65817",
+        "oct19": "feed",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/718",
+        "oct19": "shelter",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/7618",
+        "oct19": "water",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/7677",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/8069",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/830",
+        "oct19": "change_soil",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/8354",
+        "oct19": "change_soil",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/852",
+        "oct19": "leave_normal",
+        "oct21": "change_soil"
+      },
+      {
+        "id": "actions_se/8567",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/8587",
+        "oct19": "treat_or_remove",
+        "oct21": "leave_normal"
+      },
+      {
+        "id": "actions_se/8603",
+        "oct19": "leave_normal",
+        "oct21": "water"
+      },
+      {
+        "id": "actions_se/8686",
+        "oct19": "leave_normal",
+        "oct21": "isolate"
+      },
+      {
+        "id": "actions_se/9265",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/9486",
+        "oct19": "leave_normal",
+        "oct21": "dont_water"
+      },
+      {
+        "id": "actions_se/959",
+        "oct19": "treat_or_remove",
+        "oct21": "isolate"
+      }
+    ]
+  }
+}

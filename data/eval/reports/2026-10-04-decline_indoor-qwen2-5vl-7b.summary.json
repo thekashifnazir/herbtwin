@@ -1,0 +1,62 @@
+{
+  "backend": "ollama",
+  "constant_prediction": null,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "e558326",
+  "largest_disagreements": [
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_007",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_010",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_013",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_015",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_017"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 12142,
+  "metrics": {
+    "balanced_accuracy": {
+      "hi": 0.7540983606557377,
+      "lo": 0.6271186440677966,
+      "skipped": 0,
+      "value": 0.6916666666666667
+    },
+    "precision": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "skipped": 0,
+      "value": 1.0
+    },
+    "recall": {
+      "hi": 0.5081967213114754,
+      "lo": 0.2542372881355932,
+      "skipped": 0,
+      "value": 0.38333333333333336
+    },
+    "specificity": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "skipped": 0,
+      "value": 1.0
+    }
+  },
+  "model": "qwen2.5vl:7b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 67,
+  "n_ok": 120,
+  "n_total": 120,
+  "pred_histogram": {
+    "0": 97,
+    "1": 19,
+    "3": 4
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-decline_indoor-qwen2-5vl-7b",
+  "set": "decline_indoor",
+  "tags": {
+    "safe-to-train": 120
+  },
+  "temperature": 0
+}

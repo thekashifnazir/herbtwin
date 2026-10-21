@@ -1,0 +1,77 @@
+{
+  "baselines": {
+    "preferred_is_earlier": 0.776,
+    "preferred_is_longer": 0.68
+  },
+  "first_position_rate": 0.484,
+  "git_sha": "559112f",
+  "judge": "ollama:qwen3:14b:no-think",
+  "metrics": {
+    "accuracy": {
+      "hi": 0.796,
+      "lo": 0.716,
+      "n": 750,
+      "n_pairs": 375,
+      "skipped": 0,
+      "value": 0.7573333333333333
+    },
+    "accuracy_counting_unparseable_as_half": {
+      "hi": 0.796,
+      "lo": 0.716,
+      "n": 750,
+      "n_pairs": 375,
+      "skipped": 0,
+      "value": 0.7573333333333333
+    },
+    "accuracy_diagnosis": {
+      "hi": 0.7831858407079646,
+      "lo": 0.6747787610619469,
+      "n": 452,
+      "n_pairs": 226,
+      "skipped": 0,
+      "value": 0.7300884955752213
+    },
+    "accuracy_herb": {
+      "hi": 0.844311377245509,
+      "lo": 0.7305389221556886,
+      "n": 334,
+      "n_pairs": 167,
+      "skipped": 0,
+      "value": 0.7904191616766467
+    },
+    "accuracy_preferred_is_later": {
+      "hi": 0.8392857142857143,
+      "lo": 0.6666666666666666,
+      "n": 168,
+      "n_pairs": 84,
+      "skipped": 0,
+      "value": 0.7559523809523809
+    },
+    "accuracy_preferred_is_shorter": {
+      "hi": 0.7125,
+      "lo": 0.55,
+      "n": 240,
+      "n_pairs": 120,
+      "skipped": 0,
+      "value": 0.6291666666666667
+    },
+    "accuracy_strong_pairs": {
+      "hi": 0.8206106870229007,
+      "lo": 0.7309160305343512,
+      "n": 524,
+      "n_pairs": 262,
+      "skipped": 0,
+      "value": 0.7767175572519084
+    }
+  },
+  "n_error": 0,
+  "n_failed": 0,
+  "n_ok": 750,
+  "n_pairs": 375,
+  "n_pairs_both_orders": 375,
+  "n_rows": 750,
+  "position_consistency": 0.8773333333333333,
+  "prompt_hash": "ac831a1b9c3e",
+  "run_id": "2026-10-04-pairs_se-ollama-qwen3-14b-no-think",
+  "tie_rate": 0.0
+}

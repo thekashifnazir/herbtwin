@@ -1,0 +1,252 @@
+{
+ "prereg": "data/eval/prereg/2026-10-19-trusted-extract-r4.md",
+ "split": "dev",
+ "selected": "super-vl+E1",
+ "grid": [
+  {
+   "config": "super-vl+E0",
+   "stages": 2,
+   "negatives": 414,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 72,
+   "recall": 0.4861,
+   "recall_wilson95": [
+    0.3743,
+    0.5993
+   ],
+   "latency_p50_s": 0.67,
+   "latency_p95_s": 0.92,
+   "usd_per_answer": 0.000262,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/216",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields": {
+    "action": 0.785,
+    "polarity": 0.955,
+    "applies_to": 0.944,
+    "hedged": 0.994,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.441,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "super-vl+E1",
+   "stages": 2,
+   "negatives": 414,
+   "false_agrees": 0,
+   "false_agree_rate": 0.0,
+   "false_agree_wilson95": [
+    0.0,
+    0.0092
+   ],
+   "positives": 72,
+   "recall": 0.5833,
+   "recall_wilson95": [
+    0.4681,
+    0.6901
+   ],
+   "latency_p50_s": 0.62,
+   "latency_p95_s": 0.91,
+   "usd_per_answer": 0.000381,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/216",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [],
+   "fields": {
+    "action": 0.853,
+    "polarity": 0.949,
+    "applies_to": 0.966,
+    "hedged": 0.989,
+    "is_instruction": 0.876,
+    "condition_kinds": 0.542,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "super+E0",
+   "stages": 2,
+   "negatives": 414,
+   "false_agrees": 7,
+   "false_agree_rate": 0.0169,
+   "false_agree_wilson95": [
+    0.0082,
+    0.0345
+   ],
+   "positives": 72,
+   "recall": 0.5833,
+   "recall_wilson95": [
+    0.4681,
+    0.6901
+   ],
+   "latency_p50_s": 0.96,
+   "latency_p95_s": 1.64,
+   "usd_per_answer": 0.000247,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/216",
+    "fact": "3/48",
+    "hedged": "0/21",
+    "liking": "2/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "2/21"
+   },
+   "false_agree_ids": [
+    284,
+    286,
+    332,
+    333,
+    334,
+    356,
+    357
+   ],
+   "fields": {
+    "action": 0.802,
+    "polarity": 0.944,
+    "applies_to": 0.955,
+    "hedged": 0.966,
+    "is_instruction": 0.751,
+    "condition_kinds": 0.486,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "ultra+E0",
+   "stages": 2,
+   "negatives": 414,
+   "false_agrees": 3,
+   "false_agree_rate": 0.0072,
+   "false_agree_wilson95": [
+    0.0025,
+    0.0211
+   ],
+   "positives": 72,
+   "recall": 0.6806,
+   "recall_wilson95": [
+    0.5661,
+    0.7767
+   ],
+   "latency_p50_s": 0.94,
+   "latency_p95_s": 1.05,
+   "usd_per_answer": 0.00085,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "0/216",
+    "fact": "3/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "0/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [
+    332,
+    333,
+    334
+   ],
+   "fields": {
+    "action": 0.774,
+    "polarity": 0.955,
+    "applies_to": 0.938,
+    "hedged": 1.0,
+    "is_instruction": 0.87,
+    "condition_kinds": 0.672,
+    "sentences": 177
+   }
+  },
+  {
+   "config": "nano+E0",
+   "stages": 2,
+   "negatives": 414,
+   "false_agrees": 6,
+   "false_agree_rate": 0.0145,
+   "false_agree_wilson95": [
+    0.0067,
+    0.0313
+   ],
+   "positives": 72,
+   "recall": 0.5694,
+   "recall_wilson95": [
+    0.4544,
+    0.6774
+   ],
+   "latency_p50_s": 0.77,
+   "latency_p95_s": 1.13,
+   "usd_per_answer": 5.8e-05,
+   "no_form": 0,
+   "false_agrees_by_kind": {
+    "do": "5/216",
+    "fact": "0/48",
+    "hedged": "0/21",
+    "liking": "0/42",
+    "neg": "0/42",
+    "other_plant": "1/24",
+    "question": "0/21"
+   },
+   "false_agree_ids": [
+    96,
+    104,
+    106,
+    112,
+    380,
+    389
+   ],
+   "fields": {
+    "action": 0.723,
+    "polarity": 0.927,
+    "applies_to": 0.898,
+    "hedged": 0.989,
+    "is_instruction": 0.678,
+    "condition_kinds": 0.266,
+    "sentences": 177
+   }
+  }
+ ],
+ "redteam_of_selected": {
+  "config": "super-vl+E1",
+  "stages": 2,
+  "negatives": 11,
+  "false_agrees": 0,
+  "false_agree_rate": 0.0,
+  "false_agree_wilson95": [
+   0.0,
+   0.2588
+  ],
+  "positives": 5,
+  "recall": 0.6,
+  "recall_wilson95": [
+   0.2307,
+   0.8824
+  ],
+  "latency_p50_s": 0.76,
+  "latency_p95_s": 0.94,
+  "usd_per_answer": 0.000395,
+  "no_form": 0,
+  "false_agrees_by_kind": {
+   "do": "0/11"
+  },
+  "false_agree_ids": []
+ },
+ "spent_usd": 0.3205
+}

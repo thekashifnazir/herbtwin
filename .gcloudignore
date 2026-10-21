@@ -1,0 +1,20 @@
+# What `gcloud run deploy --source .` (the deploy) uploads to Cloud Build: only what
+# the Dockerfile copies. Without this file gcloud reads .gitignore alone, and the main
+# checkout's data/external (tens of GB, ignored via .git/info/exclude) would be uploaded.
+/*
+!/Dockerfile
+!/.dockerignore
+!/pyproject.toml
+!/uv.lock
+!/README.md
+!/LICENSE
+!/src/
+!/data/
+/data/*
+!/data/seasonal/
+!/data/outcomes/
+!/data/confidence/
+!/data/scoring/
+!/data/spot_grid/
+!/data/crop_calendar/
+__pycache__/

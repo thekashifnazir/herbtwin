@@ -1,0 +1,447 @@
+{
+ "tier_recall": 0.9,
+ "in_tiers": 415,
+ "fair_wanted": 461,
+ "recall": 0.157,
+ "found": 94,
+ "wanted": 597,
+ "recall_over_ceiling": 0.322,
+ "shown_recall": 0.332,
+ "shown": 153,
+ "hard_errors": [],
+ "rows": [
+  {
+   "setting": "pot",
+   "month": 1,
+   "found": 0,
+   "wanted": 8,
+   "in_tiers": 0,
+   "fair_wanted": 1,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 2,
+   "found": 1,
+   "wanted": 17,
+   "in_tiers": 3,
+   "fair_wanted": 5,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 3,
+   "found": 2,
+   "wanted": 35,
+   "in_tiers": 8,
+   "fair_wanted": 8,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 4,
+   "found": 3,
+   "wanted": 38,
+   "in_tiers": 5,
+   "fair_wanted": 6,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 5,
+   "found": 2,
+   "wanted": 18,
+   "in_tiers": 4,
+   "fair_wanted": 4,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 6,
+   "found": 0,
+   "wanted": 21,
+   "in_tiers": 1,
+   "fair_wanted": 3,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 7,
+   "found": 2,
+   "wanted": 12,
+   "in_tiers": 4,
+   "fair_wanted": 4,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 8,
+   "found": 3,
+   "wanted": 13,
+   "in_tiers": 5,
+   "fair_wanted": 6,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 9,
+   "found": 0,
+   "wanted": 7,
+   "in_tiers": 2,
+   "fair_wanted": 2,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 10,
+   "found": 0,
+   "wanted": 5,
+   "in_tiers": 0,
+   "fair_wanted": 1,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 11,
+   "found": 0,
+   "wanted": 2,
+   "in_tiers": 1,
+   "fair_wanted": 1,
+   "hard_errors": 0
+  },
+  {
+   "setting": "pot",
+   "month": 12,
+   "found": 1,
+   "wanted": 2,
+   "in_tiers": 1,
+   "fair_wanted": 1,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 1,
+   "found": 0,
+   "wanted": 8,
+   "in_tiers": 2,
+   "fair_wanted": 8,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 2,
+   "found": 2,
+   "wanted": 17,
+   "in_tiers": 15,
+   "fair_wanted": 17,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 3,
+   "found": 4,
+   "wanted": 35,
+   "in_tiers": 35,
+   "fair_wanted": 35,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 4,
+   "found": 5,
+   "wanted": 38,
+   "in_tiers": 36,
+   "fair_wanted": 38,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 5,
+   "found": 2,
+   "wanted": 18,
+   "in_tiers": 18,
+   "fair_wanted": 18,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 6,
+   "found": 3,
+   "wanted": 21,
+   "in_tiers": 19,
+   "fair_wanted": 21,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 7,
+   "found": 4,
+   "wanted": 12,
+   "in_tiers": 11,
+   "fair_wanted": 12,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 8,
+   "found": 5,
+   "wanted": 13,
+   "in_tiers": 11,
+   "fair_wanted": 13,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 9,
+   "found": 2,
+   "wanted": 7,
+   "in_tiers": 7,
+   "fair_wanted": 7,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 10,
+   "found": 0,
+   "wanted": 5,
+   "in_tiers": 4,
+   "fair_wanted": 5,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 11,
+   "found": 1,
+   "wanted": 2,
+   "in_tiers": 1,
+   "fair_wanted": 2,
+   "hard_errors": 0
+  },
+  {
+   "setting": "clay ground",
+   "month": 12,
+   "found": 2,
+   "wanted": 2,
+   "in_tiers": 2,
+   "fair_wanted": 2,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 1,
+   "found": 0,
+   "wanted": 8,
+   "in_tiers": 2,
+   "fair_wanted": 8,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 2,
+   "found": 3,
+   "wanted": 17,
+   "in_tiers": 15,
+   "fair_wanted": 17,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 3,
+   "found": 3,
+   "wanted": 35,
+   "in_tiers": 35,
+   "fair_wanted": 35,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 4,
+   "found": 4,
+   "wanted": 38,
+   "in_tiers": 36,
+   "fair_wanted": 38,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 5,
+   "found": 3,
+   "wanted": 18,
+   "in_tiers": 18,
+   "fair_wanted": 18,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 6,
+   "found": 4,
+   "wanted": 21,
+   "in_tiers": 19,
+   "fair_wanted": 21,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 7,
+   "found": 0,
+   "wanted": 12,
+   "in_tiers": 11,
+   "fair_wanted": 12,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 8,
+   "found": 4,
+   "wanted": 13,
+   "in_tiers": 11,
+   "fair_wanted": 13,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 9,
+   "found": 3,
+   "wanted": 7,
+   "in_tiers": 7,
+   "fair_wanted": 7,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 10,
+   "found": 3,
+   "wanted": 5,
+   "in_tiers": 4,
+   "fair_wanted": 5,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 11,
+   "found": 1,
+   "wanted": 2,
+   "in_tiers": 1,
+   "fair_wanted": 2,
+   "hard_errors": 0
+  },
+  {
+   "setting": "sandy ground",
+   "month": 12,
+   "found": 2,
+   "wanted": 2,
+   "in_tiers": 2,
+   "fair_wanted": 2,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 1,
+   "found": 0,
+   "wanted": 2,
+   "in_tiers": 0,
+   "fair_wanted": 2,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 2,
+   "found": 1,
+   "wanted": 5,
+   "in_tiers": 4,
+   "fair_wanted": 5,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 3,
+   "found": 3,
+   "wanted": 16,
+   "in_tiers": 16,
+   "fair_wanted": 16,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 4,
+   "found": 5,
+   "wanted": 11,
+   "in_tiers": 11,
+   "fair_wanted": 11,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 5,
+   "found": 0,
+   "wanted": 6,
+   "in_tiers": 6,
+   "fair_wanted": 6,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 6,
+   "found": 4,
+   "wanted": 7,
+   "in_tiers": 7,
+   "fair_wanted": 7,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 7,
+   "found": 1,
+   "wanted": 5,
+   "in_tiers": 5,
+   "fair_wanted": 5,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 8,
+   "found": 4,
+   "wanted": 8,
+   "in_tiers": 7,
+   "fair_wanted": 8,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 9,
+   "found": 2,
+   "wanted": 3,
+   "in_tiers": 3,
+   "fair_wanted": 3,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 10,
+   "found": 0,
+   "wanted": 0,
+   "in_tiers": 0,
+   "fair_wanted": 0,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 11,
+   "found": 0,
+   "wanted": 0,
+   "in_tiers": 0,
+   "fair_wanted": 0,
+   "hard_errors": 0
+  },
+  {
+   "setting": "part shade",
+   "month": 12,
+   "found": 0,
+   "wanted": 0,
+   "in_tiers": 0,
+   "fair_wanted": 0,
+   "hard_errors": 0
+  }
+ ],
+ "pass": true
+}

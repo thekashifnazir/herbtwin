@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Judges · herbtwin{% endblock %}
+{% block page %}judge-page{% endblock %}
+{% block main %}
+<h1>Judges</h1>
+{% if done %}
+<p class="lead done">You're in. Photo reads on this browser skip the daily limits for 60 days.</p>
+{# the whole visit from its first screen, as anyone sees it, is the main way on; the samples
+   below are a shortcut (21 Oct, Kash: "make it clear they can go back to the home page to
+   carry on ... I wanted to get the full experience from the start") #}
+<div class="judge-home">
+  <p><a class="button primary" href="/">Start from the home page</a></p>
+  <p class="small muted">The full visit, as anyone sees it: send a photo of a plant and follow it through.</p>
+</div>
+{% elif blocked %}
+<p class="err">Too many tries today. Try again tomorrow.</p>
+{% else %}
+<p class="lead">Enter the judges' code to skip the daily photo limits on this browser.</p>
+{% if wrong %}<p class="err" role="alert">That code didn't work. Check it and try again.</p>{% endif %}
+<form method="post" action="/judge" class="card">
+  <label>Judges' code
+    <input type="password" name="code" required maxlength="100" autocomplete="off">
+  </label>
+  <button class="primary" type="submit">Use code</button>
+</form>
+{% endif %}
+
+{# one tap sends a sample with London set, as if picked on the home page (18 Oct judge walk) #}
+<section class="judge-start" aria-labelledby="judge-start-h">
+  <h2 id="judge-start-h">Or a quick look: one tap each</h2>
+  <p>Each sends one of our sample photos with the place set to London. Answers follow the date
+    and London's weather for the next 2 weeks, so they change from week to week.</p>
+  <form class="judge-try" id="judge-try" method="post" action="/analyse" enctype="multipart/form-data">
+    <input type="file" name="photo" id="judge-photo" accept="image/jpeg" hidden>
+    <input type="hidden" name="place" value="London">
+    <div class="judge-picks">
+      <a class="judge-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg" data-to="/analyse">
+        <img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" alt="" loading="lazy">
+        <span><strong>Basil flowering</strong> The best start: the advice tested on the plant's twin, with pictures of it in about 7 days.</span></a>
+      <a class="judge-pick" href="/static/samples/6-basil-downy-mildew.jpg" data-sample="6-basil-downy-mildew.jpg" data-to="/analyse">
+        <img src="/static/samples/6-basil-downy-mildew-thumb.jpg" width="480" height="360" alt="" loading="lazy">
+        <span><strong>Basil mildew</strong> Yellow patches and grey-purple fuzz: a disease the photo check looks for.</span></a>
+      <a class="judge-pick" href="/static/samples/4-rosemary-beetles.jpg" data-sample="4-rosemary-beetles.jpg" data-to="/analyse">
+        <img src="/static/samples/4-rosemary-beetles-thumb.jpg" width="480" height="640" alt="" loading="lazy">
+        <span><strong>Rosemary beetles</strong> A pest on the shoot tips.</span></a>
+      {% if spot_on %}<a class="judge-pick" href="/static/samples/7-pea-bed.jpg" data-sample="7-pea-bed.jpg" data-to="/spots">
+        <img src="/static/samples/7-pea-bed-thumb.jpg" width="480" height="360" alt="" loading="lazy">
+        <span><strong>Raised bed</strong> The second door, "What can I grow here?": which crops suit this spot in London now.</span></a>{% endif %}
+    </div>
+  </form>
+  <p class="small muted"><a href="/credits">Photo credits</a></p>
+  <p class="small muted" id="judge-said" role="status" aria-live="polite"></p>
+  <noscript><p class="small muted">Without JavaScript, a tap opens the photo: save it, then send it from the <a href="/">home page</a> with London as the place.</p></noscript>
+</section>
+
+<section class="judge-staged" aria-labelledby="judge-staged-h">
+  <h2 id="judge-staged-h">What only shows over days</h2>
+  <p>The reminder email and "Did you do it?" need a signed-in account and a second photo of the
+    same plant days later, so they won't appear in a short session. The gallery shows both with
+    test data, marked "Staged (test data)". Signed in, you can try them for real: tick
+    "Email me when it's time to check again" under an answer.</p>
+  <p><a class="button" href="/">Start from the home page</a></p>
+</section>
+{% endblock %}
+{% block script %}
+<script>
+(() => {
+  // a tap loads the sample file into the hidden input (untouched, as the home tiles do) and
+  // sends the form; where a File can't be assigned the tile stays a plain link to the photo
+  const form = document.getElementById("judge-try"), input = document.getElementById("judge-photo"),
+        said = document.getElementById("judge-said");
+  if (!form || !window.fetch || !window.DataTransfer) return;
+  said.textContent = "";
+  let sending = false;
+  // a small copy stays in this tab so the answer page shows the photo back, as an upload
+  // from the home page does (index.html; result.html reads "herbtwin-photo-pending")
+  async function keepPhoto(blob) {
+    try {
+      window.sessionStorage.removeItem("herbtwin-photo-pending");
+      const bmp = await createImageBitmap(blob);
+      const side = 320, scale = side / Math.min(bmp.width, bmp.height);
+      const w = Math.round(bmp.width * scale), h = Math.round(bmp.height * scale);
+      const c = document.createElement("canvas");
+      c.width = side; c.height = side;  // a square crop from the middle, like the home page's
+      c.getContext("2d").drawImage(bmp, (side - w) / 2, (side - h) / 2, w, h);
+      const src = c.toDataURL("image/jpeg", 0.8);
+      window.sessionStorage.setItem("herbtwin-photo-pending", JSON.stringify({src, at: Date.now()}));
+    } catch { /* no storage or canvas: the answer shows without the photo */ }
+  }
+  form.querySelectorAll(".judge-pick").forEach(tile => {
+    tile.addEventListener("click", async e => {
+      e.preventDefault();  // before the first await, or the link navigates anyway
+      if (sending) return;
+      sending = true;
+      tile.setAttribute("aria-busy", "true");
+      said.textContent = "Sending the photo…";
+      try {
+        const r = await fetch(tile.href);
+        if (!r.ok) throw new Error(String(r.status));
+        const blob = await r.blob(), dt = new DataTransfer();
+        dt.items.add(new File([blob], tile.dataset.sample, {type: blob.type || "image/jpeg"}));
+        input.files = dt.files;
+        if (tile.dataset.to === "/analyse") await keepPhoto(blob);
+      } catch { location.href = tile.href; return; }  // can't load it: open the photo instead
+      form.action = tile.dataset.to;
+      form.submit();
+    });
+  });
+  // back from the answer, the page may come from the cache with a tile still busy
+  window.addEventListener("pageshow", () => {
+    sending = false; said.textContent = "";
+    form.querySelectorAll("[aria-busy]").forEach(t => t.removeAttribute("aria-busy"));
+  });
+})();
+</script>
+{% endblock %}

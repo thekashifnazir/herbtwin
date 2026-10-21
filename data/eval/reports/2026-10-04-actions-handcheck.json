@@ -1,0 +1,1662 @@
+[
+ {
+  "id": "actions_se/10980",
+  "hand": {
+   "actions": [
+    "move_light"
+   ],
+   "primary": "move_light"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "move_light"
+   ],
+   "primary": "move_light"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "move_light"
+   ],
+   "primary": "move_light"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "move_light"
+   ],
+   "primary": "move_light"
+  }
+ },
+ {
+  "id": "actions_se/11205",
+  "hand": {
+   "actions": [
+    "move_light",
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "move_light"
+  },
+  "hand_note": "Misses thick mulch (other)",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "shelter",
+    "water"
+   ],
+   "primary": "move_light"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  }
+ },
+ {
+  "id": "actions_se/11251",
+  "hand": {
+   "actions": [
+    "other",
+    "prune"
+   ],
+   "primary": "prune"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "prune"
+   ],
+   "primary": "prune"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "prune"
+   ],
+   "primary": "prune"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "prune"
+   ],
+   "primary": "prune"
+  }
+ },
+ {
+  "id": "actions_se/1307",
+  "hand": {
+   "actions": [
+    "move_light",
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "move_light"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "move_light"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "prune",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  }
+ },
+ {
+  "id": "actions_se/13321",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  },
+  "hand_note": "treat_or_remove unsupported; misses drainage holes and compost change",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "shelter"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "move_light",
+    "other",
+    "shelter",
+    "water"
+   ],
+   "primary": "shelter"
+  }
+ },
+ {
+  "id": "actions_se/13354",
+  "hand": {
+   "actions": [
+    "leave_normal",
+    "move_light"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "Main point: fungus harmless, leave it; more light is a side note",
+  "qwen3_14b": {
+   "actions": [
+    "leave_normal",
+    "move_light"
+   ],
+   "primary": "move_light"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "leave_normal",
+    "move_light",
+    "prune"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "move_light"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/1337",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "other"
+   ],
+   "primary": "dont_water"
+  },
+  "hand_note": "Adds move_light; root removal/trim only in quote, said not needed yet",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "other"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "other"
+   ],
+   "primary": "dont_water"
+  }
+ },
+ {
+  "id": "actions_se/13403",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "Reassures not a concern; only a drainage caution; no light or treatment advice",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "dont_water",
+    "move_light",
+    "treat_or_remove"
+   ],
+   "primary": "ask_first"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/13527",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "hand_note": "Misses check leaf undersides for mites (ask_first)",
+  "qwen3_14b": {
+   "actions": [
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/1372",
+  "hand": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "Cause is over-feeding; implies stop feeding, not normal",
+  "qwen3_14b": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/13905",
+  "hand": {
+   "actions": [
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "shelter unsupported",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/13921",
+  "hand": {
+   "actions": [
+    "leave_normal",
+    "prune",
+    "shelter"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "Says don't worry; wind blocking is for next time",
+  "qwen3_14b": {
+   "actions": [
+    "prune",
+    "shelter"
+   ],
+   "primary": "shelter"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal",
+    "prune",
+    "shelter"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "prune",
+    "shelter"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/13922",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "Insect barrier is other, not shelter",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/1407",
+  "hand": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "Says temporary, plant usually self-corrects; hand-pollinating optional",
+  "qwen3_14b": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/14143",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "other"
+   ],
+   "primary": "dont_water"
+  },
+  "hand_note": "Says don't prune; no light or treatment advice",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "other",
+    "prune"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "other",
+    "prune"
+   ],
+   "primary": "dont_water"
+  }
+ },
+ {
+  "id": "actions_se/14333",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "dont_water",
+    "other",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "move_light unsupported (already out of sun); misses check mites/pot (ask_first)",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "dont_water",
+    "other",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "other",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/14485",
+  "hand": {
+   "actions": [
+    "other",
+    "prune",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "prune",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "other",
+    "prune",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/14519",
+  "hand": {
+   "actions": [
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "Misses keeping air humid (other)",
+  "qwen3_14b": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/14526",
+  "hand": {
+   "actions": [
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "Adds move_light, prune, shelter, water; none advised",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "other",
+    "prune",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/14706",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "hand_note": "Stresses roots need proper wetting; no light, prune or treatment advised",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "water"
+   ],
+   "primary": "water"
+  }
+ },
+ {
+  "id": "actions_se/1512",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "Main message: nothing to worry, best ignored; looking into it is a caveat",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "ask_first"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/1519",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "Main culprit too-rich soil; remedy foliar iron feed is other, not treatment",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "treat_or_remove"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/1539",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "dont_water",
+    "other",
+    "prune"
+   ],
+   "primary": "dont_water"
+  },
+  "hand_note": "Adds move_light, shelter; misses dig-a-hole wetness test (ask_first)",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light",
+    "other",
+    "prune",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "dont_water",
+    "other",
+    "prune",
+    "water"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "dont_water",
+    "other",
+    "prune",
+    "water"
+   ],
+   "primary": "dont_water"
+  }
+ },
+ {
+  "id": "actions_se/1605",
+  "hand": {
+   "actions": [
+    "other",
+    "prune",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "hand_note": "Misses light summer pruning",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "prune",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "other",
+    "prune",
+    "water"
+   ],
+   "primary": "water"
+  }
+ },
+ {
+  "id": "actions_se/1704",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "move_light",
+    "shelter"
+   ],
+   "primary": "move_light"
+  },
+  "hand_note": "Main advice is shade cloth for less sun; diagnosis check is secondary",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "move_light"
+   ],
+   "primary": "ask_first"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "shelter"
+   ],
+   "primary": "shelter"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "shelter"
+   ],
+   "primary": "shelter"
+  }
+ },
+ {
+  "id": "actions_se/2028",
+  "hand": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/2073",
+  "hand": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "treat_or_remove unsupported; only a fertiliser change advised",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "other"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/2109",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "move_light",
+    "other",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "treat_or_remove unsupported; misses pH test (ask_first)",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "other",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "move_light",
+    "other",
+    "water"
+   ],
+   "primary": "ask_first"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "move_light",
+    "other",
+    "water"
+   ],
+   "primary": "ask_first"
+  }
+ },
+ {
+  "id": "actions_se/2149",
+  "hand": {
+   "actions": [
+    "other",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "Stresses distilled water and specialist supplier; not-drying is one point",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "water"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/2184",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "hand_note": "Stresses drought; advises correct watering plus compost mulch",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "water"
+   ],
+   "primary": "ask_first"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "other",
+    "water"
+   ],
+   "primary": "water"
+  }
+ },
+ {
+  "id": "actions_se/2299",
+  "hand": {
+   "actions": [
+    "prune"
+   ],
+   "primary": "prune"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "prune"
+   ],
+   "primary": "prune"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "prune"
+   ],
+   "primary": "prune"
+  }
+ },
+ {
+  "id": "actions_se/2321",
+  "hand": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/244",
+  "hand": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "prune"
+  },
+  "hand_note": "move_light unsupported; misses pulling plant if it spreads",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "prune",
+    "water"
+   ],
+   "primary": "prune"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "prune"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "prune"
+  }
+ },
+ {
+  "id": "actions_se/2490",
+  "hand": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/4611",
+  "hand": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/4630",
+  "hand": {
+   "actions": [
+    "leave_normal",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "Misses 'could do nothing' option",
+  "qwen3_14b": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/4769",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "other",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "Foliar iron spray is feeding not treatment; no light move advised",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "other",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "other",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "other",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/5130",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "prune unsupported; misses calling tree surgeon (ask_first)",
+  "qwen3_14b": {
+   "actions": [
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/5266",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "leave_normal",
+    "treat_or_remove"
+   ],
+   "primary": "ask_first"
+  },
+  "hand_note": "Wait for spring leaf-out before removal; shelter unsupported",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "shelter",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "leave_normal",
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "ask_first"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "leave_normal",
+    "other",
+    "treat_or_remove"
+   ],
+   "primary": "ask_first"
+  }
+ },
+ {
+  "id": "actions_se/5687",
+  "hand": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  }
+ },
+ {
+  "id": "actions_se/5719",
+  "hand": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "Diagnoses winter burn; no protection advised; only blight hygiene tips",
+  "qwen3_14b": {
+   "actions": [
+    "shelter"
+   ],
+   "primary": "shelter"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/643",
+  "hand": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "leave_normal"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/8051",
+  "hand": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "Misses mounding soil around new roots (other)",
+  "qwen3_14b": {
+   "actions": [
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "prune"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other",
+    "prune",
+    "treat_or_remove"
+   ],
+   "primary": "prune"
+  }
+ },
+ {
+  "id": "actions_se/8517",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "move_light"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "move_light"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "dont_water"
+  }
+ },
+ {
+  "id": "actions_se/855",
+  "hand": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "Hand-pollination or attracting bees is other, not treatment",
+  "qwen3_14b": {
+   "actions": [
+    "treat_or_remove"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  }
+ },
+ {
+  "id": "actions_se/8768",
+  "hand": {
+   "actions": [
+    "dont_water"
+   ],
+   "primary": "dont_water"
+  },
+  "hand_note": "No request for more info; ask_first unsupported",
+  "qwen3_14b": {
+   "actions": [
+    "ask_first",
+    "dont_water"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water"
+   ],
+   "primary": "dont_water"
+  }
+ },
+ {
+  "id": "actions_se/9002",
+  "hand": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "dont_water"
+  },
+  "hand_note": "Advises less water, not more; no treatment advised",
+  "qwen3_14b": {
+   "actions": [
+    "move_light",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "water"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "dont_water"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "dont_water",
+    "move_light"
+   ],
+   "primary": "dont_water"
+  }
+ },
+ {
+  "id": "actions_se/935",
+  "hand": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "hand_note": "",
+  "qwen3_14b": {
+   "actions": [
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "other"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "leave_normal",
+    "other"
+   ],
+   "primary": "leave_normal"
+  }
+ },
+ {
+  "id": "actions_se/9944",
+  "hand": {
+   "actions": [
+    "leave_normal",
+    "other",
+    "prune",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "hand_note": "shelter unsupported; misses 'left alone' for second tree",
+  "qwen3_14b": {
+   "actions": [
+    "other",
+    "prune",
+    "shelter",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_sonnet_5_5": {
+   "actions": [
+    "ask_first",
+    "other",
+    "prune",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  },
+  "claude_in_final_set": {
+   "actions": [
+    "ask_first",
+    "leave_normal",
+    "other",
+    "prune",
+    "treat_or_remove",
+    "water"
+   ],
+   "primary": "treat_or_remove"
+  }
+ }
+]

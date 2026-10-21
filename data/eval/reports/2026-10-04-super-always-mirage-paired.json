@@ -1,0 +1,70 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = always_answer minus old_prompt; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "old_prompt": "2026-10-04-super-mirage-text.jsonl",
+    "always_answer": "2026-10-04-super-mirage-always.jsonl"
+  },
+  "n_paired": 200,
+  "ask_first_primary": {
+    "old_prompt": 75,
+    "always_answer": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "old_prompt": 0.41,
+      "always_answer": 0.445,
+      "diff": 0.035,
+      "lo": -0.03,
+      "hi": 0.1,
+      "n": 200
+    },
+    "primary_in_truth": {
+      "old_prompt": 0.635,
+      "always_answer": 0.675,
+      "diff": 0.04,
+      "lo": -0.03,
+      "hi": 0.115,
+      "n": 200
+    },
+    "jaccard": {
+      "old_prompt": 0.30834523809523806,
+      "always_answer": 0.3402797619047619,
+      "diff": 0.03193452380952381,
+      "lo": -0.0031845238095238077,
+      "hi": 0.06672619047619048,
+      "n": 200
+    },
+    "over_treatment": {
+      "old_prompt": 0.015,
+      "always_answer": 0.005,
+      "diff": -0.01,
+      "lo": -0.025,
+      "hi": 0.0,
+      "n": 200
+    },
+    "water_conflict": {
+      "old_prompt": 0.03,
+      "always_answer": 0.055,
+      "diff": 0.025,
+      "lo": 0.0,
+      "hi": 0.05,
+      "n": 200
+    },
+    "asked_when_expert_asked": {
+      "old_prompt": 0.4583333333333333,
+      "always_answer": 0.3055555555555556,
+      "diff": -0.1527777777777778,
+      "lo": -0.2777777777777778,
+      "hi": -0.027777777777777776,
+      "n": 72
+    },
+    "primary_ok_if_asked_too": {
+      "old_prompt": 0.41,
+      "always_answer": 0.445,
+      "diff": 0.035,
+      "lo": -0.03,
+      "hi": 0.1,
+      "n": 200
+    }
+  }
+}

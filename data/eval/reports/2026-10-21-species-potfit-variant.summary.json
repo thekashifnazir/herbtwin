@@ -1,0 +1,70 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.14425,
+  "failed_ids": [
+    "species_gbif/6147697675"
+  ],
+  "git_sha": "be506639",
+  "largest_disagreements": [
+    "species_gbif/3858578207",
+    "species_gbif/4039205391",
+    "species_gbif/4606806501",
+    "species_gbif/4993771888",
+    "species_gbif/5230907367"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 10946,
+  "metrics": {
+    "genus_top1": {
+      "hi": 0.9395973154362416,
+      "lo": 0.8456375838926175,
+      "skipped": 0,
+      "value": 0.8926174496644296
+    },
+    "top1": {
+      "hi": 0.912751677852349,
+      "lo": 0.7986577181208053,
+      "skipped": 0,
+      "value": 0.8590604026845637
+    },
+    "top3": {
+      "hi": 0.9798657718120806,
+      "lo": 0.9060402684563759,
+      "skipped": 0,
+      "value": 0.9463087248322147
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 1,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 149,
+  "n_total": 150,
+  "per_species_top1": {
+    "acer palmatum": 1.0,
+    "allium schoenoprasum": 0.9,
+    "allium tuberosum": 1.0,
+    "artemisia dracunculus": 0.667,
+    "coriandrum sativum": 1.0,
+    "dryopteris filix-mas": 0.9,
+    "melissa officinalis": 0.9,
+    "mentha spicata": 0.9,
+    "ocimum basilicum": 0.9,
+    "origanum vulgare": 1.0,
+    "petroselinum crispum": 0.8,
+    "polystichum setiferum": 0.3,
+    "salvia officinalis": 0.9,
+    "salvia rosmarinus": 0.9,
+    "thymus vulgaris": 0.8
+  },
+  "prompt_hash": "0e5f9cb27423",
+  "run_id": "2026-10-21-species-potfit-variant",
+  "set": "species_gbif",
+  "tags": {
+    "safe-to-train": 150
+  },
+  "temperature": 0
+}

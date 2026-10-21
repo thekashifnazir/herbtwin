@@ -1,0 +1,9 @@
+{
+  "prompt_version": "c2-v1",
+  "signals": {
+    "posture": "passed",
+    "tissue": "passed",
+    "colour": "passed"
+  },
+  "note": "set by scripts/check_scoring.py on 2026-10-07: zai-org/GLM-5.3-Flash, posture {'change_right': '10/10', 'same_false': '0/10', 'parsley_ok': '3/3'}, tissue {'change_right': '14/14', 'same_false': '0/12'}, colour {'change_right': '14/14', 'same_false': '0/10'}, $0.116; a signal without 10 change and 10 same pairs stays untested"
+}

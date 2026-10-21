@@ -1,0 +1,106 @@
+{
+  "advise_cost_usd": 0.499564,
+  "backend": "tokenfactory",
+  "git_sha": "f0b841c",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.6666666666666666,
+      "lo": 0.4444444444444444,
+      "n": 72,
+      "value": 0.5555555555555556
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.38766666666666666,
+      "lo": 0.31204166666666666,
+      "n": 200,
+      "value": 0.34975
+    },
+    "over_treatment": {
+      "hi": 0.025,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.01
+    },
+    "primary_in_truth": {
+      "hi": 0.715,
+      "lo": 0.585,
+      "n": 200,
+      "value": 0.65
+    },
+    "primary_match": {
+      "hi": 0.475,
+      "lo": 0.34,
+      "n": 200,
+      "value": 0.41
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.475,
+      "lo": 0.34,
+      "n": 200,
+      "value": 0.41
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.0
+    },
+    "water_conflict": {
+      "hi": 0.05,
+      "lo": 0.005,
+      "n": 200,
+      "value": 0.025
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 200,
+  "n_total": 200,
+  "pred_primary": {
+    "dont_water": 8,
+    "leave_normal": 86,
+    "move_light": 4,
+    "other": 42,
+    "prune": 31,
+    "shelter": 6,
+    "treat_or_remove": 4,
+    "water": 19
+  },
+  "pred_primary_fine": {
+    "change_soil": 13,
+    "dont_water": 8,
+    "feed": 8,
+    "isolate": 1,
+    "leave_normal": 86,
+    "move_light": 4,
+    "mulch": 1,
+    "other": 12,
+    "prune": 31,
+    "repot": 8,
+    "shelter": 6,
+    "treat_or_remove": 3,
+    "water": 19
+  },
+  "prompt_hash": "114a377a8a65",
+  "run_id": "b1b-mirage",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 44,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

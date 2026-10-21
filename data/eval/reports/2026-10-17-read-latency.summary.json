@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-17",
+  "n": 10,
+  "n_ok": 10,
+  "median_s": 19.9,
+  "min_s": 17.66,
+  "max_s": 31.98,
+  "backup_reads": 0,
+  "cost_usd": 0.0431,
+  "note": "Local server (Mac, home broadband) on main at 2328d81, with the live switches from the private working repo's `deploy.sh` (GLM-5.3-Flash reads the photo with DeepSeek-V4.1-Flash as backup and a 90 s photo timeout; Nemotron 3 Super x3 advises; Nano chats; Tavily, search and spot on). Off locally, as they do not change the time: the Cloudflare edge guard and the visitor caps; LangSmith traces went to a separate project. Signed out; place typed: London; one read at a time.",
+  "rows": [
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "status": "ok",
+      "read_s": 17.69,
+      "page_s": 0.05,
+      "total_s": 17.74,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00335,
+      "calls": 4,
+      "repeat": 0
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "status": "ok",
+      "read_s": 19.47,
+      "page_s": 0.0,
+      "total_s": 19.47,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00438,
+      "calls": 5,
+      "repeat": 0
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "status": "ok",
+      "read_s": 31.97,
+      "page_s": 0.0,
+      "total_s": 31.98,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00569,
+      "calls": 5,
+      "repeat": 0
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "status": "ok",
+      "read_s": 17.65,
+      "page_s": 0.0,
+      "total_s": 17.66,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00349,
+      "calls": 4,
+      "repeat": 0
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "status": "ok",
+      "read_s": 20.22,
+      "page_s": 0.0,
+      "total_s": 20.22,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00461,
+      "calls": 5,
+      "repeat": 0
+    },
+    {
+      "photo": "1-parsley-healthy.jpg",
+      "status": "ok",
+      "read_s": 20.91,
+      "page_s": 0.0,
+      "total_s": 20.91,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00358,
+      "calls": 4,
+      "repeat": 1
+    },
+    {
+      "photo": "3-basil-yellow-leaves.jpg",
+      "status": "ok",
+      "read_s": 24.14,
+      "page_s": 0.0,
+      "total_s": 24.14,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00377,
+      "calls": 4,
+      "repeat": 1
+    },
+    {
+      "photo": "4-rosemary-beetles.jpg",
+      "status": "ok",
+      "read_s": 19.63,
+      "page_s": 0.0,
+      "total_s": 19.63,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00473,
+      "calls": 5,
+      "repeat": 1
+    },
+    {
+      "photo": "5-coriander-flowering.jpg",
+      "status": "ok",
+      "read_s": 18.02,
+      "page_s": 0.0,
+      "total_s": 18.03,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.0041,
+      "calls": 4,
+      "repeat": 1
+    },
+    {
+      "photo": "6-basil-downy-mildew.jpg",
+      "status": "ok",
+      "read_s": 26.09,
+      "page_s": 0.0,
+      "total_s": 26.09,
+      "observe_models": [
+        "zai-org/GLM-5.3-Flash"
+      ],
+      "backup": false,
+      "cost_usd": 0.00536,
+      "calls": 5,
+      "repeat": 1
+    }
+  ],
+  "live_spot_check": {
+    "measured_by": "integrating session",
+    "date": "2026-10-17",
+    "revision": "herbtwin-00030-scf",
+    "path": "Cloudflare -> Cloud Run, /api/analyse, curl time_total, judges' code, place London",
+    "total_s": {
+      "1-parsley-healthy.jpg": 24.4,
+      "4-rosemary-beetles.jpg": 25.8,
+      "6-basil-downy-mildew.jpg": 23.9
+    }
+  }
+}

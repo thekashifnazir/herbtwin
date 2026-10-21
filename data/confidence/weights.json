@@ -1,0 +1,127 @@
+{
+  "provenance": {
+    "status": "fitted",
+    "note": "base, advisor, agreement and repair fitted on the panel runs; levels measured on cross-fitted held-out rows; other factors hand-set; soil_texture hand-set (spot spec D73, 12 Oct 2026)",
+    "sets": [
+      "2026-10-05-panel2-se-150.jsonl",
+      "2026-10-05-panel2-mirage.jsonl"
+    ],
+    "n": 350,
+    "date": "2026-10-05",
+    "auroc": {
+      "se->mirage": 0.735,
+      "mirage->se": 0.743
+    }
+  },
+  "base": {
+    "treat_or_remove": 0.486,
+    "other": 1.025,
+    "leave_normal": -0.944,
+    "move_light": -0.54,
+    "shelter": -0.385,
+    "dont_water": -1.332,
+    "prune": 0.508,
+    "water": -0.164,
+    "default": -0.323
+  },
+  "factors": {
+    "advisor": {
+      "raises": 0.105,
+      "lowers": -0.179
+    },
+    "agreement": {
+      "raises": 0.074,
+      "lowers": -0.06
+    },
+    "repair": {
+      "lowers": 0.007
+    },
+    "species": {
+      "raises": 0.2,
+      "lowers": -0.4
+    },
+    "photo_quality": {
+      "lowers": -0.3
+    },
+    "season": {
+      "raises": 0.5,
+      "lowers": -0.5
+    },
+    "season_evidence": {
+      "raises": 0.1,
+      "lowers": -0.1
+    },
+    "cold_nights": {
+      "raises": 0.2,
+      "lowers": -0.1
+    },
+    "plant_model": {
+      "raises": 0.3,
+      "lowers": -0.4
+    },
+    "plant_model_margin": {
+      "raises": 0.1,
+      "lowers": -0.2
+    },
+    "container": {
+      "raises": 0.1,
+      "lowers": -0.1
+    },
+    "weather": {
+      "raises": 0.1
+    },
+    "forecast_distance": {
+      "raises": 0.1,
+      "lowers": -0.1
+    },
+    "weather_explains": {
+      "raises": 0.3
+    },
+    "care_facts": {
+      "raises": 0.1,
+      "lowers": -0.1
+    },
+    "soil": {
+      "raises": 0.2,
+      "lowers": -0.3
+    },
+    "history": {
+      "raises": 0.1
+    },
+    "soil_feel": {
+      "raises": 0.3,
+      "lowers": -0.4
+    },
+    "setting": {
+      "raises": 0.05
+    },
+    "light": {
+      "raises": 0.1,
+      "lowers": -0.2
+    },
+    "soil_texture": {
+      "raises": 0.1,
+      "lowers": -0.2
+    }
+  },
+  "levels": [
+    {
+      "level": "not_sure",
+      "below": -0.4,
+      "in_ten": 3,
+      "n": 179
+    },
+    {
+      "level": "fairly_sure",
+      "below": 0.2,
+      "in_ten": 5,
+      "n": 60
+    },
+    {
+      "level": "sure",
+      "below": null,
+      "in_ten": 7,
+      "n": 111
+    }
+  ]
+}

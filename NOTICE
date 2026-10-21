@@ -1,0 +1,143 @@
+HerbTwin
+Copyright (c) 2026 Kashif Nazir
+
+The code, and the data we wrote ourselves, are released under the MIT License (see
+LICENSE).
+
+This repository also holds data compiled from, or pointing to, third-party sources.
+Their owners keep their rights, and none of them endorses this project. Care facts from
+gardening publishers are restated in our own words, with a link to the source page in
+each row; no publisher's text is copied. `scripts/check_copied_text.py` checks this: it
+fails if any data field shares 8 or more words in a row with a page that row cites.
+
+DATA CREDITS
+
+Open Government Licence v3:
+https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+CC BY 4.0: https://creativecommons.org/licenses/by/4.0/
+
+data/spot_grid/
+  British Geological Survey, Soil Parent Material Model, 1 km. Open Government Licence
+  v3. Contains British Geological Survey materials (c) UKRI.
+  UKCEH Countryside Survey topsoil pH, 1 km model (Henrys, Keith, Robinson and Emmett
+  2012, NERC EIDC). Open Government Licence v3.
+  Met Office HadUK-Grid v1.3.2, 1 km monthly normals 1991-2020, via CEDA. Open
+  Government Licence v3. Contains Met Office data (c) Crown copyright.
+  Used for: soil texture, lime and pH per 1 km cell; frost nights, coldest-month
+  minimum and sunshine hours. Details in data/spot_grid/README.md.
+
+data/crop_calendar/
+  Royal Horticultural Society, Garden Organic, Real Seeds, Gardeners' World, Jekka's,
+  Sarah Raven, Marshalls and other UK growers' pages (URL per row). Publishers'
+  copyright: we keep facts only, in our own words.
+  Plant Variety Database (https://github.com/bripatch/plant-variety-database), by Wind
+  River Greens (https://plants.windrivergreens.com). CC BY 4.0
+  (https://creativecommons.org/licenses/by/4.0/). Used for days-to-harvest values
+  where a row cites it.
+  Used for: sow, plant-out and harvest months; container, sun and soil facts.
+
+data/outcomes/
+  RHS advice pages; Clemson HGIC; NC State Extension; University of Wisconsin-Madison,
+  Maryland, Utah State and UConn Extension; American Orchid Society (URL per row).
+  Publishers' copyright: facts only, in our own words.
+  Used for: what happens if you do, or don't, take a care action now; what each pest
+  or disease looks like.
+
+data/seasonal/
+  RHS; NC State Extension; Clemson HGIC; UW-Madison, UConn and UF/IFAS Extension;
+  AHDB; American Orchid Society; Frontiers; Wildlife Watch; Wikipedia, pinned to a
+  revision (URL per row). Publishers' copyright, and CC BY-SA 4.0 for Wikipedia:
+  facts only, in our own words.
+  Used for: what is normal for each plant in each UK month.
+
+data/confidence/
+  Our own weights, fitted by scripts/fit_confidence.py over our evaluation runs. MIT.
+
+data/scoring/
+  Our pair list and gate result (MIT). The photos it refers to are not included. The
+  public ones keep their own licence (CC BY or CC BY-SA, from Wikimedia Commons, ETH Zurich and
+  PhenoCam), credited in the "note" field of data/scoring/pairs.json; the rest are the
+  owner's own garden photos.
+
+data/eval/
+  Our manifests, labels and reports (MIT). The photos and posts they refer to are not
+  included; each keeps the licence given in its row's "licence" field (Gardening Stack
+  Exchange, GBIF and iNaturalist, Wikimedia Commons, Mendeley Data, Zenodo).
+
+src/herbtwin/data/openplantdb_herbs.json
+  OpenPlantDB (github.com/cwfrazier1/openplantdb). CC0 1.0; see
+  src/herbtwin/data/LICENSE-openplantdb.txt.
+
+docs/judges/samples/
+  Sample photos from iNaturalist / GBIF and Wikimedia Commons photographers (CC0 1.0,
+  CC BY 3.0 US, CC BY 4.0, CC BY-SA 4.0), downscaled and stripped of metadata. Authors
+  are named in docs/judges/samples/CREDITS.md.
+
+src/herbtwin/web/static/samples/
+  The same six sample photos, served on the home page, plus small thumbnails made from
+  them (resized only). Same authors and licences as docs/judges/samples/CREDITS.md:
+  Johnathon Ridden (CC0 1.0), Forest and Kim Starr (CC BY 3.0 US), Максим Шумских
+  (CC BY 4.0), Ian Wolfe (CC0 1.0), Kolforn (Wikimedia) (CC BY-SA 4.0). The page names
+  them under the samples.
+  7-pea-bed.jpg: Kolforn (Wikimedia), CC BY-SA 4.0, from Wikimedia Commons: 2020-11-25
+  Young pea plants, Trimingham, Norfolk
+  (https://commons.wikimedia.org/wiki/File:-2020-11-25_Young_pea_plants,_Trimingham,_Norfolk.JPG),
+  resized to 1600 px; shared under the same licence.
+  CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
+
+src/herbtwin/web/static/twin/
+  Eight "about a week from now" illustrations: each is an edit of one of the sample
+  photos above ("if you do" and "if you don't"), made with Qwen-Image-Edit-2509
+  (Apache-2.0) on a Nebius AI Cloud GPU. They are changed versions of the source
+  photos and keep the source photo's licence: Johnathon Ridden (CC0 1.0), Forest and
+  Kim Starr (CC BY 3.0 US), Максим Шумских (CC BY 4.0), Ian Wolfe (CC0 1.0). Each
+  render's credit is in the "credit" field of src/herbtwin/web/static/twin/manifest.json
+  and is shown under the picture.
+  CC BY 3.0 US: https://creativecommons.org/licenses/by/3.0/us/
+  CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+
+src/herbtwin/evals/species_synonyms.json
+  Synonym list from the World Checklist of Vascular Plants (WCVP), Royal Botanic
+  Gardens, Kew, version 16. CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/).
+  Govaerts et al. (2021), "The World Checklist of Vascular Plants, a continuously
+  updated resource for exploring global plant diversity", Scientific Data 8, 215.
+  Changed: we kept only species-rank synonyms whose accepted name is one of our taxa,
+  and dropped one homonym. Used for: matching a photo model's species name to ours.
+
+LIVE SERVICES
+
+The app also asks these services at run time. Nothing they return is stored in this
+repository.
+
+Open-Meteo (https://open-meteo.com)
+  Weather, the 2-week forecast, past weather (archive API) and place-name search
+  (geocoding API). API data under CC BY 4.0: "Weather data by Open-Meteo.com". Open-Meteo
+  combines national weather services' models, Copernicus/ECMWF reanalysis and the
+  GeoNames place list (CC BY 4.0); the full list is at https://open-meteo.com/en/licence.
+  The free API is for non-commercial use only. Anyone running a commercial copy needs
+  an Open-Meteo API plan.
+
+postcodes.io (https://postcodes.io)
+  Turns a typed UK postcode into a rough location. Code MIT. Great Britain postcode data
+  under the OS OpenData licence; Northern Ireland ("BT") postcodes under the ONSPD
+  licence, free for non-commercial use only.
+  Contains Ordnance Survey data (c) Crown copyright and database right.
+  Contains Royal Mail data (c) Royal Mail copyright and database right.
+  Contains National Statistics data (c) Crown copyright and database right.
+  Contains NRS data (c) Crown copyright and database right.
+
+OpenPlantBook (https://open.plantbook.io)
+  Light, soil-moisture and temperature bands for a plant outside our own list (needs
+  free API credentials). Used under OpenPlantBook's own terms of use; no data licence
+  is stated, so none of its data is shipped here.
+
+Royal Horticultural Society plant pages (https://www.rhs.org.uk)
+  For a plant outside our list, the app reads that species' RHS page and uses its
+  growing conditions for that one answer. Pages are cached only on the running server
+  (data/pages/, never committed). RHS copyright; we link the page and do not copy its
+  text.
+
+Web search (Tavily, Exa, TinyFish)
+  The follow-up chat can search trusted gardening sites. Each result keeps its
+  publisher's copyright and is linked, not copied. Each service is used under its own
+  terms.

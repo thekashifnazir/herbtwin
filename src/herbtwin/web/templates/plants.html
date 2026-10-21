@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "_nav.html" import site_nav %}
+{% block title %}My plants · herbtwin{% endblock %}
+{% block page %}plants-page has-band{% endblock %}
+{% block nav %}{{ site_nav(person=person, here="plants") }}{% endblock %}
+{% block wrap %} wide{% endblock %}
+{% block main %}
+{# the home look (16 Oct): the band, then a grid of inked cards, one per plant, each the
+   photo, the latest answer and Open; earlier answers and the reminder, rename and delete
+   fold into the card so three plants fit on a screen #}
+<div class="page-band">
+  <h1>My plants</h1>
+  {% if plants %}<p>Each photo you send while signed in is kept here with its answer, newest first.</p>{% endif %}
+  <p class="actions"><a class="button primary" href="/">Upload a photo</a></p>
+</div>
+{% if plants %}
+<div class="plant-grid">
+{% for p, visits, thumb, lines, box in plants %}
+<article class="card plant">
+  <div class="plant-head">
+    {% if thumb %}<a class="plant-thumb" href="/answers/{{ visits[0].id }}"><img src="{{ thumb }}" alt="Open the latest answer" width="96" height="96"></a>{% endif %}
+    <div class="plant-title">
+      <h2>{{ p.name }}</h2>
+      <p class="muted small plant-species">{{ p.species[:1]|upper }}{{ p.species[1:] }}</p>
+    </div>
+  </div>
+  {% if visits %}{% set v = visits[0] %}
+  <p class="plant-latest"><a href="/answers/{{ v.id }}"><span class="num visit-date">{{ v.taken_at.strftime("%d %b") }}</span> {{ v.answer.headline if v.answer else "no advice" }}</a>{% if lines.get(v.id) %}<span class="visit-line small muted">{{ lines[v.id] }}</span>{% endif %}</p>
+  {% if box and box.on and not box.sent %}<p class="small plant-remind-on">Reminder on: one email when it's due a look.</p>{% endif %}
+  {% if box and box.sent %}<p class="tray small remind-sent">We emailed you a reminder for the {{ v.taken_at.strftime("%d %b") }} answer.</p>{% endif %}
+  <p class="plant-open"><a class="button" href="/answers/{{ v.id }}">Open the latest answer</a></p>
+  {% if visits|length > 1 %}<details class="plant-earlier"><summary>Earlier answers ({{ visits|length - 1 }})</summary>
+  <ul class="visits">
+    {% for w in visits[1:] %}<li><a href="/answers/{{ w.id }}"><span class="num visit-date">{{ w.taken_at.strftime("%d %b") }}</span> {{ w.answer.headline if w.answer else "no advice" }}</a>{% if lines.get(w.id) %}<span class="visit-line small muted">{{ lines[w.id] }}</span>{% endif %}</li>{% endfor %}
+  </ul></details>{% endif %}
+  {% endif %}
+  <details class="plant-manage"><summary>Reminder, name and delete</summary>
+  {% if box and not box.sent %}<form class="tray remind" method="post" action="/answers/{{ visits[0].id }}/reminder"><input type="hidden" name="back" value="/plants">
+    <label><input type="checkbox" name="on" value="1"{% if box.on %} checked{% endif %} onchange="this.form.submit()"> Email me when it's time to check again</label>
+    <p class="small muted">{% if box.on %}On: one email, when this advice is due a look.{% else %}Off: no email.{% endif %}</p>
+    <noscript><button type="submit">Save</button></noscript></form>{% endif %}
+    <p class="small muted">Next photo: from the same spot, at about the same time of day if you can.</p>
+    <form class="rename" method="post" action="/plants/{{ p.id }}/rename">
+      <label for="name-{{ p.id }}" class="small">Name</label>
+      <div class="rename-row"><input id="name-{{ p.id }}" name="name" value="{{ p.name }}" maxlength="60" required> <button class="quiet" type="submit">Rename</button></div>
+    </form>
+    <form class="delete" method="post" action="/plants/{{ p.id }}/delete" onsubmit='return confirm({{ ("Delete " ~ p.name ~ " and all its photos? This cannot be undone.")|tojson }})'><button class="danger" type="submit">Delete this plant and its photos</button></form>
+  </details>
+</article>
+{% endfor %}
+</div>
+{% else %}
+<div class="card plants-empty">
+  <h2>No plants yet</h2>
+  <p>Send a photo while signed in and the plant appears here, with each answer it gets.</p>
+</div>
+{% endif %}
+<hr class="divider">
+<section class="account" aria-labelledby="account-h">
+  <h2 id="account-h">Your account</h2>
+  {% if sharing %}<form class="sharing" method="post" action="/account/sharing"><input type="hidden" name="back" value="/plants">
+    <p>Sharing how past advice turned out: <strong>{{ "on" if sharing.share_scored_pairs else "off" }}</strong></p>
+    <p class="small muted">The plant, the month, a rough region and how the advice turned out, to make the advice better for everyone. Never your photos or typed text. Turning it off keeps your plants out of what we share from now on.</p>
+    {% if sharing.share_scored_pairs %}<button class="quiet" type="submit" name="share" value="no">Turn off</button>
+    {% else %}<button class="quiet" type="submit" name="share" value="yes">Turn on</button>{% endif %}
+  </form>{% endif %}
+  <div class="account-delete">
+    <a class="button danger" href="/account/delete">Delete my account and everything in it</a>
+  </div>
+</section>
+{% endblock %}

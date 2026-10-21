@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% from "_nav.html" import site_nav %}
+{% block title %}Which plant? · herbtwin{% endblock %}
+{% block page %}plants-page{% endblock %}
+{% block nav %}{{ site_nav(person=person) }}{% endblock %}
+{% block main %}
+<h1>Which plant is this?</h1>
+{# this photo and what it was read as, by the name its answer will carry (judge pre-walk, 19 Oct) #}
+{% if photo or top %}<p class="choose-this">{% if photo %}<img class="choose-new" src="{{ photo }}" alt="Your new photo" width="96" height="96">{% endif %}
+  {% if top %}<span>Read as: <strong>{{ plant_name(top.name, top.common_name) }}</strong></span>{% endif %}</p>{% endif %}
+<p class="lead">Pick the plant in this photo, so the advice can use what it knows about it.</p>
+<form class="choices" method="post" action="/answers/{{ rid }}/plant">
+{% for p, last, thumb in found %}<button class="choice" type="submit" name="plant_id" value="{{ p.id }}">
+  {% if thumb %}<img src="{{ thumb }}" alt="" width="160" height="160">{% else %}<span class="choice-pic" aria-hidden="true"></span>{% endif %}
+  <span class="choice-name">{{ p.name }}</span>
+  <span class="choice-when small muted">last photo {{ last.taken_at.strftime("%d %b") }}</span></button>
+{% endfor %}<button class="choice choice-new" type="submit" name="plant_id" value="new">
+  <span class="choice-pic" aria-hidden="true">+</span>
+  <span class="choice-name">A new plant</span>
+  <span class="choice-when small muted">start a fresh history</span></button>
+</form>
+<p class="small muted">Next time, take it from the same spot, at about the same time of day if you can: the check on earlier advice compares the two photos.</p>
+<p><a class="back" href="/">Use a different photo</a></p>
+{% endblock %}
+{% block photo_copy %}{# kept: the answer page after this choice claims it #}{% endblock %}

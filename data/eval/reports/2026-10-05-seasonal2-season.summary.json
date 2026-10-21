@@ -1,0 +1,12 @@
+{
+  "n": 203,
+  "accuracy": 0.7832512315270936,
+  "uk_n": 83,
+  "uk_accuracy": 0.7349397590361446,
+  "no_norm_n": 33,
+  "no_norm_accuracy": 0.8787878787878788,
+  "leave_share": 0.5889830508474576,
+  "failed": 2,
+  "spent_usd": 0.646,
+  "arm": "season"
+}

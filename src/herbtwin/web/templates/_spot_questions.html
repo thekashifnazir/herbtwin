@@ -1,0 +1,76 @@
+{# The spot answer's two questions (spot spec section 4, D68): the compass tap, read in
+   the page and worked out on the server (herbtwin.compass), with the 8-way tap as the
+   fallback; and the squeeze test. Used inside a form that posts to a refine. Both are
+   radio tiles (static/pages/spot.css styles them by .compass, .rose and .squeeze, on the
+   spot pages and under a plant answer alike). #}
+{% macro direction_rose(selected=none, unsure=true) %}
+{% set full = {"N": "north", "NE": "north-east", "E": "east", "SE": "south-east", "S": "south", "SW": "south-west", "W": "west", "NW": "north-west"} %}
+<div class="rose">{% for d in ("NW", "N", "NE", "W", "", "E", "SW", "S", "SE") %}
+  {% if d %}<label><input type="radio" name="direction" value="{{ d }}"{% if d == selected %} checked{% endif %}><span aria-hidden="true">{{ d }}</span><span class="vh">{{ full[d] }}</span></label>
+  {% elif unsure %}<label class="unsure"><input type="radio" name="direction" value=""{% if not selected %} checked{% endif %}><span>Not sure</span></label>
+  {% else %}<span class="here" aria-hidden="true"></span>{% endif %}{% endfor %}
+</div>
+{% endmacro %}
+
+{% macro compass_field(compass_first=true) %}
+<div class="compass" data-compass>
+  {% if compass_first %}<p><strong>Which way does it face?</strong> Stand at the spot and face the way it gets open sky (away from any wall or fence behind it). Raise your phone to the top of the tallest thing in that direction, a fence, hedge or house, or the horizon if there is nothing, and tap.</p>
+  <p class="actions"><button type="button" data-compass-tap>Point and tap</button> <span data-compass-said role="status"></span></p>
+  {% else %}<p><strong>Which way does it face?</strong> Stand at the spot and face the way it gets open sky (away from any wall or fence behind it). Not sure? The midday sun is in the south, and a map shows north at the top.</p>{% endif %}
+  {% for n in ("sensor", "alpha", "beta", "gamma", "webkit_heading", "webkit_accuracy") %}<input type="hidden" name="{{ n }}">{% endfor %}
+  <fieldset data-compass-fallback{% if compass_first %} hidden{% endif %}><legend>{% if compass_first %}Or pick a direction{% else %}Pick a direction{% endif %}</legend>
+    {{ direction_rose() }}</fieldset>
+  {% if compass_first %}<p class="hint">Look along the top edge of the phone.</p>{% endif %}
+</div>
+<script>
+(() => {
+  for (const box of document.querySelectorAll("[data-compass]:not([data-ready])")) {
+    box.dataset.ready = "1";
+    const tap = box.querySelector("[data-compass-tap]"), said = box.querySelector("[data-compass-said]");
+    const form = box.closest("form");
+    const fallback = (why) => {
+      box.querySelector("[data-compass-fallback]").hidden = false;
+      if (said) said.textContent = why;
+    };
+    const D = window.DeviceOrientationEvent;
+    if (!tap) continue;
+    if (!D) { tap.hidden = true; fallback("no compass on this device: pick a direction"); continue; }
+    tap.onclick = async () => {
+      if (typeof D.requestPermission === "function") {   // iOS: only inside this tap
+        try { if (await D.requestPermission() !== "granted") { fallback("no compass permission: pick a direction"); return; } }
+        catch { fallback("no compass permission: pick a direction"); return; }
+      }
+      const kind = "ondeviceorientationabsolute" in window ? "deviceorientationabsolute" : "deviceorientation";
+      tap.disabled = true;   // one reading per tap: no second listener, no double submit
+      const done = (why) => {
+        clearTimeout(timer); window.removeEventListener(kind, read); tap.disabled = false;
+        if (why) fallback(why);
+      };
+      const read = (e) => {
+        const ios = e.webkitCompassHeading !== undefined && e.webkitCompassHeading !== null;
+        if (!ios && kind !== "deviceorientationabsolute") { done("this phone gives no north: pick a direction"); return; }
+        // a desktop with no sensors, or a phone with no magnetometer, sends nulls
+        if (e.beta === null || (!ios && e.alpha === null)) { done("the compass gave no reading: pick a direction"); return; }
+        done();
+        const put = (n, v) => { form.elements[n].value = (v === null || v === undefined) ? "" : String(v); };
+        put("sensor", ios ? "ios" : "absolute");
+        put("alpha", e.alpha); put("beta", e.beta); put("gamma", e.gamma);
+        put("webkit_heading", e.webkitCompassHeading); put("webkit_accuracy", e.webkitCompassAccuracy);
+        said.textContent = "got it";
+        form.requestSubmit();
+      };
+      const timer = setTimeout(() => done("the compass did not answer: pick a direction"), 3000);
+      window.addEventListener(kind, read);
+    };
+  }
+})();
+</script>
+{% endmacro %}
+
+{% macro squeeze_field(choices, selected=none) %}
+<fieldset class="squeeze"><legend>Squeeze test (1 minute)</legend>
+  <p class="hint">Take a pinch of soil from 5 cm down, wet it until it holds together, and push it out between thumb and finger. What happens?</p>
+  {% for v, text in choices.items() %}<label><input type="radio" name="squeeze" value="{{ v }}"{% if selected == v %} checked{% endif %}> {{ text|capitalize }}</label>
+  {% endfor %}<label><input type="radio" name="squeeze" value=""{% if not selected %} checked{% endif %}> Skip it</label>
+</fieldset>
+{% endmacro %}

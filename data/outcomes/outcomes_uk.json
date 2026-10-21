@@ -1,0 +1,6009 @@
+[
+ {
+  "plant": "acer palmatum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "if_you_do": "Pruning now makes cuts bleed sap, which RHS says can weaken the tree; wait until after leaf fall.",
+  "if_you_dont": null,
+  "caution": "not in spring or early summer",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide",
+   "https://www.rhs.org.uk/advice/profile?pid=325"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "RHS pages differ: one allows pruning from July, another says wait until after leaf fall; waiting is the safer choice to limit bleeding.",
+  "if_you_dont": null,
+  "caution": "bleeding is usually not harmful, but prolonged bleeding can rarely weaken the tree",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide",
+   "https://www.rhs.org.uk/advice/profile?pid=325"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12
+  ],
+  "if_you_do": "Pruning after leaf fall and before January, removing badly placed or crossing shoots, builds a good branch framework with least sap bleeding.",
+  "if_you_dont": null,
+  "caution": "do not leave a stub, which is prone to decay and dieback",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/advice/profile?pid=325",
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5
+  ],
+  "if_you_do": "A tree in the same pot for over a year benefits from a general-purpose granular feed in late spring.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   9
+  ],
+  "if_you_do": "A slightly bigger pot every couple of years, in April or September, keeps it growing; a tree living in a pot needs its roots trimmed every 2-3 years.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "treat_or_remove",
+  "problem": "coral spot",
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Pruning infections out promptly to healthy wood, in dry weather and through the branch collar, removes the dying wood the fungus spreads from.",
+  "if_you_dont": "The fungus can spread from dead areas into adjacent living wood, causing more branch die-back.",
+  "caution": "there are no specific fungicide controls; do not leave dead wood lying around; on maples, cuts made outside July to January bleed sap, which RHS says weakens the tree",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/coral-spot",
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "treat_or_remove",
+  "problem": "leaf scorch",
+  "problem_aliases": [
+   "acer leaf scorch",
+   "scorch"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Moving pots to shelter, watering well, mulching and giving shade reduces further scorch; it rarely causes long-term damage.",
+  "if_you_dont": "Scorched leaves can stay unsightly for the rest of the season, and badly affected ones may drop.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/problems/acer-leaf-scorch",
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "treat_or_remove",
+  "problem": "verticillium wilt",
+  "problem_aliases": [
+   "verticillium"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Heavy watering and a nitrogen feed may help woody plants recover, though reinfection can follow; where confirmed, remove and destroy the tree with its roots.",
+  "if_you_dont": "Leaves yellow and shrivel, the plant may suddenly wilt in hot weather, and branches die back.",
+  "caution": "no chemicals treat it; take care not to spread infected soil",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/verticillium-wilt",
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Repotting and removing as many grubs as possible from the roots and compost cuts the root damage.",
+  "if_you_dont": "Grubs eat the roots; between autumn and spring a potted plant can wilt and die.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   8,
+   9
+  ],
+  "if_you_do": "Watering parasitic nematodes into the pot in August or early September, while compost is warm enough, is the RHS biological control for the grubs.",
+  "if_you_dont": "Grubs eat the roots; between autumn and spring a potted plant can wilt and die.",
+  "caution": "use nematodes with care, as they can infect other animals",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Snipping leaves just above the base through the growing season gives fresh pickings. After flowering, cutting the whole clump to about 5 cm stimulates a flush of fresh foliage.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Chives like richer soil than Mediterranean herbs, so in a pot, mixing in some garden compost or a slow-release feed suits them.",
+  "if_you_dont": null,
+  "caution": "too much nitrogen with low potassium makes leek rust worse",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/advice/grow-your-own/containers/june-edible-container-idea",
+   "https://www.rhs.org.uk/disease/leek-rust"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Lifting and dividing the clump in spring or autumn every three or four years stops it getting overcrowded and gives new plants.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "treat_or_remove",
+  "problem": "allium leaf miner",
+  "problem_aliases": [
+   "allium leaf miners",
+   "allium leafminer"
+  ],
+  "months": [
+   3,
+   4,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Covering plants with insect-proof mesh while adult flies are active and laying eggs protects them effectively.",
+  "if_you_dont": "Leaves get lines of white mines, and the damage often lets in other infections that rot the plant.",
+  "caution": "rotate where you grow it, or flies can emerge under the mesh from pupae in the soil",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/allium-leaf-miner"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies also eat aphids. Control is optional.",
+  "if_you_dont": "Heavy colonies can stunt growth, curl leaves and leave sticky honeydew where black sooty mould grows.",
+  "caution": "RHS advises against pesticides; they also harm natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "treat_or_remove",
+  "problem": "leek rust",
+  "problem_aliases": [
+   "rust",
+   "chive rust"
+  ],
+  "months": [
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Not crowding plants, taking care with fertiliser and clearing debris after cropping reduces infection.",
+  "if_you_dont": "Severe attacks make leaves shrivel early and reduce vigour.",
+  "caution": "no fungicides are approved for gardeners against leek rust",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/leek-rust",
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "allium tuberosum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Cutting leaves back encourages new growth. Cutting off flower stalks as soon as they finish blooming stops rampant self-seeding.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hort.extension.wisc.edu/articles/garlic-chives-allium-tuberosum/"
+  ]
+ },
+ {
+  "plant": "allium tuberosum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Lifting and dividing clumps about every three years maintains vigour and flowering.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://hort.extension.wisc.edu/articles/garlic-chives-allium-tuberosum/",
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "allium tuberosum",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies also eat aphids. Control is optional.",
+  "if_you_dont": "Heavy colonies can stunt growth, curl leaves and leave sticky honeydew where black sooty mould grows.",
+  "caution": "RHS advises against pesticides; they also harm natural enemies",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "allium tuberosum",
+  "action": "treat_or_remove",
+  "problem": "leek rust",
+  "problem_aliases": [
+   "rust",
+   "chive rust"
+  ],
+  "months": [
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Not crowding plants, taking care with fertiliser and clearing debris after cropping reduces infection.",
+  "if_you_dont": "Severe attacks make leaves shrivel early and reduce vigour.",
+  "caution": "no fungicides are approved for gardeners against leek rust",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/disease/leek-rust",
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "anethum graveolens",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Snipping a few leaves while keeping at least a third of the plant, and cutting off forming flower stems, keeps fresh leaves coming for longer.",
+  "if_you_dont": null,
+  "caution": "dill bolts in hot, dry weather; water in dry spells",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/dill/grow-your-own"
+  ]
+ },
+ {
+  "plant": "anethum graveolens",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies help keep numbers down.",
+  "if_you_dont": "Aphids can stunt growth, curl or distort leaves and weaken the plant; their sticky honeydew can grow black sooty mould.",
+  "caution": "RHS advises against pesticides: most, even organic ones, reduce biodiversity, including natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/dill/grow-your-own"
+  ]
+ },
+ {
+  "plant": "anethum graveolens",
+  "action": "treat_or_remove",
+  "problem": "slugs and snails",
+  "problem_aliases": [
+   "slugs",
+   "snails",
+   "slug",
+   "snail"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Hand-picking them by torchlight on mild, damp evenings, and covering young transplants with cloches, gives young plants some protection.",
+  "if_you_dont": "They eat soft, fleshy leaves and seedlings at night, leaving ragged holes.",
+  "caution": "avoid slug pellets, even organic ones, which harm garden wildlife",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/slugs-and-snails",
+   "https://www.rhs.org.uk/herbs/dill/grow-your-own"
+  ]
+ },
+ {
+  "plant": "artemisia dracunculus",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "In spring, cutting last year's growth back to the lowest new shoots clears old stems; picking shoot tips regularly into autumn encourages fresh young growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/tarragon/grow-your-own"
+  ]
+ },
+ {
+  "plant": "artemisia dracunculus",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Tarragon prefers low to moderate soil fertility; extension advice is to test the soil and add fertiliser only if a test shows it is needed.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://extension.usu.edu/yardandgarden/research/french-tarragon-in-the-garden"
+  ]
+ },
+ {
+  "plant": "artemisia dracunculus",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Dividing established clumps in spring every few years renews this short-lived perennial.",
+  "if_you_dont": null,
+  "caution": "use gritty, free-draining compost; tarragon dislikes wet compost and overwatering encourages root rot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+   "https://extension.usu.edu/yardandgarden/research/french-tarragon-in-the-garden"
+  ]
+ },
+ {
+  "plant": "artemisia dracunculus",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Pruning out infected shoots promptly reduces further infection; watering regularly in dry spells and giving plants space and airflow help prevent it.",
+  "if_you_dont": "White powdery patches spread over leaves and shoots and can stunt or distort growth.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/powdery-mildews",
+   "https://www.rhs.org.uk/herbs/tarragon/grow-your-own"
+  ]
+ },
+ {
+  "plant": "artemisia dracunculus",
+  "action": "treat_or_remove",
+  "problem": "rust",
+  "problem_aliases": [
+   "rust diseases"
+  ],
+  "months": [
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Picking off a few affected leaves as soon as seen can sometimes slow it; removing many leaves does more harm than good. Avoid excess nitrogen fertiliser.",
+  "if_you_dont": "Heavy infection often reduces the plant's vigour; badly affected leaves often yellow and fall early.",
+  "caution": "no fungicides with good activity are available to gardeners for edible crops",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/rust-diseases",
+   "https://www.rhs.org.uk/herbs/tarragon/grow-your-own"
+  ]
+ },
+ {
+  "plant": "coriandrum sativum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Picking a few leaves from each plant once 10-15 cm tall, then letting it recover, gives several pickings; remove flower stems as they form if growing for leaves.",
+  "if_you_dont": null,
+  "caution": "hot, dry spells make it run to seed quickly; water when it is dry",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/coriander/grow-your-own"
+  ]
+ },
+ {
+  "plant": "coriandrum sativum",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies help keep numbers down.",
+  "if_you_dont": "Aphids can stunt growth, curl or distort leaves and weaken the plant; their sticky honeydew can grow black sooty mould.",
+  "caution": "RHS advises against pesticides: most, even organic ones, reduce biodiversity, including natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/coriander/grow-your-own"
+  ]
+ },
+ {
+  "plant": "coriandrum sativum",
+  "action": "treat_or_remove",
+  "problem": "slugs and snails",
+  "problem_aliases": [
+   "slugs",
+   "snails",
+   "slug",
+   "snail"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Hand-picking them by torchlight on mild, damp evenings, and covering young transplants with cloches, gives young plants some protection.",
+  "if_you_dont": "They eat soft, fleshy leaves and seedlings at night, leaving ragged holes.",
+  "caution": "avoid slug pellets, even organic ones, which harm garden wildlife",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/slugs-and-snails",
+   "https://www.rhs.org.uk/herbs/coriander/grow-your-own"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3
+  ],
+  "if_you_do": "Snipping off dead or ragged fronds at the base before the new crosiers unfurl in spring, and clearing debris, tidies the plant and helps air circulate.",
+  "if_you_dont": null,
+  "caution": "take care not to damage the newly developing fronds",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/dryopteris/growing-guide",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Ferns in pots should get a general fertiliser in the growing season; in the ground a yearly mulch usually means no feeding is needed.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide",
+   "https://www.rhs.org.uk/plants/dryopteris/growing-guide"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Dividing in spring, by cutting the underground stems or splitting mature crowns, gives new plants to pot up.",
+  "if_you_dont": null,
+  "caution": "replant at the same depth; planting too deep makes sections rot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/dryopteris/growing-guide",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "treat_or_remove",
+  "problem": "slugs and snails",
+  "problem_aliases": [
+   "slugs",
+   "snails",
+   "slug",
+   "snail"
+  ],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Hand-picking slugs and snails by torchlight on mild, damp evenings removes some; RHS says they will always be present, so expect to reduce rather than eliminate them.",
+  "if_you_dont": "Slugs and snails can chew the soft new fronds as they unroll.",
+  "caution": "slug pellets, even organic ones, harm wildlife",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/slugs-and-snails"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "If grubs are found among the roots, RHS advises repotting the plant and removing as many as possible from the roots and compost.",
+  "if_you_dont": "Grubs eat the roots; plants in pots can wilt and die from autumn to spring.",
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "if_you_do": "Picking off adult weevils by torchlight on mild spring or summer evenings removes them; ferns in containers are the ones most at risk.",
+  "if_you_dont": "Grubs eat the roots; plants in pots can wilt and die from autumn to spring.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   8,
+   9
+  ],
+  "if_you_do": "Watering pathogenic nematodes into the compost in August or early September, while it is warm and before the grubs grow large, gives the best results.",
+  "if_you_dont": "Grubs eat the roots; plants in pots can wilt and die from autumn to spring.",
+  "caution": "use nematodes only when you have a specific pest to treat",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Light picking only: leaves can be picked whenever needed, but RHS gives mid to late spring for hard pruning and summer for trimming topiary.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5
+  ],
+  "if_you_do": "Bay generally responds well to hard pruning, best done in mid to late spring; also cut out any shoots damaged by winter frost.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Trimming topiary bay in summer keeps its shape and encourages denser growth; on a free-form shrub, shorten new growth where needed.",
+  "if_you_dont": null,
+  "caution": "use secateurs, as shears leave cut leaves that look unsightly",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Bay in a pot does better with an organic-based general liquid feed every 2 to 3 weeks, from mid-spring until late summer.",
+  "if_you_dont": null,
+  "caution": "bay in the ground shouldn't need feeding",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "if_you_do": "Repotting every two or three years into a slightly larger pot with fresh soil-based compost benefits container bay; spring is a good time.",
+  "if_you_dont": "Old compost slumps, losing air, drainage and nutrients; congested roots can leave it saturated, risking root rot.",
+  "caution": "if a bigger pot isn't feasible, prune the roots and refresh the compost in the same pot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own",
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Best avoided: growth slows or stops in autumn and winter, so fresh compost risks sitting too wet; RHS says spring is generally the best time.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "treat_or_remove",
+  "problem": "bay sucker",
+  "problem_aliases": [
+   "bay suckers"
+  ],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Usually best left alone; you can pick off curled leaves, but that can harm the plant more than the bugs do.",
+  "if_you_dont": "Leaves thicken, curl and yellow at the edges, then brown, but the bay's long-term health and vigour are usually unaffected.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/bay-sucker"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "rotting roots",
+   "roots rotting",
+   "phytophthora root rot"
+  ],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Keeping the compost from getting waterlogged, especially in winter, lowers the risk of the roots rotting.",
+  "if_you_dont": "Damp, cold compost, especially in winter, can rot the roots.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Healthy plants tolerate light infestations; scraping off adult scales and egg masses helps, though it may not reduce large populations.",
+  "if_you_dont": "Large populations can cause poor growth, and their sticky honeydew may be covered by black sooty mould.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/scale-insects"
+  ]
+ },
+ {
+  "plant": "melissa officinalis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Cutting back the dead stems by early spring, before the new shoots come, clears the winter die-back.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own"
+  ]
+ },
+ {
+  "plant": "melissa officinalis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Cutting the whole plant to just above the base straight after its summer flowers brings a fresh flush of new leaves and stops self-seeding.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own"
+  ]
+ },
+ {
+  "plant": "melissa officinalis",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Lifting and dividing the clump in spring or autumn every few years stops it getting too large and unruly, and gives extra plants.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own"
+  ]
+ },
+ {
+  "plant": "melissa officinalis",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Pruning out infected shoots promptly reduces further infection; watering regularly in dry spells and giving plants space and airflow help prevent it.",
+  "if_you_dont": "White powdery patches spread over leaves and shoots and can stunt or distort growth.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/powdery-mildews",
+   "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own"
+  ]
+ },
+ {
+  "plant": "melissa officinalis",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No control is needed: birds, ladybirds and ground beetles eat them, and mottled leaves are safe to eat.",
+  "if_you_dont": "Leaves get coarse pale mottling, often heavy by late summer, but this seems to have little effect on growth.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Cutting old, faded stems back any time from late autumn until spring, before new shoots emerge, clears dead growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Picking young shoot tips keeps mint bushy and productive. After flowering, cutting the whole plant to about 5 cm brings fresh shoots within weeks.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "In pots, mixing garden compost or slow-release fertiliser into the compost suits mint, which prefers richer conditions than Mediterranean herbs.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/advice/grow-your-own/containers/june-edible-container-idea"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Dividing the clump in spring or autumn and replanting a section, or moving to a larger pot, every few years stops it getting cramped and encourages fresh, healthy growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies also eat aphids. Control is optional.",
+  "if_you_dont": "Heavy colonies can stunt growth, curl leaves and leave sticky honeydew where black sooty mould grows.",
+  "caution": "RHS advises against pesticides; they also harm natural enemies",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "treat_or_remove",
+  "problem": "blue mint beetle",
+  "problem_aliases": [
+   "blue mint beetles"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Picking the beetles and larvae off by hand is feasible on small clumps of mint.",
+  "if_you_dont": "They make holes in leaves but are rarely numerous enough to badly damage healthy mint.",
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/blue-mint-beetle"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "treat_or_remove",
+  "problem": "mint moth",
+  "problem_aliases": [
+   "mint moths",
+   "mint moth caterpillars"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Check plants from late April and pick caterpillars off by hand where practical; they can usually be tolerated, and cutting back badly hit shoots stimulates new growth.",
+  "if_you_dont": "Young shoot tips get damaged and leaves curled over, though rarely significantly.",
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/mint-moth"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "treat_or_remove",
+  "problem": "mint rust",
+  "problem_aliases": [
+   "rust"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Removing affected plants and their roots promptly, before black resting spores form, stops the soil being contaminated.",
+  "if_you_dont": "Large areas of leaf die and plants may lose leaves.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/disease/mint-rust"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No control is needed: birds, ladybirds and ground beetles eat them, and mottled leaves are safe to eat.",
+  "if_you_dont": "Leaves get coarse pale mottling, often heavy by late summer, but this seems to have little effect on growth.",
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "mentha",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Removing infected shoots promptly, watering regularly in dry spells and giving plants open, airy space makes mildew less likely.",
+  "if_you_dont": "A white, dusty coating spreads over leaves and stems, and the plant grows less strongly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/disease/powdery-mildews",
+   "https://doi.org/10.1094/PDIS-94-9-1171A"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Cutting old, faded stems back any time from late autumn until spring, before new shoots emerge, clears dead growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Picking young shoot tips keeps mint bushy and productive. After flowering, cutting the whole plant to about 5 cm brings fresh shoots within weeks.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "In pots, mixing garden compost or slow-release fertiliser into the compost suits mint, which prefers richer conditions than Mediterranean herbs.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/advice/grow-your-own/containers/june-edible-container-idea"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Dividing the clump in spring or autumn and replanting a section, or moving to a larger pot, every few years stops it getting cramped and encourages fresh, healthy growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies also eat aphids. Control is optional.",
+  "if_you_dont": "Heavy colonies can stunt growth, curl leaves and leave sticky honeydew where black sooty mould grows.",
+  "caution": "RHS advises against pesticides; they also harm natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "treat_or_remove",
+  "problem": "blue mint beetle",
+  "problem_aliases": [
+   "blue mint beetles"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Picking the beetles and larvae off by hand is feasible on small clumps of mint.",
+  "if_you_dont": "They make holes in leaves but are rarely numerous enough to badly damage healthy mint.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/blue-mint-beetle"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "treat_or_remove",
+  "problem": "mint moth",
+  "problem_aliases": [
+   "mint moths",
+   "mint moth caterpillars"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Check plants from late April and pick caterpillars off by hand where practical; they can usually be tolerated, and cutting back badly hit shoots stimulates new growth.",
+  "if_you_dont": "Young shoot tips get damaged and leaves curled over, though rarely significantly.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/mint-moth"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "treat_or_remove",
+  "problem": "mint rust",
+  "problem_aliases": [
+   "rust"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Removing affected plants and their roots promptly, before black resting spores form, stops the soil being contaminated.",
+  "if_you_dont": "Large areas of leaf die and plants may lose leaves.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/mint-rust"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No control is needed: birds, ladybirds and ground beetles eat them, and mottled leaves are safe to eat.",
+  "if_you_dont": "Leaves get coarse pale mottling, often heavy by late summer, but this seems to have little effect on growth.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "mentha spicata",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Removing infected shoots promptly, watering regularly in dry spells and giving plants open, airy space makes mildew less likely.",
+  "if_you_dont": "A white, dusty coating spreads over leaves and stems, and the plant grows less strongly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/disease/powdery-mildews",
+   "https://doi.org/10.1094/PDIS-94-9-1171A"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Picking a few shoot tips from each plant regularly keeps basil bushy and productive; removing flower stems as soon as seen keeps leaf quality longer.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "In pots, a balanced organic-based liquid fertiliser boosts leafy growth; basil in the ground usually needs no feeding.",
+  "if_you_dont": null,
+  "caution": "avoid potassium-rich feeds such as tomato feed, which encourage flowering",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies help keep numbers down.",
+  "if_you_dont": "Aphids can stunt growth, curl or distort leaves and weaken the plant; their sticky honeydew can grow black sooty mould.",
+  "caution": "RHS advises against pesticides: most, even organic ones, reduce biodiversity, including natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "treat_or_remove",
+  "problem": "basil downy mildew",
+  "problem_aliases": [
+   "downy mildew"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "There is no known cure: harvest unaffected leaves to use at once, then pull out, bag and bin infected plants.",
+  "if_you_dont": "Yellowing starts on lower leaves and spreads until the whole plant shows symptoms, with leaves browning, curling and wilting.",
+  "caution": "leaves from infected plants are safe to eat",
+  "evidence_tier": "C",
+  "sources": [
+   "https://hort.extension.wisc.edu/articles/basil-downy-mildew-2/",
+   "https://extension.umd.edu/resource/downy-mildew-basil-home-garden"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "treat_or_remove",
+  "problem": "grey mould",
+  "problem_aliases": [
+   "botrytis",
+   "gray mold",
+   "grey mold"
+  ],
+  "months": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Promptly removing dead or dying leaves and flowers, and spacing plants for airflow, lowers humidity and removes what the mould grows on.",
+  "if_you_dont": "In damp, still air a fuzzy grey-brown mould spreads over dying parts, and buds and flowers can shrivel and die.",
+  "caution": "handle affected parts gently, spores spread very easily; no fungicides are approved for gardeners",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/grey-mould",
+   "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Removing infected shoots promptly, watering regularly in dry spells and giving plants open, airy space makes mildew less likely.",
+  "if_you_dont": "A white, dusty coating spreads over leaves and stems, and the plant grows less strongly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/powdery-mildews",
+   "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+  ]
+ },
+ {
+  "plant": "ocimum basilicum",
+  "action": "treat_or_remove",
+  "problem": "slugs and snails",
+  "problem_aliases": [
+   "slugs",
+   "snails",
+   "slug",
+   "snail"
+  ],
+  "months": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Hand-picking them by torchlight on mild, damp evenings removes them; watering in the morning, not evening, gives them less damp cover at night.",
+  "if_you_dont": "They eat soft, fleshy leaves and seedlings at night, leaving ragged holes.",
+  "caution": "avoid slug pellets, even organic ones, which harm garden wildlife",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/slugs-and-snails",
+   "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5
+  ],
+  "if_you_do": "Trimming established plants in late spring, removing dead or straggly stems, keeps them compact and encourages a flush of new growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Light picking only: snipping a few shoots gives leaves for the kitchen, best before flowers open; RHS gives late spring for trimming.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   9,
+   10
+  ],
+  "if_you_do": "Trimming off the flower stems when the flowers are over keeps plants neat.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6
+  ],
+  "if_you_do": "Oregano in the same pot for over a year benefits from a light sprinkle of all-purpose granular feed at the end of spring or start of summer.",
+  "if_you_dont": null,
+  "caution": "oregano in the ground needs no feeding",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Best avoided: growth slows or stops in autumn and winter, so fresh compost risks sitting too wet; RHS says spring is generally the best time.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+  ],
+  "_note": "Sep and Oct are left open on purpose, unlike the other woody herbs' Sep-Feb rows: RHS says oregano clumps can be divided after flowering in late summer or early autumn (https://www.rhs.org.uk/herbs/oregano/grow-your-own), and its repotting guide says perennials can be divided when repotted."
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "treat_or_remove",
+  "problem": "mint moth",
+  "problem_aliases": [
+   "mint moths",
+   "mint moth caterpillars"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Checking from late April and picking caterpillars off by hand helps; cutting back badly hit shoots also stimulates new growth.",
+  "if_you_dont": "Caterpillars curl and web shoot tips but rarely cause significant damage, and they feed other garden wildlife.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/mint-moth"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "treat_or_remove",
+  "problem": "mint rust",
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Removing affected plants promptly, before black resting spores form, stops those spores contaminating the soil.",
+  "if_you_dont": "Dusty orange pustules appear on stems and leaves, followed by yellow or black ones; black resting spores survive the winter.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own",
+   "https://www.rhs.org.uk/disease/mint-rust"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "rotting roots",
+   "roots rotting",
+   "phytophthora root rot"
+  ],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Protecting the pot from waterlogging over winter helps stop the roots rotting.",
+  "if_you_dont": "Waterlogging over winter will cause the roots to rot.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No treatment is needed; the damage can be tolerated, and encouraging birds, ladybirds and ground beetles helps.",
+  "if_you_dont": "Leaves get pale mottling, heavy by late summer, but growth is barely affected and the leaves remain safe to eat.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/oregano/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "origanum vulgare",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Removing infected shoots promptly, watering regularly in dry spells and giving plants open, airy space makes mildew less likely.",
+  "if_you_dont": "A white, dusty coating spreads over leaves and stems, and the plant grows less strongly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/disease/powdery-mildews",
+   "https://doi.org/10.1094/PDIS-09-11-0790"
+  ]
+ },
+ {
+  "plant": "petroselinum crispum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Picking leafy stems regularly from the outside, snipped near the base, encourages plants to produce more leaves.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/parsley/grow-your-own"
+  ]
+ },
+ {
+  "plant": "petroselinum crispum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Parsley in the ground shouldn't need feeding; if potted plants need a boost, RHS suggests a balanced, organic-based liquid feed now and then (every few weeks) while it is growing.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/parsley/grow-your-own"
+  ]
+ },
+ {
+  "plant": "petroselinum crispum",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies also eat aphids. Control is optional.",
+  "if_you_dont": "Heavy colonies can stunt growth, curl leaves and leave sticky honeydew where black sooty mould grows.",
+  "caution": "RHS advises against pesticides; they also harm natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/herbs/parsley/grow-your-own"
+  ]
+ },
+ {
+  "plant": "petroselinum crispum",
+  "action": "treat_or_remove",
+  "problem": "carrot fly",
+  "problem_aliases": [
+   "carrot flies",
+   "carrot root fly"
+  ],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Covering plants completely with insect-proof netting keeps egg-laying flies off; a full covering works better than a barrier.",
+  "if_you_dont": "The maggots feed on the roots.",
+  "caution": "rotate where you grow it, or flies can emerge under the netting from pupae in the soil",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/carrot-fly",
+   "https://www.rhs.org.uk/herbs/parsley/grow-your-own"
+  ]
+ },
+ {
+  "plant": "petroselinum crispum",
+  "action": "treat_or_remove",
+  "problem": "celery leaf mining fly",
+  "problem_aliases": [
+   "celery leaf miner",
+   "celery fly",
+   "leaf miner"
+  ],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Insect-proof mesh stops the flies laying eggs on the leaves; without a cover, all you can do is pinch off the mined parts. Some damage can be lived with.",
+  "if_you_dont": "Leaves get blotchy mines that turn brown and papery, looking scorched.",
+  "caution": "rotate where you grow it, or flies can emerge under the mesh from pupae in the soil",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/celery-leaf-mining-fly",
+   "https://www.rhs.org.uk/herbs/parsley/grow-your-own"
+  ]
+ },
+ {
+  "plant": "petroselinum crispum",
+  "action": "treat_or_remove",
+  "problem": "slugs and snails",
+  "problem_aliases": [
+   "slugs",
+   "snails",
+   "slug",
+   "snail"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Torchlight hand-picking on mild, damp evenings and beer traps emptied each morning can help protect plants; growing parsley in pots may keep it out of reach.",
+  "if_you_dont": "They eat parsley leaves, leaving ragged holes.",
+  "caution": "RHS advises against slug pellets, even organic ones; copper, grit and eggshell barriers did not reduce damage",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/slugs-and-snails",
+   "https://www.rhs.org.uk/herbs/parsley/grow-your-own"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3
+  ],
+  "if_you_do": "Snipping off dead or ragged fronds at the base before the new crosiers unfurl in spring, and clearing debris, tidies the plant and helps air circulate.",
+  "if_you_dont": null,
+  "caution": "take care not to damage the newly developing fronds",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/polystichum/growing-guide",
+   "https://plants.ces.ncsu.edu/plants/polystichum-setiferum/",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Ferns in pots should get a general fertiliser in the growing season; in the ground a yearly mulch usually means no feeding is needed.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide",
+   "https://www.rhs.org.uk/plants/polystichum/growing-guide"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Dividing in spring, into pieces of underground stem, each with a growth bud and roots, or by splitting mature crowns, gives new plants to pot up.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/polystichum/growing-guide",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "treat_or_remove",
+  "problem": "slugs and snails",
+  "problem_aliases": [
+   "slugs",
+   "snails",
+   "slug",
+   "snail"
+  ],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Hand-picking slugs and snails by torchlight on mild, damp evenings removes some; RHS says they will always be present, so expect to reduce rather than eliminate them.",
+  "if_you_dont": "Slugs and snails can chew the soft new fronds as they unroll.",
+  "caution": "slug pellets, even organic ones, harm wildlife",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/slugs-and-snails"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "If grubs are found among the roots, RHS advises repotting the plant and removing as many as possible from the roots and compost.",
+  "if_you_dont": "Grubs eat the roots; plants in pots can wilt and die from autumn to spring.",
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "if_you_do": "Picking off adult weevils by torchlight on mild spring or summer evenings removes them; ferns in containers are the ones most at risk.",
+  "if_you_dont": "Grubs eat the roots; plants in pots can wilt and die from autumn to spring.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   8,
+   9
+  ],
+  "if_you_do": "Watering pathogenic nematodes into the compost in August or early September, while it is warm and before the grubs grow large, gives the best results.",
+  "if_you_dont": "Grubs eat the roots; plants in pots can wilt and die from autumn to spring.",
+  "caution": "use nematodes only when you have a specific pest to treat",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/vine-weevil",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3
+  ],
+  "if_you_do": "Main pruning in late winter, as growth resumes (mid-February in the south, March in colder areas), keeps bush roses vigorous and flowering well.",
+  "if_you_dont": "Bush roses left unpruned turn into a tangle of stems that flowers poorly.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/roses/modern-bush/pruning-guide",
+   "https://www.rhs.org.uk/plants/roses/pruning-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Snipping off fading flowers about once a week encourages more blooms.",
+  "if_you_dont": "Many roses set hips (their seed pods) and then stop flowering.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/roses/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "In beds, feed in March or April and again after the first flush; in pots, liquid-feed fortnightly from mid-spring, switching to high-potash once flowering starts, for more flowers.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/roses/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "Squashing colonies by hand removes them, and ladybirds, hoverflies and other natural enemies help keep numbers down.",
+  "if_you_dont": "Aphids can stunt growth, curl or distort leaves and weaken the plant; their sticky honeydew can grow black sooty mould.",
+  "caution": "RHS advises against pesticides: most, even organic ones, reduce biodiversity, including natural enemies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/aphids",
+   "https://www.rhs.org.uk/plants/roses/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "black spot",
+  "problem_aliases": [
+   "rose black spot",
+   "blackspot"
+  ],
+  "months": [
+   3,
+   4
+  ],
+  "if_you_do": "Cutting out every marked stem in spring, before the leaves open, holds the disease back, though rain still carries spores in from elsewhere.",
+  "if_you_dont": "A badly hit rose can drop nearly every leaf and grows much more weakly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/rose-black-spot"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "black spot",
+  "problem_aliases": [
+   "rose black spot",
+   "blackspot"
+  ],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Collecting and destroying fallen leaves, or burying them under mulch, helps delay next year's attack, though spores still blow in from elsewhere.",
+  "if_you_dont": "The fungus overwinters on fallen leaves and young stems, then infects new leaves from spring.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/rose-black-spot"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [
+   "rose powdery mildew"
+  ],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Pruning out badly affected shoots as soon as symptoms show, watering in dry spells and keeping growth open for airflow reduces mildew.",
+  "if_you_dont": "Badly affected buds often fail to open properly, and repeated heavy infection reduces the plant's vigour.",
+  "caution": "avoid excess nitrogen feed, which makes soft growth prone to mildew; RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/rose-powdery-mildew"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "rose leaf-rolling sawfly",
+  "problem_aliases": [
+   "leaf-rolling sawfly",
+   "leaf rolling sawfly",
+   "rose leaf rolling sawfly"
+  ],
+  "months": [
+   5,
+   6
+  ],
+  "if_you_do": "Picking off rolled leaves before the larvae finish feeding helps, but only when few leaves are affected; RHS suggests tolerating it.",
+  "if_you_dont": "Leaves roll into tight tubes; vigour may drop if much foliage is affected, but roses usually recover and flower well.",
+  "caution": "removing many leaves harms the rose more than the sawfly does",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/rose-leaf-rolling-sawfly",
+   "https://www.rhs.org.uk/plants/roses/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "rose rust",
+  "problem_aliases": [
+   "rust"
+  ],
+  "months": [
+   4,
+   5,
+   6
+  ],
+  "if_you_do": "Cutting out infected shoots in spring as soon as you see them stops their spores spreading.",
+  "if_you_dont": "Orange pustules form under the leaves, turning black in late summer, and infected leaves may fall early.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/rose-rust"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "treat_or_remove",
+  "problem": "rose rust",
+  "problem_aliases": [
+   "rust"
+  ],
+  "months": [
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Collecting and destroying fallen leaves in autumn reduces the resting spores that survive winter.",
+  "if_you_dont": "Infected leaves may fall early, and resting spores carry the disease into next year.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/disease/rose-rust"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Light picking only: young shoots or single leaves can be picked at any time, but RHS gives mid to late spring for a light prune.",
+  "if_you_dont": null,
+  "caution": "avoid cutting hard into bare wood; older stems may not reshoot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5
+  ],
+  "if_you_do": "A light prune in mid to late spring keeps sage compact and brings bushy growth of fresh new leaves.",
+  "if_you_dont": null,
+  "caution": "avoid cutting hard into bare wood; older stems may not reshoot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6
+  ],
+  "if_you_do": "Sage in the same pot for over a year benefits from a light sprinkle of all-purpose granular feed at the end of spring or start of summer.",
+  "if_you_dont": null,
+  "caution": "sage in the ground needs no feeding",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Best avoided: growth slows or stops in autumn and winter, so fresh compost risks sitting too wet; RHS says spring is generally the best time.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "treat_or_remove",
+  "problem": "capsid bugs",
+  "problem_aliases": [
+   "capsid bug",
+   "capsids"
+  ],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Welcome birds and ground beetles and put up with a little damage; once the leaves look twisted, it is usually too late to control them.",
+  "if_you_dont": "Leaves near shoot tips get small brown-edged holes, but vigour is often unaffected and plants soon recover.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/capsid-bugs"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Promptly pruning out infected shoots reduces further infection; watering in dry spells helps, as drought-stressed plants are more prone.",
+  "if_you_dont": "Badly infected young leaves can curl and twist, and the plant grows less strongly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/disease/powdery-mildews"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "rotting roots",
+   "roots rotting",
+   "phytophthora root rot"
+  ],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Moving the pot to a sheltered spot, such as the rain shadow of a wall, keeps off the excess winter rain that can rot roots.",
+  "if_you_dont": "Excess winter rain can cause the roots to rot.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "treat_or_remove",
+  "problem": "rosemary beetle",
+  "problem_aliases": [
+   "rosemary beetles"
+  ],
+  "months": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   1,
+   2,
+   3,
+   4
+  ],
+  "if_you_do": "Picking off beetles and larvae by hand, where practical, can help keep numbers below the level that causes serious damage.",
+  "if_you_dont": "Leaves can be eaten to brown stumps, but plants often survive with no noticeable harm, so control is not usually necessary.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/rosemary-beetle"
+  ]
+ },
+ {
+  "plant": "salvia officinalis",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No treatment is needed; the damage can be tolerated, and encouraging birds, ladybirds and ground beetles helps.",
+  "if_you_dont": "Leaves get pale mottling, heavy by late summer, but growth is barely affected and the leaves remain safe to eat.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Light picking only: young shoots or single leaves can be picked at any time, but RHS gives mid to late spring for a light prune.",
+  "if_you_dont": null,
+  "caution": "avoid cutting hard into bare wood; older stems may not reshoot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5
+  ],
+  "if_you_do": "A light prune in mid to late spring keeps sage compact and brings bushy growth of fresh new leaves.",
+  "if_you_dont": null,
+  "caution": "avoid cutting hard into bare wood; older stems may not reshoot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6
+  ],
+  "if_you_do": "Sage in the same pot for over a year benefits from a light sprinkle of all-purpose granular feed at the end of spring or start of summer.",
+  "if_you_dont": null,
+  "caution": "sage in the ground needs no feeding",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Best avoided: growth slows or stops in autumn and winter, so fresh compost risks sitting too wet; RHS says spring is generally the best time.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "treat_or_remove",
+  "problem": "capsid bugs",
+  "problem_aliases": [
+   "capsid bug",
+   "capsids"
+  ],
+  "months": [
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Welcome birds and ground beetles and put up with a little damage; once the leaves look twisted, it is usually too late to control them.",
+  "if_you_dont": "Leaves near shoot tips get small brown-edged holes, but vigour is often unaffected and plants soon recover.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/capsid-bugs"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "treat_or_remove",
+  "problem": "powdery mildew",
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "Promptly pruning out infected shoots reduces further infection; watering in dry spells helps, as drought-stressed plants are more prone.",
+  "if_you_dont": "Badly infected young leaves can curl and twist, and the plant grows less strongly.",
+  "caution": "RHS advises against fungicides",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/disease/powdery-mildews"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "rotting roots",
+   "roots rotting",
+   "phytophthora root rot"
+  ],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Moving the pot to a sheltered spot, such as the rain shadow of a wall, keeps off the excess winter rain that can rot roots.",
+  "if_you_dont": "Excess winter rain can cause the roots to rot.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "treat_or_remove",
+  "problem": "rosemary beetle",
+  "problem_aliases": [
+   "rosemary beetles"
+  ],
+  "months": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   1,
+   2,
+   3,
+   4
+  ],
+  "if_you_do": "Picking off beetles and larvae by hand, where practical, can help keep numbers below the level that causes serious damage.",
+  "if_you_dont": "Leaves can be eaten to brown stumps, but plants often survive with no noticeable harm, so control is not usually necessary.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/rosemary-beetle"
+  ]
+ },
+ {
+  "plant": "salvia officinalis 'purpurascens'",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No treatment is needed; the damage can be tolerated, and encouraging birds, ladybirds and ground beetles helps.",
+  "if_you_dont": "Leaves get pale mottling, heavy by late summer, but growth is barely affected and the leaves remain safe to eat.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Light picking only: shoots can be snipped as needed, but RHS gives a light trim each year after the spring flowers fade.",
+  "if_you_dont": null,
+  "caution": "avoid cutting back into old wood",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6
+  ],
+  "if_you_do": "A light trim each year after the spring flowers fade keeps rosemary from turning leggy, woody and bare at the base.",
+  "if_you_dont": "Without pruning, rosemary gets long, woody stems with no leaves low down.",
+  "caution": "avoid cutting back into old wood",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   5,
+   6
+  ],
+  "if_you_do": "Rosemary in the same pot for over a year benefits from a light sprinkle of all-purpose granular feed at the end of spring or start of summer.",
+  "if_you_dont": null,
+  "caution": "rosemary in the ground needs no feeding",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Best avoided: growth slows or stops in autumn and winter, so fresh compost risks sitting too wet; RHS says spring is generally the best time.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "treat_or_remove",
+  "problem": "cuckoo spit",
+  "problem_aliases": [
+   "spittlebugs",
+   "spittlebug",
+   "froghoppers",
+   "froghopper"
+  ],
+  "months": [
+   5,
+   6,
+   7
+  ],
+  "if_you_do": "No action is needed: spittlebugs are part of healthy garden wildlife and RHS asks gardeners not to remove them.",
+  "if_you_dont": "Growth is usually unaffected, though feeding at a shoot tip may cause some distorted growth.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/cuckoo-spit-spittlebugs"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "rotting roots",
+   "roots rotting",
+   "phytophthora root rot"
+  ],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Moving the pot to a sheltered spot near a building, in a rain shadow, keeps off heavy winter rain that waterlogs compost.",
+  "if_you_dont": "Rosemary roots rot and die in compost that stays cold and wet.",
+  "caution": "never let the pot sit in waterlogged compost",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "treat_or_remove",
+  "problem": "rosemary beetle",
+  "problem_aliases": [
+   "rosemary beetles"
+  ],
+  "months": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   1,
+   2,
+   3,
+   4
+  ],
+  "if_you_do": "Picking off beetles and larvae by hand, or shaking branches over newspaper, helps keep numbers below the level that causes serious damage.",
+  "if_you_dont": "Leaves can be eaten to brown stumps, but plants often survive with no noticeable harm, so control is not usually necessary.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/rosemary-beetle"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No treatment is needed; the damage can be tolerated, and encouraging birds, ladybirds and ground beetles helps.",
+  "if_you_dont": "Leaves get pale mottling, heavy by late summer, but growth is barely affected and the leaves remain safe to eat.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Healthy plants tolerate light infestations; scraping off adult scales and egg masses helps, though it may not reduce large populations.",
+  "if_you_dont": "Large populations can cause poor growth, and their sticky honeydew may be covered by black sooty mould.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/scale-insects"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   6,
+   7,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Light picking only: regular harvesting keeps thyme compact, but RHS gives mid to late spring, or soon after flowering, for a light trim.",
+  "if_you_dont": null,
+  "caution": "avoid cutting hard into old wood; stems may not reshoot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5
+  ],
+  "if_you_do": "A light trim in mid to late spring keeps shrubby thyme compact and bushy.",
+  "if_you_dont": "Older plants that are never trimmed go thin and straggly.",
+  "caution": "avoid cutting hard into old wood; stems may not reshoot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   8,
+   9
+  ],
+  "if_you_do": "A light trim soon after the summer flowers fade keeps shrubby thyme compact and bushy.",
+  "if_you_dont": "Older plants that are never trimmed go thin and straggly.",
+  "caution": "avoid cutting hard into old wood; stems may not reshoot",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "if_you_do": "Repotting in spring or early summer, while it is growing, into a pot at least 15 cm wide with drainage holes and gritty soil-based compost gives the roots fresh room.",
+  "if_you_dont": null,
+  "caution": "go up only 2.5-5 cm at a time; too big a pot stays wet, and thyme roots rot in damp compost",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Best avoided: growth slows or stops in autumn and winter, so fresh compost risks sitting too wet; RHS says spring is generally the best time.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant",
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "rotting roots",
+   "roots rotting",
+   "phytophthora root rot"
+  ],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Moving the pot to a sheltered spot near a building, in a rain shadow, keeps it out of the winter damp that rots roots.",
+  "if_you_dont": "Thyme roots rot when they sit damp, above all in winter.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "treat_or_remove",
+  "problem": "rosemary beetle",
+  "problem_aliases": [
+   "rosemary beetles"
+  ],
+  "months": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   1,
+   2,
+   3,
+   4
+  ],
+  "if_you_do": "Picking off beetles and larvae by hand, where practical, can help keep numbers below the level that causes serious damage.",
+  "if_you_dont": "Leaves can be eaten to brown stumps, but plants often survive with no noticeable harm, so control is not usually necessary.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/rosemary-beetle"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "treat_or_remove",
+  "problem": "sage and ligurian leafhoppers",
+  "problem_aliases": [
+   "leafhoppers",
+   "leafhopper",
+   "sage leafhopper",
+   "ligurian leafhopper"
+  ],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "No treatment is needed; the damage can be tolerated, and encouraging birds, ladybirds and ground beetles helps.",
+  "if_you_dont": "Leaves get pale mottling, heavy by late summer, but growth is barely affected and the leaves remain safe to eat.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+   "https://www.rhs.org.uk/biodiversity/sage-and-ligurian-leafhoppers"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "A liquid feed in the growing season, April to September, encourages good growth and flowering; feed sparingly.",
+  "if_you_dont": null,
+  "caution": "avoid over-fertilising; some RHS advice is just one feed in spring and one in late summer",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/getmedia/d02059a1-4e2c-45c3-956b-da5cc90db7f1/Indoor-plants-resources.pdf",
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Not now: RHS advises not to feed aloes in winter, when they rest.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/getmedia/d02059a1-4e2c-45c3-956b-da5cc90db7f1/Indoor-plants-resources.pdf",
+   "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Repotting every two to three years, or when root-bound, into a free-draining cactus mix in a pot with drainage holes gives room to grow.",
+  "if_you_dont": null,
+  "caution": "avoid too large a pot; excess compost stays wet and can cause rot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+   "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Checking and isolating plants limits spread, but the waxy coat makes mealybugs hard to control with sprays; badly infested plants can be simpler to discard.",
+  "if_you_dont": "Large numbers reduce vigour, stunt growth and may cause early leaf fall, with sticky honeydew where black sooty mould grows.",
+  "caution": "biological controls need warmth; in glasshouses RHS says they are only likely to work May to September",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+   "https://www.rhs.org.uk/biodiversity/mealybug",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Watering only when the compost has dried out completely, and hardly at all in winter, reduces the risk of root rot.",
+  "if_you_dont": "Overwatering is the most common aloe problem, leading to root rot.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+   "https://www.rhs.org.uk/getmedia/d02059a1-4e2c-45c3-956b-da5cc90db7f1/Indoor-plants-resources.pdf",
+   "https://www.rhs.org.uk/plants/types/cacti-succulents/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Adult scales can be removed by hand, but this may not reduce large populations; sprays mostly affect the young stage. Badly infested plants may be best replaced.",
+  "if_you_dont": "Large populations may cause poor growth, and sticky honeydew can be colonised by black sooty mould.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+   "https://www.rhs.org.uk/biodiversity/scale-insects",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "A predatory mite is the most commonly used biological control.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": "aloes dislike humid air, so do not mist them",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "aloe vera",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Out of season, Amblyseius predatory mites survive winter better than Phytoseiulus and can be used as a preventative, but are less likely to control heavy infestations.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": "aloes dislike humid air, so do not mist them",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Removing browned or dead leaves and old heavy plantlets improves its look; a badly damaged plant cut to 5-8 cm regrows from the centre if well cared for.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/spider-plants/growing-guide"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "Rarely needed if repotted into fresh compost; if leaves stay yellow in brighter light, a balanced liquid feed every other month can help.",
+  "if_you_dont": null,
+  "caution": "too much fertiliser reduces plantlets and can brown leaf tips; wait 4-6 months after repotting",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/spider-plants/growing-guide",
+   "https://plants.ces.ncsu.edu/plants/chlorophytum-comosum/",
+   "https://hgic.clemson.edu/factsheet/spider-plant/"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Repotting every year or two into a pot one size up, with fresh compost, keeps it growing; any time of year is fine.",
+  "if_you_dont": "Once pot-bound, growth slows; the thick roots can eventually crack the pot.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/spider-plants/growing-guide",
+   "https://hgic.clemson.edu/factsheet/spider-plant/"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "treat_or_remove",
+  "problem": "aphids",
+  "problem_aliases": [
+   "aphid",
+   "greenfly",
+   "blackfly"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Aphids feed on the soft new growth; rinse them off as soon as you see them.",
+  "if_you_dont": "Aphids suck sap, yellowing and distorting leaves, stunting growth and leaving sticky honeydew.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/spider-plants/growing-guide",
+   "https://hgic.clemson.edu/factsheet/spider-plant/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Using a quick-draining mix and letting it dry out briefly between waterings helps prevent root rot.",
+  "if_you_dont": "Excess watering or a slow-draining mix leads to root rot; spider plants dislike standing in water.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/spider-plant/",
+   "https://www.rhs.org.uk/plants/spider-plants/growing-guide"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Scraping off early scale with a fingernail clears light attacks, though it may not reduce large numbers; healthy plants tolerate a few.",
+  "if_you_dont": "Scale sucks sap; large numbers can cause poor growth, and some kinds excrete honeydew on which black sooty mould grows.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/spider-plant/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/scale-insects"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Spraying the leaves, including undersides, with water dislodges mites and webs; keeping humidity high reduces the risk.",
+  "if_you_dont": "Leaves show pale speckling, then bronze or yellow and drop; heavily damaged plants weaken and may die.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/spider-plant/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "treat_or_remove",
+  "problem": "whitefly",
+  "problem_aliases": [
+   "whiteflies",
+   "glasshouse whitefly"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Washing the plant, then spraying it thoroughly with insecticidal soap, especially under the leaves, helps control whitefly.",
+  "if_you_dont": "Infested leaves turn yellow and die, and the plant may be stunted.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/spider-plant/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Cutting damaged leaves off at the base improves the plant's overall appearance.",
+  "if_you_dont": null,
+  "caution": "wear gloves; the sap is a skin irritant",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Little benefit: growth slows in winter and light is too low for the plant to use feed for good growth.",
+  "if_you_dont": null,
+  "caution": "RHS limits any winter feeding to once a month at most",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide",
+   "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "A monthly liquid houseplant or cactus feed from April to September boosts growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Moving a pot-bound plant into a pot only slightly larger, with plenty of drainage holes, gives it room; it prefers a snug pot.",
+  "if_you_dont": null,
+  "caution": "only repot once roots and leaves fill the pot or make it buckle",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide",
+   "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Checking and isolating plants limits spread, but the waxy coat makes mealybugs hard to control with sprays; badly infested plants can be simpler to discard.",
+  "if_you_dont": "Large numbers reduce vigour, stunt growth and may cause early leaf fall, with sticky honeydew where black sooty mould grows.",
+  "caution": "biological controls need warmth; in glasshouses RHS says they are only likely to work May to September",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/mealybug",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Watering only once the compost has dried out, and never leaving the pot standing in water, reduces the risk of roots rotting.",
+  "if_you_dont": "Overwatering or standing in water is usually the main problem and can lead to root rot; a whole plant leaning over is a sign to check.",
+  "caution": "it barely needs any water in winter",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "A predatory mite is the most commonly used biological control.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": "mites mostly come in hot, dry air, but this plant dislikes humidity, so do not mist it",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Out of season, Amblyseius predatory mites survive winter better than Phytoseiulus and can be used as a preventative, but are less likely to control heavy infestations.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": "mites mostly come in hot, dry air, but this plant dislikes humidity, so do not mist it",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "treat_or_remove",
+  "problem": "vine weevil",
+  "problem_aliases": [
+   "vine weevils",
+   "vine weevil grubs",
+   "vine weevil larvae"
+  ],
+  "months": [
+   9,
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Repotting and removing as many grubs as possible from roots and compost, or applying nematodes while compost is warm enough, reduces the grubs feeding on roots.",
+  "if_you_dont": "Grubs eat the thick roots and the leaves flop over; between autumn and spring a potted plant can wilt and die.",
+  "caution": "nematodes need compost between about 5 and 20°C",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/vine-weevil"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Cutting long or straggly stems back to just above a leaf encourages bushier, denser growth, as new shoots sprout from the leaf joints.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/epipremnum/growing-guide",
+   "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "A general houseplant feed once a month, April to October, helps it grow.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/epipremnum/growing-guide"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Skip feeding now: extension advice is to feed every other month except while the plant is dormant in winter.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
+   "https://www.rhs.org.uk/plants/epipremnum/growing-guide"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Repotting in spring into a pot one size larger, once roots crowd or poke through the drainage holes, keeps roots healthy and growth strong.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/epipremnum/growing-guide",
+   "https://hgic.clemson.edu/factsheet/how-to-grow-pothos-indoors-epipremnum-spp-care-cultivars-and-common-problems/"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Light attacks can be picked off by hand; a badly infested plant may be best discarded.",
+  "if_you_dont": "Mealybugs suck sap and stunt growth; honeydew brings black sooty mould, and plants sometimes die.",
+  "caution": "their wax helps repel pesticides, making them somewhat difficult to control; keep new plants apart for at least a month",
+  "evidence_tier": "C",
+  "sources": [
+   "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
+   "https://hgic.clemson.edu/factsheet/how-to-grow-pothos-indoors-epipremnum-spp-care-cultivars-and-common-problems/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/mealybug"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Watering only when the top layer of compost has dried out, and never leaving the pot standing in water, helps prevent root rot.",
+  "if_you_dont": "Compost kept too wet causes the roots to rot; overwatering can also blacken the leaf edges.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/epipremnum/growing-guide",
+   "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
+   "https://hgic.clemson.edu/factsheet/how-to-grow-pothos-indoors-epipremnum-spp-care-cultivars-and-common-problems/"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Scraping off early scale with a fingernail clears light attacks, though it may not reduce large numbers; healthy plants tolerate a few.",
+  "if_you_dont": "Scale sucks sap; large numbers can cause poor growth, and some kinds excrete honeydew on which black sooty mould grows.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/scale-insects"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Spraying the leaves, including undersides, with water dislodges mites and webs; keeping humidity high reduces the risk.",
+  "if_you_dont": "Leaves show pale speckling, then bronze or yellow and drop; heavily damaged plants weaken and may die.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/how-to-grow-pothos-indoors-epipremnum-spp-care-cultivars-and-common-problems/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3,
+   4
+  ],
+  "if_you_do": "Shortening overly long shoots in late winter or early spring, cutting just above a leaf, reduces a plant that has outgrown its space; most figs cope well.",
+  "if_you_dont": null,
+  "caution": "wear gloves; the sticky white sap may irritate skin or aggravate allergies",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "A high-nitrogen feed from spring to late summer encourages leafy growth.",
+  "if_you_dont": null,
+  "caution": "too much fertiliser can cause sudden leaf drop",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Little benefit: winter light is too low for the plant to use feed for good growth, and too much fertiliser can cause leaf drop.",
+  "if_you_dont": null,
+  "caution": "RHS limits any winter feeding to once a month at most",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide",
+   "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Moving into a slightly larger pot every couple of years in spring gives roots room; in other years, replacing the top 2.5 cm of compost refreshes it.",
+  "if_you_dont": "Stunted growth may be a sign the plant needs repotting into a larger container.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Checking and isolating plants limits spread, but the waxy coat makes mealybugs hard to control with sprays; badly infested plants can be simpler to discard.",
+  "if_you_dont": "Large numbers reduce vigour, stunt growth and may cause early leaf fall, with sticky honeydew where black sooty mould grows.",
+  "caution": "biological controls need warmth; in glasshouses RHS says they are only likely to work May to September",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/mealybug",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Adult scales can be removed by hand, but this may not reduce large populations; sprays mostly affect the young stage. Badly infested plants may be best replaced.",
+  "if_you_dont": "Large populations may cause poor growth, and sticky honeydew can be colonised by black sooty mould.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/scale-insects",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "A predatory mite is the usual biological control; raising humidity lowers the risk but will not control the mite on its own.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Out of season, Amblyseius predatory mites survive winter better than Phytoseiulus and can be used as a preventative, but are less likely to control heavy infestations.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": "raising humidity lowers the risk but will not control the mite on its own",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "treat_or_remove",
+  "problem": "thrips",
+  "problem_aliases": [
+   "thrip",
+   "thunderflies"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Blue sticky traps help monitor and reduce numbers and biological controls are available, but silvered leaves will not regain their green colour.",
+  "if_you_dont": "Leaves turn dull green, then develop a silvery-white discolouration with tiny black spots; new growth may be distorted.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/7207/ficus-lyrata/details",
+   "https://www.rhs.org.uk/biodiversity/thrips",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Pruning back in spring keeps a plant that has grown too large for its space in check.",
+  "if_you_dont": null,
+  "caution": "new stems will have smaller leaves with fewer holes until the plant settles",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   10,
+   11,
+   12,
+   1,
+   2,
+   3
+  ],
+  "if_you_do": "Little benefit: winter light is too low for the plant to use feed for good growth.",
+  "if_you_dont": null,
+  "caution": "RHS limits any winter feeding to once a month at most",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants",
+   "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "A balanced liquid feed from April to September encourages strong, healthy growth.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants",
+   "https://www.rhs.org.uk/plants/11192/monstera-deliciosa-f/details"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Repotting every few years into a pot only a few centimetres larger gives these vigorous plants room to grow.",
+  "if_you_dont": null,
+  "caution": "avoid a much bigger pot; the compost stays wet too long, risking root rot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants",
+   "https://www.rhs.org.uk/plants/types/houseplants/growing-guide"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Checking and isolating plants limits spread, but the waxy coat makes mealybugs hard to control with sprays; badly infested plants can be simpler to discard.",
+  "if_you_dont": "Large numbers reduce vigour, stunt growth and may cause early leaf fall, with sticky honeydew where black sooty mould grows.",
+  "caution": "biological controls need warmth; in glasshouses RHS says they are only likely to work May to September",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants",
+   "https://www.rhs.org.uk/biodiversity/mealybug",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Letting the compost become almost dry before watering, and not leaving the pot in a saucer of water, reduces the risk of roots rotting.",
+  "if_you_dont": "Overwatering or waterlogged, poorly draining compost can rot the roots and make the plant collapse.",
+  "caution": "water slightly less often over winter",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Adult scales can be removed by hand, but this may not reduce large populations; sprays mostly affect the young stage. Badly infested plants may be best replaced.",
+  "if_you_dont": "Large populations may cause poor growth, and sticky honeydew can be colonised by black sooty mould.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/11192/monstera-deliciosa-f/details",
+   "https://www.rhs.org.uk/biodiversity/scale-insects",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "A predatory mite is the usual biological control; raising humidity lowers the risk but will not control the mite on its own.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/11192/monstera-deliciosa-f/details",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   11,
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "Out of season, Amblyseius predatory mites survive winter better than Phytoseiulus and can be used as a preventative, but are less likely to control heavy infestations.",
+  "if_you_dont": "Leaves go mottled and pale and may dry up or drop; a plant with heavy damage is badly weakened and can die.",
+  "caution": "raising humidity lowers the risk but will not control the mite on its own",
+  "evidence_tier": "D",
+  "sources": [
+   "https://www.rhs.org.uk/plants/11192/monstera-deliciosa-f/details",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Once all the flowers have fallen, cutting the spike just above the second node below them often gives a new flowering side-shoot within 8 to 12 weeks.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://secure.aos.org/media/Content-Images/PDFs/Phalaenopsis_novice.pdf"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11
+  ],
+  "if_you_do": "Feed lightly but regularly with an orchid fertiliser in the growing season; watering without feed every fourth time flushes out harmful salt build-up.",
+  "if_you_dont": null,
+  "caution": "Feeding at every watering lets salts build up in the compost, and they can harm the roots.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://homegarden.cahnr.uconn.edu/factsheets/orchid-care-and-repotting"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   12,
+   1,
+   2
+  ],
+  "if_you_do": "In winter, feed only sparingly, if at all.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Repot into bark-based orchid compost when it outgrows its pot or the compost is two years old, while roots are active with green tips.",
+  "if_you_dont": "Old bark breaks down over about two years.",
+  "caution": "Never use multipurpose or loam-based compost; these kill moth orchids.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://homegarden.cahnr.uconn.edu/factsheets/orchid-care-and-repotting"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs",
+   "glasshouse mealybug"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Thorough spraying or a predatory ladybird can reduce them, but their waxy coat makes them hard to control; badly infested plants are simpler to replace.",
+  "if_you_dont": "Large numbers reduce vigour, stunt growth and may cause early leaf fall; their honeydew is often colonised by black sooty mould.",
+  "caution": "Predatory ladybirds and wasps need warmth, so work best from May to September.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://rhs.org.uk/biodiversity/mealybug",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Keeping the compost slightly damp, never letting the pot sit in water and not overpotting all help prevent root rot.",
+  "if_you_dont": "Roots kept too wet will probably rot, and roots kept too dry can shrivel and die.",
+  "caution": "Keep water out of the crown, where the leaves meet, to avoid crown rot.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://secure.aos.org/media/Content-Images/PDFs/Phalaenopsis_novice.pdf",
+   "https://homegarden.cahnr.uconn.edu/factsheets/orchid-care-and-repotting"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Raising humidity moves conditions away from those spider mites favour, though not enough on its own; predatory mites can be bought to control them.",
+  "if_you_dont": "Leaves develop a fine pale mottling on the upper surface.",
+  "caution": "Keep water off the leaves and out of the crown; a tray of wet pebbles raises humidity, but never let the pot sit in water.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://homegarden.cahnr.uconn.edu/factsheets/orchid-care-and-repotting",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects",
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://secure.aos.org/media/Content-Images/PDFs/Phalaenopsis_novice.pdf"
+  ]
+ },
+ {
+  "plant": "schlumbergera",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Removing a few end segments from leggy stems in spring, after flowering, makes the stems branch and form a bushier plant.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/christmas-cactus/growing-guide"
+  ]
+ },
+ {
+  "plant": "schlumbergera",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "if_you_do": "A liquid houseplant feed from April through September helps it grow.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/christmas-cactus/growing-guide"
+  ]
+ },
+ {
+  "plant": "schlumbergera",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3
+  ],
+  "if_you_do": "Repotting at the end of March, every year or two once roots fill the pot, keeps growth healthy.",
+  "if_you_dont": null,
+  "caution": "Use a pot only slightly larger; these like to be snug, and poor growth can be a sign the pot is too large.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/christmas-cactus/growing-guide"
+  ]
+ },
+ {
+  "plant": "schlumbergera",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs",
+   "glasshouse mealybug"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Thorough spraying or a predatory ladybird can reduce them, but their waxy coat makes them hard to control; badly infested plants are simpler to replace.",
+  "if_you_dont": "Large numbers reduce vigour and stunt growth; their sticky honeydew is often colonised by black sooty mould.",
+  "caution": "Predatory ladybirds and wasps need warmth, so work best from May to September.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/christmas-cactus/growing-guide",
+   "https://rhs.org.uk/biodiversity/mealybug",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "schlumbergera",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Letting any excess water drain away, so roots never sit in damp compost, helps avoid root rot.",
+  "if_you_dont": "Roots may rot if left in damp compost; damaged roots show as shrivelled stems, and overwatering can make buds drop.",
+  "caution": "Don't let the compost dry out entirely either; underwatering also damages roots.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/christmas-cactus/growing-guide"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Cutting old leaves and finished flowers off low down, where the stem starts, keeps the plant tidy.",
+  "if_you_dont": null,
+  "caution": "wear gloves; the sap can irritate skin",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/peace-lilies/how-to-grow-peace-lilies"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10
+  ],
+  "if_you_do": "A general liquid fertiliser every few weeks from April to October boosts leaf production and flowering.",
+  "if_you_dont": null,
+  "caution": "use a weak feed; overfeeding can burn leaf tips and roots",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/peace-lilies/how-to-grow-peace-lilies",
+   "https://hgic.clemson.edu/factsheet/peace-lily/",
+   "https://plants.ces.ncsu.edu/plants/spathiphyllum/"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "repot",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "In spring, repot only once roots are densely packed, into a pot a few centimetres larger; a large clump can be divided into several plants.",
+  "if_you_dont": null,
+  "caution": "avoid overpotting",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/peace-lilies/how-to-grow-peace-lilies",
+   "https://hgic.clemson.edu/factsheet/peace-lily/"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "treat_or_remove",
+  "problem": "fungus gnats",
+  "problem_aliases": [
+   "fungus gnat",
+   "sciarid flies",
+   "sciarid fly"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Letting the compost dry between waterings reduces their numbers; yellow sticky traps near the plant catch the adults.",
+  "if_you_dont": "Mostly a nuisance: the larvae feed on decaying matter and established plants are unlikely to be damaged.",
+  "caution": "sticky traps also catch predators and other harmless insects",
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/peace-lily/",
+   "https://www.rhs.org.uk/biodiversity/fungus-gnats",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "treat_or_remove",
+  "problem": "mealybugs",
+  "problem_aliases": [
+   "mealybug",
+   "mealy bug",
+   "mealy bugs"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Wiping leaves with a damp cloth removes some pests; light attacks can be picked off by hand. A badly infested plant may be best discarded.",
+  "if_you_dont": "Mealybugs suck sap and stunt growth; honeydew brings black sooty mould, and plants sometimes die.",
+  "caution": "their wax helps repel pesticides, making them somewhat difficult to control; keep new plants apart for at least a month",
+  "evidence_tier": "C",
+  "sources": [
+   "https://plants.ces.ncsu.edu/plants/spathiphyllum/",
+   "https://hgic.clemson.edu/factsheet/peace-lily/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/mealybug"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Letting the top of the compost dry between waterings, and watering less in winter, helps prevent root rot.",
+  "if_you_dont": "Compost kept too wet for long periods can cause root rot; overwatering also browns or yellows leaves.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/peace-lilies/how-to-grow-peace-lilies",
+   "https://hgic.clemson.edu/factsheet/peace-lily/"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Scraping off early scale with a fingernail clears light attacks, though it may not reduce large numbers; healthy plants tolerate a few.",
+  "if_you_dont": "Scale sucks sap; large numbers can cause poor growth, and some kinds excrete honeydew on which black sooty mould grows.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/peace-lily/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/scale-insects"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "treat_or_remove",
+  "problem": "spider mites",
+  "problem_aliases": [
+   "spider mite",
+   "red spider mite",
+   "glasshouse red spider mite",
+   "two-spotted spider mite"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Spraying the leaves, including undersides, with water dislodges mites and webs; keeping humidity high reduces the risk.",
+  "if_you_dont": "Leaves show pale speckling, then bronze or yellow and drop; heavily damaged plants weaken and may die.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/peace-lily/",
+   "https://hgic.clemson.edu/factsheet/common-houseplant-insects-related-pests/",
+   "https://www.rhs.org.uk/biodiversity/glasshouse-red-spider-mite"
+  ]
+ },
+ {
+  "plant": "zamioculcas zamiifolia",
+  "action": "prune",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "No pruning is needed; removing faded leaves and flowers at soil level is all the tidying it takes.",
+  "if_you_dont": null,
+  "caution": "Harmful if eaten and irritates skin and eyes; wear gloves when handling.",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/Plants/19185/wd/Details",
+   "https://www.rhs.org.uk/plants/368045/zamioculcas-zamiifolia-raven-dowonsuppbrsup/details"
+  ]
+ },
+ {
+  "plant": "zamioculcas zamiifolia",
+  "action": "feed",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "This slow grower needs little: a balanced houseplant feed at half strength, once or twice a year while it is growing.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "D",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/zz-plant-zamioculcas-zamiifolia-indoor-care-growing-tips-plant-guide/",
+   "https://homegarden.cahnr.uconn.edu/factsheets/zz-plant"
+  ]
+ },
+ {
+  "plant": "zamioculcas zamiifolia",
+  "action": "treat_or_remove",
+  "problem": "root rot",
+  "problem_aliases": [
+   "phytophthora root rot",
+   "rotting roots",
+   "roots rotting",
+   "rhizome rot"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Watering only once the compost has dried, and never leaving the pot standing in water, avoids the overwatering that causes root rot.",
+  "if_you_dont": "Overwatering is the main thing that kills ZZ plants; yellow leaves and rotting roots are the signs.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/zz-plant-zamioculcas-zamiifolia-indoor-care-growing-tips-plant-guide/",
+   "https://homegarden.cahnr.uconn.edu/factsheets/zz-plant"
+  ]
+ },
+ {
+  "plant": "zamioculcas zamiifolia",
+  "action": "treat_or_remove",
+  "problem": "scale insects",
+  "problem_aliases": [
+   "scale",
+   "scale insect",
+   "soft scale"
+  ],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Removing adult scales by hand helps but may not reduce large numbers; sprays mainly work on the young stage.",
+  "if_you_dont": "Large populations may cause poor growth; some species excrete sticky honeydew, which can be colonised by black sooty mould.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://plants.ces.ncsu.edu/plants/zamioculcas-zamiifolia/",
+   "https://www.rhs.org.uk/biodiversity/scale-insects",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "A spring mulch of garden compost or mulching bark, about 10 cm deep, stops the tree drying out and suppresses weeds.",
+  "if_you_dont": null,
+  "caution": "keep the mulch away from the trunk, which rots if covered",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "allium schoenoprasum",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3
+  ],
+  "if_you_do": "Mulching clumps in the ground with well-rotted organic matter in late winter or early spring improves the soil, helps keep moisture in and suppresses weeds.",
+  "if_you_dont": null,
+  "caution": "for chives growing in the ground",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/chives/grow-your-own"
+  ]
+ },
+ {
+  "plant": "dryopteris filix-mas",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "Spreading garden compost or rotted manure on the soil each spring improves it and helps growth; ferns in the ground mulched like this every year rarely need feeding.",
+  "if_you_dont": null,
+  "caution": "for ferns planted in the garden",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/dryopteris/growing-guide",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   2,
+   3
+  ],
+  "if_you_do": "Mulching bay in the ground with well-rotted organic matter in late winter or early spring adds nutrients, improves soil structure, keeps moisture in and suppresses weeds.",
+  "if_you_dont": null,
+  "caution": "bay in containers gets liquid feed instead",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "polystichum setiferum",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "A yearly spring mulch of leaf mould or well-rotted manure conditions the soil and boosts growth; mulched ferns in the ground usually need no feeding.",
+  "if_you_dont": null,
+  "caution": "for ferns planted in the garden",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/polystichum/growing-guide",
+   "https://www.rhs.org.uk/plants/types/ferns/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "A thick spring mulch of well-rotted manure deters annual weeds, and roses, as hungry plants, flower and grow better for it.",
+  "if_you_dont": null,
+  "caution": "leave a 10 cm gap around the base of the stems",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/roses/growing-guide"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7
+  ],
+  "if_you_do": "Mulching with well-rotted manure or garden compost after the mid-summer feed, following the first flush of flowers, helps hungry roses keep flowering.",
+  "if_you_dont": null,
+  "caution": "leave a 10 cm gap around the base of the stems",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/roses/growing-guide"
+  ]
+ },
+ {
+  "plant": "thymus vulgaris",
+  "action": "mulch",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Grit or gravel spread around thyme keeps weeds down and holds the low stems off damp soil, which could otherwise rot them.",
+  "if_you_dont": null,
+  "caution": "use grit or gravel, not organic mulch; RHS gives no particular month",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/thyme/grow-your-own"
+  ]
+ },
+ {
+  "plant": "chlorophytum comosum",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Rarely needed, but occasional misting helps if leaf tips start browning in very dry air.",
+  "if_you_dont": "In very dry air, leaves may develop brown tips.",
+  "caution": "keep it away from radiators, which dry the air",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/spider-plants/growing-guide",
+   "https://plants.ces.ncsu.edu/plants/chlorophytum-comosum/"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Not advised: snake plants like low humidity, so RHS says never mist them and keep them out of steamy bathrooms.",
+  "if_you_dont": null,
+  "caution": "they like good air flow, but not chilly draughts",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide"
+  ]
+ },
+ {
+  "plant": "epipremnum aureum",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Usually unnecessary: pothos cope with normal home humidity, though a humidifier can help where leaf scorch or tip dieback appears.",
+  "if_you_dont": null,
+  "caution": "low humidity is only one cause of tip dieback; intense light is another",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/epipremnum/growing-guide",
+   "https://hgic.clemson.edu/factsheet/how-to-grow-pothos-indoors-epipremnum-spp-care-cultivars-and-common-problems/"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Regular misting, especially in hot weather, and a tray of damp gravel under the pot give the medium to high humidity figs need.",
+  "if_you_dont": "Insufficient humidity can cause dry, shrivelled leaves.",
+  "caution": "keep the water level just below the gravel surface",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide",
+   "https://plants.ces.ncsu.edu/plants/ficus-lyrata/"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Misting the leaves, or standing the pot on a tray of moist gravel, raises humidity for this tropical-forest plant; grouping plants together also helps.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants",
+   "https://www.rhs.org.uk/plants/11192/monstera-deliciosa-f/details"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   6,
+   7,
+   8
+  ],
+  "if_you_do": "In hot weather, misting the leaves and aerial roots daily, or standing the pot on a wide saucer of damp gravel, raises humidity.",
+  "if_you_dont": null,
+  "caution": "keep water out of the crown and never let the pot sit in water",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide",
+   "https://homegarden.cahnr.uconn.edu/factsheets/orchid-care-and-repotting"
+  ]
+ },
+ {
+  "plant": "schlumbergera",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Regular misting and a tray of damp gravel under the pot give the humid air these rainforest cacti enjoy.",
+  "if_you_dont": null,
+  "caution": "do not let the compost become waterlogged",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/christmas-cactus/growing-guide"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Standing the pot over a tray of damp gravel, or misting the leaves regularly, raises humidity and helps stop leaf edges browning.",
+  "if_you_dont": "In air that is too dry, the leaves may start to turn brown at the edges.",
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/peace-lilies/how-to-grow-peace-lilies"
+  ]
+ },
+ {
+  "plant": "zamioculcas zamiifolia",
+  "action": "humidity",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Not needed: ZZ plants are adapted to arid conditions and thrive at normal indoor humidity.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/zz-plant-zamioculcas-zamiifolia-indoor-care-growing-tips-plant-guide/"
+  ]
+ },
+ {
+  "plant": "dracaena trifasciata",
+  "action": "rotate",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Turning the pot a quarter each time you water stops the plant leaning towards the light.",
+  "if_you_dont": null,
+  "caution": "if the whole plant leans, not just a leaf, check for root rot",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/sansevieria/growing-guide"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "rotate",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Turning the pot a quarter each time you water stops it leaning to the light and growing lop-sided.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/peace-lilies/how-to-grow-peace-lilies"
+  ]
+ },
+ {
+  "plant": "acer palmatum",
+  "action": "change_soil",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   9
+  ],
+  "if_you_do": "A tree living in a pot needs its roots trimmed every 2-3 years: cut 5 cm off the root ball and repot in fresh compost, ideally April or September.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/acer/japanese-maples/growing-guide"
+  ]
+ },
+ {
+  "plant": "ficus lyrata",
+  "action": "change_soil",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5
+  ],
+  "if_you_do": "In years without repotting, or once too big to repot, scraping off the top 2.5 cm of compost and replacing it with fresh compost refreshes the pot.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/ornamental-figs/growing-guide"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "change_soil",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "if_you_do": "If a bigger pot isn't feasible, pruning the roots and refreshing the compost in the same container benefits a large potted bay.",
+  "if_you_dont": null,
+  "caution": "avoid autumn and winter, when fresh compost risks sitting too wet",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own",
+   "https://www.rhs.org.uk/container-gardening/how-to-repot-a-plant"
+  ]
+ },
+ {
+  "plant": "phalaenopsis",
+  "action": "change_soil",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Completely replacing the bark compost every couple of years, while roots are active with green tips, keeps it airy and free-draining.",
+  "if_you_dont": "Old bark compost packs down and stays wet for longer, and the roots can rot in it.",
+  "caution": "use only bark-based orchid compost; loam-based or multipurpose compost kills moth orchids",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/phalaenopsis/growing-guide"
+  ]
+ },
+ {
+  "plant": "laurus nobilis",
+  "action": "check_pests",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Looking out for bay suckers and scale insects, as RHS advises for bay, finds them while light infestations can still be tolerated or removed.",
+  "if_you_dont": null,
+  "caution": "bay suckers are active from late spring to autumn",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/herbs/bay/grow-your-own"
+  ]
+ },
+ {
+  "plant": "monstera deliciosa",
+  "action": "check_pests",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Keeping watch for mealybugs and sticky residue on the leaves lets you act before these sap-suckers reduce the plant's vigour.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/plants/swiss-cheese-plants/how-to-grow-swiss-cheese-plants",
+   "https://www.rhs.org.uk/biodiversity/indoor-plants-sap-feeding-insects"
+  ]
+ },
+ {
+  "plant": "rosa",
+  "action": "check_pests",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   4,
+   5,
+   6
+  ],
+  "if_you_do": "Checking plants regularly from late April to early June finds rose leaf-rolling sawfly while picking off the few rolled leaves still helps.",
+  "if_you_dont": null,
+  "caution": "removing many leaves harms the rose more than the sawfly",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/rose-leaf-rolling-sawfly"
+  ]
+ },
+ {
+  "plant": "salvia rosmarinus",
+  "action": "check_pests",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   8,
+   9,
+   10,
+   11,
+   12,
+   1,
+   2,
+   3,
+   4
+  ],
+  "if_you_do": "Tapping or shaking branches over newspaper reveals and collects rosemary beetles and larvae, most active from late summer to spring.",
+  "if_you_dont": null,
+  "caution": "control is rarely needed; healthy plants usually tolerate the beetle",
+  "evidence_tier": "C",
+  "sources": [
+   "https://www.rhs.org.uk/biodiversity/rosemary-beetle"
+  ]
+ },
+ {
+  "plant": "spathiphyllum",
+  "action": "check_pests",
+  "problem": null,
+  "problem_aliases": [],
+  "months": [
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "if_you_do": "Examining the leaves often, including underneath, catches mealybugs, spider mites and scale early; wiping leaves with a damp cloth removes some pests.",
+  "if_you_dont": null,
+  "caution": null,
+  "evidence_tier": "C",
+  "sources": [
+   "https://hgic.clemson.edu/factsheet/peace-lily/",
+   "https://plants.ces.ncsu.edu/plants/spathiphyllum/"
+  ]
+ }
+]

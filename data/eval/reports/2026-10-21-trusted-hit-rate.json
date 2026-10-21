@@ -1,0 +1,1534 @@
+{
+ "note": "trusted-page quote hit rate on the 6 judge sample photos, 21 Oct (scripts/trusted_hit_rate.py); page sentences are the pages' public words; no photo bytes, no advice text",
+ "baseline_main_b2c02484": {
+  "quotes": 0,
+  "answers": 12,
+  "spent_usd": 0.078,
+  "rows": [
+   {
+    "photo": "1-parsley-healthy.jpg",
+    "repeat": 0,
+    "species": "petroselinum crispum",
+    "plant": "curled parsley",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "curled parsley",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-parsley",
+     "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+     "https://www.gardenersworld.com/plants/using-your-greenhouse-in-autumn"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Parsley will grow well in full sun or partial shade.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Position the plants at the same level they were previously growing, and space them 15\u201330cm (6\u201312in) apart.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Firm them in, then water well.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Once established, parsley needs little attention.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "plant_trait",
+         "value": "established"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Simply water in dry weather, keep weeds at bay, and snip off any lower leaves that turn yellow, to keep plants looking good and encourage new growth.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "hot_dry_weather",
+         "value": "dry weather"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "1-parsley-healthy.jpg",
+    "repeat": 1,
+    "species": "petroselinum crispum",
+    "plant": "curled parsley",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "curled parsley",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-parsley",
+     "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+     "https://www.gardenersworld.com/plants/using-your-greenhouse-in-autumn"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Parsley will grow well in full sun or partial shade.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Position the plants at the same level they were previously growing, and space them 15\u201330cm (6\u201312in) apart.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Firm them in, then water well.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Once established, parsley needs little attention.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "plant_trait",
+         "value": "established"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Simply water in dry weather, keep weeds at bay, and snip off any lower leaves that turn yellow, to keep plants looking good and encourage new growth.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "hot_dry_weather",
+         "value": "dry weather"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "3-basil-yellow-leaves.jpg",
+    "repeat": 0,
+    "species": "ocimum basilicum",
+    "plant": "Basil",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "basil",
+     "month": 10,
+     "action": "prune",
+     "setting": "unknown",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "no page",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://extension.illinois.edu/gardening"
+    ],
+    "url": null,
+    "quote": null,
+    "sentences": []
+   },
+   {
+    "photo": "3-basil-yellow-leaves.jpg",
+    "repeat": 1,
+    "species": "ocimum basilicum",
+    "plant": "Sweet basil",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "sweet basil",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://pfaf.org/user/Plant.aspx?LatinName=Ocimum+basilicum",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil",
+     "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+     "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+     "https://www.rhs.org.uk/propagation/how-to-sow-seeds-indoors",
+     "https://extension.psu.edu/programs/master-gardener/counties/philadelphia/hotline/master-gardeners-philadelphia-planting-guide"
+    ],
+    "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "In Elizabethan times, sweet basil leaf was dried and used as a snuff to treat headaches and colds.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "It is also seen as a sacred plant \u2013 some Greek Orthodox churches use Greek basil to prepare their holy water and, at Hindu weddings, the parents of the bride traditionally present the groom with a basil leaf.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "4-rosemary-beetles.jpg",
+    "repeat": 0,
+    "species": "salvia rosmarinus",
+    "plant": "Rosemary",
+    "problem": "rosemary beetle",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "rosemary",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "unknown",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "rosemary beetle",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenorganic.org.uk/expert-advice/monthly-organic-gardening-advice/your-organic-garden-in-october",
+     "https://www.rhs.org.uk/biodiversity/lily-beetle",
+     "https://www.rhs.org.uk/biodiversity/viburnum-beetle",
+     "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+     "https://www.gardenersworld.com/how-to/solve-problems/rosemary-beetle",
+     "https://www.rhs.org.uk/science/plant-health-in-gardens/entomology/rhs-projects-on-plant-pests/the-spread-of-non-native-garden-pests"
+    ],
+    "url": "https://www.rhs.org.uk/biodiversity/lily-beetle",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "The grubs of raspberry beetle can damage the fruits of raspberry, blackberry and other cane fruits.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "other_plant",
+       "group": "cane fruits",
+       "conditions": [
+        {
+         "kind": "named_problem",
+         "value": "raspberry beetle"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Rats are common, intelligent, social animals.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "general",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "They can feed on growing and stored fruits and vegetables.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "general",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "4-rosemary-beetles.jpg",
+    "repeat": 1,
+    "species": "salvia rosmarinus",
+    "plant": "rosemary",
+    "problem": "rosemary beetle",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "rosemary",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "rosemary beetle",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenorganic.org.uk/expert-advice/monthly-organic-gardening-advice/your-organic-garden-in-october",
+     "https://www.rhs.org.uk/biodiversity/lily-beetle",
+     "https://www.rhs.org.uk/biodiversity/viburnum-beetle",
+     "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+     "https://www.gardenersworld.com/how-to/solve-problems/rosemary-beetle",
+     "https://www.rhs.org.uk/science/plant-health-in-gardens/entomology/rhs-projects-on-plant-pests/the-spread-of-non-native-garden-pests"
+    ],
+    "url": "https://www.rhs.org.uk/biodiversity/lily-beetle",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "The grubs of raspberry beetle can damage the fruits of raspberry, blackberry and other cane fruits.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "other_plant",
+       "group": "cane fruits",
+       "conditions": [
+        {
+         "kind": "named_problem",
+         "value": "raspberry beetle"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Rats are common, intelligent, social animals.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "general",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "They can feed on growing and stored fruits and vegetables.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "general",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "5-coriander-flowering.jpg",
+    "repeat": 0,
+    "species": "coriandrum sativum",
+    "plant": "coriander/cilantro",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "coriander/cilantro",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "pot",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-coriander",
+     "https://www.gardenersworld.com/house-plants/best-kitchen-plants",
+     "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-herbs",
+     "https://extension.psu.edu/attracting-beneficial-insects",
+     "https://www.missouribotanicalgarden.org/gardens-gardening/your-garden/help-for-the-home-gardener/advice-tips-resources/visual-guides/herb-problems-outdoors",
+     "https://extension.illinois.edu/newsletters/gardeners-corner/gardeners-corner-summer-2023"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Coriander, also sometimes known as cilantro, is an annual herb that produces tangy leaves and aromatic seeds, widely used in many dishes, especially in Mexican and Asian cuisines.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "5-coriander-flowering.jpg",
+    "repeat": 1,
+    "species": "coriandrum sativum",
+    "plant": "coriander / cilantro",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "coriander / cilantro",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "pot",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-coriander",
+     "https://www.rhs.org.uk/herbs/growing",
+     "https://www.rhs.org.uk/garden-inspiration/grow-your-own/crops-for-shade",
+     "https://extension.illinois.edu/newsletters/gardeners-corner/gardeners-corner-summer-2023",
+     "https://www.missouribotanicalgarden.org/gardens-gardening/your-garden/help-for-the-home-gardener/advice-tips-resources/visual-guides/herb-problems-outdoors",
+     "https://extension.psu.edu/attracting-beneficial-insects"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Coriander is easy to grow from seed sown outdoors, in the ground or in containers, from spring onwards.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Plants are compact, so make ideal gap-fillers on the veg plot.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "If you grow it purely for leaves, then treat it like a short-term salad crop and sow small batches every month or so, to provide continual leafy harvests from mid-summer to early autumn.",
+      "form": {
+       "action": "shade",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "plant_trait",
+         "value": "grow it purely for leaves"
+        },
+        {
+         "kind": "month_range",
+         "value": "mid-summer to early autumn"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Take care not to overwater, as coriander dislikes soggy conditions.",
+      "form": {
+       "action": "water",
+       "polarity": "dont",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "other",
+         "value": "not to overwater"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "6-basil-downy-mildew.jpg",
+    "repeat": 0,
+    "species": "ocimum basilicum",
+    "plant": "Basil",
+    "problem": "basil downy mildew",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "basil",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "basil downy mildew",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/plants/ocimum-basilicum",
+     "https://www.gardenersworld.com/plants/ocimum-basilicum-dark-opal",
+     "https://www.gardenersworld.com/plants/ocimum-basilicum-var-minimum-greek",
+     "https://www.rhs.org.uk/herbs/growing",
+     "https://extension.illinois.edu/keywords/plant-clinic",
+     "https://extension.illinois.edu/view/blog-archive/82/2017",
+     "https://extension.psu.edu/beth-gugino"
+    ],
+    "url": "https://www.gardenersworld.com/plants/ocimum-basilicum",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Basil, Ocimum basilicum, is a popular, half-hardy to tender herb used in a variety of summer dishes, and works particularly well when eaten with tomatoes.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "It may also be grown with tomatoes, used as a companion plant to deter whitefly.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": true,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Native to dry scrub in Africa and Asia, basil requires a lot of heat to thrive, and can be prone to downy mildew.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "There are many varieties to choose from, however, some of which have been bred to withstand cooler conditions.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "6-basil-downy-mildew.jpg",
+    "repeat": 1,
+    "species": "ocimum basilicum",
+    "plant": "Basil",
+    "problem": "basil downy mildew",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "basil",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "basil downy mildew",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/plants/ocimum-basilicum",
+     "https://www.gardenersworld.com/plants/ocimum-basilicum-dark-opal",
+     "https://www.gardenersworld.com/plants/ocimum-basilicum-var-minimum-greek",
+     "https://www.rhs.org.uk/herbs/growing",
+     "https://extension.illinois.edu/keywords/plant-clinic",
+     "https://extension.illinois.edu/view/blog-archive/82/2017",
+     "https://extension.psu.edu/beth-gugino"
+    ],
+    "url": "https://www.gardenersworld.com/plants/ocimum-basilicum",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Basil, Ocimum basilicum, is a popular, half-hardy to tender herb used in a variety of summer dishes, and works particularly well when eaten with tomatoes.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "It may also be grown with tomatoes, used as a companion plant to deter whitefly.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": true,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Native to dry scrub in Africa and Asia, basil requires a lot of heat to thrive, and can be prone to downy mildew.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "There are many varieties to choose from, however, some of which have been bred to withstand cooler conditions.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "7-pea-bed.jpg",
+    "repeat": 0,
+    "species": null,
+    "plant": "",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "pea",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": "dry",
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": true
+    },
+    "path": "not started",
+    "started": false,
+    "provider": null,
+    "about": null,
+    "url": null,
+    "quote": null,
+    "sentences": []
+   },
+   {
+    "photo": "7-pea-bed.jpg",
+    "repeat": 1,
+    "species": null,
+    "plant": "",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "pea",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": "dry",
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": true
+    },
+    "path": "not started",
+    "started": false,
+    "provider": null,
+    "about": null,
+    "url": null,
+    "quote": null,
+    "sentences": []
+   }
+  ]
+ },
+ "with_could_agree_filter": {
+  "quotes": 0,
+  "answers": 12,
+  "spent_usd": 0.059,
+  "rows": [
+   {
+    "photo": "1-parsley-healthy.jpg",
+    "repeat": 0,
+    "species": "petroselinum crispum",
+    "plant": "curled parsley",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "curled parsley",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-parsley",
+     "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+     "https://www.gardenersworld.com/plants/using-your-greenhouse-in-autumn"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Firm them in, then water well.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Simply water in dry weather, keep weeds at bay, and snip off any lower leaves that turn yellow, to keep plants looking good and encourage new growth.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "hot_dry_weather",
+         "value": "dry weather"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "1-parsley-healthy.jpg",
+    "repeat": 1,
+    "species": "petroselinum crispum",
+    "plant": "curled parsley",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "curled parsley",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-parsley",
+     "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+     "https://www.gardenersworld.com/plants/using-your-greenhouse-in-autumn"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Firm them in, then water well.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Simply water in dry weather, keep weeds at bay, and snip off any lower leaves that turn yellow, to keep plants looking good and encourage new growth.",
+      "form": {
+       "action": "water",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "hot_dry_weather",
+         "value": "dry weather"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "3-basil-yellow-leaves.jpg",
+    "repeat": 0,
+    "species": "ocimum basilicum",
+    "plant": "Sweet basil",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "sweet basil",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://pfaf.org/user/Plant.aspx?LatinName=Ocimum+basilicum",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil",
+     "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+     "https://www.rhs.org.uk/shows-events/rhs-urban-show/houseplant-profiles/houseplants-for-sunlight",
+     "https://www.rhs.org.uk/propagation/how-to-sow-seeds-indoors",
+     "https://extension.psu.edu/programs/master-gardener/counties/philadelphia/hotline/master-gardeners-philadelphia-planting-guide"
+    ],
+    "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "In Elizabethan times, sweet basil leaf was dried and used as a snuff to treat headaches and colds.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "It is also seen as a sacred plant \u2013 some Greek Orthodox churches use Greek basil to prepare their holy water and, at Hindu weddings, the parents of the bride traditionally present the groom with a basil leaf.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "3-basil-yellow-leaves.jpg",
+    "repeat": 1,
+    "species": "ocimum basilicum",
+    "plant": "Basil",
+    "problem": null,
+    "action": "prune",
+    "checked_action": true,
+    "state": {
+     "plant": "basil",
+     "month": 10,
+     "action": "prune",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "no page",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://extension.illinois.edu/gardening"
+    ],
+    "url": null,
+    "quote": null,
+    "sentences": []
+   },
+   {
+    "photo": "4-rosemary-beetles.jpg",
+    "repeat": 0,
+    "species": "salvia rosmarinus",
+    "plant": "Rosemary",
+    "problem": "rosemary beetle",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "rosemary",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "unknown",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "rosemary beetle",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenorganic.org.uk/expert-advice/monthly-organic-gardening-advice/your-organic-garden-in-october",
+     "https://www.rhs.org.uk/biodiversity/lily-beetle",
+     "https://www.rhs.org.uk/biodiversity/viburnum-beetle",
+     "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+     "https://www.gardenersworld.com/how-to/solve-problems/rosemary-beetle",
+     "https://www.rhs.org.uk/science/plant-health-in-gardens/entomology/rhs-projects-on-plant-pests/the-spread-of-non-native-garden-pests"
+    ],
+    "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Take care when using fresh rosemary in your cooking, it\u2019s a pungent herb that will overpower delicate flavours.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "4-rosemary-beetles.jpg",
+    "repeat": 1,
+    "species": "salvia rosmarinus",
+    "plant": "Rosemary",
+    "problem": "rosemary beetle",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "rosemary",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "rosemary beetle",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenorganic.org.uk/expert-advice/monthly-organic-gardening-advice/your-organic-garden-in-october",
+     "https://www.rhs.org.uk/biodiversity/lily-beetle",
+     "https://www.rhs.org.uk/biodiversity/viburnum-beetle",
+     "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+     "https://www.gardenersworld.com/how-to/solve-problems/rosemary-beetle",
+     "https://www.rhs.org.uk/science/plant-health-in-gardens/entomology/rhs-projects-on-plant-pests/the-spread-of-non-native-garden-pests"
+    ],
+    "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-rosemary",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Take care when using fresh rosemary in your cooking, it\u2019s a pungent herb that will overpower delicate flavours.",
+      "form": {
+       "action": "none",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [],
+       "hedged": false,
+       "is_instruction": false
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "5-coriander-flowering.jpg",
+    "repeat": 0,
+    "species": "coriandrum sativum",
+    "plant": "coriander",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "coriander",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "pot",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-coriander",
+     "https://www.rhs.org.uk/herbs/growing",
+     "https://www.missouribotanicalgarden.org/gardens-gardening/your-garden/help-for-the-home-gardener/advice-tips-resources/visual-guides/herb-problems-outdoors",
+     "https://extension.psu.edu/attracting-beneficial-insects",
+     "https://extension.illinois.edu/blogs/know-how-know-more/2020-08-05-its-time-plant-fall-garden"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "If you grow it purely for leaves, then treat it like a short-term salad crop and sow small batches every month or so, to provide continual leafy harvests from mid-summer to early autumn.",
+      "form": {
+       "action": "shade",
+       "polarity": "do",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "plant_trait",
+         "value": "grow it purely for leaves"
+        },
+        {
+         "kind": "month_range",
+         "value": "mid-summer to early autumn"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     },
+     {
+      "text": "Take care not to overwater, as coriander dislikes soggy conditions.",
+      "form": {
+       "action": "water",
+       "polarity": "dont",
+       "applies_to": "this_plant",
+       "group": "",
+       "conditions": [
+        {
+         "kind": "other",
+         "value": "not to overwater"
+        }
+       ],
+       "hedged": false,
+       "is_instruction": true
+      },
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "5-coriander-flowering.jpg",
+    "repeat": 1,
+    "species": "coriandrum sativum",
+    "plant": "coriander/cilantro",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "coriander/cilantro",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "pot",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "no page",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+     "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-coriander",
+     "https://www.gardenersworld.com/house-plants/best-kitchen-plants",
+     "https://extension.umn.edu/garden-and-home/yard-and-garden/gardening-in-minnesota/growing-herbs",
+     "https://extension.psu.edu/attracting-beneficial-insects",
+     "https://www.missouribotanicalgarden.org/gardens-gardening/your-garden/help-for-the-home-gardener/advice-tips-resources/visual-guides/herb-problems-outdoors",
+     "https://extension.illinois.edu/newsletters/gardeners-corner/gardeners-corner-summer-2023"
+    ],
+    "url": null,
+    "quote": null,
+    "sentences": []
+   },
+   {
+    "photo": "6-basil-downy-mildew.jpg",
+    "repeat": 0,
+    "species": "ocimum basilicum",
+    "plant": "Sweet basil",
+    "problem": "basil downy mildew",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "sweet basil",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "basil downy mildew",
+     "seedlings": false
+    },
+    "path": "no page",
+    "started": true,
+    "provider": "tavily",
+    "about": [],
+    "url": null,
+    "quote": null,
+    "sentences": []
+   },
+   {
+    "photo": "6-basil-downy-mildew.jpg",
+    "repeat": 1,
+    "species": "ocimum basilicum",
+    "plant": "Basil",
+    "problem": "basil downy mildew",
+    "action": "treat_or_remove",
+    "checked_action": true,
+    "state": {
+     "plant": "basil",
+     "month": 10,
+     "action": "treat_or_remove",
+     "setting": "outdoor",
+     "container": "unknown",
+     "soil": null,
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": "basil downy mildew",
+     "seedlings": false
+    },
+    "path": "read",
+    "started": true,
+    "provider": "tavily",
+    "about": [
+     "https://www.gardenersworld.com/plants/ocimum-basilicum",
+     "https://www.gardenersworld.com/plants/ocimum-basilicum-dark-opal",
+     "https://www.gardenersworld.com/plants/ocimum-basilicum-var-minimum-greek",
+     "https://www.rhs.org.uk/herbs/growing",
+     "https://extension.illinois.edu/keywords/plant-clinic",
+     "https://extension.illinois.edu/view/blog-archive/82/2017",
+     "https://extension.psu.edu/beth-gugino"
+    ],
+    "url": "https://www.rhs.org.uk/herbs/growing",
+    "quote": null,
+    "sentences": [
+     {
+      "text": "Maintain air movement and ventilate greenhouses to help reduce problems with fungal diseases such as grey mould (Botrytis cinerea) and damping off of .",
+      "form": null,
+      "decided": "unsure"
+     }
+    ]
+   },
+   {
+    "photo": "7-pea-bed.jpg",
+    "repeat": 0,
+    "species": null,
+    "plant": "",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "garden pea",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": "dry",
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": false
+    },
+    "path": "not started",
+    "started": false,
+    "provider": null,
+    "about": null,
+    "url": null,
+    "quote": null,
+    "sentences": []
+   },
+   {
+    "photo": "7-pea-bed.jpg",
+    "repeat": 1,
+    "species": null,
+    "plant": "",
+    "problem": null,
+    "action": "leave_normal",
+    "checked_action": false,
+    "state": {
+     "plant": "pea",
+     "month": 10,
+     "action": "",
+     "setting": "outdoor",
+     "container": "ground",
+     "soil": "dry",
+     "cold_ahead": null,
+     "hot_dry": null,
+     "rain_ahead": null,
+     "problem": null,
+     "seedlings": true
+    },
+    "path": "not started",
+    "started": false,
+    "provider": null,
+    "about": null,
+    "url": null,
+    "quote": null,
+    "sentences": []
+   }
+  ]
+ },
+ "probe_action_in_query": {
+  "note": "one Tavily search per checkable answer with the action in the query, as if searched after the advisors; decided against the baseline's states",
+  "rows": [
+   {
+    "photo": "1-parsley-healthy.jpg",
+    "query": "curled parsley cutting back",
+    "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-divide-supermarket-herbs",
+    "sentences": [
+     [
+      "Cut back most of the soft upper foliage to lower buds.",
+      "agree",
+      "prune"
+     ],
+     [
+      "Then place the newly divided plants in a bright, warm spot and they'll produce new shoots for use all season.",
+      "unsure",
+      "move_light"
+     ]
+    ]
+   },
+   {
+    "photo": "3-basil-yellow-leaves.jpg",
+    "query": "basil cutting back",
+    "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-make-five-plants-from-one-supermarket-basil",
+    "sentences": [
+     [
+      "Take the supermarket basil plant and cut off any leggy shoots, back to a strong pair of growing buds.",
+      "unsure",
+      "prune"
+     ],
+     [
+      "Next, take the basil plant out of the pot and gently, without touching the stems or leaves of the plant, divide the rootball.",
+      "unsure",
+      "repot"
+     ]
+    ]
+   },
+   {
+    "photo": "4-rosemary-beetles.jpg",
+    "query": "rosemary rosemary beetle control",
+    "url": "https://www.gardenersworld.com/how-to/solve-problems/rosemary-beetle",
+    "sentences": [
+     [
+      "Holes in leaves and tiny elongated eggs left by 8mm-long green beetles with purple stripes.",
+      "unsure",
+      "treat_or_remove"
+     ],
+     [
+      "Pick off the adult beetles and larvae by hand and destroy.",
+      "unsure",
+      "treat_or_remove"
+     ]
+    ]
+   },
+   {
+    "photo": "6-basil-downy-mildew.jpg",
+    "query": "basil basil downy mildew control",
+    "url": "https://extension.umn.edu/agriculture/specialty-crops/vegetable-farming/disease-management/basil-downy-mildew",
+    "sentences": [
+     [
+      "The pathogen that causes downy mildew is not a true fungus but a water mold.",
+      "unsure",
+      "none"
+     ],
+     [
+      "Begin sprays before infection occurs to be effective.",
+      "unsure",
+      "treat_or_remove"
+     ],
+     [
+      "If any plant has basil downy mildew, remove and destroy the plant immediately.",
+      "unsure",
+      "remove_plant"
+     ]
+    ]
+   }
+  ]
+ }
+}

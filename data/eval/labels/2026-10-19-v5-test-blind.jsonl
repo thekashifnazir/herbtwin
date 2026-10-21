@@ -1,0 +1,413 @@
+{"id": 1180, "label": "no"}
+{"id": 1305, "label": "no"}
+{"id": 1111, "label": "no"}
+{"id": 1029, "label": "no"}
+{"id": 1132, "label": "no"}
+{"id": 1388, "label": "no"}
+{"id": 1357, "label": "no"}
+{"id": 1212, "label": "no"}
+{"id": 1279, "label": "no"}
+{"id": 1254, "label": "no"}
+{"id": 1413, "label": "no"}
+{"id": 1292, "label": "no"}
+{"id": 1059, "label": "no"}
+{"id": 1168, "label": "no"}
+{"id": 1379, "label": "no"}
+{"id": 1110, "label": "no"}
+{"id": 1093, "label": "no"}
+{"id": 1344, "label": "no"}
+{"id": 1353, "label": "no"}
+{"id": 1322, "label": "no"}
+{"id": 1248, "label": "no"}
+{"id": 1011, "label": "no"}
+{"id": 1135, "label": "no"}
+{"id": 1267, "label": "no"}
+{"id": 1194, "label": "yes", "reason": "direct instruction to move chives to sunnier spot"}
+{"id": 1409, "label": "yes", "reason": "spray to clear aphids; aphids confirmed"}
+{"id": 1393, "label": "no"}
+{"id": 1343, "label": "no"}
+{"id": 1173, "label": "no"}
+{"id": 1027, "label": "yes", "reason": "August=late summer, powdery mildew confirmed, remove leaves"}
+{"id": 1010, "label": "no"}
+{"id": 1346, "label": "no"}
+{"id": 1208, "label": "yes", "reason": "outdoor basil, autumn, cold night forecast: bring indoors"}
+{"id": 1066, "label": "no"}
+{"id": 1082, "label": "no"}
+{"id": 1242, "label": "no"}
+{"id": 1098, "label": "yes", "reason": "indoor thyme with red spider mite: mist and remove worst stems"}
+{"id": 1176, "label": "yes", "reason": "direct instruction to cut mint right back"}
+{"id": 1339, "label": "no"}
+{"id": 1105, "label": "yes", "reason": "move basil to full sun"}
+{"id": 1167, "label": "no"}
+{"id": 1052, "label": "no"}
+{"id": 1362, "label": "yes", "reason": "rain forecast, ground bed: hold back watering"}
+{"id": 1312, "label": "no"}
+{"id": 1191, "label": "no"}
+{"id": 1337, "label": "no"}
+{"id": 1374, "label": "no"}
+{"id": 1095, "label": "yes", "reason": "compost moist: skip watering"}
+{"id": 1372, "label": "no"}
+{"id": 1030, "label": "no"}
+{"id": 1274, "label": "no"}
+{"id": 1345, "label": "yes", "reason": "leaf spot confirmed: pick off affected leaves"}
+{"id": 1261, "label": "no"}
+{"id": 1037, "label": "no"}
+{"id": 1303, "label": "no"}
+{"id": 1192, "label": "no"}
+{"id": 1401, "label": "no"}
+{"id": 1139, "label": "no"}
+{"id": 1020, "label": "no"}
+{"id": 1064, "label": "no"}
+{"id": 1016, "label": "no"}
+{"id": 1352, "label": "no"}
+{"id": 1144, "label": "no"}
+{"id": 1146, "label": "yes", "reason": "indoor basil with whitefly: sticky traps"}
+{"id": 1054, "label": "no"}
+{"id": 1259, "label": "no"}
+{"id": 1125, "label": "no"}
+{"id": 1224, "label": "no"}
+{"id": 1320, "label": "no"}
+{"id": 1278, "label": "no"}
+{"id": 1253, "label": "no"}
+{"id": 1288, "label": "no"}
+{"id": 1200, "label": "no"}
+{"id": 1096, "label": "no"}
+{"id": 1324, "label": "no"}
+{"id": 1076, "label": "no"}
+{"id": 1236, "label": "no"}
+{"id": 1230, "label": "no"}
+{"id": 1065, "label": "no"}
+{"id": 1085, "label": "no"}
+{"id": 1081, "label": "no"}
+{"id": 1184, "label": "no"}
+{"id": 1113, "label": "no"}
+{"id": 1342, "label": "yes", "reason": "June early summer, aphids (greenfly) confirmed: squash"}
+{"id": 1272, "label": "no"}
+{"id": 1233, "label": "no"}
+{"id": 1162, "label": "no"}
+{"id": 1090, "label": "no"}
+{"id": 1412, "label": "no"}
+{"id": 1170, "label": "no"}
+{"id": 1304, "label": "no"}
+{"id": 1333, "label": "no"}
+{"id": 1145, "label": "no"}
+{"id": 1229, "label": "no"}
+{"id": 1392, "label": "no"}
+{"id": 1038, "label": "no"}
+{"id": 1157, "label": "no"}
+{"id": 1203, "label": "no"}
+{"id": 1313, "label": "no"}
+{"id": 1325, "label": "yes", "reason": "bring basil into the house (cold protection), no qualifiers"}
+{"id": 1340, "label": "no"}
+{"id": 1356, "label": "no"}
+{"id": 1186, "label": "no"}
+{"id": 1092, "label": "yes", "reason": "seedlings, surface dry: water"}
+{"id": 1411, "label": "no"}
+{"id": 1015, "label": "no"}
+{"id": 1214, "label": "no"}
+{"id": 1069, "label": "no"}
+{"id": 1350, "label": "no"}
+{"id": 1142, "label": "no"}
+{"id": 1088, "label": "no"}
+{"id": 1072, "label": "no"}
+{"id": 1169, "label": "no"}
+{"id": 1275, "label": "no"}
+{"id": 1376, "label": "no"}
+{"id": 1293, "label": "no"}
+{"id": 1215, "label": "no"}
+{"id": 1317, "label": "no"}
+{"id": 1086, "label": "no"}
+{"id": 1121, "label": "no"}
+{"id": 1155, "label": "no"}
+{"id": 1143, "label": "no"}
+{"id": 1101, "label": "no"}
+{"id": 1156, "label": "no"}
+{"id": 1188, "label": "no"}
+{"id": 1265, "label": "no"}
+{"id": 1083, "label": "no"}
+{"id": 1117, "label": "no"}
+{"id": 1024, "label": "no"}
+{"id": 1391, "label": "no"}
+{"id": 1182, "label": "no"}
+{"id": 1055, "label": "no"}
+{"id": 1025, "label": "yes", "reason": "light clip all over = trim back"}
+{"id": 1071, "label": "no"}
+{"id": 1031, "label": "no"}
+{"id": 1114, "label": "no"}
+{"id": 1270, "label": "no"}
+{"id": 1367, "label": "no"}
+{"id": 1318, "label": "no"}
+{"id": 1369, "label": "no"}
+{"id": 1195, "label": "no"}
+{"id": 1074, "label": "no"}
+{"id": 1153, "label": "no"}
+{"id": 1196, "label": "no"}
+{"id": 1119, "label": "yes", "reason": "October mid-autumn, pots: move under cover"}
+{"id": 1068, "label": "no"}
+{"id": 1181, "label": "no"}
+{"id": 1210, "label": "no"}
+{"id": 1314, "label": "yes", "reason": "indoor chives in winter: brightest sill"}
+{"id": 1355, "label": "no"}
+{"id": 1099, "label": "no"}
+{"id": 1021, "label": "no"}
+{"id": 1336, "label": "no"}
+{"id": 1277, "label": "yes", "reason": "frost forecast, pots: group against wall and fleece"}
+{"id": 1109, "label": "no"}
+{"id": 1070, "label": "no"}
+{"id": 1213, "label": "no"}
+{"id": 1397, "label": "no"}
+{"id": 1389, "label": "no"}
+{"id": 1036, "label": "no"}
+{"id": 1283, "label": "no"}
+{"id": 1056, "label": "no"}
+{"id": 1136, "label": "no"}
+{"id": 1334, "label": "no"}
+{"id": 1384, "label": "no"}
+{"id": 1124, "label": "no"}
+{"id": 1049, "label": "no"}
+{"id": 1165, "label": "no"}
+{"id": 1199, "label": "no"}
+{"id": 1335, "label": "no"}
+{"id": 1243, "label": "no"}
+{"id": 1227, "label": "no"}
+{"id": 1012, "label": "no"}
+{"id": 1045, "label": "no"}
+{"id": 1209, "label": "no"}
+{"id": 1354, "label": "yes", "reason": "direct instruction to water parsley deeply"}
+{"id": 1009, "label": "no"}
+{"id": 1298, "label": "no"}
+{"id": 1141, "label": "no"}
+{"id": 1290, "label": "no"}
+{"id": 1174, "label": "no"}
+{"id": 1381, "label": "no"}
+{"id": 1383, "label": "no"}
+{"id": 1323, "label": "no"}
+{"id": 1087, "label": "no"}
+{"id": 1160, "label": "no"}
+{"id": 1112, "label": "no"}
+{"id": 1329, "label": "no"}
+{"id": 1219, "label": "no"}
+{"id": 1152, "label": "no"}
+{"id": 1371, "label": "no"}
+{"id": 1044, "label": "yes", "reason": "mint rust confirmed: cut shoots down"}
+{"id": 1359, "label": "no"}
+{"id": 1147, "label": "no"}
+{"id": 1120, "label": "no"}
+{"id": 1128, "label": "no"}
+{"id": 1032, "label": "no"}
+{"id": 1202, "label": "no"}
+{"id": 1116, "label": "no"}
+{"id": 1078, "label": "no"}
+{"id": 1370, "label": "no"}
+{"id": 1084, "label": "no"}
+{"id": 1245, "label": "no"}
+{"id": 1131, "label": "no"}
+{"id": 1310, "label": "no"}
+{"id": 1007, "label": "yes", "reason": "rosemary beetle confirmed: pick off beetles"}
+{"id": 1198, "label": "no"}
+{"id": 1091, "label": "no"}
+{"id": 1166, "label": "no"}
+{"id": 1089, "label": "no"}
+{"id": 1014, "label": "no"}
+{"id": 1019, "label": "no"}
+{"id": 1309, "label": "no"}
+{"id": 1028, "label": "no"}
+{"id": 1004, "label": "yes", "reason": "indoor mint with whitefly: spray soapy water"}
+{"id": 1097, "label": "no"}
+{"id": 1291, "label": "no"}
+{"id": 1360, "label": "yes", "reason": "cover parsley with a cloche (cold protection)"}
+{"id": 1297, "label": "yes", "reason": "direct instruction to water coriander"}
+{"id": 1039, "label": "no"}
+{"id": 1207, "label": "no"}
+{"id": 1273, "label": "no"}
+{"id": 1106, "label": "no"}
+{"id": 1316, "label": "no"}
+{"id": 1079, "label": "no"}
+{"id": 1240, "label": "no"}
+{"id": 1228, "label": "no"}
+{"id": 1201, "label": "no"}
+{"id": 1250, "label": "no"}
+{"id": 1041, "label": "no"}
+{"id": 1172, "label": "no"}
+{"id": 1107, "label": "no"}
+{"id": 1022, "label": "no"}
+{"id": 1271, "label": "no"}
+{"id": 1130, "label": "no"}
+{"id": 1178, "label": "no"}
+{"id": 1404, "label": "no"}
+{"id": 1154, "label": "no"}
+{"id": 1034, "label": "no"}
+{"id": 1307, "label": "no"}
+{"id": 1122, "label": "no"}
+{"id": 1058, "label": "yes", "reason": "shelter rosemary with fleece"}
+{"id": 1140, "label": "yes", "reason": "June pot basil, compost dry: water"}
+{"id": 1035, "label": "no"}
+{"id": 1328, "label": "no"}
+{"id": 1299, "label": "yes", "reason": "March early spring: cut sage back"}
+{"id": 1177, "label": "no"}
+{"id": 1126, "label": "no"}
+{"id": 1221, "label": "yes", "reason": "trim coriander stems back"}
+{"id": 1244, "label": "no"}
+{"id": 1238, "label": "no"}
+{"id": 1197, "label": "no"}
+{"id": 1365, "label": "no"}
+{"id": 1366, "label": "no"}
+{"id": 1171, "label": "no"}
+{"id": 1380, "label": "no"}
+{"id": 1003, "label": "no"}
+{"id": 1080, "label": "no"}
+{"id": 1399, "label": "no"}
+{"id": 1306, "label": "no"}
+{"id": 1023, "label": "no"}
+{"id": 1062, "label": "no"}
+{"id": 1127, "label": "no"}
+{"id": 1102, "label": "no"}
+{"id": 1043, "label": "no"}
+{"id": 1282, "label": "no"}
+{"id": 1001, "label": "no"}
+{"id": 1048, "label": "no"}
+{"id": 1008, "label": "no"}
+{"id": 1395, "label": "no"}
+{"id": 1075, "label": "no"}
+{"id": 1211, "label": "no"}
+{"id": 1100, "label": "no"}
+{"id": 1050, "label": "yes", "reason": "downy mildew confirmed: remove mildewed leaves"}
+{"id": 1190, "label": "no"}
+{"id": 1349, "label": "no"}
+{"id": 1137, "label": "no"}
+{"id": 1033, "label": "no"}
+{"id": 1311, "label": "no"}
+{"id": 1347, "label": "no"}
+{"id": 1094, "label": "no"}
+{"id": 1232, "label": "no"}
+{"id": 1341, "label": "no"}
+{"id": 1264, "label": "no"}
+{"id": 1225, "label": "yes", "reason": "pot mint: soak thoroughly"}
+{"id": 1386, "label": "yes", "reason": "March, trim rosemary lightly"}
+{"id": 1302, "label": "no"}
+{"id": 1163, "label": "no"}
+{"id": 1149, "label": "no"}
+{"id": 1018, "label": "no"}
+{"id": 1368, "label": "yes", "reason": "August late summer: shear mint by half"}
+{"id": 1223, "label": "no"}
+{"id": 1255, "label": "no"}
+{"id": 1262, "label": "yes", "reason": "frost forecast, containers: move to sheltered wall"}
+{"id": 1239, "label": "no"}
+{"id": 1249, "label": "no"}
+{"id": 1134, "label": "no"}
+{"id": 1103, "label": "no"}
+{"id": 1185, "label": "no"}
+{"id": 1251, "label": "no"}
+{"id": 1330, "label": "yes", "reason": "pot basil, top dry: water thoroughly"}
+{"id": 1364, "label": "no"}
+{"id": 1077, "label": "no"}
+{"id": 1017, "label": "no"}
+{"id": 1005, "label": "no"}
+{"id": 1138, "label": "no"}
+{"id": 1151, "label": "no"}
+{"id": 1104, "label": "no"}
+{"id": 1222, "label": "no"}
+{"id": 1390, "label": "no"}
+{"id": 1338, "label": "no"}
+{"id": 1257, "label": "no"}
+{"id": 1400, "label": "yes", "reason": "cold night forecast: bring basil indoors"}
+{"id": 1158, "label": "no"}
+{"id": 1206, "label": "no"}
+{"id": 1287, "label": "no"}
+{"id": 1377, "label": "no"}
+{"id": 1280, "label": "yes", "reason": "direct instruction to hold off watering rosemary"}
+{"id": 1326, "label": "no"}
+{"id": 1234, "label": "no"}
+{"id": 1321, "label": "no"}
+{"id": 1063, "label": "no"}
+{"id": 1118, "label": "no"}
+{"id": 1247, "label": "no"}
+{"id": 1363, "label": "no"}
+{"id": 1241, "label": "no"}
+{"id": 1220, "label": "no"}
+{"id": 1405, "label": "no"}
+{"id": 1408, "label": "no"}
+{"id": 1268, "label": "no"}
+{"id": 1026, "label": "no"}
+{"id": 1067, "label": "no"}
+{"id": 1407, "label": "no"}
+{"id": 1295, "label": "no"}
+{"id": 1358, "label": "no"}
+{"id": 1266, "label": "no"}
+{"id": 1373, "label": "no"}
+{"id": 1246, "label": "no"}
+{"id": 1289, "label": "no"}
+{"id": 1403, "label": "yes", "reason": "tender herb, autumn, cold forecast: move to frost-free place"}
+{"id": 1133, "label": "no"}
+{"id": 1269, "label": "no"}
+{"id": 1378, "label": "no"}
+{"id": 1382, "label": "no"}
+{"id": 1406, "label": "no"}
+{"id": 1260, "label": "no"}
+{"id": 1218, "label": "no"}
+{"id": 1060, "label": "yes", "reason": "aphids confirmed: rinse chives with water spray"}
+{"id": 1256, "label": "no"}
+{"id": 1284, "label": "no"}
+{"id": 1300, "label": "no"}
+{"id": 1205, "label": "no"}
+{"id": 1047, "label": "no"}
+{"id": 1217, "label": "no"}
+{"id": 1237, "label": "no"}
+{"id": 1187, "label": "no"}
+{"id": 1189, "label": "no"}
+{"id": 1013, "label": "no"}
+{"id": 1159, "label": "yes", "reason": "snip chives down to base"}
+{"id": 1296, "label": "no"}
+{"id": 1361, "label": "no"}
+{"id": 1331, "label": "no"}
+{"id": 1073, "label": "yes", "reason": "leaf spot confirmed: take off spotted leaves"}
+{"id": 1235, "label": "no"}
+{"id": 1387, "label": "no"}
+{"id": 1150, "label": "no"}
+{"id": 1276, "label": "no"}
+{"id": 1286, "label": "yes", "reason": "July pot rosemary, compost dry: water"}
+{"id": 1046, "label": "no"}
+{"id": 1175, "label": "no"}
+{"id": 1040, "label": "no"}
+{"id": 1327, "label": "no"}
+{"id": 1410, "label": "no"}
+{"id": 1193, "label": "no"}
+{"id": 1183, "label": "no"}
+{"id": 1179, "label": "no"}
+{"id": 1129, "label": "no"}
+{"id": 1204, "label": "no"}
+{"id": 1108, "label": "no"}
+{"id": 1161, "label": "no"}
+{"id": 1348, "label": "no"}
+{"id": 1396, "label": "no"}
+{"id": 1351, "label": "no"}
+{"id": 1006, "label": "no"}
+{"id": 1231, "label": "no"}
+{"id": 1051, "label": "no"}
+{"id": 1148, "label": "no"}
+{"id": 1057, "label": "no"}
+{"id": 1042, "label": "no"}
+{"id": 1315, "label": "no"}
+{"id": 1002, "label": "no"}
+{"id": 1123, "label": "no"}
+{"id": 1226, "label": "no"}
+{"id": 1301, "label": "no"}
+{"id": 1385, "label": "no"}
+{"id": 1252, "label": "no"}
+{"id": 1394, "label": "yes", "reason": "mint rust confirmed: strip rust-spotted leaves"}
+{"id": 1398, "label": "no"}
+{"id": 1375, "label": "no"}
+{"id": 1281, "label": "no"}
+{"id": 1294, "label": "no"}
+{"id": 1402, "label": "no"}
+{"id": 1216, "label": "no"}
+{"id": 1285, "label": "no"}
+{"id": 1319, "label": "no"}
+{"id": 1308, "label": "no"}
+{"id": 1115, "label": "no"}
+{"id": 1053, "label": "yes", "reason": "aphids (greenfly) confirmed: wash off"}
+{"id": 1332, "label": "no"}
+{"id": 1263, "label": "no"}
+{"id": 1258, "label": "no"}
+{"id": 1164, "label": "yes", "reason": "rosemary beetle confirmed: tap off and dispose"}
+{"id": 1061, "label": "no"}

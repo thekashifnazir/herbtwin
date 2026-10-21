@@ -1,0 +1,95 @@
+{
+  "advise_cost_usd": 0.084301,
+  "backend": "tokenfactory",
+  "few_shot_ids": [
+    "actions_se/2249",
+    "actions_se/9742",
+    "actions_se/453",
+    "actions_se/16103",
+    "actions_se/3478",
+    "actions_se/57694"
+  ],
+  "few_shot_shown": false,
+  "git_sha": "ab5df72",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.53125,
+      "lo": 0.21875,
+      "n": 32,
+      "value": 0.375
+    },
+    "hedge_had_answer": {
+      "hi": 0.07317073170731707,
+      "lo": 0.0,
+      "n": 41,
+      "value": 0.024390243902439025
+    },
+    "jaccard": {
+      "hi": 0.3955714285714285,
+      "lo": 0.2880793650793651,
+      "n": 150,
+      "value": 0.339968253968254
+    },
+    "over_treatment": {
+      "hi": 0.07333333333333333,
+      "lo": 0.013333333333333334,
+      "n": 150,
+      "value": 0.04
+    },
+    "primary_in_truth": {
+      "hi": 0.6666666666666666,
+      "lo": 0.52,
+      "n": 150,
+      "value": 0.5933333333333334
+    },
+    "primary_match": {
+      "hi": 0.46,
+      "lo": 0.30666666666666664,
+      "n": 150,
+      "value": 0.38666666666666666
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.46,
+      "lo": 0.30666666666666664,
+      "n": 150,
+      "value": 0.38666666666666666
+    },
+    "water_conflict": {
+      "hi": 0.07333333333333333,
+      "lo": 0.013333333333333334,
+      "n": 150,
+      "value": 0.04
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "pred_primary": {
+    "ask_first": 45,
+    "dont_water": 18,
+    "leave_normal": 13,
+    "move_light": 14,
+    "other": 15,
+    "prune": 9,
+    "shelter": 5,
+    "treat_or_remove": 24,
+    "water": 7
+  },
+  "prompt_hash": "d9fd7599abe0",
+  "run_id": "2026-10-04-super-se-text-150",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 9,
+    "dont_water": 13,
+    "leave_normal": 27,
+    "move_light": 6,
+    "other": 37,
+    "prune": 10,
+    "shelter": 4,
+    "treat_or_remove": 37,
+    "water": 7
+  }
+}

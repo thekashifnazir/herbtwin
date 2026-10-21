@@ -1,0 +1,29 @@
+<!doctype html>
+{% from "_nav.html" import site_nav %}
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}herbtwin{% endblock %}</title>
+<meta name="description" content="Take a photo of a plant or herb. herbtwin works out what it is and what it needs now.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/alegreya-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/fira-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+{% block head %}{% endblock %}
+<style>{{ site_css }}</style>
+</head>
+<body class="{% block page %}{% endblock %}">
+{# the frame is 72rem wide on every page, so the header never jumps between pages; main
+   holds a 38rem reading column at its left, or the whole width with `{% block wrap %} wide{% endblock %}` #}
+{# the first stop for a keyboard: past the wordmark and the nav, straight to the page #}
+<a class="skip" href="#content">Skip to content</a>
+<header class="site"><div class="wrap">
+  <a class="wordmark" href="/">{{ mark }}herbtwin</a>
+  {% block nav %}{{ site_nav() }}{% endblock %}
+</div></header>
+<main id="content" tabindex="-1"><div class="wrap{% block wrap %}{% endblock %}">
+{% block main %}{% endblock %}
+</div></main>
+<footer class="foot"><div class="wrap">{% block foot %}<span class="foot-mark" aria-hidden="true">herbtwin</span>{% endblock %}<a href="/privacy">Privacy</a><a href="/credits">Credits</a><a href="https://open-meteo.com/" rel="noopener noreferrer">Weather data by Open-Meteo.com</a></div></footer>
+{# the photo copy the home form leaves for the answer page (index.html): every page drops
+   it, except the answer page, which claims it, and the plant choice on the way there #}
+{% block photo_copy %}<script>try { sessionStorage.removeItem("herbtwin-photo-pending"); } catch {}</script>{% endblock %}
+{% block script %}{% endblock %}
+</body></html>

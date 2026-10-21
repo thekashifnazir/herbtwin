@@ -1,0 +1,22 @@
+{# Shown while the photo is read (spot spec D67): the direction question fills the wait
+   (an 8-way pick while COMPASS_FIRST is off). The answer goes by fetch, so the streamed
+   page keeps running and offers the answer when done. Styled by static/pages/spot.css (.spot-wait). #}
+{% import "_spot_questions.html" as spotq %}
+<form class="tray spot-wait" method="post" action="/spots/{{ rid }}/told" data-fetch>
+  {{ spotq.compass_field(compass_first) }}
+  <p class="actions"><button class="primary" type="submit" data-fallback-send>Send</button> <span data-sent role="status"></span></p>
+</form>
+<script>
+(() => {
+  const form = document.querySelector("form[data-fetch]");
+  if (!form) return;
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const sent = form.querySelector("[data-sent]");
+    try {
+      const r = await fetch(form.action, {method: "POST", body: new FormData(form), headers: {"X-Herbtwin-Fetch": "1"}});
+      sent.textContent = r.ok ? "Thanks: it counts where a wall or fence behind the spot shades it." : "That answer didn't work; you can try again under the answer.";
+    } catch { sent.textContent = "Could not send it; you can try again under the answer."; }
+  });
+})();
+</script>

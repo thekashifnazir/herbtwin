@@ -1,0 +1,3032 @@
+{
+ "run_at": "2026-10-12T13:54:54",
+ "model": "dedicated/nvidia/Nemotron-3-Nano-Omni-2j6OgDCI6TwX",
+ "prompt_version": "c2-v1",
+ "pass": false,
+ "counts": {
+  "change_right": "5/10",
+  "same_false": "0/10",
+  "parsley_ok": "3/3"
+ },
+ "gates": {
+  "posture": {
+   "pass": false,
+   "counts": {
+    "change_right": "5/10",
+    "same_false": "0/10",
+    "parsley_ok": "3/3"
+   }
+  },
+  "tissue": {
+   "pass": true,
+   "counts": {
+    "change_right": "14/14",
+    "same_false": "1/12"
+   }
+  },
+  "colour": {
+   "pass": false,
+   "counts": {
+    "change_right": "7/14",
+    "same_false": "0/10"
+   }
+  }
+ },
+ "cost_usd": 0.0,
+ "results": [
+  {
+   "id": "fit1",
+   "set": "change",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The plant in photo B has more leaves and stems hanging lower than in photo A, indicating increased drooping.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"In photo B, the plant's stems and leaves show more drooping compared to photo A, where the plant is more upright and compact.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"In photo B, the plant's stems and leaves show more drooping (hanging lower than normal) compared to photo A, where the plant appears more upright and less wilted.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"In photo B, the plant's stems and leaves are visibly drooping more compared to photo A, where the plant is more upright.\"}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "fit2",
+   "set": "change",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The plant in photo B shows more drooping in its stems and leaves compared to photo A, indicating greater wilting.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The stems and leaves in photo B droop more noticeably than in photo A, showing greater wilting.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"In photo B, the plant's stems and leaves show more pronounced drooping compared to photo A, indicating greater wilting.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B shows more drooping in its stems and leaves compared to photo A, where the foliage is more upright.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "fit3",
+   "set": "change",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B shows more drooping in its stems and leaves compared to photo A, with visible flopping that exceeds normal posture.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The plant in photo B shows more drooping of leaves and stems compared to photo A, where the foliage is more upright.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows more drooping leaves and stems compared to photo A, indicating greater wilting.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B has more leaves and stems drooping (hanging lower than normal) compared to photo A, indicating greater drooping.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "fit4",
+   "set": "change",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The plant in photo B shows more drooping stems and leaves compared to photo A, indicating greater wilting.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"In photo B, the plant's stems and leaves droop more noticeably compared to photo A, where they are more upright.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"In photo B, the plant's stems and leaves are more extended and hanging lower than in photo A, indicating greater drooping.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"In photo B, the plant's stems and leaves are visibly drooping more compared to photo A, where the plant appears more upright.\"}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "fit5",
+   "set": "change",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"In photo B, a leaf is visibly drooping (hanging lower than normal), while in photo A, the plant's leaves are held upright without drooping.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The plant in photo B shows more drooping of stems and leaves compared to photo A, indicating a greater degree of wilting.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"In photo B, the plant's stems and leaves hang lower compared to photo A, indicating more drooping.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B shows more drooping of stems and leaves compared to photo A, indicating a greater degree of wilting.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "blos1",
+   "set": "change",
+   "signal": "posture",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows the flower lying down with petals drooping, while Photo A has the flower upright and fully open.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows a drooping flower while Photo B's flower is upright and fully open, indicating less drooping.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows the flower lying flat and wilted, whereas Photo A shows an upright, fresh bloom.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows a wilted, drooping flower while Photo B shows a fresh, upright bloom, indicating less drooping in B.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "blos2",
+   "set": "change",
+   "signal": "posture",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's flower petals and structure appear more drooped compared to the upright position in photo A, indicating greater wilting.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's flower petals and stamens are more upright and less flopped compared to photo A's more drooping appearance.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows the flower petals drooping lower than in photo A, indicating more wilting.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"The flower in photo B holds its petals more upright and appears less flopped than in photo A, indicating less drooping.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "blos3",
+   "set": "change",
+   "signal": "posture",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows the flower lying down with petals drooping, while Photo A has the flower upright.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows a drooping flower with flopped petals, while Photo B shows the flower upright with petals spread, indicating less drooping.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows the flower drooping with petals flopped down, while Photo A has the flower upright and fully open.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows a fully open, upright flower while Photo A displays a wilted, drooping flower, indicating B droops less.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "let1",
+   "set": "change",
+   "signal": "posture",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's plant shows more drooping leaves compared to the upright, firm leaves in photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's plant has more upright, compact leaves compared to photo A's more spread and drooping leaves, indicating less drooping.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's plant shows leaves that are more spread and lower, indicating greater drooping compared to photo A's upright, firm leaves.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's plant has more upright, compact leaves compared to Photo A's more spread and slightly drooping leaves.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "let2",
+   "set": "change",
+   "signal": "posture",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B shows more drooping as its leaves hang lower compared to the upright, firm leaves in photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's plant has more upright and compact leaves compared to Photo A, indicating less drooping.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves hang lower than photo A's upright structure, indicating more drooping.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's plant has more upright, compact leaves compared to photo A's more spread and drooping leaves.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_fit1",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's leaves and stems maintain similar positions with no clear indication of increased drooping in photo B compared to photo A.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant's leaves and stems appear to be held in a similar upright position in both photos, with no noticeable difference in drooping or wilting.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B appear to droop more compared to photo A, with visible wilting in the stems and leaves on the right side.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B show more drooping (hanging lower) compared to photo A, indicating more wilting.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_fit2",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant's leaves and stems in photo B maintain the same drooping level as in photo A, with no noticeable increase or decrease in wilting or flopping.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's leaves and stems maintain similar upright positions in both photos, indicating no significant drooping difference.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves and stems in photo B appear to droop more compared to photo A, with several leaves hanging lower than in photo A, indicating more wilting or flopping.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant's leaves and stems in both photos appear to be held in a similar upright position with no noticeable difference in drooping.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_blos1",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the model was not sure",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The flower's posture and petal positions appear identical in both photos, showing no signs of wilting or drooping.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The flower's structure and orientation appear identical in both photos, with no visible signs of drooping or wilting.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"low\",\n  \"reason\": \"Both images show the same flower with no visible leaves or stems to assess drooping.\"\n}",
+     "change": "same",
+     "confidence": "low"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"Both photos show the flower with petals and stamens in identical positions, indicating no drooping difference.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_blos2",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The flower's posture and drooping appear identical in both photos, with no noticeable difference in wilting or flopping.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's posture, including petal and stem positions, appears nearly identical between the two photos, indicating no significant drooping difference.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant's position and structure appear identical in both images, indicating no significant difference in drooping.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The flower's posture and drooping appear identical in both photos, indicating no noticeable change.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_ros1",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    "bright_shade",
+    "bright_shade"
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant in photo B holds its leaves and stems in a similar upright position as in photo A, showing no significant drooping.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in both photos maintains an upright posture with no visible drooping or wilting, indicating similar stem and leaf positioning.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's stems and leaves in both photos appear upright with no visible wilting or drooping, indicating similar posture.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"same\",\n\"confidence\": \"high\",\n\"reason\": \"Both photos show the plant with upright, non-wilting stems and leaves, indicating no noticeable difference in drooping.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_ros2",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": true,
+   "light": [
+    "bright_shade",
+    "direct_sun"
+   ],
+   "verdict": "cant_tell",
+   "reason": "light changed",
+   "looks": []
+  },
+  {
+   "id": "same_rose1",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    "bright_shade",
+    "bright_shade"
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's posture and leaf positions appear consistent between the two photos, with no visible wilting or drooping differences.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's posture and leaf positions appear consistent between the two images, with no clear indication of increased drooping in photo B.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B appears to have a more upright structure with less drooping compared to photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The plant's posture in both photos appears consistent with no noticeable drooping, indicating similar wilting levels.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_rose2",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": true,
+   "light": [
+    "bright_shade",
+    "direct_sun"
+   ],
+   "verdict": "cant_tell",
+   "reason": "light changed",
+   "looks": []
+  },
+  {
+   "id": "same_chive1",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    "bright_shade",
+    "bright_shade"
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The plant in photo B shows more drooping (wilting) of stems and leaves compared to photo A, indicating a greater loss of turgor or structural support.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The green stems in both photos are upright with no visible wilting or drooping, indicating similar posture.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant in photo B shows more drooping stems and leaves compared to the upright structure in photo A, indicating more wilting.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The plant's stems and leaves appear similarly upright in both photos, with no clear indication of increased drooping in photo B compared to photo A.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "same_chive2",
+   "set": "same",
+   "signal": "posture",
+   "expect": "same",
+   "light_guard": true,
+   "light": [
+    "bright_shade",
+    "direct_sun"
+   ],
+   "verdict": "cant_tell",
+   "reason": "light changed",
+   "looks": []
+  },
+  {
+   "id": "parsley1",
+   "set": "parsley",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": true,
+   "light": [
+    "direct_sun",
+    "bright_shade"
+   ],
+   "verdict": "cant_tell",
+   "reason": "light changed",
+   "looks": []
+  },
+  {
+   "id": "parsley2",
+   "set": "parsley",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": true,
+   "light": [
+    "direct_sun",
+    "bright_shade"
+   ],
+   "verdict": "cant_tell",
+   "reason": "light changed",
+   "looks": []
+  },
+  {
+   "id": "parsley3",
+   "set": "parsley",
+   "signal": "posture",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    "bright_shade",
+    "deep_shade"
+   ],
+   "verdict": "less",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows a healthier plant with more upright leaves and stems compared to the more drooping and wilting appearance in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows more pronounced drooping of leaves and stems compared to photo A, indicating greater wilting.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows more upright green foliage with less drooping compared to the more wilted and hanging stems in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows more pronounced drooping of stems and leaves compared to photo A, with several parts hanging lower than in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col1",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B shows significant yellowing and browning compared to the predominantly green leaf in Photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is darker green with minimal yellowing compared to Photo A's significantly yellow and browned leaf.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B shows significant yellowing and browning compared to the greener Photo A, indicating less green coloration.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows significant yellowing and browning, while Photo B's leaf is a uniform dark green with minimal yellowing, indicating less pale or yellow coloration.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col2",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows extensive browning and yellowing, making the leaf less green compared to the mostly green leaf in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf is predominantly green with minimal discoloration compared to Photo A's extensive brown and yellow areas.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows significant browning and yellowing compared to the greener Photo A, indicating less green coloration.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows significant browning and yellowing, while Photo B's leaf is predominantly green with minimal discoloration, indicating less pale or yellow coloration.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col3",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf shows significant yellowing and browning compared to the green leaf in Photo A, indicating more yellow/pale coloration.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is predominantly green while Photo A's leaf is brown and yellow, indicating less pale or yellow coloration in B.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf shows significant browning and yellowing compared to the greener leaf in Photo A, indicating less green coloration.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows a leaf with significant brown discoloration (indicating more yellow/brown), while Photo B's leaf is predominantly green, indicating less yellow.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col4",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf is brown and dried, while photo A's is green, indicating less green coloration.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is green while photo A's is brown and dried, indicating less pale/yellow.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows a dried, brown leaf while Photo A is green, indicating B is more pale/yellow.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows a brown (yellowish-brown) dried leaf, while Photo B shows a green leaf, so B has less yellow color compared to A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col5",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B shows more yellow and brown discoloration on the leaf compared to the greener leaf in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is greener with fewer yellow/brown spots compared to the heavily discolored leaf in Photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf shows more yellow and brown discoloration compared to the greener leaf in Photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows significant yellowing and browning on the leaf, while Photo B's leaf is predominantly green with minimal discoloration, indicating less yellowing in B compared to A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col6",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is predominantly brown and yellow with minimal green, while Photo A has significant green areas, indicating B is less green (more pale/yellow).\" }",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf has more green and less yellow compared to the predominantly yellow-brown leaf in photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows a leaf with significant green coloration, while Photo B's leaf is predominantly brown and yellow with very little green, indicating it is more pale/yellow.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A's leaf is predominantly yellow-brown with minimal green, while photo B shows more green and reduced yellow, indicating less yellow in B compared to A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col7",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are predominantly yellow and pale compared to the green leaves in Photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows predominantly yellow and golden leaves, while Photo B has greener foliage with less yellowing.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows green foliage while Photo B displays predominantly yellow and brownish leaves, indicating a significant color shift toward yellow/pale tones.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A's leaves are predominantly yellow and brown, while Photo B's leaves are green, indicating less yellow coloration in B compared to A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col8",
+   "set": "change",
+   "signal": "colour",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are predominantly yellow/pale yellow, while Photo A's are green with some yellowing, indicating more yellow in B.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows yellow leaves while photo B shows green leaves, indicating the leaves in B are less yellow than in A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B displays significantly more yellow and orange foliage compared to the greener and less yellow leaves in Photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A displays yellow leaves while photo B shows green leaves, indicating a clear reduction in yellow coloration.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col9",
+   "set": "change",
+   "signal": "colour",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "less",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are paler and more greenish compared to the brighter yellow in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The yellow leaves in photo B appear more vibrant and yellow compared to the paler yellow in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A's leaves are a vibrant yellow while photo B's are a paler, more greenish-yellow, indicating less yellow coloration in photo B.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's yellow leaves are more vibrant and intense compared to the more muted yellow in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col10",
+   "set": "change",
+   "signal": "colour",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B are greener with less yellow compared to photo A, indicating a reduction in yellow pigmentation.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"The yellow color of the lower leaves in photo B is less pronounced compared to photo A, indicating they are less yellow.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaves are greener and less yellow compared to photo A's more yellowish leaves.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"The lower leaves in photo B are noticeably less yellow compared to photo A, indicating a reduction in yellow pigmentation.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col11",
+   "set": "change",
+   "signal": "colour",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "less",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A's leaves are yellow while Photo B's are green, so B's leaves are less yellow.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The leaves in photo B are distinctly more yellow compared to the green leaves in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A's leaves are yellowish while Photo B's are greener, indicating less yellow.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are visibly more yellow/pale compared to the greener leaves in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col12",
+   "set": "change",
+   "signal": "colour",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "less",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A's leaves are yellow while photo B's are green, indicating less yellow color.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are yellow while photo A's are green, indicating a more pale/yellow color in B.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A's plant tops are yellow, while Photo B's are green, showing less yellow color in B.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B are yellowish compared to the green leaves in photo A, indicating they are more pale or yellow.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col13",
+   "set": "change",
+   "signal": "colour",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "less",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaves are a deeper green with less yellowish tone compared to the more yellowish-green leaves in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are lighter and more yellowish-green compared to the darker green in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are a deeper green compared to Photo A's more yellowish-green leaves, indicating less pale or yellow coloration.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaves appear lighter and more yellowish compared to the denser, darker green foliage in Photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col14",
+   "set": "change",
+   "signal": "colour",
+   "expect": "less",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "less",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaves are a deeper, more uniform green with less yellowing compared to Photo A's more yellowish-green leaves.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves have a noticeable yellowish or paler tone compared to the greener leaves in Photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves are a deeper green with less yellowing compared to Photo A's more yellowish-green leaves.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaves show a noticeable yellowish or pale tone compared to the greener foliage in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col15",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color in both photos appears identical with no visible differences in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The leaf in photo B appears lighter in color (more pale) compared to the darker green in photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color in both photos appears consistent with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf's green color appears consistent between both photos, with no noticeable pale or yellow tint in photo B compared to photo A.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col16",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The green color of the leaf in photo B appears to be the same as in photo A.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color in both photos appears to be the same shade of green with no noticeable difference in paleness or yellowness.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color in both photos appears to be a similar shade of green with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf's green color appears consistent between both photos, with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col17",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows a lighter, more yellowish section on the leaf compared to the solid green in photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf's green color appears consistent between both photos, with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B displays a noticeable paler/yellowish section in the leaf that is absent in photo A, indicating increased paleness or yellowness.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color in both photos appears consistent with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col18",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos appear to have the same green hue with no noticeable difference in pale or yellow tones.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos show consistent green coloration with no visible differences in pale or yellow tones.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color appears consistent between the two photos, with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color appears consistent between the two photos, with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col19",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos appear to have the same green coloration with no noticeable difference in pale or yellow tones.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color appears consistent between both photos with no significant pale or yellowing observed.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos appear to have consistent coloration with no noticeable difference in pale or yellow tones, indicating the same appearance.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos appear to have similar green tones with no clear visual difference in paleness or yellowness between photo B and photo A.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col20",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf colors in both photos appear consistent with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf colors in both photos appear consistent with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf colors in both photos appear visually consistent with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaves in both photos display similar green tones with no noticeable difference in pale or yellow appearance.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col21",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos appear to have consistent green tones with no noticeable difference in pale or yellow hues.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf colors in both photos appear consistent with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaf color in both photos appears consistent with no significant pale or yellow variation visible.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"medium\",\n  \"reason\": \"The leaves in photo B appear lighter (more pale) than in photo A, likely due to differences in lighting conditions affecting color perception.\"\n}",
+     "change": "less",
+     "confidence": "medium"
+    }
+   ]
+  },
+  {
+   "id": "col22",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The leaf color in both photos appears consistently green with no noticeable difference in pale or yellow tones.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in both photos show similar green tones with no noticeable pale or yellowing difference.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaf color appears consistent between the two photos, with no significant difference in pale or yellow tones.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B appear lighter and more pale compared to photo A, indicating a noticeable difference in color tone.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col23",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"The lower leaves in photo B appear greener and less yellow compared to photo A, indicating a reduction in pale or yellow coloration.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"The lower leaves in photo B are less yellow (more green) compared to photo A, indicating a clear difference in leaf color.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B appear to have the same coloration as in photo A, with no clear indication of being more pale or more yellow.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The lower leaves in photo B show a more yellow/pale hue compared to photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "col24",
+   "set": "same",
+   "signal": "colour",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B appear lighter (more pale) than those in photo A, indicating a noticeable difference in leaf coloration.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"The leaves in photo B appear lighter and more yellowish compared to the greener leaves in photo A.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"The leaves in photo B appear lighter and more yellowish compared to photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"medium\", \"reason\": \"Photo B's leaves, especially on the right plant, appear lighter and more yellowish compared to photo A, likely due to lighting differences affecting color perception.\"}",
+     "change": "less",
+     "confidence": "medium"
+    }
+   ]
+  },
+  {
+   "id": "brown1",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo A shows a green, healthy leaf while photo B shows a brown, dried-out leaf, indicating more dead tissue in B.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows a brown, dried-out leaf while Photo B shows a green, healthy leaf with no dead tissue visible.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays a brown, desiccated leaf while Photo A shows a green, healthy leaf, indicating more dead tissue in B.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows a green, healthy leaf while Photo A shows a brown, dead leaf, indicating far less dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown2",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is largely brown and dried-out, while photo A's leaf is green with minimal dead tissue.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is green and healthy with no brown or dried-out tissue, while photo A shows significant dead, brown tissue.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive brown, dried-out tissue while Photo A shows a healthy green leaf with no dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays a healthy green leaf with no brown or dried tissue, whereas Photo A shows extensive brown, dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown3",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows significantly more brown and dried-out tissue compared to the greener, healthier appearance of photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's stem is predominantly green with minimal brown/dried tissue compared to Photo A's extensive brown areas.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive brown and dried tissue along the leaf, whereas Photo A shows a largely green, healthy leaf with only minor discoloration.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B shows a largely green, healthy leaf with minimal brown or dried tissue, whereas Photo A is mostly brown and dried out.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown4",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows significantly more brown and dried-out tissue along the leaf compared to the greener, healthier appearance in photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's stem is predominantly green with minimal brown dead tissue, while photo A shows extensive brown, dead tissue.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B displays extensive brown and dried tissue, especially near the tip and along the edges, whereas Photo A shows a largely green, healthy leaf with minimal discoloration.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows extensive brown and dried-out tissue, while photo B's leaf is predominantly green with minimal dead tissue, indicating less dead tissue in B.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown5",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows extensive brown and dried-out tissue compared to the mostly green and healthy appearance in photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows extensive brown, dried-out tissue while photo B's leaf is predominantly green with minimal discoloration.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive brown, dried-out tissue compared to the largely green leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B's leaf is mostly green with only slight discoloration, while Photo A has extensive brown, dried-out tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown6",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows significantly more brown and dried-out tissue compared to the greener photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows extensive brown and dried-out tissue while photo B's leaf is mostly green with minimal brown areas.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive brown and yellow discoloration indicating more dead tissue compared to the greener leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B's leaf is mostly green and healthy, whereas photo A is largely brown and dried-out.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown7",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf is predominantly brown and yellow, indicating significant dead or dried-out tissue compared to the green leaf in photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows extensive brown and yellow discoloration indicating dead tissue, while Photo B's leaf is predominantly dark green with minimal discoloration, showing much less dead tissue.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B displays extensive brown and dried tissue compared to the largely green, healthy leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf is mostly dark green with only a tiny brown spot, while Photo A's leaf is largely brown and yellow, indicating far more dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown8",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows significantly more yellowed and browned leaf tissue compared to the greener photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf is greener with less brown/dried tissue compared to Photo A's more discolored and damaged leaf.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive yellowing and browning of the leaf tissue, indicating more dead or dried-out material than the largely green leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B's leaf is mostly green with only minor discoloration, whereas Photo A shows extensive brown and dried-out tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown9",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows significantly more brown and dried-out tissue compared to the greener photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B shows a greener leaf with significantly less brown, dried-out tissue compared to the heavily discolored and browned leaf in photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive brown and dried-out tissue compared to the greener, less damaged leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B's leaf is largely green with only minor brown spots, showing far less dead or dried-out tissue than the heavily browned, damaged leaf in photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown10",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf shows significantly more brown and dried-out tissue compared to the greener, healthier appearance of photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows extensive brown, dried-out tissue while photo B's leaf is mostly green with minimal brown areas.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive brown and dried-out tissue compared to the largely green leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B's leaf is mostly green with only minor discoloration, while Photo A's leaf is largely brown and dried-out.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown11",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's leaf has significantly more brown and yellow discolored areas compared to the mostly green leaf in Photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows a largely brown and yellow (dead) leaf, while photo B shows a mostly green, healthy leaf with minimal brown spots.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n\"change\": \"more\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B displays extensive yellowing and brown, dried-out tissue compared to the largely green, healthy leaf in Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B's leaf is mostly green with only minor discoloration, while Photo A's leaf is largely brown and dried-out.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown12",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows extensively dried and brown leaves and stems, while photo A has green, living foliage, indicating significantly more dead tissue in B.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows green leaves and stems while photo A has mostly brown, dried-out leaves, indicating less dead tissue in B.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B's plant has significantly more dead, brown, and dried-out leaf and stem tissue compared to the greener, less desiccated plant in Photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows predominantly dried, brown, withered leaves and stems, while Photo B has more green foliage with significantly less dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown13",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows withered, brown, and dead leaves and stems, while photo A has green, healthy foliage, indicating significantly more dead tissue in B.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B has significantly more green, healthy leaves compared to photo A, which is dominated by dead, brown, dried-out leaf and stem tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows significantly more dead, brown, and dried-out leaf and stem tissue compared to the green, living foliage in Photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows vibrant green foliage with minimal dead tissue, while photo A is dominated by withered, brown, dried-out leaves and stems.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown14",
+   "set": "change",
+   "signal": "tissue",
+   "expect": "more",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows a healthy, green plant with minimal dead tissue, while Photo B shows a withered plant with extensive brown and dried-out leaves and stems.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo A shows a plant with extensive brown, withered leaves and stems, while Photo B shows a healthy plant with predominantly green leaves and very little dead tissue.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows significantly more dead, brown, and dried-out leaf and stem tissue compared to the mostly green and healthy appearance of Photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"less\",\n\"confidence\": \"high\",\n\"reason\": \"Photo B shows a healthy, green plant with very few brown leaves, whereas Photo A shows a plant with extensive brown, withered foliage.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown15",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B has a smaller area of dead, brown tissue compared to photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows more brown, dead tissue compared to photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The brown, dead tissue in the central area of the stem appears to be of similar size and extent in both photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount of dead, brown, dried-out tissue in the leaf appears visually identical between photo A and photo B.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown16",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount of brown, dead tissue on the leaf is identical in both photos.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount of brown, dead tissue on the leaf appears identical in both photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"medium\",\n  \"reason\": \"Photo B shows a slightly smaller brown discolored area than Photo A, indicating less dead tissue.\"\n}",
+     "change": "less",
+     "confidence": "medium"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"same\",\n\"confidence\": \"medium\",\n\"reason\": \"The brown, dead tissue spans a comparable length and intensity in both photos, suggesting similar amounts of dead tissue.\"\n}",
+     "change": "same",
+     "confidence": "medium"
+    }
+   ]
+  },
+  {
+   "id": "brown17",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows a larger area of brown, dead tissue compared to photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount of brown, dried-out leaf tissue appears identical in both photos when ignoring background and other elements.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount of brown, dead tissue on the leaf appears visually identical between the two photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"same\",\n\"confidence\": \"high\",\n\"reason\": \"The extent of brown, dead tissue on the leaf looks visually identical in both photos.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown18",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount of dead, brown, or dried-out tissue in the plant stem appears identical between photo A and photo B, with no noticeable difference in the extent or severity of the discoloration.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount of brown, dead tissue on the leaf appears identical in both photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows larger and more extensive brown, dead tissue across the leaf compared to photo A.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"same\",\n\"confidence\": \"high\",\n\"reason\": \"The brown, dead tissue appears identical in extent and location between the two photos.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown19",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount and distribution of dead, brown, dried-out tissue on the leaf appears identical between photo A and photo B.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows more brown, dead tissue on the leaf compared to photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount and distribution of brown, dead tissue on the leaf is identical between photo A and photo B.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount and distribution of brown, dried-out tissue on the stem appear identical between the two photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown20",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B shows less dead, brown, or dried-out leaf tissue compared to photo A, as the brown areas are less extensive in B.\"\n}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount of dead, brown, or dried-out tissue on the leaf appears identical in both photos, with the brown area extending to the same length from the left edge in both images.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows more brown and dried-out tissue compared to photo A, with increased discoloration and damage visible along the leaf.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n\"change\": \"same\",\n\"confidence\": \"high\",\n\"reason\": \"The visible dead brown tissue on the leaf is identical in both photos, indicating no change.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown21",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B has a larger area of brown, dead tissue compared to photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The extent of brown, dried-out tissue in photo B matches that of photo A, with no visible increase or decrease in the dead tissue area.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows a larger area of brown, dried-out tissue compared to photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows a longer section of brown, dried-out tissue compared to photo A, indicating increased dead tissue.\"}",
+     "change": "less",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown22",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "same",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The length and extent of the brown/dried tissue appear identical in both photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The length of the brown, dead tissue in photo B appears identical to that in photo A, with no visible difference in the extent of dried-out leaf or stem tissue.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount of dead, brown, dried-out tissue in photo B appears to be the same as in photo A, with no clear increase or decrease in the brown section's length or extent.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"same\", \"confidence\": \"high\", \"reason\": \"The amount of dead, brown, dried-out tissue on the plant stem appears identical in both photos.\"}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown23",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B has fewer brown and dried-out leaves compared to photo A, indicating less dead tissue.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The amount of dead, brown, or dried-out leaf and stem tissue appears consistent between photo A and photo B, with no significant increase or decrease visible in the plant's condition.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"medium\",\n  \"reason\": \"Both photos show similar amounts of dead, brown, and dried-out leaf tissue on the plant, with no clear indication of more or less in photo B compared to photo A.\"\n}",
+     "change": "same",
+     "confidence": "medium"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The quantity and distribution of dead, brown, or dried-out leaf and stem tissue appear consistent between the two photos, with no clear increase or decrease in such tissue in photo B compared to photo A.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown24",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B has fewer brown, withered leaves in the central cluster compared to photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"high\",\n  \"reason\": \"The number and extent of dead, brown, or dried-out leaf tissue in the central cluster appear consistent between photo A and photo B.\"\n}",
+     "change": "same",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B has fewer dead, brown, dried-out leaf or stem tissues compared to photo A.\"}",
+     "change": "less",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\"change\": \"less\", \"confidence\": \"high\", \"reason\": \"Photo B shows fewer brown, dried-out leaves in the central cluster compared to photo A.\"}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown25",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "more",
+   "reason": null,
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B has a larger cluster of dried brown leaves on the left side of the stem compared to photo A, indicating more dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A shows a larger cluster of dried, brown leaves on the left stem, while photo B has fewer dried leaves, indicating less dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\"change\": \"more\", \"confidence\": \"high\", \"reason\": \"Photo B shows a larger cluster of dried, brown leaf tissue on the left side of the stem compared to photo A, which has fewer such leaves.\"}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo A has a more prominent cluster of dried, brown leaves on the left stem compared to photo B, which shows less dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  },
+  {
+   "id": "brown26",
+   "set": "same",
+   "signal": "tissue",
+   "expect": "same",
+   "light_guard": false,
+   "light": [
+    null,
+    null
+   ],
+   "verdict": "cant_tell",
+   "reason": "the four looks did not agree",
+   "looks": [
+    {
+     "prompt": "plain",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"more\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B has more clusters of dead, brown, shriveled leaves and stem tissue on the main plant stem compared to photo A, with additional visible dead tissue in the lower sections.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "plain",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B has fewer visible dead, brown, or dried-out leaf or stem tissue compared to photo A, which shows more clusters of withered leaves on the main stem.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    },
+    {
+     "prompt": "timed",
+     "order": "earlier_first",
+     "raw": "{\n  \"change\": \"same\",\n  \"confidence\": \"medium\",\n  \"reason\": \"Both photos show comparable amounts of dead, brown, or dried-out leaf or stem tissue on the main stem, with similar clusters of dried leaves visible.\"\n}",
+     "change": "same",
+     "confidence": "medium"
+    },
+    {
+     "prompt": "timed",
+     "order": "later_first",
+     "raw": "{\n  \"change\": \"less\",\n  \"confidence\": \"high\",\n  \"reason\": \"Photo B has fewer dried, brown leaves on the stem compared to photo A, indicating less dead tissue.\"\n}",
+     "change": "more",
+     "confidence": "high"
+    }
+   ]
+  }
+ ]
+}

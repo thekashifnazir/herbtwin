@@ -1,0 +1,42 @@
+{
+  "backend": "ollama",
+  "constant_prediction": 0,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "e558326",
+  "largest_disagreements": [],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 24145,
+  "metrics": {
+    "spearman_basil": {
+      "hi": null,
+      "lo": null,
+      "skipped": null,
+      "value": null
+    },
+    "spearman_fittonia": {
+      "hi": null,
+      "lo": null,
+      "skipped": null,
+      "value": null
+    }
+  },
+  "model": "qwen2.5vl:7b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 63,
+  "n_total": 63,
+  "pred_histogram": {
+    "0": 63
+  },
+  "prompt_hash": "23d006a5cd18",
+  "run_id": "2026-10-04-droop_recovery-qwen2-5vl-7b",
+  "set": "droop_recovery",
+  "tags": {
+    "safe-to-train": 63
+  },
+  "temperature": 0
+}

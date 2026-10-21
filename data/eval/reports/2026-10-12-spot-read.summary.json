@@ -1,0 +1,10 @@
+{
+ "n": 222,
+ "failed": 0,
+ "setting_accuracy": 0.93,
+ "compost_called_soil": 1,
+ "soil_called_compost_share": 0.052,
+ "setting_target_met": true,
+ "cost_usd": 0.2414,
+ "model": "zai-org/GLM-5.3-Flash"
+}

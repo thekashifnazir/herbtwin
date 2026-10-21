@@ -1,0 +1,42 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": 0,
+  "cost_usd": 0,
+  "failed_ids": [],
+  "git_sha": "82c063e",
+  "largest_disagreements": [],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 2050,
+  "metrics": {
+    "spearman_basil": {
+      "hi": null,
+      "lo": null,
+      "skipped": null,
+      "value": null
+    },
+    "spearman_fittonia": {
+      "hi": null,
+      "lo": null,
+      "skipped": null,
+      "value": null
+    }
+  },
+  "model": "dedicated/nvidia/Nemotron-3-Nano-Omni-2j6OgDCI6TwX",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 0,
+  "n_ok": 63,
+  "n_total": 63,
+  "pred_histogram": {
+    "0": 63
+  },
+  "prompt_hash": "44ea8edaea55",
+  "run_id": "2026-10-12-droop_recovery-nemotron-omni",
+  "set": "droop_recovery",
+  "tags": {
+    "safe-to-train": 63
+  },
+  "temperature": 0
+}

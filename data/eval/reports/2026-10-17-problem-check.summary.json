@@ -1,0 +1,110 @@
+{
+  "date": "2026-10-17",
+  "observe_model": "zai-org/GLM-5.3-Flash",
+  "observe_fallback_model": "",
+  "observe_prompt_hash": "35b1b37a0ad4",
+  "per_class": 24,
+  "seed": 7,
+  "month": 10,
+  "classes": {
+    "basil_downy_mildew": {
+      "n": 24,
+      "none": 16,
+      "right": 8,
+      "in_scope": {
+        "n": 21,
+        "none": 13,
+        "right": 8
+      }
+    },
+    "mint_rust": {
+      "n": 24,
+      "right": 14,
+      "none": 10,
+      "in_scope": {
+        "n": 22,
+        "right": 14,
+        "none": 8
+      }
+    },
+    "powdery_mildew_herbs": {
+      "n": 24,
+      "right": 10,
+      "none": 14,
+      "in_scope": {
+        "n": 13,
+        "right": 10,
+        "none": 3
+      }
+    },
+    "aphids_on_herbs": {
+      "n": 6,
+      "right": 1,
+      "none": 5,
+      "in_scope": {
+        "n": 1,
+        "right": 1
+      }
+    },
+    "slugs_snails": {
+      "n": 24,
+      "none": 24,
+      "in_scope": {
+        "n": 0
+      }
+    },
+    "healthy": {
+      "n": 150,
+      "none": 149,
+      "error": 1,
+      "in_scope": {
+        "n": 139,
+        "none": 139
+      }
+    },
+    "judges": {
+      "n": 5,
+      "none": 3,
+      "right": 2,
+      "in_scope": {
+        "n": 5,
+        "none": 3,
+        "right": 2
+      }
+    }
+  },
+  "wrong_names": {},
+  "healthy_false_alarm_rate": 0.0,
+  "judges": {
+    "1-parsley-healthy.jpg": {
+      "want": null,
+      "got": null,
+      "symptoms": "",
+      "error": null
+    },
+    "3-basil-yellow-leaves.jpg": {
+      "want": "basil downy mildew",
+      "got": null,
+      "symptoms": "",
+      "error": null
+    },
+    "4-rosemary-beetles.jpg": {
+      "want": "rosemary beetle",
+      "got": "rosemary beetle",
+      "symptoms": "metallic striped beetles clustered on shoots; nibbled, browned leaf tips; narrow needle-like leaves; green above, paler beneath",
+      "error": null
+    },
+    "5-coriander-flowering.jpg": {
+      "want": null,
+      "got": null,
+      "symptoms": "",
+      "error": null
+    },
+    "6-basil-downy-mildew.jpg": {
+      "want": "basil downy mildew",
+      "got": "basil downy mildew",
+      "symptoms": "grey fuzzy patches on leaf underside; slight leaf curl and puckering; small brown tip on one leaf margin; grey-violet downy sporulation beneath leaf; shiny, slightly greasy upper surface; toothed margins, green turgid blades",
+      "error": null
+    }
+  }
+}

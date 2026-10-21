@@ -1,0 +1,87 @@
+{
+  "advise_cost_usd": 0.400091,
+  "backend": "tokenfactory",
+  "git_sha": "e06ef8a",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.4557823129251701,
+      "lo": 0.30612244897959184,
+      "n": 147,
+      "value": 0.38095238095238093
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.3647417346312374,
+      "lo": 0.315031132158204,
+      "n": 543,
+      "value": 0.3393273699903534
+    },
+    "over_treatment": {
+      "hi": 0.07918968692449356,
+      "lo": 0.040515653775322284,
+      "n": 543,
+      "value": 0.058931860036832415
+    },
+    "primary_in_truth": {
+      "hi": 0.6058931860036832,
+      "lo": 0.5230202578268877,
+      "n": 543,
+      "value": 0.565377532228361
+    },
+    "primary_match": {
+      "hi": 0.40331491712707185,
+      "lo": 0.32044198895027626,
+      "n": 543,
+      "value": 0.36279926335174956
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.40331491712707185,
+      "lo": 0.32044198895027626,
+      "n": 543,
+      "value": 0.36279926335174956
+    },
+    "water_conflict": {
+      "hi": 0.06813996316758748,
+      "lo": 0.03130755064456722,
+      "n": 543,
+      "value": 0.049723756906077346
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b+photo-zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 3,
+  "n_missing": 0,
+  "n_ok": 543,
+  "n_total": 546,
+  "observe_backend": "tokenfactory",
+  "observe_cost_usd": 0.403077,
+  "pred_primary": {
+    "dont_water": 77,
+    "leave_normal": 168,
+    "move_light": 45,
+    "other": 50,
+    "prune": 42,
+    "shelter": 10,
+    "treat_or_remove": 107,
+    "water": 44
+  },
+  "prompt_hash": "462dda0ce414",
+  "run_id": "2026-10-04-super-always-photo546-glm",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 50,
+    "dont_water": 52,
+    "leave_normal": 101,
+    "move_light": 25,
+    "other": 108,
+    "prune": 31,
+    "shelter": 12,
+    "treat_or_remove": 136,
+    "water": 28
+  }
+}

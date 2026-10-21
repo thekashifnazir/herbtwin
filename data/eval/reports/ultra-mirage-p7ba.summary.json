@@ -1,0 +1,106 @@
+{
+  "advise_cost_usd": 0.861942,
+  "backend": "tokenfactory",
+  "git_sha": "56e9638",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.9305555555555556,
+      "lo": 0.7638888888888888,
+      "n": 72,
+      "value": 0.8472222222222222
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.3884778911564626,
+      "lo": 0.3211977648202138,
+      "n": 196,
+      "value": 0.3546161321671526
+    },
+    "over_treatment": {
+      "hi": 0.12244897959183673,
+      "lo": 0.04591836734693878,
+      "n": 196,
+      "value": 0.08163265306122448
+    },
+    "primary_in_truth": {
+      "hi": 0.7602040816326531,
+      "lo": 0.6326530612244898,
+      "n": 196,
+      "value": 0.6989795918367347
+    },
+    "primary_match": {
+      "hi": 0.49489795918367346,
+      "lo": 0.3520408163265306,
+      "n": 196,
+      "value": 0.42346938775510207
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.49489795918367346,
+      "lo": 0.3520408163265306,
+      "n": 196,
+      "value": 0.42346938775510207
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 196,
+      "value": 0.0
+    },
+    "water_conflict": {
+      "hi": 0.05102040816326531,
+      "lo": 0.00510204081632653,
+      "n": 196,
+      "value": 0.025510204081632654
+    }
+  },
+  "model": "nvidia/Nemotron-3-Ultra-550b-a55b",
+  "n_error": 0,
+  "n_failed": 4,
+  "n_missing": 0,
+  "n_ok": 196,
+  "n_total": 200,
+  "pred_primary": {
+    "dont_water": 10,
+    "leave_normal": 68,
+    "move_light": 4,
+    "other": 52,
+    "prune": 27,
+    "shelter": 8,
+    "treat_or_remove": 13,
+    "water": 14
+  },
+  "pred_primary_fine": {
+    "change_soil": 8,
+    "dont_water": 10,
+    "feed": 5,
+    "isolate": 2,
+    "leave_normal": 68,
+    "move_light": 4,
+    "mulch": 4,
+    "other": 30,
+    "prune": 27,
+    "repot": 5,
+    "shelter": 8,
+    "treat_or_remove": 11,
+    "water": 14
+  },
+  "prompt_hash": "7ba44f01d95b",
+  "run_id": "ultra-mirage-p7ba",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 32,
+    "move_light": 2,
+    "other": 42,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 25
+  }
+}

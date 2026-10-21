@@ -1,0 +1,70 @@
+/* "Tap the plant you mean" (tap_plant.html): the photo, the box a tap marks, and two
+   equal buttons, so the whole photo is never a gate */
+.tap-page .tap-photo { position: relative; margin: 20px 0 8px; line-height: 0; }
+.tap-page .tap-photo img { display: block; width: 100%; height: auto; border-radius: var(--surface);
+  cursor: crosshair; }
+/* the photo and the shade round the box, clipped to the photo's rounded corners; the box
+   sits outside the clip so its corner holds can reach past the photo's edge */
+.tap-page .tap-frame { position: relative; overflow: hidden; border-radius: var(--surface); }
+.tap-page .tap-shade { position: absolute; border-radius: 12px; pointer-events: none;
+  box-shadow: 0 0 0 9999px rgb(0 0 0 / .35); }
+/* the box: dragged to move, an edge or a corner dragged to size it. It follows the pointer
+   and never moves on its own (no transition), so reduced motion has nothing to stop */
+.tap-page .tap-mark { position: absolute; box-sizing: border-box; border: 3px solid var(--primary-fg);
+  outline: 3px solid var(--primary); border-radius: 12px; cursor: move; touch-action: none;
+  user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.tap-page .tap-mark:focus-visible { outline-width: 4px; outline-offset: 3px; }
+/* the box's hold reaches 16px past its edge, so an edge or a corner is a 44px target, 28px
+   of it inside (tap_plant.html picks the edge or corner from where the pointer is, not what
+   it hit) */
+.tap-page .tap-mark::before { content: ""; position: absolute; inset: -19px; }
+/* a corner, drawn: a 28px bracket over the box's own corner, white edged in green */
+.tap-page .tap-corner { position: absolute; width: 28px; height: 28px; box-sizing: border-box;
+  border: 0 solid var(--primary-fg); pointer-events: none;
+  filter: drop-shadow(0 0 1px var(--primary)) drop-shadow(0 0 1px var(--primary)); }
+.tap-page .tap-corner[data-corner="nw"] { left: -6px; top: -6px; border-width: 6px 0 0 6px;
+  border-top-left-radius: 14px; }
+.tap-page .tap-corner[data-corner="ne"] { right: -6px; top: -6px; border-width: 6px 6px 0 0;
+  border-top-right-radius: 14px; }
+.tap-page .tap-corner[data-corner="sw"] { left: -6px; bottom: -6px; border-width: 0 0 6px 6px;
+  border-bottom-left-radius: 14px; }
+.tap-page .tap-corner[data-corner="se"] { right: -6px; bottom: -6px; border-width: 0 6px 6px 0;
+  border-bottom-right-radius: 14px; }
+/* an edge's grip, drawn: a 28px bar over the middle of each side, in the corners' white
+   edged in green; it goes when the side is too short to hold it clear of the corners
+   (tap-narrow, tap-low) and the edge is still held there */
+.tap-page .tap-edge { position: absolute; box-sizing: border-box; border-radius: 3px;
+  background: var(--primary-fg); pointer-events: none;
+  filter: drop-shadow(0 0 1px var(--primary)) drop-shadow(0 0 1px var(--primary)); }
+.tap-page .tap-edge[data-edge="n"], .tap-page .tap-edge[data-edge="s"] { left: calc(50% - 14px);
+  width: 28px; height: 6px; }
+.tap-page .tap-edge[data-edge="e"], .tap-page .tap-edge[data-edge="w"] { top: calc(50% - 14px);
+  width: 6px; height: 28px; }
+.tap-page .tap-edge[data-edge="n"] { top: -6px; }
+.tap-page .tap-edge[data-edge="s"] { bottom: -6px; }
+.tap-page .tap-edge[data-edge="e"] { right: -6px; }
+.tap-page .tap-edge[data-edge="w"] { left: -6px; }
+.tap-page .tap-mark.tap-narrow .tap-edge[data-edge="n"],
+.tap-page .tap-mark.tap-narrow .tap-edge[data-edge="s"],
+.tap-page .tap-mark.tap-low .tap-edge[data-edge="e"],
+.tap-page .tap-mark.tap-low .tap-edge[data-edge="w"] { display: none; }
+/* under the photo: the caption, and Smaller / Bigger for sizing the box by taps alone.
+   Room is kept for the caption's lines and the buttons' row, so neither arrives with a
+   shift on a phone */
+.tap-page .tap-under { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start;
+  min-height: 48px; margin: 0 0 8px; }
+.tap-page .tap-said { min-height: 2lh; margin: 0; }
+.tap-page .tap-size { display: flex; gap: 8px; }
+.tap-page .tap-size[hidden] { display: none; }
+.tap-page .tap-size button { width: 44px; padding: 0; font-size: 22px; font-weight: 600; }
+.tap-page .tap-size button[aria-disabled="true"] { opacity: .45; cursor: default; }
+.tap-page .vh { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; }
+.tap-page .tap-go { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 12px; }
+.tap-page .tap-go button { width: 100%; }
+/* keyboard regions to start from (tap_plant.html): a pointer never meets them, a focus ring
+   shows them; once the box is placed it takes the focus instead */
+.tap-page .tap-cell { position: absolute; width: calc(100% / 3); height: calc(100% / 3);
+  min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent;
+  box-shadow: none; pointer-events: none; }
+.tap-page .tap-cell:focus-visible { outline: 3px solid var(--primary); outline-offset: -3px; }

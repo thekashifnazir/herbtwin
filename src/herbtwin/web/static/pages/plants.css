@@ -1,0 +1,98 @@
+/* My plants (/plants) and the "Which plant is this?" chooser. */
+
+/* ---------- My plants: one card per plant ---------- */
+.plants-page .plant { margin-bottom: 24px; }
+.plants-page .plant-head { display: flex; align-items: center; gap: 16px; margin: 0 0 16px; }
+.plants-page .plant-thumb { flex: none; display: block; border-radius: 12px; }
+.plants-page .plant-thumb img { display: block; width: 96px; height: 96px; object-fit: cover;
+  border-radius: 12px; background: var(--muted); }
+.plants-page .plant-title { min-width: 0; }
+.plants-page .plant-title h2 { margin: 0 0 4px; }
+.plants-page .plant-species { margin: 0; font-style: italic; }
+
+.plants-page .visits { margin: 0 0 16px; padding: 0; list-style: none; border-top: 1px solid var(--border); }
+.plants-page .visits li { margin: 0; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.plants-page .visits a { display: block; min-height: 24px; color: var(--fg); text-decoration: none; }
+.plants-page .visits a:hover { color: var(--primary); text-decoration: underline; }
+.plants-page .visit-date { display: inline-block; min-width: 3.75em; color: var(--muted-fg); font-weight: 500; }
+.plants-page .visit-line { display: block; margin-top: 2px; padding-left: 3.75em; }
+
+.plants-page .remind label { display: flex; align-items: flex-start; gap: 0; min-height: 44px;
+  margin: 0 0 4px; padding-top: 8px; cursor: pointer; }
+.plants-page .remind input[type=checkbox] { flex: none; margin-top: 2px; }
+.plants-page .remind p { margin: 0 0 0 30px; }
+.plants-page .remind noscript button { margin-top: 12px; }
+
+/* rename and delete sit apart from the reading, delete last */
+.plants-page .plant-manage { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.plants-page .rename { margin: 0 0 16px; }
+.plants-page .rename label { margin-bottom: 0; color: var(--muted-fg); }
+.plants-page .rename-row { display: flex; gap: 8px; align-items: center; }
+.plants-page .rename-row input { flex: 1 1 auto; min-width: 0; margin-top: 4px; }
+.plants-page .rename-row button { flex: none; margin-top: 4px; }
+.plants-page .delete { margin: 0; }
+
+.plants-page .plants-empty { padding: 24px 20px; }
+
+/* the account, quiet at the foot of the page */
+.plants-page .account .sharing { margin: 0 0 24px; }
+.plants-page .account .sharing p { margin-bottom: 8px; }
+.plants-page .account .sharing button { margin-top: 4px; }
+.plants-page .account-delete { padding-top: 16px; border-top: 1px solid var(--border); }
+
+/* ---------- the chooser: big photo buttons in a grid ---------- */
+.plants-page .choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;
+  margin: 24px 0; }
+@media (min-width: 560px) { .plants-page .choices { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.plants-page .choice { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  gap: 2px; min-height: 0; padding: 8px 8px 12px; border: 1px solid var(--border); border-radius: var(--surface);
+  background: var(--card); text-align: left; box-shadow: var(--shadow); }
+.plants-page .choice:hover { background: var(--card); border-color: var(--primary); }
+.plants-page .choice img, .plants-page .choice-pic { display: block; width: 100%; height: auto;
+  aspect-ratio: 1; margin-bottom: 8px; object-fit: cover; border-radius: 10px; background: var(--muted); }
+.plants-page .choice-pic { display: flex; align-items: center; justify-content: center;
+  color: var(--primary); font: 700 48px/1 var(--display); }
+.plants-page .choice-name { padding: 0 4px; font-weight: 700; font-size: 17px; }
+.plants-page .choice-when { padding: 0 4px; font-weight: 400; }
+.plants-page .choice-new { border-style: dashed; border-color: var(--primary); box-shadow: none; }
+.plants-page .choice-new .choice-pic { background: var(--soft); }
+
+/* ---------- the home look (16 Oct): band, then a grid of inked plant cards ----------
+   The grid pulls up over the band's edge; each card is the photo, the latest answer and
+   Open, with earlier answers and the reminder, name and delete folded inside it. */
+.plants-page .plant-grid, .plants-page .plants-empty { position: relative; margin-top: -48px; }
+.plants-page .plant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 24px; align-items: start; margin-bottom: 8px; }
+.plants-page .plant, .plants-page .plants-empty { margin: 0; border: 1.5px solid var(--fg);
+  box-shadow: 5px 5px 0 var(--ink-shadow); }
+.plants-page .plant-head { margin-bottom: 12px; }
+.plants-page .plant-thumb img { width: 88px; height: 88px; }
+.plants-page .plant-latest { margin: 0 0 12px; padding: 12px 14px; border-radius: 12px; background: var(--soft); }
+.plants-page .plant-latest a { display: block; color: var(--fg); font: 700 19px/1.3 var(--display); text-decoration: none; }
+.plants-page .plant-latest a:hover { color: var(--primary); text-decoration: underline; }
+.plants-page .plant-latest .visit-date { display: block; min-width: 0; margin-bottom: 2px;
+  font: 500 15px/1.3 var(--sans); }
+.plants-page .plant-latest .visit-line { padding-left: 0; }
+.plants-page .plant-remind-on { margin: 0 0 12px; color: var(--ok); font-weight: 500; }
+.plants-page .plant-open { margin: 0 0 8px; }
+.plants-page .plant details { margin: 8px 0 0; border: 0; border-top: 1px solid var(--border); border-radius: 0;
+  background: none; }
+.plants-page .plant details > summary { padding: 10px 0; color: var(--muted-fg); font-size: 16px; }
+.plants-page .plant details[open] > summary { color: var(--fg); }
+.plants-page .plant .visits { margin: 0 0 8px; }
+.plants-page .plant-manage .remind { margin-top: 4px; }
+.plants-page .plant-manage .rename { margin: 12px 0; }
+.plants-page .plant-manage .delete { margin: 0 0 8px; }
+@media (max-width: 720px) { .plants-page .plant-grid, .plants-page .plants-empty { margin-top: -40px; }
+  .plants-page .plant-grid { grid-template-columns: minmax(0, 1fr); } }
+/* folded parts sit flush inside the card, no box within a box */
+.plants-page details.plant-manage { padding-top: 0; }
+.plants-page .plant details > :not(summary) { margin-left: 0; margin-right: 0; }
+.plants-page .plant details > :nth-child(2) { margin-top: 4px; }
+.plants-page .plant details > :last-child { margin-bottom: 8px; }
+.plants-page .plant details[open] > summary { border-bottom: 0; }
+
+/* the chooser's new photo and what it was read as (judge pre-walk, 19 Oct) */
+.plants-page .choose-this { display: flex; align-items: center; gap: 14px; margin: 8px 0 0; }
+.plants-page .choose-this img { flex: none; width: 96px; height: 96px; object-fit: cover;
+  border-radius: 12px; background: var(--muted); }

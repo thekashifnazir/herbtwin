@@ -1,0 +1,520 @@
+/* The answer page (result.html) in three blocks: 1 what to do, 2 help us be surer, 3 the
+   details, folded. One column on a phone; from 960px block 1 on the left, 2 and 3 on the
+   right. Colour carries meaning beside the words, never instead of them: green = do,
+   clay = don't, amber = keep an eye on / check first. Scoped under .answer-page. */
+
+.answer-page .where { margin-top: -4px; color: var(--muted-fg); }
+.answer-page .note { color: var(--muted-fg); font-size: 16px; }
+/* read aloud, not shown: the chart's spoken line, how sure's colon and full stop */
+.answer-page .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- block 1: what to do ---------- */
+.answer-page .plan { margin-top: 24px; }
+
+/* the one main action: a green head so it reads as THE answer */
+.answer-page .main-action { margin: 0 0 20px; padding: 0 20px 20px; overflow: hidden; }
+.answer-page .main-action .head { margin: 0 -20px 16px; padding: 16px 20px 4px; background: var(--soft); }
+.answer-page .main-action .head .tag { background: var(--card); color: var(--primary); }
+.answer-page .main-action h2 { margin: 8px 0 12px; font-size: clamp(30px, 7.5vw, 38px); }
+.answer-page .main-action .because { font-size: 19px; line-height: 1.5; }
+.answer-page .head .note { margin: 0 0 4px; color: var(--muted-fg); }
+/* after Check the advice again: it ran, and this is what it did; the old headline struck */
+.answer-page .head .checked { margin: 0 0 6px; color: var(--primary); font-weight: 700; }
+.answer-page .head .checked s { color: var(--muted-fg); font-weight: 400; }
+.answer-page .sure { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+.answer-page .sure span { display: block; color: var(--muted-fg); }
+
+/* "if you do" lines (led by their source) and the time tags; THIS WEEK is quieter than TODAY, never amber */
+.answer-page .ifdo { color: var(--fg); }
+.answer-page .ifdo .lead { font-weight: 700; }
+.answer-page .lowc { color: var(--muted-fg); font-size: 16px; }
+.answer-page .tag.later { background: var(--card); }
+
+/* the twin stills: two illustrated futures of the plant, captioned */
+.answer-page .twin { margin: 0 0 20px; }
+.answer-page .twin h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
+.answer-page .twin-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+.answer-page .twin figure { margin: 0; }
+.answer-page .twin img { display: block; width: 100%; height: auto;
+  border: 1px solid var(--border); border-radius: 12px; }  /* home's photo corners */
+.answer-page .twin figcaption { margin-top: 4px; color: var(--muted-fg); font-size: 16px; }
+
+/* Also do, Don't, Keep an eye on: compact inked cards (below), a fill and a label in their
+   colour; the label is set like home's card heads (19 Oct: the answer matches home) */
+.answer-page .also, .answer-page .dont, .answer-page .watch { padding: 12px 16px; }
+.answer-page .also { background: var(--soft); }
+.answer-page .dont { background: var(--clay-bg); }
+.answer-page .watch { background: var(--warn-bg); }
+.answer-page .also h2, .answer-page .dont h2, .answer-page .watch h2 {
+  margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
+/* the signs to watch for, one to a line */
+.answer-page .watch ul { margin: 4px 0 8px; padding-left: 1.2em; }
+.answer-page .watch li + li { margin-top: 4px; }
+.answer-page .also h2 { color: var(--primary); }
+.answer-page .dont h2 { color: var(--clay); }
+.answer-page .watch h2 { color: var(--warn); }
+.answer-page .item { display: flex; flex-wrap: wrap; align-items: center; gap: 0 10px; }
+.answer-page .item + .item { margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid color-mix(in srgb, var(--border) 60%, transparent); }
+.answer-page .item h3 { margin: 4px 0; font-size: 18px; }
+.answer-page .item p { flex-basis: 100%; margin: 0 0 4px; }
+.answer-page .item .because { color: var(--muted-fg); }
+.answer-page .item > :last-child, .answer-page .watch > :last-child { margin-bottom: 0; }
+/* See it by part (21 Oct, gardener test: they wanted the advice by part of the setup):
+   the lines above sorted by part, plain so it never reads as more advice; open from the start
+   (21 Oct, Kash). A row
+   per part, its name then its lines; each line's dot in its meaning's colour, and "Don't:"
+   or "Check first:" in words */
+.answer-page .by-part { margin: 0 0 20px; }
+.answer-page .by-part .row { display: flex; flex-wrap: wrap; gap: 2px 16px; padding: 10px 0; }
+.answer-page .by-part .row + .row { border-top: 1px solid var(--border); }
+/* the part's name is a label, not a heading: a reader's heading list keeps it out of Keep
+   an eye on (Opus review) */
+.answer-page .by-part .part { flex: 0 0 9rem; margin: 0; font: 700 16px/1.5 var(--sans);
+  color: var(--muted-fg); }
+.answer-page .by-part ul { flex: 1 1 14rem; margin: 0; padding-left: 1.1em; }
+.answer-page .by-part li + li { margin-top: 4px; }
+.answer-page .by-part li::marker { color: var(--primary); }
+.answer-page .by-part [data-kind="dont"]::marker, .answer-page .by-part [data-kind="dont"] strong { color: var(--clay); }
+.answer-page .by-part :is([data-kind="check"], [data-kind="watch"])::marker,
+.answer-page .by-part :is([data-kind="check"], [data-kind="watch"]) strong { color: var(--warn); }
+
+/* ---------- block 2: help us be surer ---------- */
+.answer-page .ask h2 { margin-top: 0; }
+.answer-page .refine fieldset { margin-bottom: 16px; }
+.answer-page .refine .actions { margin: 12px 0 8px; }
+/* Check the advice again / Ask while they run: the label says what is happening */
+.answer-page .refine .actions button[aria-disabled="true"],
+.answer-page .refine .actions button:disabled { opacity: .7; cursor: progress; }
+.answer-page .refine .actions button { flex: 1 1 15rem; }
+.answer-page .chatnote { color: var(--muted-fg); font-size: 16px; }
+.answer-page .chatnote:empty { margin: 0; }
+.answer-page .chatlog { margin: 16px 0; }  /* not flush under the starter pills */
+.answer-page .chatlog h4 { margin: 0 0 12px; font: 700 16px/1.3 var(--sans); color: var(--muted-fg); }
+.answer-page .msg { margin: 0 0 12px; white-space: pre-wrap; }
+.answer-page .msg.user { margin-left: 15%; padding: 10px 16px; border-radius: var(--surface);
+  background: var(--soft); font-weight: 500; }
+.answer-page .reminder { margin: 16px 0; }
+.answer-page .reminder label { display: flex; align-items: center; min-height: 44px; margin: 0; }
+.answer-page .reminder [role="status"] { margin: 4px 0 0; color: var(--ok); font-weight: 500; }
+.answer-page .reminder [role="status"].err { color: var(--danger); }
+.answer-page .reminder [role="status"]:empty { margin: 0; }   /* kept in the tree so the first message is read out */
+
+/* ---------- block 3: the details, folded ---------- */
+.answer-page .details h2 { margin-top: 0; }
+/* each fold, shut or open, says what it holds: a title and a quiet line under it, a mark in
+   the colour of what it is about (green: our best read, amber: check first, sky: the twin and
+   its weather; no side edge, those were cut as dead edges), and a tinted head once open so the
+   open one stands out from the shut ones (21 Oct, Kash on rev 00050: "not great once opened and not") */
+.answer-page details.fold { overflow: hidden; }
+.answer-page details.fold .fold-title::before { content: ""; display: inline-block; width: 10px; height: 10px;
+  margin: 0 10px 2px 0; border-radius: var(--pill); background: var(--fold-edge, var(--muted-fg)); }
+.answer-page details.fold-good { --fold-edge: var(--primary); --fold-tint: var(--soft); }
+.answer-page details.fold-check { --fold-edge: var(--warn); --fold-tint: var(--warn-bg); }
+.answer-page details.fold-twin { --fold-edge: var(--sky-fg); --fold-tint: var(--sky); }
+.answer-page details.fold > summary { min-height: 64px; padding: 12px 20px; }
+.answer-page details.fold > summary:hover { background: var(--fold-tint, var(--muted)); }
+.answer-page details.fold[open] > summary { background: var(--fold-tint, var(--muted)); }
+.answer-page .fold-head { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.answer-page .fold-title { font: 700 18px/1.3 var(--sans); }
+.answer-page .fold-peek { color: var(--muted-fg); font: 400 16px/1.4 var(--sans); }
+/* what each advisor said, under Who advised: a short quiet list, the call in bold (21 Oct) */
+.answer-page .advisor-said { margin: 12px 0 16px; }
+.answer-page .advisor-said h3 { margin: 0 0 6px; font-size: 18px; }
+.answer-page .advisor-said ul { margin: 0; padding: 0 0 0 12px; list-style: none;
+  border-left: 2px solid var(--border); }
+.answer-page .advisor-said li + li { margin-top: 6px; }
+.answer-page .advisor-said .note { margin: 8px 0 0; }
+/* which model did each step (receipt.model_map): the step and its model on the left, the
+   time and cost on the right; on a phone the cost drops under them. Nothing under 16px */
+.answer-page .model-map { margin: 12px 0 16px; }
+.answer-page .model-map h3 { margin: 0 0 6px; font-size: 18px; }
+.answer-page .model-map ul { margin: 0; padding: 0 0 0 12px; list-style: none; border-left: 2px solid var(--border); }
+.answer-page .model-map li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; font-size: 16px; }
+.answer-page .model-map li + li { margin-top: 6px; }
+.answer-page .model-map .mm-model { color: var(--muted-fg); }
+.answer-page .model-map .mm-cost { font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 480px) { .answer-page .model-map li { flex-direction: column; } }  /* a phone: the cost under its step, every row alike */
+.answer-page .model-map .mm-total { margin: 10px 0 0; font-size: 16px; }
+.answer-page .model-map .note { margin: 6px 0 0; font-size: 16px; }
+.answer-page .why ul { padding: 0; list-style: none; }
+.answer-page .why li + li { margin-top: 8px; }
+.answer-page details table { font-size: 16px; }
+.answer-page .better, .answer-page .worse { font-weight: 700; }
+.answer-page .same { color: var(--muted-fg); }
+.answer-page .record { color: var(--muted-fg); font-size: 16px; }
+
+/* ---------- desktop: use the width, the plan on the left ---------- */
+@media (min-width: 960px) {
+  .answer-page .answer-cols { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 0 56px; align-items: start; }
+  .answer-page .side { margin-top: 24px; }
+  .answer-page .side > .divider:first-child { display: none; }
+  .answer-page .main-action .head { padding: 20px 28px 4px; margin: 0 -28px 16px; }
+  .answer-page .main-action { padding: 0 28px 24px; }
+}
+
+/* the photo check named a pest or disease: amber, "check first" (the box is .tray.warn) */
+.answer-page .seen-problem h2 { margin: 0 0 8px; font-size: 19px; color: var(--warn); }
+
+/* ---------- the band and the inked cards (16 Oct: the home page's look) ----------
+   The plant's name, where and when sit on the green band; the main card pulls up over its
+   edge. Every card in block 1 gets the ink edge and hard shadow, keeping its own colour. */
+.answer-page .page-band h1 { max-width: 22ch; }
+/* where it grows, the date and the place: a row of chips in the band's white on a lighter
+   green, 6:1 or better in both schemes (21 Oct, Kash: the line was "hard to see"). They wrap
+   on a phone, never scroll */
+.answer-page .page-band .where { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 18px; }
+.answer-page .page-band .where .chip { display: inline-flex; align-items: center; min-height: 32px;
+  padding: 3px 12px; border-radius: var(--pill); background: color-mix(in srgb, var(--band-fg) 14%, var(--band));
+  color: var(--band-fg); font: 600 17px/1.2 var(--sans); }
+.answer-page .page-band .note { color: var(--band-muted); }
+.answer-page .page-band .bed-offer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+  margin-top: 16px; color: var(--band-fg); font-size: 17px; }
+.answer-page .page-band + .answer-cols .plan { position: relative; margin-top: -48px; }
+.answer-page :is(.main-action, .also, .dont, .watch, .ask) { border: 1.5px solid var(--fg); border-radius: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink-shadow); }
+/* "Tell us more": one panel, inked like the plan's cards, its one green button inside
+   (21 Oct, Kash: "a lot going on") */
+.answer-page .ask { padding: 0; background: var(--card); }
+.answer-page .ask > :last-child { margin-bottom: 0; }
+/* ...folded to one line until tapped (21 Oct, gardener test: the page was busy). The card
+   is the frame, so the fold has none of its own; its line is a tall tap row in the green
+   of "do", with the site's chevron drawn a little larger. Open, the panel reads as before */
+.answer-page .tell-more { margin: 0; padding: 0 20px 20px; border: 0; border-radius: inherit;
+  background: none; }
+.answer-page .tell-more > :not(summary) { margin-left: 0; margin-right: 0; }  /* the padding's */
+.answer-page .tell-more > :last-child { margin-bottom: 0; }
+.answer-page .tell-more > summary { min-height: 56px; margin: 0 -20px; padding: 12px 20px;
+  color: var(--primary); font-size: 19px; line-height: 1.3; }
+.answer-page .tell-more:not([open]) { padding-bottom: 0; }  /* shut: just the line */
+.answer-page .tell-more > summary::after { width: 10px; height: 10px; }
+/* a "Make this surer" jump lands with the line it opened still in view above the heading */
+.answer-page .tell-more > #refine { margin-top: 16px; scroll-margin-top: 88px; }
+/* in sections (21 Oct, Kash on rev 00049: "section it out better", "improve our colouring"):
+   each group set off by a thin neutral line, its heading in plain ink with a small mark that
+   says what it is: neutral for the optional groups, amber where a fact would make the advice
+   surer (its .tray.warn inside), green for the did-it check-in, a thing to answer. The one
+   green button sends the groups above it */
+.answer-page .tell-more .part { margin: 20px 0 0; padding: 16px 0 0; border-top: 1px solid var(--border); }
+.answer-page .tell-more .part > :last-child { margin-bottom: 0; }
+.answer-page .tell-more .part > h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 12px;
+  font: 700 17px/1.3 var(--sans); letter-spacing: 0; color: var(--fg); }
+/* the neutral mark is decoration only (about 1.6:1): the heading's words carry the meaning */
+.answer-page .tell-more .part > h3::before { content: ""; flex: none; width: 4px; height: 1.1em;
+  border-radius: 2px; background: var(--border); }
+.answer-page .tell-more .part.needed > h3::before { background: var(--warn); }
+.answer-page .tell-more .part.did > h3::before { background: var(--primary); }
+.answer-page .refine .actions.send { margin: 20px 0 0; }
+.answer-page :is(.also, .dont, .watch) { margin-bottom: 20px; }
+/* what next (design wave 1, D): the plan's last card, in the tray green of Also do, says what
+   to do after it; "I did it" is its one lime button */
+.answer-page .next-step { margin: 0 0 20px; padding: 14px 16px; border: 1.5px solid var(--fg);
+  border-radius: var(--surface); box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--soft); }
+/* what else could grow here: What next's inked card on the sky of the spot page's own
+   "Coming up" box, so it reads as the way to another page, not more of this plan */
+.answer-page .spot-card { margin: 0 0 20px; padding: 14px 16px; border: 1.5px solid var(--fg);
+  border-radius: var(--surface); box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--sky); }
+.answer-page .spot-card h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; color: var(--sky-fg); }
+.answer-page .spot-card p { margin: 0 0 10px; }
+.answer-page .spot-card > :last-child { margin-bottom: 0; }
+.answer-page .next-step h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; color: var(--primary); }
+.answer-page .next-step p { margin: 0 0 8px; }
+.answer-page .next-step > :last-child { margin-bottom: 0; }
+.answer-page .next-step .i-did { margin: 4px 0 10px; }
+.answer-page .next-step .i-did > button { background: var(--lime); color: var(--lime-fg); border-color: var(--lime-fg); font-weight: 700; }
+.answer-page .page-band .latin { margin: -6px 0 4px; color: var(--band-muted); font-size: 18px; }
+.answer-page .main-action { margin-bottom: 28px; }
+.answer-page .main-action .head { border-bottom: 1.5px solid var(--fg); }
+/* the time on the one thing to do is lime, like the button you press on the band */
+.answer-page .main-action .head .tag { background: var(--lime); color: var(--lime-fg); }
+/* how sure: the heading only names it; the badge under it is the thing to read (review of
+   the word badge, 21 Oct: at 24 px the question was bigger than the answer) */
+.answer-page .sure strong { font: 700 19px/1.2 var(--display); }
+@media (max-width: 720px) { .answer-page .page-band + .answer-cols .plan { margin-top: -40px; } }
+/* no card pulls up over the band (bare bed, no plant, unreadable photo): less empty green */
+.answer-page .page-band:not(:has(+ .answer-cols)) { padding-bottom: 36px; margin-bottom: 16px; }
+/* the photo you sent, big (21 Oct, Kash: "actual plant picture is tiny"), from the browser
+   tab's own copy: above the main card on a phone, pulling up over the band in its place;
+   beside the main card from 960px. Inked like the cards */
+.answer-page .answer-cols > .your-photo { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover;
+  vertical-align: top; margin: 0 0 20px; border: 1.5px solid var(--fg); border-radius: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--card); }
+.answer-page .page-band + .answer-cols > .your-photo { position: relative; margin-top: -48px; }
+/* no advice this time: the photo alone under the band */
+.answer-page .your-photo.solo { width: 100%; max-width: 560px; height: auto; aspect-ratio: 3 / 2; object-fit: cover;
+  margin: 0 0 20px; border: 1.5px solid var(--fg); border-radius: var(--surface); background: var(--card); }
+@media (max-width: 720px) { .answer-page .page-band + .answer-cols > .your-photo { margin-top: -40px; } }
+@media (max-width: 959px) {
+  .answer-page .page-band + .answer-cols:has(> .your-photo:not([hidden])) .plan,
+  .answer-page .answer-cols.ask-up:has(> .your-photo:not([hidden])) .main-action { margin-top: 0; }
+}
+@media (min-width: 960px) {
+  /* the plan down the left; the photo, then the questions and details, down the right. The
+     second row takes the plan's extra height, so the photo's row is only as tall as it */
+  .answer-page .answer-cols { grid-template-rows: auto 1fr; }
+  .answer-page .answer-cols > .plan { grid-column: 1; grid-row: 1 / span 2; }
+  .answer-page .answer-cols > .side { grid-column: 2; grid-row: 2; }
+  .answer-page .answer-cols > .your-photo { grid-column: 2; grid-row: 1; aspect-ratio: 4 / 3; }
+  .answer-page .answer-cols:has(> .your-photo:not([hidden])) > .side { margin-top: 8px; }
+}
+/* more photos of the same plant: small inked squares under the big one, in its column */
+.answer-page .your-more { display: flex; flex-wrap: wrap; gap: 12px; margin: -6px 0 20px; }
+.answer-page .your-more img { width: 80px; height: 80px; object-fit: cover; border: 1.5px solid var(--fg);
+  border-radius: var(--surface); box-shadow: 3px 3px 0 var(--ink-shadow); background: var(--card); }
+@media (min-width: 960px) {
+  /* a row of their own between the photo and the side column; the plan spans all three */
+  .answer-page .answer-cols:has(> .your-more:not([hidden])) { grid-template-rows: auto auto 1fr; }
+  .answer-page .answer-cols:has(> .your-more:not([hidden])) > .plan { grid-row: 1 / span 3; }
+  .answer-page .answer-cols:has(> .your-more:not([hidden])) > .side { grid-row: 3; }
+  .answer-page .answer-cols > .your-more { grid-column: 2; grid-row: 2; }
+}
+
+/* ---------- Compare: the twin drawn (idea 3, 18 Oct) ----------
+   Each choice's soil water over 2 weeks; one line at a time, the tapped choice's. Blue
+   bands are that choice's cold nights; the dashed line is leaving it, for reference. */
+.answer-page { --cold: var(--sky); --cold-fg: var(--sky-fg); }  /* herbtwin.css, both themes */
+.answer-page .twin-chart { margin: 12px 0 16px; }
+.answer-page .twin-chart svg { display: block; width: 100%; height: auto; max-width: 560px; overflow: visible; }
+.answer-page .twin-chart .axis { font: 600 13px/1 var(--sans); fill: var(--muted-fg); }
+.answer-page .twin-chart .frame { stroke: var(--border); stroke-width: 1; }
+.answer-page .twin-chart .needs { stroke: var(--warn); stroke-width: 1; stroke-dasharray: 2 3; }
+.answer-page .twin-chart .needs-label { fill: var(--warn); }
+.answer-page .twin-chart polyline { fill: none; stroke: var(--primary); stroke-width: 3;
+  stroke-linejoin: round; stroke-linecap: round; }
+.answer-page .twin-chart polyline.base { stroke: var(--muted-fg); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.answer-page .twin-chart .cold { fill: var(--cold); }
+/* the wash alone is 1.18:1 on the card: an edge on top of each cold night carries the 3:1 */
+.answer-page .twin-chart .cold-edge { stroke: var(--cold-fg); stroke-width: 3; }
+.answer-page .twin-chart .base-cold .cold-edge { stroke-dasharray: 5 4; }  /* leaving it: dashed, as its line */
+.answer-page .twin-chart .cold-label { font: 700 14px/1 var(--sans); fill: var(--cold-fg); }
+.answer-page .twin-chart .twin-line { opacity: 0; visibility: hidden; }
+/* leaving it's cold nights stay faintly in view; the faint label gives way to the shown line's own */
+.answer-page .twin-chart .base-cold rect { fill: var(--cold); opacity: .45; }
+.answer-page .twin-chart .base-cold text { font: 700 14px/1 var(--sans); fill: var(--cold-fg); opacity: .8; }
+.answer-page .twin-chart:has(.twin-line.on .cold-label) .base-cold text { display: none; }
+.answer-page .twin-chart .twin-line.on { opacity: 1; visibility: visible; }
+.answer-page .twin-chart .today { fill: var(--card); stroke: var(--primary); stroke-width: 2; }
+.answer-page .twin-chart image[hidden] { display: none; }
+.answer-page .twin-chart figcaption { font-size: 16px; color: var(--muted-fg); }
+.answer-page .twin-pick { padding: 4px 12px; border: 1.5px solid var(--border); border-radius: var(--pill);
+  background: var(--card); color: var(--fg); font: inherit; cursor: pointer; text-align: left; }
+.answer-page .twin-pick[aria-pressed="true"] { border-color: var(--primary); background: var(--soft);
+  font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .answer-page .twin-chart .twin-line { transition: opacity .25s cubic-bezier(0.2,0,0,1), visibility .25s; }
+}
+
+/* ---------- the answer arrives: headline, then how sure, then the rest (idea 4, 18 Oct) ----------
+   The headline lands alone, the how-sure badge settles in, then the reasons follow: about
+   600 ms, once per page. Everything is drawn in full without motion; only an opted-in
+   motion setting animates it, and every animation ends where the still page starts. */
+/* how sure, as a word badge and what it meant in our tests, not a 2-step meter: the
+   steps read as "2 out of 2" (21 Oct, gardener test). Green our best read, amber check
+   first. The line sits beside the badge when it fits and drops under it whole when not */
+.answer-page .sure { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.answer-page .sure > :is(strong, span:not(.badge, .badge-line)) { flex-basis: 100%; }
+.answer-page .sure .badge { padding: 4px 14px; border-radius: var(--pill);
+  border: 1.5px solid transparent; font: 700 19px/1.3 var(--sans); white-space: nowrap; }
+.answer-page .sure .badge.best { background: var(--soft); color: var(--primary); border-color: var(--soft-line); }
+.answer-page .sure .badge.check { background: var(--warn-bg); color: var(--warn); border-color: var(--warn-line); }
+.answer-page .sure .badge-line { font-size: 16px; color: var(--muted-fg); }
+@media (prefers-reduced-motion: no-preference) {
+  .answer-page .main-action .head h2 { animation: answer-in .22s cubic-bezier(0.2,0,0,1) both; }
+  .answer-page .main-action > :not(.head) { animation: answer-in .2s cubic-bezier(0.2,0,0,1) .4s both; }
+  .answer-page .main-action > .sure { animation-delay: .15s; }
+  /* the badge settles in as the line under the headline lands, before the reasons */
+  .answer-page .sure .badge { animation: badge-in .18s cubic-bezier(0.2,0,0,1) .22s both; }
+}
+@keyframes answer-in { from { opacity: 0; transform: translateY(6px); } }
+@keyframes badge-in { from { opacity: 0; transform: scale(.92); } }
+
+/* ---------- motion, design wave 1 (M1, M2; Kash, 19 Oct) ----------
+   M1, the load-in: the band's name and lines rise in turn (as home's first visit does), then
+   the main card rises under them, before the headline and dots above play inside it. About
+   0.6 s. M2, the reveals: each card below the first screen fades up as it enters and is
+   still by 70% in view, so nothing moves while it is read. Opacity and a small rise only,
+   inside the opt-in block, and never started hidden waiting for a script: a browser without
+   scroll timelines shows the cards as before. herbtwin.css's reduce rule stops all of it */
+@media (prefers-reduced-motion: no-preference) {
+  .answer-page .page-band > :is(.latin, .where) { animation: band-rise .32s cubic-bezier(0.2,0,0,1) both; }
+  /* the name only rises, never fades: from opacity 0 it showed in the fallback face, then
+     swapped to the poster face (the poster font is preloaded in base.html) */
+  .answer-page .page-band > h1 { animation: name-rise .32s cubic-bezier(0.2,0,0,1) both; }
+  .answer-page .page-band > .latin { animation-delay: 60ms; }
+  .answer-page .page-band > .where { animation-delay: 120ms; }
+  .answer-page .main-action { animation: card-rise .4s cubic-bezier(0.2,0,0,1) 40ms both; }
+  /* livelier (21 Oct, Kash: "load in speeds… different animations to make it more
+     engaging"): every card rises 22 px on load, one after another, so the ones in view
+     arrive in turn (the main card, then the next, then the rest; on a desktop the right
+     column's too), all still by about 0.55 s. It fills backwards only, so a card is left
+     untransformed once it is done */
+  .answer-page :is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
+    animation: card-rise .38s cubic-bezier(0.2,0,0,1) backwards; }
+  @supports (animation-timeline: view()) {
+    /* below the first screen the scroll's reveal takes over, as before. It too fills
+       backwards only: a card at least 70% in view on load is past its range, so the load
+       rise under it shows instead; one at the fold finishes its reveal as you scroll */
+    .answer-page :is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
+      animation: card-rise .38s cubic-bezier(0.2,0,0,1) backwards, card-reveal linear backwards;
+      animation-timeline: auto, view(); animation-range: normal, entry 0% entry 70%; }
+    /* a desktop's right column starts on the first screen: its first card rises on load only */
+    @media (min-width: 960px) { .answer-page .side > .ask { animation-name: card-rise, none; } }
+  }
+  /* the stagger: the card right under the main one (or the right column's first) at 100 ms,
+     every later card at 160 ms; the second value is the scroll reveal's, which waits for nothing */
+  .answer-page :is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
+    animation-delay: 160ms, 0s; }
+  .answer-page .plan > .main-action + *, .answer-page .side > .ask { animation-delay: 100ms, 0s; }
+  /* Compare: the shown line draws itself left to right when the fold opens, and again when
+     another choice is tapped (it takes .on): a wipe, not dashes, so it rests a plain solid
+     stroke in every browser, and one that can't clip just shows the line (21 Oct review:
+     pathLength on a polyline left the line dotted where it is ignored). Leaving it's
+     dashed line is not in a .twin-line and keeps its own dashes */
+  .answer-page details[open] .twin-line.on polyline {
+    animation: line-draw .6s cubic-bezier(0.2,0,0,1) 120ms backwards; }
+  /* every fold slides open: its content drops in under the summary; closing is instant */
+  .answer-page details[open] > :not(summary) { animation: fold-open .28s cubic-bezier(0.2,0,0,1); }
+}
+@keyframes band-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes name-rise { from { transform: translateY(10px); } }
+@keyframes card-rise { from { opacity: 0; transform: translateY(22px); } }
+@keyframes card-reveal { from { opacity: .001; transform: translateY(22px); } }
+/* 4 px of room round the line's own box: the stroke's edges and caps stay whole while it draws */
+@keyframes line-draw { from { clip-path: inset(-4px 100% -4px -4px); } to { clip-path: inset(-4px); } }
+@keyframes fold-open { from { opacity: 0; transform: translateY(-8px); } }
+
+/* ---------- the plant's face and "I did it" (ideas 5 and 5b, 18 Oct) ----------
+   A small line drawing whose mood matches the answer, beside its voice; it wobbles while
+   the voice plays. "I did it" gives the answer an ending: the plant says thanks, with a
+   small burst of leaves when motion is welcome. Decorative: the words say it all. */
+.answer-page .face { flex: none; overflow: visible; }
+/* big enough to notice (18 Oct final look: at 32 px the drawing read as about 20 px) */
+.answer-page .voice .face { width: 48px; height: 48px; }
+.answer-page .i-did .face { width: 40px; height: 40px; }
+.answer-page .face .head { fill: var(--soft); stroke: var(--primary); stroke-width: 2; }
+.answer-page .face .sprout { fill: var(--primary); }
+.answer-page .face .line { fill: none; stroke: var(--fg); stroke-width: 2; stroke-linecap: round;
+  stroke-linejoin: round; }
+.answer-page .face .eye { fill: var(--fg); }
+.answer-page .face .brr { stroke: var(--cold-fg); }
+.answer-page .face .drop { fill: var(--cold-fg); }
+/* the puzzled face's "?" in the "check first" colour, and the trim face's scissors (21 Oct,
+   Kash: "why is the plant face cross?") */
+.answer-page .face .mark { fill: none; stroke: var(--warn); stroke-width: 2; stroke-linecap: round;
+  stroke-linejoin: round; }
+.answer-page .face .snip { fill: none; stroke: var(--fg); stroke-width: 1.5; stroke-linecap: round; }
+.answer-page .voice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+.answer-page .voice > :not(.face, .hear) { flex-basis: 100%; }
+.answer-page .i-did { margin-top: 12px; }
+/* signed out, under "I did it": how to keep the plant and get the check-again email */
+.answer-page .i-did .keep { margin: 8px 0 0; font-size: 16px; color: var(--muted-fg); }
+/* the thanks stays rendered (empty) so a screen reader hears it when it's filled */
+.answer-page .i-did .thanks { position: relative; display: flex; align-items: center; gap: 10px; margin: 0;
+  font-weight: 700; color: var(--primary); }
+.answer-page .i-did .thanks:not(.shown) .face { display: none; }
+.answer-page .i-did .thanks:focus { outline: none; }
+.answer-page .i-did .burst { position: absolute; left: 16px; top: 50%; width: 0; height: 0; display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .answer-page .voice.speaking .face { animation: face-talk .35s ease-in-out infinite alternate; }
+  .answer-page .i-did .thanks.shown .burst { display: block; }
+  .answer-page .i-did .burst i { position: absolute; width: 10px; height: 6px; border-radius: 10px 0;
+    background: var(--primary); animation: leaf-out .6s cubic-bezier(0.2,0,0,1) both; }
+  .answer-page .i-did .burst i:nth-child(1) { --to: translate(-26px, -22px) rotate(-40deg); }
+  .answer-page .i-did .burst i:nth-child(2) { --to: translate(4px, -30px) rotate(10deg); }
+  .answer-page .i-did .burst i:nth-child(3) { --to: translate(28px, -18px) rotate(50deg); }
+  .answer-page .i-did .burst i:nth-child(4) { --to: translate(-30px, 12px) rotate(-120deg); }
+  .answer-page .i-did .burst i:nth-child(5) { --to: translate(30px, 14px) rotate(130deg); }
+  .answer-page .i-did .burst i:nth-child(6) { --to: translate(0, 28px) rotate(180deg); }
+  .answer-page .i-did .thanks.shown .face { animation: face-talk .3s ease-in-out 2 alternate; }
+}
+/* high-contrast modes: the face keeps its lines in the system's text colour */
+@media (forced-colors: active) {
+  .answer-page .face .head { fill: Canvas; stroke: CanvasText; }
+  .answer-page .face :is(.line, .brr, .mark, .snip) { stroke: CanvasText; }
+  .answer-page .face :is(.eye, .sprout, .drop) { fill: CanvasText; }
+}
+@keyframes face-talk { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+@keyframes leaf-out { from { transform: none; opacity: 1; } to { transform: var(--to); opacity: 0; } }
+
+/* "Tested on your plant's twin" in full once a page, then this chip: the same green as
+   "Better" (19 Oct small-print plan) */
+.answer-page .twin-chip { background: var(--primary); color: var(--primary-fg); margin-right: 4px; }
+
+/* ---------- how sure, what would help, what to ask (19 Oct, Kash) ---------- */
+/* the questions that make it surer, one tap away, under how sure we are */
+.answer-page .make-surer { display: flex; flex-wrap: wrap; gap: 8px 12px; margin: 12px 0 0; }
+/* a rough read: amber, check first, above the headline */
+.answer-page .head .rough-read { margin: 0 0 6px; color: var(--warn); font-weight: 700; }
+/* the care facts' page Tavily found, said in the plan */
+.answer-page .sources-line { margin: 10px 0 0; color: var(--muted-fg); font-size: 16px; }
+/* the indoors/outdoors switch: an outlined button on the band that says what it does, the
+   band's second kind of press (lime is kept for the one to press) (21 Oct, Kash) */
+/* room round the switch, and a tint so it reads as a thing to press, not a line of text
+   (21 Oct, Kash on rev 00050: "text is very close ... make it stand out a bit more") */
+.answer-page .page-band .setting-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0 0 18px; }
+.answer-page .page-band .setting-switch .switch { min-height: 48px; padding: 10px 18px; border: 1.5px solid var(--band-line);
+  border-radius: 14px; background: color-mix(in srgb, var(--band-fg) 12%, var(--band)); color: var(--band-fg);
+  font: 600 16px/1.35 var(--sans); text-align: left; }
+.answer-page .page-band .setting-switch .switch:hover { background: color-mix(in srgb, var(--band-fg) 20%, var(--band)); }
+.answer-page .page-band .kept { margin-top: 6px; }
+/* "Add my photo" after keeping: the band's outline, not the paper's dark words on green */
+.answer-page .page-band .kept button { border: 1.5px solid var(--band-line); background: transparent; color: var(--band-fg); }
+/* no place: the friendly ask and its town box on the band; its button is the page's one
+   main button only when the card has none (21 Oct, Kash; review of #364) */
+.answer-page .page-band .place-ask { max-width: 34rem; margin: 4px 0 12px; }
+.answer-page .page-band .place-ask label { margin: 0 0 8px; color: var(--band-fg); font: 600 18px/1.35 var(--sans); }
+.answer-page .page-band .place-ask .place-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.answer-page .page-band .place-ask input { flex: 1 1 12rem; width: auto; min-height: 44px; margin: 0; border-color: var(--band-line); }
+/* three questions to tap, then the replies under them */
+.answer-page .starters { margin-top: 20px; }
+.answer-page .starters h4 { margin: 0 0 8px; font: 700 16px/1.3 var(--sans); color: var(--muted-fg); }
+.answer-page .starters .actions { flex-wrap: wrap; gap: 8px; margin: 0; }
+.answer-page .refine .starters .actions button { flex: 0 1 auto; }  /* pills sized to their words */
+.answer-page .starters .starter { min-height: 44px; padding: 6px 16px; border: 1.5px solid var(--fg);
+  background: var(--card); font: 600 16px/1.3 var(--sans); text-align: left; }  /* home's pills */
+.answer-page .decided-by { margin: 6px 0 0; color: var(--muted-fg); font-size: 16px; }
+.answer-page .decided-by a { white-space: nowrap; }
+.answer-page .asked { margin: 20px 0 16px; }  /* not flush under the starter pills */
+/* phones, low: the questions sit under the headline card, the rest of the plan after them.
+   The two columns become one list for this; from 960px they stay side by side */
+@media (max-width: 959px) {
+  .answer-page .answer-cols.ask-up { display: flex; flex-direction: column; }
+  .answer-page .answer-cols.ask-up > :is(.plan, .side) { display: contents; }
+  .answer-page .answer-cols.ask-up > * > * { order: 3; }
+  .answer-page .answer-cols.ask-up .main-action { order: 1; position: relative; margin-top: -48px; }
+  .answer-page .answer-cols.ask-up #chat { order: 2; margin-bottom: 28px; }
+  /* the divider above the questions moved with them: it would sit beside the details' own */
+  .answer-page .answer-cols.ask-up .side > .divider:first-child { display: none; }
+}
+@media (max-width: 720px) { .answer-page .answer-cols.ask-up .main-action { margin-top: -40px; } }
+/* Compare at phone width (judge live walk of rev 00040): "vs leaving it" wrapped to three
+   lines and the choice pills wrapped inside their ovals. The verdict column stays one line,
+   the cells lose some padding, and a pill that must wrap takes the card's corners */
+@media (max-width: 480px) { .answer-page details.compare th, .answer-page details.compare td { padding: 6px; }
+  .answer-page details.compare th:nth-child(2), .answer-page details.compare td:nth-child(2) { white-space: nowrap; }
+  .answer-page details.compare .twin-pick { border-radius: var(--surface); padding: 4px 8px; line-height: 1.3; } }
+
+/* indoors: the month's normal and care tips (21 Oct, a gardener: indoor "doesn't have much
+   info"), a compact inked card like Keep an eye on, in the weather-free blue */
+.answer-page .indoor-now { padding: 12px 16px; margin-bottom: 20px; background: var(--sky);
+  border: 1.5px solid var(--fg); border-radius: var(--surface); box-shadow: 5px 5px 0 var(--ink-shadow); }
+.answer-page .indoor-now h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; color: var(--sky-fg); }
+.answer-page .indoor-now ul { margin: 4px 0 8px; padding-left: 1.2em; }
+.answer-page .indoor-now li + li { margin-top: 4px; }
+.answer-page .indoor-now > :last-child { margin-bottom: 0; }
+
+/* "Add photos for a surer answer" in What next (21 Oct, Kash on rev 00049): a quiet box on the
+   card, the file picker as a pill, one green send */
+.answer-page .more-photos { margin: 4px 0 12px; padding: 12px 14px; border: 1px solid var(--soft-line);
+  border-radius: 12px; background: var(--card); }
+.answer-page .more-photos-ask { margin: 0 0 8px; }
+.answer-page .more-photos .pick { display: flex; flex-direction: column; gap: 6px; margin: 0 0 6px; font-weight: 600; }
+.answer-page .more-photos input[type="file"] { max-width: 100%; font: inherit; }
+.answer-page .more-photos input[type="file"]::file-selector-button { min-height: 44px; margin-right: 10px;
+  padding: 8px 18px; border: 1.5px solid var(--fg); border-radius: var(--pill); background: var(--card);
+  color: var(--fg); font: 600 16px/1.2 var(--sans); cursor: pointer; }
+.answer-page .more-photos .picked { margin: 0 0 8px; color: var(--muted-fg); font-size: 16px; }
+.answer-page .more-photos .picked:empty { margin: 0; }  /* kept in the tree so the first message is read out */
+.answer-page .more-photos button[aria-disabled="true"], .answer-page .more-photos button:disabled { opacity: .7; cursor: progress; }

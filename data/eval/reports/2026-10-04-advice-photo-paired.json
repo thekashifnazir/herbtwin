@@ -1,0 +1,46 @@
+{
+ "description": "Paired comparison on questions scored ok in both runs; difference = with photo minus text only; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+ "n_paired": 538,
+ "not_a_plant_photos": 112,
+ "ask_first_primary": {
+  "text_only": 301,
+  "with_photo": 255
+ },
+ "metrics": {
+  "primary_match": {
+   "text_only": 0.2491,
+   "with_photo": 0.2677,
+   "diff": 0.0186,
+   "lo": -0.0074,
+   "hi": 0.0428
+  },
+  "primary_in_truth": {
+   "text_only": 0.4331,
+   "with_photo": 0.4572,
+   "diff": 0.0242,
+   "lo": -0.0037,
+   "hi": 0.052
+  },
+  "jaccard": {
+   "text_only": 0.2638,
+   "with_photo": 0.2762,
+   "diff": 0.0123,
+   "lo": -0.0055,
+   "hi": 0.0302
+  },
+  "over_treatment": {
+   "text_only": 0.1134,
+   "with_photo": 0.0948,
+   "diff": -0.0186,
+   "lo": -0.0372,
+   "hi": 0.0
+  },
+  "water_conflict": {
+   "text_only": 0.0428,
+   "with_photo": 0.039,
+   "diff": -0.0037,
+   "lo": -0.013,
+   "hi": 0.0056
+  }
+ }
+}

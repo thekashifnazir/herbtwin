@@ -1,0 +1,108 @@
+/* the streamed wait page (web/progress.py): what the twin made of each choice, then each
+   advisor ask as it lands, a dot per ask. Every line is real progress, never a timer. */
+.progress li.twin, .progress li.advisor { animation: arrive .4s ease-out both; }
+@keyframes arrive { from { opacity: 0; transform: translateY(4px); } }
+.progress li .tests { display: block; margin-top: 2px; font-weight: 400; font-size: 16px; }
+.progress li .test { display: block; color: var(--muted-fg); }
+.progress li .test b { font-weight: 700; }
+.progress li .test.better b { color: var(--ok); }
+.progress li .test.worse b { color: var(--clay); }
+.progress li .dots { display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: 1px; }
+.progress li .dots i { width: 10px; height: 10px; border-radius: 50%; box-sizing: border-box;
+  border: 2px solid var(--soft-line); }
+.progress li .dots i.on { background: var(--primary); border-color: var(--primary); }
+.progress li .dots i.miss { background: var(--border); border-color: var(--border); }
+.progress li .dots i.new { animation: fill .5s ease-out both; }
+@keyframes fill { from { transform: scale(.4); opacity: .3; } }
+@media (prefers-reduced-motion: reduce) {
+  .progress li.twin, .progress li.advisor, .progress li .dots i.new { animation: none !important; }
+}
+/* the photo you sent, top right of the steps from the first paint (WAIT_PHOTO): the same
+   small square as on the answer page it jumps to */
+.progress-steps .wait-photo { float: right; width: 112px; height: 112px; object-fit: cover; margin: 0 0 12px 16px; border: 1.5px solid var(--fg); border-radius: 4px; background: var(--card); }
+@media (max-width: 720px) { .progress-steps .wait-photo { width: 80px; height: 80px; } }
+.progress-steps:has(> .wait-photo:not([hidden])) { display: flow-root; }
+/* more photos of the same plant: small squares under the main one, on its right edge */
+.progress-steps .wait-more { float: right; clear: right; display: flex; gap: 8px; margin: 0 0 12px 16px; }
+.progress-steps .wait-more img { width: 52px; height: 52px; object-fit: cover; border: 1.5px solid var(--fg); border-radius: 4px; background: var(--card); }
+@media (max-width: 720px) { .progress-steps .wait-more img { width: 36px; height: 36px; } }
+/* the read is done (progress._done): the next page waits for a tap, not a jump. A card in
+   the page, right under the steps (21 Oct, Kash: "why is it down at the bottom?"); docked to
+   the foot of the screen only on a phone, where the steps run past the screen */
+.progress-steps .ready { margin: 20px 0 4px; padding: 16px 20px; border: 2px solid var(--primary);
+  border-radius: var(--surface); background: var(--soft); }
+.progress-steps .ready .ready-done { margin: 0 0 4px; color: var(--muted-fg); font-size: 16px; }
+.progress-steps .ready h2 { margin: 0 0 12px; }
+.progress-steps .ready p { margin: 0; }
+/* a quick question still open: a reply still counts (progress.STILL_ASK) */
+.progress-steps .ready .ready-still { margin-top: 10px; font-size: 16px; }
+.progress-steps .ready.docked .ready-still { flex-basis: 100%; margin: 0; text-align: center; }
+.progress-steps .ready.docked { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; margin: 0;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 20px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); border: 0; border-radius: 0;
+  border-top: 2px solid var(--fg); background: var(--card); }
+.progress-steps .ready.docked .ready-done { display: none; }
+.progress-steps .ready.docked h2 { margin: 0; font-size: 22px; }
+body.has-dock { padding-bottom: calc(150px + env(safe-area-inset-bottom)); } /* the script sets the bar's own height */
+@media (prefers-reduced-motion: no-preference) {
+  .progress-steps .ready.docked { animation: dock .3s ease-out both; }
+}
+@keyframes dock { from { transform: translateY(100%); } }
+/* said to a screen reader only: the band's status line when the read is done */
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* our own data beside the steps (progress._fact): the steps on the left, the cards on the
+   right; on a phone the cards follow the steps. Without script they stay in the list */
+.wait-grid { display: flex; flex-direction: column; }
+.wait-grid > .progress-steps { order: 1; }
+.wait-side { order: 2; margin-top: 8px; }
+@media (min-width: 900px) {
+  .wait-grid { display: grid; grid-template-columns: minmax(0, 38rem) minmax(0, 24rem); gap: 0 28px; align-items: start; }
+  .wait-grid > .progress-steps { grid-column: 1; grid-row: 1; }
+  .wait-side { grid-column: 2; grid-row: 1; position: relative; margin-top: -48px; }
+}
+.wait-fact h2 { margin: 0 0 8px; font-size: 20px; }
+.wait-fact ul:not(.chips) { margin: 0 0 8px; padding-left: 20px; }
+.wait-fact ul:not(.chips) li { margin: 0 0 4px; }
+.wait-fact .chips { margin-bottom: 8px; }
+.wait-fact .chips li { padding: 4px 12px; border-radius: var(--pill); background: var(--soft); font-weight: 700; }
+/* a problem chip opens on what it looks like and a link to its source (progress._problem_chip):
+   the chip is the summary, a 44px tap; open, it takes the card's width */
+.wait-fact .chips li:has(> details) { padding: 0; }
+.wait-fact .chips li:has(> details[open]) { flex-basis: 100%; border-radius: 12px; }
+.wait-fact .chips details { margin: 0; border: 0; background: none; }
+.wait-fact .chips summary { min-height: 44px; gap: 8px; padding: 4px 14px; }
+.wait-fact .chips details[open] summary { border-bottom: 0; }
+.wait-fact .chips details > p { margin: 0 14px 8px; font-weight: 400; }
+.wait-fact .chips details > p:last-child { margin-bottom: 12px; }
+.wait-fact .chips details a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+/* colour that says what a card is, never decoration (21 Oct, Kash: "plain"): what's normal
+   in the calm green, the weather in the site's weather blue. In the weather, only rain today
+   and frost nights take the blue; a mild, dry day stays plain */
+.wait-fact.fact-normal { border-left: 6px solid var(--ok); }
+.wait-fact.fact-normal h2 { color: var(--ok); }
+.wait-fact.fact-weather { border-left: 6px solid var(--sky-fg); }
+.wait-fact.fact-weather h2 { color: var(--sky-fg); }
+.wait-fact .wet { color: var(--sky-fg); font-weight: 700; }
+.wait-fact .cold { padding: 6px 10px; border-radius: 8px; background: var(--sky); color: var(--sky-fg); font-weight: 700; }
+.wait-fact p { margin: 0 0 6px; }
+.progress ol > li.fact { padding-left: 0; color: var(--fg); font-weight: 400; }
+.progress ol > li.fact::before, .progress ol > li.fact:not(:last-of-type)::after { display: none; }
+@media (prefers-reduced-motion: no-preference) { .wait-side .wait-fact { animation: arrive .4s ease-out both; } }
+/* the quick questions (progress.asks_card): a tap each, sent at once; script only */
+.wait-asks { margin: 0 0 8px; display: flow-root; } /* beside the photo you sent, never under it */
+@media (max-width: 720px) { .progress-steps .wait-asks { clear: both; } } /* a phone: below it */
+.wait-asks h2 { margin: 0 0 4px; font-size: 20px; }
+.wait-asks > p.muted { margin: 0; }
+.wait-asks fieldset { margin: 14px 0 0; padding: 0; border: 0; }
+.wait-asks legend { margin-bottom: 6px; padding: 0; font-weight: 700; }
+.wait-asks .choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.wait-asks label { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 6px 14px;
+  border: 1.5px solid var(--soft-line); border-radius: var(--pill); background: var(--card); cursor: pointer; }
+.wait-asks label:has(input:checked) { border-color: var(--primary); font-weight: 700; }
+.wait-asks .sent { margin: 12px 0 0; font-weight: 700; }
+/* empty, it takes no room but stays a live region: display:none would hide it from a
+   screen reader, which may then miss the first reply's line */
+.wait-asks .sent:empty { margin: 0; }
+/* what the advisors are, under "Thinking about what it needs" */
+.progress li .note { display: block; font-weight: 400; font-size: 16px; color: var(--muted-fg); }

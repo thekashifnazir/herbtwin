@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = b minus a; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "a": "super-mirage-p7ba.jsonl",
+    "b": "nano4b-tuned-vllm-mirage.jsonl"
+  },
+  "n_paired": 200,
+  "ask_first_primary": {
+    "a": 0,
+    "b": 0
+  },
+  "metrics": {
+    "primary_match": {
+      "a": 0.435,
+      "b": 0.42,
+      "diff": -0.015,
+      "lo": -0.08,
+      "hi": 0.05,
+      "n": 200
+    },
+    "primary_in_truth": {
+      "a": 0.675,
+      "b": 0.63,
+      "diff": -0.045,
+      "lo": -0.105,
+      "hi": 0.02,
+      "n": 200
+    },
+    "jaccard": {
+      "a": 0.37603571428571425,
+      "b": 0.3323690476190476,
+      "diff": -0.04366666666666666,
+      "lo": -0.07838095238095238,
+      "hi": -0.008083333333333333,
+      "n": 200
+    },
+    "over_treatment": {
+      "a": 0.01,
+      "b": 0.02,
+      "diff": 0.01,
+      "lo": -0.01,
+      "hi": 0.03,
+      "n": 200
+    },
+    "water_conflict": {
+      "a": 0.045,
+      "b": 0.035,
+      "diff": -0.01,
+      "lo": -0.04,
+      "hi": 0.015,
+      "n": 200
+    },
+    "unguarded_water_conflict": {
+      "a": 0.005,
+      "b": 0.005,
+      "diff": 0.0,
+      "lo": -0.015,
+      "hi": 0.015,
+      "n": 200
+    },
+    "asked_when_expert_asked": {
+      "a": 0.6111111111111112,
+      "b": 0.5,
+      "diff": -0.1111111111111111,
+      "lo": -0.2361111111111111,
+      "hi": 0.013888888888888888,
+      "n": 72
+    },
+    "primary_ok_if_asked_too": {
+      "a": 0.435,
+      "b": 0.42,
+      "diff": -0.015,
+      "lo": -0.08,
+      "hi": 0.05,
+      "n": 200
+    }
+  }
+}

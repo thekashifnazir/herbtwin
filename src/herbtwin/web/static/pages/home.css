@@ -1,0 +1,382 @@
+/* The home page (/): a deep-green band under the site header holds the promise, the
+   photo form and the twin before/after. Below it the example answer overlaps the band's edge, then an evidence
+   bento, a row of sample photos and the steps of a read. */
+
+/* ---------- the band: continuous with the header, full bleed ----------
+   The header above is already var(--band) edge to edge, so the band just follows on:
+   margin pulls it to the viewport's sides out of the 72rem wrap. */
+.home-page main { padding-top: 0; }
+/* 100vw counts a classic scrollbar (Windows, Linux): clip that sliver, never scroll sideways */
+.home-page { overflow-x: clip; }
+.home-page .home-band { background: var(--band); color: var(--band-fg);
+  margin: 0 calc(50% - 50vw); padding: 8px max(16px, calc(50vw - var(--frame) / 2 + 16px)) 88px; }
+.home-page .home-band :focus-visible { outline-color: var(--band-fg); }
+.home-page .home-band .muted { color: var(--band-muted); }
+.home-page .home-band a { color: var(--band-fg); }
+
+/* the promise: the one place the condensed poster face is used (loaded in herbtwin.css) */
+.home-page .home-hero { margin-bottom: 24px; }
+.home-page .home-hero h1 { font: 800 clamp(2.4rem, 6.5vw, 5rem)/0.95 var(--poster);
+  letter-spacing: 0; text-transform: uppercase; margin: 0 0 8px; }
+.home-page .home-hero .lead { max-width: 34rem; font-size: 19px; color: var(--band-muted); }
+/* the voice line, small above the H1, in the band's one bright colour */
+.home-page .home-hero .home-eyebrow { margin: 0 0 6px; font: italic 600 18px/1.3 var(--sans); color: var(--lime, var(--band-fg)); }
+.home-page .home-hero .lead strong { color: var(--band-fg); }
+
+/* which location the answer uses, said once a photo is picked (19 Oct, Kash's walk) */
+/* found: a light green box with a tick; none: an amber "check" box (the answer's own
+   Check-first colours), never an error red (21 Oct, Kash: "make it more obvious that no
+   location was picked up"). Both on the band's dark green, so both carry their own ground */
+.home-page .home-band .home-photo-place { display: flex; flex-wrap: wrap; align-items: center;
+  gap: 8px 12px; margin: 0 0 12px; padding: 10px 14px; border-radius: 12px;
+  background: var(--soft); color: var(--fg); font-weight: 500; }
+.home-page .home-band .home-photo-place svg { flex: none; color: var(--ok); }
+.home-page .home-band .home-photo-place > span { flex: 1 1 12rem; min-width: 0; }
+.home-page .home-band .home-no-place { display: flex; align-items: flex-start; gap: 10px;
+  margin: 0 0 12px; padding: 10px 14px; border-radius: 12px; background: var(--warn-bg);
+  border: 1.5px solid var(--warn-line); color: var(--fg); font-size: 16px; line-height: 1.4; }
+.home-page .home-band .home-no-place[hidden] { display: none; }
+.home-page .home-band .home-no-place p { margin: 0; }
+.home-page .home-band .home-no-place :is(svg, strong) { flex: none; color: var(--warn); }
+.home-page .home-band .home-photo-place #where-else { color: var(--fg);
+  border-color: color-mix(in srgb, var(--ok) 55%, transparent); }
+.home-page .home-band .home-photo-place #where-else:hover { background: color-mix(in srgb, var(--ok) 12%, transparent); }
+/* while the note shows, the way to add a place stands out: a filled button, not an outline */
+.home-page .home-band .home-where:has(#no-photo-place:not([hidden])) #locate {
+  background: var(--band-btn); color: var(--band-btn-fg); border-color: var(--band-btn); }
+.home-page .home-band .home-where:has(#no-photo-place:not([hidden])) #locate:hover {
+  background: color-mix(in srgb, var(--band-btn) 88%, var(--band-btn-fg)); }
+.home-page .home-band #where-else { background: transparent; color: var(--band-fg);
+  border: 2px solid var(--band-line); border-radius: var(--pill); padding: 6px 16px; font-weight: 500; }
+/* the samples as chips under the photo card: one row that scrolls sideways on a phone, the
+   last chip half shown so the scroll is plain; wrapped on a wide screen */
+.home-page .home-chips { margin: -4px 0 4px; min-width: 0; }  /* a grid item: let the row scroll, not widen the page */
+.home-page .home-chips-h { margin: 0 0 8px; color: var(--band-fg); font-size: 16px; }
+.home-page .home-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.home-page .home-chips .small { margin: 6px 0 0; }
+.home-page .home-band .home-chips a { color: var(--band-fg); }
+.home-page .home-pick { display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px 4px 4px;
+  border-radius: var(--pill); background: var(--tone, var(--card)); color: var(--band-fg);
+  font: 600 16px/1.2 var(--sans); text-decoration: none; white-space: nowrap; }
+.home-page .home-pick img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+.home-page .home-pick:hover { filter: brightness(1.15); }
+.home-page .home-pick:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; }
+/* the photo: one big cream pill on the band; the hint goes quiet under it */
+.home-page .home-band .home-photo { position: relative; margin: 0 0 16px; padding: 18px 22px;
+  border: 0; border-radius: var(--pill); background: var(--band-btn); color: var(--band-btn-fg);
+  font: 700 22px/1.2 var(--sans); cursor: pointer; max-width: 30rem; }
+.home-page .home-band .home-photo .hint { display: block; margin-top: 4px;
+  font: 400 15px/1.4 var(--sans); color: var(--band-btn-fg); opacity: .8; }
+/* the whole pill is the target: the native input stays in the form and keeps
+   focus, just out of sight; picked or not, a tap anywhere opens the chooser */
+.home-page .home-band .home-photo input[type=file] { position: absolute; width: 1px; height: 1px;
+  margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* the clipped input can't show its own focus ring, so the pill shows it */
+.home-page .home-band .home-photo:has(input:focus-visible) { outline: 3px solid var(--band-fg);
+  outline-offset: 3px; }
+/* the words and the picked photo sit in the middle of the pill, before and after a pick (21 Oct,
+   Kash: "so choose a photo is in the center of this box"); once picked the pill rounds less,
+   so the thumbnail never runs into its curve on a phone */
+.home-page .home-band .home-photo { display: flex; flex-direction: column; align-items: center;
+  text-align: center; }
+.home-page .home-band .home-photo.has-photo { border-radius: 28px; }
+.home-page .home-chosen { display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-top: 16px; max-width: 100%; }
+.home-page .home-chosen img { flex: none; width: 88px; height: 88px; object-fit: cover; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--muted); }
+.home-page .home-chosen > span { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 0; }
+.home-page .home-chosen-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font: 500 16px/1.4 var(--sans); }
+/* more photos of the same plant, under the photo pill: a quiet pill of its own to add one,
+   then each picked photo as a small square with its Remove. Without script the plain field
+   shows; with it (.ready) the field hides inside its pill, as the main one does */
+.home-page .home-more { max-width: 30rem; margin: -8px 0 0; color: var(--band-fg); }
+.home-page .home-more-add { position: relative; display: inline-flex; align-items: center; min-height: 44px;
+  padding: 8px 18px; border: 1.5px dashed currentColor; border-radius: var(--pill);
+  font: 600 17px/1.3 var(--sans); cursor: pointer; }
+.home-page .home-more-opt { font-weight: 400; opacity: .85; }
+.home-page .home-more:not(.ready) .home-more-add { display: flex; flex-direction: column; align-items: flex-start;
+  gap: 8px; border-radius: 16px; }
+.home-page .home-more.ready .home-more-add input { position: absolute; width: 1px; height: 1px; margin: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.home-page .home-more-add:has(input:focus-visible) { outline: 3px solid var(--band-fg); outline-offset: 3px; }
+.home-page .home-more-hint { margin: 6px 0 0; opacity: .85; }
+.home-page .home-more-list { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0 0; padding: 0; list-style: none; }
+.home-page .home-more-list li { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.home-page .home-more-list img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--muted); }
+.home-page .home-band .home-more-list button { min-height: 44px; background: transparent; color: var(--band-fg);
+  border: 2px solid var(--band-line); border-radius: var(--pill); padding: 6px 16px; font-weight: 500; }
+.home-page .home-band .home-more-list button:hover { background: rgb(255 255 255 / .08); }
+.home-page .home-more-said { margin: 6px 0 0; }
+.home-page .home-more-said:empty { display: none; }
+
+/* the form: photo pill and place field side by side on wide screens,
+   question and buttons full width under them */
+.home-page .home-form { display: grid; grid-template-columns: 1fr; gap: 20px;
+  margin: 0; }
+@media (min-width: 960px) {
+  .home-page .home-form { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; }
+  .home-page .home-form :is(.home-go, .home-chips, .home-more, p.small) { grid-column: 1 / -1; }
+}
+
+/* location: quieter than the photo, still readable on the band */
+.home-page .home-band .home-where { background: transparent; border-color: var(--band-line);
+  margin: 0; padding: 14px 18px; }
+.home-page .home-band .home-where input { max-width: 100%; }
+.home-page .home-where legend { font-weight: 500; }
+.home-page .home-locate { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.home-page .home-locate:has(#locate[hidden]):has(#located:empty) { display: none; }
+.home-page .home-band #locate { background: transparent; color: var(--band-fg);
+  border: 2px solid var(--band-line); border-radius: var(--pill); padding: 6px 16px; font-weight: 500; }
+.home-page .home-band :is(#locate, #where-else):hover { background: rgb(255 255 255 / .08); }
+
+/* the two ways in: cream primary, outlined secondary, side by side at
+   natural width — both still say what they want */
+.home-page .home-go { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+.home-page .home-go button { flex-direction: column; gap: 2px; padding: 10px 22px;
+  max-width: 24rem; }
+.home-page .home-go-for { display: block; font-size: 16px; font-weight: 400; line-height: 1.3; }
+.home-page .home-band .home-go .primary { background: var(--band-btn); color: var(--band-btn-fg); }
+.home-page .home-band .home-go .primary:hover { background: color-mix(in srgb, var(--band-btn) 88%, var(--band)); }
+.home-page .home-band .home-go button:not(.primary) { background: transparent; color: var(--band-fg);
+  border: 2px solid var(--band-line); }
+.home-page .home-band .home-go button:not(.primary):hover { background: rgb(255 255 255 / .08); }
+
+.home-page .home-ask { margin-top: 24px; }
+.home-page .home-ask .actions { margin: 12px 0; }
+.home-page .home-ask button { min-width: 88px; }
+.home-page .home-ask-said { margin: 0; font-weight: 500; }
+
+/* ---------- the twin divider, in the band ----------
+   Two stacked stills; the "don't" is clipped by --cut. A real range input is laid
+   invisibly over the frame so pointer drag and arrow keys both move it; the white
+   divider is drawn at --cut. Reduced motion: it simply never animates. */
+.home-page .home-twin { margin: 24px 0 0; }
+.home-page .home-twin-frame { position: relative; border-radius: 14px; overflow: hidden;
+  aspect-ratio: 21/8; user-select: none; box-shadow: 0 22px 44px -26px rgb(0 0 0 / .55); }
+.home-page .home-twin-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.home-page .home-twin-dont { clip-path: inset(0 0 0 var(--cut, 50%)); }
+.home-page .home-twin-tag { position: absolute; top: 12px; z-index: 2; padding: 6px 16px;
+  border-radius: var(--pill); background: rgb(15 20 15 / .75); color: #fff;
+  font: 600 16px/1.3 var(--sans); }
+.home-page .home-twin-tag.l { left: 12px; }
+.home-page .home-twin-tag.r { right: 12px; }
+.home-page .home-twin-tag.ex { top: auto; bottom: 12px; left: 12px; background: var(--card); color: var(--fg); }
+.home-page .home-twin-frame::after { content: ""; position: absolute; top: 0; bottom: 0;
+  left: var(--cut, 50%); width: 4px; background: #fff; transform: translateX(-2px);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / .25); z-index: 2; pointer-events: none; }
+/* the handle on the divider: a lime pill that says what to do, so the slider reads as one
+   without any motion (18 Oct: the nudge alone went unseen on phones) */
+/* kept whole at the ends: centred on the divider, but never closer than half its width to an edge */
+.home-page .home-twin-grip { position: absolute; top: 50%; z-index: 3;
+  left: clamp(52px, var(--cut, 50%), calc(100% - 52px));
+  transform: translate(-50%, -50%); padding: 8px 14px; border-radius: var(--pill); white-space: nowrap;
+  background: var(--lime); color: var(--lime-fg); border: 2px solid var(--lime-fg);
+  font: 700 16px/1 var(--sans); box-shadow: 0 4px 14px -4px rgb(0 0 0 / .5); pointer-events: none; }
+@media (forced-colors: active) {
+  .home-page .home-twin-grip { background: Canvas; color: CanvasText; border-color: CanvasText; }
+}
+.home-page .home-twin-range { position: absolute; inset: 0; z-index: 4; width: 100%; height: 100%;
+  margin: 0; opacity: 0; cursor: ew-resize; }
+.home-page .home-twin-frame:has(.home-twin-range:focus-visible) { outline: 3px solid var(--band-fg);
+  outline-offset: 3px; }
+.home-page .home-twin figcaption { margin-top: 6px; font-size: 16px; color: var(--band-muted); }
+
+/* ---------- below the band ---------- */
+/* the example: one dashed frame round the answer and its evidence, overlapping the
+   band's bottom edge. The "Example" tab sits on the frame's edge, so it labels everything
+   inside, and the header shows what went in (one photo, one place) before what came out */
+.home-page .home-example { position: relative; margin: -56px 0 8px; padding: 28px 16px 8px;
+  background: var(--bg); border: 2px dashed var(--fg); border-radius: var(--surface); }
+.home-page .home-example-tab { position: absolute; top: 0; left: 20px; transform: translateY(-50%);
+  margin: 0; padding: 4px 14px; border-radius: var(--pill); background: var(--fg); color: var(--bg);
+  font: 700 15px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; }
+.home-page .home-example-in { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+  margin: 0 0 16px; font-size: 18px; }
+.home-page .home-example-in img { width: 56px; height: 42px; object-fit: cover; border-radius: 8px;
+  border: 1.5px solid var(--fg); }
+.home-page .home-example-arrow { font-weight: 700; }
+.home-page .home-example .home-bento { margin-bottom: 8px; }
+
+/* how it works: 4 numbered photo cards, each with one chip of the example's real output */
+.home-page .home-how { margin: 24px 0 32px; }
+.home-page .home-how-cards { list-style: none; counter-reset: how; margin: 8px 0 12px; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.home-page .home-how-cards li { counter-increment: how; }
+.home-page .home-how-cards figure { position: relative; margin: 0 0 8px; aspect-ratio: 4/3; overflow: hidden;
+  border-radius: 12px; border: 1.5px solid var(--fg); background: var(--muted); }
+.home-page .home-how-cards img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* card 2 is the same photo on a cold week: a blue wash, so the step reads as weather */
+.home-page .home-how-cards .cold img { filter: saturate(.45); }
+.home-page .home-how-cards .cold::after { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgb(70 130 210 / .55), rgb(70 130 210 / .3)); }
+.home-page .home-how-cards figure::before { content: counter(how); position: absolute; top: 8px; left: 8px;
+  z-index: 1; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--fg); color: var(--bg); font: 700 15px/1 var(--sans); }
+.home-page .home-how-chip { position: absolute; z-index: 1; left: 8px; right: 8px; bottom: 8px; width: fit-content;
+  max-width: calc(100% - 16px); padding: 4px 10px; border-radius: var(--pill); background: var(--card);
+  color: var(--fg); border: 1.5px solid var(--fg); font: 700 16px/1.3 var(--sans); }
+/* card 3's picture is the twin left out: said on the picture, so the verdict chip under it
+   reads as "shelter beats this", never as a picture of sheltering */
+.home-page .home-how-tag { position: absolute; z-index: 1; top: 8px; right: 8px; padding: 2px 10px;
+  border-radius: var(--pill); background: var(--clay); color: var(--bg); font: 700 16px/1.3 var(--sans); }
+.home-page .home-how-cards h3 { margin: 0 0 2px; font: 700 17px/1.3 var(--sans); letter-spacing: 0; }
+.home-page .home-how-cards p { margin: 0; }
+@media (max-width: 720px) {
+  .home-page .home-how-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .home-page .home-how-chip { border-radius: 12px; padding: 3px 8px; }
+}
+.home-page .home-sample h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
+.home-page .home-sample-head { margin-bottom: 4px; font: 700 23px/1.25 var(--display); }
+.home-page .home-sample-do { margin: 16px 0 4px; }
+/* Also do / Don't / Keep an eye on: 3 rows, each tag on the left and its words beside it */
+.home-page .home-sample-more { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; font-size: 16px; }
+.home-page .home-sample-more li { display: grid; grid-template-columns: 7.5rem 1fr; align-items: baseline; gap: 8px; }
+.home-page .home-sample-more .tag { justify-self: start; }
+.home-page .home-sample-more .tag-dont { background: var(--clay); color: var(--bg); }
+.home-page .home-sample-more .tag-watch { background: var(--warn-bg); color: var(--warn); }
+
+/* evidence bento: varied tile sizes, never a row of identical cards */
+.home-page .home-bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px; }
+.home-page .home-tile h2 { margin: 0 0 8px; font: 700 16px/1.3 var(--sans); color: var(--muted-fg); letter-spacing: 0; }
+.home-page .home-tile-big { font: 700 40px/1 var(--display); font-variant-numeric: tabular-nums; margin: 0 0 6px; }
+.home-page .home-factors { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 16px; }
+.home-page .home-factors li { display: flex; align-items: baseline; gap: 10px; }
+.home-page .home-factors li span:first-child { flex: none; width: 1.2rem; text-align: center; font-weight: 700; }
+.home-page .home-factors .up span { color: var(--ok); }
+.home-page .home-factors .down span { color: var(--warn); }
+.home-page .home-factors .miss span { color: var(--muted-fg); }
+@media (min-width: 900px) {
+  .home-page .home-bento { grid-template-columns: 2fr 1fr; }
+  .home-page .home-tile-wide { grid-column: span 1; }
+  .home-page .home-tile-wide:last-child { grid-column: span 2; }
+}
+
+
+/* the footer wordmark: home has the giant one; every other page the smaller .foot-mark */
+.home-page .home-giant { display: block; text-align: center; font: 800 clamp(3.5rem, 13vw, 10rem)/0.9 var(--poster);
+  color: var(--soft-strong); margin: 8px 0; }
+
+@media (max-width: 720px) {
+  .home-page .home-twin-frame { aspect-ratio: 4/3; }
+  .home-page .home-chip-row { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px;
+    scroll-snap-type: x proximity; }
+  .home-page .home-pick { flex: none; scroll-snap-align: start; }
+  /* the outlook: one row per choice (chip, name, note), not 3 stacked lines */
+  .home-page .home-outlook li { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+  .home-page .home-band { padding-bottom: 72px; }
+  .home-page .home-go button { max-width: none; flex: 1 1 12rem; }
+  .home-page .home-example { margin-top: -44px; padding: 26px 10px 4px; }
+  .home-page .home-bento { grid-template-columns: 1fr; }
+}
+
+/* wide screens: the promise across the top, the form left, the twin right,
+   so the band uses the frame's width instead of stacking down one column */
+@media (min-width: 1100px) {
+  .home-page .home-band { display: grid; column-gap: 40px; align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); }
+  .home-page .home-hero { grid-column: 1 / -1; }
+  .home-page .home-form { grid-column: 1; grid-template-columns: 1fr; }
+  .home-page .home-ask { grid-column: 1; }
+  .home-page .home-twin { grid-column: 2; grid-row: 2 / span 2; margin: 0;
+    display: flex; flex-direction: column; }
+  .home-page .home-twin-frame { flex: 1; aspect-ratio: auto; min-height: 420px; }
+}
+
+/* ---------- the band's boxes and the one bright colour ----------
+   Outlined boxes on the green were hard to pick out, so the place box is solid, a tone lighter than the band, and the two things to press (the photo and
+   the main button) are lime, so the eye goes straight to what to do. */
+.home-page { --tone: #2B6142; --tone-muted: #CFE3D6; }  /* --lime and --lime-fg: herbtwin.css */
+.home-page .home-band .home-where { background: var(--tone); border: 0;
+  border-radius: var(--surface); padding: 16px 20px; }
+/* the box is one green in both themes, so its quiet words are too: dark --band-muted is 3.98:1 on it */
+.home-page .home-band .home-where .muted { color: var(--tone-muted); }
+/* the legend moves inside the filled box, so the box has no notch in its top edge */
+.home-page .home-band .home-where > legend { float: left; width: 100%; padding: 0; margin-bottom: 6px; }
+.home-page .home-band .home-where > legend + * { clear: both; }
+/* light in both themes, like the band's buttons: the theme's own ink would vanish on it */
+.home-page .home-band input[name=place] { background: var(--band-btn); color: var(--band-btn-fg); border: 0; min-height: 48px; }
+.home-page .home-band .home-photo { background: var(--lime); color: var(--lime-fg);
+  padding: 24px 26px; font-size: 26px; box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--lime) 60%, transparent); }
+.home-page .home-band .home-photo .hint { color: var(--lime-fg); }
+.home-page .home-band .home-go .primary { background: var(--lime); color: var(--lime-fg); }
+.home-page .home-band .home-go .primary:hover { background: color-mix(in srgb, var(--lime) 90%, var(--lime-fg)); }
+.home-page .home-twin-tag.l { background: var(--lime); color: var(--lime-fg); }
+
+/* ---------- the example and its evidence: bold, inked boxes ----------
+   Each tile its own soft colour with an ink edge and a hard shadow, matching the poster
+   headline; white on the paper was too faint to pick the boxes out. */
+/* --sky and --ink-shadow: herbtwin.css */
+.home-page :is(.home-sample, .home-tile) { border: 1.5px solid var(--fg); box-shadow: 5px 5px 0 var(--ink-shadow); }
+.home-page .home-tile h2 { color: var(--fg); }
+.home-page .home-tile:nth-child(1) { background: var(--soft); }
+.home-page .home-tile:nth-child(2) { background: var(--sky); }
+.home-page .home-tile:nth-child(3) { background: var(--warn-bg); }
+.home-page .home-bento { gap: 22px; }
+
+/* the 2-week outlook: one row per choice, the verdict a coloured pill first, so
+   "better" is the thing you see; "same" stays quiet */
+.home-page .home-outlook { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); }
+.home-page .home-outlook li { display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  font-size: 18px; }
+.home-page .home-verdict { padding: 4px 14px; border-radius: var(--pill); font: 700 16px/1.3 var(--sans);
+  background: var(--card); color: var(--muted-fg); border: 1.5px solid var(--border); }
+.home-page .home-outlook .better .home-verdict { background: var(--primary); color: var(--primary-fg);
+  border-color: var(--primary); font-size: 18px; padding: 6px 18px; }
+/* one big value per tile, coloured by what it is: confidence green, weather blue (--sky-fg) */
+.home-page .home-tile:nth-child(1) .home-tile-big { color: var(--ok); }
+.home-page .home-tile:nth-child(2) .home-tile-big { color: var(--sky-fg); }
+
+/* the one models line, a pill on the band colour: the judges' eligibility signal */
+.home-page .home-how-sources { display: inline-block; margin: 4px 0 24px; padding: 10px 18px;
+  border-radius: var(--pill); background: var(--band); color: var(--band-fg); font: 600 16px/1.4 var(--sans); }
+.home-page .home-how-sources a { color: var(--lime, var(--band-fg)); }
+
+/* the first load of a session (19 Oct home pass; H1 fix, judge's motion proposal): the hero
+   rises 16 px, staggered. Only a move, never a fade, so the words are there from the first
+   paint; and only once the real fonts are in (`intro-go`, set by index.html's gate within
+   600 ms, or never), so it never plays in a stand-in face. `first-load` alone runs the twin */
+@media (prefers-reduced-motion: no-preference) {
+  .intro-go .home-page :is(.home-hero > *, .home-photo) { animation: intro-rise .4s cubic-bezier(0.2,0,0,1) backwards; }
+  .intro-go .home-page .home-hero > :nth-child(2) { animation-delay: 80ms; }
+  .intro-go .home-page .home-hero > :nth-child(3) { animation-delay: 160ms; }
+  .intro-go .home-page .home-photo { animation-delay: 240ms; }
+}
+@keyframes intro-rise { from { transform: translateY(16px); } }
+
+/* H3: on the first load the sample chips slide in from the right, one after another, 24 px
+   each (21 Oct, Kash: "make it more engaging"): on a phone it says the row scrolls, and on a
+   wide screen it draws the eye to them. 0.56 s in all. Under the pointer a chip lifts 2 px */
+@media (prefers-reduced-motion: no-preference) {
+  .intro-go .home-page .home-pick { animation: chips-in .36s cubic-bezier(0.2,0,0,1) backwards; animation-delay: 120ms; }
+  .intro-go .home-page .home-pick:nth-child(2) { animation-delay: 170ms; }
+  .intro-go .home-page .home-pick:nth-child(3) { animation-delay: 220ms; }
+  .intro-go .home-page .home-pick:nth-child(4) { animation-delay: 270ms; }
+  .intro-go .home-page .home-pick:nth-child(n+5) { animation-delay: 320ms; }
+}
+/* only where there is a real pointer: on touch a tapped chip would stay lifted */
+@media (prefers-reduced-motion: no-preference) and (hover: hover) {
+  .home-page .home-pick { transition: transform .15s cubic-bezier(0.2,0,0,1), filter .15s; }
+  .home-page .home-pick:hover { transform: translateY(-2px); }
+}
+@keyframes chips-in { from { transform: translateX(24px); } }
+
+/* H2: below the first screen, each block rises 24 px and fades in over 0.4 s the moment any
+   of it shows, and blocks that arrive together go one after another, 80 ms apart (21 Oct,
+   Kash: "make it more engaging"). The page's script marks only blocks that start below the
+   first screen (.home-later) and adds .home-in as each one reaches the screen's edge, so a
+   block is held back only while it is out of sight: nothing in view waits, and with no
+   script, no observer or Reduce Motion nothing is marked and all of it just shows. The
+   grip on the twin pops once the first-load sweep lands (index.html adds .swept) */
+@media screen and (prefers-reduced-motion: no-preference) {
+  .home-page .home-later:not(.home-in) { opacity: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .home-page .home-later.home-in { animation: home-reveal .4s cubic-bezier(0.2,0,0,1) backwards;
+    animation-delay: var(--reveal-delay, 0ms); }
+  .home-page .home-twin-frame.swept .home-twin-grip { animation: grip-pop .4s cubic-bezier(0.2,0,0,1); }
+}
+@keyframes home-reveal { from { opacity: 0; transform: translateY(24px); } }
+@keyframes grip-pop { 50% { transform: translate(-50%, -50%) scale(1.12); } }

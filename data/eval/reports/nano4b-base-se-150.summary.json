@@ -1,0 +1,100 @@
+{
+  "backend": "ollama",
+  "git_sha": "323fd9a",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 1.0,
+      "lo": 1.0,
+      "n": 31,
+      "value": 1.0
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.3213968253968254,
+      "lo": 0.24044444444444443,
+      "n": 150,
+      "value": 0.2807142857142857
+    },
+    "over_treatment": {
+      "hi": 0.26,
+      "lo": 0.13333333333333333,
+      "n": 150,
+      "value": 0.19333333333333333
+    },
+    "primary_in_truth": {
+      "hi": 0.66,
+      "lo": 0.49333333333333335,
+      "n": 150,
+      "value": 0.58
+    },
+    "primary_match": {
+      "hi": 0.46,
+      "lo": 0.3,
+      "n": 150,
+      "value": 0.38
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.46,
+      "lo": 0.3,
+      "n": 150,
+      "value": 0.38
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 150,
+      "value": 0.0
+    },
+    "water_conflict": {
+      "hi": 0.06666666666666667,
+      "lo": 0.006666666666666667,
+      "n": 150,
+      "value": 0.03333333333333333
+    }
+  },
+  "model": "nemotron-3-nano:4b-bf16:no-think",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "pred_primary": {
+    "leave_normal": 34,
+    "move_light": 5,
+    "other": 14,
+    "prune": 17,
+    "shelter": 2,
+    "treat_or_remove": 72,
+    "water": 6
+  },
+  "pred_primary_fine": {
+    "change_soil": 2,
+    "feed": 3,
+    "leave_normal": 34,
+    "move_light": 5,
+    "prune": 17,
+    "repot": 9,
+    "shelter": 2,
+    "treat_or_remove": 72,
+    "water": 6
+  },
+  "prompt_hash": "7ba44f01d95b",
+  "run_id": "nano4b-base-se-150",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 6,
+    "dont_water": 18,
+    "leave_normal": 27,
+    "move_light": 9,
+    "other": 29,
+    "prune": 10,
+    "shelter": 4,
+    "treat_or_remove": 37,
+    "water": 10
+  }
+}

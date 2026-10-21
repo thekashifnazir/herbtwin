@@ -1,0 +1,89 @@
+{
+ "note": "POST-TEST changes (pinch-out is not cut back; each action in the sentence's own words; whole plants are not the affected parts; 'may' read as May only when it is the month), rescored from the saved round-5 forms with no calls. The pre-registered headline stays round 5's own result. The watering word lists were widened after seeing the TEST positives they lost: TEST recall here is optimistic; DEV is the fairer estimate of the cost.",
+ "headline_prereg": {
+  "config": "ultra+E0+cond:ultra",
+  "stages": 3,
+  "negatives": 435,
+  "false_agrees": 4,
+  "false_agree_rate": 0.0092,
+  "false_agree_wilson95": [
+   0.0036,
+   0.0234
+  ],
+  "positives": 92,
+  "recall": 0.8152,
+  "recall_wilson95": [
+   0.7239,
+   0.8813
+  ],
+  "latency_p50_s": 1.57,
+  "latency_p95_s": 2.19,
+  "usd_per_answer": 0.001253,
+  "no_form": 0,
+  "false_agrees_by_kind": {
+   "do": "4/185",
+   "fact": "0/57",
+   "hedged": "0/42",
+   "liking": "0/36",
+   "near": "0/28",
+   "neg": "0/45",
+   "other_plant": "0/21",
+   "question": "0/21"
+  },
+  "false_agree_ids": [
+   2044,
+   2065,
+   2386,
+   2440
+  ],
+  "passes_bar": true
+ },
+ "posthoc": {
+  "negatives": 435,
+  "false_agrees": 0,
+  "false_agree_wilson95": [
+   0.0,
+   0.0088
+  ],
+  "positives": 92,
+  "recall": 0.8152,
+  "recall_wilson95": [
+   0.7239,
+   0.8813
+  ],
+  "false_agree_ids": [],
+  "lost_agree_ids": [
+   2073,
+   2094,
+   2103,
+   2154,
+   2156,
+   2177,
+   2178,
+   2179,
+   2206,
+   2290,
+   2382,
+   2383,
+   2443,
+   2457,
+   2491,
+   2493,
+   2513
+  ]
+ },
+ "dev": {
+  "round5": {
+   "negatives": 415,
+   "false_agrees": 0,
+   "positives": 71,
+   "recall": 0.7183
+  },
+  "now": {
+   "negatives": 415,
+   "false_agrees": 0,
+   "positives": 71,
+   "recall": 0.6901
+  }
+ }
+}

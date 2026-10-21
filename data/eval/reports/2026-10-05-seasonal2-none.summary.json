@@ -1,0 +1,12 @@
+{
+  "n": 203,
+  "accuracy": 0.8275862068965517,
+  "uk_n": 83,
+  "uk_accuracy": 0.7590361445783133,
+  "no_norm_n": 33,
+  "no_norm_accuracy": 0.8181818181818182,
+  "leave_share": 0.5338983050847458,
+  "failed": 2,
+  "spent_usd": 0.584,
+  "arm": "none"
+}

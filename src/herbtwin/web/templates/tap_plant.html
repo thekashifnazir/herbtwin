@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% from "_nav.html" import site_nav %}
+{#- "Tap the plant you mean" (19 Oct, Kash's walk): this photo shows different plants. A tap
+    puts a box round the plant, a third of the photo across; the person drags it to move it
+    and drags a corner to size it (21 Oct: the first, fixed box caught three pots), or an
+    edge to make it narrower or shorter alone (21 Oct, the owner: "reduce box size with
+    vertical and horizontal, not just corners"). The box is the rectangle the server crops
+    (tapping.crop_rect_at: its top-left x, y and its width and height w, h, as shares of the
+    photo), and a press reads it; the whole photo is the other button, side by side, never
+    a gate. Without a script only the whole photo can be used. #}
+{% block title %}Which plant? · herbtwin{% endblock %}
+{% block page %}tap-page{% endblock %}
+{% block nav %}{{ site_nav(person=person) }}{% endblock %}
+{% block main %}
+<h1>Which plant do you mean?</h1>
+{#- no names here: the read's species are its guesses at ONE plant, not a list of the
+    plants in the photo (a live preview, 19 Oct, listed "rosemary, lavender and lavender
+    cotton" for a row of pots) #}
+<p class="lead">This photo shows more than one plant. Tap the one you want advice for, or use the whole photo.</p>
+<form class="tap-form" id="tap-form" method="post" action="/taps/{{ tap_id }}">
+  <input type="hidden" name="x" id="box-x"><input type="hidden" name="y" id="box-y"><input type="hidden" name="w" id="box-w"><input type="hidden" name="h" id="box-h">
+  <div class="tap-photo" id="tap-photo" data-share="{{ '%.4f'|format(share) }}" data-least="{{ '%.4f'|format(least) }}">
+    {#- the photo and the shade round the box are clipped to the photo's rounded corners; the
+        box is not, so its holds reach past the photo's edge (22 Oct, on a phone) #}
+    <div class="tap-frame"><img id="tap-img" src="/taps/{{ tap_id }}/photo" alt="Your photo"><span class="tap-shade" id="tap-shade" hidden></span></div>
+    {#- role="application": a screen reader in browse mode would take the arrow keys for
+        itself; this one small box hands them to the page, and says how (the help below) #}
+    <span class="tap-mark" id="tap-mark" hidden tabindex="0" role="application"
+          aria-label="The box we'll read" aria-describedby="tap-box-help"
+      ><span class="tap-corner" data-corner="nw" aria-hidden="true"></span
+      ><span class="tap-corner" data-corner="ne" aria-hidden="true"></span
+      ><span class="tap-corner" data-corner="sw" aria-hidden="true"></span
+      ><span class="tap-corner" data-corner="se" aria-hidden="true"></span
+      ><span class="tap-edge" data-edge="n" aria-hidden="true"></span
+      ><span class="tap-edge" data-edge="e" aria-hidden="true"></span
+      ><span class="tap-edge" data-edge="s" aria-hidden="true"></span
+      ><span class="tap-edge" data-edge="w" aria-hidden="true"></span
+    ></span>
+  </div>
+  <p class="vh" id="tap-box-help">Arrow keys move the box. Shift with Left or Right changes its width, and Shift with Up or Down changes its height: Right and Up make it bigger, Left and Down smaller. The Smaller box and Bigger box buttons under the photo resize it too.</p>
+  <div class="tap-under">
+    <p class="small muted tap-said" id="tap-said" role="status" aria-live="polite"></p>
+    {#- a way to size the box with taps alone, no drag (WCAG 2.5.7) #}
+    <div class="tap-size" id="tap-size" hidden>
+      <button type="button" class="quiet" id="tap-smaller" aria-label="Smaller box">−</button>
+      <button type="button" class="quiet" id="tap-bigger" aria-label="Bigger box">+</button>
+    </div>
+  </div>
+  <p class="vh" id="tap-size-said" aria-live="polite"></p>
+  <div class="actions tap-go">
+    <button type="submit" name="whole" value="1" id="tap-whole">Use the whole photo</button>
+    <button class="primary" type="submit" id="tap-go" hidden>Use the plant in the box</button>
+  </div>
+</form>
+<p><a class="back" href="/">Use a different photo</a></p>
+{% endblock %}
+{% block photo_copy %}{# kept: the wait and answer pages show it (home's copy, or the crop) #}{% endblock %}
+{% block script %}
+<script>
+(() => {
+  const box = document.getElementById("tap-photo"), img = document.getElementById("tap-img"),
+        mark = document.getElementById("tap-mark"), go = document.getElementById("tap-go"),
+        said = document.getElementById("tap-said"), form = document.getElementById("tap-form"),
+        shade = document.getElementById("tap-shade"), sizing = document.getElementById("tap-size"),
+        smaller = document.getElementById("tap-smaller"), bigger = document.getElementById("tap-bigger"),
+        sized = document.getElementById("tap-size-said");
+  const field = {x: document.getElementById("box-x"), y: document.getElementById("box-y"),
+                 w: document.getElementById("box-w"), h: document.getElementById("box-h")};
+  const share = Number(box.dataset.share) || 0.33;  // the square it starts as (tapping.share_of)
+  const least = Number(box.dataset.least) || 0;  // the least side cut (tapping.least_side)
+  const FINGER = 48;  // and never a side smaller on screen than a finger can hold and move
+  const STEP = 0.02;  // a key moves the box, or changes its width or height, by this share of the photo
+  // Smaller and Bigger: the box's short side by this share of the photo's, the long in step
+  const SIZE_STEP = 0.1;
+  const RATIO = 3;  // never longer than three times across, either way (tapping.RATIO)
+  // an edge or corner holds from 16px outside the box to 28px inside it: 44px for a finger
+  const GRIP_IN = 28;
+  const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+  const pct = (v) => Math.round(v * 100);
+  const frame = () => img.getBoundingClientRect();
+  // the least side on screen, in px: the least the server cuts, and a finger's width
+  const lowest = (r) => { const short = Math.min(r.width, r.height); return Math.min(short, Math.max(least * short, FINGER)); };
+  // a box in px of the photo on screen ({left, top, w, h}) made one the server cuts as it
+  // is: inside the photo, no side under the least, never longer than RATIO times across
+  // (the long side gives way). A side it changes keeps its middle where it was
+  const fit = (b, r) => {
+    const lo = lowest(r);
+    let w = clamp(b.w, lo, r.width), h = clamp(b.h, lo, r.height);
+    w = Math.min(w, RATIO * h); h = Math.min(h, RATIO * w);
+    return {left: clamp(b.left + (b.w - w) / 2, 0, r.width - w),
+            top: clamp(b.top + (b.h - h) / 2, 0, r.height - h), w, h};
+  };
+  const same = (a, b) => Math.abs(a.left - b.left) + Math.abs(a.top - b.top) + Math.abs(a.w - b.w) + Math.abs(a.h - b.h) < 0.5;
+  // Smaller and Bigger: both sides at once about the box's middle, its shape kept
+  const scaled = (b, way, r) => {
+    const short = Math.min(b.w, b.h),
+          k = Math.max(0, short + way * SIZE_STEP * Math.min(r.width, r.height)) / short;
+    return {left: b.left + b.w * (1 - k) / 2, top: b.top + b.h * (1 - k) / 2, w: b.w * k, h: b.h * k};
+  };
+  // the box: its top-left corner (x, y) and its width and height (w, h) as shares of the
+  // photo, so it holds its place when the page is resized; the server cuts this rectangle
+  let at = null;
+  const toPx = (a, r) => ({left: a.x * r.width, top: a.y * r.height, w: a.w * r.width, h: a.h * r.height});
+  const place = (b, r = frame()) => {
+    if (!r.width || !r.height || ![b.left, b.top, b.w, b.h].every(Number.isFinite)) return;
+    const f = fit(b, r);
+    at = {x: f.left / r.width, y: f.top / r.height, w: f.w / r.width, h: f.h / r.height};
+    for (const k of ["x", "y", "w", "h"]) field[k].value = at[k].toFixed(4);
+    const where = {left: at.x * 100 + "%", top: at.y * 100 + "%", width: at.w * 100 + "%", height: at.h * 100 + "%"};
+    Object.assign(mark.style, where);
+    Object.assign(shade.style, where);
+    // an edge's drawn grip goes when its side is too short to hold it clear of the corners
+    mark.classList.toggle("tap-narrow", f.w < 76);
+    mark.classList.toggle("tap-low", f.h < 76);
+    // at the floor or the ceiling a button says so and does nothing, but keeps the focus
+    smaller.setAttribute("aria-disabled", String(same(fit(scaled(f, -1, r), r), f)));
+    bigger.setAttribute("aria-disabled", String(same(fit(scaled(f, 1, r), r), f)));
+  };
+  // said politely, after the change: where the box is, or how big
+  const sayPlace = () => { sized.textContent = `The box's middle is ${pct(at.x + at.w / 2)}% across the photo and ${pct(at.y + at.h / 2)}% down.`; };
+  const saySize = () => { sized.textContent = `The box is ${pct(at.w)}% of the photo wide and ${pct(at.h)}% high.`; };
+  const choose = (x, y) => {
+    if (!(x >= 0 && x <= 1 && y >= 0 && y <= 1)) return;
+    const r = frame(), short = Math.min(r.width, r.height);
+    // a new tap moves the box and keeps its size; the first is a square, `share` across
+    const w = at ? at.w * r.width : share * short, h = at ? at.h * r.height : share * short;
+    place({left: x * r.width - w / 2, top: y * r.height - h / 2, w, h}, r);
+    if (!at) return;
+    mark.hidden = false;
+    shade.hidden = false;
+    sizing.hidden = false;
+    go.hidden = false;
+    said.textContent = "Drag to move, drag an edge or a corner to resize. We'll read the plant in the box.";
+    // the box takes over from the nine regions for a keyboard
+    box.querySelectorAll(".tap-cell").forEach((cell) => { cell.tabIndex = -1; });
+  };
+  img.addEventListener("click", (e) => {
+    const r = img.getBoundingClientRect();
+    choose((e.clientX - r.left) / r.width, (e.clientY - r.top) / r.height);
+  });
+  // which edge or corner a pointer holds ("n", "se", ...), from where it is, not which
+  // element it hit: the holds reach past the box. Along a side the ends are its corners and
+  // the middle its edge; on a small box the holds would cover it, so its middle always moves
+  const handleAt = (e, r) => {
+    const b = toPx(at, r), px = e.clientX - r.left - b.left, py = e.clientY - r.top - b.top,
+          gx = Math.min(GRIP_IN, b.w / 3), gy = Math.min(GRIP_IN, b.h / 3),
+          mx = Math.max(12, Math.min(b.w / 4, b.w / 2 - gx)), my = Math.max(12, Math.min(b.h / 4, b.h / 2 - gy));
+    if (Math.abs(px - b.w / 2) < mx && Math.abs(py - b.h / 2) < my) return "";
+    return (py < gy ? "n" : py > b.h - gy ? "s" : "") + (px < gx ? "w" : px > b.w - gx ? "e" : "");
+  };
+  const CURSOR = {n: "ns-resize", s: "ns-resize", e: "ew-resize", w: "ew-resize",
+                  nw: "nwse-resize", se: "nwse-resize", ne: "nesw-resize", sw: "nesw-resize"};
+  // an edge or corner dragged: the sides it holds follow the pointer, the opposite ones stay
+  // put; no side under the least or past the photo, and past RATIO the dragged side stops
+  const stretch = (b, handle, dx, dy, r) => {
+    const lo = lowest(r), right = b.left + b.w, bottom = b.top + b.h,
+          W = handle.includes("w"), E = handle.includes("e"), N = handle.includes("n"), S = handle.includes("s");
+    let w = W ? right - clamp(b.left + dx, 0, right - lo) : E ? clamp(right + dx, b.left + lo, r.width) - b.left : b.w,
+        h = N ? bottom - clamp(b.top + dy, 0, bottom - lo) : S ? clamp(bottom + dy, b.top + lo, r.height) - b.top : b.h;
+    if (w > RATIO * h) { if (W || E) w = RATIO * h; else h = w / RATIO; }
+    if (h > RATIO * w) { if (N || S) h = RATIO * w; else w = h / RATIO; }
+    return {left: W ? right - w : E ? b.left : b.left + (b.w - w) / 2,
+            top: N ? bottom - h : S ? b.top : b.top + (b.h - h) / 2, w, h};
+  };
+  // drag the box to move it, an edge or a corner to size it: mouse, pen and touch alike
+  let drag = null;
+  mark.addEventListener("pointerdown", (e) => {
+    if (!at || (e.pointerType === "mouse" && e.button !== 0)) return;
+    e.preventDefault();
+    mark.focus({preventScroll: true});
+    const r = frame();
+    drag = {id: e.pointerId, handle: handleAt(e, r), sx: e.clientX, sy: e.clientY, from: toPx(at, r), r};
+    mark.setPointerCapture(e.pointerId);
+  });
+  mark.addEventListener("pointermove", (e) => {
+    if (!drag && at && e.pointerType === "mouse") mark.style.cursor = CURSOR[handleAt(e, frame())] || "move";
+    if (!drag || e.pointerId !== drag.id) return;
+    const {r, from, handle} = drag, dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    place(handle ? stretch(from, handle, dx, dy, r) : {...from, left: from.left + dx, top: from.top + dy}, r);
+  });
+  const end = (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    if (drag.handle) saySize();  // a drag says nothing as it goes, its size once let go
+    drag = null;
+  };
+  ["pointerup", "pointercancel", "lostpointercapture"].forEach((t) => mark.addEventListener(t, end));
+  // by keyboard: arrows move the box; Shift with Left or Right changes its width, with Up or
+  // Down its height, about its middle: Right and Up make it bigger. Alt, Ctrl and Cmd pass
+  // to the browser (Alt+Left and Alt+Right are Back and Forward on Windows)
+  mark.addEventListener("keydown", (e) => {
+    const way = {ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1]}[e.key];
+    if (!way || !at || e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    const r = frame(), b = toPx(at, r);
+    if (e.shiftKey) {
+      const dw = way[0] * STEP * r.width, dh = -way[1] * STEP * r.height;
+      place({left: b.left - dw / 2, top: b.top - dh / 2, w: b.w + dw, h: b.h + dh}, r);
+      saySize();
+    } else {
+      place({...b, left: b.left + way[0] * STEP * r.width, top: b.top + way[1] * STEP * r.height}, r);
+      sayPlace();
+    }
+  });
+  // by taps alone: Smaller and Bigger, both sides at once, a tenth of the short side a time
+  const rescale = (way) => {
+    if (!at) return;
+    const r = frame(), b = toPx(at, r), next = fit(scaled(b, way, r), r);
+    if (same(next, b)) return;
+    place(next, r);
+    saySize();
+  };
+  smaller.addEventListener("click", () => rescale(-1));
+  bigger.addEventListener("click", () => rescale(1));
+  // to start by keyboard: nine regions over the photo, invisible to a pointer (#275 review);
+  // one puts the box there and hands the focus to it
+  ["top left", "top", "top right", "left", "middle", "right", "bottom left", "bottom", "bottom right"]
+    .forEach((where, i) => {
+      const cell = document.createElement("button");
+      cell.type = "button"; cell.className = "tap-cell";
+      cell.setAttribute("aria-label", `The plant at the ${where} of the photo`);
+      Object.assign(cell.style, {left: (i % 3) * 100 / 3 + "%", top: Math.floor(i / 3) * 100 / 3 + "%"});
+      cell.addEventListener("click", () => {
+        choose((i % 3 + 0.5) / 3, (Math.floor(i / 3) + 0.5) / 3);
+        if (at) mark.focus();
+      });
+      box.appendChild(cell);
+    });
+  form.addEventListener("submit", (e) => {
+    if (e.submitter && e.submitter.name === "whole") {
+      for (const k of ["x", "y", "w", "h"]) field[k].value = "";
+      // home's copy of the whole photo, kept fresh: the pages drop a copy over 10 minutes old.
+      // Its closer looks (more) stay with it: the whole photo's read had them
+      try {
+        const kept = JSON.parse(sessionStorage.getItem("herbtwin-photo-pending") || "null");
+        if (kept && kept.src) sessionStorage.setItem("herbtwin-photo-pending", JSON.stringify({src: kept.src, more: kept.more, at: Date.now()}));
+      } catch { /* no storage: the pages show no photo */ }
+      return;
+    }
+    if (!at) { e.preventDefault(); said.textContent = "Tap the plant first, or use the whole photo."; return; }
+    // the wait and answer pages show the photo back from this tab (index.html): the crop,
+    // since the crop is what is read (the box is never below the least the server cuts,
+    // nor past RATIO, so it cuts this same rectangle), 320px on its long side
+    try {
+      const nw = img.naturalWidth, nh = img.naturalHeight, cw = at.w * nw, ch = at.h * nh,
+            k = 320 / Math.max(cw, ch), c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(cw * k)); c.height = Math.max(1, Math.round(ch * k));
+      c.getContext("2d").drawImage(img, at.x * nw, at.y * nh, cw, ch, 0, 0, c.width, c.height);
+      sessionStorage.setItem("herbtwin-photo-pending", JSON.stringify({src: c.toDataURL("image/jpeg", 0.8), at: Date.now()}));
+    } catch { /* no storage or canvas: the pages show no photo */ }
+  });
+})();
+</script>
+{% endblock %}

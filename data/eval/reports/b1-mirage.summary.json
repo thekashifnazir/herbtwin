@@ -1,0 +1,108 @@
+{
+  "advise_cost_usd": 0.564162,
+  "backend": "tokenfactory",
+  "git_sha": "0c3c12b",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.6944444444444444,
+      "lo": 0.4722222222222222,
+      "n": 72,
+      "value": 0.5833333333333334
+    },
+    "hedge_had_answer": {
+      "hi": 0.75,
+      "lo": 0.125,
+      "n": 8,
+      "value": 0.375
+    },
+    "jaccard": {
+      "hi": 0.36234523809523805,
+      "lo": 0.2879285714285714,
+      "n": 200,
+      "value": 0.32590476190476186
+    },
+    "over_treatment": {
+      "hi": 0.035,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.015
+    },
+    "primary_in_truth": {
+      "hi": 0.665,
+      "lo": 0.535,
+      "n": 200,
+      "value": 0.6
+    },
+    "primary_match": {
+      "hi": 0.455,
+      "lo": 0.32,
+      "n": 200,
+      "value": 0.385
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.455,
+      "lo": 0.32,
+      "n": 200,
+      "value": 0.39
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.02,
+      "lo": 0.0,
+      "n": 200,
+      "value": 0.005
+    },
+    "water_conflict": {
+      "hi": 0.055,
+      "lo": 0.01,
+      "n": 200,
+      "value": 0.03
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 200,
+  "n_total": 200,
+  "pred_primary": {
+    "ask_first": 8,
+    "dont_water": 11,
+    "leave_normal": 77,
+    "move_light": 4,
+    "other": 36,
+    "prune": 36,
+    "shelter": 8,
+    "treat_or_remove": 2,
+    "water": 18
+  },
+  "pred_primary_fine": {
+    "change_soil": 14,
+    "check_pests": 8,
+    "dont_water": 11,
+    "feed": 4,
+    "humidity": 1,
+    "leave_normal": 77,
+    "move_light": 4,
+    "mulch": 2,
+    "other": 10,
+    "prune": 36,
+    "repot": 5,
+    "shelter": 8,
+    "treat_or_remove": 2,
+    "water": 18
+  },
+  "prompt_hash": "eaa055e327b4",
+  "run_id": "b1-mirage",
+  "set": "actions_mirage",
+  "truth_primary": {
+    "ask_first": 20,
+    "dont_water": 5,
+    "leave_normal": 33,
+    "move_light": 2,
+    "other": 44,
+    "prune": 34,
+    "shelter": 11,
+    "treat_or_remove": 25,
+    "water": 26
+  }
+}

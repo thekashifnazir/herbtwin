@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% from "_nav.html" import site_nav %}
+{% import "_spot_questions.html" as spotq %}
+{# "What could grow here", three jobs in order: the verdict (the site sheet and a line per
+   group), the top picks (5 a group, only what is not fine about each), then the two
+   questions that sharpen it and the details, folded. Groups and rows come from
+   web/spotting.py (groups, split_lead). On a wide screen the verdict and picks take the
+   left, the questions and details the right. Styles: static/pages/spot.css (.spot-page). #}
+{% block title %}What could grow here · herbtwin{% endblock %}
+{% block page %}spot-page has-band{% endblock %}
+{% block nav %}{{ site_nav(person, accounts) }}{% endblock %}
+{% block wrap %} wide{% endblock %}
+{% block main %}
+{% set r = spot.read %}
+{% set setting_text = {"pot": "Pot", "trough": "Trough", "raised_bed": "Raised bed", "open_ground": "Bed or border", "windowsill": "Windowsill", "unknown": "Setting not clear"} %}
+{% set size_text = {"small": "under 5 L", "medium": "5 to 20 L", "large": "over 20 L", "unknown": "size not clear"} %}
+{% set class_text = {"sun": "full sun", "part_shade": "part shade", "shade": "shade"} %}
+{% set method_text = {"compass": "from your compass reading", "direction": "from the direction you picked", "defaults": "from typical garden walls and fences" ~ (": pick the way it faces to firm it up" if spot and spot.compass else "")} %}
+{% set open_text = "assumes a typical 1.8 m fence about 5 m away" %}
+{% set dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"] %}
+{% set container = r.setting in ("pot", "trough", "windowsill") %}
+{% set ask_facing = spot.compass or (spot.aspect and spot.direction_matters) %}
+{% set ask_squeeze = not container and spot.texture and spot.squeeze in ("ask", "offer") %}
+{% set by = {} %}{% for g in groups %}{% set _ = by.update({g.key: g}) %}{% endfor %}
+{% set lead_up = lead_note and r.setting == "open_ground" %}
+{% set differ_lead = "sources differ on timing. " %}
+{% set seen = namespace(differ=false) %}{% for g in groups %}{% for x in g.top + g.rest %}{% for r in x.pick.reasons if r.startswith(differ_lead) %}{% set seen.differ = true %}{% endfor %}{% endfor %}{% endfor %}{# food in the ground itself #}
+
+{% macro row(x) %}<li class="pick">
+  <div class="pick-head"><p class="what"><strong class="name">{{ x.pick.name }}</strong> <span class="do">{{ x.pick.do }}</span></p>{% if x.source %}<a class="src" href="{{ x.source }}" rel="noopener noreferrer nofollow" target="_blank" aria-label="{{ x.pick.name }} on {{ x.host }} (opens in a new tab)">{{ x.host }}</a>{% endif %}</div>
+  {% if x.flags %}<ul class="chips">{% for c, tone in x.flags %}<li class="chip {{ tone }}">{{ c.name }}: {{ c.value }}</li>{% endfor %}</ul>{% endif %}
+  {# "sources differ on timing" was the most repeated sentence on the site: the RHS window
+     shows with a "±" that opens the other source's (19 Oct small-print plan) #}
+  {% set rs = namespace(plain=[], differ="") %}{% for r in x.pick.reasons %}{% if r.startswith(differ_lead) %}{% set rs.differ = r[differ_lead|length:] %}{% else %}{% set rs.plain = rs.plain + [r] %}{% endif %}{% endfor %}
+  {% if rs.plain %}{% set because = rs.plain|join("; ") %}<p class="because">{{ because[:1]|upper }}{{ because[1:] }}</p>{% endif %}
+  {% if rs.differ %}{% set parts = rs.differ.split(". ") %}<details class="differ"><summary><span aria-hidden="true">±</span> {{ parts[0]|trim(".") }}<span class="visually-hidden"> (sources differ on timing)</span></summary><p>{{ parts[1:]|join(". ") }}</p></details>{% endif %}
+</li>{% endmacro %}
+{% macro rows(g) %}<ul class="picks tone-{{ g.tone }}">{% for x in g.top %}{{ row(x) }}{% endfor %}</ul>
+{% if g.rest %}<details class="more"><summary>{{ g.rest|length }} more</summary><ul class="picks tone-{{ g.tone }}">{% for x in g.rest %}{{ row(x) }}{% endfor %}</ul></details>{% endif %}{% endmacro %}
+
+<div class="page-band">
+  <h1>What could grow here</h1>
+</div>
+<div class="spot-layout">
+<header class="spot-hero">
+  {# the verdict first, as tiles over the band's edge: how many crops in each group #}{% if groups %}<ul class="verdict">
+    {% if "good_now" not in by %}<li class="tone-none"><span class="n">0</span><strong>Good now</strong>: nothing is a sure bet here this month.</li>{% endif %}
+    {% for g in groups %}<li class="tone-{{ g.tone }}"><span class="n">{{ g.rows|length }}</span><a href="#{{ g.key|replace('_', '-') }}">{{ g.title }}</a>: {{ g.line }}</li>{% endfor %}
+  </ul>{% endif %}
+  <dl class="sheet">
+    <div><dt>Setting</dt><dd>{{ setting_text[r.setting] }}{% if r.setting in ("pot", "trough") and r.pot_size != "unknown" %}, {{ size_text[r.pot_size] }}{% endif %}</dd></div>
+    <div><dt>Month</dt><dd>{{ month }}</dd></div>
+    <div><dt>Place</dt><dd>{% if run.location %}{{ run.location.label or run.location.source }}{% else %}place unknown{% endif %}</dd></div>
+    {# the class is June's, so it says "in summer": winter can be sunless at the same spot.
+       Before a direction is picked the hours come from defaults, and the row says so #}
+    {% if spot.sun %}<div><dt>Sun</dt><dd>{{ class_text[spot.sun.june_class]|capitalize }} in summer{% if spot.sun.borderline %}, give or take{% endif %}{% if ask_facing %} · <a href="#sharpen">{% if spot.sun.method == "defaults" %}a guess until you say which way it faces{% else %}which way does it face?{% endif %}</a>{% endif %}</dd></div>{% endif %}
+  </dl>
+  {# the Sun row's year: clear-day hours from the sun's path and this spot's horizon; the
+     band is the low-to-high range, the dot this month (idea 11, 18 Oct) #}
+  {% set arc = sun_arc(spot.sun, month_number) %}{% if arc %}<figure class="sun-arc">
+    <svg viewBox="0 0 300 62" role="img" aria-label="{{ arc.year }}">
+      <polygon class="range" points="{{ arc.band }}"/>
+      <polyline class="mid" points="{{ arc.mid }}"/>
+      <circle class="now" cx="{{ arc.now[0] }}" cy="{{ arc.now[1] }}" r="4.5"/>
+    </svg>
+    <ol class="months" aria-hidden="true">{% for m in "JFMAMJJASOND" %}<li{% if loop.index == month_number %} class="now"{% endif %}>{{ m }}</li>{% endfor %}</ol>
+    <figcaption>{{ arc.said }}</figcaption>
+  </figure>{% endif %}
+  <p class="note told-said" id="told-said" role="status" tabindex="-1"></p>
+  {% for n in notes %}<p class="note">{{ n }}</p>{% endfor %}
+  {% if history %}<p class="note">{{ history }}</p>{% endif %}
+  {% if run.failures | selectattr("stage", "equalto", "spot") | list %}<p class="note">We couldn't read the spot from this photo, so the list comes from the place alone.</p>{% endif %}
+  {% for n in grow.notes %}<p class="note">{{ n }}</p>{% endfor %}
+  {% if check_setting %}<form class="tray warn setting-check" aria-label="Pot or ground" method="post" action="/spots/{{ run.record_id }}/told">
+    <p><strong>Is it in a pot or in the ground?</strong> Today's photo reader can mistake a pot for a bed, and the list depends on it.</p>
+    <div class="actions"><button name="setting" value="pot">Pot</button><button name="setting" value="raised_bed">Raised bed</button><button name="setting" value="open_ground">In the ground</button></div>
+  </form>{% endif %}
+  {# while the pot-or-ground question is up, it is the one way to set the setting #}
+  {% if not check_setting %}<form class="spot-fix" method="post" action="/spots/{{ run.record_id }}/told">
+    <label>Not right? Change the setting
+      <select name="setting" onchange="this.form.submit()">{% if r.setting == "unknown" %}<option value="" selected>pick one</option>{% endif %}{% for v, t in setting_text.items() if v != "unknown" %}<option value="{{ v }}"{% if r.setting == v %} selected{% endif %}>{{ t }}</option>{% endfor %}</select></label>
+    {% if r.setting in ("pot", "trough") %}<label>Pot size
+      <select name="pot_size" onchange="this.form.submit()">{% if r.pot_size == "unknown" %}<option value="" selected>size?</option>{% endif %}{% for v, t in size_text.items() if v != "unknown" %}<option value="{{ v }}"{% if r.pot_size == v %} selected{% endif %}>{{ t }}</option>{% endfor %}</select></label>{% endif %}
+    <noscript><button class="quiet" type="submit">Change</button></noscript>
+  </form>{% endif %}
+</header>
+
+<div class="spot-picks">
+{% if seen.differ %}<p class="note differ-key"><span aria-hidden="true">±</span> = the RHS and Garden Organic give different months: tap it for the other.</p>{% endif %}
+{% for key in ("good_now", "worth_a_try") if key in by %}{% set g = by[key] %}
+<section class="tier" id="{{ key|replace('_', '-') }}">
+<h2>{{ g.title }}</h2>{{ rows(g) }}
+</section>
+{% endfor %}
+{% if lead_up %}<p class="tray warn lead-note"><strong>Check the soil for lead.</strong> {{ lead_note }}</p>{% endif %}
+</div>
+
+<aside class="spot-side">
+{% if ask_facing or ask_squeeze %}<section class="sharpen" id="sharpen">
+<h2>{% if ask_facing and ask_squeeze %}Two quick answers make this surer{% else %}One quick answer makes this surer{% endif %}</h2>
+{% if spot.compass %}<form class="tray ask" id="facing" method="post" action="/spots/{{ run.record_id }}/told">{{ spotq.compass_field(compass_first) }}
+  <p class="actions"><button type="submit">Use it</button></p></form>
+{% elif ask_facing %}{% set cur = dirs[((spot.aspect.heading_deg / 45) | round | int) % 8] %}<form class="tray ask" id="facing" method="post" action="/spots/{{ run.record_id }}/told">
+  <div class="compass"><fieldset><legend>Change direction</legend>
+    <p class="hint">The way the spot faces, away from any wall or fence behind it.</p>
+    {{ spotq.direction_rose(cur, unsure=false) }}</fieldset></div>
+  <p class="actions"><button type="submit">Use it</button></p></form>{% endif %}
+{% if ask_squeeze %}<form class="tray ask" method="post" action="/spots/{{ run.record_id }}/told">{% if spot.squeeze == "offer" %}<p>Want to check? Squeeze test, 1 minute.</p>{% endif %}
+  {{ spotq.squeeze_field(squeeze_choices) }}
+  <p class="actions"><button type="submit">Use it</button></p></form>{% endif %}
+</section>{% endif %}
+
+<section class="spot-details">
+<h2>The details</h2>
+{% if "coming_up" in by %}<details id="coming-up"><summary>Coming up ({{ by.coming_up.rows|length }})</summary>
+  <ul class="picks tone-later">{% for x in by.coming_up.rows %}{{ row(x) }}{% endfor %}</ul></details>{% endif %}
+{% if "not_here" in by %}<details id="not-here" class="not-here"><summary>Not here ({{ by.not_here.rows|length }})</summary>
+  <ul>{% for x in by.not_here.rows %}<li><strong>{{ x.pick.name }}</strong>: {{ x.pick.reasons[0] }}</li>{% endfor %}</ul></details>{% endif %}
+
+<details class="reading"><summary>The spot: sun and frost</summary>
+{% if spot.sun %}{% set june = spot.sun.months[5] %}
+  <p><strong>About {{ "%.0f"|format(june[1]) }} h of direct sun on a clear June day</strong> ({{ "%.0f"|format(june[0]) }} to {{ "%.0f"|format(june[2]) }} h): {{ class_text[spot.sun.june_class] }}{% if spot.sun.borderline %}, borderline{% endif %} <span class="muted">({% if spot.sun.method == "defaults" and not spot.direction_matters %}{{ open_text }}{% else %}{{ method_text[spot.sun.method] }}{% endif %})</span>.</p>
+  {% if spot.sun.cross_check == "disagrees" %}<p class="note">The light in the photo did not match the way it faces; sun hours are less sure.</p>{% endif %}
+  <div class="scroll"><table class="sun-table"><caption>Clear-day hours of direct sun on the 15th of each month</caption>
+    <tr>{% for m in "JFMAMJJASOND" %}<th scope="col">{{ m }}</th>{% endfor %}</tr>
+    <tr>{% for low, mid, high in spot.sun.months %}<td class="num">{{ "%.0f"|format(mid) }}</td>{% endfor %}</tr></table></div>
+  {% if spot.frost and spot.frost.sunshine_year_h %}<p class="note">This area gets about {{ spot.frost.sunshine_year_h }} h of bright sunshine a year.</p>{% endif %}
+{% elif r.setting == "windowsill" %}<p>Indoors: no sun estimate.</p>
+{% else %}<p>No sun estimate without a location.</p>{% endif %}
+{% if spot.frost and spot.frost.air_frost_by_month %}
+  <p>About {{ "%.0f"|format(spot.frost.air_frost_year) }} air frosts a year (1991 to 2020), {{ "%g"|format(spot.frost.air_frost_by_month[month_number - 1]) }} on average in {{ month }}.{% if spot.frost.typical_coldest_night_c is not none %} A typical winter's coldest night: {{ spot.frost.typical_coldest_night_c }} °C.{% endif %}</p>
+{% endif %}
+</details>
+
+<details class="soil"><summary>The soil</summary>
+{% if medium %}<p>{{ medium }}</p>{% endif %}
+{% if container %}{# a container: the maps don't apply #}
+{% elif spot.texture %}{% set t = spot.texture %}
+  <p>{% if t.source == "squeeze" %}Your squeeze test says <strong>{{ t.top }}</strong>.{% elif t.source == "none" %}Soil texture not known here.{% elif t.source == "map+photo" %}The maps and your photo suggest <strong>{{ t.top }}</strong> soil ({{ t.map_class|lower }} on the BGS map).{% else %}The maps suggest <strong>{{ t.top }}</strong> soil ({{ t.map_class|lower }}, BGS).{% endif %}</p>
+  {% if spot.ph and (spot.ph.low is not none or spot.ph.lime) %}<p>{% if spot.ph.low is not none %}Topsoil pH about {{ spot.ph.low }} to {{ spot.ph.high }} (farmland model, not gardens): a £5 kit settles it.{% endif %}{% if spot.ph.lime %} There is lime in the ground.{% endif %}</p>{% endif %}
+  {% set cw = soil_colour_words(r.colour) %}
+  {% if cw or r.organic_matter == "high" %}<p class="note">From the photo: {% if cw %}{{ cw|capitalize }} soil{% endif %}{% if cw and r.organic_matter == "high" %}, {% endif %}{% if r.organic_matter == "high" %}{{ "rich" if cw else "Rich" }} in organic matter{% endif %}.</p>{% endif %}
+{% elif not medium and r.setting == "unknown" %}<p>The soil maps describe the ground itself: pick "Bed or border" above to see them for this spot.</p>
+{% elif not medium %}<p>Soil not known here.</p>
+{% endif %}
+{% if lead_note and not lead_up %}<p class="note lead-note">{{ lead_note }}</p>{% endif %}
+</details>
+
+{% if attributions %}<details class="credits"><summary>Where this comes from</summary>
+<ul>{% for a in attributions %}<li>{{ a }}</li>{% endfor %}
+{% if spot.sun and spot.sun.method == "defaults" and not spot.direction_matters %}<li>Sun hours assume a garden fence or hedge on every side, about 1.8 m high and 5 m away, so the way it faces doesn't change them; the low winter sun stays below that height.</li>{% endif %}</ul>
+</details>{% endif %}
+</section>
+</aside>
+
+<p class="actions spot-again"><a class="button primary" href="/">Try another photo</a></p>
+</div>
+{% endblock %}
+{% block foot %}{{ super() }}<span class="num">Ref {{ run.record_id }}</span>{% endblock %}
+{% block script %}<script>
+(() => {
+  // an answer here ("Use it", a setting) reloads the page: say what changed and move focus
+  // to it, so a screen reader hears the list was redone instead of starting from the top
+  const KEY = "herbtwin-spot-told", said = document.getElementById("told-said");
+  // the flag carries the time, so a post that failed or never left can't announce a later visit
+  const mark = () => { try { sessionStorage.setItem(KEY, JSON.stringify({at: location.pathname, t: Date.now()})); } catch {} };
+  document.querySelectorAll('form[action$="/told"]').forEach(f => {
+    f.addEventListener("submit", mark);
+    f.addEventListener("change", e => { if (e.target.tagName === "SELECT") mark(); });  // submit() fires no submit event
+  });
+  let was = null;
+  try { was = JSON.parse(sessionStorage.getItem(KEY)); sessionStorage.removeItem(KEY); } catch {}
+  if (!said || !was || was.at !== location.pathname || Date.now() - was.t > 15000) return;
+  said.textContent = "Updated with what you told us.";
+  said.focus();
+})();
+</script>{% endblock %}

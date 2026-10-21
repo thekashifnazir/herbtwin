@@ -1,0 +1,78 @@
+{
+  "description": "Paired comparison on questions scored ok in both runs; difference = few_shot minus plain; 95% CI by bootstrap over questions (2000 draws, seed 0).",
+  "runs": {
+    "plain": "2026-10-04-super-mirage-text.jsonl",
+    "few_shot": "2026-10-04-super-mirage-fewshot.jsonl"
+  },
+  "n_paired": 200,
+  "ask_first_primary": {
+    "plain": 75,
+    "few_shot": 66
+  },
+  "metrics": {
+    "primary_match": {
+      "plain": 0.41,
+      "few_shot": 0.395,
+      "diff": -0.015,
+      "lo": -0.065,
+      "hi": 0.035,
+      "n": 200
+    },
+    "primary_in_truth": {
+      "plain": 0.635,
+      "few_shot": 0.62,
+      "diff": -0.015,
+      "lo": -0.065,
+      "hi": 0.03,
+      "n": 200
+    },
+    "jaccard": {
+      "plain": 0.30834523809523806,
+      "few_shot": 0.2990833333333333,
+      "diff": -0.009261904761904763,
+      "lo": -0.04058333333333333,
+      "hi": 0.018273809523809522,
+      "n": 200
+    },
+    "over_treatment": {
+      "plain": 0.015,
+      "few_shot": 0.01,
+      "diff": -0.005,
+      "lo": -0.015,
+      "hi": 0.0,
+      "n": 200
+    },
+    "water_conflict": {
+      "plain": 0.03,
+      "few_shot": 0.04,
+      "diff": 0.01,
+      "lo": -0.015,
+      "hi": 0.035,
+      "n": 200
+    },
+    "asked_when_expert_asked": {
+      "plain": 0.4583333333333333,
+      "few_shot": 0.3472222222222222,
+      "diff": -0.1111111111111111,
+      "lo": -0.2222222222222222,
+      "hi": 0.0,
+      "n": 72
+    },
+    "primary_ok_if_asked_too": {
+      "plain": 0.41,
+      "few_shot": 0.395,
+      "diff": -0.015,
+      "lo": -0.065,
+      "hi": 0.035,
+      "n": 200
+    },
+    "hedge_had_answer": {
+      "plain": 0.0,
+      "few_shot": 0.0,
+      "diff": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 47
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Privacy · herbtwin{% endblock %}
+{% block main %}
+<h1>Privacy</h1>
+<p>herbtwin looks at a photo of a plant and says what it needs. This page says what that
+involves in plain words.</p>
+
+<h2>What is kept</h2>
+<ul>
+  <li><strong>Signed in:</strong> your photos, your plants, the answers and the chat under
+    them are kept in Supabase (hosted in the EU) so the app can remember your plants.</li>
+  <li><strong>Signed out:</strong> nothing is kept on disk. The answer, and the photo as the AI
+    saw it (no location data), stay in the server's memory for an hour, so you can ask
+    follow-up questions or add more photos for a surer answer, then they are gone.</li>
+  <li>The answer page shows your photo back from a small copy kept in your own browser tab.
+    It is not sent again and goes when you close the tab.</li>
+  <li>Locations are rounded to about 1 km before anything uses or keeps them.</li>
+  <li><strong>What can I grow here?</strong> reads your photo once for the setting and the
+    soil and keeps no photo. The way the spot faces is the direction you pick; nothing reads
+    your phone's compass. Signed in, the spot's answer and the direction you picked are kept
+    with the rounded place, so a later photo there can reuse it.</li>
+  <li>To keep the site within its limits we count photo reads per visitor per day. The
+    visitor is stored as a scrambled code made from your internet address, never the
+    address itself.</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>Only the ones the site needs to work, none for tracking or adverts:</p>
+<ul>
+  <li><strong>Signed in:</strong> two sign-in cookies keep you signed in, one for an hour
+    and one for 30 days. Signing out removes them.</li>
+  <li><strong>Judges:</strong> entering the judges' code sets one cookie for 60 days, so
+    the daily photo limits don't apply in that browser.</li>
+  <li>Signed out and without the code, the site sets no cookies.</li>
+</ul>
+
+<h2>Who processes what</h2>
+<ul>
+  <li><strong>Nebius Token Factory</strong> runs the AI models that read your photo and write
+    the advice. The photo is sent with its location data stripped.</li>
+  <li><strong>LangSmith</strong> keeps a record of the AI model calls (the text sent and
+    returned, timings and cost) so we can see how the site is doing and which advice worked.
+    It gets no photos, email addresses or locations, only place names.</li>
+  <li><strong>Supabase</strong> stores signed-in accounts and their plants.</li>
+  <li><strong>Resend</strong> sends the sign-in emails, and a reminder email if you tick
+    "Email me when it's time to check again" under an answer: one email to your sign-in
+    address for that answer. The link in it, or unticking the box, stops it.</li>
+  <li><strong>Open-Meteo</strong> gets a rounded location to look up the weather and a
+    place's coldest winter nights. It also gets a town name you type, to find where it is.</li>
+  <li><strong>postcodes.io</strong> gets a UK postcode you type, to find roughly where it
+    is. It is told nothing else.</li>
+  <li><strong>Open Plantbook</strong> gets the plant's name, to look up the light and soil
+    moisture it likes. It is told nothing else.</li>
+  <li>Web search services (Tavily, Exa, TinyFish) get a search built from the plant's name
+    or your chat question when the app looks something up on gardening sites. Tavily also
+    gets the kind of thing that helps with the advice (for example, horticultural fleece), to
+    find it at UK garden shops; nothing about you goes with it. If you typed a UK town or
+    postcode, Tavily gets that town's name, to find pages that list gardeners there.</li>
+  <li><strong>Google Maps</strong> gets the town you typed only if you tap "Find garden
+    centres near" under an answer: it opens a map search in a new tab. We send it nothing.</li>
+  <li><strong>ElevenLabs</strong> turns the answer into speech when you press "Hear it from
+    your plant". It gets only the words the plant says: no photo, location or account
+    details, and never your voice.</li>
+  <li><strong>Cloudflare</strong> and <strong>Google Cloud</strong> carry and run the site.</li>
+  <li><strong>Nebius AI Cloud</strong> runs the daily reminder job: for each reminder due,
+    it reads your sign-in email address, the plant's name and the action from Supabase and
+    hands the email to Resend.</li>
+</ul>
+
+<h2>Deleting your account</h2>
+<p>Signed in, go to <a href="/plants">My plants</a> and choose <strong>Delete account</strong>.
+Your photos, plants, answers and sign-in are deleted.</p>
+
+<h2>Contact</h2>
+<p>Questions: <a href="https://github.com/thekashifnazir/herbtwin">open an issue on GitHub</a>.</p>
+
+{% endblock %}

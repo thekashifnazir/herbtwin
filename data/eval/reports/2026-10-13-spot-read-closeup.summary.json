@@ -1,0 +1,10 @@
+{
+ "n": 226,
+ "failed": 0,
+ "setting_accuracy": 0.833,
+ "compost_called_soil": 2,
+ "soil_called_compost_share": 0.163,
+ "setting_target_met": false,
+ "cost_usd": 0.0223,
+ "model": "google/gemma-3-27b-it"
+}

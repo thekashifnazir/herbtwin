@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ heading or message }} · herbtwin{% endblock %}
+{% block page %}has-band{% endblock %}
+{% block head %}{% if refresh %}<meta http-equiv="refresh" content="{{ refresh }}">{% endif %}{% endblock %}
+{% block main %}<div class="page-band">{% if heading %}<h1>{{ heading }}</h1>
+<p class="lead">{{ message }}</p>{% else %}<h1>{{ message }}</h1>{% endif %}
+{% if back %}<p class="actions"><a class="button primary" href="{{ back }}">{{ back_text or "Back" }}</a></p>
+{#- a missing page was a dead end with only the nav (19 Oct walk): the way back, as the
+    expired page has, and My plants for someone signed in #}
+{%- elif heading == "Page not found" %}<p class="actions"><a class="button primary" href="/">Check a plant</a>{% if has_session(request) %} <a class="button" href="/plants">My plants</a>{% endif %}</p>{% endif %}</div>{% endblock %}

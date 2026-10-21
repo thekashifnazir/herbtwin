@@ -1,0 +1,107 @@
+{
+  "advise_cost_usd": 0.369062,
+  "backend": "tokenfactory",
+  "git_sha": "f0b841c",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.6451612903225806,
+      "lo": 0.2903225806451613,
+      "n": 31,
+      "value": 0.4838709677419355
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.39244444444444443,
+      "lo": 0.2966666666666667,
+      "n": 150,
+      "value": 0.34368253968253965
+    },
+    "over_treatment": {
+      "hi": 0.07333333333333333,
+      "lo": 0.013333333333333334,
+      "n": 150,
+      "value": 0.04
+    },
+    "primary_in_truth": {
+      "hi": 0.7333333333333333,
+      "lo": 0.58,
+      "n": 150,
+      "value": 0.66
+    },
+    "primary_match": {
+      "hi": 0.5,
+      "lo": 0.3466666666666667,
+      "n": 150,
+      "value": 0.4266666666666667
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.5,
+      "lo": 0.3466666666666667,
+      "n": 150,
+      "value": 0.4266666666666667
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.03333333333333333,
+      "lo": 0.0,
+      "n": 150,
+      "value": 0.013333333333333334
+    },
+    "water_conflict": {
+      "hi": 0.06666666666666667,
+      "lo": 0.006666666666666667,
+      "n": 150,
+      "value": 0.03333333333333333
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "pred_primary": {
+    "dont_water": 16,
+    "leave_normal": 44,
+    "move_light": 13,
+    "other": 27,
+    "prune": 14,
+    "shelter": 3,
+    "treat_or_remove": 27,
+    "water": 6
+  },
+  "pred_primary_fine": {
+    "change_soil": 10,
+    "dont_water": 16,
+    "feed": 9,
+    "humidity": 1,
+    "isolate": 1,
+    "leave_normal": 44,
+    "move_light": 13,
+    "mulch": 1,
+    "other": 4,
+    "prune": 14,
+    "repot": 2,
+    "shelter": 3,
+    "treat_or_remove": 26,
+    "water": 6
+  },
+  "prompt_hash": "114a377a8a65",
+  "run_id": "b1b-se-150",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 6,
+    "dont_water": 18,
+    "leave_normal": 27,
+    "move_light": 9,
+    "other": 29,
+    "prune": 10,
+    "shelter": 4,
+    "treat_or_remove": 37,
+    "water": 10
+  }
+}

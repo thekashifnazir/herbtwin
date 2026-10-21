@@ -1,0 +1,20 @@
+{
+ "step": "S0 compass probe (spec section 12, step 0)",
+ "device": "Samsung Galaxy S24+, Chrome, deviceorientationabsolute",
+ "spot": "strip bed, facing it from the patio (down the garden)",
+ "taps": 10,
+ "heading_median_deg": 334.4,
+ "heading_spread_deg": 1.7,
+ "truth_deg": 191,
+ "truth_checks": [
+  "photo 20261004_131430 with the sun in frame (worked case, +-2 deg)",
+  "photo 20261012_105327 with the sun through cloud: camera at 154.7 deg toward the strip bed corner",
+  "map house outline (Google Maps, north fixed by the map): down the garden about 198 deg"
+ ],
+ "median_error_deg": 143.3,
+ "worst_error_deg": 143.7,
+ "pitch_median_deg": -3.3,
+ "google_maps_beam_deg_approx": 250,
+ "verdict": "compass fails (median over 30 deg): the 8-way tap is the question; COMPASS_FIRST = False",
+ "not_done": "trough and pot row taps; iOS. The verdict does not depend on them."
+}

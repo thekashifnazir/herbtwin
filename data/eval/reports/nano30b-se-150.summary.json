@@ -1,0 +1,106 @@
+{
+  "advise_cost_usd": 0.188584,
+  "backend": "tokenfactory",
+  "git_sha": "323fd9a",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.8709677419354839,
+      "lo": 0.5483870967741935,
+      "n": 31,
+      "value": 0.7096774193548387
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.36734920634920637,
+      "lo": 0.27905555555555556,
+      "n": 150,
+      "value": 0.3238968253968254
+    },
+    "over_treatment": {
+      "hi": 0.11333333333333333,
+      "lo": 0.03333333333333333,
+      "n": 150,
+      "value": 0.07333333333333333
+    },
+    "primary_in_truth": {
+      "hi": 0.7333333333333333,
+      "lo": 0.5866666666666667,
+      "n": 150,
+      "value": 0.66
+    },
+    "primary_match": {
+      "hi": 0.5,
+      "lo": 0.34,
+      "n": 150,
+      "value": 0.42
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.5,
+      "lo": 0.34,
+      "n": 150,
+      "value": 0.42
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.02,
+      "lo": 0.0,
+      "n": 150,
+      "value": 0.006666666666666667
+    },
+    "water_conflict": {
+      "hi": 0.04666666666666667,
+      "lo": 0.0,
+      "n": 150,
+      "value": 0.02
+    }
+  },
+  "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "pred_primary": {
+    "dont_water": 18,
+    "leave_normal": 33,
+    "move_light": 11,
+    "other": 19,
+    "prune": 13,
+    "shelter": 7,
+    "treat_or_remove": 41,
+    "water": 8
+  },
+  "pred_primary_fine": {
+    "change_soil": 5,
+    "dont_water": 18,
+    "feed": 6,
+    "humidity": 3,
+    "isolate": 10,
+    "leave_normal": 33,
+    "move_light": 11,
+    "other": 1,
+    "prune": 13,
+    "repot": 4,
+    "shelter": 7,
+    "treat_or_remove": 31,
+    "water": 8
+  },
+  "prompt_hash": "7ba44f01d95b",
+  "run_id": "nano30b-se-150",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 6,
+    "dont_water": 18,
+    "leave_normal": 27,
+    "move_light": 9,
+    "other": 29,
+    "prune": 10,
+    "shelter": 4,
+    "treat_or_remove": 37,
+    "water": 10
+  }
+}

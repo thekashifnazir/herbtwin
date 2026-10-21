@@ -1,0 +1,91 @@
+{
+  "advise_cost_usd": 0.408524,
+  "backend": "tokenfactory",
+  "git_sha": "bde5544",
+  "metrics": {
+    "asked_when_expert_asked": {
+      "hi": 0.7419354838709677,
+      "lo": 0.41935483870967744,
+      "n": 31,
+      "value": 0.5806451612903226
+    },
+    "hedge_had_answer": {
+      "hi": null,
+      "lo": null,
+      "n": 0,
+      "value": null
+    },
+    "jaccard": {
+      "hi": 0.38722222222222225,
+      "lo": 0.29034920634920636,
+      "n": 150,
+      "value": 0.3397857142857143
+    },
+    "over_treatment": {
+      "hi": 0.05333333333333334,
+      "lo": 0.006666666666666667,
+      "n": 150,
+      "value": 0.02666666666666667
+    },
+    "primary_in_truth": {
+      "hi": 0.7133333333333334,
+      "lo": 0.5533333333333333,
+      "n": 150,
+      "value": 0.6333333333333333
+    },
+    "primary_match": {
+      "hi": 0.52,
+      "lo": 0.36666666666666664,
+      "n": 150,
+      "value": 0.44666666666666666
+    },
+    "primary_ok_if_asked_too": {
+      "hi": 0.52,
+      "lo": 0.36666666666666664,
+      "n": 150,
+      "value": 0.44666666666666666
+    },
+    "unguarded_water_conflict": {
+      "hi": 0.02,
+      "lo": 0.0,
+      "n": 150,
+      "value": 0.006666666666666667
+    },
+    "water_conflict": {
+      "hi": 0.08666666666666667,
+      "lo": 0.02,
+      "n": 150,
+      "value": 0.04666666666666667
+    }
+  },
+  "model": "nvidia/nemotron-3-super-120b-a12b",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_ok": 150,
+  "n_total": 150,
+  "pred_primary": {
+    "dont_water": 17,
+    "leave_normal": 61,
+    "move_light": 9,
+    "other": 17,
+    "prune": 9,
+    "shelter": 2,
+    "treat_or_remove": 28,
+    "water": 7
+  },
+  "prompt_hash": "ee8da6c2c947",
+  "run_id": "2026-10-05-panel-se-150",
+  "set": "actions_se",
+  "truth_primary": {
+    "ask_first": 6,
+    "dont_water": 18,
+    "leave_normal": 27,
+    "move_light": 9,
+    "other": 29,
+    "prune": 10,
+    "shelter": 4,
+    "treat_or_remove": 37,
+    "water": 10
+  }
+}

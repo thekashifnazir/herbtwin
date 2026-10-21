@@ -1,0 +1,63 @@
+{
+  "backend": "tokenfactory",
+  "constant_prediction": null,
+  "cost_usd": 0.104453,
+  "failed_ids": [],
+  "git_sha": "6143762",
+  "largest_disagreements": [
+    "decline_indoor/Snake_Plant_Healthy/Snake_Plant_Healthy_052",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_076",
+    "decline_indoor/Snake_Plant_Leaf_Withering/Snake_Plant_Leaf_Withering_083",
+    "decline_indoor/Spider_Plant_Healthy/Spider_Plant_Healthy_004",
+    "decline_indoor/Spider_Plant_Healthy/Spider_Plant_Healthy_017"
+  ],
+  "limit": null,
+  "max_side": 1024,
+  "mean_latency_ms": 11963,
+  "metrics": {
+    "balanced_accuracy": {
+      "hi": 0.9499861072520144,
+      "lo": 0.8415178571428572,
+      "skipped": 0,
+      "value": 0.8999999999999999
+    },
+    "precision": {
+      "hi": 0.9402985074626866,
+      "lo": 0.7727272727272727,
+      "skipped": 0,
+      "value": 0.8636363636363636
+    },
+    "recall": {
+      "hi": 1.0,
+      "lo": 0.8840579710144928,
+      "skipped": 0,
+      "value": 0.95
+    },
+    "specificity": {
+      "hi": 0.9365079365079365,
+      "lo": 0.75,
+      "skipped": 0,
+      "value": 0.85
+    }
+  },
+  "model": "zai-org/GLM-5.3-Flash",
+  "n_error": 0,
+  "n_failed": 0,
+  "n_missing": 0,
+  "n_not_plant": 1,
+  "n_ok": 120,
+  "n_total": 120,
+  "pred_histogram": {
+    "0": 54,
+    "1": 39,
+    "2": 23,
+    "3": 4
+  },
+  "prompt_hash": "35b1b37a0ad4",
+  "run_id": "2026-10-17-decline_indoor-glm-5-3-flash-scene",
+  "set": "decline_indoor",
+  "tags": {
+    "safe-to-train": 120
+  },
+  "temperature": 0
+}
