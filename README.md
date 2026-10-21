@@ -83,7 +83,7 @@ expert 51% of the time), so the answer now says "our best read, about half the t
 models named the plant 0.54 to 0.63 of the time against GLM-5.3-Flash's 0.85 to 0.87, so
 GLM reads the photo and Nemotron does the reasoning and the talking. What failed is kept
 and published: [docs/reference/nvidia-models.md](docs/reference/nvidia-models.md) and the
-"What didn't work" section of the Devpost story.
+[What didn't work](https://herbtwin.kashifnazir.com/about#didnt) on the site's About page.
 
 ## Where the AI is
 
@@ -362,8 +362,8 @@ I attended the Nebius × NVIDIA event at Builders & Brews London, and built herb
 my own in October 2026. It started in my own garden: herbs in a trough and pots. This
 autumn the oregano died and the purple sage nearly did, and I couldn't tell what was
 normal for October. A professional gardener graded its advice, and a former tree surgeon
-tried it over the phone; what they said changed it. The full story is in
-the private working repo's `devpost.md`.
+tried it over the phone; what they said changed it. The full story is on the site's
+[About page](https://herbtwin.kashifnazir.com/about).
 
 ## Licence
 

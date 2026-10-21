@@ -119,6 +119,11 @@ class ModelMap:
     baseline: str  # the same tokens at Ultra's price, for the steps in the total
 
 
+def seconds(ms: int) -> str:
+    """A step's time as the map says it: "0.0 s" read as nothing at all (21 Oct pass)."""
+    return "under 0.1 s" if ms < 100 else f"{ms / 1000:.1f} s"
+
+
 def usd(v: float) -> str:
     if v == 0:
         return "$0"
@@ -150,7 +155,7 @@ def model_map(rec: AnalysisRecord) -> ModelMap | None:
         MapRow(
             _step_words(s),
             plain_name(s.model),
-            f"{s.ms / 1000:.1f} s",
+            seconds(s.ms),
             "no model"
             if s.stage not in MODEL_STAGES
             else "price not listed"

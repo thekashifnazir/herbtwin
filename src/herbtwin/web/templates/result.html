@@ -289,6 +289,9 @@
       {# a trusted page's own sentence, as written, when code finds it says the same as this
          answer (stages/trusted_page.py); nothing when unsure, off, late or broken #}
       {% if rec.trusted and rec.trusted.quote %}<p class="sources-line trusted-quote">A trusted page says the same: &ldquo;{{ rec.trusted.quote }}&rdquo; ({{ said_by([rec.trusted.url]) }}, found with Tavily)</p>{% endif %}
+      {# else the page it found, as a link only: named by its site, never its title, and only
+         when its address names the plant (stages/trusted_page.read_more); no claim it agrees #}
+      {% set more = read_more(rec) %}{% if more %}<p class="sources-line read-more">Read more on {{ said_by([more]) }} (found with Tavily)</p>{% endif %}
       {# who decided it, in view (19 Oct pre-walk: the answer never named NVIDIA or Nebius) #}
       {% if advised_by %}<p class="decided-by">Decided by {{ advised_by }} on Nebius Token Factory · <a href="/about#made-with">What it's made with</a></p>{% endif %}
       {# the plant reads this answer aloud: its own words, never new advice; shown once the
@@ -686,7 +689,7 @@
       {% set mm = model_map(rec) %}{% if mm %}<div class="model-map">
         <h3>Which model did each step</h3>
         <ul>{% for r in mm.rows %}<li><span class="mm-what"><strong>{{ r.step }}</strong> <span class="mm-model">{{ r.model }}</span></span><span class="mm-cost">{{ r.seconds }} · {{ r.cost }}</span></li>{% endfor %}</ul>
-        <p class="mm-total">This answer cost <strong>{{ mm.total }}</strong> in model time{% if mm.unpriced %}, not counting {{ mm.unpriced|join(" and ") }} (price not listed){% endif %}. On NVIDIA Nemotron 3 Ultra for every step it would have cost about <strong>{{ mm.baseline }}</strong>.</p>
+        <p class="mm-total">This answer cost <strong>{{ mm.total }}</strong> in model time{% if mm.unpriced %}, not counting {{ mm.unpriced|join(" and ") }} (price not listed){% endif %}. On NVIDIA Nemotron 3 Ultra for {{ "the priced steps" if mm.unpriced else "every step" }} it would have cost about <strong>{{ mm.baseline }}</strong>.</p>
         <p class="note">The Ultra figure is an estimate: the same tokens at Ultra's listed price. A different model would use a different number of tokens.</p>
       </div>{% endif %}
       {# how the lead was chosen, when a rule of ours chose it: here, not in the band, where

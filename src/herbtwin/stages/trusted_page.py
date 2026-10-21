@@ -25,6 +25,7 @@ from concurrent.futures import TimeoutError as Late
 from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import TYPE_CHECKING
+from urllib.parse import urlsplit
 
 from herbtwin.adapters.base import ModelAdapter
 from herbtwin.answer import is_seedlings
@@ -127,13 +128,8 @@ def _whole(sentence: str) -> bool:
     return sentence[:1].isupper() and len(sentence) <= MAX_CHARS and not _GLUED.search(sentence)
 
 
-def pick(found: Found, about: Callable[[list[dict]], list[dict]]) -> tuple[str, list[str]] | None:
-    """The first trusted page about the plant that has whole sentences to read, and those
-    sentences as the page wrote them (at most 6); None when there is none. Tavily only:
-    the chain falls back to other providers, this never does."""
-    if found.provider != "tavily":
-        return None
-    hits = [
+def _hits(found: Found) -> list[dict]:
+    return [
         {
             "title": h.title,
             "url": h.url,
@@ -142,28 +138,49 @@ def pick(found: Found, about: Callable[[list[dict]], list[dict]]) -> tuple[str, 
         }
         for h in found.hits
     ]
-    for h in about(hits):
+
+
+def pages(found: Found, about: Callable[[list[dict]], list[dict]]) -> list[str]:
+    """The search's trusted pages about the plant, in its order (at most 8), for "Read
+    more"; none from any provider but Tavily."""
+    if found.provider != "tavily":
+        return []
+    return [h["url"] for h in about(_hits(found)) if is_trusted(h["url"], TRUSTED)][:8]
+
+
+def pick(found: Found, about: Callable[[list[dict]], list[dict]]) -> tuple[str, list[str]] | None:
+    """The first trusted page about the plant that has whole sentences to read, and those
+    sentences as the page wrote them (at most 6); else the first trusted page about the
+    plant, with none, kept for "Read more" (read_more); None when there is no such page.
+    Tavily only: the chain falls back to other providers, this never does."""
+    if found.provider != "tavily":
+        return None
+    first = None
+    for h in about(_hits(found)):
         if not is_trusted(h["url"], TRUSTED):
             continue
         # line by line: a list line with no full stop never runs into the next sentence
         said = [s for s in candidates(_fresh(h["lines"])) if _whole(s)][:MAX_SENTENCES]
         if said:
             return h["url"], said
-    return None
+        first = first or h["url"]
+    return (first, []) if first else None
 
 
 def _read_page(
     search: Search, adapter: ModelAdapter, plant: str, query: str, about: Callable
 ) -> TrustedCheck | None:
-    picked = pick(search.search(query), about)
+    found = search.search(query)
+    picked = pick(found, about)
     if picked is None:
         return None
     url, said = picked
-    forms = list(_READERS.map(lambda s: _read(adapter, plant, s), said))
+    forms = list(_READERS.map(lambda s: _read(adapter, plant, s), said)) if said else []
     return TrustedCheck(
         url=url,
         found_with="tavily",
         sentences=[PageSentence(text=s, form=f) for s, f in zip(said, forms, strict=True)],
+        pages=[u for u in pages(found, about) if u != url],
     )
 
 
@@ -264,6 +281,27 @@ def plant_state(rec: AnalysisRecord, action: CareAction, told: Told | None) -> P
         problem=rec.problem.name if rec.problem else None,
         seedlings=obs is not None and is_seedlings(obs),
     )
+
+
+def page_names(url: str, *names: str | None) -> bool:
+    """The page's own address names the plant ("/herbs/parsley/", "/ocimum-basilicum"): a
+    page found for a problem can be about another plant (the RHS lily-beetle page for
+    rosemary beetle, 21 Oct), and a link to it would mislead."""
+    path = urlsplit(url).path.lower().replace("-", " ").replace("_", " ")
+    return any(re.search(rf"\b{re.escape(n.lower())}\b", path) for n in names if n and len(n) > 2)
+
+
+def read_more(rec: AnalysisRecord) -> str | None:
+    """The trusted page found for this answer, to link as "Read more" when nothing on it is
+    quoted: no claim that it agrees, so only when its address names the plant. The page
+    is named by its site on the answer page, never by its title (a page's own words)."""
+    page, pack = rec.trusted, rec.pack
+    if page is None or page.quote or pack is None:
+        return None
+    # our own names for the plant (the pack's Latin and common name), never the photo
+    # model's ("Sweet basil", a cultivar's quotes)
+    names = (pack.species, *pack.common_name.split("/"))
+    return next((u for u in (page.url, *page.pages) if page_names(u, *names)), None)
 
 
 def quoted(page: TrustedCheck | None, state: PlantState) -> TrustedCheck | None:

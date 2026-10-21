@@ -185,3 +185,24 @@ def test_a_broken_trace_store_never_stops_an_answer(tmp_path, caplog):
     rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN)
     assert rec.answer is not None and rec.failures == []
     assert "receipt failed" in caplog.text
+
+
+def test_with_an_unpriced_model_the_baseline_says_the_priced_steps_not_every_step(tmp_path):
+    # 22 Oct pass: the Ultra figure leaves an unpriced model out, so "every step" overstated it
+    rec = _full_plan(tmp_path)
+    rows = [_row(1, "observe", "acme/unlisted-vision", 2000, 300), _row(2, "advise", SUPER, 10, 10)]
+    rec.receipt = receipt.from_rows(rows, receipt.MODEL_STAGES)
+    total = _render(rec).split('<p class="mm-total">', 1)[1].split("</p>", 1)[0]
+    assert "On NVIDIA Nemotron 3 Ultra for the priced steps it would have cost" in total
+    assert "every step" not in total
+    rec.receipt = _receipt()  # every model priced: every step
+    assert "for every step it would have cost" in _render(rec)
+
+
+def test_a_step_under_a_tenth_of_a_second_says_so_never_zero():
+    # 22 Oct pass: "Our plant data · 0.0 s" read as if it took no time, or none was measured
+    assert receipt.seconds(3) == "under 0.1 s" and receipt.seconds(99) == "under 0.1 s"
+    assert receipt.seconds(100) == "0.1 s" and receipt.seconds(9500) == "9.5 s"
+    m = receipt.model_map(AnalysisRecord.model_validate({**_bare(), "receipt": _receipt()}))
+    research = next(r for r in m.rows if r.step == "Looked up how it grows")
+    assert research.seconds == "under 0.1 s"

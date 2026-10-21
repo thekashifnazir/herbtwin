@@ -209,11 +209,21 @@ class TrustedCheck(BaseModel):
     found_with: Literal["tavily"]
     sentences: list[PageSentence] = Field(max_length=12)
     quote: str | None = None
+    # the search's other trusted pages about the plant, in its order, for "Read more"
+    # (trusted_page.read_more): addresses only, never their words
+    pages: list[str] = Field(default_factory=list, max_length=8)
 
     @field_validator("url")
     @classmethod
     def _trusted_page(cls, v: str) -> str:
         if not _trusted(v):
+            raise ValueError("not an https page on a trusted site")
+        return v
+
+    @field_validator("pages")
+    @classmethod
+    def _trusted_pages(cls, v: list[str]) -> list[str]:
+        if not all(_trusted(u) for u in v):
             raise ValueError("not an https page on a trusted site")
         return v
 

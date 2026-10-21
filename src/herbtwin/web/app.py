@@ -103,6 +103,7 @@ from herbtwin.spot import (
 from herbtwin.spot_questions import COMPASS_FIRST
 from herbtwin.stages.advise import advisors_said
 from herbtwin.stages.problem import signs, slugs_seen
+from herbtwin.stages.trusted_page import read_more
 from herbtwin.sun_arc import sun_arc
 from herbtwin.tracing import trace_root, traced
 from herbtwin.twin_bank import figure as twin_figure
@@ -193,6 +194,7 @@ TEMPLATES.env.globals["top_doubt"] = top_doubt  # "Mostly: …" beside How sure 
 TEMPLATES.env.globals["light_said"] = light_said  # the light we measured, on the band
 TEMPLATES.env.globals["advisors_said"] = advisors_said  # who advised, in plain words
 TEMPLATES.env.globals["advisor_lines"] = advisor_lines  # what each said, checked
+TEMPLATES.env.globals["read_more"] = read_more  # the page Tavily found
 TEMPLATES.env.globals["model_map"] = model_map  # each step's model, time and cost
 TEMPLATES.env.globals["soil_colour_words"] = soil_colour_words  # no Munsell codes on the page
 TEMPLATES.env.globals["no_cure_headline"] = NO_CURE_HEADLINE  # Compare says why it is empty

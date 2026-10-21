@@ -127,6 +127,7 @@ def main(argv: list[str] | None = None) -> int:
                 "about": seen.get("about"),
                 "url": page.url if page else None,
                 "quote": rec.trusted.quote if rec.trusted else None,
+                "read_more": trusted_page.read_more(rec),
                 "sentences": [
                     {
                         "text": s.text,
@@ -139,9 +140,11 @@ def main(argv: list[str] | None = None) -> int:
             rows.append(row)
             print(
                 f"{photo.name} #{i}: {row['species']} {action} -> {row['path']}"
-                f"{' QUOTE' if row['quote'] else ''} ({len(row['sentences'])} read)"
+                f"{' QUOTE' if row['quote'] else ''}{' LINK' if row['read_more'] else ''}"
+                f" ({len(row['sentences'])} read)"
             )
     print(f"\nquotes {sum(bool(r.get('quote')) for r in rows)}/{len(rows)}")
+    print(f"read-more links {sum(bool(r.get('read_more')) for r in rows)}/{len(rows)}")
     print(Counter(r["path"] for r in rows))
     print(f"spent ${spend.spent:.3f}")
     if args.out:

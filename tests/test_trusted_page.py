@@ -239,6 +239,106 @@ def test_a_cut_sentence_at_the_snippets_start_is_never_read():
     _wait_for_free_slots()
 
 
+MORE = (
+    '<p class="sources-line read-more">Read more on '
+    '<a href="{url}" rel="noopener noreferrer">RHS</a> (found with Tavily)</p>'
+)
+
+
+def test_a_page_found_but_not_quoted_is_a_plain_read_more_link(tmp_path):
+    # 22 Oct (best use of Tavily): the page Tavily found, shown on every answer that has
+    # one, named by its site, never by its title, and with no claim that it agrees
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, f"...cut off. {LIKING}", {LIKING: A_LIKING})
+        page = _answer(c)
+    assert MORE.format(url=RHS_BASIL) in page.text
+    assert "How to grow basil" not in page.text  # the hit's title, the page's own words
+    assert "trusted-quote" not in page.text and "says the same" not in page.text
+
+
+def test_a_quoted_page_is_not_linked_twice(tmp_path):
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, SAID, {SAID: WATER})
+        page = _answer(c)
+    assert LINE.format(quote=SAID, url=RHS_BASIL) in page.text
+    assert "read-more" not in page.text
+
+
+def test_a_page_whose_address_names_another_plant_is_not_linked(tmp_path, monkeypatch):
+    lily = "https://www.rhs.org.uk/biodiversity/lily-beetle"
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, LIKING, {LIKING: A_LIKING})
+        s.found = Found([Hit("Lily beetle", lily, LIKING)], "tavily", None)
+        page = _answer(c)
+    assert "read-more" not in page.text and lily not in page.text
+
+
+def test_read_more_links_the_first_trusted_page_whose_address_names_the_plant():
+    # 22 Oct samples: the page read for a quote was "what to plant in January" for basil,
+    # while the RHS basil page was the search's next trusted page
+    from herbtwin.schemas import KnowledgePack, TrustedCheck
+
+    january = "https://www.gardenersworld.com/plants/what-to-plant-january"
+    pages = ["https://www.rhs.org.uk/biodiversity/lily-beetle", RHS_BASIL]
+    pack = KnowledgePack.model_construct(species="ocimum basilicum", common_name="basil")
+    rec = AnalysisRecord.model_construct(
+        pack=pack,
+        trusted=TrustedCheck(url=january, found_with="tavily", sentences=[], pages=pages),
+    )
+    assert trusted_page.read_more(rec) == RHS_BASIL
+    rec.trusted = rec.trusted.model_copy(update={"pages": pages[:1]})
+    assert trusted_page.read_more(rec) is None  # nothing names basil
+    rec.trusted = rec.trusted.model_copy(update={"url": RHS_BASIL, "quote": SAID})
+    assert trusted_page.read_more(rec) is None  # quoted: the quote line links it already
+    # by the pack's Latin name too, and a "/" in its common name
+    rec.pack = KnowledgePack.model_construct(
+        species="coriandrum sativum", common_name="Coriander/cilantro"
+    )
+    rec.trusted = TrustedCheck(
+        url="https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+        found_with="tavily",
+        sentences=[],
+    )
+    assert trusted_page.read_more(rec) == rec.trusted.url
+
+
+@pytest.mark.parametrize(
+    ("url", "names", "want"),
+    [
+        ("https://www.rhs.org.uk/herbs/parsley/grow-your-own", ("parsley",), True),
+        ("https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own", ("lemon balm",), True),
+        (
+            "https://www.gardenersworld.com/plants/ocimum-basilicum",
+            ("basil", "Ocimum basilicum"),
+            True,
+        ),
+        # found for rosemary beetle, but about another plant: never linked (21 Oct)
+        (
+            "https://www.rhs.org.uk/biodiversity/lily-beetle",
+            ("rosemary", "Salvia rosmarinus"),
+            False,
+        ),
+        ("https://www.rhs.org.uk/herbs/growing", ("basil",), False),
+        ("https://www.rhs.org.uk/herbs/basilisk-tips", ("basil",), False),  # whole words only
+        ("https://www.rhs.org.uk/basil", (None, "", "ba"), False),  # no usable name
+    ],
+)
+def test_a_page_is_linked_only_when_its_address_names_the_plant(url, names, want):
+    assert trusted_page.page_names(url, *names) is want
+
+
+def test_a_page_with_nothing_to_read_is_kept_for_read_more_and_never_read():
+    reader = Reader({LIKING: A_LIKING})
+    s = FakeSearch(Found([Hit("Basil", RHS_BASIL, "...cut off here")], "tavily", None))
+    page = trusted_page.finish(trusted_page.start(s, reader, "basil", None, 10, lambda h: h))
+    assert page.url == RHS_BASIL and page.sentences == [] and page.quote is None
+    assert reader.prompts == []
+    _wait_for_free_slots()
+
+
 def _rec(**obs):
     o = Observation.model_validate({**OBS, **obs})
     return AnalysisRecord.model_construct(
@@ -270,7 +370,9 @@ def test_a_list_line_with_no_full_stop_never_runs_into_the_next_sentence():
     reader = Reader({glued: WATER, lines[1]: A_LIKING})
     s = FakeSearch(Found([hit], "tavily", None))
     page = trusted_page.finish(trusted_page.start(s, reader, "rosemary", None, 10, lambda h: h))
-    assert page is None  # the glued line is gone, and the line after an unended one too
+    # the glued line is gone, and the line after an unended one too: the page is kept for
+    # "Read more", with nothing read
+    assert page.sentences == [] and reader.prompts == []
 
 
 @pytest.mark.parametrize("told", [{"setting": "indoor"}, {"place": "London"}])
