@@ -5,6 +5,8 @@ words, plainer decision cards, and the dashed "not built yet" box kept."""
 import re
 from pathlib import Path
 
+import pytest
+
 from herbtwin.web import style
 from tests.test_web_answer_reveal import _rules
 from tests.test_web_spot import HOME
@@ -12,6 +14,8 @@ from tests.test_web_spot import _client as _spot_client
 
 ROOT = Path(__file__).parents[1]
 SHEET = ROOT / "src/herbtwin/web/static/pages/about-built.css"
+# round 4 (22 Oct): the section's new rules, sorting after about.css
+SHEET_4 = ROOT / "src/herbtwin/web/static/pages/about_built.css"
 
 
 def _built(tmp_path, monkeypatch, env: dict | None = None) -> str:
@@ -100,7 +104,7 @@ def test_the_nebius_line_is_plain_and_true(tmp_path, monkeypatch):
     # runs the job on Nebius AI Cloud
     built = _built(tmp_path, monkeypatch)
     plain = (
-        "<p>Every AI model runs on Nebius Token Factory. "
+        '<p class="about-nebius">Every AI model runs on Nebius Token Factory. '
         "Reminder emails come from a small daily job on Nebius AI Cloud.</p>"
     )
     assert plain in built
@@ -121,15 +125,20 @@ def test_with_the_voice_on_the_nebius_line_names_its_one_exception(tmp_path, mon
     assert "voice (ElevenLabs)" in built
 
 
-def test_the_decision_cards_are_plain_and_carry_the_reports_figures(tmp_path, monkeypatch):
+def test_the_decisions_are_bullets_not_cards_and_carry_the_reports_figures(tmp_path, monkeypatch):
+    # round 4 (22 Oct, Kash: "maybe we just do bullet points here with style like we did on
+    # Moveset instead? break up the constant boxes"): a bold lead, then plain words, no card
     built = _built(tmp_path, monkeypatch)
-    cards = built.split('<ul class="about-cards decisions">', 1)[1].split("</ul>", 1)[0]
-    for title in (
-        "<strong>The mid-size model decides, not the biggest.</strong>",
-        "<strong>The small model runs the chat.</strong>",
-        "<strong>A non-NVIDIA model reads the photo, because it named plants better.</strong>",
-    ):
-        assert title in cards, title
+    decided = built.split("<h3>A few decisions I'd call out</h3>", 1)[1]
+    assert re.sub(r"\s+", " ", decided).startswith(' <ul class="about-points">')
+    cards = decided.split("</ul>", 1)[0]
+    assert "about-card" not in cards and "ink" not in cards
+    leads = re.findall(r"\n    <li><strong>([^<]+)</strong> ", cards)
+    assert leads == [
+        "The mid-size model decides, not the biggest.",
+        "The small model runs the chat.",
+        "A non-NVIDIA model reads the photo, because it named plants better.",
+    ]
     for figure in ("12.7%", "in 2%", "10 of 10", "about half", "0.54 to 0.627", "0.846 to 0.867"):
         assert figure in cards, figure
     assert (
@@ -145,11 +154,52 @@ def test_the_decision_cards_are_plain_and_carry_the_reports_figures(tmp_path, mo
     assert "| 10/10, 10/10, 10/10 | 15 s, 14 s, ~15 s |" in nano and "| 32 s, 24 s |" in nano
 
 
-def test_about_built_css_is_scoped_to_the_page_and_uses_tokens_only():
-    sheet = SHEET.read_text("utf-8")
+def test_the_weather_path_says_what_it_carries_to_the_twin(tmp_path, monkeypatch):
+    # round 4 (22 Oct, Kash: "instead of a long impossible line between them, do something
+    # with it"): the green wire from the weather carries a label naming what the twin takes
+    turn = _steps(_built(tmp_path, monkeypatch))[3]
+    assert turn.startswith('class="turn">')
+    feed = re.search(r'<p class="flow-feed">(.*?)</p>', turn, flags=re.S)
+    assert feed and re.sub(r"<[^>]+>", "", feed.group(1)) == (
+        "Day by day: night lows, rain and drying"
+    )
+    # and that is true: the twin steps each forecast day on its low (frost), its rain (water
+    # in) and its evapotranspiration (water out), and nothing else of the weather
+    twin = (ROOT / "src/herbtwin/stages/twin.py").read_text("utf-8")
+    assert "action, i, d.t_min, d.t_max, d.et0_mm, d.rain_mm, vol" in twin
+    assert "t_min, _t_max, et0, rain, watering = _apply_action(" in twin  # the high unused
+    assert "frost=frost_probability(t_min," in twin
+    assert "water_in = rain_mm * pot.cover_factor" in twin and "out = et0_mm * kc" in twin
+    # no L across the frame: on a wide screen the second row runs back, right to left, so the
+    # twin sits right under the weather and the wire is one straight drop through the label
+    rules = {s: b for _, s, b in _rules(SHEET_4.read_text("utf-8"))}
+    assert rules[".about-page .flow-built > li:nth-child(5)"] == "grid-area: 2 / 4;"
+    assert rules[".about-page .flow-built > li:nth-child(8)"] == "grid-area: 2 / 1;"
+    back = rules[".about-page .flow-built > li:nth-child(n+6)::before"]
+    assert 'content: "\\2190" / ""' in back  # the row's arrows point back, left
+    old = _rules(SHEET.read_text("utf-8"))
+    assert not any(s.endswith(("li.turn::after", ".turn + li::after")) for _, s, _ in old)
+    wire = next(b for s, b in rules.items() if s.endswith(".flow-feed::after"))
+    assert "background: var(--ok)" in wire
+
+
+def test_the_weather_path_label_counts_in_few_words(tmp_path, monkeypatch):
+    # the page's word cap: the label adds a handful of words, the bullets none
+    import html
+
+    built = _built(tmp_path, monkeypatch)
+    words = html.unescape(re.sub(r"<[^>]+>", " ", '<h2 id="built">' + built)).split()
+    assert len(words) <= 393 + 8
+
+
+@pytest.mark.parametrize(
+    ("sheet", "least"), [(SHEET, 10), (SHEET_4, 5)], ids=["about-built", "about_built"]
+)
+def test_about_built_css_is_scoped_to_the_page_and_uses_tokens_only(sheet, least):
+    sheet = sheet.read_text("utf-8")
     assert style._minify(sheet) in style.CSS  # inlined by style.py, no <link> needed
     rules = _rules(sheet)
-    assert len(rules) > 10
+    assert len(rules) > least  # each sheet keeps its own guard (review)
     for _, sel, body in rules:
         for part in sel.split(","):
             assert part.strip().startswith(".about-page"), sel
@@ -157,6 +207,22 @@ def test_about_built_css_is_scoped_to_the_page_and_uses_tokens_only():
         for prop, value in re.findall(r"(?:^|;)\s*([a-z-]+)\s*:\s*([^;]+)", body):
             if prop in ("color", "background", "background-color", "border-color"):
                 assert value.strip().startswith(("var(--", "transparent", "none")), (sel, prop)
+
+
+def test_the_flow_boxes_stay_big():
     # bigger boxes and text in the flow (Kash: "now ~11px")
+    rules = _rules(SHEET.read_text("utf-8"))
     node = next(b for _, s, b in rules if s == ".about-page .flow-built .node")
     assert int(re.search(r"font-size: (\d+)px", node).group(1)) >= 18
+
+
+def test_the_decision_bullets_are_moveset_style():
+    # Moveset's "about-list": a small round accent dot before each, the lead bold in the
+    # page's ink, the rest muted
+    rules = {s: b for _, s, b in _rules(SHEET_4.read_text("utf-8"))}
+    dot = next(b for s, b in rules.items() if s.endswith(".about-points > li::before"))
+    assert "background: var(--primary)" in dot and "border-radius: 50%" in dot
+    item = next(b for s, b in rules.items() if s.endswith(".about-points > li"))
+    assert "color: var(--muted-fg)" in item
+    lead = next(b for s, b in rules.items() if s.endswith(".about-points > li > strong"))
+    assert "color: var(--fg)" in lead

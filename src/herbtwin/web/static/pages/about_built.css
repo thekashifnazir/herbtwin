@@ -1,0 +1,40 @@
+/* About, "How it's built", round 4 (22 Oct, Kash's notes: "boxes after boxes"). This sheet
+   sorts after about.css ("_" after "."), so its rules win on order. Theme tokens only. */
+
+/* the weather's path says what it carries (Kash: "instead of a long impossible line between
+   them, do something with it"): a sky label, the weather's colour, ringed in the path's green.
+   On a phone it sits under the weather box, the green arrow below it into the twin */
+.about-page .flow-built > li.turn > .flow-feed { margin: 0; align-self: center; text-align: center; }
+.about-page .flow-built .flow-feed > span { display: inline-block; max-width: 15rem; padding: 6px 14px;
+  border: 2px solid var(--ok); border-radius: 999px; background: var(--sky); color: var(--sky-fg);
+  font: 600 16px/1.35 var(--sans); }
+.about-page .flow-built .flow-feed > span > b { display: block; font-weight: 700; }
+@media (min-width: 960px) {
+  /* on a wide screen the second row runs back, right to left, so the twin sits under the
+     weather: the path is one straight drop through its label, not an L across the frame. The
+     answer ends bottom left, over what hangs off it */
+  .about-page .flow-built > li:nth-child(5) { grid-area: 2 / 4; }
+  .about-page .flow-built > li:nth-child(6) { grid-area: 2 / 3; }
+  .about-page .flow-built > li:nth-child(7) { grid-area: 2 / 2; }
+  .about-page .flow-built > li:nth-child(8) { grid-area: 2 / 1; }
+  .about-page .flow-built > li:nth-child(n+6)::before { content: "\2190" / ""; left: auto; right: -36px; }
+  /* the green line runs from the weather box down through the label to the arrow into the
+     twin (about-built.css), so the space under the weather says what flows */
+  .about-page .flow-built > li.turn > .flow-feed { flex: 1 0 auto; display: flex; flex-direction: column;
+    align-items: center; margin: -14px 0 -36px; }
+  .about-page .flow-built > li.turn > .flow-feed::before,
+  .about-page .flow-built > li.turn > .flow-feed::after { content: ""; flex: 1 0 12px; width: 3px;
+    background: var(--ok); }
+  .about-page .flow-built .flow-feed > span { max-width: 14rem; border-radius: var(--surface); }
+}
+
+/* the decisions as Moveset's bullets (Kash: "bullet points here with style like we did on
+   Moveset instead? break up the constant boxes"): a small green dot, the lead in bold ink,
+   the rest muted; no cards */
+.about-page .about .about-points { list-style: none; margin: 8px 0 0; padding: 0; display: flex;
+  flex-direction: column; gap: 14px; }
+.about-page .about .about-points > li { position: relative; max-width: 66ch; margin: 0; padding-left: 24px;
+  font-size: 18px; line-height: 1.5; color: var(--muted-fg); }
+.about-page .about .about-points > li::before { content: ""; position: absolute; left: 2px;
+  top: calc(0.75em - 4px); width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
+.about-page .about .about-points > li > strong { color: var(--fg); font-weight: 700; }

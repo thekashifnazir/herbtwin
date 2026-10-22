@@ -3,9 +3,7 @@
    the same lines; it sorts before about.css ("-" before "."), so its rules carry one more
    element than the ones they override there. Theme tokens only; nothing under 16px. */
 
-/* What it does: the heading sits level with the top of the cost card beside it */
-.about-page .about-what .about-two h2 { margin-top: 0; }
-.about-page .about-what .about-two p { margin: 0 0 8px; max-width: var(--measure); }
+/* What it does: since round 4 one card with the cost (about_top_who.css) */
 
 /* What didn't work: the lesson, then the evidence, then what we do now; all the same shape,
    filling the row (three, then two wider) with no gap left over */

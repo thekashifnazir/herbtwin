@@ -52,7 +52,7 @@ def test_old_credits_links_land_on_the_credits_section(tmp_path):
 
 def test_the_answers_example_cost_is_labelled_one_example_and_an_estimate(tmp_path):
     page = _about(tmp_path)
-    cost = page.split('<div class="about-receipt about-card ink">', 1)[1].split("</div>", 1)[0]
+    cost = page.split('<div class="about-receipt">', 1)[1].split("</div>", 1)[0]
     assert "<strong>$0.0040</strong>" in cost and "<strong>about $0.0177</strong>" in cost
     assert "One example, not an average." in cost
     assert "the same tokens at Ultra's listed price" in cost
@@ -100,7 +100,9 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, mo
     )
     # one rule (22 Oct, round 3 joined): the words shown on load, capped at what the four
     # round-3 sections measured together (1,469) plus about 40; grow it only on purpose
-    assert len(words.split()) <= 1510
+    # TEMPORARY while round 4's four parts land in any order (22 Oct): the round-4
+    # integration resets this to the measured total plus about 40
+    assert len(words.split()) <= 1560
     repo = "https://github.com/thekashifnazir/herbtwin/blob/main/"
     for doc in (
         "docs/reference/nvidia-models.md",
@@ -367,7 +369,7 @@ def test_the_results_are_the_questions_they_answer_with_fair_bars(tmp_path, monk
     for card, (colour, question, number, bars, key) in zip(cards, CARDS, strict=True):
         card = html.unescape(card)
         assert card.startswith(f"{colour} ink"), question
-        assert f"<h3>{question}</h3>" in card
+        assert f"<h4>{question}</h4>" in card
         assert f'<p class="answer"><strong>{number}</strong>' in card, question
         assert [(w, v, float(x)) for w, v, x in BAR.findall(card)] == bars, question
         if key:
@@ -378,6 +380,20 @@ def test_the_results_are_the_questions_they_answer_with_fair_bars(tmp_path, monk
     for _, question, _, bars, _ in CARDS:
         scales = {round(x / float(v.split()[0].rstrip("%")), 1) for _, v, x in bars}
         assert len(scales) <= 1, (question, scales)
+
+
+def test_the_question_cards_have_their_own_heading_under_the_flow(tmp_path, monkeypatch):
+    # round 4 (22 Oct, Kash: the cards "look great! but need a heading for this section"): a
+    # heading between the test flow and the cards names the list, and each question sits a
+    # level under it
+    _, _, works = _flows(tmp_path, True, monkeypatch)
+    after_flow = works.split("</figure>", 1)[1]
+    assert after_flow.lstrip().startswith(
+        '<h3 class="works-head" id="works-results">What the tests found</h3>\n'
+        '  <ul class="works-cards" aria-labelledby="works-results">'
+    )
+    assert works.count("<h4>") == 7 and "<h3>" not in after_flow
+    assert ".about-page .about h3.works-head {" in style.CSS
 
 
 def test_the_ceiling_is_named_for_what_it_is(tmp_path, monkeypatch):
@@ -405,7 +421,17 @@ def test_who_made_it_is_kashs_own_bio_and_ends_on_the_public_repo(tmp_path):
     page = _about(tmp_path)
     who = page.split('<h2 id="who">', 1)[1].split("</section>", 1)[0]
     assert "I'm Kash, a Senior Technical Architect based in London." in who
-    assert "the architecture and the judgement calls are mine" in who
+    # round 4: Moveset's voice (22 Oct, Kash: "the Moveset who made it is much better")
+    for said in (
+        "herbtwin inverts that: one idea, one person, built end to end",
+        "I was at the London event",
+        "because it is the reason this exists at all",
+        "I've never been a career developer",
+        "The architecture and the judgement calls are mine.",
+        '<a href="https://kashifnazir.com" rel="noopener noreferrer">kashifnazir.com</a>',
+        '<a href="https://www.linkedin.com/in/kashifnazir" rel="noopener noreferrer">LinkedIn</a>',
+    ):
+        assert said in who, said
     assert '<a class="button" href="https://github.com/thekashifnazir/herbtwin"' in who
 
 
@@ -446,10 +472,7 @@ def test_round_two_colours_every_source_and_says_what_each_colour_means(tmp_path
 def test_round_two_turns_the_long_text_into_cards(tmp_path):
     # Kash: "just not helpful"; the "All of it is public" card ("like this!") is the model
     page = _about(tmp_path)
-    didnt = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
-    assert didnt.count('<li class="about-card rules ink"><strong>') == 5
-    nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
-    assert nxt.count('<li class="about-card later">') == 5
+    # (round 4 turned What didn't work and What's next out of cards again: see below)
     assert page.count('<blockquote class="about-card quote ink">') == 2
     css = style.CSS
     assert (
@@ -488,10 +511,12 @@ def test_round_three_says_what_it_does_in_two_lines_level_with_the_cost_card(tmp
     # heading level with the top of "What an answer costs"
     page = _spot_client(tmp_path)[0].get("/about").text
     what = page.split('<section class="about-what"', 1)[1].split("</section>", 1)[0]
-    left = what.split('<div class="about-two">', 1)[1].split('<div class="about-receipt', 1)[0]
+    # round 4: the two lines and the cost now share one card (its first half)
+    left = what.split('<div class="about-what-card about-card ink">', 1)[1].split(
+        '<div class="about-receipt', 1
+    )[0]
     assert left.strip().startswith('<div>\n      <h2 id="what">What it does</h2>')
     assert left.count("<p>") == 2 and '"Did you do it?"' in left and "What can I grow here?" in left
-    assert ".about-page .about-what .about-two h2 { margin-top: 0; }" in style.CSS
     # the small print under the results went; its link moved into the expert's card
     assert "The expert questions are text only" not in page
     quotes = re.findall(
@@ -501,11 +526,11 @@ def test_round_three_says_what_it_does_in_two_lines_level_with_the_cost_card(tmp
     assert "An expert's review." in quotes[0] and ">how we measured</a>" in quotes[0]
 
 
-def test_what_didnt_work_leads_each_card_with_its_lesson(tmp_path):
-    # Kash: each card should make a judge think "of course!": the lesson, the evidence, now
+def test_what_didnt_work_leads_each_row_with_its_lesson(tmp_path):
+    # Kash: each lesson should make a judge think "of course!": the lesson, the evidence, now
     page = _about(tmp_path)
     didnt = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
-    cards = re.findall(r'<li class="about-card rules ink">(.*?)</li>', didnt, flags=re.S)
+    cards = re.findall(r"<li>(.*?)</li>", didnt, flags=re.S)
     assert len(cards) == 5
     for card in cards:
         assert re.match(
@@ -555,3 +580,39 @@ def test_round_three_joined_up(tmp_path):
     assert "Reminder emails come from a small daily job on Nebius AI Cloud." in page
     css = style.CSS
     assert ".node.then" not in css and ".about-page .node.answer { padding-top: 12px; }" not in css
+
+
+def test_round_four_top_is_one_card_clear_of_the_band_and_a_green_nebius_line(tmp_path):
+    # 22 Oct round 4, Kash: space under the band; "do this all as one big box"; the Nebius
+    # line across the page like home's green "Decided by" line
+    page = _spot_client(tmp_path)[0].get("/about").text
+    what = page.split('<section class="about-what"', 1)[1].split("</section>", 1)[0]
+    card = what.split('<div class="about-what-card about-card ink">', 1)[1]
+    assert '<h2 id="what">What it does</h2>' in card and '<div class="about-receipt">' in card
+    assert what.count("about-card") == 1  # one box, not a paragraph beside a box
+    css = style.CSS
+    assert ".about-page .about .about-what { margin-top: 40px; }" in css
+    assert ".about-page .about section > p.about-nebius { max-width: none;" in css
+    nebius = css.split(".about-page .about section > p.about-nebius {", 1)[1].split("}", 1)[0]
+    assert "text-align: center;" in nebius and "color: var(--ok);" in nebius
+    assert '<p class="about-nebius">Every AI model runs on Nebius Token Factory' in page
+
+
+def test_round_four_makes_one_lessons_panel_and_a_roadmap(tmp_path):
+    # 22 Oct round 4, Kash: "boxes after boxes, more variety". What didn't work is one amber
+    # panel of ruled rows; What's next is a line with five stops, not five dashed boxes
+    page = _about(tmp_path)
+    didnt = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
+    assert didnt.count('<ul class="lesson-rows ink">') == 1 and didnt.count("<li><strong>") == 5
+    assert "about-card" not in didnt
+    nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
+    assert nxt.count('<ol class="roadmap">') == 1 and nxt.count("<li><strong>") == 5
+    assert "about-card" not in nxt
+    css = style.CSS
+    assert (
+        ".about-page ul.lesson-rows { list-style: none;" in css
+        and "background: var(--warn-bg); }" in css
+    )
+    assert ".about-page .lesson-rows > li + li { border-top: 1px solid var(--warn-line); }" in css
+    assert "border-top: 2px dashed var(--muted-fg); }" in css  # the line, across on a wide screen
+    assert "border-left: 2px dashed var(--muted-fg); }" in css  # and down on a phone
