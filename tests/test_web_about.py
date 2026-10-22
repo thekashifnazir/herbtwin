@@ -98,8 +98,9 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, mo
     words = html.unescape(
         re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>", "", shown, flags=re.S))
     )
-    # 1,530 since the prices failure joined What didn't work (22 Oct, Kash: keep it)
-    assert len(words.split()) <= 1530
+    # one rule (22 Oct, round 3 joined): the words shown on load, capped at what the four
+    # round-3 sections measured together (1,469) plus about 40; grow it only on purpose
+    assert len(words.split()) <= 1510
     repo = "https://github.com/thekashifnazir/herbtwin/blob/main/"
     for doc in (
         "docs/reference/nvidia-models.md",
@@ -537,3 +538,20 @@ def test_whats_next_says_why_and_accessibility_is_a_plain_words_list(tmp_path):
     )
     assert ">See the accessibility checks</a>" in access
     assert "axe-core" not in access and "3.98:1" not in access  # no jargon on its face
+
+
+def test_round_three_joined_up(tmp_path):
+    # 22 Oct, after the four round-3 parts landed: no names in the testers line, the reminder
+    # job's platform among the stack chips, and no leftover rules the flow no longer uses
+    page = _spot_client(tmp_path)[0].get("/about").text
+    nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
+    assert "checked by tools, a paid gardener and two testers" in nxt
+    # not "every step": the voice (when on) is ElevenLabs and the photo has a backup (review)
+    assert (
+        "Why: then reading the photo runs on NVIDIA too, and it's 5 times faster than GLM." in nxt
+    )
+    chips = page.split('<ul class="about-chips"', 1)[1].split("</ul>", 1)[0]
+    assert "<li>Nebius AI Cloud</li>" in chips
+    assert "Reminder emails come from a small daily job on Nebius AI Cloud." in page
+    css = style.CSS
+    assert ".node.then" not in css and ".about-page .node.answer { padding-top: 12px; }" not in css

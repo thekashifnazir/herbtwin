@@ -45,9 +45,6 @@
 .about-page .node em { font-style: normal; font-weight: 700; color: var(--ok); }
 .about-page .node span { color: var(--muted-fg); }
 .about-page .node b { margin-top: 2px; color: var(--ok); font-variant-numeric: tabular-nums; }
-.about-page .node.then { margin-top: 14px; }
-.about-page .node.then::before { content: "\2193" / ""; position: absolute; left: 50%; top: -30px;
-  transform: translateX(-50%); font: 700 22px/1 var(--sans); color: var(--muted-fg); }
 .about-page .node.photo { background: var(--muted); }
 .about-page .node.tavily { background: var(--lilac); }
 .about-page .node.weather { background: var(--sky); }
@@ -60,7 +57,6 @@
 .about-page .node.rules { background: var(--warn-bg); border-color: var(--warn); }
 .about-page .node.rules strong { color: var(--warn); }
 .about-page .node.later { box-shadow: none; border: 2px dashed var(--muted-fg); background: transparent; }
-.about-page .node.answer { padding-top: 12px; }
 /* the source a box leans on, named where colour alone might not say it */
 .about-page .tag { align-self: flex-start; padding: 0 8px; border-radius: var(--pill); font: 700 16px/1.5 var(--sans);
   font-style: normal; background: var(--card); color: var(--lilac-fg); border: 1.5px solid currentColor; }
