@@ -11,9 +11,7 @@ from tests.test_web_spot import _client as _spot_client
 
 SECTIONS = [
     "herbtwin, and why I built it",
-    "What it does",
-    "How it's built",
-    "The models, and what each does",
+    "How one answer is made",
     "How I know it works",
     "What didn't work",
     "What's next",
@@ -76,16 +74,18 @@ def test_nothing_on_the_about_page_or_in_made_with_is_under_16px():
     rules = re.findall(r"\.(?:about-page|made-with|made-group)[^{]*\{[^}]*\}", style.CSS)
     sizes = [int(px) for r in rules for px in re.findall(r"font(?:-size)?:[^;]*?(\d+)px", r)]
     assert len(rules) > 20 and sizes and min(sizes) >= 16
-    about = style.CSS.split(".about-page .about-stats {", 1)[1]
-    assert "→" not in style.CSS and "↓" not in style.CSS  # the arrows are escapes, not text
-    assert '.about-page .about-flow li + li::before { content: "\\2192" / "";' in about
+    assert "→" not in style.CSS and "↓" not in style.CSS  # any arrow is an escape, not text
 
 
-def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path):
+def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, monkeypatch):
     # 22 Oct site walk: About ran to 1,961 words, Kash's other About pages a few hundred.
     # The numbers stay; the long prose went to the reports on the public repo
     import html
 
+    from herbtwin.web import app as web_app
+
+    # counted as live, with the trusted-page check on (22 Oct: the diagrams' labels count)
+    monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)
     page = _spot_client(tmp_path)[0].get("/about").text
     main = page.split("<main", 1)[1].split("</main>", 1)[0]
     words = html.unescape(
@@ -137,7 +137,7 @@ def test_about_gives_one_pass_figure_for_the_trusted_page_check(tmp_path, monkey
 
     monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)  # as live
     page = _spot_client(tmp_path)[0].get("/about").text
-    models = page.split('id="made-with-h"', 1)[1].split("</section>", 1)[0]
+    models = page.split('<h2 id="how">', 1)[1].split("</section>", 1)[0]
     assert "Ultra checks a trusted page instead" in models
     assert "It shipped at round 8: 3 false agrees in 418" in models
     assert "4 false agrees in 435" not in page
@@ -154,3 +154,50 @@ def test_devpost_says_the_same_photo_can_read_differently_and_about_stays_short(
     assert '"has bolted and is flowering"' in flat
     assert "That second pair is not a clean repeat" in flat
     assert "different read" not in _about(tmp_path)
+
+
+def test_two_diagrams_carry_the_story_with_each_step_named(tmp_path):
+    # 22 Oct, Kash: "make some diagrams to show our system design setup like we did in
+    # moveset and step out" (the About was "bland and very claude"); one portrait SVG each,
+    # 344 wide so its 16px text is 16px or more at 390 px, with nothing scrolling sideways
+    page = _spot_client(tmp_path)[0].get("/about").text
+    how = page.split('<h2 id="how">', 1)[1].split("</section>", 1)[0]
+    answer = how.split('<svg class="sys" id="sys-answer"', 1)[1].split("</svg>", 1)[0]
+    assert 'viewBox="0 0 344 ' in answer and '<title id="sys-answer-t">' in answer
+    for said in (
+        "Read the photo · GLM-5.3-Flash",
+        "DeepSeek V4.1 Flash races it after 14 s.",
+        "Open-Meteo:",
+        "The plant's twin",
+        "6 choices × 14 days,",
+        "3 × NVIDIA Nemotron 3 Super",
+        "Our rules",
+        "3 Nano, with",
+        "3 Ultra quotes a page",
+        "GBIF pest sightings,",
+        "$0.0040 of model time, one example",
+        "17.4 s · $0.0016",
+        "6.0 s · $0.0024",
+    ):
+        assert said in answer, said
+    # only the closer photo check runs beside research and the weather (pipeline._beside),
+    # so only it is drawn alongside; never "at the same time" for all three (22 Oct review)
+    assert ">alongside</text>" in answer and "at the same time" not in answer
+    # one green path: the weather, through the twin, to the advisors; dashed for not built
+    assert answer.count('class="wire-a"') == 2 and answer.count('class="box-acc"') == 3
+    assert 'class="box-dash"' in answer
+    assert "<figcaption" in how and 'class="sys-key"' in how and '<i class="key-d">' in how
+    works = page.split('<h2 id="works">', 1)[1].split("</section>", 1)[0]
+    evals = works.split('<svg class="sys" id="sys-evals"', 1)[1].split("</svg>", 1)[0]
+    for said in (
+        "Write the test down first",
+        "Label it blind",
+        "Trusted-page rounds: 2 labellers,",
+        "round 8: 3 false",
+        "(774 questions)",
+    ):
+        assert said in evals, said
+    # drawn with the theme's tokens only, so dark mode follows; never wider than a phone
+    rules = re.findall(r"\.about-page \.sys[^{]*\{[^}]*\}", style.CSS)
+    assert rules and not any(re.search(r"#[0-9a-fA-F]{3,6}\b|rgb\(", r) for r in rules)
+    assert not any("min-width" in r for r in rules)

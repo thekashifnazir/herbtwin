@@ -13,26 +13,52 @@
 .about-page .about section > :is(p, ul, ol, h3) { max-width: var(--measure); }
 .about-page .about h2 { margin: 0 0 12px; }
 .about-page .about h3 { margin: 20px 0 8px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
-.about-page .about-steps { padding-left: 1.4em; }
-.about-page .about-steps li + li, .about-page .about-list li + li, .about-page .about-calls li + li { margin-top: 10px; }
-.about-page .about-list, .about-page .about-calls { padding-left: 1.2em; }
-/* the steps of a read as a row of chips, an arrow between each; one under another on a phone.
-   The arrows are decoration (empty alt text): the list is the order */
-.about-page .about .about-flow { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-wrap: wrap;
-  align-items: center; gap: 10px 0; max-width: none; }
-.about-page .about-flow li { position: relative; padding: 6px 14px; border-radius: var(--surface);
-  background: var(--soft); font-size: 16px; font-weight: 700; }
-.about-page .about-flow li + li { margin-left: 32px; }
-.about-page .about-flow li + li::before { content: "\2192" / ""; position: absolute; left: -24px; top: 50%;
-  transform: translateY(-50%); color: var(--muted-fg); }
-@media (max-width: 720px) {
-  .about-page .about .about-flow { flex-direction: column; align-items: flex-start; gap: 24px; }
-  .about-page .about-flow li + li { margin-left: 0; }
-  .about-page .about-flow li + li::before { content: "\2193" / ""; left: 18px; top: -22px; transform: none; }
+.about-page .about-list li + li, .about-page .about-calls li + li { margin-top: 10px; }
+.about-page .about-list { padding-left: 1.2em; }
+/* the two diagrams (22 Oct, after Moveset's and Step Out's About): drawn SVG, boxes in ink,
+   one green path (the weather through the twin to the answer) and dashed for not built yet.
+   Portrait and 344 wide, so one copy reads at 390 px (16px text at 16px or more) with nothing scrolling sideways; on a
+   wide screen the diagram sits beside the words that go with it. Theme tokens only, so dark
+   mode follows. */
+.about-page .about-sys { display: grid; grid-template-columns: minmax(0, 26rem) minmax(0, 1fr); gap: 24px 48px;
+  align-items: start; margin: 8px 0 24px; }
+.about-page .about .sys-side > * { max-width: var(--measure); }
+.about-page .sys-fig { margin: 0; }
+.about-page .sys { display: block; width: 100%; height: auto; overflow: visible; }
+.about-page .sys .box { fill: var(--card); stroke: var(--fg); stroke-width: 1.5; }
+.about-page .sys .box-acc { fill: var(--card); stroke: var(--ok); stroke-width: 2.5; }
+.about-page .sys .box-dash { fill: none; stroke: var(--muted-fg); stroke-width: 1.5; stroke-dasharray: 6 5; }
+.about-page .sys .t { font: 700 16px var(--sans); fill: var(--fg); }
+.about-page .sys .d { font: 400 16px var(--sans); fill: var(--muted-fg); }
+.about-page .sys .n { font: 700 16px var(--sans); fill: var(--ok); font-variant-numeric: tabular-nums; }
+.about-page .sys .wire { stroke: var(--muted-fg); stroke-width: 1.5; }
+.about-page .sys .wire-a { stroke: var(--ok); stroke-width: 2.5; }
+.about-page .sys .ah { fill: var(--muted-fg); }
+.about-page .sys .ah-a { fill: var(--ok); }
+.about-page .sys :is(.lbl, .lbl-a) { font: 600 16px var(--sans); paint-order: stroke; stroke: var(--bg);
+  stroke-width: 4px; stroke-linejoin: round; }
+.about-page .sys .lbl { fill: var(--muted-fg); }
+.about-page .sys .lbl-a { fill: var(--ok); }
+.about-page .sys-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 12px 0 4px;
+  font-size: 16px; color: var(--muted-fg); }
+.about-page .sys-key span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.about-page .sys-key i { display: inline-block; width: 28px; height: 0; border-top: 3px solid var(--ok); }
+.about-page .sys-key .key-d { border-top: 2px dashed var(--muted-fg); }
+.about-page .sys-fig figcaption { margin-top: 8px; font-size: 16px; color: var(--muted-fg); }
+.about-page .sys-fig figcaption strong { color: var(--fg); }
+.about-page .sys-side h3 { margin-top: 24px; }
+/* on a wide screen the words stay beside the long diagram as it scrolls */
+@media (min-width: 901px) and (min-height: 800px) { .about-page .sys-side { position: sticky; top: 24px; } }
+.about-page .about-calls { list-style: none; padding-left: 0; }
+.about-page .about-calls li { position: relative; padding-left: 20px; }
+.about-page .about-calls li::before { content: "" / ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--ok); }
+@media (max-width: 900px) {
+  .about-page .about-sys { grid-template-columns: minmax(0, 1fr); }
+  .about-page .sys-fig { max-width: 26rem; }
 }
-/* the models: the cards from _credits.html, then why each does its job, then one example's cost */
-.about-page .made-with { margin: 0 0 40px; }
-.about-page .about-calls { margin: 16px 0; }
+/* one example's cost, beside the diagram */
+.about-page .about-calls { margin: 12px 0 16px; }
 .about-page .about-receipt { max-width: var(--measure); padding: 14px 18px; border-left: 4px solid var(--ok);
   border-radius: 0 var(--surface) var(--surface) 0; background: var(--card); }
 .about-page .about-receipt h3 { margin-top: 0; }

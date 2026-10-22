@@ -29,9 +29,10 @@ def test_credits_page_names_every_author_with_source_and_licence(tmp_path):
         assert f'<a href="{url}" rel="noopener noreferrer">{name}</a>' in body, name
     assert "Qwen-Image-Edit" in body and "basil from Forest and Kim Starr's (CC BY 3.0 US)" in body
     assert "© UKRI" in body and "Open Government Licence" in body  # BGS, with the spot on
+    # the models are named on the diagram of one answer (22 Oct), where /about#made-with lands
     models = page.text.split('id="made-with"', 1)[1].split("</section>", 1)[0]
-    assert "Open-Meteo.com" in body and '<div class="made-groups">' in models
-    assert "<strong>NVIDIA Nemotron 3 Super</strong>" in models
+    assert "Open-Meteo.com" in body and '<svg class="sys" id="sys-answer"' in models
+    assert "3 × NVIDIA Nemotron 3 Super" in models and "GLM-5.3-Flash" in models
 
 
 def test_every_page_links_about_and_credits_from_its_footer(tmp_path):
@@ -105,7 +106,7 @@ def test_the_about_page_has_its_own_headings_and_the_credits_open_last(tmp_path)
     page = _client(tmp_path, [], []).get("/about").text
     levels = [int(n) for n in re.findall(r"<h([1-6])\b", page)]
     assert levels[0] == 1 and all(b <= a + 1 for a, b in zip(levels, levels[1:], strict=False))
-    assert '<h2 id="made-with-h">The models, and what each does</h2>' in page
+    assert '<section id="made-with" aria-labelledby="how">' in page
     credits = page.split('<section class="made-with about-credits" id="credits"', 1)[1]
     assert '<h2 id="credits-h">Credits</h2>' in credits and "<h3>Sample photos</h3>" in credits
     assert "<details" not in credits  # open on About, never folded

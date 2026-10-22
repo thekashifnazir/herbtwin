@@ -188,7 +188,8 @@ answer appears in **My plants**.
 
 - **One app instance** serves everyone, so reads at a busy moment can be slower.
 - **Daily caps:** 200 photo reads a day for the whole site and 10 per visitor (UK days).
-  Over a cap you get "The garden's had a busy day. Try again tomorrow." The judges' code
+  Over your own 10 you get "You've used today's 10 photo reads."; over the site's 200, "The
+  garden's had a busy day. Try again tomorrow." Both say the limit resets at midnight. The judges' code
   skips both, and also skips the stop when the site's model budget runs out.
 - **UK, outdoors, herbs.** Season norms are UK-only; a place outside the UK gets a note
   and no season norm. The weather and the plant's twin are for plants outside.
