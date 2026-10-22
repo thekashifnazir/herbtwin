@@ -20,19 +20,9 @@
 </div>
 
 <div class="about">
-<section class="about-what" aria-labelledby="what">{# round 4 (22 Oct, Kash: "do we even need them? or do this all as one big box"): what it does and what it costs, one wide card, clear of the band #}
-  <div class="about-what-card about-card ink">
-    <div>
-      <h2 id="what">What it does</h2>
-      <p>Signed in, you get an email when it's time to look again, and your next photo asks "Did you do it?".</p>
-      {% if spot_on %}<p><strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.</p>{% endif %}
-    </div>
-    <div class="about-receipt">
-      <h3>What an answer costs</h3>
-      <p>Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> with every step on Nemotron 3 Ultra.</p>
-      <p class="made-note">One example, not an average. The Ultra figure is an estimate: the same tokens at Ultra's listed price.</p>
-    </div>
-  </div>
+<section class="about-what" aria-labelledby="what">{# 23 Oct (Kash): just the short lead here; the cost moved under How it's built #}
+  <h2 id="what">What it does</h2>
+  <p class="about-lead">Signed in, you get an email when it's time to look again, and your next photo asks "Did you do it?".{% if spot_on %} <strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.{% endif %}</p>
 </section>
 
 <section id="made-with" aria-labelledby="built">{# the answer page's "What it's made with" lands here #}
@@ -103,6 +93,14 @@
     <li><strong>The small model runs the chat.</strong> Nemotron 3 Nano: 10 of 10 on our what-if check, in about half Super's time.</li>
     <li><strong>A non-NVIDIA model reads the photo, because it named plants better.</strong> Four NVIDIA vision models named the plant 0.54 to 0.627 of the time, against GLM-5.3-Flash's 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>).</li>
   </ul>
+</section>
+
+<section class="about-costs" aria-labelledby="costs">{# 23 Oct (Kash): the cost, straight after the flow it prices #}
+  <div class="about-receipt about-card ink">
+    <h3 id="costs">What each answer costs</h3>
+    <p>Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> with every step on Nemotron 3 Ultra.</p>
+    <p class="made-note">One example, not an average. The Ultra figure is an estimate: the same tokens at Ultra's listed price.</p>
+  </div>
 </section>
 
 <section aria-labelledby="works">
@@ -189,9 +187,25 @@
       <p class="from">415 of the 461 RHS picks that fit the setting; 12 months, 4 settings</p>
     </li>{% endif %}
   </ul>
+  {# 23 Oct (Kash): the checks people did, apart from the automated ones, and what's next #}
+  <h3 id="people">Checked by people</h3>
   <div class="about-two">
-    <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A paid gardener graded 3 photos: every first action Acceptable, 3 of 5 overall.<br>Four rules changed, and "7 in 10" went once we measured 51% (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p></blockquote>
+    <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A professional gardener hired through Tendem graded 3 photos: every first action Acceptable, 3 of 5 overall.<br>Four rules changed, and "7 in 10" went once we measured 51% (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p></blockquote>
     <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get what the answer tells you to use.<br>That became the shops card under the answer.</p></blockquote>
+  </div>
+  <p class="about-people-pilot"><strong>A small Toloka pilot</strong> to check our photo reading against people: beginners caught the named problem in 4 of 5 photos, but seemed to over-call with a healthy photo beside it (3 of 5). A tiny sample: 5 photos, 3 raters each.</p>
+  <p class="about-people-next"><strong>Next:</strong> a first-time-user study on Toloka, not run yet (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>). Tendem and Toloka are paid from Nebius Builder Program credits.</p>
+  {# 23 Oct (Kash): accessibility is one of the checks, so it closes How I know it works #}
+  <h3 id="access">Accessibility</h3>
+  <div class="about-card about-access">
+    <ul>
+      <li><span aria-hidden="true">✓</span> Checked against WCAG 2.2 AA, in light and dark</li>
+      <li><span aria-hidden="true">✓</span> A focus ring on everything you can tab to</li>
+      <li><span aria-hidden="true">✓</span> Buttons at least 44 px</li>
+      <li><span aria-hidden="true">✓</span> Works at 320 px wide, with nothing scrolling sideways</li>
+      <li><span aria-hidden="true">✓</span> Respects Reduce Motion</li>
+    </ul>
+    <p><a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">See the accessibility checks</a></p>
   </div>
 </section>
 
@@ -227,24 +241,10 @@
     <li><strong>Naming more problems, starting with slugs.</strong>
       <span>Why: slugs are a common herb pest, and the photo check can't name them yet.</span></li>
     <li><strong>Tests with real people.</strong>
-      <span>Why: so far it's been checked by tools, a paid gardener and two testers. Next: a screen-reader test and a beginners' test.</span></li>
+      <span>Why: no screen-reader test yet, and the beginners' study hasn't run (see Checked by people).</span></li>
     <li><strong>More than one server.</strong>
       <span>Why: one server and a daily cap today.</span></li>
   </ol>
-</section>
-
-<section aria-labelledby="access">
-  <h2 id="access">Accessibility</h2>
-  <div class="about-card about-access">
-    <ul>
-      <li><span aria-hidden="true">✓</span> Checked against WCAG 2.2 AA, in light and dark</li>
-      <li><span aria-hidden="true">✓</span> A focus ring on everything you can tab to</li>
-      <li><span aria-hidden="true">✓</span> Buttons at least 44 px</li>
-      <li><span aria-hidden="true">✓</span> Works at 320 px wide, with nothing scrolling sideways</li>
-      <li><span aria-hidden="true">✓</span> Respects Reduce Motion</li>
-    </ul>
-    <p><a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">See the accessibility checks</a></p>
-  </div>
 </section>
 
 <section aria-labelledby="who">{# round 4 (22 Oct, Kash: "the Moveset who made it is much better"): its voice and shape #}

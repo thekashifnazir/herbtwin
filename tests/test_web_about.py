@@ -15,7 +15,6 @@ SECTIONS = [
     "How I know it works",
     "What didn't work",
     "What's next",
-    "Accessibility",
     "Who made it",
     "Credits",
 ]
@@ -52,7 +51,7 @@ def test_old_credits_links_land_on_the_credits_section(tmp_path):
 
 def test_the_answers_example_cost_is_labelled_one_example_and_an_estimate(tmp_path):
     page = _about(tmp_path)
-    cost = page.split('<div class="about-receipt">', 1)[1].split("</div>", 1)[0]
+    cost = page.split('<div class="about-receipt about-card ink">', 1)[1].split("</div>", 1)[0]
     assert "<strong>$0.0040</strong>" in cost and "<strong>about $0.0177</strong>" in cost
     assert "One example, not an average." in cost
     assert "the same tokens at Ultra's listed price" in cost
@@ -100,9 +99,10 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, mo
     )
     # one rule (22 Oct, round 3 joined): the words shown on load, capped at what the four
     # round-3 sections measured together (1,469) plus about 40; grow it only on purpose
-    # TEMPORARY while round 4's four parts land in any order (22 Oct): the round-4
-    # integration resets this to the measured total plus about 40
-    assert len(words.split()) <= 1560
+    # one rule: the words shown on load, capped at the measured total plus about 40. Grown on
+    # purpose on 23 Oct, from 1,560 (1,522 measured) to 1,620 (1,586), for Kash's "Checked by
+    # people": Tendem, the 11 Oct Toloka pilot and the next study
+    assert len(words.split()) <= 1620
     repo = "https://github.com/thekashifnazir/herbtwin/blob/main/"
     for doc in (
         "docs/reference/nvidia-models.md",
@@ -466,7 +466,6 @@ def test_round_two_colours_every_source_and_says_what_each_colour_means(tmp_path
         "--lilac: #EEE8F7; --lilac-fg: #5B3F8F;" in css
         and "--lilac: #251E33; --lilac-fg: #C4B2EE;" in css
     )
-    assert ".about-page .node.tavily { background: var(--lilac); }" in css
 
 
 def test_round_two_turns_the_long_text_into_cards(tmp_path):
@@ -497,26 +496,20 @@ def test_the_palette_tints_each_kind_of_box_and_card():
     # one palette for the flow, the legend, the tiles and the cards; a dropped tint shows here
     css = style.CSS
     for rule in (
-        ".about-page :is(.sw, .about-tiles li, .about-card, .under li).advisors { background: var(--soft); }",
-        ".about-page :is(.sw, .about-tiles li, .about-card).photo { background: var(--muted); }",
-        ".about-page :is(.sw, .about-tiles li, .under li).tavily { background: var(--lilac); }",
-        ".about-page :is(.sw, .under li).gbif { background: var(--clay-bg); }",
-        ".about-page :is(.sw, .about-card).rules { background: var(--warn-bg); border-color: var(--warn); }",
+        ".about-page .under li.advisors { background: var(--soft); }",
+        ".about-page .under li.tavily { background: var(--lilac); }",
+        ".about-page .under li.gbif { background: var(--clay-bg); }",
     ):
         assert rule in css, rule
 
 
 def test_round_three_says_what_it_does_in_two_lines_level_with_the_cost_card(tmp_path):
-    # 22 Oct round 3, Kash: two short lines (the reminder and "What can I grow here?"), the
-    # heading level with the top of "What an answer costs"
+    # 22 Oct round 3, Kash: two short lines (the reminder and "What can I grow here?"); since
+    # 23 Oct a lead on its own, the cost under How it's built
     page = _spot_client(tmp_path)[0].get("/about").text
     what = page.split('<section class="about-what"', 1)[1].split("</section>", 1)[0]
-    # round 4: the two lines and the cost now share one card (its first half)
-    left = what.split('<div class="about-what-card about-card ink">', 1)[1].split(
-        '<div class="about-receipt', 1
-    )[0]
-    assert left.strip().startswith('<div>\n      <h2 id="what">What it does</h2>')
-    assert left.count("<p>") == 2 and '"Did you do it?"' in left and "What can I grow here?" in left
+    lead = what.split('<p class="about-lead">', 1)[1].split("</p>", 1)[0]
+    assert '"Did you do it?"' in lead and "What can I grow here?" in lead
     # the small print under the results went; its link moved into the expert's card
     assert "The expert questions are text only" not in page
     quotes = re.findall(
@@ -556,7 +549,7 @@ def test_whats_next_says_why_and_accessibility_is_a_plain_words_list(tmp_path):
     page = _about(tmp_path)
     nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
     assert nxt.count("<span>Why: ") == 5
-    access = page.split('<h2 id="access">', 1)[1].split("</section>", 1)[0]
+    access = page.split('<h3 id="access">', 1)[1].split("</section>", 1)[0]
     items = re.findall(r"<li>(.*?)</li>", access, flags=re.S)
     assert len(items) == 5 and all(
         i.startswith('<span aria-hidden="true">✓</span> ') for i in items
@@ -570,7 +563,7 @@ def test_round_three_joined_up(tmp_path):
     # job's platform among the stack chips, and no leftover rules the flow no longer uses
     page = _spot_client(tmp_path)[0].get("/about").text
     nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
-    assert "checked by tools, a paid gardener and two testers" in nxt
+    assert "no screen-reader test yet, and the beginners' study hasn't run" in nxt
     # not "every step": the voice (when on) is ElevenLabs and the photo has a backup (review)
     assert (
         "Why: then reading the photo runs on NVIDIA too, and it's 5 times faster than GLM." in nxt
@@ -582,14 +575,13 @@ def test_round_three_joined_up(tmp_path):
     assert ".node.then" not in css and ".about-page .node.answer { padding-top: 12px; }" not in css
 
 
-def test_round_four_top_is_one_card_clear_of_the_band_and_a_green_nebius_line(tmp_path):
-    # 22 Oct round 4, Kash: space under the band; "do this all as one big box"; the Nebius
-    # line across the page like home's green "Decided by" line
+def test_round_four_top_is_a_lead_clear_of_the_band_and_a_green_nebius_line(tmp_path):
+    # 22 Oct round 4, Kash: space under the band; the Nebius line across the page like home's
+    # green "Decided by" line. 23 Oct: the top is just the lead, no half-empty card
     page = _spot_client(tmp_path)[0].get("/about").text
     what = page.split('<section class="about-what"', 1)[1].split("</section>", 1)[0]
-    card = what.split('<div class="about-what-card about-card ink">', 1)[1]
-    assert '<h2 id="what">What it does</h2>' in card and '<div class="about-receipt">' in card
-    assert what.count("about-card") == 1  # one box, not a paragraph beside a box
+    assert '<h2 id="what">What it does</h2>' in what and '<p class="about-lead">' in what
+    assert "about-card" not in what and "What an answer costs" not in what
     css = style.CSS
     assert ".about-page .about .about-what { margin-top: 40px; }" in css
     assert ".about-page .about section > p.about-nebius { max-width: none;" in css
@@ -616,3 +608,85 @@ def test_round_four_makes_one_lessons_panel_and_a_roadmap(tmp_path):
     assert ".about-page .lesson-rows > li + li { border-top: 1px solid var(--warn-line); }" in css
     assert "border-top: 2px dashed var(--muted-fg); }" in css  # the line, across on a wide screen
     assert "border-left: 2px dashed var(--muted-fg); }" in css  # and down on a phone
+
+
+def test_round_four_left_no_rules_behind(tmp_path):
+    # 23 Oct: four rounds by four sessions left 35 About rules that matched nothing (old tiles,
+    # cards, the first flow, its swatches, the round-3 lesson grids); a browser scan found them
+    css = style.CSS
+    for gone in (
+        "about-tiles",
+        "about-lessons",
+        "about-next",
+        ".about-page .flow ",
+        ".flow-evals",
+        ".node.tavily",
+        ".about-cards",
+        ".sw.twin",
+        ".sw.weather",
+        ".about-card.later",
+    ):
+        assert gone not in css, gone
+
+
+def test_the_cost_follows_the_flow_and_accessibility_closes_the_checks(tmp_path):
+    # 23 Oct, Kash: "What each answer costs" straight after How it's built; Accessibility at
+    # the end of How I know it works, before What didn't work, as a sub-heading
+    page = _spot_client(tmp_path)[0].get("/about").text
+    built_end = page.index("</section>", page.index('<h2 id="built">'))
+    costs = page.index('<section class="about-costs" aria-labelledby="costs">')
+    works = page.index('<h2 id="works">')
+    assert built_end < costs < works
+    cost = page[costs:works]
+    assert (
+        '<h3 id="costs">What each answer costs</h3>' in cost
+        and "about-receipt about-card ink" in cost
+    )
+    access, real_user, didnt = (
+        page.index('<h3 id="access">Accessibility</h3>'),
+        page.index("<strong>A real user.</strong>"),
+        page.index('<h2 id="didnt">'),
+    )
+    assert real_user < access < didnt
+    assert page.count('id="access"') == 1 and '<h2 id="access">' not in page
+
+
+def test_people_checks_have_their_own_sub_section_with_a_next_step(tmp_path):
+    # 23 Oct, Kash: "Checked by people" in How I know it works, after the tests' cards and
+    # before Accessibility; the expert was hired through Tendem ($47.86, the review), and the
+    # Toloka study is pre-registered but has not run, so it claims no results ("and Tendem")
+    page = _spot_client(tmp_path)[0].get("/about").text
+    found, people, access = (
+        page.index('id="works-results"'),
+        page.index('<h3 id="people">Checked by people</h3>'),
+        page.index('<h3 id="access">'),
+    )
+    assert found < people < access
+    part = page[people:access]
+    assert "A professional gardener hired through Tendem graded 3 photos" in part
+    assert part.count('<blockquote class="about-card quote ink">') == 2
+    nxt = part.split('<p class="about-people-next">', 1)[1].split("</p>", 1)[0]
+    assert nxt.startswith("<strong>Next:</strong> a first-time-user study on Toloka, not run yet")
+    assert 'data/eval/prereg/2026-10-22-toloka-site-study.md"' in nxt
+    assert "Tendem and Toloka are paid from Nebius Builder Program credits." in nxt
+
+
+def test_the_toloka_pilot_is_aggregates_only_and_says_how_small(tmp_path):
+    # 23 Oct, Kash: "It was a small pilot to verify our models." The 11-12 Oct run, majority
+    # hits 4/5 without the reference and 3/5 with it (the private working repo's `2026-10-12-`
+    # human-judges-toloka.md); Toloka's trial terms allow aggregates only, never raw labels
+    page = _about(tmp_path)
+    pilot = page.split('<p class="about-people-pilot">', 1)[1].split("</p>", 1)[0]
+    assert pilot.startswith("<strong>A small Toloka pilot</strong> to check our photo reading")
+    assert (
+        "4 of 5 photos" in pilot
+        and "(3 of 5)" in pilot
+        and "A tiny sample: 5 photos, 3 raters each." in pilot
+    )
+    story = " ".join(
+        (Path(__file__).parents[1] / "docs/submission/devpost.md").read_text("utf-8").split()
+    )
+    assert "**A small Toloka pilot.** To check our photo reading against people" in story
+    assert "in 4 of 5 without the reference (one more partly) and 3 of 5 with it" in story
+    assert "aggregates only, as Toloka's trial terms ask" in story
+    assert "> **TODO (Kash), user testing:**" in story  # the site study's slot stays

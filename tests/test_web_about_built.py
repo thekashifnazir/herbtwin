@@ -23,7 +23,7 @@ def _built(tmp_path, monkeypatch, env: dict | None = None) -> str:
 
     monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)
     page = _spot_client(tmp_path, home={**HOME, **(env or {})})[0].get("/about").text
-    return page.split('<h2 id="built">', 1)[1].split('<h2 id="works">', 1)[0]
+    return page.split('<h2 id="built">', 1)[1].split("</section>", 1)[0]
 
 
 def _steps(built: str) -> list[str]:

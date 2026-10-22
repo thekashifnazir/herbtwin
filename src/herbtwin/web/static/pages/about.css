@@ -13,7 +13,6 @@
 /* prose beside its card on a wide screen; one under the other on a phone */
 .about-page .about-two { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px 32px;
   align-items: start; }
-.about-page .about-two > p { margin: 0; }
 @media (max-width: 860px) { .about-page .about-two { grid-template-columns: minmax(0, 1fr); } }
 .about-page .about h2 { margin: 0 0 12px; }
 .about-page .about h3 { margin: 24px 0 8px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
@@ -24,20 +23,12 @@
 .about-page .about-chips li { padding: 4px 12px; border-radius: var(--pill); background: var(--soft);
   color: var(--ok); font: 700 16px/1.4 var(--sans); }
 
-/* the flow: one answer as six steps in a framed panel, left to right on a wide screen and
-   one under another on a phone (one copy, so it reads the same to a screen reader). The
-   boxes are home's sticker tiles, coloured by what they are: weather sky blue, the twin its
-   deep green, the advisors mint, our rules amber ("check"), the answer a white sticker with
-   the plant's face. The arrows into the twin and the advisors are the one green path. */
+/* the flows' framed panel and their boxes, home's sticker tiles coloured by what they are:
+   weather sky blue, the twin its deep green, the advisors mint, our rules amber, the answer
+   a white sticker with the plant's face. Each flow's own layout lives in about-built.css,
+   about_built.css and about-works.css. */
 .about-page .flow-panel { margin: 16px 0 8px; padding: 24px; border: 1.5px solid var(--border);
   border-radius: var(--surface); background: var(--bg); }
-.about-page .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px 36px;
-  grid-template-columns: repeat(6, minmax(0, 1fr)); align-items: start; }
-.about-page .flow-evals { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.about-page .flow > li { position: relative; display: flex; flex-direction: column; gap: 14px; }
-.about-page .flow > li + li::before { content: "\2192" / ""; position: absolute; left: -29px; top: 28px;
-  font: 700 22px/1 var(--sans); color: var(--muted-fg); }
-.about-page .flow > li.acc::before { color: var(--ok); font-size: 28px; top: 24px; }
 .about-page .node { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
   border: 1.5px solid var(--fg); border-radius: var(--surface); background: var(--card);
   box-shadow: 4px 4px 0 var(--ink-shadow); font-size: 16px; line-height: 1.35; }
@@ -46,7 +37,6 @@
 .about-page .node span { color: var(--muted-fg); }
 .about-page .node b { margin-top: 2px; color: var(--ok); font-variant-numeric: tabular-nums; }
 .about-page .node.photo { background: var(--muted); }
-.about-page .node.tavily { background: var(--lilac); }
 .about-page .node.weather { background: var(--sky); }
 .about-page .node.weather em { color: var(--sky-fg); }
 .about-page .node.twin { background: var(--band); color: var(--band-fg); }
@@ -65,7 +55,7 @@
 /* what hangs off the answer, in a row of its own under the flow */
 .about-page .flow-under { margin-top: 24px; padding-top: 16px; border-top: 1.5px dashed var(--border); }
 .about-page .flow-under .flow-by { margin: 0 0 10px; }
-.about-page .flow .under, .about-page .flow-under .under { list-style: none; margin: 0; padding: 0; display: grid;
+.about-page .flow-under .under { list-style: none; margin: 0; padding: 0; display: grid;
   gap: 12px; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
 .about-page .flow-under .under li { display: flex; flex-direction: column; gap: 4px; padding: 10px 14px;
   border: 1.5px solid var(--fg); border-radius: 12px; box-shadow: 3px 3px 0 var(--ink-shadow);
@@ -86,12 +76,6 @@
 .about-page .face .head { fill: var(--soft); stroke: var(--primary); stroke-width: 2; }
 .about-page .face .sprout { fill: var(--primary); }
 .about-page .face .line { fill: none; stroke: var(--fg); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-.about-page .face .eye { fill: var(--fg); }
-@media (max-width: 1100px) {
-  .about-page .flow, .about-page .flow-evals { grid-template-columns: minmax(0, 1fr); gap: 40px; max-width: 30rem; }
-  .about-page .flow > li + li::before { content: "\2193" / ""; left: 50%; top: -32px; transform: translateX(-50%); }
-  .about-page .flow > li.acc::before { top: -34px; }
-}
 @media (max-width: 480px) { .about-page .flow-panel { padding: 16px; } }
 
 /* who made it ends on one closing card, as the sibling pages do */
@@ -103,38 +87,22 @@
 /* the credits: open, as the page's last section */
 .about-page .about-credits h3 { margin: 16px 0 8px; }
 
-/* one palette for the flow's boxes, the legend, the result tiles and the cards */
-.about-page :is(.sw, .about-tiles li, .about-card, .under li).advisors { background: var(--soft); }
-.about-page :is(.sw, .about-tiles li, .about-card).photo { background: var(--muted); }
-.about-page :is(.sw, .about-tiles li, .under li).tavily { background: var(--lilac); }
-.about-page :is(.sw, .under li).gbif { background: var(--clay-bg); }
-.about-page .sw.weather { background: var(--sky); }
-.about-page .sw.twin { background: var(--band); }
-.about-page :is(.sw, .about-card).rules { background: var(--warn-bg); border-color: var(--warn); }
-.about-page .about-card.rules strong { color: var(--warn); }
+/* the tints of what hangs under the answer, by source */
+.about-page .under li.advisors { background: var(--soft); }
+.about-page .under li.tavily { background: var(--lilac); }
+.about-page .under li.gbif { background: var(--clay-bg); }
 
 /* cards, after the "All of it is public" card Kash liked: a tinted sticker, a bold lead, a line */
 .about-page .about-card { margin: 0; padding: 14px 18px; border-radius: var(--surface); background: var(--card);
   font-size: 16px; line-height: 1.45; }
 .about-page .about-card:not(.ink) { border: 1.5px solid var(--border); }
-.about-page .about-card.later { border: 2px dashed var(--muted-fg); background: transparent; }
-.about-page .about .about-cards { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 18px;
-  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); max-width: none; }
-.about-page .about-cards.small { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
-.about-page :is(.about-cards > li, .about-card.quote p, .about-close p) > strong:first-child { display: block;
+.about-page :is(.about-card.quote p, .about-close p) > strong:first-child { display: block;
   margin-bottom: 2px; }
 .about-page .about-card a { color: var(--fg); }  /* AA on every tint */
 .about-page .about-card.quote p { margin: 0; }
 .about-page .about-card.quote { border-left-width: 6px; }
 
-/* the results as tiles (22 Oct, Kash: a table "not clear it's a table"): the number big,
-   what it measures under it, coloured by what was measured */
-.about-page .about .about-tiles { list-style: none; margin: 20px 0 12px; padding: 0; display: grid; gap: 18px;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); max-width: none; }
-.about-page .about-tiles li { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px;
-  border-radius: var(--surface); background: var(--card); }
-.about-page .about-tiles strong { font: 700 30px/1.05 var(--display); font-variant-numeric: tabular-nums; }
-.about-page .about-tiles span { font-size: 16px; color: var(--muted-fg); line-height: 1.4; }
+/* small notes stay in the reading column */
 .about-page .about .made-note { max-width: var(--measure); }
 
 /* the credits: folded, as home's are; #credits opens it */

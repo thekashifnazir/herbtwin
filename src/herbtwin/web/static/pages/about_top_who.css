@@ -2,19 +2,15 @@
    "about_" sorts after about.css and the about-*.css sheets, so it wins their ties. Theme
    tokens only; nothing under 16px. */
 
-/* What it does and what an answer costs: one wide mint card, clear of the band above, its
-   two halves split by a rule (one under the other on a phone) */
+/* What it does: a short lead, clear of the band above (23 Oct, Kash: the cost moved under
+   How it's built) */
 .about-page .about .about-what { margin-top: 40px; }
-.about-page .about-card.about-what-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
-  gap: 20px 36px; padding: 22px 26px; background: var(--soft); }
-.about-page .about-what-card h2 { margin: 0 0 10px; }
-.about-page .about-what-card h3 { margin: 0 0 8px; }
-.about-page .about-what-card p { margin: 0 0 8px; }
-.about-page .about-what-card .about-receipt { padding-left: 36px; border-left: 1.5px solid var(--soft-line); }
-@media (max-width: 860px) {
-  .about-page .about-card.about-what-card { grid-template-columns: minmax(0, 1fr); }
-  .about-page .about-what-card .about-receipt { padding: 16px 0 0; border-left: 0; border-top: 1.5px solid var(--soft-line); }
-}
+.about-page .about section > p.about-lead { max-width: 46rem; margin: 0; font-size: 20px; line-height: 1.5; }
+
+/* What each answer costs: the mint card straight after the flow it prices */
+.about-page .about .about-costs { margin-top: -12px; }
+.about-page .about-costs .about-receipt { max-width: 52rem; padding: 18px 22px; }
+.about-page .about-costs .about-receipt h3 { margin: 0 0 8px; }
 
 /* the Nebius line: across the page, green words, centred, no box, as home's "Decided by"
    line (round 4) */
@@ -24,3 +20,7 @@
 /* Who made it: prose, as Moveset's, beside the public card */
 .about-page .about-bio p { margin: 0 0 12px; max-width: var(--measure); }
 .about-page .about-bio p:last-child { margin-bottom: 0; }
+
+/* Checked by people: the pilot and the next study under the two quote cards (23 Oct) */
+.about-page .about section > p.about-people-pilot { margin: 20px 0 8px; }
+.about-page .about section > p.about-people-next { margin: 0 0 8px; }
