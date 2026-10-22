@@ -116,7 +116,9 @@
    shadow, never green; the picked one a shade darker with a tick. The radio sits unseen
    under its label, so a keyboard and no script still work */
 .answer-page .refine .picks { min-width: 0; margin: 0 0 16px; padding: 0; border: 0; }
-.answer-page .refine .picks legend { margin: 0 0 8px; padding: 0; font-weight: 500; }
+/* the question in full colour, also under "Where it is", whose .where class the band's muted
+   chips row shares (22 Oct: the indoor "Where is it?" read greyed out) */
+.answer-page .refine .picks legend { margin: 0 0 8px; padding: 0; color: var(--fg); font-weight: 500; }
 .answer-page .refine .picks .choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .answer-page .refine .picks label { position: relative; display: inline-flex; align-items: center; gap: 6px;
   min-height: 40px; margin: 0; padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--pill);

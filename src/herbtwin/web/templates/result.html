@@ -108,7 +108,8 @@
   {# only what is still unanswered: answering the soil can bring in "last watered", and the
      count went up (19 Oct judge walk of #269) #}
   {% set told_as = {"aspect": "heading", "soil_texture": "squeeze"} %}{% set open = namespace(n=0) %}
-  {% for q in asks if q != "question" and not (rec.told and rec.told[told_as.get(q, q)]) %}{% set open.n = open.n + 1 %}{% endfor %}
+  {# the window indoors is left out of this count while the advice does not read it yet #}
+  {% for q in asks if q not in ("question", "window") and not (rec.told and rec.told[told_as.get(q, q)]) %}{% set open.n = open.n + 1 %}{% endfor %}
   {# the place is asked on the band when it is missing, so it is not counted again here, nor
      asked again in the fold, nor lifts the fold on a phone when it was the only question
      (21 Oct, Kash: the ask said once; review of the band PR) #}
@@ -320,6 +321,12 @@
          (design wave 1, C); "tell us below" only when no Make-surer button says it (21 Oct,
          Kash: "Add where it is" was said three times) #}
       {%- if not best %}{% set doubt = top_doubt(a) %}<span>{% if doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
+      {# indoors the photo's light can't be measured (light.read_light: no open sky to
+         compare with), and the page never said so (22 Oct, a gardener: "how do you tell light
+         levels indoors?"). Say it once, and ask for the window, until it is told; never beside "Send a sharper
+         photo" or a no-cure answer, where the window can't help. Not advice,
+         so the rater text skips it (answer_text.SKIP_CLASSES) #}
+      {% if obs and obs.setting == "indoor" and not (rec.told and rec.told.window) and not retake and a.headline != no_cure_headline %}<p class="note indoor-light">We can't measure light indoors from a photo. <a href="#refine">Tell us which window it's by</a>.</p>{% endif %}
       {% if tell_more %}<p class="make-surer"><a class="button primary" href="#refine">Make this surer: tell us more</a></p>{% endif %}
       {% if retake or asks_open %}<p class="make-surer">{% if retake %}<a class="button primary" href="/">{{ retake[1] }}</a>{% endif %}
         {%- if asks_open %} <a class="button{{ '' if retake else ' primary' }}" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
@@ -529,9 +536,9 @@
       {# the shut line is a card to come to, not a row of green text (22 Oct, Kash on A3):
          a pale green tint, a leaf, the bold ask and what it takes. Never a filled button:
          the page's one green stays the card's or the band's #}
-      {% set selects = asks|reject("in", ("question", "aspect", "soil_texture"))|list %}
-      {% set taps = {"soil_feel": "how the soil feels", "last_watered": "when you last watered", "changed": "what's changed"} %}
-      {% set tm = namespace(said=[]) %}{% for q in selects %}{% set tm.said = tm.said + [taps[q]] %}{% endfor %}{% set said = tm.said %}
+      {% set selects = asks|reject("in", ("question", "aspect", "soil_texture", "window"))|list %}
+      {% set taps = {"soil_feel": "how the soil feels", "last_watered": "when you last watered", "changed": "what's changed", "window": "where it sits"} %}
+      {% set tm = namespace(said=[]) %}{% for q in (["window"] if "window" in asks else []) + selects %}{% set tm.said = tm.said + [taps[q]] %}{% endfor %}{% set said = tm.said %}
       <details class="tell-more"{% if mid_way %} open{% endif %}>
       <summary><span class="tm-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg></span><span class="tm-say"><span class="tm-title">Want a more exact answer?</span>
         <span class="tm-sub">{% if said %}{{ said|length }} quick tap{{ "s" if said|length != 1 else "" }}: {% if said|length > 1 %}{{ said[:-1]|join(", ") }} and {{ said[-1] }}{% else %}{{ said[0] }}{% endif %}{% else %}Tell us more, or ask anything about this plant{% endif %}</span></span></summary>
@@ -551,8 +558,8 @@
       {% set tray_in = none %}{% if a.tell_me and not on_band %}{% set tray_in = "where" if a.tell_me_key in ("location", "aspect") else ("changed" if a.tell_me_key in ("soil_feel", "soil_texture") else ("chat" if a.tell_me_key == "setting" else "top")) %}{% endif %}
       {% set tray %}<div class="tray warn"><p>{{ a.tell_me }}</p>{% if a.tell_me_key == "location" %}
         <label>Where is it?<input type="text" name="place" maxlength="80" placeholder="UK town or postcode"></label>{% endif %}</div>{% endset %}
-      {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?"} %}
-      {% set has_where = tray_in == "where" or "aspect" in asks %}
+      {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?", "window": "Where is it?"} %}
+      {% set has_where = tray_in == "where" or "aspect" in asks or "window" in asks %}
       {% set has_changed = tray_in == "changed" or selects or "soil_texture" in asks %}
       {% if tray_in == "top" %}{{ tray }}{% endif %}
       {% if "aspect" not in asks and rec.told and rec.told.heading %}
@@ -562,7 +569,12 @@
       {% if rec.told and rec.told.setting %}<input type="hidden" name="setting" value="{{ rec.told.setting }}">{% endif %}
       {% if has_where %}<div class="part where{{ ' needed' if tray_in == 'where' else '' }}"><h3>Where it is</h3>
       {% if tray_in == "where" %}{{ tray }}{% endif %}
-      {% if "aspect" in asks %}{{ spotq.compass_field(compass_first, rec.told.heading.direction if rec.told and rec.told.heading else none, unsure_picked=false) }}{% endif %}</div>{% endif %}
+      {% if "aspect" in asks %}{{ spotq.compass_field(compass_first, rec.told.heading.direction if rec.told and rec.told.heading else none, unsure_picked=false) }}{% endif %}
+      {#- indoors, which window and how close, in place of the compass (22 Oct, a gardener:
+          "how do you tell light levels indoors?"): the same quiet chips, none picked #}
+      {%- for q in ("window",) if q in asks %}<fieldset class="picks"><legend>{{ titles[q] }}</legend><div class="choices">
+        {% for v, text in choices[q].items() %}<label><input type="radio" name="{{ q }}" value="{{ v }}"{% if rec.told and rec.told[q] == v %} checked{% endif %}><span>{{ text }}</span></label>{% endfor %}
+      </div></fieldset>{% endfor %}</div>{% endif %}
       {% if has_changed %}<div class="part changed{{ ' needed' if tray_in == 'changed' else '' }}"><h3>What's changed</h3>
       {% if tray_in == "changed" %}{{ tray }}{% endif %}
       {# each quick question as quiet answer chips, not a select (22 Oct, Kash, A3: like the

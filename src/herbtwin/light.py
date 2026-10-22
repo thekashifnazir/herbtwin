@@ -184,7 +184,15 @@ MISSING_TEXT = {
     "dark": "too dim to measure (dusk or night)",
     "flash": "the flash fired",
     "implausible": "the light reading was not believable",
-    "indoors": "light indoors is not measured yet",
+    # as the card's ask for the window (integrator, 22 Oct): not "not measured yet"
+    "indoors": "we can't measure light indoors from a photo: tell us which window it's by",
+}
+# the window question's answers (Told.window), as the page and the advisor say them
+WINDOW_TEXT = {
+    "south_close": "a south-facing window, close to it",
+    "east_west_close": "an east- or west-facing window, close to it",
+    "north_or_far": "a north-facing window, or far from one",
+    "no_window": "no window near it",
 }
 
 
@@ -268,8 +276,13 @@ def light_factor(
     missing: LightMissing | None,
     klass: tuple[LightClass, str] | None,
     need: frozenset[LightClass],
+    window: str | None = None,
 ) -> tuple[Effect, str]:
-    """The light factor's effect and detail (spec section 3, D51)."""
+    """The light factor's effect and detail (spec section 3, D51). Indoors, with a window
+    told, the detail says what we went on; it moves nothing, as nothing was measured."""
+    if missing == "indoors" and window in WINDOW_TEXT:
+        said = WINDOW_TEXT[window]
+        return "neutral", f"{'with' if window == 'no_window' else 'by'} {said} (you told us)"
     if reading is None and klass is None:
         return "missing", MISSING_TEXT.get(missing or "", "light not known yet")
     detail = _describe(reading, klass)

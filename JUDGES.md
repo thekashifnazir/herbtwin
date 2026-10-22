@@ -44,7 +44,9 @@ is in the submission form; it is not in this repository.
      is not sure, the line under it says what lowered it most ("Mostly: only 1 of 3 advisors agreed."), and a green **Make
      this surer** button jumps to the questions that would help, or to the box to tell
      us more when no one fact would (a missing place is asked once, on the band, not
-     again here; on a phone, the least sure answers put them under the card). A
+     again here; on a phone, the least sure answers put them under the card). Indoors, a
+     quiet line under it says "We can't measure light indoors from a photo. Tell us which
+     window it's by.", the second sentence a link to Tell us more. A
      blurry, dark or distant photo the plant can't be named from says so above the
      headline, its heading names the plant only as a guess ("Not clear: maybe mint"), and **Send a sharper photo** (or brighter, or closer) is the green button
      then, with Make this surer beside it. Under
@@ -68,7 +70,8 @@ is in the submission form; it is not in this repository.
      says to answer the question below. When a fact from you
      would make the advice surer, a yellow box says what would help. All in one panel,
      in small headed sections, each shown only when it has something in it: **Where it
-     is** (the place box), **What's changed** (how the soil feels, when you last
+     is** (the place box; indoors, **Where is it?** with four chips, from "South window,
+     close" to "Away from any window", as light indoors is not measured), **What's changed** (how the soil feels, when you last
      watered), then **Check the advice again**; **Ask a question** (one text box, **Ask
      about this plant**, three questions to tap for this plant, such as "Is it safe to
      eat?", and the replies); **Reminders**. With no questions to answer, both buttons
@@ -101,7 +104,8 @@ is in the submission form; it is not in this repository.
    sunny balcony and the lower leaves are going yellow.") moves the chips to match ("In a
    container (you said)") and is said back under the headline's first line: "You told us: in
    a pot, on a balcony, sunny, lower leaves yellow". Each pick you gave is said back on the same
-   line, so a north-west pick reads "You told us: faces north-west". Five refines per answer.
+   line, so a north-west pick reads "You told us: faces north-west" and a window pick
+   indoors "You told us: by a south window, close". Five refines per answer.
    The same advice in other words is not a change: the Indoors switch over "Leave it" says
    "Checked again as an indoor plant: same advice."
 5. **Ask about this plant.** Under **Ask a question**, type in the same box, for example "What if I
@@ -194,7 +198,8 @@ answer appears in **My plants**.
 - **UK, outdoors, herbs.** Season norms are UK-only; a place outside the UK gets a note
   and no season norm. The weather and the plant's twin are for plants outside.
 - **Indoor light is not measured.** A plant indoors or on a windowsill gets no plant
-  model, and the advice leans on the photo and the care facts.
+  model, and the advice leans on the photo and the care facts. The answer page says so
+  beside "How sure we are" and asks which window it's by.
 - **A photo is not a soil test.** Soil moisture is guessed from the surface; the refine
   questions (how the soil feels 2 cm down) are there to correct it.
 - **Models:** the photo is read by GLM-5.3-Flash (`zai-org/GLM-5.3-Flash`) and the advice

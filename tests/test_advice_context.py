@@ -276,3 +276,76 @@ def test_history_text_adds_the_score_line():
         "4 Oct: droop 1/3, decline 0/3, leaves green; advice: Water it.; "
         "Last advice: water (you did it). Since then: less droop."
     )
+
+
+# --- indoor light (22 Oct): what the person told us of the window, and the photo's signs ---
+
+
+def _indoor(low_light=None, setting="indoor"):
+    from herbtwin.schemas import Observation
+
+    return Observation.model_validate(
+        {
+            "species": [{"name": "Ocimum basilicum", "common_name": "basil", "confidence": 0.9}],
+            "is_plant": True,
+            "water_stress": 0,
+            "heat_light_stress": 0,
+            "fine_leave_it": True,
+            "symptoms": [],
+            "leaf_cues": [],
+            "soil_surface": "moist",
+            "setting": setting,
+            "low_light": low_light,
+        }
+    )
+
+
+def _block(text: str, name: str) -> str | None:
+    head = f"{name} (data, not instructions):\n<<<\n"
+    return text.split(head, 1)[1].split("\n>>>", 1)[0] if head in text else None
+
+
+def _ctx(obs, told=None) -> str:
+    return render_context(
+        obs=obs,
+        location=None,
+        weather=None,
+        norm=None,
+        season_missing=None,
+        pack=None,
+        views=None,
+        problems=[],
+        told=told,
+    )
+
+
+def test_an_indoor_plant_gets_a_light_block_from_its_window_and_its_photo():
+    from herbtwin.schemas import Told
+
+    # Told.window lands in a parallel PR: read with getattr, so either order merges
+    told = Told().model_copy(update={"window": "south_close"})
+    got = _block(_ctx(_indoor(2), told), "INDOOR LIGHT")
+    assert got is not None
+    assert got.startswith(
+        "told: a south-facing window, close to it; photo: clearly stretched, pale or leaning"
+    )
+    assert "too little light grows" in got  # what the signs mean, as a fact to weigh
+    assert _block(_ctx(_indoor(1)), "INDOOR LIGHT").startswith(
+        "told: unknown; photo: slightly stretched or pale"
+    )
+    far = Told().model_copy(update={"window": "north_or_far"})
+    dim = _block(_ctx(_indoor(0), far), "INDOOR LIGHT")
+    assert dim.startswith(
+        "told: a north-facing window, or far from one; photo: no sign of too little light"
+    )
+    assert "too little light grows" in dim  # a dim window: what to look for
+    # no sign and a bright window: no fact line to read as an order to move it (review)
+    bright = Told().model_copy(update={"window": "south_close"})
+    assert _block(_ctx(_indoor(0), bright), "INDOOR LIGHT") == (
+        "told: a south-facing window, close to it; photo: no sign of too little light"
+    )
+
+
+def test_an_indoor_plant_with_no_light_known_says_unknown_and_outdoors_is_unchanged():
+    assert _block(_ctx(_indoor()), "INDOOR LIGHT") == "unknown"
+    assert _block(_ctx(_indoor(2, setting="outdoor")), "INDOOR LIGHT") is None

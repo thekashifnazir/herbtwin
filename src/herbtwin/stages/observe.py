@@ -29,6 +29,10 @@ SYSTEM = (
     "out of the drainage holes or over the rim, a root ball that is all roots, or a plant "
     "far wider and taller than its pot and top-heavy), snug when it fills the pot, roomy "
     "when the pot has plenty of space; unknown when there is no pot or you cannot tell. "
+    "low_light is signs of too little light: 0 none, 1 slightly stretched or pale, 2 "
+    "clearly leggy (long bare stems between the leaves), pale, or leaning to one side "
+    "towards the light. A compact, green plant is 0; score it only from the plant's own "
+    "shape and colour, never from how bright the photo is. "
     "photo_quality is poor when the photo is blurred, dark, the plant is small in the frame, "
     "or several plants share it; say which in quality_note. "
     "scene is one_plant when the photo is about one kind of plant: a single plant, or a "
@@ -102,6 +106,7 @@ OBSERVE_SCHEMA = {
         "setting": {"type": "string", "enum": ["indoor", "outdoor", "unknown"]},
         "container": {"type": "string", "enum": ["pot", "ground", "unknown"]},
         "pot_fit": {"type": "string", "enum": ["roomy", "snug", "too_small", "unknown"]},
+        "low_light": {"type": "integer", "minimum": 0, "maximum": 2},
         "photo_quality": {"type": "string", "enum": ["good", "poor"]},
         "quality_note": {"type": "string"},
         "scene": {"type": "string", "enum": ["one_plant", "bed_or_border", "no_plant"]},
@@ -162,6 +167,7 @@ def _parse(raw: str, strict: bool = False) -> Observation:
                 "fine_leave_it": False,
                 "scene": "bed_or_border" if obs.scene == "bed_or_border" else "no_plant",
                 "pot_fit": "unknown",  # no plant has outgrown nothing
+                "low_light": None,  # no plant, no light signs
             }
         )
     if obs.container == "ground" and obs.pot_fit != "unknown":

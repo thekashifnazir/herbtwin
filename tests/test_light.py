@@ -281,3 +281,23 @@ def test_sky_is_read_at_the_offset_its_hours_are_labelled_in(taken, offset, sky_
         tags(offset=offset), taken, RAMP, indoor=False, sky_offset_s=sky_offset_s
     )
     assert missing is None and r.sky_wm2 == pytest.approx(sky)
+
+
+def test_indoors_the_light_line_asks_for_the_window_then_says_what_we_went_on():
+    # integrator, 22 Oct: "light indoors is not measured yet" sat in How sure while the card
+    # asks which window it is by; once told, the line says what we went on
+    assert light_factor("leave_normal", None, "indoors", None, frozenset()) == (
+        "missing",
+        "we can't measure light indoors from a photo: tell us which window it's by",
+    )
+    told = light_factor("move_light", None, "indoors", None, frozenset(), window="south_close")
+    assert told == ("neutral", "by a south-facing window, close to it (you told us)")
+    far = light_factor("leave_normal", None, "indoors", None, frozenset(), window="north_or_far")
+    assert far[1] == "by a north-facing window, or far from one (you told us)"
+    # outdoors a told window means nothing: the old line stands
+    assert (
+        light_factor("leave_normal", None, "no_exposure", None, frozenset(), window="south_close")[
+            0
+        ]
+        == "missing"
+    )

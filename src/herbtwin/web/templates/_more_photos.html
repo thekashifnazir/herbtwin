@@ -7,7 +7,7 @@
 {% if more_photos_on %}{% set t = rec.told %}
 <form class="more-photos" method="post" action="/answers/{{ rec.record_id }}/photos" enctype="multipart/form-data">
   <p class="more-photos-ask"><strong>Want a surer answer?</strong> Add 1 or 2 more photos of the same plant: one close up of the leaves, one of the whole plant with its pot or soil.</p>
-  {%- if t %}{% for q in ("soil_feel", "last_watered", "changed", "squeeze", "question", "setting") if t[q] %}<input type="hidden" name="{{ q }}" value="{{ t[q] }}">{% endfor %}
+  {%- if t %}{% for q in ("soil_feel", "last_watered", "changed", "squeeze", "question", "setting", "window") if t[q] %}<input type="hidden" name="{{ q }}" value="{{ t[q] }}">{% endfor %}
   {%- if t.heading %}{% set h = t.heading %}{% if h.direction %}<input type="hidden" name="direction" value="{{ h.direction }}">{% else %}<input type="hidden" name="heading" value="{{ h.heading }}"><input type="hidden" name="pitch" value="{{ h.pitch if h.pitch is not none else '' }}"><input type="hidden" name="accuracy" value="{{ h.accuracy if h.accuracy is not none else '' }}">{% endif %}{% endif %}{% endif %}
   <label class="pick">Choose 1 or 2 photos<input type="file" name="more" accept="image/jpeg,image/png" multiple required></label>
   <p class="picked" role="status" aria-live="polite"></p>

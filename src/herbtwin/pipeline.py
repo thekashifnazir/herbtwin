@@ -1284,7 +1284,14 @@ def decide(
         has_location=rec.location is not None,
         soil_feel=soil_feel,
         history_days=history.days_since if history else None,
-        light_factor=light_factor(panel.primary, now_light, rec.light_missing, klass, need),
+        light_factor=light_factor(
+            panel.primary,
+            now_light,
+            rec.light_missing,
+            klass,
+            need,
+            window=getattr(told, "window", None),  # Told.window: the window question
+        ),
         spot_on=spot_on,
         texture=texture,
         light_known=klass is not None,

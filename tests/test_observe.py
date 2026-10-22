@@ -190,3 +190,30 @@ def test_the_read_says_whether_the_plant_has_outgrown_its_pot():
     assert observe(MockAdapter([json.dumps(bed)]), b"\xff\xd8", "image/jpeg").pot_fit == "unknown"
     # a reply without it, and every recording made before it, still parses
     assert observe(MockAdapter([json.dumps(GOOD)]), b"\xff\xd8", "image/jpeg").pot_fit == "unknown"
+
+
+# --- low light, read from the photo (22 Oct, Kash: indoor light; "yes ... quick") ---------
+
+
+def test_the_read_scores_signs_of_too_little_light_and_defaults_to_none():
+    from herbtwin.stages.observe import SYSTEM
+
+    leggy = {**GOOD, "low_light": 2}
+    obs = observe(MockAdapter([json.dumps(leggy)]), b"\xff\xd8", "image/jpeg")
+    assert obs.low_light == 2
+    # the advisor gets it in INDOOR LIGHT only: the summary, outdoors too, stays as it was
+    assert "low_light" not in json.loads(to_prompt_summary(obs))
+    # the backup and old recordings may leave it out: not known, never "no sign"
+    assert Observation.model_validate(GOOD).low_light is None
+    prop = OBSERVE_SCHEMA["properties"]["low_light"]
+    assert (prop["minimum"], prop["maximum"]) == (0, 2)
+    assert "low_light" not in OBSERVE_SCHEMA["required"]
+    # both photo models read the same words: what 1 and 2 look like, and 0 by default
+    assert "low_light" in SYSTEM and "leggy" in SYSTEM and "leaning" in SYSTEM
+    with pytest.raises(ObserveError):
+        observe(MockAdapter([json.dumps({**GOOD, "low_light": 3})] * 2), b"\xff", "image/jpeg")
+
+
+def test_not_a_plant_has_no_light_signs():
+    reply = {**GOOD, "is_plant": False, "low_light": 2}
+    assert observe(MockAdapter([json.dumps(reply)]), b"\xff\xd8", "image/jpeg").low_light is None

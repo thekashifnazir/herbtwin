@@ -1428,3 +1428,27 @@ def test_shelter_on_a_cold_night_leads_after_the_hold_and_no_note_says_leave_it(
     assert a is not None and a.do[0].action == "shelter"
     assert not a.held_water and TWIN_OVERRIDES not in lines
     assert not any(HELD_WATER_NOTE in n for n in rec.notes)
+
+
+@respx.mock
+def test_an_indoor_plant_short_of_light_can_be_told_to_move_and_nothing_argues(tmp_path):
+    # 22 Oct, indoor light: the advisors see INDOOR LIGHT from the photo's signs, and a
+    # "move it to better light" call leads with no twin run and no second card for the job
+    weather = respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    leggy = {**OBS, "setting": "indoor", "low_light": 2, "water_stress": 0, "symptoms": []}
+    move = {
+        "actions": ["move_light"],
+        "primary": "move_light",
+        "answer": "It is stretched and pale from too little light. Move it to a brighter window.",
+        "ask": "",
+        "confidence": "high",
+    }
+    deps = _deps(tmp_path, [json.dumps(leggy)], [json.dumps(move)] * 3)
+    rec = analyse(deps, JPEG, "image/jpeg", received=WHEN)
+    a = rec.answer
+    assert a is not None and rec.state is None and not weather.called
+    assert a.do[0].action == "move_light" and a.headline == "Move it to better light."
+    assert [c.action for c in a.do].count("move_light") == 1
+    assert a.compare == [] and a.dont is None  # no twin verdict to argue with it
+    sent = deps.advise_adapter.calls[0]["prompt"]
+    assert "INDOOR LIGHT" in sent and "photo: clearly stretched, pale or leaning" in sent

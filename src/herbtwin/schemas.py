@@ -153,6 +153,10 @@ class Observation(BaseModel):
     # named (bare ground) gets only that, since there is no plant to advise on
     scene: Scene = "one_plant"
     pot_fit: PotFit = "unknown"
+    # signs of too little light (22 Oct, indoor light): 0 none, 1 slightly stretched or pale,
+    # 2 clearly leggy, pale or leaning to one side. None: not read (the backup or an old
+    # recording left it out), never taken as "no sign"
+    low_light: int | None = Field(None, ge=0, le=2)
 
     @property
     def bare_bed(self) -> bool:
@@ -604,6 +608,14 @@ CHANGED_TEXT: dict[str, str] = {
     "new_plant": "new plant",
     "nothing": "nothing",
 }
+# indoors, where it sits: light indoors is not measured, so we ask (22 Oct, a gardener: "how
+# do you tell light levels indoors?"); the chips under "Where is it?"
+WINDOW_TEXT: dict[str, str] = {
+    "south_close": "South window, close",
+    "east_west_close": "East or west window, close",
+    "north_or_far": "North window, or a metre or more back",
+    "no_window": "Away from any window",
+}
 MAX_QUESTION = 500
 Squeeze = Literal["gritty", "smooth", "sticky"]
 SQUEEZE_TEXT: dict[str, str] = {
@@ -662,6 +674,8 @@ class Told(BaseModel):
     heading: HeadingTap | None = None  # the compass or 8-way tap
     # "Wrong? Switch": the person says the read got indoors or outdoors wrong
     setting: Literal["indoor", "outdoor"] | None = None
+    # indoors, which window and how close (WINDOW_TEXT): asked in place of the compass
+    window: Literal["south_close", "east_west_close", "north_or_far", "no_window"] | None = None
 
     @field_validator("question", "place")
     @classmethod
@@ -683,6 +697,7 @@ class Told(BaseModel):
             or self.setting
             or self.squeeze
             or self.heading
+            or self.window
         )
 
     def switch_only(self) -> bool:

@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Literal
 
+from herbtwin.light import WINDOW_TEXT
 from herbtwin.note_facts import note_facts
 from herbtwin.plant_model import ModelView, is_tender
 from herbtwin.schemas import (
@@ -225,6 +226,36 @@ def history_text(visits: list, trend: str | None) -> str:
     return "\n".join(lines)
 
 
+# indoors there is no light reading (light.py MISSING_TEXT["indoors"]), so the advisor gets what
+# the person told us of the window and the photo's own signs (22 Oct, Kash). Told.window
+# comes in a parallel change: read with getattr, so either merges first
+LOW_LIGHT_TEXT = {
+    0: "no sign of too little light",
+    1: "slightly stretched or pale",
+    2: "clearly stretched, pale or leaning to one side",
+}
+DIM_WINDOWS = frozenset({"north_or_far", "no_window"})
+LOW_LIGHT_FACT = (
+    "a plant indoors with too little light grows stretched and pale and leans towards the "
+    "window; a brighter spot, close to a south, east or west window, is the fix"
+)
+
+
+def indoor_light(obs: Observation, told: Told | None) -> str:
+    """The INDOOR LIGHT block: "told: <window>; photo: <signs>", then what the signs mean when
+    either points to too little light; "unknown" when neither is known. The photo summary
+    leaves low_light out, so an outdoor advisor prompt is unchanged."""
+    window = WINDOW_TEXT.get(getattr(told, "window", None) or "")
+    signs = LOW_LIGHT_TEXT.get(obs.low_light) if obs.low_light is not None else None
+    if window is None and signs is None:
+        return "unknown"
+    said = f"told: {window or 'unknown'}; photo: {signs or 'unknown'}"
+    # what the signs mean, only when they or the window point to too little light: under "no
+    # sign" it read as an order to move the plant (review)
+    dim = (obs.low_light or 0) >= 1 or getattr(told, "window", None) in DIM_WINDOWS
+    return f"{said}\n{LOW_LIGHT_FACT}" if dim else said
+
+
 def render_context(
     *,
     obs: Observation | None,
@@ -265,6 +296,8 @@ def render_context(
                 "if you advise treating, name one of these exactly: " + "; ".join(problems),
             )
         )
+    if obs is not None and obs.setting == "indoor":
+        blocks.append(fence("INDOOR LIGHT", indoor_light(obs, told)))
     if history:
         blocks.append(fence("HISTORY", history_text(history, trend)))
     if told is not None and told_lines(told):  # a tap or squeeze alone writes no line here

@@ -88,6 +88,7 @@ from herbtwin.schemas import (
     SOIL_FEEL_TEXT,
     SPOT_SETTINGS,
     SQUEEZE_TEXT,
+    WINDOW_TEXT,
     AnalysisRecord,
     DidIt,
     HeadingTap,
@@ -286,6 +287,7 @@ CHOICES = {
     "last_watered": LAST_WATERED_TEXT,
     "changed": CHANGED_TEXT,
     "squeeze": SQUEEZE_TEXT,
+    "window": WINDOW_TEXT,
 }
 
 
@@ -360,6 +362,7 @@ TOLD_WORDS = {  # Told's fields as the page names them
     "squeeze": "the squeeze test",
     "heading": "the direction",
     "setting": "indoors or outdoors",
+    "window": "where it sits",
 }
 
 
@@ -2009,6 +2012,7 @@ def create_app(
         place: str | None = Form(None),
         squeeze: str | None = Form(None),
         setting: str | None = Form(None),  # "Wrong? Switch": indoor or outdoor
+        window: str | None = Form(None),  # indoors: which window and how close
     ):
         try:
             spot = {}
@@ -2021,6 +2025,7 @@ def create_app(
                 question=question,
                 place=place,
                 setting=setting,
+                window=window,
                 **spot,
             )
             person, holder = await who(request)
@@ -2055,6 +2060,7 @@ def create_app(
         question: str | None = Form(None),
         squeeze: str | None = Form(None),
         setting: str | None = Form(None),
+        window: str | None = Form(None),
     ):
         """ "Add photos for a surer answer": the first photo and 1 or 2 more of the same plant,
         read again together in one call (one photo read for the visitor cap), then a fresh
@@ -2093,6 +2099,7 @@ def create_app(
                 changed=changed,
                 question=question,
                 setting=setting,
+                window=window,
                 **(spot if settings.spot_enabled else {}),
             )
         except HTTPException as e:  # a form post gets a page back, never the JSON error body

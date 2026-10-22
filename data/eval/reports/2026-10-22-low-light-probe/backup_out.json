@@ -1,0 +1,104 @@
+{
+ "spent_usd": 0.0238,
+ "rows": [
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "sample-1-parsley-healthy",
+   "truth_min": 0,
+   "seconds": 67.7,
+   "low_light": 0,
+   "setting": "outdoor",
+   "species": "curly parsley",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "sample-3-basil-yellow",
+   "truth_min": 0,
+   "seconds": 11.0,
+   "low_light": 0,
+   "setting": "outdoor",
+   "species": "Sweet basil",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "sample-4-rosemary-beetles",
+   "truth_min": 0,
+   "seconds": 34.2,
+   "low_light": 0,
+   "setting": "outdoor",
+   "species": "rosemary",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "sample-5-coriander-flowering",
+   "truth_min": 0,
+   "seconds": 11.6,
+   "low_light": 0,
+   "setting": "outdoor",
+   "species": "Coriander / cilantro",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "sample-6-basil-mildew",
+   "truth_min": 0,
+   "seconds": 32.0,
+   "low_light": 0,
+   "setting": "outdoor",
+   "species": "sweet basil",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "sample-7-pea-bed",
+   "truth_min": 0,
+   "seconds": 8.8,
+   "low_light": 0,
+   "setting": "outdoor",
+   "species": "Garden pea",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "se-37744-leggy-basil",
+   "truth_min": 1,
+   "seconds": 31.0,
+   "low_light": 2,
+   "setting": "indoor",
+   "species": "sweet basil",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "se-55376-leggy-kalanchoe",
+   "truth_min": 1,
+   "seconds": 26.6,
+   "low_light": 0,
+   "setting": "indoor",
+   "species": "flaming Katy",
+   "notes": ""
+  },
+  {
+   "role": "backup",
+   "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+   "photo": "se-22693-etiolated-sedum",
+   "truth_min": 1,
+   "seconds": 49.6,
+   "low_light": 0,
+   "setting": "indoor",
+   "species": "Cuban oregano",
+   "notes": ""
+  }
+ ]
+}

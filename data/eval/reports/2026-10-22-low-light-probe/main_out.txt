@@ -1,0 +1,10 @@
+main run (zai-org/GLM-5.3-Flash), printed before the backup step crashed on a missing model id; low_light per photo:
+sample-1-parsley-healthy 0
+sample-3-basil-yellow 0
+sample-4-rosemary-beetles 0
+sample-5-coriander-flowering 0
+sample-6-basil-mildew 0
+sample-7-pea-bed 0
+se-37744-leggy-basil 2
+se-55376-leggy-kalanchoe 2
+se-22693-etiolated-sedum None
