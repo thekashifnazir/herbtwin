@@ -801,6 +801,9 @@ class Answer(BaseModel):
     # the disease our no-cure rule removes the plant for, when it is named: the photo
     # check's, else the one the advisor named (answer.no_cure_overrides)
     no_cure_of: str | None = None
+    # the twin found no dry day ahead, so leaving it leads over the advisors' water call
+    # (pipeline.twin_holds_water): the page says so (answer.rule_overrides)
+    held_water: bool = False
     indoor: IndoorNow | None = None  # indoors: the month's normal and care tips
 
 

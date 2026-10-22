@@ -50,6 +50,12 @@ def worth_doing(view: ModelView) -> bool:
     return view.vs_leaving_it == "better" and view.tip_day is not None
 
 
+def no_dry_day(view: ModelView | None) -> bool:
+    """The twin ran and leaving it reaches no dry day in the 2 weeks: watering answers
+    nothing there (site walk 2, r1: "Water it." with 6 mm of rain that day)."""
+    return view is not None and view.action == "water" and view.why in (NO_DRY_DAY, STAYS_MOIST)
+
+
 def _peak(strip: RiskStrip) -> float:
     return max((max(d.water_stress, d.frost) for d in strip.days), default=0.0)
 

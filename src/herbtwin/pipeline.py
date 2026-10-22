@@ -38,7 +38,7 @@ from herbtwin.answer import (
     build_answer,
     is_bolted,
     is_seedlings,
-    no_cure_overrides,
+    rule_overrides,
     visible_damage,
     weather_explains,
 )
@@ -64,6 +64,7 @@ from herbtwin.plant_model import (
     Verdict,
     compare_actions,
     is_tender,
+    no_dry_day,
     shelters_from_cold,
     worth_doing,
 )
@@ -851,6 +852,29 @@ def spot_inputs(
     return klass, texture
 
 
+# the twin's claim is "no dry day in the next 2 weeks": it holds only over a 2-week forecast
+HOLD_WATER_DAYS = 14
+
+
+def twin_holds_water(panel: Panel, views: dict, *, days: int, dry_signs: bool) -> Panel:
+    """A "water it" call gives way to leaving it when the twin finds no dry day in the 2
+    weeks without watering. Site walk 2 (22 Oct), r1: three advisors said "Water it." in
+    London with 6 mm of rain that day, while Compare said "no dry days or frost in the next
+    2 weeks"; Kash, 22 Oct: "cool do it". Only over a full 2-week forecast (`days`), and
+    never against a sign of dryness the twin may have under-read (`dry_signs`: droop or a
+    dry surface in the photo, or "the soil feels dry"): a drooping basil on a dry surface
+    starts about 2 mm above the twin's dry day, too close to overrule three advisors on. No
+    forecast (indoors, the evals), no change."""
+    if (
+        panel.primary != "water"
+        or days < HOLD_WATER_DAYS
+        or dry_signs
+        or not no_dry_day(views.get("water"))
+    ):
+        return panel
+    return _led_by(panel, "leave_normal")
+
+
 def follow_the_twin(panel: Panel, views: dict) -> Panel:
     """A split "leave it" panel follows the twin on cold: when sheltering beats leaving it
     before a cold or frost day, and at least one ask chose shelter, that ask leads. "Leave it.
@@ -893,7 +917,11 @@ LED_WITH = {  # the advisors' call, in the note under the headline when a rule o
     "other": "another job",
     "isolate": "keeping it away from other plants",
     "leave_normal": "leaving it",
+    "water": "watering it",
 }
+HELD_WATER_NOTE = (
+    "your plant's twin finds no dry day in the next 2 weeks without it, so leaving it leads."
+)
 
 
 def _led_by(panel: Panel, primary: CareAction) -> Panel:
@@ -1148,8 +1176,20 @@ def decide(
     advised_ms = int((time.perf_counter() - asked_at) * 1000)
 
     asked = panel
+    base = (
+        next((x for x in rec.state.strips if x.action == "do_nothing"), None) if rec.state else None
+    )
+    dry_signs = obs.water_stress >= 2 or obs.soil_surface == "dry" or soil_feel == "dry"
+    panel = twin_holds_water(panel, views, days=len(base.days) if base else 0, dry_signs=dry_signs)
+    held_water = panel is not asked
+    if held_water:
+        rec.notes.append(f"{LED_NOTE} {LED_WITH['water']}; {HELD_WATER_NOTE}")
+    before = panel
     panel = follow_the_twin(panel, views)
-    if panel is not asked:
+    if panel is not before:
+        if held_water:  # shelter leads on a cold night, not leaving it: no note saying it does
+            held_water = False
+            rec.notes.pop()
         # the page says who chose it: a minority call the twin backs, not a sure advisor
         rec.notes.append(
             f"{panel.agree} of {panel.total} {BACKED_NOTE}; the 2-week forecast "
@@ -1266,13 +1306,14 @@ def decide(
         container=obs.container,
         roots_crowded=obs.pot_fit == "too_small",
         damage=damage,
+        held_water=held_water and panel.primary == "leave_normal",
         # indoors, the month's care from our indoor table: UK months, so not for a photo
         # placed abroad; one with no place still gets it, as the app is for UK homes
         indoor_care=indoor_care_for(match.key, month)
         if indoors and (rec.location is None or in_uk(rec.location.lat, rec.location.lon))
         else None,
     )
-    overrides = no_cure_overrides(rec.answer)
+    overrides = rule_overrides(rec.answer)
     if overrides:
         _say(progress, overrides)  # after the advisors' "treat it" (site walk 2, r5)
     # the quote decided against the action the headline shows, not the advisors': a rule

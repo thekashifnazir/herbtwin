@@ -496,6 +496,10 @@ TRAY_CHECK = (
 TENDER_BED_BECAUSE = (  # planted out, it cannot come in (Opus review: "safer indoors" for a bed)
     "it is a tender plant: cold nights harm it, so cover it before they come."
 )
+HELD_WATER_BECAUSE = (  # pipeline.twin_holds_water (site walk 2, r1: "Water it." in the rain)
+    "your plant's twin finds no dry day in the next 2 weeks without watering, so there is no "
+    "need to water yet."
+)
 # a seasonal job the advisors led with out of its season (pipeline.in_season): the reason is
 # ours, never their feeding line under another headline
 WAITING_JOB = {
@@ -1150,6 +1154,12 @@ RULES_CHOSE = "Our rules then chose the plan at the top, so follow that."
 # on the wait page and under What each advisor said (site walk 2, r5: "treat it" three
 # times, then "Remove it", with nothing between)
 NO_CURE_OVERRIDES = "Our rule for {problem} overrides: there's no cure, so remove it."
+# the advisors said "water it" and the twin found no dry day ahead (pipeline.twin_holds_water;
+# site walk 2, r1: "Water it." with 6 mm of rain that day). Kash, 22 Oct: "cool do it"
+TWIN_OVERRIDES = (
+    "Your plant's twin overrides them: no dry day in the next 2 weeks without watering, so "
+    "leave it."
+)
 MOST_SAID = "The plan at the top goes with what most of them said."
 ALL_DIFFERED = "Each said something different, so we're less sure of the plan at the top."
 _TOGETHER = {2: "Both", 3: "All three", 4: "All four"}
@@ -1173,6 +1183,14 @@ def no_cure_overrides(a: Answer | None) -> str | None:
     if a is None or a.headline != NO_CURE_HEADLINE:
         return None
     return NO_CURE_OVERRIDES.format(problem=(a.no_cure_of or "").strip() or "this disease")
+
+
+def rule_overrides(a: Answer | None) -> str | None:
+    """The line that says which rule of ours overrode the advisors' call, in plain words, for
+    the wait page and What each advisor said: no cure, or the twin's no dry day; else None."""
+    if a is not None and a.held_water:
+        return TWIN_OVERRIDES
+    return no_cure_overrides(a)
 
 
 def shown_call(a: Answer, primary: str, label: Mapping[str, str], advisor: bool = False) -> str:
@@ -1201,7 +1219,7 @@ def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid
     a = rec.answer
     if a is None or not a.runs:
         return AdvisorsSaid([], "")
-    overrides = no_cure_overrides(a)
+    overrides = rule_overrides(a)
     calls = [shown_call(a, r.primary, label, advisor=True) for r in a.runs]
     n = len(calls)
     same = n > 1 and len(set(calls)) == 1
@@ -1420,6 +1438,7 @@ def build_answer(
     tender: bool = False,
     container: str = "unknown",
     damage: bool = True,
+    held_water: bool = False,
     indoor_care: IndoorCare | None = None,
     roots_crowded: bool = False,
 ) -> Answer:
@@ -1479,7 +1498,13 @@ def build_answer(
     # seedlings are never cut or pinched for growth (judge walk of rev 00043: a pot of
     # seed-leaf basil told to "pinch out the stem tips"): the same trim as a resting herb's
     no_cut = resting or seedlings
-    if tender_lead and (led or container != "ground"):
+    # the twin found no dry day ahead, so leaving it leads over a water call: decide() says
+    # when pipeline.twin_holds_water fired (a split panel's chosen run can be a leave-it ask,
+    # so it is never worked out again here). The reason is the twin's; watering is no Also do
+    held_water = held_water and panel.primary == "leave_normal"
+    if held_water:
+        reason = HELD_WATER_BECAUSE
+    elif tender_lead and (led or container != "ground"):
         # our headline needs our reason, whoever chose shelter: "Bring it indoors to a bright
         # windowsill." over the advisors' "bring it indoors overnight" or "a sunny balcony"
         # argued with itself (judge walk of rev 00043)
@@ -1532,6 +1557,8 @@ def build_answer(
         )
     for action in adv.actions:
         if action in (panel.primary, "ask_first") or len(do) == 3:
+            continue
+        if action == "water" and held_water:
             continue
         if action == "prune" and seedlings:  # seedlings are thinned, never cut back
             continue
@@ -1762,6 +1789,7 @@ def build_answer(
         # whoever led (our rule or the advisors themselves): the same headline, the same check
         tray_check=not no_cure and ours == TENDER_HEADLINE,
         in_ground=container == "ground",
+        held_water=held_water,
         no_cure_of=no_cure_of,
         tell_me=assessment.tell_me,
         tell_me_key=assessment.tell_me_key,

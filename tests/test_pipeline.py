@@ -1279,3 +1279,152 @@ def test_the_wait_says_when_our_no_cure_rule_overrides_the_advisors(tmp_path):
     assert said in lines
     last_advisor = max(i for i, x in enumerate(lines) if isinstance(x, AdvisorReplied))
     assert lines.index(said) > last_advisor
+
+
+# --- the twin holds a water call (site walk 2, r1; Kash, 22 Oct: "cool do it") -----------
+
+
+def test_twin_holds_water_only_over_a_full_forecast_and_no_sign_of_dryness():
+    from herbtwin.pipeline import twin_holds_water
+    from herbtwin.plant_model import NO_DRY_DAY, STAYS_MOIST
+
+    damp = {"water": ModelView("water", "same", NO_DRY_DAY, None)}
+    held = twin_holds_water(_panel("water", "water", "water"), damp, days=14, dry_signs=False)
+    assert (held.primary, held.agree, held.total) == ("leave_normal", 0, 3)
+    wet = {"water": ModelView("water", "worse", STAYS_MOIST, None)}
+    assert twin_holds_water(_panel("water", "water", "water"), wet, days=14, dry_signs=False)
+    kept = [
+        (_panel("water", "water", "water"), damp, 2, False),  # a short forecast: 2 weeks unknown
+        (_panel("water", "water", "water"), damp, 14, True),  # droop, a dry surface, "dry"
+        (  # a dry day ahead: watering is better, the call stands
+            _panel("water", "water", "water"),
+            {"water": ModelView("water", "better", "dry by Monday if left; …", 3)},
+            14,
+            False,
+        ),
+        (_panel("leave_normal", "water", "leave_normal"), damp, 14, False),  # not a water call
+        (_panel("water", "water", "water"), {}, 14, False),  # no twin (indoors, the evals)
+    ]
+    for panel, views, days, dry in kept:
+        assert twin_holds_water(panel, views, days=days, dry_signs=dry) is panel
+
+
+def _damp_fortnight(start) -> dict:
+    """An Open-Meteo reply for 14 mild, damp days from `start`: light rain most days, so a
+    plant that starts moist never reaches a dry day."""
+    from datetime import timedelta
+
+    days = [(start + timedelta(days=i)).isoformat() for i in range(14)]
+    rain = [6, 0.5, 0, 1, 0, 0, 2, 0, 0.5, 0, 3, 0, 0, 1]
+    hourly = {k: v for k, v in SAMPLE["hourly"].items() if k != "time"}
+    return {
+        **SAMPLE,
+        "daily": {
+            "time": days,
+            "temperature_2m_max": [14] * 14,
+            "temperature_2m_min": [9] * 14,
+            "precipitation_sum": rain,
+            "et0_fao_evapotranspiration": [0.9] * 14,
+            "shortwave_radiation_sum": [5] * 14,
+            "daylight_duration": [38000] * 14,
+        },
+        "hourly": {
+            "time": [f"{d}T{h:02d}:00" for d in days for h in range(24)],
+            **{k: [v[i % len(v)] for i in range(14 * 24)] for k, v in hourly.items()},
+        },
+    }
+
+
+@respx.mock
+def test_a_water_call_with_no_dry_day_ahead_is_led_by_leave_it_and_says_why(tmp_path):
+    # r1: curly parsley in London, 6 mm of rain that day, three advisors "Water it." while
+    # Compare said "no dry days or frost in the next 2 weeks"
+    from herbtwin.answer import HELD_WATER_BECAUSE, TWIN_OVERRIDES, advisor_lines
+    from herbtwin.pipeline import AdvisorReplied, analyse_with_reading
+
+    respx.get(OPEN_METEO_URL).mock(
+        return_value=httpx.Response(200, json=_damp_fortnight(WHEN.date()))
+    )
+    parsley = {
+        **OBS,
+        "species": [
+            {"name": "Petroselinum crispum", "common_name": "curly parsley", "confidence": 0.9}
+        ],
+        "water_stress": 0,
+        "symptoms": [],
+        "soil_surface": "moist",
+        "setting": "outdoor",
+        "container": "pot",
+    }
+    deps = _deps(tmp_path, [json.dumps(parsley)], [json.dumps(ADV)] * 3)
+    lines: list = []
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    a = rec.answer
+    assert a is not None and a.held_water
+    assert a.do[0].action == "leave_normal" and a.do[0].because == HELD_WATER_BECAUSE
+    assert "water" not in [c.action for c in a.do]  # never an Also do under it
+    # said plainly, as #448's no-cure line: on the wait page after the advisors, and under
+    # What each advisor said beside their own call
+    assert TWIN_OVERRIDES in lines
+    last = max(i for i, x in enumerate(lines) if isinstance(x, AdvisorReplied))
+    assert lines.index(TWIN_OVERRIDES) > last
+    said = advisor_lines(rec, {"water": "Water it", "leave_normal": "Leave it"})
+    assert [x.action for x in said.lines] == ["Water it"] and said.note == TWIN_OVERRIDES
+    assert any("your plant's twin finds no dry day" in n for n in rec.notes)
+
+
+def _r1_parsley() -> dict:
+    return {
+        **OBS,
+        "species": [
+            {"name": "Petroselinum crispum", "common_name": "curly parsley", "confidence": 0.9}
+        ],
+        "water_stress": 0,
+        "symptoms": [],
+        "soil_surface": "moist",
+        "setting": "outdoor",
+        "container": "pot",
+    }
+
+
+@respx.mock
+def test_a_split_water_panel_held_by_the_twin_still_says_why(tmp_path):
+    # review: 2 "water it" and 1 "leave it" made the leave-it ask the chosen run, so the
+    # answer never knew the rule fired: no line on the wait page, "our rules chose" instead
+    from herbtwin.answer import HELD_WATER_BECAUSE, TWIN_OVERRIDES
+
+    respx.get(OPEN_METEO_URL).mock(
+        return_value=httpx.Response(200, json=_damp_fortnight(WHEN.date()))
+    )
+    split = [json.dumps(ADV), json.dumps(LEAVE_ADV), json.dumps(ADV)]
+    deps = _deps(tmp_path, [json.dumps(_r1_parsley())], split)
+    lines: list = []
+    from herbtwin.pipeline import analyse_with_reading
+
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    a = rec.answer
+    assert a is not None and a.held_water and a.do[0].action == "leave_normal"
+    assert a.do[0].because == HELD_WATER_BECAUSE
+    assert TWIN_OVERRIDES in lines
+    assert "water" not in [c.action for c in a.do]
+
+
+@respx.mock
+def test_shelter_on_a_cold_night_leads_after_the_hold_and_no_note_says_leave_it(tmp_path):
+    # review: water, shelter, water before a cold night: the hold made it "leave it", then
+    # follow_the_twin gave shelter the lead, under a note that still said "leaving it leads"
+    from herbtwin.answer import TWIN_OVERRIDES
+    from herbtwin.pipeline import HELD_WATER_NOTE, analyse_with_reading
+
+    cold = _damp_fortnight(WHEN.date())
+    cold["daily"]["temperature_2m_min"] = [9, 9, 2, 1, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=cold))
+    basil = {**_r1_parsley(), "species": OBS["species"]}
+    split = [json.dumps(ADV), json.dumps(SHELTER_ADV), json.dumps(ADV)]
+    deps = _deps(tmp_path, [json.dumps(basil)], split)
+    lines: list = []
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    a = rec.answer
+    assert a is not None and a.do[0].action == "shelter"
+    assert not a.held_water and TWIN_OVERRIDES not in lines
+    assert not any(HELD_WATER_NOTE in n for n in rec.notes)
