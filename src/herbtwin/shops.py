@@ -454,7 +454,9 @@ class ShopFinder:
             if shop is None or shop in {f.shop for f in found}:
                 continue
             title = plain_title(h.title, product.name)
-            found.append(Offer(shop, title, h.url, listed_price(h.url, h.snippet)))
+            # no price: a snippet's one figure can be another product's (B&Q's carousel,
+            # 22 Oct probe); listed_price stays for a pre-registered stricter rule
+            found.append(Offer(shop, title, h.url, None))
             if len(found) == RANGE:
                 break
         kept = tuple(found)
@@ -479,7 +481,7 @@ class ShopFinder:
         pest: str | None = None,
     ) -> list[Handy]:
         """Handy to have: the same search and the same rules, for what to watch for, with a
-        range of up to RANGE shops each and the price each page listed, when it said one."""
+        range of up to RANGE shops each; no price (22 Oct hotfix)."""
         return self._found(handy_for(signs, outdoor, in_pot, pest), region)
 
     def _found(self, wanted: list[Product], region: str) -> list[Handy]:

@@ -207,7 +207,7 @@ CROCUS = "https://www.crocus.co.uk/product/_/winter-fleece-plant-covers/classid.
 HAXNICKS = "https://www.haxnicks.co.uk/products/easy-fleece-jackets"
 
 
-def test_a_range_of_up_to_three_each_at_a_different_shop_with_prices_only_as_listed(tmp_path):
+def test_a_range_of_up_to_three_each_at_a_different_shop_and_no_price(tmp_path):
     rows = [
         ("Garden Fleece - Harrod Horticultural", HARROD, "Garden Fleece 30gsm £12.95 In stock"),
         ("Grow it Frostgard Fleece - Dobbies Garden Centres", DOBBIES, "Frostgard fleece."),
@@ -228,9 +228,9 @@ def test_a_range_of_up_to_three_each_at_a_different_shop_with_prices_only_as_lis
         "Crocus",
     ]
     assert "Haxnicks" not in text and DOBBIES_2 not in text
-    # Harrod's one clear price; Dobbies said none; Crocus's three are no clear price
-    assert re.findall(r'<span class="shop-price">([^<]+)</span>', item) == ["£12.95 when we looked"]
-    assert "Prices as listed when we looked; we don't check stock" in text
+    # no price shows, even Harrod's one clear figure (hotfix, 22 Oct: see the B&Q carousel)
+    assert "shop-price" not in text and "when we looked" not in text and "£" not in text
+    assert "We don't check prices or stock" in text
     assert text.count("Horticultural fleece, for a cold night") == 1  # the why, once
     assert c.app.state.shops._tavily.asked == ["horticultural fleece buy UK"]  # one search
 
@@ -477,3 +477,39 @@ def test_a_could_be_pest_gets_no_control(tmp_path):
         name="slugs and snails", looks_like="holes", source="https://www.rhs.org.uk/x", sure=False
     )
     assert c.get(f"/answers/{rid}/extras").status_code == 204
+
+
+# 22 Oct price probe (scratchpad nano/, pre-registered): on B&Q product pages the search
+# snippet holds ANOTHER product's carousel, so its one clear £ figure is the wrong price
+# (true £255.99 and £10.99). Kept as fixtures for a future pre-registered test of a stricter
+# rule (a price tied to the page's own title); until one passes, no price shows
+BQ_CAROUSEL = [
+    (
+        "Fargro Home and Garden Heavy-Duty Horticultural Fleece",
+        "https://www.diy.com/departments/fargro-home-and-garden-heavy-duty-horticultural-fleece"
+        "-6m-x-250m-18gsm-large-area-plant-protection/5060542961004_BQ.prd",
+        "Plant Fleece Covers with Zip 4 pcs 70 gm 2.36x2 m. Great low price. Plant Fleece "
+        "Covers with Zip 4 pcs 70 gm 2.36x2 m. £96.65Free home delivery. Add to basket.",
+        "255.99",
+    ),
+    (
+        "Horticultural Fleece with Drawstring for Winter Plant Cover",
+        "https://www.diy.com/departments/2-pack-garden-fleece-plant-frost-protection-"
+        "horticultural-fleece-with-drawstring-for-winter-plant-cover/5061076309515_BQ.prd",
+        "vers with Drawstring 4 pcs 70 gm 0.8x1.2 m. Great low price. Plant Fleece Covers with "
+        "Drawstring 4 pcs 70 gm 0.8x1.2 m. £23.65Free home delivery.",
+        "10.99",
+    ),
+]
+
+
+@pytest.mark.parametrize(("title", "url", "snippet", "true_price"), BQ_CAROUSEL)
+def test_a_carousel_price_fools_the_snippet_rule_so_no_price_shows(
+    tmp_path, title, url, snippet, true_price
+):
+    wrong = listed_price(url, snippet)
+    assert wrong is not None and wrong != f"£{true_price}"  # why prices are off
+    c, rid = _leave_it(tmp_path, {"horticultural fleece": [(title, url, snippet)]})
+    text = c.get(f"/answers/{rid}/extras").text
+    assert title.split()[0] in text  # the shop link still shows
+    assert "when we looked" not in text and wrong not in text and "Prices as listed" not in text
