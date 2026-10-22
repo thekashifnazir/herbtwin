@@ -149,7 +149,11 @@ _SAYS: dict[str, re.Pattern] = {
             r"overwinter\w*|transfer\w*"
         ),
         "move_light": r"mov\w*|put\w*|place\w*|stand\w*|shift\w*|relocat\w*|transfer\w*|give",
-        "prune": r"cut\w*|prun\w*|trim\w*|clip\w*|shorten\w*|shear\w*|snip\w*|chop\w*",
+        # the verbs, never the nouns: "save the trimmings" is no cut (round 7's false agree)
+        "prune": (
+            r"cut(?!tings\b)\w*|prun(?!ings\b)\w*|trim(?!mings\b)\w*|clip(?!pings\b)\w*|"
+            r"shorten\w*|shear\w*|snip\w*|chop\w*"
+        ),
         "treat_or_remove": _TREATS,
         "remove_plant": _TREATS,
     }.items()
@@ -163,6 +167,23 @@ _WHOLE_PLANT = re.compile(
 
 def _plain(sentence: str) -> str:
     return sentence.replace("’", "'")
+
+
+_BACKING = frozenset().union(*SAME_ADVICE.values())  # every form action that can agree
+# a cut of the whole plant, or down to the ground or base, is a hard cut, not a trim
+# (round 7's false agree: "cut the whole plant down to just above the base")
+_HARD_CUT = re.compile(
+    r"\b(?:whole plant|(?:down )?to (?:just )?(?:above )?the (?:ground|base)|to ground level)\b",
+    re.I,
+)
+
+
+def could_agree(sentence: str, action: str | None = None) -> bool:
+    """The sentence names one of our actions (this action's, when given) in its own words.
+    decide never agrees with one that does not, whatever its form, so only these are
+    worth a read (21 Oct)."""
+    actions = SAME_ADVICE.get(action, frozenset()) if action else _BACKING
+    return any(_SAYS[a].search(_plain(sentence)) for a in actions)
 
 
 def months_in(value: str) -> set[int] | None:
@@ -246,7 +267,7 @@ def decide(form: Form | None, s: PlantState, sentence: str = "") -> Literal["agr
         return "unsure"
     if sentence and unconfirmed(sentence, s):
         return "unsure"
-    if s.action == "prune" and _PINCH.search(sentence):
+    if s.action == "prune" and (_PINCH.search(sentence) or _HARD_CUT.search(sentence)):
         return "unsure"
     if sentence and form.action in _SAYS and not _SAYS[form.action].search(_plain(sentence)):
         return "unsure"

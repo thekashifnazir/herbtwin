@@ -22,6 +22,7 @@ directory holds the failed pre-registered rounds beside the passing ones.
 | Chat: does Tavily search make the answer right? (Nemotron 3 Nano, search on vs off) | 30 factual herb questions | **25 of 30** right with search, **15 of 30** without: **+0.333** [+0.133, +0.533], pre-registered (`2026-10-19-chat-search`) |
 | Advice: says "treat it" when the expert did not (one ask each) | 150 Stack Exchange questions | **Super 0.020** [0.000, 0.047]; Ultra 0.127 [0.080, 0.180] (`super-se-150-p7ba`, `ultra-se-150-p7ba`) |
 | Trusted-page check on real pages: false agrees (Nemotron 3 Ultra reads, code decides; pre-registered round 6) | 192 items from trusted-site searches, 191 blind negatives | **0 of 191** (`2026-10-19-trusted-realpage-r6.json`) |
+| Trusted-page check, round 8 (live since 22 Oct): whole pages and a last Ultra check | 444 items from 63 new plant states, 418 blind negatives, 26 positives | **3 of 418** false agrees [0.24%, 2.09%], PASS; recall **10 of 26** (target 0.5, missed) (`2026-10-22-trusted-realpage-r8.json`) |
 
 The two advice rows are three asks on the 5 Oct prompt. On the live prompt, asked once,
 Super scores 0.440 [0.360, 0.520] and 0.435 [0.365, 0.505] (`super-se-150-p7ba`,

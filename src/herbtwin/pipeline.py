@@ -210,10 +210,8 @@ class Reading:
     weather_missing: str | None
     weather: WeatherFacts | None
     failures: list[StageFailure]
-    # the trusted-page check (stages/trusted_page.py): started when the answer is first
-    # decided, joined after the advisors; a refine, or a stored answer rebuilt, never
-    # searches or reads again
-    checking: trusted_page.Checking | None = None
+    # the trusted-page check (stages/trusted_page.py): run once the answer is first
+    # decided; a refine, or a stored answer rebuilt, never searches or reads again
     checked: bool = False
 
 
@@ -381,6 +379,8 @@ NOT_A_PLANT_LINE = "This doesn't look like a plant"
 # said only when Tavily found the care facts' RHS page (rhs.find_rhs): never for TinyFish,
 # and never for a herb of our own file, which searches nothing. Worded to stay true for a
 # pack from the cache, which Tavily found on an earlier read (review, 21 Oct)
+# the wait's step while the trusted page is searched and read (only when it is)
+CHECKING_A_PAGE = "Looking for a trusted gardening page with Tavily"
 FOUND_WITH_TAVILY = "Care facts from its RHS page, found with Tavily"
 
 
@@ -752,7 +752,6 @@ def _located(deps: Deps, reading: Reading, rec: AnalysisRecord) -> Reading:
         weather=weather,
         failures=failures,
         # the same answer, told more: its page is never searched or read again
-        checking=reading.checking,
         checked=reading.checked,
     )
 
@@ -982,19 +981,7 @@ def decide(
     rec = reading.rec.model_copy(deep=True)
     failures = list(reading.failures)
     tracer = StageTracer(deps.trace_store, rec.record_id)
-    if not reading.checked:
-        # a trusted page's sentences, searched and read while the advisors think (a plant
-        # we have no data on is never searched: its pages could be about anything)
-        reading.checked = True
-        top, about = reading.top, rec.model_copy(deep=True)
-        reading.checking = trusted_page.start(
-            trusted_page.tavily_only(deps.search) if deps.settings.tavily_key else None,
-            bind(deps.check_adapter, "trusted_page", tracer) if deps.check_adapter else None,
-            (top.common_name or top.name) if top and reading.match.key else "",
-            rec.problem.name if rec.problem else None,
-            reading.month,
-            lambda hits: about_the_plant(hits, about),
-        )
+    about = rec.model_copy(deep=True)  # the plant as read, for the trusted page's search
     obs, match, top, month = rec.observation, reading.match, reading.top, reading.month
     weather = reading.weather
     soil_feel = told.soil_feel if told else None
@@ -1116,14 +1103,25 @@ def decide(
             "harm in the photo, a look under the leaves comes first."
         )
     followed = panel is not asked  # a rule of ours chose the lead: not the advisor's sureness
-    if reading.checking is not None:
-        # joined now the advisors have answered; kept on the reading, so a refine is
-        # decided again with no new search or read
-        checking, reading.checking = reading.checking, None
+    if not reading.checked:
+        # a trusted page for the action we advise, searched and read now it is decided
+        # (round 7: a search before the advice found page introductions); kept on the
+        # reading, so a refine is decided again with no new search or read. A plant we
+        # have no data on is never searched: its pages could be about anything
+        reading.checked = True
+        checking = trusted_page.start(
+            trusted_page.tavily_only(deps.search) if deps.settings.tavily_key else None,
+            bind(deps.check_adapter, "trusted_page", tracer) if deps.check_adapter else None,
+            (top.common_name or top.name) if top and reading.match.key else "",
+            rec.problem.name if rec.problem else None,
+            panel.primary,
+            month,
+            lambda hits: about_the_plant(hits, about),
+            trusted_page.plant_state(rec, panel.primary, told),
+        )
+        if checking is not None:
+            _say(progress, CHECKING_A_PAGE)
         reading.rec.trusted = trusted_page.finish(checking)
-    rec.trusted = trusted_page.quoted(
-        reading.rec.trusted, trusted_page.plant_state(rec, panel.primary, told)
-    )
     others_better = any(worth_doing(v) for a, v in views.items() if a not in BASELINES)
     inputs = FactorInputs(
         action=panel.primary,
@@ -1184,6 +1182,13 @@ def decide(
         indoor_care=indoor_care_for(match.key, month)
         if indoors and (rec.location is None or in_uk(rec.location.lat, rec.location.lon))
         else None,
+    )
+    # the quote decided against the action the headline shows, not the advisors': a rule
+    # that changes the headline (cold, a resting herb, rule-led protect) drops it, since
+    # the last gate judged the advisors' action (post-test change after round 8, review)
+    shown = rec.answer.do[0].action if rec.answer.do else ""
+    rec.trusted = trusted_page.quoted(
+        reading.rec.trusted, trusted_page.plant_state(rec, shown, told)
     )
     rec.answer.trend = history.trend if history else None
     rec.answer.prediction = predict(rec.answer, obs)  # C2: what a later photo checks

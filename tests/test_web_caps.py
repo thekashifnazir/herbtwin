@@ -208,3 +208,29 @@ def test_the_limit_page_band_reaches_both_edges_of_a_wide_screen(tmp_path):
     assert r.status_code == 429 and "That&#39;s the limit for today" in r.text
     assert '<div class="wrap">\n<div class="page-band">' in r.text  # the reading column
     assert "main .wrap:has(> .page-band) { padding-right: 16px; }" in style.CSS
+
+
+def test_the_limit_page_says_what_to_do_next(tmp_path):
+    # 22 Oct site walk: "Try again tomorrow" and nothing to press. A judge's code lifts the
+    # caps, so that is the one main button; how it works can still be read
+    c = _client(tmp_path, {"HERBTWIN_DAILY_READS": "1"}, usage=MemoryUsage())
+    _upload(c)
+    page = _upload(c).text
+    band = page.split('<div class="page-band">', 1)[1].split("</div>", 1)[0]
+    assert "<p>The limit resets at midnight, UK time.</p>" in band
+    assert (
+        '<p class="actions"><a class="button primary" href="/judge">Judges: enter your code</a> '
+        '<a class="button" href="/about">How herbtwin works</a></p>' in band
+    )
+    assert band.count("primary") == 1
+
+
+def test_the_budget_stop_offers_the_code_but_no_reset_time(tmp_path):
+    from herbtwin.web.app import OUT_OF_BUDGET, TEMPLATES
+
+    page = TEMPLATES.get_template("message.html").render(
+        message=OUT_OF_BUDGET, heading="That's the limit for today", capped="budget",
+        request=None, has_session=lambda r: False,
+    )  # fmt: skip
+    assert 'href="/judge">Judges: enter your code</a>' in page
+    assert "resets at midnight" not in page

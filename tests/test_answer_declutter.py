@@ -32,15 +32,6 @@ def test_your_photo_is_big_beside_the_main_card_not_a_thumbnail_in_the_band(tmp_
     assert " hidden" in img and 'id="your-photo"' in img and 'alt="Your photo"' in img
     phone = _rule(".answer-page .answer-cols > .your-photo")
     assert "width: 100%" in phone and "aspect-ratio" in phone and "object-fit: cover" in phone
-    # on a phone the photo takes the pull-up over the band, in the plan's or (ask-up) the
-    # main card's place, so the two never both pull up
-    narrow = ", ".join(
-        s for at, s, b in _rules(CSS) if "max-width: 959px" in " ".join(at) and "margin-top: 0" in b
-    )
-    assert (
-        ".answer-page .answer-cols.ask-up:has(> .your-photo:not([hidden])) .main-action" in narrow
-    )
-    assert ".answer-page .page-band + .answer-cols:has(> .your-photo:not([hidden])) .plan" in narrow
     wide = _rule(".answer-page .answer-cols > .your-photo", "min-width: 960px")
     assert "grid-column: 2" in wide and "grid-row: 1" in wide
 
@@ -111,3 +102,41 @@ def test_the_level_line_has_no_stray_space(tmp_path):
     page = _render(_unsure_record(tmp_path))
     said = re.search(r'class="badge-line">.*?</span><span>(.*?)</span>', page, flags=re.S).group(1)
     assert said.startswith("Mostly: ") and said == said.strip() and "  " not in said
+
+
+SHOWN = ".answer-page .answer-cols:where(:has(> .your-photo:not([hidden])))"
+
+
+def test_on_a_phone_the_main_card_comes_before_the_photo():
+    # 22 Oct site walk (Top 5 #5): on a phone the band and the big photo filled the first
+    # screen and the headline started at its bottom edge. Under 960px the main card comes
+    # first and takes the pull-up over the band; the photo follows it, still big
+    narrow = "max-width: 959px"
+    assert "display: flex" in _rule(SHOWN, narrow) and "flex-direction: column" in _rule(
+        SHOWN, narrow
+    )
+    assert "display: contents" in _rule(f"{SHOWN} > .plan", narrow)
+    order = lambda sel: int(re.search(r"order: (\d+)", _rule(sel, narrow)).group(1))  # noqa: E731
+    card = order(f"{SHOWN} .main-action")
+    photo = order(f"{SHOWN} > :is(.your-photo, .your-more)")
+    rest = order(f"{SHOWN} > .plan > *")
+    assert card < photo < rest and order(f"{SHOWN} > .side") >= rest
+    band = ".answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden])))"
+    assert "margin-top: -48px" in _rule(f"{band} .main-action", narrow)
+    assert "margin-top: -40px" in _rule(f"{band} .main-action", "max-width: 720px")
+    assert "margin-top: 0" in _rule(f"{band} > .your-photo", narrow)
+    # asked low on a phone (ask-up), the questions stay right under the card, the photo after
+    assert order(".answer-page .answer-cols.ask-up > :is(.your-photo, .your-more)") > order(
+        ".answer-page .answer-cols.ask-up #chat"
+    )
+    # a desktop keeps the photo beside the main card: nothing here reaches 960px and up
+    for at, s, _b in _rules(CSS):
+        if ":where(:has(> .your-photo" in s:
+            assert any("max-width" in a for a in at), s
+
+
+def test_the_main_card_before_the_photo_stays_visible_at_rest():
+    # the reorder adds no motion of its own, and nothing it moves starts hidden
+    for _at, s, b in _rules(CSS):
+        if ":where(:has(> .your-photo" in s or "ask-up > :is(.your-photo" in s:
+            assert "opacity" not in b and "animation" not in b and "visibility" not in b, s

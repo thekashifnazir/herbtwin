@@ -66,18 +66,18 @@ def main(argv: list[str] | None = None) -> int:
         seen["state"] = state  # what the app decided against: its own action and plant
         return real_quoted(page, state)
 
-    def start(search, adapter, plant, problem, month, about):
+    def start(search, adapter, plant, problem, *rest):
         seen["plant"], seen["problem"] = plant, problem
-        got = real_start(search, adapter, plant, problem, month, about)
+        got = real_start(search, adapter, plant, problem, *rest)
         seen["started"] = got is not None
         return got
 
-    def pick(found, about):
+    def pick(found, about, *rest):
         seen["provider"] = found.provider
         seen["hits"] = [h.url for h in found.hits]
         seen["about"] = [h["url"] for h in about([{"url": h.url, "title": h.title,
                          "snippet": h.snippet, "lines": list(h.lines)} for h in found.hits])]  # fmt: skip
-        return real_pick(found, about)
+        return real_pick(found, about, *rest)
 
     def finish(checking):
         page = real_finish(checking)

@@ -23,7 +23,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from herbtwin.adapters.base import AdapterError, ModelAdapter, ToolCall
 from herbtwin.advice_context import FENCE_RUN, fence, history_text, told_lines
-from herbtwin.answer import TRAY_CHECK, dont_if_dry
+from herbtwin.answer import NO_CURE_HEADLINE, TRAY_CHECK, dont_if_dry
 from herbtwin.scenarios import SCENARIOS, run_scenario
 from herbtwin.schemas import AnalysisRecord, SoilFeel
 from herbtwin.search import MAX_HITS
@@ -745,7 +745,13 @@ def starters(rec: AnalysisRecord) -> list[str]:
     like a typed one; the what-if runs the plant model."""
     indoors = rec.observation is not None and rec.observation.setting == "indoor"
     what_if = "What if I don't water it this week?" if indoors else "What if I move it inside?"
-    if rec.answer is not None and rec.answer.photo_issue:
+    rough = rec.answer is not None and rec.answer.photo_issue
+    if rec.answer is not None and rec.answer.headline == NO_CURE_HEADLINE:
+        # no cure: never "How do I treat …?" under "There is no cure", nor a what-if for a
+        # plant to pull out (22 Oct site walk); a rough read keeps its no-"eat" rule
+        spread = "Will it spread to my other plants?"
+        return [spread] if rough else ["Can I eat the healthy leaves?", spread]
+    if rough:
         # a rough read may have the name wrong: no "safe to eat?" on it (judge walk of #269)
         return ["When should I harvest it?", what_if]
     if rec.problem is not None:

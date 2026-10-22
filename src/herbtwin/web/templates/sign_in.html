@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Sign in · herbtwin{% endblock %}
+{% block page %}sign-in-page has-band{% endblock %}
 {% block main %}
+{# the band, as the rest of the site opens (22 Oct site walk), the email card over its edge #}
+<div class="page-band">
 <h1>Sign in</h1>
 <p class="lead">We email you a link. No password.</p>
-<form method="post" action="/auth/sign-in" class="card">
+</div>
+<form method="post" action="/auth/sign-in" class="card ink band-overlap">
   <label>Your email
     <input type="email" name="email" required maxlength="254" autocomplete="email">
   </label>

@@ -23,7 +23,7 @@ is in the submission form; it is not in this repository.
    location says "Using your photo's location"; without one, type a town, or there is no
    weather and no test on the plant's twin. Press **What does my plant need?**
    (the big green button; **Analyse** on a site without the spot answer).
-2. **Watch it work.** The page lists each step as it happens ("Reading the photo",
+2. **Watch it work.** The page names the step it is on at the top and lists each step as it happens ("Reading the photo",
    "Found …", "Looking up how … likes to grow", "Checking the weather where you are",
    "Thinking about what it needs"), then opens the answer. Section 4 says why.
 3. **Read the answer.** It comes in three blocks (on a wide screen the first is on the
@@ -32,7 +32,7 @@ is in the submission form; it is not in this repository.
      chips ("Outdoors", "In a container", "18 Oct", "London"); with no place outdoors, the
      band asks "We don't know where this is: add a town for weather-checked advice." with a
      town box and a lime **Check the advice** button; the photo you sent, big beside
-     the main card (above it on a phone); when the photo's exposure let us measure it, the
+     the main card (under it on a phone, so the advice is in the first screen); when the photo's exposure let us measure it, the
      light at that moment ("Light at 14:05: part shade, about 40% of open-sky light"); then the main action in one
      big card with a green head: its tag (TODAY; no tag when the advice is to leave it),
      the headline, why, a "→" line saying what happens if you do it (when there is data
@@ -55,7 +55,10 @@ is in the submission form; it is not in this repository.
      into pot, soil, leaves and stems, and where it sits, nothing new; then a
      **What next** card: send a new photo in a few days, **Add 1 or 2 more photos** of the same
      plant for a surer answer (when that is on), **I did it** for an action you can
-     carry out, and **Send another photo**;
+     carry out, and **Send another photo**; under **Remove it. There is no cure for this.**
+     it says to bag it and bin it, not the compost, and to check the plants beside it, with
+     no more photos of a plant that is going. A pest the sources say to pick off by hand
+     gets that as its headline ("Pick the beetles off by hand.") in place of "Treat it.";
    - **Tell us more and we'll check the advice.** Folded to one line, **Want a more exact
      answer? Tell us more**, until you tap it or a **Make this surer** button on the main
      card; it starts open once you have asked or told us something, or when the main card
@@ -150,8 +153,9 @@ keep the exact one.
 A photo read makes four or five model calls: one to read the photo, a second look when the
 read suggests a pest or disease, and three to the advisor (the same question asked three
 times, to see whether the answers agree). The trusted-page check reads up to six sentences
-with Nemotron 3 Ultra, each with a second short pass when it has conditions, run while the
-advisors think. If GLM fails, the backup reads the photo too. Around them it fetches the
+a page from the first three trusted pages with Nemotron 3 Ultra, each with a second short
+pass when it has conditions, and one last Ultra check on any sentence the code agrees with,
+run while the advisors think. If GLM fails, the backup reads the photo too. Around them it fetches the
 weather and the plant's care facts; a plant outside the built-in list has its RHS page
 looked up and read. A read takes about 15 to 35 seconds: on the live site, 25 and 36
 seconds on 14 Oct, 28 on 16 Oct and 15.5 on 19 Oct. (On 12 Oct, before the second look was

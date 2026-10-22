@@ -196,6 +196,10 @@ class PageSentence(BaseModel):
 
     text: str = Field(max_length=400)
     form: Form | None = None
+    heading: str | None = Field(None, max_length=200)  # the page's heading above it
+    # the plant state (trusted_page.gated) Nemotron said it backs, read with our advice
+    # (stages/trusted_backs.py); asked only when the code agreed. None: not asked, or no
+    backed: str | None = Field(None, max_length=600)
 
 
 class TrustedCheck(BaseModel):

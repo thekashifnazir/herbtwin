@@ -1,23 +1,30 @@
 {% extends "base.html" %}
 {% block title %}Judges · herbtwin{% endblock %}
-{% block page %}judge-page{% endblock %}
+{% block page %}judge-page has-band{% endblock %}
+{% block wrap %} wide{% endblock %}
 {% block main %}
+{# the band, as About and My plants open (22 Oct site walk: at 1300px this page was mostly
+   empty); the code card pulls up over its edge, and its button is the page's one primary #}
+<div class="page-band">
 <h1>Judges</h1>
 {% if done %}
-<p class="lead done">You're in. Photo reads on this browser skip the daily limits for 60 days.</p>
+<p class="lead">You're in. Photo reads on this browser skip the daily limits for 60 days.</p>
 {# the whole visit from its first screen, as anyone sees it, is the main way on; the samples
    below are a shortcut (21 Oct, Kash: "make it clear they can go back to the home page to
    carry on ... I wanted to get the full experience from the start") #}
 <div class="judge-home">
-  <p><a class="button primary" href="/">Start from the home page</a></p>
-  <p class="small muted">The full visit, as anyone sees it: send a photo of a plant and follow it through.</p>
+  <p class="actions"><a class="button primary" href="/">Start from the home page</a></p>
+  <p class="small">The full visit, as anyone sees it: send a photo of a plant and follow it through.</p>
 </div>
 {% elif blocked %}
-<p class="err">Too many tries today. Try again tomorrow.</p>
+<p class="lead" role="alert">Too many tries today. Try again tomorrow, or try a sample below.</p>
 {% else %}
 <p class="lead">Enter the judges' code to skip the daily photo limits on this browser.</p>
-{% if wrong %}<p class="err" role="alert">That code didn't work. Check it and try again.</p>{% endif %}
-<form method="post" action="/judge" class="card">
+{% endif %}
+</div>
+{% if not done and not blocked %}
+<form method="post" action="/judge" class="card ink band-overlap judge-code">
+  {% if wrong %}<p class="err" role="alert">That code didn't work. Check it and try again.</p>{% endif %}
   <label>Judges' code
     <input type="password" name="code" required maxlength="100" autocomplete="off">
   </label>

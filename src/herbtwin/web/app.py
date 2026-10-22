@@ -36,6 +36,8 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from herbtwin import local_help, reminders
 from herbtwin.answer import (
     NO_CURE_HEADLINE,
+    NO_CURE_NEXT,
+    NO_CURE_THANKS,
     TRAY_CHECK,
     advisor_lines,
     by_part,
@@ -138,6 +140,7 @@ from herbtwin.web.accounts import (
     set_session,
 )
 from herbtwin.web.edge import EdgeGuard, visitor_ip
+from herbtwin.web.head import HeadAsGet
 from herbtwin.web.held_photos import HeldPhotos
 from herbtwin.web.progress import (
     HEAD,
@@ -200,6 +203,8 @@ TEMPLATES.env.globals["read_more"] = read_more  # the page Tavily found
 TEMPLATES.env.globals["model_map"] = model_map  # each step's model, time and cost
 TEMPLATES.env.globals["soil_colour_words"] = soil_colour_words  # no Munsell codes on the page
 TEMPLATES.env.globals["no_cure_headline"] = NO_CURE_HEADLINE  # Compare says why it is empty
+TEMPLATES.env.globals["no_cure_next"] = NO_CURE_NEXT  # What next under "Remove it"
+TEMPLATES.env.globals["no_cure_thanks"] = NO_CURE_THANKS  # its "I did it" thanks
 TEMPLATES.env.globals["dont_if_dry"] = dont_if_dry  # the Don't card with the soil unknown
 TEMPLATES.env.globals["tray_check"] = TRAY_CHECK  # under "Bring it indoors" for a pot
 TEMPLATES.env.globals["sample_files"] = sample_files  # home: a picked sample is set in London
@@ -589,6 +594,7 @@ def create_app(
     style.know_font_types()
     app.mount("/static", _Static(directory=style.STATIC), name="static")
     app.add_middleware(FlushTraces, traces=lambda: app.state.deps.traces)
+    app.add_middleware(HeadAsGet)  # outermost: a HEAD is a GET with no body
     edge, judge_code = settings.edge_secret, settings.judge_code
     secure = (app.state.site_url or "").startswith("https://")
     judge_tries = judge.Attempts()
@@ -637,6 +643,10 @@ def create_app(
         # an expired answer and a missing page are 404s, but each has its own heading
         heading = heading or OWN_HEADINGS.get(text) or MESSAGE_HEADINGS.get(status)
         context: dict = {"message": text, "back": back, "back_text": back_text, "heading": heading}
+        # the read caps and the budget stop (22 Oct walk: a dead end): the judges' code lifts
+        # both, and the day's cap says when it lifts by itself
+        if text in (BUSY_DAY, OUT_OF_BUDGET):
+            context["capped"] = "day" if text == BUSY_DAY else "budget"
         if signed_in is not None:
             context["signed_in"] = signed_in
         return TEMPLATES.TemplateResponse(request, "message.html", context, status_code=status)

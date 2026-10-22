@@ -1,4 +1,7 @@
-/* /judge: the code box, then one-tap samples as rows (a thumbnail and what it shows) */
+/* /judge: the band, the code card pulled up over its edge, then one-tap samples as rows (a
+   thumbnail and what it shows), two side by side on a wider screen. The page is wide, so the
+   card and the paragraphs keep the reading column */
+.judge-page .judge-code, .judge-page :is(.judge-start, .judge-staged) > p { max-width: var(--measure); }
 .judge-page .judge-start, .judge-page .judge-staged { margin-top: 32px; }
 /* in: the home page is the main way on, the samples a shortcut under it (21 Oct, Kash) */
 .judge-page .judge-home { margin: 16px 0 0; }
@@ -12,3 +15,4 @@
 .judge-page .judge-pick[aria-busy="true"] { opacity: .6; }
 .judge-page .judge-pick img { width: 112px; height: 84px; object-fit: cover; border-radius: 8px; }
 .judge-page .judge-pick strong { display: block; margin-bottom: 2px; }
+@media (min-width: 720px) { .judge-page .judge-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

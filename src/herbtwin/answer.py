@@ -92,6 +92,29 @@ NO_CURE_HEADLINE = "Remove it. There is no cure for this."
 NO_CURE_BECAUSE = "this disease has no cure, and it can spread to other plants of its kind."
 NO_CURE_SEEN = "{seen}, which has no cure and can spread to other plants of its kind."
 SPARES_THE_OTHERS: frozenset[str] = frozenset({"treat_or_remove", "isolate", "check_pests"})
+# What next under "Remove it": no plant to photo again, add photos of or keep (22 Oct site
+# walk: "send a new photo of the same plant" under "Remove it"). Bag and bin is the sources'
+# own; the compost is where a gardener would put it otherwise
+NO_CURE_NEXT = (
+    "Bag it and bin it, not the compost. Check the plants beside it in a few days; "
+    "send a photo if you see the same signs."
+)
+NO_CURE_THANKS = "Thanks: that keeps it off the others."  # "I did it", said by a plant pulled out
+# the sourced how as the headline, in our own words (22 Oct site walk: "Treat it." never said
+# how, while the hand-picking sat under it as "From gardening sources … (less sure)"). Each
+# only over an outcome row that says it, and only when that row passes _unsafe for the card
+TREAT_HOW: tuple[tuple[re.Pattern[str], str], ...] = (
+    (
+        re.compile(r"^Picking (?:off )?(?:the )?beetles and larvae (?:off )?by hand", re.I),
+        "Pick the beetles off by hand.",
+    ),
+    (re.compile(r"^Squashing colonies by hand", re.I), "Squash the aphids by hand."),
+    (
+        re.compile(r"^(?:hand-picking (?:them|slugs and snails) by torchlight|torchlight hand-pick)", re.I),
+        "Pick off the slugs and snails by torchlight.",
+    ),
+    (re.compile(r"\bpick(?:ing)? caterpillars off by hand", re.I), "Pick the caterpillars off by hand."),
+)  # fmt: skip
 SEASONAL_JOBS = frozenset({"prune"})  # actions whose reason ends with the season's next change
 # perennial herbs that rest through the UK winter: from September to February a cut "to
 # encourage bushier growth" asks for growth the plant will not make. The gardener's review
@@ -393,6 +416,16 @@ def _unsafe(sentence: str, rest: bool, primary: str | None = None) -> bool:
         or (rest and _cuts_while_resting(sentence))
         or (primary is not None and _commands_another(sentence, primary))
     )
+
+
+def sourced_how(card: ActionCard, rest: bool) -> str | None:
+    """A treat card's how as its headline: our fixed words for the outcome row's own hand
+    job, or None (no row of ours, no hand job we word, or a row that fails _unsafe)."""
+    if card.action != "treat_or_remove" or card.if_you_do_from != "outcome_table":
+        return None
+    if _unsafe(card.if_you_do, rest, "treat_or_remove"):
+        return None
+    return next((said for p, said in TREAT_HOW if p.search(card.if_you_do)), None)
 
 
 def winter_rest(plant_key: str | None, month: int) -> bool:
@@ -1462,6 +1495,9 @@ def build_answer(
         # "(less sure)" beside it, under "Likely right", argued with the page (19 Oct)
         main.less_sure = False
         do = [main] + [c for c in do[1:] if c.action in SPARES_THE_OTHERS]
+    how = None if no_cure else sourced_how(main, no_cut)
+    if how is not None:
+        main.less_sure = False  # the headline rests on the sourced line, as with no cure
     dont = None
     for action in TEMPTING:
         v = views.get(action)
@@ -1536,7 +1572,8 @@ def build_answer(
     return Answer(
         headline=NO_CURE_HEADLINE
         if no_cure
-        else ours
+        else how
+        or ours
         or _leave_but_protect(panel.primary, views)
         # a rough read can't say "normal for October": the plain leave-it line (judge walk)
         or _headline(

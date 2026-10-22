@@ -65,9 +65,7 @@ def test_the_card_is_script_only_and_sends_each_tap():
     )
     assert "Push a finger 2 cm into the soil. How does it feel?" in card
     assert '<input type="radio" name="soil_feel" value="dry"> Dry</label>' in card
-    assert (
-        '<input type="radio" name="last_watered" value="1_2_days"> 1 to 2 days ago</label>' in card
-    )
+    assert '<input type="radio" name="last_watered" value="1_2_days"> 1–2 days ago</label>' in card
     assert '<p class="sent" role="status"></p>' in card  # each reply is said once
     script = card.split("<script>", 1)[1]
     assert "f.hidden=false" in script and "f.addEventListener('change'" in script
@@ -289,11 +287,9 @@ def test_the_questions_say_the_read_has_started_and_a_reply_still_counts():
     # 21 Oct, Kash on rev 00050: the steps moved before the second question, and it read as
     # if the answer had started without them. Nothing waits on them, and the page says so
     card = asks_card(WID)
-    assert (
-        '<p class="muted">We\'ve started on your photo. Answer any time before you open your '
-        "answer and we'll use it. Skip them if you like.</p>" in card
-    )
-    assert "They make the advice surer" not in card
+    # 22 Oct site walk: said in one short line, so the questions start higher on a phone
+    assert '<p class="muted">Optional. Your answers make the advice closer.</p>' in card
+    assert "They make the advice surer" not in card and "We've started" not in card
 
 
 def test_not_sure_on_watering_is_said_plainly_and_sends_no_watering(tmp_path):
@@ -328,3 +324,22 @@ def test_not_sure_on_watering_says_kept_only_when_the_answer_used_a_watering_rep
     assert w2.reply(WID, None, Told(), frozenset({"last_watered"})) == "later"
     w2.finish(WID, "/answers/x")
     assert w2.late(WID, None) == ("/answers/x", None)  # nothing to check again
+
+
+def test_the_answer_pills_take_two_columns_and_short_words_on_a_phone():
+    # 22 Oct site walk: the 10 pills wrapped one per row on a phone (the card ~1.6 screens).
+    # Two columns, and shorter words for watering; the values sent are the same
+    from herbtwin.schemas import LAST_WATERED_TEXT
+    from herbtwin.web.style import CSS
+
+    card = asks_card(WID)
+    watered = re.findall(r'name="last_watered" value="([^"]+)"> ([^<]+)</label>', card)
+    assert [v for v, _ in watered] == list(LAST_WATERED_TEXT)
+    assert [w for _, w in watered] == [
+        "Today", "1–2 days ago", "3–7 days ago", "Over a week ago", "Not sure",
+    ]  # fmt: skip
+    assert max(len(w) for _, w in watered) <= 15
+    assert (
+        "@media (max-width: 720px) { .wait-asks .choices { display: grid;"
+        " grid-template-columns: 1fr 1fr;" in CSS
+    )

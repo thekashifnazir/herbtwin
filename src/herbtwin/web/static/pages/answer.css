@@ -257,10 +257,23 @@
 .answer-page .your-photo.solo { width: 100%; max-width: 560px; height: auto; aspect-ratio: 3 / 2; object-fit: cover;
   margin: 0 0 20px; border: 1.5px solid var(--fg); border-radius: var(--surface); background: var(--card); }
 @media (max-width: 720px) { .answer-page .page-band + .answer-cols > .your-photo { margin-top: -40px; } }
+/* under 960px the main card comes first and the photo follows it, still big (22 Oct site
+   walk, Top 5 #5: on a phone the band and the photo filled the first screen and the
+   headline started at its bottom edge). The two columns become one list for this, as
+   ask-up does; the card takes the pull-up over the band. No motion of its own */
 @media (max-width: 959px) {
-  .answer-page .page-band + .answer-cols:has(> .your-photo:not([hidden])) .plan,
-  .answer-page .answer-cols.ask-up:has(> .your-photo:not([hidden])) .main-action { margin-top: 0; }
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) { display: flex; flex-direction: column; }
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > .plan { display: contents; }
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > .plan > * { order: 3; }
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) .main-action { order: 1; position: relative; }
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > :is(.your-photo, .your-more) { order: 2; }
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > .side { order: 4; }
+  .answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden]))) .main-action { margin-top: -48px; }
+  .answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden]))) > .your-photo { margin-top: 0; }
+  /* asked low (ask-up): the questions stay right under the card, the photo after them */
+  .answer-page .answer-cols.ask-up > :is(.your-photo, .your-more) { order: 3; }
 }
+@media (max-width: 720px) { .answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden]))) .main-action { margin-top: -40px; } }
 @media (min-width: 960px) {
   /* the plan down the left; the photo, then the questions and details, down the right. The
      second row takes the plan's extra height, so the photo's row is only as tall as it */

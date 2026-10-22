@@ -94,7 +94,13 @@ NOW_JS = (
     # a new step ends a stall: the text comes back only on the next one
     "const st=document.getElementById('stalled');if(st)st.hidden=true;"
     "const s=document.querySelectorAll('.progress-steps ol>li');"
-    "s.forEach((li,i)=>li.classList.toggle('now',i===s.length-1))}"
+    "s.forEach((li,i)=>li.classList.toggle('now',i===s.length-1));"
+    # the step now, named at the top of the card above the questions (22 Oct site walk: on a
+    # phone the steps began ~1.4 screens down). An advisor's step without its early pick,
+    # which could argue with the answer
+    "const n=document.getElementById('wait-now-step'),li=s[s.length-1];if(n&&li){"
+    "const t=((li.firstChild||{}).textContent||'').trim();"
+    "n.textContent=li.classList.contains('advisor')?t.split(':')[0]:t}}"
     # our own data for the plant (SeasonFound, WeatherFound) arrives as a step; with script
     # its card moves to the side column, without it the card stays in the list
     "function herbtwinAside(id){const e=document.getElementById(id),"
@@ -119,6 +125,15 @@ WAIT_PHOTO = (
     'const e=document.createElement("img");e.src=s;e.alt="Your photo "+(k+2);'
     "e.width=e.height=52;m.append(e)});m.hidden=!m.children.length}"
     "}catch{}})()</script>\n"  # no storage (private mode): the steps show without it
+)
+
+
+# the step being worked on, one line at the top of the card beside the photo, above the
+# questions (22 Oct site walk, Top 5 #5: on a phone nothing in the first screen said work
+# was happening). Its height never changes, so it never moves the questions; script only
+WAIT_NOW = (
+    '<p class="wait-now" id="wait-now"><span class="wait-now-label">Now</span>'
+    '<span class="wait-now-step" id="wait-now-step">Starting on your photo</span></p>'
 )
 
 
@@ -147,6 +162,7 @@ def page_head(stalled: str, photo: bool = True) -> str:
         'aria-label="About your plant" hidden></aside>\n'
         '<div class="card ink band-overlap progress-steps">\n'
         + (WAIT_PHOTO if photo else "")
+        + WAIT_NOW
         # hidden until a stall; without script it shows, as the only way to say it
         + f'<p class="muted" id="stalled" hidden><small>{stalled}</small></p>'
         f'<noscript><p class="muted"><small>{stalled}</small></p></noscript>\n<ol>\n'
@@ -363,10 +379,15 @@ ASKED_KEPT = (
 )
 ASK_FAILED = "That didn't send. You can tell us under your answer."
 ASKED_BELOW = "Thanks. This photo asks which plant first: tell us again under your answer."
-STARTED = (
-    "We've started on your photo. Answer any time before you open your answer and we'll use "
-    "it. Skip them if you like."
-)
+# 22 Oct site walk: one short line, so the questions start higher on a phone
+STARTED = "Optional. Your answers make the advice closer."
+# watering in short words, so the pills sit two to a row on a phone (22 Oct site walk);
+# the same values as LAST_WATERED_TEXT, which the answer page still words in full
+WATERED_SHORT = LAST_WATERED_TEXT | {
+    "1_2_days": "1–2 days ago",
+    "3_7_days": "3–7 days ago",
+    "longer": "over a week ago",
+}
 # on the ready card while a quick question is still open (progress._done)
 STILL_ASK = "You can still answer the questions above: we'll use them when you open your answer."
 SEE_WAIT_S = 30  # "See your answer" waits this long for a late reply's check, then opens it
@@ -402,7 +423,7 @@ def asks_card(wait_id: str) -> str:
             "Push a finger 2 cm into the soil. How does it feel?",
             {**SOIL_FEEL_TEXT, NOT_SURE: "not sure"},  # as on the watering one (Kash)
         )
-        + _choices("last_watered", "When did you last water it?", LAST_WATERED_TEXT)
+        + _choices("last_watered", "When did you last water it?", WATERED_SHORT)
         + '<p class="sent" role="status"></p></form>'
         "<script>(()=>{const f=document.getElementById('wait-asks');"
         "if(!f||!window.fetch||!window.FormData)return;f.hidden=false;"
@@ -495,6 +516,10 @@ def _done(target: str) -> str:
         + f"const s={json.dumps(said)},h=document.querySelector('.page-band h1'),"
         + "l=document.querySelector('.page-band .lead'),w=document.getElementById('wait-said');"
         + "if(h)h.textContent=s;if(l)l.hidden=true;if(w)w.textContent=s+'.';"
+        # the line at the top of the card says it too, and stops pulsing
+        + "const nw=document.getElementById('wait-now');if(nw){nw.classList.add('finished');"
+        + "nw.querySelector('.wait-now-label').textContent='Done';"
+        + "document.getElementById('wait-now-step').textContent=s}"
         + "const r=document.getElementById('ready');"
         # docked, the page's foot clears the bar at its height now, as its lines come and go
         + "const pad=()=>{if(r&&r.classList.contains('docked'))"
@@ -539,7 +564,9 @@ def _failed(reason: str, retry: str = "/") -> str:
         + DROP_ASKS
         # nothing is being worked on now: the last step stops pulsing beside the error
         + "<script>document.querySelectorAll('.progress li.now')"
-        ".forEach(li=>li.classList.remove('now'))</script>\n"
+        ".forEach(li=>li.classList.remove('now'));"
+        # no step is being worked on: the error below says what happened
+        "(e=>{if(e)e.hidden=true})(document.getElementById('wait-now'))</script>\n"
         f'<p class="err">That didn\'t work: {html.escape(reason.rstrip("."))}. '
         f'<a href="{html.escape(retry, quote=True)}">Try again</a></p>\n{_END}'
     )

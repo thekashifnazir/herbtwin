@@ -679,3 +679,58 @@ def test_the_found_step_names_the_photo_model_by_its_plain_name_only():
     for unnamed in ("mock", "some/new-model", None):
         line = _step(PlantFound("basil", unnamed))
         assert line.startswith("<li>Found basil</li>") and "Read by" not in line
+
+
+def test_the_card_opens_on_the_step_now_above_the_questions():
+    # 22 Oct site walk (Top 5 #5): on a phone the first screen was the photo and the two
+    # questions; the steps began ~1.4 screens down, so nothing said work was happening. One
+    # line at the top of the card names the step now, before the questions and every step
+    from herbtwin.web.progress import HEAD, NOW_JS, SIGNED_OUT_HEAD, SPOT_HEAD
+
+    for head in (HEAD, SIGNED_OUT_HEAD, SPOT_HEAD):
+        card = head.split('<div class="card ink band-overlap progress-steps">\n', 1)[1]
+        assert (
+            '<p class="wait-now" id="wait-now"><span class="wait-now-label">Now</span>'
+            '<span class="wait-now-step" id="wait-now-step">Starting on your photo</span></p>'
+        ) in card
+        # the questions (the stream's `extra`) come after the first <ol>, the steps after that
+        assert card.index('id="wait-now"') < card.index("<ol>")
+    now = NOW_JS.split("function herbtwinNow(){", 1)[1].split("function herbtwinAside", 1)[0]
+    assert "document.getElementById('wait-now-step')" in now
+    # an advisor's step without its early pick (site walk: it could argue with the answer)
+    assert "li.classList.contains('advisor')" in now and ".split(':')[0]" in now
+
+
+def test_the_step_now_line_never_changes_height_or_moves_without_consent():
+    # the no-jump rule (21 Oct, Kash): the line sits above the questions, so a long step must
+    # never push them down while someone is answering; without script it is not shown
+    from herbtwin.web.style import CSS
+
+    assert "html:not(.js) .wait-now { display: none; }" in CSS
+    assert (
+        ".progress-steps .wait-now-step { display: block; overflow: hidden; white-space: nowrap;"
+        " text-overflow: ellipsis;" in CSS
+    )
+    # on a phone two lines are kept for it, filled or not
+    assert (
+        "@media (max-width: 720px) { .progress-steps .wait-now-step { height: 2.6em;"
+        " white-space: normal; display: -webkit-box; -webkit-line-clamp: 2;" in CSS
+    )
+    pulse = ".progress-steps .wait-now:not(.finished) .wait-now-step::before { animation: now"
+    assert f"@media (prefers-reduced-motion: no-preference) {{ {pulse}" in CSS
+    assert CSS.count(pulse) == 1  # still where motion is not welcome
+
+
+def test_the_step_now_line_says_ready_and_goes_on_a_failure():
+    from herbtwin.web.progress import _done, _failed
+
+    end = _done("/answers/abc")
+    assert (
+        "const nw=document.getElementById('wait-now');if(nw){nw.classList.add('finished');"
+        "nw.querySelector('.wait-now-label').textContent='Done';"
+        "document.getElementById('wait-now-step').textContent=s}" in end
+    )
+    assert end.index("document.getElementById('wait-now')") < end.index("r.classList.add('docked')")
+    failed = _failed("the photo read took too long")
+    assert "document.getElementById('wait-now')" in failed and ".hidden=true" in failed
+    assert failed.index("wait-now") < failed.index('class="err"')

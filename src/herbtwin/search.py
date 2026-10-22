@@ -18,6 +18,7 @@ from herbtwin.config import Settings
 
 log = logging.getLogger(__name__)
 TAVILY_SEARCH_URL = "https://api.tavily.com/search"
+TAVILY_EXTRACT_URL = "https://api.tavily.com/extract"
 EXA_SEARCH_URL = "https://api.exa.ai/search"
 TINYFISH_SEARCH_URL = "https://api.search.tinyfish.ai"
 TIMEOUT_S = 15.0
@@ -194,6 +195,27 @@ class Tavily:
         )
         return _hits(data.get("results"), domains, lambda r: r.get("content"))
 
+    def extract(self, urls: list[str], domains: tuple[str, ...]) -> dict[str, str]:
+        """Whole pages as markdown, for the trusted-page check (round 8): one call, 1
+        credit per 5 pages; only trusted pages asked, only trusted pages kept."""
+        asked = [u for u in urls if is_trusted(u, domains)][:5]
+        if not asked:
+            return {}
+        data = request_json(
+            self.http,
+            "POST",
+            TAVILY_EXTRACT_URL,
+            {"Authorization": f"Bearer {self.key}"},
+            body={"urls": asked, "format": "markdown", "extract_depth": "basic"},
+        )
+        return {
+            r["url"]: r["raw_content"]
+            for r in data.get("results") or []
+            if isinstance(r, dict)
+            and r.get("url") in asked
+            and isinstance(r.get("raw_content"), str)
+        }
+
     def recent(self, query: str, domains: tuple[str, ...], n: int) -> list[Hit]:
         """Tavily's search over the last month, each hit with the day it was published
         (Seen recently in the UK, reported.py). Tavily has no `days`: the window is
@@ -297,6 +319,14 @@ class WebSearch:
             # all ASKED: each caller keeps the ones about its plant, then its own few
             return Found(hits[:ASKED], p.name, None if hits else "nothing found on trusted sites")
         return Found([], None, UNAVAILABLE)
+
+    def extract(self, urls: list[str]) -> dict[str, str]:
+        """Whole trusted pages from the first provider that reads them (Tavily); {} when
+        none can."""
+        for p in self.providers:
+            if hasattr(p, "extract"):
+                return p.extract(urls, self.domains)
+        return {}
 
 
 def web_search_from(settings: Settings, http: httpx.Client | None = None) -> WebSearch | None:

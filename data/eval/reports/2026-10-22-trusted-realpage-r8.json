@@ -1,0 +1,3006 @@
+{
+ "prereg": "data/eval/prereg/2026-10-22-trusted-realpage-r8.md",
+ "frozen": "1b301423",
+ "scored_at": "2026-10-22T00:02:14.781362+00:00",
+ "items": 444,
+ "sentences": 214,
+ "negatives": 418,
+ "false_agrees": 3,
+ "false_agree_wilson95": [
+  0.0024,
+  0.0209
+ ],
+ "verdict": "PASS",
+ "positives": 26,
+ "recall": 0.3846,
+ "recall_wilson95": [
+  0.2243,
+  0.5747
+ ],
+ "no_form": 4,
+ "latency_p50_s": 1.33,
+ "latency_p95_s": 1.93,
+ "spent_usd": 0.2943,
+ "false_agree_items": [
+  {
+   "id": 8157,
+   "sentence": "Often, simply hand-squashing a small infestation is all that\u2019s required.",
+   "action": "treat_or_remove"
+  },
+  {
+   "id": 8158,
+   "sentence": "Often, simply hand-squashing a small infestation is all that\u2019s required.",
+   "action": "treat_or_remove"
+  },
+  {
+   "id": 8323,
+   "sentence": "Check plants every few days and water as needed, aiming to keep the just moist.",
+   "action": "water"
+  }
+ ],
+ "agree_ids": [
+  8051,
+  8117,
+  8139,
+  8140,
+  8157,
+  8158,
+  8167,
+  8168,
+  8225,
+  8226,
+  8237,
+  8238,
+  8323
+ ],
+ "code_agree_ids": [
+  8015,
+  8016,
+  8017,
+  8018,
+  8049,
+  8050,
+  8051,
+  8061,
+  8062,
+  8065,
+  8066,
+  8067,
+  8071,
+  8072,
+  8073,
+  8074,
+  8075,
+  8076,
+  8113,
+  8114,
+  8117,
+  8139,
+  8140,
+  8153,
+  8154,
+  8157,
+  8158,
+  8167,
+  8168,
+  8175,
+  8176,
+  8225,
+  8226,
+  8237,
+  8238,
+  8323,
+  8333,
+  8334,
+  8375,
+  8376
+ ],
+ "code_false_agrees": 30,
+ "by_half": {
+  "soil_known": {
+   "negatives": 207,
+   "false_agrees": 2,
+   "false_agree_wilson95": [
+    0.0027,
+    0.0345
+   ],
+   "positives": 15,
+   "recall": 0.4
+  },
+  "soil_not_known": {
+   "negatives": 211,
+   "false_agrees": 1,
+   "false_agree_wilson95": [
+    0.0008,
+    0.0264
+   ],
+   "positives": 11,
+   "recall": 0.3636
+  }
+ },
+ "recall_target": 0.5,
+ "forms": {
+  "strawberry|Adult vine weevils can be caught by hand and squashed.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "vine weevils"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|After three years, cut down one or two older, less productive stems to the soil level each year.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "After three years"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "older, less productive"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|Also consider not removing the aphids at all \u2013 they are a vital source of food for many other species, including house sparrows and ladybirds, which control them naturally for you.": {
+   "action": "treat_or_remove",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Also keep the soil around your plants clear (the fungus survives on plant debris) and remove any damaged fruits to prevent the problem spreading.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "fungus"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Alternatively, if you're practicing no-dig, the soil with organic matter ahead of sowing or planting directly into the mulch.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tomato|Alternatively, if you're practising no-dig, mulch the soil and plant directly into the .": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chard|Alternatively, if you're practising no-dig, the soil ahead of sowing or planting directly into the mulch.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Alternatively, if you're practising no-dig, the surface of the soil ahead of planting directly into the mulch.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sorrel|Alternatively, if you\u2019re practising no-dig, the surface with well-rotted organic matter and sow or plant directly into the mulch.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "if you're practising no-dig"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "fennel|Alternatively, you can trim back the whole plant to about 30cm (1ft) tall several times during the , to encourage a regular supply of fresh young foliage for harvesting.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "several times during the"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Although lettuces are easy to grow, they usually need protection from slugs and snails.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "fennel|As young plants, avoid too much water as this can encourage leafy growth and reduce the yield.": {
+   "action": "water_less",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "young plants"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|As young plants, avoid too much water as this can encourage leafy growth and reduce the yield.": {
+   "action": "water_less",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "young plants"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|At the start of the year seedbeds and can be covered.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "start of the year"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "seedbeds"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|Avoid just regularly wetting the top centimetre or so.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Avoid just regularly wetting the top centimetre or so.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Bear in mind that soil type will determine how water is held in the soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chilli|Birds will quickly pick them off and feed them to their young.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "blueberry|Blueberries should be watered well straight after planting and during any dry spells in their first year.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "first year"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Blueberry bushes fruit well in a sunny position with moist soil, but they will produce a reasonable crop in partial shade.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|Broad beans and peas need plenty of water at flowering time for pods to set, and again two weeks after flowering begins.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "broad beans and peas",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "flowering time"
+    },
+    {
+     "kind": "other",
+     "value": "two weeks after flowering begins"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chilli|But at the other end of the season taller cloches promote ripening of aubergines, tomatoes and peppers.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "aubergines, tomatoes and peppers",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "at the other end of the season"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "taller"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lavender|But if you really want to remove them you can either brush the spit off with your hand, or wash it off with the hose.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "spit"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "kale|Carefully lift each plant individually, or remove from the modular tray, trying not to disturb the roots.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|Check plants every few days and water as needed, aiming to keep the just moist.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "aiming to keep the just moist"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|Check plants for eggs and caterpillars, and squash any on sight to reduce infestations.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "eggs and caterpillars"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Check your plants regularly for aphids\u2014at least twice a week when plants are growing rapidly\u2014in order to catch infestations early, so you can knock or hose them off or prune them out.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "growing rapidly"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Check your strawberry plants for aphids \u2013 natural predators like birds and ladybirds should be keeping them in check, but if there are lots of them you may consider removing them by squishing them with your fingers.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    },
+    {
+     "kind": "other",
+     "value": "if there are lots of them"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "chamomile|Choose a sunny planting site with light, well-drained soil that doesn\u2019t dry out totally or get .": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "outdoor",
+     "value": "planting site"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    },
+    {
+     "kind": "other",
+     "value": "sunny"
+    },
+    {
+     "kind": "other",
+     "value": "light, well-drained soil that doesn't dry out totally or get"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "kale|Choose and prepare your sowing site as explained above, make a shallow about 1cm (\u00bdin) deep, then water along the base if dry.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "if dry"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tomato|Choose your warmest, sunniest spot, sheltered from the wind.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "warmest, sunniest spot, sheltered from the wind"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|Chopped leaves can be added to salads, as well as many cooked dishes, including soups and stews.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "chilli|Cloches function in the same way as greenhouses and polytunnels but on a miniature scale.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|Collect slugs and snails.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Common chamomile can become leggy over time, so clip plants back several times through the to keep them compact, dense and bushy.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "leggy"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Cover lightly with fine compost, firm gently and water well.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Cover lightly with soil then firm gently.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chilli|Cucumbers and dwarf French beans in particular grow very well under cloches, making them successful crops in northern gardens where uncovered crops are unreliable.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "cucumbers and dwarf French beans",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "dwarf"
+    },
+    {
+     "kind": "other",
+     "value": "northern gardens"
+    },
+    {
+     "kind": "other",
+     "value": "uncovered crops are unreliable"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "blueberry|Cut all stems to 3cm to encourage new vigorous growth.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|Cut back after flowering to keep the plant compact and to stop it from becoming too woody.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|Cut back quite hard but don't cut into old wood, as the plant will rarely regrow from such wood.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "woody"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "winter savory|Cutting back plants after flowering usually allows time for a second flush of leaves that can be harvested into autumn.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Destroying fallen infected leaves in autumn will reduce the amount of infectious spores next spring.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Dig a hole large enough to accommodate the roots and water well to soak the soil.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Dig a hole that's a little larger than the plant's previous pot.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Dispose of them in a suitable natural habitat away from any cultivated land.": null,
+  "hyssop|Drainage: Requires well-drained soil to prevent root rot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "blueberry|During that time, take off any fruit buds so the plant puts its energy into growing.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "During that time"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|Either cut down the spent flower stems once they droop after a heavy frost, or leave in place until early spring and cut back just before new growth starts.": null,
+  "kale|Encourage tender young growth by regularly cutting back stems.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Fill the with peat-free multi-purpose , water well, then make a 1cm (\u00bdin) deep hole in each one.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Firm each plant in and water well.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|Firm them in, then water well.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Five cuttings will fit in a 15cm/6in pot full of cutting compost or leafmould mixed with sand.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chard|For an early start, more reliable or to protect from slugs and snails, sow indoors from early spring onwards, into modular trays filled with peat-free .": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "early spring onwards"
+    },
+    {
+     "kind": "indoor",
+     "value": "sow indoors"
+    },
+    {
+     "kind": "container",
+     "value": "modular trays"
+    },
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|For earlier harvests, sow rocket in February and March, and for harvests into winter sow in August and September and keep the plants in a greenhouse or other protected location.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "February and March"
+    },
+    {
+     "kind": "month_range",
+     "value": "August and September"
+    },
+    {
+     "kind": "indoor",
+     "value": "greenhouse or other protected location"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|For inspiration on growing all kinds of herbs, visit the RHS gardens \u2013 you'll find herb collections and veg plots full of tasty and aromatic herbs and salad leaves.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "kale|For salad plants \u2013 scatter the seeds thinly, cover with about 1cm (\u00bdin) of compost, then water well.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "salad plants",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|For the best flavour leaves use them early in the season or chop plants back after they flower.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "early in the season"
+    },
+    {
+     "kind": "other",
+     "value": "after they flower"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|For the first two years, remove only crossing, rubbing or damaged branches so the bush develops a balanced framework.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "first two years"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|For water-wise tips, see our guides below.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "marjoram|Heat treatment is a method used by commercial nurseries, but could be adapted for the home gardener.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "kale|Holes are eaten in the outer leaves of all brassicas and damage may also be seen on the inner leaves of cabbages when the heart is cut through.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "brassicas",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "cabbage heart cut through"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lavender|Holes in leaves and tiny elongated eggs left by 8mm-long green beetles with purple stripes.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "green beetles with purple stripes"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "winter savory|Holes in leaves and tiny elongated eggs left by 8mm-long green beetles with purple stripes.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "kale|If both germinate, remove the weaker seedling, then keep in bright light and water regularly.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    },
+    {
+     "kind": "other",
+     "value": "If both germinate"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|If dealing with aphids, remember washing up liquid is not soap, it is a powerful detergent designed to de-grease a frying pan.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chamomile|If flowering chamomile is grown as a lawn, clip it back in late summer with shears to remove the old flower stems.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late summer"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "flowering"
+    },
+    {
+     "kind": "other",
+     "value": "grown as a lawn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tomato|If in doubt, plant the tomatoes into generous-sized pots so the roots have plenty of room to grow and stand them outside on warm days, bringing them indoors when the temperatures drop.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pots"
+    },
+    {
+     "kind": "outdoor",
+     "value": "stand them outside on warm days"
+    },
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "when the temperatures drop"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|If leaf production stops in summer, cut back the old foliage to stimulate new growth.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "If leaf production stops in summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|If planting blueberries in the ground, prepare the area first by removing weeds.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|If pruned correctly, hardy types can live for about 15 years (as many as 20 years, in some cases).": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "hardy types"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sorrel|If sowing directly into the ground, remove any stones and rake the soil until it has a fine, crumbly texture.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sorrel|If the leaves get too old and bitter, simply remove them to encourage new growth.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "too old and bitter"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|If the soil is dry, water thoroughly to the depth of the crop\u2019s root zone.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "If the soil is dry"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|If you have a worm bin, make sure it doesn't get too hot and kill the worms.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "worms",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "If you have a worm bin"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|If you only want fennel for its leaves, you may prefer to cut off the developing flower stems as they appear, so the plant puts its energy into producing new leafy growth.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "If you only want fennel for its leaves"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "chard|If you want to protect your plot from slugs and snails, these trialled remedies just won't cut it.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|If you want to protect your plot from slugs and snails, these trialled remedies just won't cut it.": {
+   "action": "none",
+   "polarity": "dont",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "marjoram|In an infected bed, try to locate any uninfected stems and carefully dig these out and move to another location in an attempt to start a new, healthy colony.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "infected"
+    },
+    {
+     "kind": "container",
+     "value": "bed"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|In hot weather, young transplants can quickly wilt, so plant them in a cooler, lightly shaded location, which should also deter bolting (premature flowering), and water regularly.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "In hot weather"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "young transplants"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|In late spring or early summer, move young kale plants to their final growing position when they\u2019re 10\u201315cm (4\u20136in) tall.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "In late spring or early summer"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "young kale plants"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "when they're 10\u201315cm (4\u20136in) tall"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|In spring, fill or small pots with moist, peat-free and sow seeds about 1cm (\u00bdin) deep.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "In spring"
+    },
+    {
+     "kind": "container",
+     "value": "fill or small pots"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|In subsequent springs, remove the top layer of compost and replace with fresh compost \u2013 a process known as top dressing.": {
+   "action": "feed",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "In subsequent springs"
+    },
+    {
+     "kind": "container",
+     "value": "compost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|In the case of garden mint it is also necessary to remove infected .": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "garden mint",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "infected"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|In this short video guide, below, Monty Don demonstrates how to cut back lavender after flowering to maintain a neat, compact shape and prevent it from becoming leggy and unkempt.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sorrel|It can be grown from seed, but as a perennial plant, you could also take a rooted cutting or a division from an existing plant.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chilli|It is important to store and dispose of garden chemicals carefully.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "fennel|It is important to store and dispose of garden chemicals carefully.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "kale|It is important to store and dispose of garden chemicals carefully.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|It is important to store and dispose of garden chemicals carefully.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tomato|It is important to store and dispose of garden chemicals carefully.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lovage|It may need additional watering in hot, summer weather, especially if growing in full sun or free-draining soil.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot, summer weather"
+    },
+    {
+     "kind": "other",
+     "value": "if growing in full sun or free-draining soil"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "fennel|It needs no feeding and, once established, is drought-tolerant, so needs no watering unless grown in a container.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "container"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rocket|Keep the soil moist, watering in dry spells, to ensure consistent growth and prevent plants running to seed (bolting) prematurely.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Keep them free of weeds, water in prolonged dry spells and protect the ripening fruit.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "prolonged dry spells"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|Keep them somewhere warm and bright, and water regularly.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "indoor",
+     "value": "somewhere warm and bright"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Knock aphid populations off plants by shaking the plant or spraying it with a strong stream of water.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphid"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Leaves can be picked as required, or pieces of the plant cut off and used as spring greens.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "lettuce|Lettuce plants, especially loose-leaf varieties, take up very little space, so are handy for filling any small gaps on the veg plot.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|Lettuces are easy to grow, and come in many colours, flavours and textures \u2013 your salads need never be boring!": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tomato|Lift each seedling individually, using a to support its , and hold it by a leaf rather than the delicate stem.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|Lovage is easy to grow from seeds collected when ripe in late summer or autumn.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late summer or autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "kale|Make a slit with a trowel or spade and insert the cutting about a third of its depth, then press round it firmly.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "cuttings",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Make your garden a wildlife-friendly place by avoiding harmful sprays and creating a variety of wildlife habitats and nesting boxes.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Many gardeners grow strawberries through weed-suppressing membrane (ideally or reused), put in place before planting.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "before planting"
+    },
+    {
+     "kind": "other",
+     "value": "weed-suppressing membrane (ideally or reused)"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rocket|Monitoring and Treatment Decisions Check newly emerged seedlings or recently planted transplants for flea beetle damage at least twice weekly until plants are well established.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "newly emerged seedlings or recently planted transplants"
+    },
+    {
+     "kind": "named_problem",
+     "value": "flea beetle damage"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|No soil preparation is necessary, just dig a bucketful of garden compost or well-rotted manure into the soil you remove from your planting hole and use this to backfill after planting.": {
+   "action": "feed",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|Often, simply hand-squashing a small infestation is all that\u2019s required.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "a small infestation"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|On uncovered plants removing mined leaves or squeezing the mined areas to crush the maggots may give some control.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "uncovered plants"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": true
+  },
+  "fennel|Once appear, keep them in good light and water regularly.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "Once appear"
+    },
+    {
+     "kind": "indoor",
+     "value": "keep them in good light"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Once established in soil with good organic matter content, they are only likely to require additional watering during prolonged dry spells, especially when the fruits are forming.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    },
+    {
+     "kind": "other",
+     "value": "in soil with good organic matter content"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "during prolonged dry spells"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "when the fruits are forming"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lovage|Once established, lovage needs little maintenance, although it may need watering in prolonged dry spells.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "prolonged dry spells"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "marjoram|Once established, marjoram shouldn\u2019t need additional watering when growing in the ground.": {
+   "action": "water",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tomato|Once seedlings have a couple of true leaves, move them into individual pots or of peat-free multi-purpose .": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings have a couple of true leaves"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Over the course of the trial, the front left plant of each entry was cut back by two thirds after flowering.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "fennel|Periods of drought stress are very damaging and should be avoided, as this can lead to or poor-quality crops.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "Periods of drought stress"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Periods of drought stress are very damaging and should be avoided, as this can lead to or poor-quality crops.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "Periods of drought stress"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|Pick off the adult beetles and larvae by hand and destroy.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "beetles and larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "winter savory|Pick off the adult beetles and larvae by hand and destroy.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "adult beetles and larvae"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Place the container in a warm, sunny spot and water regularly.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "container"
+    },
+    {
+     "kind": "other",
+     "value": "warm, sunny spot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Plants flower sooner in hot, dry weather, so keep them well watered and avoid planting in full sun in the height of summer.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "hot, dry weather"
+    },
+    {
+     "kind": "month_range",
+     "value": "height of summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|Plants in containers need particular attention, as the can dry out quickly in warm weather, so check the compost regularly and aim to keep it evenly moist.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "plants in containers",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "warm weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Plants in containers need regular watering to keep the slightly moist.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "plants in containers",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Plants in containers, especially hanging baskets, need regular watering, as the can dry out quickly.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "plants in containers",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "containers, especially hanging baskets"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Plants in raised beds will need watering during dry spells.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "during dry spells"
+    },
+    {
+     "kind": "container",
+     "value": "raised beds"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|Plants' tender new growth can be severely damaged if sprayed with a solution.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "tender new growth"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "fennel|Position them at the same level they were previously growing and space them at least 30cm (1ft) from other plants, then water in well.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "at the same level they were previously growing"
+    },
+    {
+     "kind": "other",
+     "value": "space them at least 30cm (1ft) from other plants"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|Potato blight spores will wash down from the leaves into the soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "Potato blight"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|Practice good hygiene and remove piles of stones, old flower pots, plant debris and tarpaulin are moved away from cultivated areas.": null,
+  "strawberry|Prepare the soil well first by digging in plenty of well-rotted garden compost or manure.": {
+   "action": "feed",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Protect young plants from slugs and snails.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young"
+    },
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Provide shade in summer to avoid bolting.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|Prune after flowering, typically in August or September.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    },
+    {
+     "kind": "month_range",
+     "value": "typically in August or September"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|Prune after their first flush of flowers have faded but avoid pruning any later than early September.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "after their first flush of flowers have faded"
+    },
+    {
+     "kind": "month_range",
+     "value": "avoid pruning any later than early September"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Prune infested leaves and stems.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "infested"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Prune these out.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "blueberry|Prune while the plants are still dormant in late winter, aiming to keep the younger, more productive branches that are two or three years old \u2013 they should be reddish brown, with lots of fat fruit buds on them.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late winter"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "dormant"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Put down a flat slate on the soil near your plants and check underneath it every day to remove the slugs and snails which have congregated in the dark and damp.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    },
+    {
+     "kind": "other",
+     "value": "dark and damp"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Regularly weeding around rocket plants helps reduce competition for water.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Remove affected plants promptly before the black resting spores are formed and contaminate the soil.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "black resting spores"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Remove any netting so that birds can eat any pests in the ground.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "so that birds can eat any pests in the ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Remove growing tips to encourage bushy plants and cut back stems to 5cm in late summer to prompt new leaves for winter protection.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Remove slug homes.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slug"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|Residues will be washed off the plants into the soil and could then harm soil invertebrates such as earthworms and beetles.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Right plant wrong place.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rocket|Rocket needs little maintenance, apart from ongoing protection from slugs and snails, and regular watering to prevent drying out.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "soil_dry",
+     "value": "to prevent drying out"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|Saline Tolerance: Not particularly tolerant of saline conditions; avoid planting in salt-affected areas.": {
+   "action": "none",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "saline conditions"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Scatter the seeds thinly and lightly cover with .": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|Should you remove aphids?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|Should you remove aphids?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Simply lay it over your planting area, pinning it in place with U-shaped pieces of wire, then cut holes in it to plant into the soil underneath.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Simply water as needed in dry spells to prevent drying out, and clip back lightly if plants become leggy.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "leggy"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|So why keep forking out for plastic-wrapped lettuces that all too often end up wilting in the fridge?": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|Some produce runners (plantlets on long stems), spreading to form low ground cover, others don\u2019t produce runners so make well-behaved edging plants for veg beds and borders.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "sorrel|Sorrel will readily self-sow if you let it flower and produce seeds, or you can collect and sow them where you want them to grow.": {
+   "action": "deadhead",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "if you let it flower and produce seeds"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Sow from April through to July, spacing the seeds 10cm (4in) apart, then cover with about 2.5cm (1in) of compost.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "April through to July"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Sow one or two seeds per module (later to one if necessary), cover with 2.5cm (1in) of , then water well.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Sow outdoors in spring or early summer for repeated harvests through summer into autumn, then sow a second batch in mid-summer that will overwinter outdoors and provide early harvests the following spring.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "spring or early summer"
+    },
+    {
+     "kind": "outdoor",
+     "value": "outdoors"
+    },
+    {
+     "kind": "container",
+     "value": "ground"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "rocket|Sow rocket outdoors from April to early September, and for a further month under cloches or plastic-free fleece.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "April to early September"
+    },
+    {
+     "kind": "month_range",
+     "value": "a further month"
+    },
+    {
+     "kind": "outdoor",
+     "value": "outdoors"
+    },
+    {
+     "kind": "container",
+     "value": "cloches or plastic-free fleece"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Sow two seeds in each hole, then cover with compost.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Sowing and harvesting herbs such as coriander, chervil dill, parsley and basil regularly, adds freshness and vibrancy to your cooking and cuts food miles to zero.": {
+   "action": "shade",
+   "polarity": "do",
+   "applies_to": "plant_group",
+   "group": "herbs",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chamomile|Squash, cucumber, pumpkin, melon, bean, potato, lettuce, beet, chard, and bok choy are crops that often have aphid-transmitted viruses associated with them.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lovage|Stop picking the leaves once plants start to flower in late summer, as they turn bitter, or remove the flower stalk to prolong harvests.": {
+   "action": "harvest",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "plants start to flower in late summer"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|Substantial numbers of any of these natural control factors can mean the aphid population may be reduced rapidly without the need for treatment.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|The amount of water needed by the crop depends on which part of the plant is eaten.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "hyssop|The best time to prune hyssop is in mid spring as new growth starts emerging.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "mid spring"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "new growth starts emerging"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|The key to watering successfully is to water thoroughly but not too often.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|There are many home-made recipes for killing aphids \u2013 the most common is using dishwasher liquid mixed with water and sprayed onto the plants.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|These are best grown in the ground, as they take up more space, but can also work in large containers.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "chilli|They are used to protect rows of low growing plants such as vegetables, strawberries and cut flowers, or cover individual plants in ornamental gardens.": null,
+  "strawberry|They can also be moved in the following spring if required though should not then be allowed to fruit in their first year.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "the following spring"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "first year"
+    }
+   ],
+   "hedged": true,
+   "is_instruction": false
+  },
+  "sorrel|They can be grown as a cut-and-come-again salad leaf, or left to mature and added to soups and sauces.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|They grow best and produce the sweetest fruits in a sheltered position in full sun but will tolerate some shade.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "hyssop|They will only be the size of your fingertip, so be careful when clearing and weeding around your pond.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "size of your fingertip"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rocket|Thin your rocket seedlings if necessary to avoid overcrowding.": {
+   "action": "thin",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|This is because it would take up a lot of room on the veg plot during the prime .": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "tomato|This is why it is preferable to dispose of waste from blighted crops in other ways.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "blight"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lavender|This plant requires perfectly drained soil, preferably on the dry side, and full sun.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "strawberry|This prevents weed growth, holds water in the soil and stops soil splashing onto the fruit.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "rocket|To do this, boil the leaves for one minute before plunging them into ice cold water, draining them and bagging them up for the freezer.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|To dry the seeds, cut whole seedheads in late summer when they ripen, place in a paper bag until the seeds dry out and fall, then store the seeds in an air-tight container.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "late summer"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "when they ripen"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|To encourage strong growth for next year\u2019s crop, after fruiting finishes, cut off foliage to about 5cm above ground level and give plants a good feed with a general-purpose fertiliser (again, follow the instructions on the pack).": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "after fruiting finishes"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tomato|To grow outdoors, choose a really warm, sunny, sheltered location.": {
+   "action": "move_light",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "outdoor",
+     "value": "To grow outdoors"
+    },
+    {
+     "kind": "other",
+     "value": "choose a really warm, sunny, sheltered location"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|To start cuttings in a pot, select young side-shoots, 5-10cm/2-4in long and trim stems back to a node.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young side-shoots, 5-10cm/2-4in long"
+    },
+    {
+     "kind": "container",
+     "value": "pot"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tomato|Tomatoes do need some attention to grow well, including protection from frost and a steady supply of moisture.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "frost"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "winter savory|Trim back summer savory after flowering to get a flush of new shoots for harvesting into autumn.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "summer savory",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|Try to water early in the morning or in the evening to limit moisture loss from the soil/compost, ideally using stored rainwater.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "early in the morning or in the evening"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|Unlike coldframes and mini-greenhouses they are normally easy to move around.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "other_plant",
+   "group": "coldframes and mini-greenhouses",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "blueberry|Use rainwater from a butt, rather than tap water, unless you have no alternative in a drought.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "unless you have no alternative in a drought"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Use the spacings given above, and keep the young plants well watered.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_trait",
+     "value": "young"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lovage|Use them fresh, finely chopped in salads, soups and stews, and to complement potatoes and eggs.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Vegetables need varying amounts of water depending on their stage of growth, the type of plant and the type of soil.": {
+   "action": "none",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "fennel|Virus-affected plants should be destroyed to prevent the disease being spread to other plants.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "Virus"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "lettuce|Virus-affected plants should be destroyed to prevent the disease being spread to other plants.": {
+   "action": "remove_plant",
+   "polarity": "do",
+   "applies_to": "general",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "Virus"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Wash rhizomes thoroughly in early autumn and immerse in hot water at 44\u00baC (111\u00baF) (no higher) for 10 minutes, then cool in cold water and plant.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "early autumn"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|Water and newly planted sorrel during dry spells until well rooted.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "newly planted"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "until well rooted"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "sorrel|Water in dry weather and thin to 20\u201330cm (8\u201312in) apart if necessary.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry weather"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Water new plants regularly while they are establishing, and water all strawberry plants during prolonged dry periods in the .": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "new plants"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "establishing"
+    },
+    {
+     "kind": "hot_dry_weather",
+     "value": "prolonged dry periods"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Water newly planted marjoram in dry spells.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "plant_stage",
+     "value": "newly planted"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "marjoram|Water regularly but avoid overwatering, as seedlings are prone to fungal diseases such as damping off.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "seedlings"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "kale|Water regularly, and in just two or three weeks you\u2019ll have tasty nutritious seedlings to add to salads and sandwiches.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|Water the plants before moving them, then gently lift them out of their pot or module and plant straight into the ground without disturbing the roots.": {
+   "action": "repot",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "container",
+     "value": "pot or module"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Water them in well and protect from slugs and snails.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "slugs and snails"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Water thoroughly but gently to avoid dislodging the seeds.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "strawberry|Water well to settle the soil around the roots.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "fennel|Water young and newly-planted fennel plants regularly during dry spells in their first to ensure good root establishment.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "hot_dry_weather",
+     "value": "dry spells"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "young and newly-planted"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chard|Water young chard plants regularly until well established.": {
+   "action": "water",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "young"
+    },
+    {
+     "kind": "plant_trait",
+     "value": "established"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chilli|We recommend letting nature take its course: let birds, ladybirds and hoverflies control aphids unless there is a huge infestation and then remove them by hand or with an organic spray.": {
+   "action": "treat_or_remove",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "named_problem",
+     "value": "aphids"
+    },
+    {
+     "kind": "other",
+     "value": "huge infestation"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "tomato|When temperatures dip again at the end of summer and early autumn, give tomato plants overnight protection with horticultural fleece, which should keep them safe until the first frosts.": {
+   "action": "protect_cold",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "end of summer and early autumn"
+    },
+    {
+     "kind": "cold_or_frost_forecast",
+     "value": "When temperatures dip again"
+    },
+    {
+     "kind": "other",
+     "value": "overnight"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "winter savory|Winter savory can become straggly over time, so prune lightly in mid- to late-spring to keep plants compact and bushy.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "month_range",
+     "value": "mid- to late-spring"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "chamomile|With a chamomile lawn, the non-flowering variety \u2018Treneague\u2019 doesn\u2019t need clipping as it stays naturally low to the ground.": {
+   "action": "prune",
+   "polarity": "dont",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [],
+   "hedged": false,
+   "is_instruction": false
+  },
+  "lettuce|With their dense centre, these lettuces generally take up to three months to reach harvesting size and you then cut the whole head.": {
+   "action": "harvest",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "plant_stage",
+     "value": "up to three months to reach harvesting size"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  },
+  "hyssop|You can also cut back after flowering, removing any dead flowers.": {
+   "action": "prune",
+   "polarity": "do",
+   "applies_to": "this_plant",
+   "group": "",
+   "conditions": [
+    {
+     "kind": "other",
+     "value": "after flowering"
+    }
+   ],
+   "hedged": false,
+   "is_instruction": true
+  }
+ }
+}

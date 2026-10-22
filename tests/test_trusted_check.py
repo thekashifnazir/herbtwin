@@ -3,7 +3,15 @@ form Stage 1 read and the plant's state. It agrees only when every part is check
 
 import pytest
 
-from herbtwin.stages.trusted_check import Condition, Form, PlantState, decide, months_in
+from herbtwin.stages.trusted_check import (
+    SAME_ADVICE,
+    Condition,
+    Form,
+    PlantState,
+    could_agree,
+    decide,
+    months_in,
+)
 
 DO = {"polarity": "do", "applies_to": "this_plant", "hedged": False, "is_instruction": True}
 
@@ -248,3 +256,86 @@ def test_a_month_range_condition_keeps_its_own_case(value, month, want):
     from herbtwin.stages.trusted_check import holds
 
     assert holds(Condition(kind="month_range", value=value), st(month=month)) is want
+
+
+SAYS_NOTHING = [
+    "Basil loves a warm, sunny spot.",
+    "Adults mate and lay eggs in spring.",
+    "Rosemary is an evergreen shrub with fragrant leaves.",
+]
+
+
+@pytest.mark.parametrize("sentence", SAYS_NOTHING)
+@pytest.mark.parametrize("action", sorted(SAME_ADVICE))
+def test_a_sentence_that_names_no_action_could_never_agree(sentence, action):
+    # 21 Oct: pick reads only sentences that could back an answer. Safe only because
+    # decide can never agree with one that names none of our actions in its own words,
+    # whatever form the model reads into it and whatever the plant's state
+    assert not could_agree(sentence)
+    for theirs in sorted(SAME_ADVICE[action]):
+        assert decide(form(theirs), st(action=action), sentence) == "unsure"
+
+
+@pytest.mark.parametrize(
+    "sentence",
+    [
+        "Water basil’s compost well in the morning.",
+        "Hold off watering until the top inch is dry.",
+        "Cover with fleece when frost is forecast.",
+        "Cut back the stems by a third after flowering.",
+        "Pick off and destroy the beetles.",
+        "Move pots to a brighter spot.",
+    ],
+)
+def test_a_sentence_that_names_one_of_our_actions_could_agree(sentence):
+    assert could_agree(sentence)
+
+
+@pytest.mark.parametrize(
+    "sentence",
+    [
+        "Save the trimmings to propagate new plants or dry them for cooking.",  # round 7
+        "Take cuttings in spring.",
+        "Compost the clippings.",
+    ],
+)
+def test_the_nouns_of_cutting_are_not_cutting_back(sentence):
+    # round 8: "trim\w*" read "trimmings" as the verb; round 7's false agree
+    assert decide(form("prune"), st(action="prune"), sentence) == "unsure"
+    assert not could_agree(sentence, "prune")
+
+
+@pytest.mark.parametrize(
+    "sentence",
+    [
+        "To encourage a fresh flush of tasty new leaves, cut the whole plant down to just above the base.",
+        "Cut the stems down to the ground in autumn.",
+        "Cut back to ground level.",
+    ],
+)
+def test_a_hard_cut_is_not_a_trim(sentence):
+    assert decide(form("prune"), st(action="prune"), sentence) == "unsure"
+
+
+def test_a_plain_cut_back_still_agrees():
+    assert decide(form("prune"), st(action="prune"), "Cut back the stems by a third.") == "agree"
+
+
+def test_could_agree_for_one_action_reads_only_its_own_words():
+    assert could_agree("Cover with fleece when frost is forecast.")
+    assert not could_agree("Cover with fleece when frost is forecast.", "water")
+    assert could_agree("Water well in dry spells.", "water")
+
+
+@pytest.mark.parametrize(
+    "sentence",
+    [
+        "Cutting back the stems keeps it bushy.",
+        "Cut back by a third.",
+        "Prune after flowering.",
+        "Trimming keeps it neat.",
+    ],
+)
+def test_the_verbs_of_cutting_still_name_cutting_back(sentence):
+    # review, 22 Oct: the noun rule first dropped "cutting back" too
+    assert could_agree(sentence, "prune")

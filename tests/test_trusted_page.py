@@ -42,11 +42,16 @@ class Reader(MockAdapter):
     """Stage 1 as a fake: each sentence's reply, found by the sentence's words in the
     prompt (the reads run in parallel, so never in a fixed order)."""
 
-    def __init__(self, replies: dict[str, object]) -> None:
+    def __init__(self, replies: dict[str, object], backs: object = True) -> None:
         super().__init__()
-        self.replies, self.prompts = replies, []
+        self.replies, self.prompts, self.backs, self.asked = replies, [], backs, []
 
     def complete_json(self, system, user, schema, *, max_tokens=1024, temperature=0.0):
+        if "OUR ADVICE" in user:  # round 8's last gate (stages/trusted_backs.py)
+            self.asked.append(user)
+            if isinstance(self.backs, Exception):
+                raise self.backs
+            return json.dumps({"backs": self.backs})
         self.prompts.append(user)
         for sentence, reply in self.replies.items():
             if sentence.replace("’", "'") in user:
@@ -80,10 +85,58 @@ def test_a_page_that_says_the_same_is_quoted_exactly_as_written(tmp_path):
         c, s, reader = _client(tmp_path, f"{LIKING} {SAID}", {LIKING: A_LIKING, SAID: WATER})
         page = _answer(c)
     assert page.status_code == 200
-    assert s.calls == ["basil care October"]  # one search: the plant, its care, the month
+    # one search, once the advice is decided: the plant and the action (round 7)
+    assert s.calls == ["basil watering"]
     assert LINE.format(quote=SAID, url=RHS_BASIL) in page.text  # byte-identical, in quotes
-    assert len(reader.prompts) == 2  # each sentence read once (no conditions: no second pass)
+    # SAID read once (no conditions: no second pass); LIKING names no action: not read
+    assert len(reader.prompts) == 1
     assert all("our advice" not in p.lower() and "water it" not in p for p in reader.prompts)
+
+
+def test_the_wait_says_a_trusted_page_is_checked_after_the_advisors(tmp_path):
+    # round 7: searched once the advice is decided, so the wait shows it after the advisors
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, SAID, {SAID: WATER})
+        wait = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    line = "<li>Looking for a trusted gardening page with Tavily"
+    assert wait.index("Advisor 3 of 3") < wait.index(line)
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, SAID, {SAID: WATER}, tavily=False)
+        wait = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    assert "trusted gardening page" not in wait  # no search: never said
+
+
+@pytest.mark.parametrize(
+    ("problem", "action", "want"),
+    [
+        (None, "water", "parsley watering"),
+        (None, "dont_water", "parsley overwatering"),
+        (None, "shelter", "parsley winter protection"),
+        (None, "move_light", "parsley sunny position"),
+        (None, "prune", "parsley cutting back"),
+        ("leaf spot", "prune", "parsley cutting back"),  # the problem only names a treatment
+        ("leaf spot", "treat_or_remove", "parsley leaf spot control"),
+        # nothing to quote: the plant's care (or problem) this month, and no reads
+        (None, "leave_normal", "parsley care October"),
+        (None, "treat_or_remove", "parsley care October"),  # treating must name a problem
+        ("leaf spot", "isolate", "parsley leaf spot October"),
+    ],
+)
+def test_the_search_names_the_action_we_advise(problem, action, want):
+    assert trusted_page.query("parsley", problem, action, 10) == want
+    assert trusted_page.reads(action, problem) == ("October" not in want)
+
+
+def test_advice_never_quoted_still_finds_its_page_but_reads_nothing():
+    reader = Reader({SAID: WATER})
+    s = FakeSearch(Found([Hit("Basil", RHS_BASIL, SAID)], "tavily", None))
+    checking = trusted_page.start(s, reader, "basil", None, "leave_normal", 10, lambda h: h)
+    page = trusted_page.finish(checking)
+    assert s.calls == ["basil care October"]
+    assert page.url == RHS_BASIL and page.sentences == [] and reader.prompts == []
+    _wait_for_free_slots()
 
 
 @pytest.mark.parametrize(
@@ -161,6 +214,54 @@ def test_a_refine_decides_again_without_searching_or_reading_again(tmp_path):
     assert "trusted page says" not in again.text  # leave it: the page's watering backs nothing
 
 
+def test_a_refine_that_keeps_the_action_but_changes_what_we_know_drops_the_quote(tmp_path):
+    # review of round 8: the last gate judged one state; a refine told something new
+    # (here a wet finger test, the action still "water") never reuses its yes
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, SAID, {SAID: WATER})
+        page = _answer(c)
+        assert LINE.format(quote=SAID, url=RHS_BASIL) in page.text
+        rid = re.search(r'data-answer="([0-9a-f]{32})"', page.text).group(1)
+        asked = len(reader.asked)
+        again = c.post(f"/answers/{rid}/refine", data={"soil_feel": "wet"}, follow_redirects=True)
+    assert "trusted page says" not in again.text
+    assert len(reader.asked) == asked  # and the gate is never asked again
+
+
+def test_a_headline_a_rule_changed_from_the_advisors_never_carries_their_quote(
+    tmp_path, monkeypatch
+):
+    # review of round 8: the gate judged the advisors' action; a rule that changes the
+    # headline (cold, a resting herb, rule-led protect) shows another, so no quote
+    from herbtwin import pipeline
+
+    real = pipeline.build_answer
+
+    def ruled(**kw):
+        a = real(**kw)
+        a.do[0] = a.do[0].model_copy(update={"action": "shelter"})
+        return a
+
+    monkeypatch.setattr(pipeline, "build_answer", ruled)
+    with respx.mock:
+        _weather()
+        c, s, reader = _client(tmp_path, SAID, {SAID: WATER})
+        page = _answer(c)
+    assert len(reader.asked) == 1  # the gate said yes, for watering
+    assert "trusted page says" not in page.text
+
+
+def test_the_gate_holds_its_yes_for_the_exact_state_it_judged():
+    reader = Reader({SAID: WATER})
+    page = _check(
+        FakeSearch(Found([Hit("Basil", RHS_BASIL, SAID)], "tavily", None)), reader, _state()
+    )
+    assert trusted_page.quoted(page, _state()).quote == SAID
+    for changed in (_state(soil=None), _state(rain_ahead=True), _state(container="pot")):
+        assert trusted_page.quoted(page, changed).quote is None
+
+
 def test_a_stored_answer_rebuilt_quotes_again_and_never_searches(tmp_path):
     from herbtwin.answer_cache import AnswerCache
     from tests.test_web_history import _signed_in
@@ -216,10 +317,12 @@ def test_a_busy_check_is_skipped_and_a_late_one_gives_nothing_at_once(monkeypatc
     reader = Reader({})
     keep = lambda hits: hits  # noqa: E731
     monkeypatch.setattr(trusted_page, "BUDGET_S", 0.2)
-    first = trusted_page.start(Slow(gate), reader, "basil", None, 10, keep)
-    second = trusted_page.start(Slow(gate), reader, "basil", None, 10, keep)
+    first = trusted_page.start(Slow(gate), reader, "basil", None, "water", 10, keep)
+    second = trusted_page.start(Slow(gate), reader, "basil", None, "water", 10, keep)
     assert first is not None and second is not None
-    assert trusted_page.start(Slow(gate), reader, "basil", None, 10, keep) is None  # 2 running
+    assert (
+        trusted_page.start(Slow(gate), reader, "basil", None, "water", 10, keep) is None
+    )  # 2 running
     time.sleep(0.3)  # the advisors took longer than the budget
     began = time.monotonic()
     assert trusted_page.finish(first) is None
@@ -227,15 +330,50 @@ def test_a_busy_check_is_skipped_and_a_late_one_gives_nothing_at_once(monkeypatc
     gate.set()
     first.job.result(1), second.job.result(1)
     _wait_for_free_slots()
-    assert trusted_page.start(Slow(gate), reader, "basil", None, 10, keep) is not None
+    assert trusted_page.start(Slow(gate), reader, "basil", None, "water", 10, keep) is not None
 
 
 def test_a_cut_sentence_at_the_snippets_start_is_never_read():
     reader = Reader({"water well.": WATER, SAID: WATER})
     s = FakeSearch(Found([Hit("Basil", RHS_BASIL, f"...water well. {SAID}")], "tavily", None))
-    checking = trusted_page.start(s, reader, "basil", None, 10, lambda hits: hits)
+    checking = trusted_page.start(s, reader, "basil", None, "water", 10, lambda hits: hits)
     page = trusted_page.finish(checking)
     assert [x.text for x in page.sentences] == [SAID]
+    _wait_for_free_slots()
+
+
+def test_only_sentences_that_could_back_an_answer_are_read():
+    # 21 Oct: on real pages 65% of the sentences read named no action (round 6), so they
+    # took the 6 reads a page has; a sentence decide could never agree with is not read
+    reader = Reader({LIKING: A_LIKING, SAID: WATER})
+    s = FakeSearch(Found([Hit("Basil", RHS_BASIL, f"{LIKING} {SAID}")], "tavily", None))
+    checking = trusted_page.start(s, reader, "basil", None, "water", 10, lambda hits: hits)
+    page = trusted_page.finish(checking)
+    assert [x.text for x in page.sentences] == [SAID]
+    assert len(reader.prompts) == 1  # SAID alone (no conditions: no second pass)
+    _wait_for_free_slots()
+
+
+def test_a_page_with_nothing_to_back_gives_way_to_the_next_trusted_page():
+    other = "https://www.rhs.org.uk/herbs/basil/growing-guide"
+    reader = Reader({SAID: WATER})
+    hits = [Hit("Basil", RHS_BASIL, LIKING), Hit("Growing basil", other, SAID)]
+    s = FakeSearch(Found(hits, "tavily", None))
+    page = trusted_page.finish(
+        trusted_page.start(s, reader, "basil", None, "water", 10, lambda h: h)
+    )
+    assert page.url == other and [x.text for x in page.sentences] == [SAID]
+    _wait_for_free_slots()
+
+
+def test_a_page_with_nothing_to_back_on_any_hit_is_kept_and_never_read():
+    reader = Reader({LIKING: A_LIKING})
+    s = FakeSearch(Found([Hit("Basil", RHS_BASIL, LIKING)], "tavily", None))
+    page = trusted_page.finish(
+        trusted_page.start(s, reader, "basil", None, "water", 10, lambda h: h)
+    )
+    assert page.url == RHS_BASIL and page.sentences == [] and page.quote is None
+    assert reader.prompts == []
     _wait_for_free_slots()
 
 
@@ -333,10 +471,156 @@ def test_a_page_is_linked_only_when_its_address_names_the_plant(url, names, want
 def test_a_page_with_nothing_to_read_is_kept_for_read_more_and_never_read():
     reader = Reader({LIKING: A_LIKING})
     s = FakeSearch(Found([Hit("Basil", RHS_BASIL, "...cut off here")], "tavily", None))
-    page = trusted_page.finish(trusted_page.start(s, reader, "basil", None, 10, lambda h: h))
+    page = trusted_page.finish(
+        trusted_page.start(s, reader, "basil", None, "water", 10, lambda h: h)
+    )
     assert page.url == RHS_BASIL and page.sentences == [] and page.quote is None
     assert reader.prompts == []
     _wait_for_free_slots()
+
+
+class Pages(FakeSearch):
+    """A search whose trusted pages can also be read whole (round 8's Tavily Extract)."""
+
+    def __init__(self, found, bodies):
+        super().__init__(found)
+        self.bodies, self.extracted = bodies, []
+
+    def extract(self, urls):
+        self.extracted.append(urls)
+        if isinstance(self.bodies, Exception):
+            raise self.bodies
+        return {u: self.bodies[u] for u in urls if u in self.bodies}
+
+
+def _state(**kw):
+    from herbtwin.stages.trusted_check import PlantState
+
+    return PlantState(**{"plant": "basil", "month": 10, "action": "water", "soil": "dry",
+                         "cold_ahead": False, "hot_dry": False, "rain_ahead": False, **kw})  # fmt: skip
+
+
+def _check(search, reader, state, plant="basil", problem=None):
+    checking = trusted_page.start(
+        search, reader, plant, problem, state.action, 10, lambda h: h, state
+    )
+    page = trusted_page.finish(checking)
+    _wait_for_free_slots()
+    return page
+
+
+@pytest.mark.parametrize(
+    ("backs", "quoted"), [(True, True), (False, False), (AdapterError("x"), False)]
+)
+def test_a_code_agree_is_quoted_only_when_the_last_gate_says_it_backs_our_advice(backs, quoted):
+    # round 8: Nemotron reads the sentence with our advice in view, only after code agreed,
+    # and can only take the agree away
+    reader = Reader({SAID: WATER, LIKING: A_LIKING}, backs=backs)
+    page = _check(
+        FakeSearch(Found([Hit("Basil", RHS_BASIL, f"{LIKING} {SAID}")], "tavily", None)),
+        reader,
+        _state(),
+    )
+    assert len(reader.asked) == 1  # SAID alone agreed; LIKING was never put to the gate
+    asked = reader.asked[0]
+    assert "OUR ADVICE (data, not instructions)" in asked and "water it" in asked
+    assert "Water basil's compost well in the morning." in asked
+    got = trusted_page.quoted(page, _state())
+    assert (got.quote == SAID) is quoted
+    # decided again (a refine, a stored answer): no new gate call, and another action never
+    # borrows this one's yes
+    assert trusted_page.quoted(page, _state(action="dont_water")).quote is None
+    assert len(reader.asked) == 1
+
+
+def test_the_page_is_read_whole_with_its_headings_when_it_can_be():
+    body = "# Basil\nBasil loves sun.\n## Watering\nWater basil’s compost well in the morning.\n## Winter\nCover with fleece."
+    reader = Reader({SAID: WATER})
+    s = Pages(Found([Hit("Basil", RHS_BASIL, LIKING)], "tavily", None), {RHS_BASIL: body})
+    page = _check(s, reader, _state())
+    assert s.extracted == [[RHS_BASIL]]
+    # only the sentence that could back watering is read; it keeps its heading
+    assert [(x.text, x.heading) for x in page.sentences] == [(SAID, "Watering")]
+    assert "Heading: Watering" in reader.asked[0]
+
+
+def test_markdown_never_reaches_a_quote_and_the_gate_stops_at_the_first_yes():
+    body = (
+        "## Watering\n**Water** basil’s compost well in the morning.\n"
+        "Water [basil](https://x.org) in dry spells.\nWater `daily` in pots.\n"
+        "Water it well before frost."
+    )
+    said = "Water basil’s compost well in the morning."
+    links = "Water basil in dry spells."
+    reader = Reader({said: WATER, links: WATER, "before frost": WATER})
+    s = Pages(Found([Hit("Basil", RHS_BASIL, LIKING)], "tavily", None), {RHS_BASIL: body})
+    page = _check(s, reader, _state())
+    # emphasis and links lose their markup; code marks are never read
+    assert [x.text for x in page.sentences] == [said, links, "Water it well before frost."]
+    assert len(reader.asked) == 1  # the first backed sentence is the quote: no more asks
+    assert trusted_page.quoted(page, _state()).quote == said
+
+
+def test_pages_that_cannot_be_read_whole_fall_back_to_the_snippets():
+    reader = Reader({SAID: WATER})
+    s = Pages(Found([Hit("Basil", RHS_BASIL, SAID)], "tavily", None), RuntimeError("down"))
+    page = _check(s, reader, _state())
+    assert [x.text for x in page.sentences] == [SAID]
+
+
+PICK_OFF = "Pick off the adult beetles and larvae by hand and destroy."
+BEETLE_FORM = {**WATER, "action": "treat_or_remove", "conditions": [{"kind": "named_problem", "value": "beetles and larvae"}]}  # fmt: skip
+
+
+@pytest.mark.parametrize(
+    ("url", "agrees"),
+    [
+        ("https://www.rhs.org.uk/biodiversity/rosemary-beetle", True),
+        ("https://www.rhs.org.uk/biodiversity/lily-beetle", False),
+    ],
+)
+def test_treating_names_the_problem_when_the_pages_address_does(url, agrees):
+    # round 7 missed this sentence: it names "beetles", and only its page names the problem
+    state = _state(plant="rosemary", action="treat_or_remove", problem="rosemary beetle")
+    reader = Reader({PICK_OFF: BEETLE_FORM})
+    page = _check(
+        FakeSearch(Found([Hit("Rosemary beetle", url, PICK_OFF)], "tavily", None)),
+        reader,
+        state,
+        "rosemary",
+        "rosemary beetle",
+    )
+    assert (trusted_page.quoted(page, state).quote == PICK_OFF) is agrees
+
+
+def test_for_a_problem_its_own_page_is_read_first():
+    general = "https://www.rhs.org.uk/herbs/basil/grow-your-own"
+    pest = "https://www.rhs.org.uk/biodiversity/aphids"
+    squash = "Squash aphid colonies between finger and thumb."
+    hits = [Hit("Basil", general, "Remove the weaker seedlings."), Hit("Aphids", pest, squash)]
+    s = Pages(Found(hits, "tavily", None), {})
+    reader = Reader({squash: {**WATER, "action": "treat_or_remove"}})
+    state = _state(action="treat_or_remove", problem="aphids")
+    page = _check(s, reader, state, problem="aphids")
+    assert s.extracted == [[pest, general]]  # the pest's page is read whole first
+    assert page.url == pest and [x.text for x in page.sentences] == [squash]
+
+
+def test_tavily_reads_only_trusted_pages_whole_and_keeps_only_those_it_asked_for():
+    from herbtwin.search import TAVILY_EXTRACT_URL, Tavily
+
+    other = "https://example.com/basil"
+    with respx.mock:
+        route = respx.post(TAVILY_EXTRACT_URL).mock(
+            return_value=httpx.Response(200, json={"results": [
+                {"url": RHS_BASIL, "raw_content": "# Basil"}, {"url": other, "raw_content": "x"},
+            ], "failed_results": []})
+        )  # fmt: skip
+        with httpx.Client() as http:
+            got = Tavily("k", http).extract([RHS_BASIL, other], ("rhs.org.uk",))
+    assert got == {RHS_BASIL: "# Basil"}
+    sent = json.loads(route.calls[0].request.content)
+    assert sent["urls"] == [RHS_BASIL] and sent["format"] == "markdown"
 
 
 def _rec(**obs):
@@ -369,7 +653,14 @@ def test_a_list_line_with_no_full_stop_never_runs_into_the_next_sentence():
     hit = Hit("October", RHS_BASIL, glued, lines)
     reader = Reader({glued: WATER, lines[1]: A_LIKING})
     s = FakeSearch(Found([hit], "tavily", None))
-    page = trusted_page.finish(trusted_page.start(s, reader, "rosemary", None, 10, lambda h: h))
+    page = trusted_page.finish(
+        trusted_page.start(s, reader, "rosemary", None, "water", 10, lambda h: h)
+    )
+    # the glued line is gone, and the line after an unended one too: the page is kept
+    # (round 7), with nothing read
+    page = trusted_page.finish(
+        trusted_page.start(s, reader, "rosemary", None, "water", 10, lambda h: h)
+    )
     # the glued line is gone, and the line after an unended one too: the page is kept for
     # "Read more", with nothing read
     assert page.sentences == [] and reader.prompts == []
@@ -410,7 +701,9 @@ def test_a_sentence_too_long_to_keep_is_left_out_not_the_page():
     assert len(long) > trusted_page.MAX_CHARS
     reader = Reader({long: WATER, SAID: WATER})
     s = FakeSearch(Found([Hit("Basil", RHS_BASIL, f"{long} {SAID}")], "tavily", None))
-    page = trusted_page.finish(trusted_page.start(s, reader, "basil", None, 10, lambda h: h))
+    page = trusted_page.finish(
+        trusted_page.start(s, reader, "basil", None, "water", 10, lambda h: h)
+    )
     assert [x.text for x in page.sentences] == [SAID]
 
 
@@ -468,7 +761,7 @@ def _read(lines, replies):
     hit = Hit("Basil", RHS_BASIL, " ".join(lines), tuple(lines))
     s = FakeSearch(Found([hit], "tavily", None))
     page = trusted_page.finish(
-        trusted_page.start(s, Reader(replies), "basil", None, 10, lambda h: h)
+        trusted_page.start(s, Reader(replies), "basil", None, "water", 10, lambda h: h)
     )
     return [x.text for x in page.sentences] if page else []
 
@@ -488,9 +781,10 @@ def test_a_line_that_lost_its_lead_in_is_never_read(lines):
 
 
 def test_a_line_after_a_whole_sentence_or_a_plain_heading_is_read():
-    lines = ["## Watering", SAID, "Basil hates cold nights.", "Keep basil warm."]
-    got = _read(lines, {SAID: WATER, "hates": A_LIKING, "Keep basil warm": A_LIKING})
-    assert got == [SAID, "Basil hates cold nights.", "Keep basil warm."]
+    # each names an action (only those are read, 21 Oct)
+    lines = ["## Watering", SAID, "Cover basil on cold nights.", "Move basil somewhere warm."]
+    got = _read(lines, {SAID: WATER, "Cover": A_LIKING, "Move basil": A_LIKING})
+    assert got == [SAID, "Cover basil on cold nights.", "Move basil somewhere warm."]
     # a list after a plain lead-in sentence ending in a full stop is read as before
     assert SAID in _read(["How to water.", f"- {SAID}"], {SAID: WATER})
 
@@ -498,7 +792,7 @@ def test_a_line_after_a_whole_sentence_or_a_plain_heading_is_read():
 def test_words_run_together_by_markup_are_never_read():
     glued = "A display of potted parsleySome crops can be cleared."
     assert _read([glued, SAID], {glued: WATER, SAID: WATER}) == [SAID]
-    ph = "Grow basil in soil with a pH of about 7."
+    ph = "Water basil in soil with a pH of about 7."
     assert _read([ph], {ph: A_LIKING}) == [ph]  # "pH" is a word, not markup
 
 

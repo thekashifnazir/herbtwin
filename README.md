@@ -103,7 +103,7 @@ flowchart LR
 |---|---|
 | **NVIDIA Nemotron 3 Super** | The advisor, asked three times per photo, and "Check the advice again" |
 | **NVIDIA Nemotron 3 Nano** | The follow-up chat: it reruns the twin for a what-if and searches trusted sites |
-| **NVIDIA Nemotron 3 Ultra** | The trusted-page check: it reads a page into a fixed form, and code decides whether the page says the same as the answer |
+| **NVIDIA Nemotron 3 Ultra** | The trusted-page check: it reads a page into a fixed form, code decides whether the page says the same as the answer, and a last Ultra check can only veto |
 | **Nebius Token Factory** | Serves every language and vision model the app calls |
 | **GLM-5.3-Flash, DeepSeek V4.1 Flash** | Read the photo (on Token Factory). GLM named the plant 0.846 of the time against 0.627 for the best NVIDIA vision model we tried |
 | **Nebius AI Cloud** | The daily reminder emails as a Serverless Job; GPU jobs for the probes |

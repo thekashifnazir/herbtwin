@@ -422,19 +422,24 @@
        lives here, after the reader has the whole plan, not inside the main card #}
     <section class="next-step ink" aria-labelledby="next-step">
       <h2 id="next-step">What next</h2>
-      <p>In a few days, send a new photo of the same plant to see how it is doing.</p>
-      {% include "_more_photos.html" %}
+      {# under "Remove it" there is no plant to photo again, add photos of or keep (22 Oct site walk) #}
+      {% set gone = a.headline == no_cure_headline %}
+      {% if gone %}<p>{{ no_cure_next }}</p>
+      {% else %}<p>In a few days, send a new photo of the same plant to see how it is doing.</p>
+      {% include "_more_photos.html" %}{% endif %}
         {# "I did it": the answer gets an ending. Shown by the script, so a page without it never
          offers a button that does nothing; nothing is stored or sent #}
       {% if first and first.action not in ("leave_normal", "dont_water", "ask_first", "check_pests", "other") %}<div class="i-did" id="i-did" hidden>
         {# inside the scripted block: without a script there is no button to point at #}
         <p class="done-it">Done it? Tell us.</p>
         <button type="button" class="quiet">I did it</button>
-        <p class="thanks" role="status" tabindex="-1"><span class="burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>{{ plant_face("content") }}<span class="said"></span></p>
+        <p class="thanks" role="status" tabindex="-1"><span class="burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>{{ plant_face("content") }}<span class="said" data-said="{{ no_cure_thanks if gone else 'Thanks for looking after me.' }}"></span></p>
         {# signed out only. With the keep link, signing in then tapping "Keep this in My plants"
            carries this answer over (#254); without it (no keep cookie in this browser) it says
-           to send the photo again. The email is an opt-in tick box after that #}
-        {% if keep %}<p class="keep"><a href="{{ keep }}">Sign in to keep this plant; you can then ask for an email when it's time to check again</a></p>
+           to send the photo again. The email is an opt-in tick box after that. Never under
+           "Remove it": there is no plant to keep #}
+        {% if gone %}{# nothing to keep #}
+        {%- elif keep %}<p class="keep"><a href="{{ keep }}">Sign in to keep this plant; you can then ask for an email when it's time to check again</a></p>
         {%- elif accounts and not signed_in %}<p class="keep"><a href="/auth/sign-in">Sign in, then send this photo again, to keep this plant; you can then ask for an email when it's time to check again</a></p>{% endif %}
       </div>
       <script>
@@ -444,7 +449,7 @@
         box.hidden = false;
         button.addEventListener("click", () => {
           thanks.classList.add("shown");
-          said.textContent = "Thanks for looking after me.";
+          said.textContent = said.dataset.said;
           button.hidden = true;
           box.querySelector(".done-it").hidden = true;  // asked and answered (#311 review)
           thanks.focus();  // the button is gone: keep keyboard and reader users in place

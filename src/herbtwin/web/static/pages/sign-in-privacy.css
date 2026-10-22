@@ -1,0 +1,4 @@
+/* sign-in, its emailed-link button, and privacy (sign_in.html, sign_in_confirm.html,
+   privacy.html): the band, then the page in the 38rem reading column. A wrap that holds a
+   band is centred and full width (herbtwin.css), so what follows the band keeps the column */
+:is(.sign-in-page, .privacy-page) .page-band ~ * { max-width: var(--measure); }
