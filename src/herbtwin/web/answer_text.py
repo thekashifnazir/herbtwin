@@ -17,7 +17,8 @@ SKIP_TAGS = {"script", "style", "button", "audio", "figure", "svg", "template"}
 # advice a rater can judge (design wave 1, D). The how-sure badge is words now, so it is kept
 # (21 Oct: the 2-step meter it replaced was skipped). "See it by part" says the plan's own
 # lines again, sorted (21 Oct, gardener test)
-SKIP_CLASSES = {"make-surer", "next-step", "by-part", "extras"}  # extras: shop links
+# extras: shop links; reported: GBIF's records and others' headlines, not our advice
+SKIP_CLASSES = {"make-surer", "next-step", "by-part", "extras", "reported"}
 VOID = {"img", "br", "hr", "input", "meta", "link", "source"}
 BLOCKS = {"p", "h2", "h3", "li", "ul", "div", "section"}  # each starts a new paragraph
 

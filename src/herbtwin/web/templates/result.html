@@ -400,6 +400,7 @@
       <h2 id="watch">Keep an eye on</h2>
       <ul>{% for s in signs %}<li>{{ s }}</li>{% endfor %}</ul>{% if after %}<p>{{ after }}</p>{% endif %}
     </section>{% endif %}
+    {% include "_reported_slot.html" %}
     {# indoors: what is normal on a windowsill this month and how to look after it, from our
        indoor table (21 Oct, a gardener: indoor "doesn't have much info") #}
     {% if a.indoor %}<section class="indoor-now" aria-labelledby="indoor-now">

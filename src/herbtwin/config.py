@@ -75,6 +75,9 @@ class Settings:
     langsmith_endpoint: str | None = None
     # the spot answer ("What can I grow here?", spot spec): the live deploy switches it on
     spot_enabled: bool = False
+    # "Seen recently in the UK" under Keep an eye on: GBIF's UK records of the plant's pests
+    # (sightings.py). Free, no key, nothing about the person sent: on unless set to 0
+    sightings: bool = True
     # the trusted-page check's reader (stages/trusted_page.py), thinking off; round 5 was
     # tested on this model, so another one is untested
     check_model: str = "nvidia/Nemotron-3-Ultra-550b-a55b"
@@ -303,6 +306,11 @@ def load_settings(env: Mapping[str, str] | None = None) -> Settings:
         langsmith_project=(env.get("HERBTWIN_LANGSMITH_PROJECT") or "").strip() or "herbtwin-dev",
         langsmith_endpoint=_https_url(env, "HERBTWIN_LANGSMITH_ENDPOINT"),
         spot_enabled=_switch(env, "HERBTWIN_SPOT_ENABLED"),
+        sightings=(
+            _switch(env, "HERBTWIN_SIGHTINGS")
+            if (env.get("HERBTWIN_SIGHTINGS") or "").strip()
+            else True
+        ),
     )
 
 

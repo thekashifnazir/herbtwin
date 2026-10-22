@@ -73,6 +73,7 @@ from herbtwin.pipeline import (
 from herbtwin.plantbook import plantbook_on
 from herbtwin.receipt import model_map
 from herbtwin.replays import ReplayCache, replay_key
+from herbtwin.reported import reported_from, subject_of
 from herbtwin.schemas import (
     CHANGED_TEXT,
     LAST_WATERED_TEXT,
@@ -88,6 +89,7 @@ from herbtwin.schemas import (
 )
 from herbtwin.scoring import score_lines
 from herbtwin.shops import DailyCap, shops_from
+from herbtwin.sightings import sightings_from
 from herbtwin.species import display_name, name_parts
 from herbtwin.spot import (
     SpotTold,
@@ -609,6 +611,10 @@ def create_app(
     http = app.state.deps.http
     app.state.shops = shops_from(settings, http, extras_cap)  # "Shops we found for this"
     app.state.local_help = local_help_from(settings, http, extras_cap)  # "Gardeners near"
+    # "Seen recently in the UK": GBIF's UK records of the plant's pests, and news headlines
+    # about them from Tavily when it is on
+    app.state.sightings = sightings_from(settings, http)
+    app.state.reported = reported_from(settings, http, extras_cap)
     app.state.waits = waiting.Waits()  # the wait page's quick questions
 
     def need_accounts() -> Accounts:
@@ -963,6 +969,9 @@ def create_app(
                 "advised_by": _advised_by(settings),
                 # _extras_slot.html: shop links, local help, or both
                 "extras_on": app.state.shops is not None or app.state.local_help is not None,
+                # _reported_slot.html: UK records of this plant's pests (GBIF), and news
+                # headlines about them (Tavily)
+                "reported_on": app.state.sightings is not None or app.state.reported is not None,
                 "signed_in": signed_in,
                 "accounts": app.state.accounts is not None,
                 "keep": keep,
@@ -1008,6 +1017,7 @@ def create_app(
                 "ask_sharing": ask_sharing,
                 "spot_on": settings.spot_enabled,
                 "plantbook_on": plantbook_on(settings),
+                "sightings_on": settings.sightings,  # the GBIF credit
                 "voice_on": settings.voice_on,
                 "tavily_on": settings.tavily_key is not None,  # the same switch search reads
                 "check_on": trusted_check_on(settings),
@@ -1030,7 +1040,11 @@ def create_app(
 
     @app.get("/privacy", response_class=HTMLResponse)
     def privacy(request: Request):
-        return TEMPLATES.TemplateResponse(request, "privacy.html", {"voice_on": settings.voice_on})
+        return TEMPLATES.TemplateResponse(
+            request,
+            "privacy.html",
+            {"voice_on": settings.voice_on, "sightings_on": settings.sightings},
+        )
 
     @app.get("/credits", include_in_schema=False)
     def credits_page():
@@ -1048,6 +1062,7 @@ def create_app(
             {
                 "spot_on": settings.spot_enabled,
                 "plantbook_on": plantbook_on(settings),
+                "sightings_on": settings.sightings,  # the GBIF credit
                 "voice_on": settings.voice_on,
                 "tavily_on": settings.tavily_key is not None,
                 "check_on": trusted_check_on(settings),
@@ -1443,14 +1458,9 @@ def create_app(
                 log.info("wait replies not applied: %s", e.detail)
         return _with_cookies(JSONResponse({"go": target}), holder)
 
-    @app.get("/answers/{answer_id}/extras", response_class=HTMLResponse)
-    async def answer_extras(request: Request, answer_id: str):
-        """The Tavily extras under the plan (_extras_slot.html loads this after the page
-        opens): shop links for the answer's actions, and gardeners near a typed UK town.
-        204, and nothing shows, when there is nothing to show or anything fails."""
-        finder, local = app.state.shops, app.state.local_help
-        if (finder is None and local is None) or not _is_answer_id(answer_id):
-            return Response(status_code=204)
+    async def extras_record(request: Request, answer_id: str):
+        """The answer an after-load fragment is for, as its owner may see it (the answer
+        cache, then a signed-in person's store), and the cookie holder for the reply."""
         person, holder = await who(request)
         owner = person.user_id if person is not None else None
         entry = app.state.answers.get_for(answer_id, owner) or (
@@ -1461,9 +1471,60 @@ def create_app(
             try:
                 stored = await run_in_threadpool(person.store.get_answer, answer_id)
             except HistoryError:
-                log.info("extras: stored answer unavailable")
+                log.info("%s: stored answer unavailable", request.url.path.rsplit("/", 1)[-1])
                 stored = None
             rec = followup._record(stored) if stored is not None else None
+        return rec, holder
+
+    @app.get("/answers/{answer_id}/reported", response_class=HTMLResponse)
+    async def answer_reported(request: Request, answer_id: str):
+        """Seen recently in the UK (_reported_slot.html loads this after the page opens): UK
+        records of the identified plant's pests and diseases from GBIF, and up to two news
+        headlines about them from Tavily. 204, and the slot stays hidden, when off, when no
+        plant was identified, when nothing is found, or when anything fails."""
+        seen, finder = app.state.sightings, app.state.reported
+        if (seen is None and finder is None) or not _is_answer_id(answer_id):
+            return Response(status_code=204)
+        rec, holder = await extras_record(request, answer_id)
+        loc = rec.location if rec is not None else None
+        if rec is None or rec.answer is None or (loc and not in_uk(loc.lat, loc.lon)):
+            return _with_cookies(Response(status_code=204), holder)  # UK sources: UK only
+        subject = subject_of(rec)
+        if subject is None:  # no plant we know: nothing to ask about
+            return _with_cookies(Response(status_code=204), holder)
+
+        def sightings_of() -> list:
+            return seen.seen(subject.problems) if seen is not None else []
+
+        def news_of() -> list:
+            return finder.reports(subject) if finder is not None else []
+
+        async def ask(fn, label: str) -> list:
+            try:
+                return await run_in_threadpool(fn)  # within its own TIMEOUT_S
+            except Exception:  # noqa: BLE001 - extra only: never an error on the page
+                log.exception("seen recently: %s broke", label)
+                return []
+
+        sightings, reports = await asyncio.gather(
+            ask(sightings_of, "sightings"), ask(news_of, "news")
+        )
+        if not sightings and not reports:
+            return _with_cookies(Response(status_code=204), holder)
+        shown = TEMPLATES.TemplateResponse(
+            request, "_reported.html", {"sightings": sightings, "reports": reports}
+        )
+        return _with_cookies(shown, holder)
+
+    @app.get("/answers/{answer_id}/extras", response_class=HTMLResponse)
+    async def answer_extras(request: Request, answer_id: str):
+        """The Tavily extras under the plan (_extras_slot.html loads this after the page
+        opens): shop links for the answer's actions, and gardeners near a typed UK town.
+        204, and nothing shows, when there is nothing to show or anything fails."""
+        finder, local = app.state.shops, app.state.local_help
+        if (finder is None and local is None) or not _is_answer_id(answer_id):
+            return Response(status_code=204)
+        rec, holder = await extras_record(request, answer_id)
         loc = rec.location if rec is not None else None
         if rec is None or rec.answer is None or (loc and not in_uk(loc.lat, loc.lon)):
             return _with_cookies(Response(status_code=204), holder)  # UK only

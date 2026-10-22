@@ -31,13 +31,14 @@
     </ul></div>
 </div>
 {% endmacro %}
-{% macro credit_lists(spot_on=false, plantbook_on=false) %}
+{% macro credit_lists(spot_on=false, plantbook_on=false, sightings_on=false) %}
 <div class="made-credit-cols">
 <div class="made-col">
   <h3>Data</h3>
   <dl class="made-data">
     <div><dt>Weather forecast</dt><dd><a href="https://open-meteo.com/" rel="noopener noreferrer">Open-Meteo.com</a> · {{ lic(by4, "CC BY 4.0") }}</dd></div>
     <div><dt>Care facts</dt><dd>Our notes from the RHS and other guides · OpenPlantDB (CC0){% if plantbook_on %} · Open Plantbook{% endif %}</dd></div>
+    {% if sightings_on %}<div><dt>Pest and disease sightings</dt><dd><a href="https://www.gbif.org/" rel="noopener noreferrer">GBIF.org</a> occurrence data, from its {{ lic(cc0, "CC0") }} and {{ lic(by4, "CC BY 4.0") }} datasets only; each count links to its records and who made them</dd></div>{% endif %}
     {% if spot_on %}<div><dt>Coldest nights</dt><dd>Open-Meteo.com, ERA5-Land · {{ lic(by4, "CC BY 4.0") }}</dd></div>
     <div><dt>Soil texture and lime</dt><dd>Contains British Geological Survey materials © UKRI (Soil Parent Material Model 1 km) · {{ lic(ogl, "Open Government Licence") }}</dd></div>
     <div><dt>Topsoil pH</dt><dd>UKCEH Countryside Survey (Henrys et al. 2012, NERC EIDC) · {{ lic(ogl, "Open Government Licence") }}</dd></div>
@@ -61,14 +62,14 @@
 <h3>Illustrations</h3>
   <p class="made-note">The "if you protect it / if you don't" pictures were drawn ahead of time by Qwen-Image-Edit from the sample photos above, made healthier or sicker: parsley from Johnathon Ridden's (CC0 1.0), basil from Forest and Kim Starr's (CC BY 3.0 US), rosemary beetles from Максим Шумских's (CC BY 4.0) and coriander from Ian Wolfe's (CC0 1.0). Illustrations, not predictions.</p>
 {% endmacro %}
-{% macro made_with(spot_on=false, plantbook_on=false, voice_on=false, tavily_on=false, open=false, check_on=false) %}
+{% macro made_with(spot_on=false, plantbook_on=false, voice_on=false, tavily_on=false, open=false, check_on=false, sightings_on=false) %}
 <section class="made-with" id="made-with" aria-labelledby="made-with-h">
 <h2 id="made-with-h">Made with</h2>
 <p class="made-note">All models run on Nebius Token Factory.</p>
 {{ made_cards(voice_on=voice_on, tavily_on=tavily_on, check_on=check_on) }}
 <details class="made-credits" id="credits"{% if open %} open{% endif %}>
   <summary>Data and photo credits</summary>
-  {{ credit_lists(spot_on=spot_on, plantbook_on=plantbook_on) }}
+  {{ credit_lists(spot_on=spot_on, plantbook_on=plantbook_on, sightings_on=sightings_on) }}
 </details>
 </section>
 {% endmacro %}

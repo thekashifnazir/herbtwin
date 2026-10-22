@@ -1,0 +1,23 @@
+{
+  "_about": "Seen recently in the UK (sightings.py): each named problem in problem_signs_uk.json that is one organism (or two, for the leafhoppers and rose rust), with its scientific name and GBIF backbone key, checked with https://api.gbif.org/v1/species/match?strict=true on 22 Oct 2026 (all EXACT, ACCEPTED, rank SPECIES; carrot fly's accepted name is Psila rosae, Chamaepsila rosae its synonym). A key's search includes its synonyms. also: other names a headline may use (reported.py). Problems many organisms cause (aphids, powdery mildew, rust, slugs and snails, whitefly, root rot ...) and disorders (leaf scorch) are left out: no one species to count. Verticillium wilt is left out too: a soil fungus, almost never recorded as a sighting.",
+  "species": {
+    "allium leaf miner": {"shown": "Allium leaf miner", "scientific": ["Phytomyza gymnostoma"], "gbif": [1554694]},
+    "basil downy mildew": {"shown": "Basil downy mildew", "scientific": ["Peronospora belbahrii"], "gbif": [3277292]},
+    "bay sucker": {"shown": "Bay sucker", "scientific": ["Lauritrioza alacris"], "gbif": [7763534]},
+    "black spot": {"shown": "Rose black spot", "scientific": ["Diplocarpon rosae"], "gbif": [2583566]},
+    "blue mint beetle": {"shown": "Blue mint beetle", "scientific": ["Chrysolina coerulans"], "gbif": [4460196]},
+    "carrot fly": {"shown": "Carrot fly", "also": ["carrot root fly"], "scientific": ["Psila rosae"], "gbif": [5713486]},
+    "celery leaf mining fly": {"shown": "Celery leaf mining fly", "scientific": ["Euleia heraclei"], "gbif": [1623571]},
+    "coral spot": {"shown": "Coral spot", "scientific": ["Nectria cinnabarina"], "gbif": [5251836]},
+    "cuckoo spit": {"shown": "Froghopper (cuckoo spit)", "also": ["froghopper"], "scientific": ["Philaenus spumarius"], "gbif": [2016038]},
+    "grey mould": {"shown": "Grey mould", "scientific": ["Botrytis cinerea"], "gbif": [2583139]},
+    "leek rust": {"shown": "Leek rust", "scientific": ["Puccinia allii"], "gbif": [7855051]},
+    "mint moth": {"shown": "Mint moth", "scientific": ["Pyrausta aurata"], "gbif": [1890534]},
+    "mint rust": {"shown": "Mint rust", "scientific": ["Puccinia menthae"], "gbif": [2514887]},
+    "rose leaf-rolling sawfly": {"shown": "Rose leaf-rolling sawfly", "scientific": ["Blennocampa phyllocolpa"], "gbif": [6097059]},
+    "rose rust": {"shown": "Rose rust", "scientific": ["Phragmidium mucronatum", "Phragmidium tuberculatum"], "gbif": [7789914, 2516514]},
+    "rosemary beetle": {"shown": "Rosemary beetle", "scientific": ["Chrysolina americana"], "gbif": [4460066]},
+    "sage and ligurian leafhoppers": {"shown": "Sage and Ligurian leafhoppers", "also": ["sage leafhopper", "Ligurian leafhopper"], "scientific": ["Eupteryx melissae", "Eupteryx decemnotata"], "gbif": [5985079, 5985037]},
+    "vine weevil": {"shown": "Vine weevil", "scientific": ["Otiorhynchus sulcatus"], "gbif": [1195129]}
+  }
+}

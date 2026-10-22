@@ -55,7 +55,13 @@ involves in plain words.</p>
     or your chat question when the app looks something up on gardening sites. Tavily also
     gets the kind of thing that helps with the advice (for example, horticultural fleece), to
     find it at UK garden shops; nothing about you goes with it. If you typed a UK town or
-    postcode, Tavily gets that town's name, to find pages that list gardeners there.</li>
+    postcode, Tavily gets that town's name, to find pages that list gardeners there. To show
+    news under "Seen recently in the UK", Tavily gets the name of a pest or disease the plant
+    can get (for example, rosemary beetle), to find this month's UK reports of it; nothing
+    about you or where you are goes with it.</li>
+  {% if sightings_on %}<li><strong>GBIF</strong> (the Global Biodiversity Information Facility) gets
+    only the species of a pest or disease the plant can get and a date range, to count its
+    UK records from the last 60 days. It is told nothing about you or where you are.</li>{% endif %}
   <li><strong>Google Maps</strong> gets the town you typed only if you tap "Find garden
     centres near" under an answer: it opens a map search in a new tab. We send it nothing.</li>
   {% if voice_on %}<li><strong>ElevenLabs</strong> turns the answer into speech when you press "Hear it from

@@ -84,24 +84,29 @@ FOR_ACTION: dict[str, tuple[Product, ...]] = {
     ),
 }
 MAX_PRODUCTS = 3
-# never sold here: a spray or a killer, slug pellets, or a plant sold as a cure
-_NEVER = re.compile(
-    r"\b(?:pellets?|\w*killers?|sprays?|repellents?|traps?|poisons?|remed\w*|medic\w*|"
-    r"cures?|heal(?:s|ing)?|herbal|"
-    # what a pest, weed or disease product is called, and the brands sold that way (#338
-    # review: "Bug Clear Ultra", "Resolva", "Roundup" passed the chemical words)
-    r"slugs?|snails?|weeds?|pests?|insects?|bugs?|aphids?|fung\w*|mould|mildew|"
-    # and the brands sold that way, and pesticide actives that end in no "-cide" (#345
-    # review: "Derris powder"): web_how.PEST_PRODUCTS, shared with the main card's reason.
-    # Pyrethrum, the -thrins, sulphur, copper sulphate and Bordeaux are names_a_chemical's
+# what a pest, weed or disease product is sold as: never a shop link, and never a headline
+# under "Reported this month" (reported.py). Brands and pesticide actives that end in no
+# "-cide" (#338, #345 reviews: "Bug Clear Ultra", "Derris powder") are web_how.PEST_PRODUCTS,
+# shared with the main card's reason; pyrethrum, the -thrins, sulphur, copper sulphate and
+# Bordeaux are names_a_chemical's
+_PRODUCT_WORDS = (
+    r"pellets?|\w*killers?|sprays?|repellents?|traps?|poisons?|"
     rf"{PEST_PRODUCTS}|"
-    # and what such a product is sold as (#338 integrator review: "vine weevil protection",
-    # "Bayer protection", "Ant bait station")
-    r"bayer|weevils?|baits?|control|repel\w*|treatments?|\w+cides?|"
+    # #338 integrator review: "vine weevil protection", "Bayer protection", "Ant bait station"
+    r"bayer|baits?|control|repel\w*|treatments?|\w+cides?|"
     # a powder only as a pest product (bone meal powder and powder-coated trellis pass)
-    r"ants?|(?:insect|dusting|pest|flea|louse|lice)\s+powders?|neem|"
+    r"(?:insect|dusting|pest|flea|louse|lice)\s+powders?|neem|"
     # a wound paint after pruning: the RHS advises against them (#352 review)
-    r"sealants?|(?:wound|pruning|tree) paints?)\b",
+    r"sealants?|(?:wound|pruning|tree) paints?"
+)
+SOLD_AGAINST_PESTS = re.compile(rf"\b(?:{_PRODUCT_WORDS})\b", re.I)
+# never sold here: a pest product (above), anything named for the pest, weed or disease it
+# is sold against, or a plant sold as a cure
+_NEVER = re.compile(
+    rf"\b(?:{_PRODUCT_WORDS}|"
+    r"remed\w*|medic\w*|cures?|heal(?:s|ing)?|herbal|"
+    r"slugs?|snails?|weeds?|pests?|insects?|bugs?|aphids?|fung\w*|mould|mildew|"
+    r"weevils?|ants?)\b",
     re.I,
 )
 # in a title only: "Westland Plant Protection compost". A shop files fleece under "plant

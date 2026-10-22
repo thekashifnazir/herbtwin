@@ -71,6 +71,9 @@ class Hit:
     # the same text line by line (the trusted-page check: a heading or a list line with no
     # full stop must never run into the next sentence, seen live 19 Oct)
     lines: tuple[str, ...] = ()
+    # when the provider says the page was published (Tavily's news search: "Wed, 22 Oct 2025
+    # 00:00:00 GMT"); None when it does not say
+    published: str | None = None
 
 
 @dataclass(frozen=True)
@@ -157,7 +160,16 @@ def _hits(
                 _clean(r.get("title"), TITLE_CHARS),
                 _clean(snippet_of(r), SNIPPET_CHARS),
             )
-            out.append(Hit(title, r["url"], snippet, _lines(snippet_of(r), SNIPPET_CHARS)))
+            published = r.get("published_date")
+            out.append(
+                Hit(
+                    title,
+                    r["url"],
+                    snippet,
+                    _lines(snippet_of(r), SNIPPET_CHARS),
+                    _clean(published, 40) if isinstance(published, str) else None,
+                )
+            )
     return out
 
 
@@ -178,6 +190,30 @@ class Tavily:
                 "max_results": n,
                 "include_domains": list(domains),
                 "search_depth": "basic",
+            },
+        )
+        return _hits(data.get("results"), domains, lambda r: r.get("content"))
+
+    def recent(self, query: str, domains: tuple[str, ...], n: int) -> list[Hit]:
+        """Tavily's search over the last month, each hit with the day it was published
+        (Seen recently in the UK, reported.py). Tavily has no `days`: the window is
+        time_range "month", and filter_by_published_date drops pages outside it (and adds
+        their dates). The domains are preferred, not required (the 22 Oct probe ran so);
+        _hits keeps only theirs, and the caller checks each date itself."""
+        data = request_json(
+            self.http,
+            "POST",
+            TAVILY_SEARCH_URL,
+            {"Authorization": f"Bearer {self.key}"},
+            body={
+                "query": query,
+                "max_results": n,
+                "search_depth": "basic",
+                "topic": "general",
+                "time_range": "month",
+                "filter_by_published_date": True,
+                "include_domains": list(domains),
+                "include_domains_mode": "prefer",
             },
         )
         return _hits(data.get("results"), domains, lambda r: r.get("content"))

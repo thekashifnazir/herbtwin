@@ -1,0 +1,24 @@
+{# Seen recently in the UK (sightings.py, reported.py), under Keep an eye on: GBIF's UK records
+   of this plant's pests and diseases, and news headlines about them found with Tavily,
+   loaded after the page opens so it never holds up the answer. Shown only when the
+   fragment brings something: nothing found, a failure or no script leaves it hidden, with no
+   empty box. `hidden` stays in the markup and the class is skipped too, so the rater text
+   (answer_text.plan_text) never reads it. Styled by static/pages/answer.css #}
+{% if reported_on and rec.observation and rec.observation.species %}<section class="reported" id="reported" aria-labelledby="reported-h" data-src="/answers/{{ rec.record_id }}/reported" hidden>
+  <h2 id="reported-h">Seen recently in the UK</h2>
+  <div class="reported-found"></div>
+</section>
+<script>
+(() => {
+  const s = document.getElementById("reported");
+  if (!s || !window.fetch) return;
+  fetch(s.dataset.src, {headers: {"X-Herbtwin-Fetch": "1"}})
+    .then((r) => (r.status === 200 ? r.text() : ""))
+    .then((html) => {
+      if (!html.trim()) return;  // nothing reported: the slot stays hidden
+      s.querySelector(".reported-found").innerHTML = html;  // our own escaped fragment
+      s.hidden = false;
+    })
+    .catch(() => {});  // extra only: a failure leaves it hidden, never an error
+})();
+</script>{% endif %}
