@@ -10,8 +10,8 @@ from tests.test_web import _client
 from tests.test_web_spot import _client as _spot_client
 
 SECTIONS = [
-    "herbtwin, and why I built it",
-    "How one answer is made",
+    "What it does",
+    "How it's built",
     "How I know it works",
     "What didn't work",
     "What's next",
@@ -31,7 +31,8 @@ def test_about_tells_the_story_in_its_sections_in_order(tmp_path):
     page = _about(tmp_path)
     heads = re.findall(r'<h2 id="[^"]+">([^<]+)</h2>', page)
     assert heads == SECTIONS
-    assert "<h1>About herbtwin</h1>" in page
+    # the sibling pages' title (22 Oct): the band and the "why" are one, not a band then a repeat
+    assert "<h1>herbtwin, and why I built it</h1>" in page and page.count("why I built it") == 1
     assert "<title>About · herbtwin</title>" in page
 
 
@@ -59,7 +60,7 @@ def test_the_answers_example_cost_is_labelled_one_example_and_an_estimate(tmp_pa
 
 def test_the_about_page_has_one_main_button_and_nothing_private(tmp_path):
     r = _spot_client(tmp_path)[0].get("/about")
-    assert r.status_code == 200 and "<h1>About herbtwin</h1>" in r.text
+    assert r.status_code == 200 and "<h1>herbtwin, and why I built it</h1>" in r.text
     page = r.text
     main = page.split('<main id="content"', 1)[1].split("</main>", 1)[0]
     assert len(re.findall(r'class="[^"]*\bprimary\b|id="next"', main)) == 1
@@ -137,9 +138,8 @@ def test_about_gives_one_pass_figure_for_the_trusted_page_check(tmp_path, monkey
 
     monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)  # as live
     page = _spot_client(tmp_path)[0].get("/about").text
-    models = page.split('<h2 id="how">', 1)[1].split("</section>", 1)[0]
-    assert "Ultra checks a trusted page instead" in models
-    assert "It shipped at round 8: 3 false agrees in 418" in models
+    works = page.split('<h2 id="works">', 1)[1].split("</section>", 1)[0]
+    assert "Trusted-page check, round 8: 3 false agrees in 418" in works
     assert "4 false agrees in 435" not in page
 
 
@@ -156,48 +156,113 @@ def test_devpost_says_the_same_photo_can_read_differently_and_about_stays_short(
     assert "different read" not in _about(tmp_path)
 
 
-def test_two_diagrams_carry_the_story_with_each_step_named(tmp_path):
-    # 22 Oct, Kash: "make some diagrams to show our system design setup like we did in
-    # moveset and step out" (the About was "bland and very claude"); one portrait SVG each,
-    # 344 wide so its 16px text is 16px or more at 390 px, with nothing scrolling sideways
+def _flows(tmp_path, check_on: bool, monkeypatch) -> tuple[str, str, str]:
+    from herbtwin.web import app as web_app
+
+    monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: check_on)
     page = _spot_client(tmp_path)[0].get("/about").text
-    how = page.split('<h2 id="how">', 1)[1].split("</section>", 1)[0]
-    answer = how.split('<svg class="sys" id="sys-answer"', 1)[1].split("</svg>", 1)[0]
-    assert 'viewBox="0 0 344 ' in answer and '<title id="sys-answer-t">' in answer
-    for said in (
-        "Read the photo · GLM-5.3-Flash",
-        "DeepSeek V4.1 Flash races it after 14 s.",
-        "Open-Meteo:",
-        "The plant's twin",
-        "6 choices × 14 days,",
-        "3 × NVIDIA Nemotron 3 Super",
-        "Our rules",
-        "3 Nano, with",
-        "3 Ultra quotes a page",
-        "GBIF pest sightings,",
-        "$0.0040 of model time, one example",
-        "17.4 s · $0.0016",
-        "6.0 s · $0.0024",
-    ):
-        assert said in answer, said
-    # only the closer photo check runs beside research and the weather (pipeline._beside),
-    # so only it is drawn alongside; never "at the same time" for all three (22 Oct review)
-    assert ">alongside</text>" in answer and "at the same time" not in answer
-    # one green path: the weather, through the twin, to the advisors; dashed for not built
-    assert answer.count('class="wire-a"') == 2 and answer.count('class="box-acc"') == 3
-    assert 'class="box-dash"' in answer
-    assert "<figcaption" in how and 'class="sys-key"' in how and '<i class="key-d">' in how
+    built = page.split('<h2 id="built">', 1)[1].split("</section>", 1)[0]
     works = page.split('<h2 id="works">', 1)[1].split("</section>", 1)[0]
-    evals = works.split('<svg class="sys" id="sys-evals"', 1)[1].split("</svg>", 1)[0]
+    return page, built, works
+
+
+def test_how_its_built_is_the_stack_then_one_coloured_flow(tmp_path, monkeypatch):
+    # 22 Oct, Kash: "still very claude coded on this page rather than sticking to more of our
+    # design language and where is the colour". The sibling pages' shape (a row of the stack,
+    # then one drawn flow in a framed panel) in herbtwin's language: one list of steps, left
+    # to right on a wide screen and one under another on a phone, the boxes home's sticker
+    # tiles coloured by what they are
+    _, built, _ = _flows(tmp_path, True, monkeypatch)
+    chips = built.split('<ul class="about-chips"', 1)[1].split("</ul>", 1)[0]
+    for name in (
+        "Python 3.12",
+        "FastAPI",
+        "Cloud Run",
+        "Cloudflare Worker",
+        "Nebius Token Factory",
+        "NVIDIA Nemotron 3",
+        "Tavily",
+        "Open-Meteo",
+        "GBIF",
+        "Supabase",
+    ):
+        assert f"<li>{name}</li>" in chips, name
+    flow = built.split('<ol class="flow"', 1)[1].split("</figure>", 1)[0]
+    # six steps, then what hangs off the answer in a row of its own
+    assert '<div class="flow-under">' in flow
+    steps = re.findall(r"\n      <li[ >]", flow)
+    assert len(steps) == 6
+    # the numbers the flow states come from the code that does them
+    from herbtwin.pipeline import HOLD_WATER_DAYS
+    from herbtwin.sightings import WINDOW_DAYS
+    from herbtwin.stages.observe import HEDGE_AFTER_S
+
+    assert f"races it after {HEDGE_AFTER_S:g} s" in flow
+    assert f"the last {WINDOW_DAYS} days" in flow and f"× {HOLD_WATER_DAYS} days" in flow
+    assert "code quotes it only if it backs the answer" in flow
+    for said in (
+        "<strong>Read the photo</strong><em>GLM-5.3-Flash</em>",
+        "DeepSeek V4.1 Flash races it after 14 s",
+        "e.g. 17.4 s · $0.0016",
+        '<div class="node weather then">',
+        "<em>Open-Meteo</em>",
+        '<div class="node twin">',
+        "6 choices × 14 days, each one tried",
+        '<div class="node advisors">',
+        "3 × NVIDIA Nemotron 3 Super",
+        "e.g. 6.0 s · $0.0024",
+        '<div class="node rules then">',
+        "Advisors say water, but nothing looks dry and the twin sees no dry day ahead: leave it.",
+        '<div class="node answer ink">',
+        '<svg class="face content"',
+        "$0.0040 of model time, one example",
+        "NVIDIA Nemotron 3 Nano, with Tavily search",
+        "NVIDIA Nemotron 3 Ultra reads a page",
+        "GBIF pest sightings, the last 60 days",
+        '<div class="node later">',
+    ):
+        assert said in flow, said
+    # one green path: the arrows into the twin and the advisors
+    assert flow.count('<li class="acc">') == 2
+    assert "<figcaption>" in built and '<i class="key-d">' in built
+    css = style.CSS
+    assert ".about-page .node.twin { background: var(--band); color: var(--band-fg); }" in css
+    assert ".about-page .node.weather { background: var(--sky); }" in css
+    assert ".about-page .node.advisors { background: var(--soft); }" in css
+    assert ".about-page .node.rules { background: var(--warn-bg);" in css
+    # theme tokens only, so dark mode follows; the lime is the band's one button, never a box
+    rules = re.findall(r"\.about-page [^{]*\{[^}]*\}", css)
+    assert not any(re.search(r"#[0-9a-fA-F]{3,6}\b|rgb\(", r) for r in rules)
+    assert not any("--lime" in r for r in rules)
+
+
+def test_the_trusted_page_box_shows_only_where_the_check_runs(tmp_path, monkeypatch):
+    (tmp_path / "on").mkdir()
+    (tmp_path / "off").mkdir()
+    _, on, _ = _flows(tmp_path / "on", True, monkeypatch)
+    _, off, _ = _flows(tmp_path / "off", False, monkeypatch)
+    assert "<strong>Trusted-page check</strong>" in on and "Trusted-page check" not in off
+
+
+def test_how_i_know_it_works_is_a_flow_that_ships_or_fails(tmp_path, monkeypatch):
+    _, _, works = _flows(tmp_path, True, monkeypatch)
+    flow = works.split('<ol class="flow flow-evals"', 1)[1].split("</ol>", 1)[0]
     for said in (
         "Write the test down first",
+        "Run it on held-out data",
         "Label it blind",
-        "Trusted-page rounds: 2 labellers,",
-        "round 8: 3 false",
-        "(774 questions)",
+        "Trusted-page rounds: 2 labellers, yes only if both agree",
+        '<div class="node advisors"><strong>It ships</strong>',
+        "round 8: 3 false agrees in 418",
+        '<div class="node rules"><strong>What didn\'t work</strong>',
+        "specialist advisors (774 questions)",
     ):
-        assert said in evals, said
-    # drawn with the theme's tokens only, so dark mode follows; never wider than a phone
-    rules = re.findall(r"\.about-page \.sys[^{]*\{[^}]*\}", style.CSS)
-    assert rules and not any(re.search(r"#[0-9a-fA-F]{3,6}\b|rgb\(", r) for r in rules)
-    assert not any("min-width" in r for r in rules)
+        assert said in flow, said
+
+
+def test_who_made_it_is_kashs_own_bio_and_ends_on_the_public_repo(tmp_path):
+    page = _about(tmp_path)
+    who = page.split('<h2 id="who">', 1)[1].split("</section>", 1)[0]
+    assert "I'm Kash, a Senior Technical Architect based in London." in who
+    assert "the architecture and the judgement calls are mine" in who
+    assert '<a class="button" href="https://github.com/thekashifnazir/herbtwin"' in who

@@ -3,6 +3,7 @@ the heading in the poster face, the first card pulled up over its edge, inked ca
 lime for the one thing to press on the band."""
 
 import json
+import re
 
 import httpx
 import respx
@@ -58,3 +59,13 @@ def test_the_spot_verdict_is_a_row_of_counted_tiles_over_the_band(tmp_path):
 def test_lime_is_for_the_thing_to_press_on_the_band():
     assert ".page-band .button.primary { background: var(--lime);" in style.CSS
     assert ".page-band .band-go {" in style.CSS and "background: var(--lime)" in style.CSS
+
+
+def test_the_bands_bleed_to_the_body_not_the_viewport():
+    # 22 Oct: with scrollbar-gutter: stable, 100vw counts the scrollbar's lane, so a 50vw bleed
+    # sat half a lane left and stopped short on the right (About's band at 1293 of 1300). The
+    # body is a size container and the bands bleed by its width (cqw)
+    assert re.search(r"body \{[^}]*container-type: inline-size", style.CSS)
+    assert ".page-band { margin: 0 calc(50% - 50cqw);" in style.CSS
+    assert "margin: 0 calc(50% - 50cqw); padding: 8px max(16px, calc(50cqw" in style.CSS  # home
+    assert "50vw" not in style.CSS and "100vw" not in style.CSS

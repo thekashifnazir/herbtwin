@@ -6,10 +6,10 @@
    The header above is already var(--band) edge to edge, so the band just follows on:
    margin pulls it to the viewport's sides out of the 72rem wrap. */
 .home-page main { padding-top: 0; }
-/* 100vw counts a classic scrollbar (Windows, Linux): clip that sliver, never scroll sideways */
+/* the band bleeds to the body's width (cqw: herbtwin.css), never wider: nothing scrolls sideways */
 .home-page { overflow-x: clip; }
 .home-page .home-band { background: var(--band); color: var(--band-fg);
-  margin: 0 calc(50% - 50vw); padding: 8px max(16px, calc(50vw - var(--frame) / 2 + 16px)) 88px; }
+  margin: 0 calc(50% - 50cqw); padding: 8px max(16px, calc(50cqw - var(--frame) / 2 + 16px)) 88px; }
 .home-page .home-band :focus-visible { outline-color: var(--band-fg); }
 .home-page .home-band .muted { color: var(--band-muted); }
 .home-page .home-band a { color: var(--band-fg); }

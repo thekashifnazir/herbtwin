@@ -93,7 +93,11 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }  /* a short page keeps the frame where a long one has it */
+/* the body is the width the bands bleed to: 100vw also counts the scrollbar lane that
+   scrollbar-gutter keeps, so a 50vw bleed sat half a lane left of the page and stopped short
+   on the right (22 Oct, the About band at 1293 of 1300). cqw is the body's own width. */
 body {
+  container-type: inline-size;
   margin: 0;
   background: var(--bg);
   color: var(--fg);
@@ -312,14 +316,14 @@ th { background: var(--muted); font-weight: 700; }
 :root { --lime: #C9F27B; --lime-fg: #12291C; --ink-shadow: var(--fg);
   --sky: #E3EEF6; --sky-fg: #2F6690; }
 @media (prefers-color-scheme: dark) { :root { --ink-shadow: #000; --sky: #1B2B3A; --sky-fg: #8CC2EE; } }
-.has-band { overflow-x: clip; }   /* 100vw counts a classic scrollbar: clip it, never scroll */
+.has-band { overflow-x: clip; }   /* a band never scrolls the page sideways */
 .has-band main { padding-top: 0; }
-/* the band's full bleed (50% - 50vw) holds only in a centred column: a page that keeps the
+/* the band's full bleed (50% - 50cqw) holds only in a centred column: a page that keeps the
    38rem reading column (message.html: the limit and not-found pages) has a wide right
    padding, so its band sat 279px left and stopped short on the right (21 Oct, Kash at 2000px).
    A wrap that holds a band is centred, as a wide one is */
 main .wrap:has(> .page-band) { padding-right: 16px; }
-.page-band { margin: 0 calc(50% - 50vw); padding: 12px max(16px, calc(50vw - var(--frame) / 2 + 16px)) 72px;
+.page-band { margin: 0 calc(50% - 50cqw); padding: 12px max(16px, calc(50cqw - var(--frame) / 2 + 16px)) 72px;
   background: var(--band); color: var(--band-fg); }
 .page-band :focus-visible { outline-color: var(--band-fg); }
 .page-band h1 { margin: 0 0 10px; font: 800 clamp(2.3rem, 6vw, 4.2rem)/0.95 var(--poster); letter-spacing: 0; }
