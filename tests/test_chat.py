@@ -592,7 +592,8 @@ def test_a_what_if_reply_that_goes_past_the_forecast_is_asked_again(tmp_path):
     again = m.calls[2]
     assert again["tool_choice"] == "none"
     ask = again["messages"][-1]["content"]
-    assert "no difference over the next 2 weeks" in ask and "do not mention frost" in ask
+    assert "no dry days in the next 2 weeks without watering" in ask
+    assert "do not mention frost" in ask
 
 
 def test_what_still_goes_past_the_forecast_is_left_out(tmp_path):

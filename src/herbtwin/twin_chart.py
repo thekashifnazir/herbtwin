@@ -15,7 +15,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from herbtwin.plant_model import TIP, TWIN_FOR, _cold, _peak, is_tender
+from herbtwin.plant_model import TIP, TWIN_FOR, _cold, is_tender, judged_by
 from herbtwin.schemas import AnalysisRecord, CareAction, RiskStrip
 
 # the SVG's own coordinates (viewBox); the page scales it to the column's width
@@ -29,7 +29,8 @@ LEFT_OUT_START_MAX_X = 150
 ABOVE, BELOW, NAME_GAP = 6.0, 15.0, 14.0
 NAME_TOP, NAME_BOTTOM = TOP + 13, BOTTOM - 3
 NAME_CHAR = 7.4  # a 14px bold letter's width, about, in viewBox units
-NEEDS_W, KEY_W = 72.0, 78.0  # "needs water", "cold nights": their width in viewBox units
+NEEDS_W = 72.0  # "needs water": its width in viewBox units
+KEY_CHAR = 7.1  # a key letter's width, about: "cold spells" is 78 units
 MARK_Y, AXIS_Y_COLD = 139, 159  # the snowflakes' row under the axis, then the week labels
 COLD_HEIGHT = 166  # the viewBox height when a snowflake row is drawn (else HEIGHT)
 
@@ -53,7 +54,8 @@ class Line:
     name_y: float = 0.0
     base_name_y: float | None = None  # where "Leave it" sits while this line is drawn
     marks: tuple[float, ...] = ()  # a snowflake under the centre of each cold window
-    key: tuple[float, str] | None = None  # the one "cold nights" word: x, anchor
+    key: tuple[float, str] | None = None  # the one "cold spells" word: x, anchor
+    spell: str = "cold spell"  # "frosty spell" for a hardy plant, as the fold says (#441)
     how: str = ""  # how to read the chart while this line is drawn, under the title
 
 
@@ -74,8 +76,17 @@ def _y(mm: float, capacity: float) -> float:
     return round(BOTTOM - (BOTTOM - TOP) * min(max(mm / capacity, 0.0), 1.0), 1)
 
 
-def _said(name: str, strip: RiskStrip, needs: float, cold: str, word: str) -> str:
-    low = next((d for d in strip.days if (d.soil_water_mm or 0.0) < needs), None)
+def dry_level_mm(trigger_mm: float) -> float:
+    """The soil water of a dry day: water_stress at the tipping point. The twin starts to
+    count stress at its watering trigger, but a dry day in Compare's rows ("dry by Saturday
+    if left") is one at TIP; the dotted "needs water" line is drawn there, so the chart and
+    the rows say the same (site walk 2, 22 Oct: "needs water by Thursday" over "No dry days
+    or frost in the next 2 weeks")."""
+    return trigger_mm * (1 - TIP)
+
+
+def _said(name: str, strip: RiskStrip, cold: str, word: str) -> str:
+    low = next((d for d in strip.days if d.water_stress >= TIP), None)
     water = f"needs water by {low.date:%A}" if low else "soil stays moist enough"
     return f"{name}: {water}; " + (f"{word} risk {cold}." if cold else f"no {word} risk.")
 
@@ -157,7 +168,7 @@ def _you(name: str) -> str:
     return f"if you {name[:1].lower()}{name[1:]}"
 
 
-def _how(name: str, base_name: str, snow: bool) -> str:
+def _how(name: str, base_name: str, snow: bool, spell: str = "cold spell") -> str:
     """How to read the chart, from the lines actually drawn: the green one, leaving it's
     dashed one (when it is not the green one), the dotted line, and the snowflakes when
     any show (round 2, 22 Oct, Kash: "explanations")."""
@@ -165,7 +176,8 @@ def _how(name: str, base_name: str, snow: bool) -> str:
     if base_name and base_name != name:
         said += f" Dashed: {_you(base_name)}."
     said += " Below the dotted line, it needs water."
-    return said + (" \u2744\ufe0e marks cold nights." if snow else "")
+    # one snowflake a run of cold nights, so a spell, as the fold counts them (#441)
+    return said + (f" \u2744\ufe0e marks each {spell}." if snow else "")
 
 
 # the twin's reasons in plain sentences, for the Compare table only: the twin's own strings
@@ -216,15 +228,16 @@ def _windows(cold: list[int]) -> list[tuple[int, int]]:
     return runs
 
 
-def _key(marks: tuple[float, ...]) -> tuple[float, str] | None:
-    """Where the one "cold nights" word goes in the snowflakes' row: after the first mark
+def _key(marks: tuple[float, ...], spell: str = "cold spell") -> tuple[float, str] | None:
+    """Where the one "cold spells" word goes in the snowflakes' row: after the first mark
     with room before the next, else before the first, else ending at the right edge."""
     if not marks:
         return None
+    key_w = KEY_CHAR * len(f"{spell}s")
     for here, nxt in zip(marks, marks[1:] + (RIGHT + 8,), strict=True):
-        if nxt - here - 10 >= KEY_W:
+        if nxt - here - 10 >= key_w:
             return (round(here + 9, 1), "start")
-    if marks[0] - LEFT - 10 >= KEY_W:
+    if marks[0] - LEFT - 10 >= key_w:
         return (round(marks[0] - 9, 1), "end")
     return (RIGHT, "end")
 
@@ -242,6 +255,8 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
     if not base.days or any(d.soil_water_mm is None for s in by.values() for d in s.days):
         return None
     word = _cold(is_tender(pack))[0]
+    # the snowflakes' word, as the evidence fold counts them (fold_titles, #441)
+    spell = "cold spell" if is_tender(pack) else "frosty spell"
     cap, n = state.capacity_mm, len(base.days)
     step = (RIGHT - LEFT) / n  # the start, then one point at the end of each day
 
@@ -253,7 +268,7 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
         twins = [by[a] for a in TWIN_FOR.get(row.action, ()) if a in by]
         if not twins:
             continue
-        strip = min(twins, key=_peak)
+        strip = min(twins, key=judged_by(row.action))
         pts = [(x(0), _y(state.water_mm, cap))]
         pts += [(x(i + 1), _y(d.soil_water_mm or 0.0, cap)) for i, d in enumerate(strip.days)]
         days = [i for i, d in enumerate(strip.days) if d.frost >= TIP]
@@ -289,22 +304,21 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
                     if cold and cold[0].x <= LEFT_OUT_START_MAX_X
                     else (RIGHT, "end")
                 ),
-                said=_said(
-                    name, strip, state.needs_water_mm, f"{first.date:%A}" if first else "", word
-                ),
+                said=_said(name, strip, f"{first.date:%A}" if first else "", word),
                 name=short,
                 name_y=name_y,
                 base_name_y=base_y,
                 marks=marks,
-                key=_key(marks),
-                how=_how(short, base_name, bool(marks or (left and left[4]))),
+                key=_key(marks, spell),
+                spell=spell,
+                how=_how(short, base_name, bool(marks or (left and left[4])), spell),
             )
         )
     if not lines:
         return None
     better = next((r.action for r in answer.compare if r.vs_leaving_it == "better"), None)
     shown = better if better in {ln.action for ln in lines} else lines[0].action
-    today, needs_y = (x(0), _y(state.water_mm, cap)), _y(state.needs_water_mm, cap)
+    today, needs_y = (x(0), _y(state.water_mm, cap)), _y(dry_level_mm(state.needs_water_mm), cap)
     drawn = [r[2] for r in raw if r[0].action in (shown, "leave_normal")]
     rest = [r[2] for r in raw if r[0].action not in (shown, "leave_normal")]
     cold_any = any(ln.cold for ln in lines)

@@ -798,6 +798,9 @@ class Answer(BaseModel):
     no_cut_growth: bool = False  # resting or seedlings: "You asked" trims cuts for growth too
     tray_check: bool = False  # a pot coming indoors: empty its tray (answer.TRAY_CHECK)
     in_ground: bool = False  # a bed plant: no line says to keep it apart (judge walk, #304)
+    # the disease our no-cure rule removes the plant for, when it is named: the photo
+    # check's, else the one the advisor named (answer.no_cure_overrides)
+    no_cure_of: str | None = None
     indoor: IndoorNow | None = None  # indoors: the month's normal and care tips
 
 

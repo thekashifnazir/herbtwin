@@ -23,7 +23,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from herbtwin.adapters.base import AdapterError, ModelAdapter, ToolCall
 from herbtwin.advice_context import FENCE_RUN, fence, history_text, told_lines
-from herbtwin.answer import NO_CURE_HEADLINE, TRAY_CHECK, dont_if_dry
+from herbtwin.answer import NO_CURE_HEADLINE, TRAY_CHECK, dont_if_dry, is_bolted
 from herbtwin.confidence import SURE_NAME
 from herbtwin.crops import RATING_MIN_C, RATINGS, Crop, load_calendar
 from herbtwin.scenarios import SCENARIOS, run_scenario
@@ -160,6 +160,12 @@ SYSTEM = (
     # 22 Oct site walk: parsley in the ground got "moving potted parsley" for the winter
     "Answer for the plant where PLANT says it grows: in the ground is not a pot, so never "
     "assume a pot. For winter, go by its winter line.\n"
+    # site walk 2, r7: a bolted annual coriander was told to stay out for the winter, "(RHS
+    # H5)"; a hardiness code is jargon to a gardener
+    "If PLANT says it is finishing (an annual or biennial that has bolted), never say it will "
+    "last the winter or come back: say it is at the end of its life and to sow again. The "
+    "RHS codes in PLANT (H4, H5, H6) are for you: say how much cold a plant takes in plain "
+    "words, and never write a hardiness code such as H5.\n"
     "If the person tells you something rather than asking, never repeat it back: say in "
     "one sentence what it changes for this plant, from the blocks, or simply thank them.\n"
     "Do not invent facts about this plant. If nothing here supports an answer, say you are "
@@ -944,6 +950,30 @@ def _winter(found: Crop, container: str, setting: str) -> str:
     return f"winter: {said} (RHS {found.rating}{pot})"
 
 
+# how long the plant itself lives, from the crop calendar: an annual that has flowered is
+# finishing, whatever its winter rating (site walk 2, r7: a bolted coriander was told "it can
+# survive a UK winter with protection (RHS H5)")
+_LIFE = {
+    "annual": "life: an annual: it grows, flowers, sets seed and dies in one season",
+    "biennial": "life: a biennial: leaves in its first year, then it flowers, sets seed and "
+    "dies in its second",
+}
+BOLTED_LINE = (
+    "bolted: it is flowering, so this plant is finishing: little more leaf, and it dies once "
+    "its seed is set; sow again for more"
+)
+FINISHING_WINTER = "winter: finishing after flowering, so it will not last the winter; sow again"
+
+
+def _plant_key(rec: AnalysisRecord) -> str | None:
+    """The read's plant key, as the season norms hold it (answer.is_bolted)."""
+    obs = rec.observation
+    if obs is None or not obs.species:
+        return None
+    top = obs.species[0]
+    return match_plant(name_parts(top.name, top.common_name)[1] or top.name).key
+
+
 def _plant_lines(rec: AnalysisRecord) -> list[str]:
     """The PLANT block: the read, with where it grows as the person corrected it (the switch
     or their note, as the band shows it), and what the crop calendar says of eating it and
@@ -965,7 +995,12 @@ def _plant_lines(rec: AnalysisRecord) -> list[str]:
     if found is not None:
         if kitchen_herb(rec):
             lines.append("kitchen: a common kitchen herb, grown to eat (UK crop calendar)")
-        lines.append(_winter(found, obs.container, obs.setting))
+        if found.life in _LIFE:
+            lines.append(_LIFE[found.life])
+        finishing = found.life in _LIFE and is_bolted(obs, _plant_key(rec))
+        if finishing:
+            lines.append(BOLTED_LINE)
+        lines.append(FINISHING_WINTER if finishing else _winter(found, obs.container, obs.setting))
     return lines + [
         f"droop {obs.water_stress}/3, decline {obs.decline}/3, leaves {colour}",
         f"seen: {', '.join(obs.symptoms) or 'nothing unusual'}",

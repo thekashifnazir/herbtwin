@@ -38,6 +38,7 @@ from herbtwin.answer import (
     build_answer,
     is_bolted,
     is_seedlings,
+    no_cure_overrides,
     visible_damage,
     weather_explains,
 )
@@ -963,6 +964,15 @@ def name_in_doubt(rec: AnalysisRecord) -> bool:
     return shared and conf < SHARED_NAME_SURE
 
 
+def photo_hides_name(rec: AnalysisRecord) -> bool:
+    """The photo itself is the trouble (blurry, dark, the plant small, hard to read), so the
+    name is a guess: the heading says "Not clear: maybe mint", never the bare name. A photo
+    issue is only ever set on a name read under SURE_NAME (22 Oct site walk 2: a blurred
+    parsley's biggest text was "Mint (not sure)", which read as the answer)."""
+    obs = rec.observation
+    return bool(obs and obs.species) and rec.answer is not None and bool(rec.answer.photo_issue)
+
+
 def in_proportion(panel: Panel, *, damage: bool, in_ground: bool = False) -> Panel:
     """Keeping it apart only for harm the photo shows or a problem it names; otherwise a
     look under the leaves leads (s014 mint: one insect, no damage, told to keep it away
@@ -1262,6 +1272,9 @@ def decide(
         if indoors and (rec.location is None or in_uk(rec.location.lat, rec.location.lon))
         else None,
     )
+    overrides = no_cure_overrides(rec.answer)
+    if overrides:
+        _say(progress, overrides)  # after the advisors' "treat it" (site walk 2, r5)
     # the quote decided against the action the headline shows, not the advisors': a rule
     # that changes the headline (cold, a resting herb, rule-led protect) drops it, since
     # the last gate judged the advisors' action (post-test change after round 8, review)

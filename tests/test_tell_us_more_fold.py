@@ -145,3 +145,17 @@ def test_the_closed_line_is_an_inked_tappable_row_and_the_phone_order_still_hold
 def test_rater_text_never_reads_the_fold(tmp_path):
     text = plan_text(_render(_full_plan(tmp_path), chat=[{"role": "user", "content": "Hi"}]))
     assert "Want a more exact answer" not in text and "Tell us more" not in text
+
+
+def test_indoors_or_out_asked_on_the_band_is_never_a_question_below(tmp_path):
+    # site walk 2 (22 Oct), r3: the card said "Answer the question below", but the only
+    # question, indoors or outdoors, had its buttons up in the band and nothing below to tap
+    rec = _unsure_record(tmp_path)
+    rec.answer.tell_me_key = "setting"
+    rec.answer.tell_me = "Tell us whether it is indoors or outside and we'll use the weather."
+    assert rec.observation is not None
+    rec.observation.setting = "unknown"
+    page = _render(rec, asks=["question"])
+    assert "Indoors or outdoors? We'll redo the advice to fit." in page  # the band asks it
+    assert "question below" not in page
+    assert rec.answer.tell_me not in _fold(page)  # not asked twice

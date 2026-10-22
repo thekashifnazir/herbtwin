@@ -513,3 +513,17 @@ def test_a_carousel_price_fools_the_snippet_rule_so_no_price_shows(
     text = c.get(f"/answers/{rid}/extras").text
     assert title.split()[0] in text  # the shop link still shows
     assert "when we looked" not in text and wrong not in text and "Prices as listed" not in text
+
+
+def test_nothing_handy_for_a_plant_to_be_binned(tmp_path):
+    # site walk 2 (22 Oct), r5: "Remove it… bag and bin" still offered "Horticultural fleece,
+    # for a cold night": nothing is handy for a plant that is going
+    from herbtwin.answer import NO_CURE_HEADLINE
+
+    c, rid = _leave_it(tmp_path, {"horticultural fleece": [("Garden Fleeces", FLEECE_PAGE)]})
+    a = c.app.state.answers.get_for(rid, None).latest.answer
+    a.do = [_card("treat_or_remove", "today")]
+    a.headline = NO_CURE_HEADLINE
+    got = c.get(f"/answers/{rid}/extras")
+    assert "Handy to have" not in got.text and "fleece" not in got.text.lower()
+    assert c.app.state.shops._tavily.asked == []  # no search for it either

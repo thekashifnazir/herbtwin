@@ -55,9 +55,10 @@ def test_compare_names_what_beats_leaving_it(tmp_path):
 
 
 def test_the_sources_fold_says_what_it_holds(tmp_path):
-    # no place, so no forecast: the title says so, the label says what the fold is (B2)
+    # no place, so no forecast: the title says so, the label says what the fold is (B2) and
+    # counts its lines, not its sources (site walk 2, 22 Oct)
     head = _summary(_render(_unsure_record(tmp_path)), "evidence")
-    assert re.search(r'<span class="fold-kind">Weather · \d+ sources?</span>', head)
+    assert re.search(r'<span class="fold-kind">What we went on · \d+ things?</span>', head)
     assert '<span class="fold-title">No forecast this time</span>' in head
 
 

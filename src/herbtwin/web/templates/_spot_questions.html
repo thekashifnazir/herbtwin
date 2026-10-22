@@ -2,24 +2,27 @@
    the page and worked out on the server (herbtwin.compass), with the 8-way tap as the
    fallback; and the squeeze test. Used inside a form that posts to a refine. Both are
    radio tiles (static/pages/spot.css styles them by .compass, .rose and .squeeze, on the
-   spot pages and under a plant answer alike). #}
-{% macro direction_rose(selected=none, unsure=true) %}
+   spot pages and under a plant answer alike). Under a plant answer nothing starts picked
+   (`unsure_picked`), and answer.css gives a pick the answer chips' quiet tick (22 Oct, site
+   walk 2: "Not sure" sat ticked in solid green right above the green "Check the advice
+   again"); with no pick the form sends no direction, the same as "Not sure". #}
+{% macro direction_rose(selected=none, unsure=true, unsure_picked=true) %}
 {% set full = {"N": "north", "NE": "north-east", "E": "east", "SE": "south-east", "S": "south", "SW": "south-west", "W": "west", "NW": "north-west"} %}
 <div class="rose">{% for d in ("NW", "N", "NE", "W", "", "E", "SW", "S", "SE") %}
   {% if d %}<label><input type="radio" name="direction" value="{{ d }}"{% if d == selected %} checked{% endif %}><span aria-hidden="true">{{ d }}</span><span class="vh">{{ full[d] }}</span></label>
-  {% elif unsure %}<label class="unsure"><input type="radio" name="direction" value=""{% if not selected %} checked{% endif %}><span>Not sure</span></label>
+  {% elif unsure %}<label class="unsure"><input type="radio" name="direction" value=""{% if not selected and unsure_picked %} checked{% endif %}><span>Not sure</span></label>
   {% else %}<span class="here" aria-hidden="true"></span>{% endif %}{% endfor %}
 </div>
 {% endmacro %}
 
-{% macro compass_field(compass_first=true) %}
+{% macro compass_field(compass_first=true, selected=none, unsure_picked=true) %}
 <div class="compass" data-compass>
   {% if compass_first %}<p><strong>Which way does it face?</strong> Stand at the spot and face the way it gets open sky (away from any wall or fence behind it). Raise your phone to the top of the tallest thing in that direction, a fence, hedge or house, or the horizon if there is nothing, and tap.</p>
   <p class="actions"><button type="button" data-compass-tap>Point and tap</button> <span data-compass-said role="status"></span></p>
   {% else %}<p><strong>Which way does it face?</strong> Stand at the spot and face the way it gets open sky (away from any wall or fence behind it). Not sure? The midday sun is in the south, and a map shows north at the top.</p>{% endif %}
   {% for n in ("sensor", "alpha", "beta", "gamma", "webkit_heading", "webkit_accuracy") %}<input type="hidden" name="{{ n }}">{% endfor %}
   <fieldset data-compass-fallback{% if compass_first %} hidden{% endif %}><legend>{% if compass_first %}Or pick a direction{% else %}Pick a direction{% endif %}</legend>
-    {{ direction_rose() }}</fieldset>
+    {{ direction_rose(selected, unsure_picked=unsure_picked) }}</fieldset>
   {% if compass_first %}<p class="hint">Look along the top edge of the phone.</p>{% endif %}
 </div>
 <script>

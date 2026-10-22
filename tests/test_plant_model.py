@@ -133,3 +133,38 @@ def test_the_cold_day_is_right_today_and_a_week_on():
     week = [(0, 0)] * 7 + [(0, 0.8), (0, 0)]
     v = compare_actions(_state(do_nothing=week, move_to_shade=week), tender=True)
     assert v["shelter"].cold_on == f"{(D0 + timedelta(days=7)):%A}"
+
+
+def test_watering_is_never_better_when_leaving_it_has_no_dry_day():
+    # site walk 2 (22 Oct), r1: London with 6 mm of rain today read "Water it ✓ better" on
+    # the wait page and "no dry days or frost in the next 2 weeks; watering keeps it moist"
+    # in Compare. A little drying short of a dry day is not a reason to water
+    damp = [(0.3, 0), (0.2, 0), (0.1, 0), (0.0, 0), (0.0, 0)]
+    v = compare_actions(_state(do_nothing=damp))
+    assert v["water"].vs_leaving_it == "same"
+    assert "watering keeps it moist" not in v["water"].why
+    assert v["water"].why == "no dry days in the next 2 weeks without watering"
+
+
+def test_watering_never_answers_a_frost_it_cannot_help():
+    # the leave-it why was a frost ("frost risk Thursday if left out; watering keeps it moist")
+    frosty = [(0.3, 0), (0.3, 0), (0.3, 0), (0.3, 0.8), (0.0, 0)]
+    v = compare_actions(_state(do_nothing=frosty))
+    assert v["water"].vs_leaving_it == "same" and "frost" not in v["water"].why
+
+
+def test_watering_before_a_dry_day_names_that_day_even_after_a_frost():
+    both = [(0.0, 0.8), (0.2, 0), (0.6, 0), (0.9, 0), (1.0, 0)]
+    v = compare_actions(_state(do_nothing=both))
+    assert v["water"].vs_leaving_it == "better"
+    assert v["water"].why == "dry by Wednesday if left; watering keeps it moist"
+
+
+def test_a_frost_never_hides_the_dry_day_watering_answers():
+    # review: frost 1.0 on both strips made the peaks equal, so watering read "same" with
+    # "no difference" beside "dry by Wednesday if left"
+    left = [(0.0, 1.0), (0.2, 0), (0.6, 0), (0.9, 0), (1.0, 0)]
+    watered = [(0.0, 1.0), (0.0, 0), (0.0, 0), (0.0, 0), (0.0, 0)]
+    v = compare_actions(_state(do_nothing=left, water_now=watered, water_lightly=watered))
+    assert v["water"].vs_leaving_it == "better"
+    assert v["water"].why == "dry by Wednesday if left; watering keeps it moist"

@@ -67,6 +67,7 @@ class Crop:
     # its Latin names, lower case, for matching a photo read to it: "mentha" for "Mentha
     # spp.", both for "Matricaria chamomilla / Chamaemelum nobile" (22 Oct, the chat)
     latin: tuple[str, ...] = ()
+    life: str = ""  # annual, biennial or perennial: how long the plant itself lives
 
     def rating_in_pot(self) -> str | None:
         """One rating less hardy in a container (RHS: pots get colder)."""
@@ -114,6 +115,7 @@ def crop_of(r: dict) -> Crop:
         name=r["common_name"],
         group=r["group"],
         perennial=r["grown_as"] == "perennial",
+        life=r.get("life_cycle") or "",
         sow_indoors=frozenset(r["sow_indoors"]),
         sow_outdoors=frozenset(r["sow_outdoors"]),
         plant_out=frozenset(r["plant_out"]),

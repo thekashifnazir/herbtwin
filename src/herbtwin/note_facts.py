@@ -14,6 +14,15 @@ import re
 from dataclasses import dataclass
 from typing import Literal
 
+from herbtwin.compass import DIRECTION_TEXT, nearest_direction
+from herbtwin.schemas import (
+    CHANGED_TEXT,
+    LAST_WATERED_TEXT,
+    SOIL_FEEL_TEXT,
+    SQUEEZE_TEXT,
+    Told,
+)
+
 Kind = Literal["container", "setting", "sun"]
 
 # (pattern, kind, value, our words). The words are ours, short, for "You told us: …"
@@ -224,16 +233,76 @@ def note_facts(text: str | None) -> NoteFacts:
 QUOTE_MAX = 80
 
 
-def echo(text: str | None) -> str | None:
-    """The line under "Changed after what you told us": what we read in the note, in our
-    words, or the note itself, quoted and trimmed, when we read nothing in it."""
+def _note_words(text: str | None, said_already: tuple[str, ...] = ()) -> tuple[bool, str] | None:
+    """(asked, words): what we read in the note, in our words, or the note itself, quoted
+    and trimmed, when we read nothing in it. Words the picks already said are not said
+    twice."""
     if not text or not text.strip():
         return None
-    said = note_facts(text).said
-    if said:
-        return "You told us: " + ", ".join(said)
+    read = note_facts(text).said
+    if read:  # what the picks already said is not said twice
+        said = [w for w in read if w not in said_already]
+        return (False, ", ".join(said)) if said else None
     note = " ".join(text.split())
     if len(note) > QUOTE_MAX:
         note = note[:QUOTE_MAX].rsplit(" ", 1)[0].rstrip(" ,.;:") + "…"
     asked = note.rstrip(" \"'”’!.)").endswith("?")
-    return f"{'You asked' if asked else 'You told us'}: “{note}”"
+    return asked, f"“{note}”"
+
+
+def echo(text: str | None) -> str | None:
+    """The line under "Changed after what you told us": what we read in the note, in our
+    words, or the note itself, quoted and trimmed, when we read nothing in it."""
+    got = _note_words(text)
+    if got is None:
+        return None
+    asked, words = got
+    return f"{'You asked' if asked else 'You told us'}: {words}"
+
+
+# "Anything changed recently?", answered in a few words
+_CHANGED_SAID = {
+    "moved": "{} recently",
+    "repotted": "{} recently",
+    "new_plant": "a {}",
+    "nothing": "{} changed recently",
+}
+
+
+def _picks(told: Told) -> list[str]:
+    """Each pick given under the answer, in the questions' own words."""
+    picks = []
+    if told.heading is not None:
+        tap = told.heading
+        way = tap.direction or nearest_direction(tap.heading or 0.0)
+        picks.append(f"faces {DIRECTION_TEXT[way]}")
+    if told.setting:
+        picks.append(f"{told.setting}s")
+    if told.place:
+        picks.append(f"in {told.place}")
+    if told.soil_feel:
+        picks.append(f"soil {SOIL_FEEL_TEXT[told.soil_feel]}")
+    if told.squeeze:
+        picks.append(f"squeeze test: {SQUEEZE_TEXT[told.squeeze]}")
+    # "not sure" is no reading: it is not said back as one
+    if told.last_watered and told.last_watered != "not_sure":
+        picks.append(f"watered {LAST_WATERED_TEXT[told.last_watered]}")
+    if told.changed:
+        picks.append(_CHANGED_SAID[told.changed].format(CHANGED_TEXT[told.changed]))
+    return picks
+
+
+def told_echo(told: Told | None) -> str | None:
+    """The line under "Checked again" or "Changed after what you told us": every pick given
+    and the note, said back (22 Oct site walk 2: a NW pick was never said, so the page read
+    as if nothing had been heard). None when nothing was told."""
+    if told is None:
+        return None
+    picks = _picks(told)
+    note = _note_words(told.question, tuple(picks))
+    if note is not None and note[0]:  # a question is asked, not told
+        asked = f"You asked: {note[1]}"
+        return f"You told us: {'; '.join(picks)}. {asked}" if picks else asked
+    if note is not None:
+        picks.append(note[1])
+    return "You told us: " + "; ".join(picks) if picks else None

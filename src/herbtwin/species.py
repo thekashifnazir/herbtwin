@@ -84,6 +84,25 @@ def name_parts(name: str, common_name: str) -> tuple[str, str]:
     return _cap(common), latin
 
 
+# a place's adjective keeps its capital mid-sentence: "maybe Italian parsley"
+_PLACE_WORD = re.compile(
+    r"^(?:Chinese|Cuban|Egyptian|English|French|German|Greek|Indian|Italian|Japanese|Korean|"
+    r"Mediterranean|Mexican|Moroccan|Persian|Roman|Russian|Solomon|Spanish|St|Swiss|Thai|"
+    r"Turkish|Vietnamese|Welsh)\b"
+)
+
+
+def name_in_sentence(name: str, common_name: str) -> str:
+    """The plant's name to follow other words ("Not clear: maybe mint"): the common name
+    with a lower-case first letter, as the readers capitalise it ("Mint"); a Latin name and
+    a place's adjective keep their capitals (22 Oct site walk 2: "Mint (not sure)" as the
+    heading read as the answer)."""
+    common, latin = _names(name, common_name)
+    if not common or (latin and common.casefold() == latin.casefold()):
+        return _cap(latin)
+    return common if _PLACE_WORD.match(common) else common[:1].lower() + common[1:]
+
+
 def display_name(name: str, common_name: str) -> str:
     """How a plant is named on the page: "Common name (Latin name)"; shown as the reader
     gave it, the common name appeared twice."""

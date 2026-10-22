@@ -101,7 +101,8 @@ ASSUMPTIONS = [
     "moved to sun: the soil dries 10% faster",
     "in a pot: 25 cm across and 15 cm deep, holding up to 40% water; a potted plant feels "
     "frost as if it were 2.5 °C colder",
-    "too dry once less than a quarter of the soil is water; frost harm grows from the "
+    "starts to dry once less than a quarter of the soil is water, and needs water below an "
+    "eighth; frost harm grows from the "
     "plant's first-damage temperature to its severe-damage one",
 ]
 

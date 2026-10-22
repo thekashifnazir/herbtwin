@@ -7,7 +7,7 @@
    form) and "Ask about this plant" (the chat, by script), the chat so far, did-it and the
    reminder, all in one fold that opens from a single line, in small headed sections. 3, the details, folded. Phones read 1, 2, 3 in one column; from 960px
    block 1 is the left column and blocks 2 and 3 the right (static/pages/answer.css). #}
-{% block title %}{% set obs = rec.observation %}{% if obs and obs.is_plant and obs.species %}{{ plant_name(obs.species[0].name, obs.species[0].common_name) }}{{ " (not sure)" if name_in_doubt(rec) else "" }} · herbtwin{% else %}Your answer · herbtwin{% endif %}{% endblock %}
+{% block title %}{% set obs = rec.observation %}{% if obs and obs.is_plant and obs.species and photo_hides_name(rec) %}Not clear: maybe {{ name_in_sentence(obs.species[0].name, obs.species[0].common_name) }} · herbtwin{% elif obs and obs.is_plant and obs.species %}{{ plant_name(obs.species[0].name, obs.species[0].common_name) }}{{ " (not sure)" if name_in_doubt(rec) else "" }} · herbtwin{% else %}Your answer · herbtwin{% endif %}{% endblock %}
 {# "Check the advice again" and the Indoors switch post to /answers/<id>/refine, and the
    refined page came back at that address: a reload asked to send the form again, a second
    paid run, and a copied link failed (22 Oct site walk). The answer's own address instead,
@@ -27,8 +27,8 @@
 {% set source_names = {"rhs.org.uk": "RHS", "archive.ahdb.org.uk": "AHDB", "ahdb.org.uk": "AHDB", "ask.ifas.ufl.edu": "UF/IFAS", "homegarden.cahnr.uconn.edu": "UConn", "frontiersin.org": "Frontiers", "gardenorganic.org.uk": "Garden Organic"} %}
 {% macro said_by(sources) %}{% set shown = namespace(names=[], items=[]) %}{% for x in sources %}{% if x.startswith("https://") or x.startswith("http://") %}{% set host = x.split("/")[2]|replace("www.", "", 1) %}{% set name = source_names.get(host, host) %}{% set href = x %}{% else %}{% set name = "our care notes" if x.startswith("docs/") else "Open Plantbook" if x.startswith("openplantbook:") else "OpenPlantDB (CC0)" if x.startswith("openplantdb") else x %}{% set href = "" %}{% endif %}{% if name not in shown.names %}{% set shown.names = shown.names + [name] %}{% set shown.items = shown.items + [(name, href)] %}{% endif %}{% endfor %}{% for name, href in shown.items %}{% if href %}<a href="{{ href }}" rel="noopener noreferrer">{{ name }}</a>{% else %}{{ name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 
-{# Compare's chart: a snowflake under each of a line's cold windows, and once "cold nights" #}
-{% macro cold_marks(ln) %}{% for m in ln.marks %}<text class="cold-mark" x="{{ m }}" y="139" text-anchor="middle">❄︎</text>{% endfor %}{% if ln.key %}<text class="cold-key" x="{{ ln.key[0] }}" y="139" text-anchor="{{ ln.key[1] }}">cold nights</text>{% endif %}{% endmacro %}
+{# Compare's chart: a snowflake under each of a line's cold windows, and once "cold spells" #}
+{% macro cold_marks(ln) %}{% for m in ln.marks %}<text class="cold-mark" x="{{ m }}" y="139" text-anchor="middle">❄︎</text>{% endfor %}{% if ln.key %}<text class="cold-key" x="{{ ln.key[0] }}" y="139" text-anchor="{{ ln.key[1] }}">{{ ln.spell }}s</text>{% endif %}{% endmacro %}
 {% macro your_photo(solo=false) %}<img class="your-photo ink{{ ' solo' if solo else '' }}" id="your-photo" alt="Your photo" width="480" height="360" hidden data-answer="{{ rec.record_id }}"><span class="your-more" id="your-more" hidden></span>{% endmacro %}
 {% set mark = {"raises": "▲", "lowers": "▼", "missing": "?", "neutral": "·"} %}
 {% set tag = {"today": "TODAY", "this_week": "THIS WEEK", "keep_an_eye": "KEEP AN EYE"} %}
@@ -80,7 +80,10 @@
   {# answer first (design wave 1, A): the name a gardener knows is the big one; the Latin
      goes in the line under it with the place and date #}
   {% set names = plant_parts(top.name, top.common_name) if top else ("", "") %}
-  <h1>{% if top %}{{ names[0] }}{% if name_in_doubt(rec) %} (not sure){% endif %}{% else %}Unidentified plant{% endif %}</h1>
+  {# a blurry, dark or small photo is the trouble: the heading never asserts the name it
+     guessed (22 Oct site walk 2: a blurred parsley read "Mint (not sure)" as its biggest
+     text); the card under it already says "Send a sharper photo" #}
+  <h1>{% if top and photo_hides_name(rec) %}Not clear: maybe {{ name_in_sentence(top.name, top.common_name) }}{% elif top %}{{ names[0] }}{% if name_in_doubt(rec) %} (not sure){% endif %}{% else %}Unidentified plant{% endif %}</h1>
   {# where it grows, in words: "pot" also meant a trough (18 Oct judge run), so a pot is "in
      a container". A pot the read saw wins over a mixed scene: pots of different herbs on a
      patio came out "in a bed or border" (Kash's live test, 21 Oct; Observation.in_bed) #}
@@ -110,6 +113,10 @@
      asked again in the fold, nor lifts the fold on a phone when it was the only question
      (21 Oct, Kash: the ask said once; review of the band PR) #}
   {% set place_on_band = ask_place and a.tell_me_key == "location" %}
+  {# indoors or outdoors is asked on the band too, with its two buttons, whenever the read
+     could not tell: "Answer the question below" then pointed at nothing to tap (site walk
+     2, r3) #}
+  {% set on_band = place_on_band or (a.tell_me_key == "setting" and obs.setting not in ("indoor", "outdoor")) %}
   {% set quick = open.n + (1 if a.tell_me_key == "location" and not place_on_band else 0) %}
   {% set asks_open = a.level != "sure" and a.tell_me and quick %}
   {# a rough read, said before the headline: what is wrong with the photo, and what to send #}
@@ -221,24 +228,30 @@
   {# each shut fold's title says what it found, a small label above it says what it is
      (22 Oct, Kash chose "B2": Perplexity Finance's finding-as-title, Turo's key value in the
      shut row); with nothing true to say, the old title (fold_titles.py) #}
-  {% set ft = fold_titles(rec, label, source_names, failed.get("environment") is not none) %}
+  {% set ft = fold_titles(rec, label, failed.get("environment") is not none) %}
+  {# the evidence fold draws exactly the lines its label counts (site walk 2, 22 Oct: "Weather ·
+     3 sources" held no weather and counted sources, not its lines) #}
+  {% set held = ft.weather.holds %}
   {% set evidence %}<details class="evidence fold"><summary><span class="fold-head">{% if ft.weather.found %}<span class="fold-kind">{{ ft.weather.kind }}</span>{% endif %}<span class="fold-title">{{ ft.weather.title }}</span>{% if ft.weather.peek %}
     <span class="fold-peek">{{ ft.weather.peek }}</span>{% endif %}</span></summary>
     {% set droop = ["not drooping", "a little droopy", "droopy", "badly wilted"] %}
     {% set decline = ["healthy-looking", "a little tired", "declining", "badly declining"] %}
-    <p>From the photo: {{ droop[obs.water_stress] }}, {{ decline[obs.decline] }}{% if obs.leaf_colour != "not_visible" %} · leaves {{ obs.leaf_colour|replace("_", " ") }}{% endif %}{% if obs.soil_surface != "not_visible" %} · soil surface {{ obs.soil_surface|replace("_", " ") }}{% endif %}{% if obs.symptoms %} · seen: {{ obs.symptoms|join(", ") }}{% endif %}</p>
+    {% if "photo" in held %}<p>From the photo: {{ droop[obs.water_stress] }}, {{ decline[obs.decline] }}{% if obs.leaf_colour != "not_visible" %} · leaves {{ obs.leaf_colour|replace("_", " ") }}{% endif %}{% if obs.soil_surface != "not_visible" %} · soil surface {{ obs.soil_surface|replace("_", " ") }}{% endif %}{% if obs.symptoms %} · seen: {{ obs.symptoms|join(", ") }}{% endif %}</p>{% endif %}
+    {# the weather the title counts, from the twin's run if left out; when the chart is
+       drawn, its snowflakes mark the same spells (fold_titles.py) #}
+    {% if "weather" in held %}<p>Weather: {{ ft.weather.weather }}, from Open-Meteo</p>{% endif %}
     {# what the season is, then who says so (judge live walk of rev 00040: "Season: RHS, our care notes") #}
     {# only the sources behind the season, never the pest and disease pages behind its
        problem signs (22 Oct site walk: mildew papers on a healthy plant's season line) #}
     {# its main state in plain words: never "normal dieback and active growth" or "evergreen hold" #}
     {% set season_said = {"active_growth": "growing", "flowering": "flowering", "bolting_risk": "may run to seed", "normal_dieback": "dying back", "dormant": "resting", "regrowth": "growing again", "leaf_fall": "dropping its leaves", "evergreen_hold": "holding its leaves"} %}
-    {% if rec.season and not (obs and obs.setting == "indoor") %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(season_sources(rec.season)) }}</p>{% endif %}
-    {% if rec.pack and rec.pack.sources %}<p>Care facts: {{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
-    {% if rec.problem %}{% set src = rec.problem.page %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
+    {% if "season" in held %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(season_sources(rec.season)) }}</p>{% endif %}
+    {% if "facts" in held %}<p>Care facts: {{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
+    {% if "check" in held %}{% set src = rec.problem.page %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
     <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}.{% if src %} Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.{% endif %}</p>{% endif %}
     {# the per-choice numbers are in "Compare all choices" in words; the model's working
        assumptions fold away here (17 Oct re-walk: raw action names and 0.00s) #}
-    {% if a and a.assumptions %}<details class="assumptions"><summary>What the plant model assumes</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
+    {% if "assumes" in held %}<details class="assumptions"><summary>What the plant model assumes</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
     {% set missed = {"environment": "the weather", "research": "the species facts", "twin": "the plant model", "advise": "the advice", "observe": "the photo read", "problem": "the closer photo check"} %}
     {% for f in rec.failures %}<p class="note">Not available this time: {{ missed.get(f.stage, "one step") }}.</p>{% endfor %}
     <p class="record">Ref {{ rec.record_id }}</p>
@@ -265,7 +278,7 @@
        (22 Oct site walk: the answer rose to "Our best read", ask-up dropped, and what they had
        just said fell halfway down the page). Only when they wrote something: a switch or a
        town alone leaves the chat empty, and an empty Tell us more stays put #}
-    <div class="answer-cols{{ ' ask-up' if (rec.refined_from and rec.told and rec.told.question) or (a.level == 'not_sure' and a.tell_me and not (place_on_band and not quick)) else '' }}">
+    <div class="answer-cols{{ ' ask-up' if (rec.refined_from and rec.told and rec.told.question) or (a.level == 'not_sure' and a.tell_me and not (on_band and not quick)) else '' }}">
     {# the photo you sent, from this browser tab's own copy (index.html keeps it on send):
        never sent again, so nothing new is stored; hidden where the tab has no copy. Big,
        above the main card on a phone and beside it from 960px, not a thumbnail in the band
@@ -281,9 +294,10 @@
       {% if rec.refined_from %}{% if not same_advice(rec.refined_from, a.headline) %}<p class="checked">Changed after what you told us. Was: <s>{{ rec.refined_from }}</s></p>
       {% else %}{% set feel = a.factors|selectattr("name", "equalto", "soil_feel")|first %}
       <p class="checked">{% if rec.told and rec.told.switch_only() %}Checked again as an {{ rec.told.setting }} plant: same advice.{% elif not (rec.told and rec.told.soil_feel) %}Checked again with what you told us: same advice.{% elif feel and feel.effect != "lowers" %}Checked again: same advice, and the soil feel fits it.{% else %}Checked again: same advice.{% endif %}</p>{% endif %}{% endif %}
-      {# what their note said, back in a few words of ours: "Changed after what you told us"
-         never said what (22 Oct site walk, Top 5 #1) #}
-      {% if rec.refined_from and rec.told %}{% set echoed = told_echo(rec.told.question) %}{% if echoed %}<p class="told-echo">{{ echoed }}</p>{% endif %}{% endif %}
+      {# what they told us, back in a few words of ours: "Changed after what you told us"
+         never said what (22 Oct site walk, Top 5 #1), and a NW pick was never said at all
+         (22 Oct site walk 2). The switch alone over the same advice is said just above #}
+      {% if rec.refined_from and rec.told and not (rec.told.switch_only() and same_advice(rec.refined_from, a.headline)) %}{% set echoed = told_echo(rec.told) %}{% if echoed %}<p class="told-echo">{{ echoed }}</p>{% endif %}{% endif %}
       {% if retake %}<p class="rough-read">{{ retake[0] }}, so this is a rough read. {{ retake[1] }} for a firmer answer.</p>{% endif %}
       {# leaving it is not a job for today: no time tag on it #}
       {% if first and first.action != "leave_normal" %}<span class="tag">{{ tag[first.when] }}</span>{% endif %}
@@ -305,7 +319,7 @@
       {#- the one thing that lowered it most, here beside the level, not two screens down
          (design wave 1, C); "tell us below" only when no Make-surer button says it (21 Oct,
          Kash: "Add where it is" was said three times) #}
-      {%- if not best %}{% set doubt = top_doubt(a) %}<span>{% if doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not place_on_band %}{{ " " if doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
+      {%- if not best %}{% set doubt = top_doubt(a) %}<span>{% if doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
       {% if tell_more %}<p class="make-surer"><a class="button primary" href="#refine">Make this surer: tell us more</a></p>{% endif %}
       {% if retake or asks_open %}<p class="make-surer">{% if retake %}<a class="button primary" href="/">{{ retake[1] }}</a>{% endif %}
         {%- if asks_open %} <a class="button{{ '' if retake else ' primary' }}" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
@@ -511,7 +525,7 @@
          its reply, a "Check the advice again" that just ran, or a reminder just saved without
          a script. Also when the main card says "Answer the question below" with no button to
          the fold (review of #337) #}
-      {% set mid_way = chat or (rec.told and rec.told.question) or (check and (check.ask or check.line)) or rec.refined_from or reminder_saved or (not best and a.tell_me and not asks_open and not place_on_band) %}
+      {% set mid_way = chat or (rec.told and rec.told.question) or (check and (check.ask or check.line)) or rec.refined_from or reminder_saved or (not best and a.tell_me and not asks_open and not on_band) %}
       {# the shut line is a card to come to, not a row of green text (22 Oct, Kash on A3):
          a pale green tint, a leaf, the bold ask and what it takes. Never a filled button:
          the page's one green stays the card's or the band's #}
@@ -534,7 +548,7 @@
       {# the fact that would help most goes in the group whose fields answer it; indoors or
          outside has no field of its own, so it sits over the box (review of 8e0282d9). The
          place, when the band asks for it, is asked there only (#364) #}
-      {% set tray_in = none %}{% if a.tell_me and not place_on_band %}{% set tray_in = "where" if a.tell_me_key in ("location", "aspect") else ("changed" if a.tell_me_key in ("soil_feel", "soil_texture") else ("chat" if a.tell_me_key == "setting" else "top")) %}{% endif %}
+      {% set tray_in = none %}{% if a.tell_me and not on_band %}{% set tray_in = "where" if a.tell_me_key in ("location", "aspect") else ("changed" if a.tell_me_key in ("soil_feel", "soil_texture") else ("chat" if a.tell_me_key == "setting" else "top")) %}{% endif %}
       {% set tray %}<div class="tray warn"><p>{{ a.tell_me }}</p>{% if a.tell_me_key == "location" %}
         <label>Where is it?<input type="text" name="place" maxlength="80" placeholder="UK town or postcode"></label>{% endif %}</div>{% endset %}
       {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?"} %}
@@ -548,7 +562,7 @@
       {% if rec.told and rec.told.setting %}<input type="hidden" name="setting" value="{{ rec.told.setting }}">{% endif %}
       {% if has_where %}<div class="part where{{ ' needed' if tray_in == 'where' else '' }}"><h3>Where it is</h3>
       {% if tray_in == "where" %}{{ tray }}{% endif %}
-      {% if "aspect" in asks %}{{ spotq.compass_field(compass_first) }}{% endif %}</div>{% endif %}
+      {% if "aspect" in asks %}{{ spotq.compass_field(compass_first, rec.told.heading.direction if rec.told and rec.told.heading else none, unsure_picked=false) }}{% endif %}</div>{% endif %}
       {% if has_changed %}<div class="part changed{{ ' needed' if tray_in == 'changed' else '' }}"><h3>What's changed</h3>
       {% if tray_in == "changed" %}{{ tray }}{% endif %}
       {# each quick question as quiet answer chips, not a select (22 Oct, Kash, A3: like the

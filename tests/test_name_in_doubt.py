@@ -34,12 +34,14 @@ def _read(tmp_path, conf, scene="one_plant", tapped=False, photo_issue=None):
         (0.55, "bed_or_border", False, None, True),  # one plant of a mixed bed
         (0.65, "bed_or_border", False, None, False),  # a firm read in a bed
         (0.55, "one_plant", False, None, False),  # one plant, clear photo: the level says it
-        (0.45, "one_plant", False, "blurry", True),  # a rough photo, as before
+        # a rough photo: "Not clear: maybe …" since 22 Oct (site walk 2, tests/test_sure_labels.py)
+        (0.45, "one_plant", False, "blurry", True),
     ],
 )
 def test_the_heading_says_not_sure_when_the_name_is_a_guess(
     tmp_path, conf, scene, tapped, issue, doubt
 ):
     h1, title = _heads(_read(tmp_path, conf, scene, tapped, issue))
-    assert ("(not sure)" in h1) is doubt
-    assert ("(not sure)" in title) is doubt  # the tab says the same as the heading
+    said = ("(not sure)", "Not clear: maybe ")
+    assert any(w in h1 for w in said) is doubt
+    assert any(w in title for w in said) is doubt  # the tab says the same as the heading

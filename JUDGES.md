@@ -46,7 +46,7 @@ is in the submission form; it is not in this repository.
      us more when no one fact would (a missing place is asked once, on the band, not
      again here; on a phone, the least sure answers put them under the card). A
      blurry, dark or distant photo the plant can't be named from says so above the
-     headline, and **Send a sharper photo** (or brighter, or closer) is the green button
+     headline, its heading names the plant only as a guess ("Not clear: maybe mint"), and **Send a sharper photo** (or brighter, or closer) is the green button
      then, with Make this surer beside it. Under
      the chips, "**Indoors? Switch and we'll redo the advice for an indoor plant**" (or
      the outdoor mirror) re-runs the advice indoors (no forecast) or outdoors. Under the main card, compact and
@@ -89,8 +89,10 @@ is in the submission form; it is not in this repository.
      don't apply when there is no cure:
      each action
      against leaving it, tested on the plant's twin: a small water-and-frost model of the
-     plant run over the next 2 weeks of weather) and **Weather, forecast and sources**
-     (the evidence behind the answer; **The photo and sources** for a plant indoors).
+     plant run over the next 2 weeks of weather) and **What we went on**
+     (the evidence behind the answer: the photo, the weather, the season, the care facts, any
+     closer photo check and the model's assumptions, counted in its label; its title is what the weather holds, such
+     as "2 cold spells in 2 weeks", the spells the chart marks with ❄︎).
 4. **Refine.** Tap **Want a more exact answer? Tell us more**. Under "Tell us more and
    we'll check the advice", in **What's changed**, say how the soil feels
    2 cm down, when you last watered, or what changed, then press **Check the advice
@@ -98,7 +100,8 @@ is in the submission form; it is not in this repository.
    through. A note in the box that says where it grows or what you see ("It is in a pot on a
    sunny balcony and the lower leaves are going yellow.") moves the chips to match ("In a
    container (you said)") and is said back under the headline's first line: "You told us: in
-   a pot, on a balcony, sunny, lower leaves yellow". Five refines per answer.
+   a pot, on a balcony, sunny, lower leaves yellow". Each pick you gave is said back on the same
+   line, so a north-west pick reads "You told us: faces north-west". Five refines per answer.
    The same advice in other words is not a change: the Indoors switch over "Leave it" says
    "Checked again as an indoor plant: same advice."
 5. **Ask about this plant.** Under **Ask a question**, type in the same box, for example "What if I

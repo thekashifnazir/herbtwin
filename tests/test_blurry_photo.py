@@ -85,8 +85,9 @@ def test_a_blurred_photo_says_so_up_front_and_offers_a_sharper_one(tmp_path):
     assert '<a class="button primary" href="/">Send a sharper photo</a>' in card
     # no confident "looks healthy" from a blurred photo
     assert '<p class="because">From what this photo shows, the plant looks healthy' in card
-    assert "<h1>Mint (not sure)</h1>" in page
-    assert "<title>Mint (Mentha spicata) (not sure) · herbtwin</title>" in page
+    # the heading never asserts the guessed name (22 Oct site walk 2: "Mint (not sure)")
+    assert "<h1>Not clear: maybe mint</h1>" in page
+    assert "<title>Not clear: maybe mint · herbtwin</title>" in page
     assert "How sure we are: high" not in page
     # no "This is normal for October" from a blurred photo: the plain leave-it headline
     assert '<h2 id="main-action">Leave it for now and keep an eye on it.</h2>' in card

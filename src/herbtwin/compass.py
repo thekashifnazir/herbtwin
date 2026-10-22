@@ -12,6 +12,17 @@ from __future__ import annotations
 import math
 
 DIRECTIONS = ("N", "NE", "E", "SE", "S", "SW", "W", "NW")  # the 8-way fallback (section 4)
+# in full, as the rose's hidden labels say them, for "You told us: faces north-west"
+DIRECTION_TEXT = {
+    "N": "north",
+    "NE": "north-east",
+    "E": "east",
+    "SE": "south-east",
+    "S": "south",
+    "SW": "south-west",
+    "W": "west",
+    "NW": "north-west",
+}
 
 
 def heading_pitch(alpha: float, beta: float, gamma: float) -> tuple[float, float]:
@@ -37,6 +48,11 @@ def heading_pitch_ios(webkit_heading: float, beta: float, gamma: float) -> tuple
 def direction_heading(direction: str) -> float:
     """The heading of an 8-way tap ("SW" -> 225). ValueError for anything else."""
     return DIRECTIONS.index(direction) * 45.0
+
+
+def nearest_direction(heading: float) -> str:
+    """The nearest of the 8 ways to a compass heading (318 -> "NW", 359 -> "N")."""
+    return DIRECTIONS[round(heading / 45) % 8]
 
 
 def angle_error(a: float, b: float) -> float:

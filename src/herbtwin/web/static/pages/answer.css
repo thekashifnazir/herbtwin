@@ -123,9 +123,14 @@
   background: var(--muted); color: var(--fg); font: 500 16px/1.2 var(--sans); cursor: pointer; }
 .answer-page .refine .picks input { position: absolute; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
 .answer-page .refine .picks label:hover { background: color-mix(in srgb, var(--muted) 88%, var(--fg)); }
-.answer-page .refine .picks label:has(input:checked) { border-color: var(--fg); font-weight: 700;
+/* a picked compass direction too, over spot.css's green fill (22 Oct, site walk 2: "Not
+   sure" sat in solid green right above the green "Check the advice again") */
+.answer-page .refine .picks label:has(input:checked),
+.answer-page .refine .rose input:checked + span { border-color: var(--fg); color: var(--fg); font-weight: 700;
   background: color-mix(in srgb, var(--muted) 76%, var(--fg)); }
-.answer-page .refine .picks label:has(input:checked)::before { content: "\2713"; }
+.answer-page .refine .picks label:has(input:checked)::before,
+.answer-page .refine .rose input:checked + span::before { content: "\2713"; }
+.answer-page .refine .rose label > span:first-of-type { gap: 6px; }  /* room for the tick */
 .answer-page .refine .picks label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
 .answer-page .chatnote:empty { margin: 0; }
 .answer-page .chatlog { margin: 16px 0; }  /* not flush under the starter pills */

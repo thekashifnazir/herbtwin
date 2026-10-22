@@ -170,9 +170,10 @@ def test_refine_with_the_note_moves_the_chips_and_says_what_it_heard(tmp_path):
     assert _chips(first) == ["Outdoors", "In the ground"]
     assert _chips(page) == ["Outdoors (you said)", "In a container (you said)"]
     head = page.split('<div class="head">', 1)[1].split('<h2 id="main-action">', 1)[0]
+    # the picks sent with it are said first (22 Oct site walk 2)
     assert (
-        '<p class="told-echo">You told us: in a pot, on a balcony, sunny, lower leaves yellow</p>'
-        in head
+        '<p class="told-echo">You told us: soil cool but not moist; watered today; '
+        "in a pot, on a balcony, sunny, lower leaves yellow</p>" in head
     )
     # the advisors get the note, what we read in it, and the read with the pot in it
     prompt = c.app.state.deps.advise_adapter.calls[-1]["prompt"]
@@ -195,7 +196,8 @@ def test_refine_with_a_balcony_note_turns_an_indoor_read_outdoors(tmp_path):
 def test_the_echo_quotes_a_note_we_could_not_read_and_escapes_it(tmp_path):
     _, _, page = _refined(tmp_path, {**OBS, "setting": "outdoor"}, "My nan's <b>favourite</b>")
     assert (
-        '<p class="told-echo">You told us: “My nan&#39;s &lt;b&gt;favourite&lt;/b&gt;”</p>' in page
+        '<p class="told-echo">You told us: soil cool but not moist; watered today; '
+        "“My nan&#39;s &lt;b&gt;favourite&lt;/b&gt;”</p>" in page
     )
     assert "<b>favourite" not in page
 

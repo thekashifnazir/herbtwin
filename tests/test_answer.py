@@ -3,7 +3,7 @@ from dataclasses import replace
 import pytest
 
 from herbtwin.advice_context import WeatherFacts
-from herbtwin.answer import ALSO_BECAUSE, build_answer, short_sign, weather_explains
+from herbtwin.answer import ALSO_BECAUSE, build_answer, short_sign, watch_list, weather_explains
 from herbtwin.confidence import Assessment
 from herbtwin.plant_model import ModelView
 from herbtwin.schemas import Advice, Answer, Chip, Observation, ProblemSeen
@@ -698,3 +698,34 @@ def test_a_plant_that_outgrew_its_pot_is_told_why_in_what_the_photo_showed():
     seen = {c.action: c.because for c in build(**april, roots_crowded=True).do[1:]}
     plain = {c.action: c.because for c in build(**april).do[1:]}
     assert seen["repot"] == CROWDED_BECAUSE and plain["repot"] == ALSO_BECAUSE["repot"]
+
+
+def test_a_plant_to_be_binned_has_no_cold_night_to_watch():
+    # site walk 2 (22 Oct), r5: "Remove it… bag and bin" with "Keep an eye on… after the cold
+    # night on Thursday": the plant is gone before the night comes
+    seen = ProblemSeen(name="basil downy mildew", looks_like="x", source="https://x")
+    night = ModelView("shelter", "better", "cold risk Sunday if left out", 4, True, "Sunday")
+    views = {**VIEWS, "shelter": night}
+    for problem in (seen, None):
+        a = build(
+            panel=DOWNY_PANEL,
+            problem=problem,
+            setting="outdoor",
+            plant_key="ocimum basilicum",
+            month=10,
+            views=views,
+        )
+        assert a.headline == "Remove it. There is no cure for this."
+        assert "cold night" not in a.watch, a.watch
+        # nor the season's signs: only whether it spreads to the plants beside it
+        assert len(watch_list(a.watch)[0]) == 1, a.watch
+    # a plant that stays keeps the night (test_answer_rewalk)
+
+
+def test_no_cure_names_the_disease_it_removes_the_plant_for():
+    # site walk 2: "Our rule for basil downy mildew overrides" needs the disease's name,
+    # from the photo check, else from the advisor's own words
+    seen = ProblemSeen(name="basil downy mildew", looks_like="x", source="https://x")
+    assert build(panel=DOWNY_PANEL, problem=seen, **BASIL).no_cure_of == "basil downy mildew"
+    assert build(panel=DOWNY_PANEL, **BASIL).no_cure_of == "basil downy mildew"
+    assert build(panel=TREAT_PANEL, **BASIL).no_cure_of is None  # a curable problem

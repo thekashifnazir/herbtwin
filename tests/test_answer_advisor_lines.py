@@ -92,12 +92,19 @@ def test_a_bed_plant_is_never_told_to_keep_it_apart(tmp_path):
     assert _said(rec)[0] == [("Advisor 1", "Keep it apart"), ("Advisor 2", "Treat it")]
 
 
-def test_no_cure_names_the_call_remove_it_and_says_our_rule_chose(tmp_path):
+def test_no_cure_keeps_the_advisors_treat_it_and_says_our_rule_overrode_it(tmp_path):
+    # site walk 2 (22 Oct), r5: the wait page showed "treat it" three times, then the
+    # headline said "Remove it"; this list called all three "Remove it". Their own call
+    # stays, and the rule that changed it is named in plain words
     rec = _rec(tmp_path, *[_run("treat_or_remove")] * 3)
     rec.answer.headline = NO_CURE_HEADLINE
     assert _said(rec) == (
-        [("All three", "Remove it")],
-        "Our rules then chose the plan at the top, so follow that.",
+        [("All three", "Treat it")],
+        "Our rule for this disease overrides: there's no cure, so remove it.",
+    )
+    rec.answer.no_cure_of = "basil downy mildew"  # the photo check's, or the advisor's
+    assert _said(rec)[1] == (
+        "Our rule for basil downy mildew overrides: there's no cure, so remove it."
     )
 
 

@@ -118,14 +118,11 @@ def test_the_switch_that_changes_the_action_still_shows_what_it_was(tmp_path):
 @respx.mock
 def test_the_indoor_page_drops_the_weather_words(tmp_path):
     _, _, first, page = _switched(tmp_path)
-    # SAMPLE's days end before the photo: nothing to count, so the old title (B2); indoors
+    # SAMPLE's days end before the photo: nothing to count, so the plain title (B2); indoors
     # the label says what the fold is and the title that no weather is needed
-    assert '<span class="fold-title">Weather, forecast and sources</span>' in first
-    assert (
-        "Weather, forecast and sources" not in page
-        and '<span class="fold-kind">Weather' not in page
-    )
-    assert '<span class="fold-kind">Photo and sources' in page
+    assert '<span class="fold-title">What we went on</span>' in first
+    assert "<p>Weather:" not in page and '<span class="fold-kind">Weather' not in page
+    assert '<span class="fold-kind">What we went on · ' in page
     assert '<span class="fold-title">Indoors: no weather needed</span>' in page
     who = re.search(r'<p class="advisors">([^<]*)</p>', page)
     assert who is not None and "your photo and care facts" in who.group(1)

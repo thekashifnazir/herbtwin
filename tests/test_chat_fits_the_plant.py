@@ -275,3 +275,57 @@ def test_the_prompt_asks_for_a_site_only_for_what_its_own_page_says(tmp_path):
     m = MockAdapter(["Fine."])
     reply(m, _parsley(tmp_path), message="ok", past=[], history=None, search=FakeSearch(PAGES))
     assert "only for a fact that site's own result says" in m.calls[0]["messages"][0]["content"]
+
+
+# --- annuals and bolting (site walk 2, 22 Oct, r7) --------------------------------------
+
+CORIANDER = SpeciesCandidate(name="Coriandrum sativum", common_name="coriander", confidence=0.9)
+
+
+def _coriander(tmp_path, notes=""):
+    return _as(_answered(_rec(tmp_path, env=_env())), CORIANDER, container="pot", notes=notes)
+
+
+def test_an_annual_is_named_as_one_with_its_one_season(tmp_path):
+    block = context(_coriander(tmp_path), None)
+    assert "life: an annual: it grows, flowers, sets seed and dies in one season" in block
+    # parsley lives two years; a perennial gets no life line
+    assert "life: a biennial" in context(_parsley(tmp_path), None)
+    rosemary = SpeciesCandidate(name="Salvia rosmarinus", common_name="rosemary", confidence=0.9)
+    assert "life:" not in context(_as(_answered(_rec(tmp_path, env=_env())), rosemary), None)
+
+
+def test_a_bolted_annual_is_finishing_and_never_told_it_lasts_the_winter(tmp_path):
+    # r7: "Leave it outdoors; it can survive a UK winter with protection (RHS H5)." for a
+    # coriander the read said had bolted and was flowering: an annual that has flowered dies
+    rec = _coriander(tmp_path, notes="The coriander has bolted and is flowering, dying back.")
+    block = context(rec, None)
+    assert "bolted: it is flowering, so this plant is finishing" in block
+    assert "winter: finishing after flowering, so it will not last the winter" in block
+    assert "survives a UK winter" not in block and "H5" not in block
+    # the same coriander not yet bolted keeps the calendar's winter line
+    young = context(_coriander(tmp_path), None)
+    assert "(RHS H5" in young and "finishing" not in young
+    assert "bolted:" not in young
+
+
+def test_the_prompt_says_a_finishing_plant_is_never_kept_for_winter_and_no_h_codes():
+    assert "If PLANT says it is finishing" in SYSTEM
+    assert "sow again" in SYSTEM
+    assert "never write a hardiness code such as H5" in SYSTEM
+
+
+def test_a_bolted_dill_is_finishing_too_and_a_flowering_perennial_is_not(tmp_path):
+    dill = SpeciesCandidate(name="Anethum graveolens", common_name="dill", confidence=0.9)
+    rec = _as(_answered(_rec(tmp_path, env=_env())), dill, notes="The dill has bolted.")
+    assert "bolted: it is flowering, so this plant is finishing" in context(rec, None)
+    # a perennial in flower is no end of life: mint flowers every summer and comes back
+    mint = SpeciesCandidate(name="Mentha spicata", common_name="spearmint", confidence=0.9)
+    rec = _as(_answered(_rec(tmp_path, env=_env())), mint, notes="The mint is flowering.")
+    block = context(rec, None)
+    assert "finishing" not in block and "life:" not in block
+
+
+def test_the_prompt_keeps_the_hardiness_codes_out_of_the_reply():
+    # review: PLANT still carries "(RHS H6)"; the prompt says the codes are for the model
+    assert "RHS codes in PLANT (H4, H5, H6) are for you" in SYSTEM

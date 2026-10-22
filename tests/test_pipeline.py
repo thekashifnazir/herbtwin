@@ -1256,3 +1256,26 @@ def test_the_wait_replies_are_asked_once_and_a_broken_hook_never_fails_the_read(
     rec = contextvars.copy_context().run(run, broken)
     assert rec.answer is not None and rec.told is None
     assert "wait replies could not be read" in caplog.text
+
+
+@respx.mock
+def test_the_wait_says_when_our_no_cure_rule_overrides_the_advisors(tmp_path):
+    # site walk 2 (22 Oct), r5: the wait page showed "Advisor 1 of 3: treat it" three times,
+    # then the answer opened on "Remove it. There is no cure for this." with nothing between
+    from herbtwin.pipeline import AdvisorReplied, analyse_with_reading
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    downy = {
+        "actions": ["treat_or_remove"],
+        "primary": "treat_or_remove",
+        "answer": "This looks like basil downy mildew. Remove the affected leaves.",
+        "confidence": "high",
+    }
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(downy)] * 3)
+    lines: list = []
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    assert rec.answer is not None and rec.answer.headline == "Remove it. There is no cure for this."
+    said = "Our rule for basil downy mildew overrides: there's no cure, so remove it."
+    assert said in lines
+    last_advisor = max(i for i, x in enumerate(lines) if isinstance(x, AdvisorReplied))
+    assert lines.index(said) > last_advisor

@@ -61,8 +61,7 @@ from herbtwin.history import HistoryError
 from herbtwin.light import light_said
 from herbtwin.local_help import local_help_from
 from herbtwin.mail import Mailer, MailError, mailer_from
-from herbtwin.note_facts import echo as told_echo
-from herbtwin.note_facts import note_facts
+from herbtwin.note_facts import note_facts, told_echo
 from herbtwin.pipeline import (
     LATE_TOLD,
     Deps,
@@ -73,6 +72,7 @@ from herbtwin.pipeline import (
     decide,
     how_led,
     name_in_doubt,
+    photo_hides_name,
     read_photo,
     reading_from,
     trusted_check_on,
@@ -98,7 +98,7 @@ from herbtwin.scoring import score_lines
 from herbtwin.seasonal import season_sources
 from herbtwin.shops import DailyCap, products_for, shops_from
 from herbtwin.sightings import sightings_from
-from herbtwin.species import display_name, name_parts
+from herbtwin.species import display_name, name_in_sentence, name_parts
 from herbtwin.spot import (
     SpotTold,
     credits,
@@ -201,6 +201,8 @@ TEMPLATES.env.globals["plant_name"] = display_name
 TEMPLATES.env.globals["plant_parts"] = name_parts  # the answer page: the big name, the Latin
 TEMPLATES.env.globals["how_led"] = how_led  # rule notes go in How we worked it out
 TEMPLATES.env.globals["name_in_doubt"] = name_in_doubt  # "(not sure)" in the heading
+TEMPLATES.env.globals["photo_hides_name"] = photo_hides_name  # "Not clear: maybe mint"
+TEMPLATES.env.globals["name_in_sentence"] = name_in_sentence  # "maybe mint", not "maybe Mint"
 TEMPLATES.env.globals["top_doubt"] = top_doubt  # "Mostly: …" beside How sure we are
 TEMPLATES.env.globals["light_said"] = light_said  # the light we measured, on the band
 TEMPLATES.env.globals["advisors_said"] = advisors_said  # who advised, in plain words
@@ -226,7 +228,7 @@ TEMPLATES.env.globals["chat_links"] = chat_links  # a kept reply's links, after 
 TEMPLATES.env.globals["reply_to"] = reply_to  # "You asked: …" and the advisor's reply
 TEMPLATES.env.globals["is_question"] = is_question  # "You asked" or "You said"
 TEMPLATES.env.globals["note_facts"] = note_facts  # the chips follow their note
-TEMPLATES.env.globals["told_echo"] = told_echo  # "You told us: in a pot, sunny"
+TEMPLATES.env.globals["told_echo"] = told_echo  # "You told us: faces north-west; in a pot"
 TEMPLATES.env.globals["same_advice"] = same_advice  # "Changed" only when the advice did
 TEMPLATES.env.globals["no_data"] = NO_DATA  # an "if you do" line that says nothing: hidden
 TEMPLATES.env.globals["site_css"] = Markup(style.CSS)
@@ -1581,6 +1583,8 @@ def create_app(
                 return await run_in_threadpool(finder.links, actions, "UK", outdoor), []
             if rec.answer.photo_issue is not None:
                 return [], []  # a rough read: the plant is a guess, so is what to watch for
+            if rec.answer.headline == NO_CURE_HEADLINE:
+                return [], []  # bag and bin: nothing is handy for a plant that is going
             # the answer needs nothing: say so, then what is handy for what it says to watch
             # for, the headline's cold night first (22 Oct, Kash: products help the Tavily case)
             signs = [rec.answer.headline, *watch_list(rec.answer.watch)[0]]

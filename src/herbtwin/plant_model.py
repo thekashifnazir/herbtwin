@@ -23,6 +23,8 @@ TIP = 0.5  # a day at or over this risk is a tipping point
 STEP = 0.1  # peak risk must differ by this much to count as better or worse
 
 Verdict = Literal["better", "same", "worse"]
+NO_DRY_DAY = "no dry days in the next 2 weeks without watering"
+STAYS_MOIST = "stays moist without watering; extra water risks waterlogged roots"
 
 
 @dataclass(frozen=True)
@@ -50,6 +52,16 @@ def worth_doing(view: ModelView) -> bool:
 
 def _peak(strip: RiskStrip) -> float:
     return max((max(d.water_stress, d.frost) for d in strip.days), default=0.0)
+
+
+def _dry_peak(strip: RiskStrip) -> float:
+    return max((d.water_stress for d in strip.days), default=0.0)
+
+
+def judged_by(care: CareAction):
+    """The risk a choice's verdict weighs: watering answers drying alone, so a frost both
+    strips share never hides its gain (review: frost 1.0 over a dry day read "same")."""
+    return _dry_peak if care == "water" else _peak
 
 
 def _frost_peak(strip: RiskStrip) -> float:
@@ -108,14 +120,21 @@ def compare_actions(state: PlantState, *, tender: bool = False) -> dict[CareActi
     }
 
     def verdict(care: CareAction) -> Verdict:
-        return _verdict(min((by[a] for a in TWIN_FOR[care]), key=_peak), base)
+        peak = judged_by(care)
+        diff = peak(min((by[a] for a in TWIN_FOR[care]), key=peak)) - peak(base)
+        return "better" if diff <= -STEP else "worse" if diff >= STEP else "same"
 
+    # watering answers a dry day only: some drying short of one (rain on the way), or a
+    # frost, is no reason to water (site walk 2, r1: "Water it ✓ better" under "no dry days
+    # or frost in the next 2 weeks; watering keeps it moist", with 6 mm of rain that day)
     v = verdict("water")
     if never_dry:
-        why = "stays moist without watering; extra water risks waterlogged roots"
-        views["water"] = ModelView("water", "worse", why, tip)
-    elif v == "better":
-        views["water"] = ModelView("water", v, f"{base_why}; watering keeps it moist", tip)
+        views["water"] = ModelView("water", "worse", STAYS_MOIST, tip)
+    elif v == "better" and dry is not None:
+        why = f"dry by {_day(base, dry)} if left; watering keeps it moist"
+        views["water"] = ModelView("water", v, why, tip)
+    elif dry is None:
+        views["water"] = ModelView("water", "same", NO_DRY_DAY, tip)
     else:
         views["water"] = ModelView("water", v, "no difference over the next 2 weeks", tip)
 

@@ -26,9 +26,9 @@ from herbtwin.confidence import (
     fold_reasons,
     load_weights,
 )
-from herbtwin.consequences import NO_DATA, consequence_for
+from herbtwin.consequences import NO_DATA, consequence_for, named_problem
 from herbtwin.indoor_care import IndoorCare
-from herbtwin.outcomes import load_outcomes
+from herbtwin.outcomes import load_outcomes, problems_for
 from herbtwin.plant_model import ModelView, shelters_from_cold, worth_doing
 from herbtwin.schemas import (
     ActionCard,
@@ -1146,6 +1146,10 @@ def _reason(
 # have, and an Opus review of a quoted version still found chemicals, hard cuts and other
 # calls' commands getting through (integrator, for FINAL). Never a new role: #351
 RULES_CHOSE = "Our rules then chose the plan at the top, so follow that."
+# the advisors said "treat it" and our no-cure rule made it "Remove it": said in plain words
+# on the wait page and under What each advisor said (site walk 2, r5: "treat it" three
+# times, then "Remove it", with nothing between)
+NO_CURE_OVERRIDES = "Our rule for {problem} overrides: there's no cure, so remove it."
 MOST_SAID = "The plan at the top goes with what most of them said."
 ALL_DIFFERED = "Each said something different, so we're less sure of the plan at the top."
 _TOGETHER = {2: "Both", 3: "All three", 4: "All four"}
@@ -1164,17 +1168,25 @@ class AdvisorsSaid(NamedTuple):
     note: str  # whose plan the page is: ours by rule, the most said, or a split; may be ""
 
 
-def shown_call(a: Answer, primary: str, label: Mapping[str, str]) -> str:
+def no_cure_overrides(a: Answer | None) -> str | None:
+    """The line that says our no-cure rule overrode the advisors' "treat it", or None."""
+    if a is None or a.headline != NO_CURE_HEADLINE:
+        return None
+    return NO_CURE_OVERRIDES.format(problem=(a.no_cure_of or "").strip() or "this disease")
+
+
+def shown_call(a: Answer, primary: str, label: Mapping[str, str], advisor: bool = False) -> str:
     """One call in the page's words (`label` is its card labels), with the page's own swaps:
     a light tidy for a resting herb, thinning for seedlings, "Remove it" under no cure, and
-    treating for a bed plant that cannot go apart (in_proportion)."""
+    treating for a bed plant that cannot go apart (in_proportion). An `advisor`'s own call
+    keeps "Treat it" under no cure: the rule overrode it, and the page says so."""
     if primary == "prune" and a.winter_rest:
         return TIDY_LABEL
     if primary == "prune" and a.no_cut_growth:
         return THIN_LABEL
     if primary == "isolate" and a.in_ground:
         primary = "treat_or_remove"
-    if primary == "treat_or_remove" and a.headline == NO_CURE_HEADLINE:
+    if primary == "treat_or_remove" and a.headline == NO_CURE_HEADLINE and not advisor:
         return REMOVE_LABEL
     return label.get(primary, label.get("other", ""))
 
@@ -1189,18 +1201,20 @@ def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid
     a = rec.answer
     if a is None or not a.runs:
         return AdvisorsSaid([], "")
-    no_cure = a.headline == NO_CURE_HEADLINE
-    calls = [shown_call(a, r.primary, label) for r in a.runs]
+    overrides = no_cure_overrides(a)
+    calls = [shown_call(a, r.primary, label, advisor=True) for r in a.runs]
     n = len(calls)
     same = n > 1 and len(set(calls)) == 1
     if same:
         lines = [AdvisorLine(_TOGETHER.get(n, f"All {n}"), calls[0])]
     else:
         lines = [AdvisorLine(f"Advisor {i}", c) for i, c in enumerate(calls, 1)]
-    rule_led = no_cure or any(f.name == "advisor" and f.detail == RULE_LED for f in a.factors)
+    rule_led = any(f.name == "advisor" and f.detail == RULE_LED for f in a.factors)
     top = max(Counter(calls).values())
     note = (
-        RULES_CHOSE
+        overrides
+        if overrides
+        else RULES_CHOSE
         if rule_led
         else ""
         if same or n == 1
@@ -1291,6 +1305,9 @@ _PROBLEM_WATCH = {
     "coral spot": "more pink spots on dead stems",
     "cuckoo spit": "more froth on the stems",
 }
+
+
+NO_CURE_WATCH = "The same signs on the plants beside it."
 
 
 def _watch_problem(name: str, no_cure: bool) -> str:
@@ -1640,6 +1657,11 @@ def build_answer(
         # "(less sure)" beside it, under "Likely right", argued with the page (19 Oct)
         main.less_sure = False
         do = [main] + [c for c in do[1:] if c.action in SPARES_THE_OTHERS]
+    no_cure_of = None  # the disease it goes for: the photo check's, else the advisor's
+    if no_cure and problem is not None:
+        no_cure_of = problem.name
+    elif no_cure and plant_key:
+        no_cure_of = named_problem(adv.answer, problems_for(plant_key), plant_key)
     how = None if no_cure else sourced_how(main, no_cut)
     if how is not None:
         main.less_sure = False  # the headline rests on the sourced line, as with no cure
@@ -1669,17 +1691,22 @@ def build_answer(
         core = " ".join(named.lower().split()[-2:])
         rest = [s for s in listed if core not in s.lower()]
         cold = views.get("shelter")
-        frost = cold is not None and shelters_from_cold(cold) and cold.cold_on
+        # a plant to bag and bin is gone before the night comes (site walk 2, r5)
+        frost = not no_cure and cold is not None and shelters_from_cold(cold) and cold.cold_on
         second = (
             FROST_SIGN.format(day=cold.cold_on).rstrip(".")
             if frost
             else short_sign(rest[0]).rstrip(".")
-            if rest
+            if rest and not no_cure  # nor the season's signs on a plant that is going
             else ""
         )
         bullets = [_watch_problem(named, no_cure)] + ([second] if second else [])
         said = " ".join(f"• {x[:1].upper()}{x[1:]}" for x in bullets)
         watch = f"{said}. {'Seen either?' if second else 'Seen it?'} Send a new photo."
+    elif no_cure:
+        # the plant is binned: its season's signs and cold nights no longer matter, only
+        # whether the disease shows on its neighbours (site walk 2, r5)
+        watch = f"• {NO_CURE_WATCH} Seen it? Send a new photo."
     elif listed:
         # one clause per sign: the signs carry their own "or"s and semicolons
         # as bullets under "Keep an eye on" (19 Oct small print: about 55 words in a block)
@@ -1735,6 +1762,7 @@ def build_answer(
         # whoever led (our rule or the advisors themselves): the same headline, the same check
         tray_check=not no_cure and ours == TENDER_HEADLINE,
         in_ground=container == "ground",
+        no_cure_of=no_cure_of,
         tell_me=assessment.tell_me,
         tell_me_key=assessment.tell_me_key,
         photo_issue=assessment.photo_issue,

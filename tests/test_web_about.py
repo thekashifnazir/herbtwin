@@ -141,3 +141,16 @@ def test_about_gives_one_pass_figure_for_the_trusted_page_check(tmp_path, monkey
     assert "Ultra checks a trusted page instead" in models
     assert "It shipped at round 8: 3 false agrees in 418" in models
     assert "4 false agrees in 435" not in page
+
+
+def test_devpost_says_the_same_photo_can_read_differently_and_about_stays_short(tmp_path):
+    # site walk 2 (22 Oct): r4 and r7 read the same coriander photo as "healthy" and as
+    # "bolted"; the mildew pair had a different place set, so it is said not to be clean.
+    # Devpost only: About was already flagged as too long (integrator, 22 Oct)
+    story = (Path(__file__).parents[1] / "docs/submission/devpost.md").read_text("utf-8")
+    flat = " ".join(story.split())
+    assert "**The same photo can get a different read on another run.**" in flat
+    assert '"looks healthy with no signs of stress"' in flat
+    assert '"has bolted and is flowering"' in flat
+    assert "That second pair is not a clean repeat" in flat
+    assert "different read" not in _about(tmp_path)

@@ -67,7 +67,8 @@ def test_a_tap_that_answers_every_chip_question_sends_the_refine(tmp_path):
 
 
 def _rule(selector: str) -> str:
-    found = [b for at, s, b in _rules(CSS) if s == selector and not at]
+    # a selector list counts: a picked compass chip shares the picked chip's rule (22 Oct)
+    found = [b for at, s, b in _rules(CSS) if selector in s.split(", ") and not at]
     assert found, selector
     return found[-1]
 

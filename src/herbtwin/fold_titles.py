@@ -16,18 +16,23 @@ from herbtwin.answer import NO_CURE_HEADLINE, shown_call
 from herbtwin.confidence import RULE_LED
 from herbtwin.plant_model import TIP, is_tender
 from herbtwin.schemas import AnalysisRecord, Answer
-from herbtwin.seasonal import season_sources
+from herbtwin.twin_chart import _windows
 
 
 @dataclass(frozen=True)
 class FoldTitle:
-    kind: str  # the small label above the finding, so the fold is still findable: "Weather"
+    kind: str  # the small label above the finding, so the fold is still findable
     title: str  # the finding, or the old category title when `found` is False
     peek: str = ""  # a quiet line under the title; "" for none
     found: bool = True
+    # the evidence fold only: the lines it lists, in order, and its weather line's words. The
+    # page draws exactly these lines and its label counts them: one list for both
+    holds: tuple[str, ...] = ()
+    weather: str = ""
 
 
-OLD_WEATHER_PEEK = "What the photo showed, the season and where the care facts came from"
+EVIDENCE = "What we went on"
+EVIDENCE_PEEK = "What the photo showed, the season and where the care facts came from"
 
 # each choice as the subject of a sentence: "Protecting it beats leaving it" (the card labels
 # are orders: "Protect it (shelter or bring in)")
@@ -59,70 +64,69 @@ def _span(n: int) -> str:
     return "2 weeks" if n == 14 else f"{n} days"
 
 
-def _sources(rec: AnalysisRecord, names: Mapping[str, str], indoor: bool) -> int:
-    """The sources the fold names, counted as the page names them (said_by in result.html):
-    one per site or set of notes, so two RHS pages are one source."""
-    found: list[str] = []
-    if rec.season and not indoor:
-        found += season_sources(rec.season)
-    if rec.pack:
-        found += rec.pack.sources
-    if rec.problem and rec.problem.page:
-        found.append(rec.problem.page)
-    shown: set[str] = set()
-    for x in found:
-        if x.startswith(("https://", "http://")):
-            host = x.split("/")[2].removeprefix("www.")
-            shown.add(names.get(host, host))
-        elif x.startswith("docs/"):
-            shown.add("our care notes")
-        elif x.startswith("openplantbook:"):
-            shown.add("Open Plantbook")
-        elif x.startswith("openplantdb"):
-            shown.add("OpenPlantDB")
-        elif x:
-            shown.add(x)
-    return len(shown)
+def _plural(n: int, word: str) -> str:
+    return f"{n} {word}{'s' if n != 1 else ''}"
 
 
-def _weather_finding(rec: AnalysisRecord) -> str | None:
-    """Cold nights if left out, as the twin counts them (the chart's blue bands); with no twin,
-    the rain due; None with no weather at all."""
+def _weather_finding(rec: AnalysisRecord) -> tuple[str, str] | None:
+    """(title, the fold's weather line). Cold spells if left out, counted as the twin chart
+    marks them: one per run of cold nights, its snowflakes (site walk 2, 22 Oct: "11 cold
+    nights" over a chart with 3 marks). With no twin, the rain due; None with no day ahead."""
     state, pack, env = rec.state, rec.pack, rec.environment
     base = next((s for s in state.strips if s.action == "do_nothing"), None) if state else None
     if base and base.days and pack:
-        n = sum(1 for d in base.days if d.frost >= TIP)
+        nights = [i for i, d in enumerate(base.days) if d.frost >= TIP]
+        n = len(_windows(nights))
         when = f"in {_span(len(base.days))}"
         # a tender plant's risk is chill, not frost (plant_model._cold)
-        night, none = (
-            ("cold night", "No cold nights") if is_tender(pack) else ("frosty night", "No frost")
+        spell, none = (
+            ("cold spell", "No cold nights") if is_tender(pack) else ("frosty spell", "No frost")
         )
-        return f"{n} {night}{'s' if n != 1 else ''} {when}" if n else f"{none} {when}"
+        said = f"{_plural(n, spell)} {when}" if n else f"{none} {when}"
+        # the nights too, inside, so one long spell never reads as a short one (r5: 13 in a row)
+        more = f" ({len(nights)} nights in all)" if len(nights) > n else ""
+        return said, f"{said} if left out{more}"
     ahead = [d for d in env.days if d.is_forecast] if env else []
     if not ahead:
         return None
     mm = round(sum(d.rain_mm for d in ahead))
     when = f"in {_span(len(ahead))}"
-    return f"{mm} mm of rain due {when}" if mm else f"No rain due {when}"
+    said = f"{mm} mm of rain due {when}" if mm else f"No rain due {when}"
+    return said, said
 
 
-def weather_title(
-    rec: AnalysisRecord, names: Mapping[str, str], weather_failed: bool = False
-) -> FoldTitle:
-    """The sources fold: what the weather holds for the plant, and how many sources the fold
-    names. Indoors there is no weather to look at, so it says so instead."""
+def _holds(rec: AnalysisRecord, indoor: bool, weather: bool) -> tuple[str, ...]:
+    """The lines the evidence fold lists, in its order (result.html draws these and no others)."""
+    a, pack = rec.answer, rec.pack
+    held = {
+        "photo": rec.observation is not None,
+        "weather": weather,
+        "season": rec.season is not None and not indoor,
+        "facts": pack is not None and bool(pack.sources),
+        "check": rec.problem is not None,
+        "assumes": a is not None and bool(a.assumptions),
+    }
+    return tuple(k for k, on in held.items() if on)
+
+
+def weather_title(rec: AnalysisRecord, weather_failed: bool = False) -> FoldTitle:
+    """The evidence fold: what we went on, led by what the weather holds for the plant, and
+    how many things the fold lists (site walk 2, 22 Oct: "Weather · 3 sources" held no
+    weather, and counted sources, not its lines). Indoors there is no weather to look at."""
     obs = rec.observation
     indoor = obs is not None and obs.setting == "indoor"
-    n = _sources(rec, names, indoor)
-    count = f" · {n} source{'s' if n != 1 else ''}" if n else ""
+    no_forecast = weather_failed or rec.environment is None
+    said = None if indoor or no_forecast else _weather_finding(rec)
+    holds = _holds(rec, indoor, said is not None)
+    kind = f"{EVIDENCE} · {_plural(len(holds), 'thing')}" if holds else EVIDENCE
     if indoor:
-        return FoldTitle(f"Photo and sources{count}", "Indoors: no weather needed")
-    if weather_failed or rec.environment is None:
-        return FoldTitle(f"Weather{count}", "No forecast this time")
-    said = _weather_finding(rec)
+        return FoldTitle(kind, "Indoors: no weather needed", holds=holds)
+    if no_forecast:
+        return FoldTitle(kind, "No forecast this time", holds=holds)
     if said is None:  # weather, but no day ahead of the photo to count
-        return FoldTitle("", "Weather, forecast and sources", OLD_WEATHER_PEEK, found=False)
-    return FoldTitle(f"Weather{count}", said)
+        return FoldTitle("", EVIDENCE, EVIDENCE_PEEK, found=False, holds=holds)
+    # a line in the fold, after a colon like its others: "Weather: no frost in 2 weeks if left out"
+    return FoldTitle(kind, said[0], holds=holds, weather=said[1][:1].lower() + said[1][1:])
 
 
 def why_title(rec: AnalysisRecord, label: Mapping[str, str]) -> FoldTitle:
@@ -133,7 +137,7 @@ def why_title(rec: AnalysisRecord, label: Mapping[str, str]) -> FoldTitle:
     kind = "Why it's our best read" if best else "Why we're not sure"
     if a is None or not a.do or not a.runs:
         return FoldTitle(kind, kind, found=False)
-    calls = [shown_call(a, r.primary, label) for r in a.runs]
+    calls = [shown_call(a, r.primary, label, advisor=True) for r in a.runs]
     main = shown_call(a, a.do[0].action, label)
     said, n = calls.count(main), len(calls)
     plan = main.split(" (")[0].lower()  # "Protect it (shelter or bring in)": "protect it"
@@ -172,9 +176,20 @@ def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
     better, same, worse = by["better"], by["same"], by["worse"]
     if not (better or same or worse):
         return FoldTitle(kind, "Compare all choices (next 2 weeks)", found=False)
-    title = f"{_cap(better[0])} beats leaving it" if better else "Nothing beats leaving it"
+    # the main job is not one the twin compares (pick off the beetles): a better choice is an
+    # extra, never the title's lead (site walk 2, r3: "Watering beats leaving it")
+    main = a.do[0].action if a.do else None
+    extra = bool(better) and main not in {"leave_normal", "dont_water"} | {
+        r.action for r in a.compare
+    }
+    if extra:
+        title = f"{_cap(_join(better))} {'helps' if len(better) == 1 else 'help'} too"
+    elif better:
+        title = f"{_cap(better[0])} beats leaving it"
+    else:
+        title = "Nothing beats leaving it"
     more = []
-    if len(better) > 1:
+    if len(better) > 1 and not extra:
         more.append(f"{_join(better[1:])} {'helps' if len(better) == 2 else 'help'} too")
     if same:
         more.append(f"{_join(same)} {'does' if len(same) == 1 else 'do'} nothing extra")
@@ -184,15 +199,12 @@ def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
 
 
 def fold_titles(
-    rec: AnalysisRecord,
-    label: Mapping[str, str],
-    names: Mapping[str, str],
-    weather_failed: bool = False,
+    rec: AnalysisRecord, label: Mapping[str, str], weather_failed: bool = False
 ) -> dict[str, FoldTitle]:
-    """Every fold's title for one answer: "weather", "why" and, with an answer, "compare".
-    `label` is the page's card labels, `names` its source names (result.html)."""
+    """Every fold's title for one answer: "weather" (the evidence fold), "why" and, with an
+    answer, "compare". `label` is the page's card labels (result.html)."""
     a = rec.answer
-    out = {"weather": weather_title(rec, names, weather_failed), "why": why_title(rec, label)}
+    out = {"weather": weather_title(rec, weather_failed), "why": why_title(rec, label)}
     if a is not None:
         out["compare"] = compare_title(a, a.headline == NO_CURE_HEADLINE)
     return out
