@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from datetime import date, datetime
-from typing import Literal
+from typing import Literal, NamedTuple
 from urllib.parse import urlsplit
 
 from pydantic import (
@@ -609,13 +609,33 @@ CHANGED_TEXT: dict[str, str] = {
     "nothing": "nothing",
 }
 # indoors, where it sits: light indoors is not measured, so we ask (22 Oct, a gardener: "how
-# do you tell light levels indoors?"); the chips under "Where is it?"
-WINDOW_TEXT: dict[str, str] = {
-    "south_close": "South window, close",
-    "east_west_close": "East or west window, close",
-    "north_or_far": "North window, or a metre or more back",
-    "no_window": "Away from any window",
+# do you tell light levels indoors?"). Each answer said one way per place, from here only: the
+# chip under "Where is it?", after "You told us: ", and in How sure and the advisor's prompt
+
+
+class WindowWords(NamedTuple):
+    label: str  # the chip
+    echo: str  # after "You told us: "
+    how_sure: str  # How sure's light line and the advisor's INDOOR LIGHT block
+
+
+WINDOW: dict[str, WindowWords] = {
+    "south_close": WindowWords(
+        "South window, close", "by a south window, close", "a south-facing window, close to it"
+    ),
+    "east_west_close": WindowWords(
+        "East or west window, close",
+        "by an east or west window, close",
+        "an east- or west-facing window, close to it",
+    ),
+    "north_or_far": WindowWords(
+        "North window, or a metre or more back",
+        "by a north window, or a metre or more back",
+        "a north-facing window, or far from one",
+    ),
+    "no_window": WindowWords("Away from any window", "away from any window", "no window near it"),
 }
+WINDOW_TEXT: dict[str, str] = {k: w.label for k, w in WINDOW.items()}  # the chips
 MAX_QUESTION = 500
 Squeeze = Literal["gritty", "smooth", "sticky"]
 SQUEEZE_TEXT: dict[str, str] = {

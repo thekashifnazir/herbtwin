@@ -15,7 +15,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Literal
 from zoneinfo import ZoneInfo
 
-from herbtwin.schemas import Effect, LightClass, LightMissing, LightNow, LightReading
+from herbtwin.schemas import WINDOW, Effect, LightClass, LightMissing, LightNow, LightReading
 
 log = logging.getLogger(__name__)
 
@@ -187,13 +187,9 @@ MISSING_TEXT = {
     # as the card's ask for the window (integrator, 22 Oct): not "not measured yet"
     "indoors": "we can't measure light indoors from a photo: tell us which window it's by",
 }
-# the window question's answers (Told.window), as the page and the advisor say them
-WINDOW_TEXT = {
-    "south_close": "a south-facing window, close to it",
-    "east_west_close": "an east- or west-facing window, close to it",
-    "north_or_far": "a north-facing window, or far from one",
-    "no_window": "no window near it",
-}
+# the window question's answers (Told.window), as How sure and the advisor say them; the
+# words live with the chips' and the echo's in schemas.WINDOW
+WINDOW_TEXT = {k: w.how_sure for k, w in WINDOW.items()}
 
 
 # the answer page's light line (21 Oct gardener test: "what light did you pick up?"): the

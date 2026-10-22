@@ -93,19 +93,13 @@ def test_a_told_window_shows_checked_on_the_next_render(tmp_path):
     assert chips.count("checked") == 1
 
 
-def test_the_window_does_not_change_the_main_card_or_the_rater_text(tmp_path):
-    # the advice does not read the window yet: the main card's "Make this surer" count is
-    # left as it was, and the card sits outside .plan
+def test_the_window_does_not_change_the_rater_text(tmp_path):
+    # the card sits outside .plan; the main card counts it as a quick question since the
+    # advice reads it (tests/test_window_words.py)
     rec = _indoor(tmp_path)
     before = _render(rec, asks=["question"])
     after = _render(rec, asks=["window", "question"])
     assert plan_text(after) == plan_text(before)
-    card = '<section class="card main-action"'
-
-    def main(p):
-        return p.split(card, 1)[1].split("</section>", 1)[0] if card in p else ""
-
-    assert main(after) == main(before)
 
 
 @respx.mock
@@ -191,16 +185,6 @@ def test_no_window_question_beside_a_retake_or_a_no_cure_answer(tmp_path):
     rec.answer.photo_issue = None
     rec.answer.headline = NO_CURE_HEADLINE
     assert "window" not in questions_for(rec.answer, rec.observation)
-
-
-def test_a_window_tap_alone_never_sends_the_form(tmp_path):
-    # review: until the advice reads the window, a tap must not run a paid refine on its
-    # own; the person presses "Check the advice again"
-    rec = _indoor(tmp_path)
-    rec.answer.tell_me_key = rec.answer.tell_me = None  # nothing else asked in "Where it is"
-    page = _render(rec, asks=["window", "question"], spot_on=True)
-    assert "data-picks" not in _refine_form(page)
-    assert "Check the advice again" in _refine_form(page)
 
 
 def test_the_switch_never_carries_the_window(tmp_path):

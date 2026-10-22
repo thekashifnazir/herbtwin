@@ -108,8 +108,8 @@
   {# only what is still unanswered: answering the soil can bring in "last watered", and the
      count went up (19 Oct judge walk of #269) #}
   {% set told_as = {"aspect": "heading", "soil_texture": "squeeze"} %}{% set open = namespace(n=0) %}
-  {# the window indoors is left out of this count while the advice does not read it yet #}
-  {% for q in asks if q not in ("question", "window") and not (rec.told and rec.told[told_as.get(q, q)]) %}{% set open.n = open.n + 1 %}{% endfor %}
+  {# the window indoors counts too: the advice reads it (#456) #}
+  {% for q in asks if q != "question" and not (rec.told and rec.told[told_as.get(q, q)]) %}{% set open.n = open.n + 1 %}{% endfor %}
   {# the place is asked on the band when it is missing, so it is not counted again here, nor
      asked again in the fold, nor lifts the fold on a phone when it was the only question
      (21 Oct, Kash: the ask said once; review of the band PR) #}
@@ -586,7 +586,7 @@
       {% if "soil_texture" in asks %}{{ spotq.squeeze_field(choices["squeeze"], rec.told.squeeze if rec.told else none) }}{% endif %}</div>{% endif %}
       {# the chips are the groups' only fields: a tap answering the last one sends it (the
          script, data-picks); the button under them stays for anyone who wants to press it #}
-      {% set picks_only = selects and not (tray_in == "where" and a.tell_me_key == "location") and "aspect" not in asks and "soil_texture" not in asks %}
+      {% set picks_only = (selects or "window" in asks) and not (tray_in == "where" and a.tell_me_key == "location") and "aspect" not in asks and "soil_texture" not in asks %}
       {% set groups_send = has_where or has_changed %}
       {# one green button in the panel (21 Oct, Kash; kept green after A3, 22 Oct, Kash).
          Their names say what each does, so no explainer line under them. With groups above,

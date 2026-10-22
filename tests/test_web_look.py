@@ -152,7 +152,10 @@ def test_short_and_long_pages_put_the_frame_in_the_same_place():
     # 13 Oct walkthrough: the progress page's header sat 7 px right of every other page's,
     # because a long page has a scrollbar and the short one did not; the centred frame
     # moved by half its width. Reserving the gutter keeps the frame still on every page.
-    assert re.search(r"html\s*\{[^}]*scrollbar-gutter:\s*stable", style.CSS)
+    # 22 Oct: by keeping the scrollbar itself, not an empty gutter: on a short page with no
+    # scrollbar, scrollbar-gutter: stable left a cream lane beside the green band
+    assert re.search(r"html\s*\{[^}]*overflow-y:\s*scroll", style.CSS)
+    assert "scrollbar-gutter" not in style.CSS
 
 
 def test_clay_labels_keep_their_text_readable_in_dark_mode():

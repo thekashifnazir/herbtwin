@@ -20,6 +20,7 @@ from herbtwin.schemas import (
     LAST_WATERED_TEXT,
     SOIL_FEEL_TEXT,
     SQUEEZE_TEXT,
+    WINDOW,
     Told,
 )
 
@@ -269,15 +270,6 @@ _CHANGED_SAID = {
 }
 
 
-# "Where is it?" indoors, said after "You told us: "
-_WINDOW_SAID = {
-    "south_close": "by a south window, close",
-    "east_west_close": "by an east or west window, close",
-    "north_or_far": "by a north window, or a metre or more back",
-    "no_window": "away from any window",
-}
-
-
 def _picks(told: Told) -> list[str]:
     """Each pick given under the answer, in the questions' own words."""
     picks = []
@@ -288,7 +280,7 @@ def _picks(told: Told) -> list[str]:
     if told.setting:
         picks.append(f"{told.setting}s")
     if told.window:
-        picks.append(_WINDOW_SAID[told.window])
+        picks.append(WINDOW[told.window].echo)  # schemas.WINDOW
     if told.place:
         picks.append(f"in {told.place}")
     if told.soil_feel:

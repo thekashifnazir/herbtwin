@@ -1,0 +1,28 @@
+{
+ "run": "2026-10-22-species-low-light",
+ "rows": 149,
+ "read_failed": 0,
+ "low_light": {
+  "0": 121,
+  "1": 3,
+  "not given": 25
+ },
+ "fired": [
+  {
+   "id": "species_gbif/5230907367",
+   "low_light": 1,
+   "setting": "outdoor"
+  },
+  {
+   "id": "species_gbif/6184932300",
+   "low_light": 1,
+   "setting": "outdoor"
+  },
+  {
+   "id": "species_gbif/6235849867",
+   "low_light": 1,
+   "setting": "outdoor"
+  }
+ ],
+ "note": "one row per scored photo (the 1 call error has no row); 'not given' is a reply that left low_light out (None), never read as 0"
+}

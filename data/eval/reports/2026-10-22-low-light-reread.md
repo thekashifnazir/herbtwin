@@ -19,11 +19,13 @@ hashes to the sha256 above again. Code e6cef4e4, GLM-5.3-Flash, no backup; obser
   intervals; the pot_fit re-read on 21 Oct gave 0.859 with the same set. One call failed in
   each run.
 - Problem check by class (right / photos), 17 Oct → now: basil downy mildew 8 → 9, mint rust
-  14 → 14, powdery mildew 10 → 6, aphids 1 → 0, slugs 0 → 0. Fewer powdery-mildew photos were
-  read as a herb the app knows (in scope 13 → 7), which is where the 4 went.
+  14 → 14, powdery mildew 10 → 6, aphids 1 → 0, slugs 0 → 0: 4 fewer for powdery mildew, 1 fewer
+  for aphids and 1 more for downy mildew. Fewer powdery-mildew photos were read as a herb the
+  app knows (in scope 13 → 9).
 - **Secondary, low_light on the 149 healthy species photos:** 0 on 121, 1 on 3, 2 on none, and
   left out on 25 (a missing score is "not known", never "no sign"). All 3 fires were read as
-  outdoor plants: species_gbif/5230907367, 6184932300 and 6235849867.
+  outdoor plants: species_gbif/5230907367, 6184932300 and 6235849867. The tally, from the run's
+  rows, is `2026-10-22-low-light-reread/low_light_tally.json`.
 
 Files: `2026-10-22-species-low-light.summary.json` and `.md`,
 `2026-10-22-problem-check.summary.json`. Spend: species $0.135 (recorded); problem check not

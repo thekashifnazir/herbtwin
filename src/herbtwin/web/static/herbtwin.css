@@ -92,9 +92,13 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; }  /* a short page keeps the frame where a long one has it */
-/* the body is the width the bands bleed to: 100vw also counts the scrollbar lane that
-   scrollbar-gutter keeps, so a 50vw bleed sat half a lane left of the page and stopped short
+/* a short page keeps the frame where a long one has it: the scrollbar's lane is always there.
+   Not scrollbar-gutter: stable, whose empty lane on a short page shows the cream page beside
+   the green band (22 Oct, sign-in at 2545 of 2560 in Kash's Chrome): a lane that is a
+   scrollbar, as on a long page, the band meets */
+html { -webkit-text-size-adjust: 100%; overflow-y: scroll; }
+/* the body is the width the bands bleed to: 100vw also counts the scrollbar's lane, so a
+   50vw bleed sat half a lane left of the page and stopped short
    on the right (22 Oct, the About band at 1293 of 1300). cqw is the body's own width. */
 body {
   container-type: inline-size;
