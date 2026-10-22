@@ -138,8 +138,11 @@ def test_the_spot_page_marks_differing_timing_once(tmp_path):
     assert "sources differ on timing" not in page.split("visually-hidden")[0]
     assert page.count('<p class="note differ-key">') == 1
     marker = page.split('<details class="differ">', 1)[1].split("</details>", 1)[0]
-    assert re.search(r"<summary><span aria-hidden=\"true\">±</span> RHS: [A-Z]", marker)
-    assert "<p>Garden Organic: " in marker
+    # on 4 Oct the first differing pick is in season only by Garden Organic, so its window
+    # shows on the closed "±" and RHS's opens under it (22 Oct walk: the closed "RHS: March
+    # to April" on an October pick read as wrong)
+    assert re.search(r"<summary><span aria-hidden=\"true\">±</span> Garden Organic: [A-Z]", marker)
+    assert "<p>RHS: " in marker
     # the full fence note moved to "Where this comes from"; the sun row says it short
     assert "assumes a typical 1.8 m fence about 5 m away" in page
 

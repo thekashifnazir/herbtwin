@@ -220,7 +220,9 @@ def test_source_disagreement_names_both_windows():
         },
     )  # fmt: skip
     assert tier_of(rhubarb, spot(month=10)) == "worth_a_try"
-    assert "RHS: November to March. Garden Organic: September to April." in reasons_of(
+    # October is in Garden Organic's window, so it leads: the closed "±" on the page
+    # shows only the first window (22 Oct walk: "RHS: March to April" read as wrong)
+    assert "Garden Organic: September to April. RHS: November to March." in reasons_of(
         rhubarb, spot(month=10)
     )
     assert "Garden Organic" not in reasons_of(rhubarb, spot(month=11))  # both list November

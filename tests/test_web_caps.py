@@ -19,6 +19,7 @@ from tests.fakes import follow
 from tests.test_web import JPEG, OBS, PNG
 
 BUSY = "The garden&#39;s had a busy day. Try again tomorrow."
+MINE = "You&#39;ve used today&#39;s 10 photo reads."
 BUDGET = "herbtwin has used its budget for model calls, so photo reads are paused for now."
 CODE = "judge-code"
 NOT_A_PLANT = json.dumps(dict(OBS, is_plant=False, species=[]))  # one model call, no weather
@@ -48,9 +49,13 @@ def test_eleventh_upload_from_one_visitor_is_refused(tmp_path):
     for _ in range(10):
         assert "No plant found" in follow(c, _upload(c)).text
     r = _upload(c)
-    assert r.status_code == 429 and BUSY in r.text
+    # 22 Oct walk 2: one visitor's own cap said "busy day", which read as the site being down
+    assert r.status_code == 429 and MINE in r.text and "busy day" not in r.text
     assert 'id="next"' not in r.text  # refused before the stream starts
     assert store.days == {date(2026, 10, 12): 10}
+    band = r.text.split('<div class="page-band">', 1)[1].split("</div>", 1)[0]
+    assert "<p>The limit resets at midnight, UK time.</p>" in band
+    assert 'href="/judge">Judges: enter your code</a>' in band
 
 
 def test_day_cap_refuses_with_the_busy_page(tmp_path):
@@ -88,7 +93,7 @@ def test_api_returns_429_json_when_capped(tmp_path):
     files = {"photo": ("b.png", PNG, "image/png")}
     assert c.post("/api/analyse", files=files).status_code == 200
     r = c.post("/api/analyse", files=files)
-    assert r.status_code == 429 and r.json() == {"detail": BUSY.replace("&#39;", "'")}
+    assert r.status_code == 429 and r.json() == {"detail": "You've used today's 1 photo read."}
 
 
 def test_api_judge_passes_the_cap(tmp_path):

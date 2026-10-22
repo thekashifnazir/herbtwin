@@ -58,7 +58,7 @@
   {{ made_cards(voice_on=voice_on, tavily_on=tavily_on, check_on=check_on) }}
   <ul class="about-calls">
     <li><strong>Super decides:</strong> it said "treat it" when the expert didn't in 2% of 150 answers. Ultra, the largest, did in 12.7%, and was no better on the main action.</li>
-    {% if check_on %}<li><strong>Ultra checks a trusted page instead:</strong> plain code decides whether a sentence it read backs the answer, and only then is it quoted. It passed on the fifth pre-registered round (4 false agrees in 435).</li>{% endif %}
+    {% if check_on %}<li><strong>Ultra checks a trusted page instead:</strong> plain code decides whether a sentence it read backs the answer, and only then is it quoted. It shipped at round 8: 3 false agrees in 418 (the rounds before are under What didn't work).</li>{% endif %}
     <li><strong>Nano talks:</strong> the chat on your answer, 10 of 10 on our what-if check, in about half Super's time.</li>
     <li><strong>GLM-5.3-Flash reads the photo:</strong> four NVIDIA vision models named the plant less often (0.54 to 0.627, against 0.846 to 0.867). Nemotron 3.5 Super VL, 5 times faster, is the first we will try again.</li>
   </ul>
@@ -97,7 +97,7 @@
     <li><strong>Ultra as the advisor</strong> over-treated; <strong>"7 in 10"</strong> overstated how sure we were.</li>
     <li><strong>Nano on our own GPU</strong> agreed with Token Factory on 81% of answers but matched the expert 4.8 points less often.</li>
     <li><strong>Cosmos video</strong> did not show the change asked for, where an image editor did (5 of 6).</li>
-    <li><strong>Prices for the things to buy</strong>: a Nemotron 3 Nano reader got 11 of 21 right, 9 wrong, and 4 of 6 shops block a direct fetch, so we show the item and the shop, not a price.</li>
+    <li><strong>Prices for the things to buy</strong>: a Nemotron 3 Nano reader got 11 of 21 right, 9 wrong and 1 left blank, and 4 of 6 shops block a direct fetch, so we show the item and the shop, not a price.</li>
   </ul>
 </section>
 

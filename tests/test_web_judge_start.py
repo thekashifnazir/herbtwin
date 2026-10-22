@@ -41,6 +41,8 @@ def test_the_judge_page_says_what_is_staged_and_never_shows_the_code(tmp_path):
         blocked,
     ):
         assert "Staged" in page and "Did you do it?" in page and "reminder" in page
+        # 22 Oct walk 2: "The gallery" named one the site doesn't have; it is Devpost's
+        assert "Our Devpost gallery shows" in page and "The gallery shows" not in page
         assert CODE not in page
 
 

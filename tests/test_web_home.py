@@ -496,7 +496,8 @@ def test_how_it_works_keeps_one_models_line_and_credits_hold_the_rest(tmp_path):
     # the judges' eligibility signal stays in view
     assert line.startswith("Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory")
     credits = _credits(home)
-    for name in ("RHS", "Open-Meteo.com", "NVIDIA Nemotron 3 Super", "Nebius Token Factory"):
+    # Token Factory is named once, in the line above (22 Oct walk 2: it was said 3 times)
+    for name in ("RHS", "Open-Meteo.com", "NVIDIA Nemotron 3 Super"):
         assert name in credits
     cards = credits.split('<ul class="made-cards">', 1)[1].split("</ul>", 1)[0]
     assert "<img" not in cards  # names, not logos

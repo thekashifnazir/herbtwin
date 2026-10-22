@@ -7,7 +7,7 @@
 {% if back %}<p class="actions"><a class="button primary" href="{{ back }}">{{ back_text or "Back" }}</a></p>
 {#- the limit for today (22 Oct walk: "Try again tomorrow" and nothing to press): the judges'
     code lifts it, and how the app works can still be read #}
-{%- elif capped %}{% if capped == "day" %}<p>The limit resets at midnight, UK time.</p>{% endif %}
+{%- elif capped %}{% if capped != "budget" %}<p>The limit resets at midnight, UK time.</p>{% endif %}
 <p class="actions"><a class="button primary" href="/judge">Judges: enter your code</a> <a class="button" href="/about">How herbtwin works</a></p>
 {#- a missing page was a dead end with only the nav (19 Oct walk): the way back, as the
     expired page has, and My plants for someone signed in #}

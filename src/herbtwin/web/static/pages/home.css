@@ -48,8 +48,8 @@
   background: color-mix(in srgb, var(--band-btn) 88%, var(--band-btn-fg)); }
 .home-page .home-band #where-else { background: transparent; color: var(--band-fg);
   border: 2px solid var(--band-line); border-radius: var(--pill); padding: 6px 16px; font-weight: 500; }
-/* the samples as chips under the photo card: one row that scrolls sideways on a phone, the
-   last chip half shown so the scroll is plain; wrapped on a wide screen */
+/* the samples as chips under the photo card, wrapped on every screen (22 Oct walk 2: the
+   sideways row cut a phone off at "Rosema…", and 2.5 of 6 showed) */
 .home-page .home-chips { margin: -4px 0 4px; min-width: 0; }  /* a grid item: let the row scroll, not widen the page */
 .home-page .home-chips-h { margin: 0 0 8px; color: var(--band-fg); font-size: 16px; }
 .home-page .home-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -267,9 +267,6 @@
 
 @media (max-width: 720px) {
   .home-page .home-twin-frame { aspect-ratio: 4/3; }
-  .home-page .home-chip-row { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 2px 16px 4px;
-    scroll-snap-type: x proximity; }
-  .home-page .home-pick { flex: none; scroll-snap-align: start; }
   /* the outlook: one row per choice (tag, name, note), not 3 stacked lines; .home-bento so it
      outranks the base rule further down (it never applied before) */
   .home-page .home-bento .home-outlook li { flex-direction: row; flex-wrap: wrap; align-items: center;

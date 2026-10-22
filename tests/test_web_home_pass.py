@@ -30,11 +30,11 @@ def test_the_samples_are_chips_right_under_the_photo_card(tmp_path):
     assert 'class="home-samples"' not in home and "home-sample-row" not in style.CSS
 
 
-def test_the_chips_scroll_sideways_on_a_phone_and_wrap_on_a_wide_screen():
+def test_the_chips_wrap_on_every_screen():
+    # 22 Oct walk 2: the phone's sideways row cut off at "Rosema…", 2.5 of 6 showing
     css = style.CSS
     assert ".home-page .home-chip-row { display: flex; flex-wrap: wrap;" in css
-    phone = css.split("@media (max-width: 720px) {", 1)[1]
-    assert "home-chip-row { flex-wrap: nowrap; overflow-x: auto;" in phone
+    assert not re.search(r"home-chip-row \{[^}]*(nowrap|overflow-x)", css)
 
 
 def test_home_asks_no_question_before_the_photo_goes(tmp_path):

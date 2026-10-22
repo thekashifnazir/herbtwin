@@ -13,7 +13,7 @@
 {% macro lic(url, name) %}<a href="{{ url }}" rel="noopener noreferrer">{{ name }}</a>{% endmacro %}
 {% macro made_cards(voice_on=false, tavily_on=false, check_on=false) %}
 <div class="made-groups">
-  <div class="made-group made-nv"><h3>NVIDIA models on Nebius Token Factory</h3>
+  <div class="made-group made-nv"><h3>NVIDIA models</h3>
     <ul class="made-cards">
       <li class="nv"><span class="job">Decides</span><strong>NVIDIA Nemotron 3 Super</strong><span>Weighs each choice, asked 3 times</span></li>
       <li class="nv"><span class="job">Answers questions</span><strong>NVIDIA Nemotron 3 Nano</strong><span>Chat on your answer, inside the twin</span></li>
@@ -65,7 +65,6 @@
 {% macro made_with(spot_on=false, plantbook_on=false, voice_on=false, tavily_on=false, open=false, check_on=false, sightings_on=false) %}
 <section class="made-with" id="made-with" aria-labelledby="made-with-h">
 <h2 id="made-with-h">Made with</h2>
-<p class="made-note">All models run on Nebius Token Factory.</p>
 {{ made_cards(voice_on=voice_on, tavily_on=tavily_on, check_on=check_on) }}
 <details class="made-credits" id="credits"{% if open %} open{% endif %}>
   <summary>Data and photo credits</summary>

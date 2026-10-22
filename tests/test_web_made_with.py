@@ -45,14 +45,13 @@ def test_made_with_groups_the_nvidia_models_the_other_model_and_the_services():
         )
     )
     assert _groups(made) == {
-        "NVIDIA models on Nebius Token Factory": [
+        "NVIDIA models": [
             "NVIDIA Nemotron 3 Super", "NVIDIA Nemotron 3 Nano", "NVIDIA Nemotron 3 Ultra",
         ],
         "Other model": ["GLM-5.3-Flash"],
         "Services": ["Tavily", "ElevenLabs", "Open-Meteo"],
     }  # fmt: skip
     assert ("Decides", "NVIDIA Nemotron 3 Super") in _cards(made)
-    assert "All models run on Nebius Token Factory." in made
     assert made.count('<li class="nv">') == 3  # the NVIDIA cards carry the green tint
     # the licences stay one tap away, folded: a data table and a photo list with thumbnails
     fold = made.split('<details class="made-credits" id="credits">', 1)[1]
@@ -146,3 +145,12 @@ def test_nemotron_ultra_is_credited_only_while_the_trusted_page_check_runs(tmp_p
     off = {**on, "HERBTWIN_TRUSTED_CHECK": "0"}
     assert "Nemotron 3 Ultra" not in _home_with(tmp_path / "off", off)
     assert "Nemotron 3 Ultra" not in _home_with(tmp_path / "mock", {})
+
+
+def test_home_names_token_factory_once(tmp_path):
+    # 22 Oct walk 2: the models line, "All models run on Nebius Token Factory." and the
+    # group heading "NVIDIA models on Nebius Token Factory" said it 3 times in about 100 px
+    main = _home(tmp_path).split("<main", 1)[1].split("</main>", 1)[0]
+    text = re.sub(r"<[^>]+>", " ", main)
+    assert text.count("Nebius Token Factory") == 1
+    assert "Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory" in text

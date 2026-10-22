@@ -3,6 +3,7 @@ it's built, the models, how we know it works, what didn't work, what's next, acc
 who made it, then the credits. /credits lands on its last section."""
 
 import re
+from pathlib import Path
 
 from herbtwin.web import style
 from tests.test_web import _client
@@ -122,5 +123,21 @@ def test_what_didnt_work_says_prices_failed_with_the_reports_numbers(tmp_path):
     page = _about(tmp_path)
     section = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
     assert "<strong>Prices for the things to buy</strong>" in section
-    for said in ("11 of 21 right, 9 wrong", "4 of 6 shops block", "not a price"):
+    # 22 Oct walk 2: "11 of 21 right, 9 wrong" added to 20; the report's one blank says it
+    for said in ("11 of 21 right, 9 wrong and 1 left blank", "4 of 6 shops block", "not a price"):
         assert said in section, said
+    story = (Path(__file__).parents[1] / "docs/submission/devpost.md").read_text("utf-8")
+    assert "11 of\n  21 right, 9 wrong, 1 left blank;" in story
+
+
+def test_about_gives_one_pass_figure_for_the_trusted_page_check(tmp_path, monkeypatch):
+    # 22 Oct walk 2: the models list said "passed on the fifth round (4 false agrees in
+    # 435)" while What didn't work said round 8 shipped at 3 in 418; it ships at round 8
+    from herbtwin.web import app as web_app
+
+    monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)  # as live
+    page = _spot_client(tmp_path)[0].get("/about").text
+    models = page.split('id="made-with-h"', 1)[1].split("</section>", 1)[0]
+    assert "Ultra checks a trusted page instead" in models
+    assert "It shipped at round 8: 3 false agrees in 418" in models
+    assert "4 false agrees in 435" not in page

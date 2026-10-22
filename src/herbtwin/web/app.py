@@ -263,6 +263,13 @@ NO_REMINDERS = "Reminder emails are off on this site, so there is nothing to sto
 UNSUBSCRIBE_DOWN = "We can't stop the reminder right now. Please try the link again later."
 BUSY_DAY = "The garden's had a busy day. Try again tomorrow."
 OUT_OF_BUDGET = "herbtwin has used its budget for model calls, so photo reads are paused for now."
+
+
+def visitor_full(reads: int) -> str:
+    """One visitor's own cap (22 Oct walk 2: "busy day" read as the whole site being down)."""
+    return f"You've used today's {reads} photo read{'' if reads == 1 else 's'}."
+
+
 REFINE_LIMIT = 5  # refines per answer: each runs the advisor three times
 REFINE_LIMIT_TEXT = (
     f"This answer has been refined {REFINE_LIMIT} times, the most it can be. "
@@ -657,8 +664,10 @@ def create_app(
         context: dict = {"message": text, "back": back, "back_text": back_text, "heading": heading}
         # the read caps and the budget stop (22 Oct walk: a dead end): the judges' code lifts
         # both, and the day's cap says when it lifts by itself
-        if text in (BUSY_DAY, OUT_OF_BUDGET):
-            context["capped"] = "day" if text == BUSY_DAY else "budget"
+        capped = {BUSY_DAY: "day", OUT_OF_BUDGET: "budget"}
+        capped[visitor_full(settings.limits.visitor_reads)] = "visitor"
+        if text in capped:
+            context["capped"] = capped[text]
         if signed_in is not None:
             context["signed_in"] = signed_in
         return TEMPLATES.TemplateResponse(request, "message.html", context, status_code=status)
@@ -740,6 +749,8 @@ def create_app(
             warn_budget(v)
         if v.allowed:
             return None
+        if v.reason == "visitor":
+            return visitor_full(settings.limits.visitor_reads)
         return OUT_OF_BUDGET if v.reason == "budget" else BUSY_DAY
 
     async def photo_refusal(request: Request) -> str | None:

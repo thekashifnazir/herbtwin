@@ -163,7 +163,8 @@ def winter_dark_note(sun: SunHours, month: int) -> str | None:
 
 def _differ(crop: Crop, action: PickAction, m: int) -> str | None:
     """Both windows named when this month is inside RHS's window and not Garden
-    Organic's, or the other way round (the logged disagreements, ref section 6)."""
+    Organic's, or the other way round (the logged disagreements, ref section 6). The
+    source whose window holds this month comes first: the closed "±" shows only it."""
     window = WINDOW_OF.get(action)
     if window is None:
         return None
@@ -174,7 +175,8 @@ def _differ(crop: Crop, action: PickAction, m: int) -> str | None:
     }
     if len(have) < 2 or len({m in w for w in have.values()}) == 1:
         return None
-    return " ".join(f"{SOURCE_NAMES[n]}: {month_span(w)}." for n, w in have.items())
+    ordered = sorted(have.items(), key=lambda nw: m not in nw[1])
+    return " ".join(f"{SOURCE_NAMES[n]}: {month_span(w)}." for n, w in ordered)
 
 
 def _actions(crop: Crop, m: int) -> list[PickAction]:
