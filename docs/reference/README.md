@@ -17,6 +17,11 @@ the work in hand. Each file marks what was verified and what was not.
 | `risk-models.md` | adding a fungal, heat, bolting, pest or frost rule; assigning an evidence tier |
 | `light-microclimate-and-open-texts.md` | converting radiation to light, shading, patio temperature bias, feeding, embeddable texts |
 | `world-models.md` | planning the learning-track experiment |
+| `results.md` | quoting a result; rerunning the command behind it |
+| `deploy-your-own.md` | running your own copy online |
+| `data-and-licences.md` | checking where shipped or fetched data comes from, and its licence |
+| `architecture.md` | finding which model does a step, or where its code lives |
+| `accessibility.md` | checking what the accessibility pass covered |
 | `evaluation-methods.md` | designing the rubric, the rating protocol or the report |
 | `users-and-risk-communication.md` | designing the risk strip and recommendation card; quoting impact figures |
 | `indoor-mode.md` | designing for plants kept indoors; estimating light from a phone photo; deciding what to ask the user |

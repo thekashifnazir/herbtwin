@@ -14,7 +14,7 @@ Spec: `docs/superpowers/specs/2026-10-11-phase-d-deploy-design.md`, section 7 (D
   has passed, or when the account is gone.
 - **Where it runs:** this repo ships no scheduler. Run `python -m herbtwin.reminders` once a
   day from your own scheduler (cron, a scheduled CI job or a serverless job), from the
-  app's image or a checkout after `uv sync`. README, "Deploying your own copy", gives one
+  app's image or a checkout after `uv sync`. docs/reference/deploy-your-own.md gives one
   way to do it.
 - **Settings:** the job reads `HERBTWIN_SUPABASE_URL`, `HERBTWIN_SUPABASE_SECRET_KEY`,
   `HERBTWIN_RESEND_API_KEY`, `HERBTWIN_MAIL_FROM` and `HERBTWIN_REMINDER_SECRET`, and

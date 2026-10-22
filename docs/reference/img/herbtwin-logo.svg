@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 128" width="470" height="128" role="img" aria-label="herbtwin">
+  <rect x="0" y="0" width="470" height="128" rx="24" fill="#F5F3EE"/>
+  <g transform="translate(24 20) scale(2.75)">
+    <rect x="1" y="1" width="30" height="30" rx="7" fill="#1A7A48"/>
+    <path d="M9 23c0-8 5-14 14-14 0 9-6 14-14 14z" fill="#F5F3EE"/>
+    <path d="M10 22l8-8" fill="none" stroke="#1A7A48" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+  <text x="136" y="84" font-family="Alegreya, Georgia, 'Times New Roman', serif" font-weight="700" font-size="64" fill="#1F4D33">herbtwin</text>
+</svg>
