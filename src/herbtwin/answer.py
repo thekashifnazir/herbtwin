@@ -1505,14 +1505,16 @@ def build_answer(
             unsure = action == "water" and not soil_known
             dont = card(action, "today", DONT_IF_DRY_BECAUSE if unsure else DONT_BECAUSE, do=False)
             break
-    listed = list(norm.problem_signs) if norm is not None else []
+    # a rough read names the plant as a guess: no watch list for that guess (22 Oct walk:
+    # a blurred parsley was told to watch for mint rust)
+    listed = list(norm.problem_signs) if norm is not None and not assessment.photo_issue else []
     if indoors:
         listed = [x for x in listed if _indoor_sign(short_sign(x))]
     elif setting == "outdoor":
         # a sign about a plant brought in does not happen outside (judge walk of #272: an
         # outdoor mildew basil was told to watch for mould "on a plant brought indoors")
         listed = [x for x in listed if not _INDOOR_ONLY.search(short_sign(x))]
-    if bolted:  # the seasons' signs are for young plants; it has gone over to seed
+    if bolted and not assessment.photo_issue:  # the seasons' signs are for young plants
         listed = list(BOLTED_SIGNS)
     named = problem.name.strip() if problem is not None else ""
     if named:

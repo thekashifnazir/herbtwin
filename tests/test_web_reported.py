@@ -226,3 +226,18 @@ def test_the_card_head_is_not_check_first_amber_and_links_are_not_bold():
     css = (style.STATIC / "pages" / "answer.css").read_text(encoding="utf-8")
     assert ".answer-page .reported h2 { margin: 0 0 4px; color: var(--primary);" in css
     assert ".answer-page .reported-links a { font-weight: 400; }" in css
+
+
+def test_a_rough_read_shows_no_pests_for_its_guessed_plant_and_asks_nothing(tmp_path):
+    # review of #406 (22 Oct walk): a blurred parsley read as mint must not list mint's
+    # pests, nor spend GBIF or Tavily searches on the guess
+    blurred = {
+        **OBS,
+        "species": [{"name": "Mentha spicata", "common_name": "mint", "confidence": 0.4}],
+        "photo_quality": "poor",
+        "quality_note": "heavily blurred",
+    }
+    c, page, rid = _answer(tmp_path, [MILDEW_SEEN], [NEWS], obs=blurred)
+    assert 'id="reported"' not in page
+    assert c.get(f"/answers/{rid}/reported").status_code == 204
+    assert c.app.state.sightings.asked == []

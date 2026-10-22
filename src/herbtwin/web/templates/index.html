@@ -150,49 +150,15 @@
       <li class="miss"><span aria-hidden="true">?</span> How the soil feels 2 cm down</li>
     </ul>
   </div>
-  <div class="card home-tile">
-    <h2>Cold nights</h2>
-    <p class="home-tile-big">3 °C</p>
-    <p class="small muted">Nights from Wednesday; basil is hurt by anything under 10 °C.</p>
-  </div>
-  <div class="card home-tile home-tile-wide">
-    <h2>Next 2 weeks vs leaving it</h2>
-    <ul class="home-outlook">
-      <li class="better"><span class="home-verdict"><span aria-hidden="true">▲</span> Better</span>
-        <strong>Protect it</strong><span class="small muted">Cold risk Wednesday</span></li>
-      <li><span class="home-verdict"><span aria-hidden="true">=</span> Same</span><strong>Water it</strong></li>
-      <li><span class="home-verdict"><span aria-hidden="true">=</span> Same</span><strong>Move to better light</strong></li>
-    </ul>
-  </div>
 </div>
 </section>
 
-{# how it works, at a glance: one photo through the 4 steps, each card carrying a real
-   piece of the example's output (18 Oct judge ideas, item 12). Only the openly licensed
-   basil sample and the twin pictures drawn from it, never anyone's own garden #}
-<section class="home-how" aria-labelledby="home-how-h">
-  <h2 id="home-how-h">How it works</h2>
-  <ol class="home-how-cards">
-    <li><figure><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The basil photo">
-      <span class="home-how-chip">Found basil</span></figure>
-      <h3>Your photo</h3><p class="small muted">A vision model names the plant and reads its leaves and soil.</p></li>
-    <li><figure class="cold"><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The same basil, tinted for a cold week">
-      <span class="home-how-chip">3 °C nights from Wed</span></figure>
-      <h3>Your weather</h3><p class="small muted">The next 2 weeks where it grows, night by night.</p></li>
-    <li><figure><img src="/static/twin/qwen__basil__if_you_dont.jpg" width="1184" height="896" loading="lazy" alt="The basil's twin left out in the cold">
-      <span class="home-how-tag">If left out</span><span class="home-how-chip">Twin: shelter ✓ better</span></figure>
-      <h3>The twin tests each choice</h3><p class="small muted">Watering, sheltering and moving it, tried on the twin first.</p></li>
-    <li><figure><img src="/static/twin/qwen__basil__if_you_do.jpg" width="1184" height="896" loading="lazy" alt="The basil's twin sheltered and thriving">
-      <span class="home-how-chip">Shelter it this week · our best read</span></figure>
-      <h3>The answer</h3><p class="small muted">One thing to do, and how sure we are.</p></li>
-  </ol>
-  {# the pictures' credit, now the pill below has no link (CC BY asks for it by the work) #}
-  <p class="small"><a class="credits-link" href="#credits">Photo credits</a></p>
-  {# the one models line kept in view, as a pill: it is what the judges check. No link (21
-     Oct, Kash: "do we even need the link to go to a separate page? We already have that info
-     below"): Made with is the next section, and the nav has About #}
-  <p class="home-how-sources">Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory</p>
-</section>
+
+{# how it works is the hero's own lead and the example above it (22 Oct site walk: the same
+   basil three times, home 5,057 px on a phone); the steps in full are on About. The one
+   models line stays in view: it is what the judges check. A label, not a button: it has no
+   link (21 Oct), so it is never filled green, the colour of a press (22 Oct walk) #}
+<p class="home-how-sources">Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory</p>
 
 {# who and what it runs on, then every licence, folded (19 Oct home pass); /credits shows
    the same section with the fold open #}
@@ -209,8 +175,8 @@
   // ones that arrive together go one after another. No script, no observer or Reduce Motion:
   // nothing is marked, all of it shows
   if (!window.IntersectionObserver || !matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
-  const blocks = ".home-twin, .home-example-in, .home-sample, .home-tile, .home-how > h2, " +
-    ".home-how-cards > li, .home-how-sources, .made-with > *";
+  const blocks = ".home-twin, .home-example-in, .home-sample, .home-tile, " +
+    ".home-how-sources, .made-with > *";
   const arrive = new IntersectionObserver((entries) => {
     entries.filter((x) => x.isIntersecting)
       .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)

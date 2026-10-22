@@ -18,7 +18,8 @@ SKIP_TAGS = {"script", "style", "button", "audio", "figure", "svg", "template"}
 # (21 Oct: the 2-step meter it replaced was skipped). "See it by part" says the plan's own
 # lines again, sorted (21 Oct, gardener test)
 # extras: shop links; reported: GBIF's records and others' headlines, not our advice
-SKIP_CLASSES = {"make-surer", "next-step", "by-part", "extras", "reported"}
+# "told-echo": what the person told us, said back, is not advice (22 Oct site walk)
+SKIP_CLASSES = {"make-surer", "next-step", "by-part", "extras", "reported", "told-echo"}
 VOID = {"img", "br", "hr", "input", "meta", "link", "source"}
 BLOCKS = {"p", "h2", "h3", "li", "ul", "div", "section"}  # each starts a new paragraph
 

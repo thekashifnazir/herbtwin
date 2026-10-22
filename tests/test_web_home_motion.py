@@ -120,7 +120,7 @@ def test_below_the_fold_rises_24px_in_04s_staggered_as_it_arrives(tmp_path):
     assert "new IntersectionObserver" in js and "threshold: 0" in js
     assert "Math.min(i, 3) * 80" in js and '"--reveal-delay"' in js
     assert 'classList.add("home-in")' in js and "unobserve(" in js
-    for part in (".home-twin", ".home-sample", ".home-tile", ".home-how-cards > li", ".made-with"):
+    for part in (".home-twin", ".home-sample", ".home-tile", ".home-how-sources", ".made-with"):
         assert part in js, part
     # never the hero, the photo or the chips: they are in view at first paint
     for kept in (".home-hero", ".home-photo", ".home-pick", ".home-go"):

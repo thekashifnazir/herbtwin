@@ -92,6 +92,54 @@ def test_a_blurred_photo_says_so_up_front_and_offers_a_sharper_one(tmp_path):
     assert '<h2 id="main-action">Leave it for now and keep an eye on it.</h2>' in card
     starters = page.split('<div class="starters" hidden>', 1)[1].split("</div></div>", 1)[0]
     assert "Is it safe to eat?" not in starters  # not on a name the photo can't back
+    # 22 Oct walk: no watch list for the guessed plant (it listed mint rust for parsley)
+    assert '<h2 id="watch">' not in page
+
+
+BLURRED = {
+    **OBS,
+    "species": [{"name": "Mentha spicata", "common_name": "mint", "confidence": 0.4}],
+    "water_stress": 0,
+    "symptoms": [],
+    "fine_leave_it": True,
+    "photo_quality": "poor",
+    "quality_note": "heavily blurred",
+}
+HEALTHY = {
+    "actions": ["leave_normal"],
+    "primary": "leave_normal",
+    "answer": "The plant looks healthy; no action needed now.",
+    "ask": "",
+    "confidence": "high",
+}
+
+
+@respx.mock
+def test_a_blurred_photo_waits_on_a_guessed_name_with_no_season_card(tmp_path):
+    # 22 Oct walk: the wait said "Found garden mint" and "Normal for garden mint in
+    # October" for a blurred parsley
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c = _client(tmp_path, [json.dumps(BLURRED)], [json.dumps(HEALTHY)] * 3)
+    wait = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    assert "<li>Found mint (not sure)" in wait
+    assert "Normal for mint" not in wait
+    sharp = {**BLURRED, "photo_quality": "good", "quality_note": ""}
+    c = _client(tmp_path, [json.dumps(sharp)], [json.dumps(HEALTHY)] * 3)
+    wait = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    assert "<li>Found mint</li>" in wait or "<li>Found mint<" in wait  # a clear photo: no hedge
+
+
+def test_a_rough_read_links_no_page_for_its_guessed_plant():
+    from herbtwin.schemas import AnalysisRecord, Answer, KnowledgePack, TrustedCheck
+    from herbtwin.stages.trusted_page import read_more
+
+    mint = "https://www.rhs.org.uk/herbs/mint/grow-your-own"
+    pack = KnowledgePack.model_construct(species="mentha spicata", common_name="mint")
+    page = TrustedCheck(url=mint, found_with="tavily", sentences=[])
+    rec = AnalysisRecord.model_construct(pack=pack, trusted=page, answer=None)
+    assert read_more(rec) == mint
+    rec.answer = Answer.model_construct(photo_issue="blurry")
+    assert read_more(rec) is None
 
 
 @respx.mock

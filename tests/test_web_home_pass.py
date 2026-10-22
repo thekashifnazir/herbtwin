@@ -52,8 +52,8 @@ def test_the_example_reads_as_3_rows_and_the_twin_is_named_once(tmp_path):
     rows = re.findall(r'<li><span class="tag[^"]*">([^<]+)</span> <span>([^<]+)</span></li>', more)
     assert [t.replace("&#39;", "'") for t, _ in rows] == ["Also do", "Don't", "Keep an eye on"]
     assert "Water it late in the day." in more
-    how = home.split('<section class="home-how"', 1)[1]
-    assert "tried on the twin first." in how and "the plant's twin first" not in how
+    # the twin is named once, in the hero's lead (the How it works cards went, 22 Oct walk)
+    assert home.count("plant's <strong>twin</strong>") == 1
 
 
 def test_home_drops_its_sign_in_line_and_the_long_hints(tmp_path):

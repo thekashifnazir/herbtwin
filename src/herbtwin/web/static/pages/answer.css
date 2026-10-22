@@ -22,6 +22,8 @@
 /* after Check the advice again: it ran, and this is what it did; the old headline struck */
 .answer-page .head .checked { margin: 0 0 6px; color: var(--primary); font-weight: 700; }
 .answer-page .head .checked s { color: var(--muted-fg); font-weight: 400; }
+/* what their note said, said back under it (22 Oct site walk): plain, not another green line */
+.answer-page .head .told-echo { margin: 0 0 8px; color: var(--fg); }
 .answer-page .sure { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
 .answer-page .sure span { display: block; color: var(--muted-fg); }
 

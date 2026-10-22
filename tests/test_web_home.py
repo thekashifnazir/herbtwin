@@ -354,7 +354,9 @@ def test_the_home_example_is_one_framed_example_with_its_input_and_no_date(tmp_p
     assert 'src="/static/samples/3-basil-yellow-leaves-thumb.jpg"' in head
     # one line: what went in, then the arrow to what came out (19 Oct home pass)
     assert "<strong>A basil photo, a cold week in London</strong>" in head and "→" in head
-    assert 'aria-label="Example answer"' in frame and "Next 2 weeks vs leaving it" in frame
+    assert 'aria-label="Example answer"' in frame
+    # the twin's verdict is the slider's to show, not a second tile (22 Oct site walk)
+    assert "Next 2 weeks vs leaving it" not in frame
     # how it works is not part of this answer: one line under the frame, no "4 models" box
     assert "home-how-sources" not in frame and "4 models" not in home
     assert "Try this example" not in home
@@ -369,41 +371,31 @@ def test_the_example_frame_keeps_its_tab_on_the_edge_and_a_small_thumbnail():
     assert "width: 56px" in thumb  # a fixed small thumbnail, never the 480 px file's width
 
 
-def test_how_it_works_is_four_photo_cards_of_the_examples_real_output(tmp_path):
-    # 18 Oct judge ideas, item 12: the pipeline at a glance, one chip of output per step
+def test_home_shows_basil_twice_and_keeps_the_models_line_as_a_label(tmp_path):
+    # 22 Oct site walk: the same basil three times (slider, example, How it works cards)
+    # and 5,057 px on a phone. The slider and the example stay; the steps are on About
     home = _home(tmp_path)
-    how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
-    assert '<h2 id="home-how-h">How it works</h2>' in how
-    cards = how.split('<ol class="home-how-cards">', 1)[1].split("</ol>", 1)[0].split("<li>")[1:]
-    chips = [re.search(r'class="home-how-chip">([^<]+)<', c).group(1) for c in cards]
-    assert chips == [
-        "Found basil",
-        "3 °C nights from Wed",
-        "Twin: shelter ✓ better",
-        "Shelter it this week · our best read",
+    assert '<section class="home-how"' not in home and "home-how-cards" not in home
+    # past the form's sample chips: the slider (both halves), then the example's input
+    shown = home.split('<figure class="home-twin">', 1)[1].split('<section class="made-with"', 1)[0]
+    pictures = re.findall(r'<img (?:class="[^"]+" )?src="([^"]+)"', shown)
+    assert pictures == [
+        "/static/twin/qwen__basil__if_you_do.jpg",
+        "/static/twin/qwen__basil__if_you_dont.jpg",
+        "/static/samples/3-basil-yellow-leaves-thumb.jpg",
     ]
-    # the chips agree with the example above them
-    frame = home.split('<section class="home-example"', 1)[1].split("</section>", 1)[0]
-    assert "<h2>Basil</h2>" in frame  # Found basil
-    assert "3 °C" in frame and "Nights from Wednesday" in frame  # 3 °C nights from Wed
-    assert (
-        "Shelter it" in frame and "How sure we are: Our best read." in frame
-    )  # Shelter it this week · our best read
-    assert re.search(r"Better</span>\s*<strong>Protect it</strong>", frame)  # shelter ✓ better
-    # card 3's picture is the twin left out, said on the picture, under the verdict chip
-    assert '<span class="home-how-tag">If left out</span>' in cards[2]
-    # only the openly licensed basil sample and the twin pictures drawn from it
-    srcs = re.findall(r'<img src="([^"]+)"', how)
-    assert srcs and all(
-        s in {"/static/samples/3-basil-yellow-leaves-thumb.jpg"}
-        or s.startswith("/static/twin/qwen__basil__")
-        for s in srcs
-    )
-    # no link at all (21 Oct, Kash: "do we even need the link to go to a separate page? We
-    # already have that info below"): Made with is the next section, and the nav has About
-    pill = how.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
+    # the judges' line stays in view, right before Made with, with no link (21 Oct, Kash)
+    pill = home.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
     assert pill == "Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory"
+    after = home.split('<p class="home-how-sources">', 1)[1]
+    assert after.index('<section class="made-with"') < after.index("</main>")
+    # a label, never a filled green: green is for a press (22 Oct walk)
+    rule = style.CSS.split(".home-page .home-how-sources {", 1)[1].split("}", 1)[0]
+    assert "border: 1.5px solid var(--fg); background: none; color: var(--fg);" in rule
     assert "Forest and Kim Starr" in _credits(home)
+    # Made with at home's foot, on a phone: two to a row, job and name (About has them in full)
+    phone = style.CSS.split("@media (max-width: 560px) { .home-page .made-with .made-cards {", 1)
+    assert len(phone) == 2 and phone[1].startswith(" grid-template-columns: repeat(2,")
 
 
 def test_how_it_works_names_open_plantbook_only_when_it_is_asked(tmp_path, monkeypatch):
@@ -432,8 +424,7 @@ def test_open_plantbook_is_on_only_with_both_keys():
 
 def test_how_it_works_keeps_one_models_line_and_credits_hold_the_rest(tmp_path):
     home = _home(tmp_path)
-    how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
-    line = how.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
+    line = home.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
     # the judges' eligibility signal stays in view
     assert line.startswith("Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory")
     credits = _credits(home)

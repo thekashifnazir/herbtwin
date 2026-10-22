@@ -1,6 +1,6 @@
 """The answer's next steps fit its action (22 Oct site walk, Top 5 #4): a remove-it answer
-is not followed by "send a new photo of the same plant", "add more photos of the same
-plant" or "keep this plant", and its chat starters never ask how to treat what has no
+is not followed by "send a new photo of the same plant", "keep this plant" or, unless the
+answer or the photo check is unsure, "add more photos of the same plant", and its chat starters never ask how to treat what has no
 cure; a treat-it answer whose sourced how is plain hand-work says that how as its
 headline, not "Treat it." over small print."""
 
@@ -138,12 +138,38 @@ def test_a_remove_it_answer_says_bag_and_bin_in_what_next(tmp_path):
     nxt = _next_step(page)
     assert f"<p>{NO_CURE_NEXT}</p>" in nxt
     assert NO_CURE_NEXT.startswith("Bag it and bin it, not the compost.")
-    # no plant left to photo again, to add photos of or to keep
+    # no plant left to photo again or to keep; a sure answer needs no more photos
     assert "same plant" not in nxt and 'class="more-photos"' not in nxt
     assert "keep this plant" not in nxt
     # "I did it" still ends it, in words that fit a plant pulled out
     assert 'id="i-did"' in nxt and f'data-said="{NO_CURE_THANKS}"' in nxt
     assert "Thanks for looking after me." not in nxt
+
+
+@pytest.mark.parametrize("unsure", ["level", "problem"])
+def test_a_remove_it_answer_keeps_more_photos_while_unsure(tmp_path, unsure):
+    # binning can't be undone: while the answer or the photo check is unsure, a surer
+    # answer from more photos is still offered under "Remove it"
+    rec = _no_cure_record(tmp_path)
+    if unsure == "level":
+        rec.answer.level = "fairly_sure"
+    else:
+        rec.problem = ProblemSeen(
+            name="basil downy mildew", looks_like="grey-purple fuzz under the leaves",
+            source="https://www.rhs.org.uk/disease/downy-mildews", sure=False,
+        )  # fmt: skip
+    nxt = _next_step(_render(rec, more_photos_on=True))
+    assert f"<p>{NO_CURE_NEXT}</p>" in nxt and 'class="more-photos"' in nxt
+    assert "same plant to see how it is doing" not in nxt
+
+
+def test_a_sure_remove_it_answer_with_a_sure_photo_check_offers_no_more_photos(tmp_path):
+    rec = _no_cure_record(tmp_path)
+    rec.problem = ProblemSeen(
+        name="basil downy mildew", looks_like="grey-purple fuzz under the leaves",
+        source="https://www.rhs.org.uk/disease/downy-mildews", sure=True,
+    )  # fmt: skip
+    assert 'class="more-photos"' not in _next_step(_render(rec, more_photos_on=True))
 
 
 def test_any_other_answer_keeps_its_what_next(tmp_path):

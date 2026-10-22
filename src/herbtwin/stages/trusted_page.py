@@ -447,6 +447,8 @@ def read_more(rec: AnalysisRecord) -> str | None:
     page, pack = rec.trusted, rec.pack
     if page is None or page.quote or pack is None:
         return None
+    if rec.answer is not None and rec.answer.photo_issue:
+        return None  # a rough read: the plant's name is a guess, so is its page (22 Oct walk)
     # our own names for the plant (the pack's Latin and common name), never the photo
     # model's ("Sweet basil", a cultivar's quotes)
     names = (pack.species, *pack.common_name.split("/"))

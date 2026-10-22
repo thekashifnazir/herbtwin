@@ -30,6 +30,7 @@ from herbtwin.pipeline import (
     Progress,
     Reading,
     as_told,
+    changes_read,
     decide,
     evidence_of,
     history_for,
@@ -368,7 +369,7 @@ def refine_stored(
         reading, first = hit
     else:
         reading, first = reading_from(stored), stored.answer.headline if stored.answer else None
-    if told.place or told.setting:
+    if changes_read(told):  # the place, the switch, or where their note says it grows
         reading = as_told(deps, reading, told)
         if set_reading is not None:
             set_reading(answer_id, reading)
@@ -396,7 +397,7 @@ def refine_stored(
                 stored.id,
                 rec.answer,
                 told,
-                evidence_of(reading) if told.place or told.setting else None,
+                evidence_of(reading) if changes_read(told) else None,
             )
             reminding.replan(person, stored.id)
         except HistoryError:

@@ -95,10 +95,10 @@ def test_a_padded_links_focus_marks_its_words_not_its_tap_box():
     rule = style.CSS.split(f":is({PADDED}):focus-visible {{", 1)[1].split("}", 1)[0]
     assert "outline: 2px solid transparent" in rule and "background-clip: content-box" in rule
     assert "background-color: var(--ring)" in rule and "color: var(--primary-fg)" in rule
-    # home's "Decided by" pill is band-green too, outside the band (Opus review: 1.8:1)
+    # home's "Decided by" pill is an outlined label on the page now, with no link (22 Oct)
     green = ":is(.page-band, .home-band, .home-how-sources)"
     pill = style.CSS.split(".home-page .home-how-sources {", 1)[1].split("}", 1)[0]
-    assert "background: var(--band)" in pill
+    assert "background: none" in pill
     band = style.CSS.split(f"{green} :is({PADDED}):focus-visible {{", 1)[1]
     band = band.split("}", 1)[0]
     assert "background-color: var(--band-fg)" in band and "color: var(--band)" in band

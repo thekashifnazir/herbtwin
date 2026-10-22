@@ -56,8 +56,9 @@ is in the submission form; it is not in this repository.
      **What next** card: send a new photo in a few days, **Add 1 or 2 more photos** of the same
      plant for a surer answer (when that is on), **I did it** for an action you can
      carry out, and **Send another photo**; under **Remove it. There is no cure for this.**
-     it says to bag it and bin it, not the compost, and to check the plants beside it, with
-     no more photos of a plant that is going. A pest the sources say to pick off by hand
+     it says to bag it and bin it, not the compost, and to check the plants beside it; it
+     offers more photos only while the answer or the photo check is unsure, as binning can't
+     be undone. A pest the sources say to pick off by hand
      gets that as its headline ("Pick the beetles off by hand.") in place of "Treat it.";
    - **Tell us more and we'll check the advice.** Folded to one line, **Want a more exact
      answer? Tell us more**, until you tap it or a **Make this surer** button on the main
@@ -89,7 +90,10 @@ is in the submission form; it is not in this repository.
    we'll check the advice", in **What's changed**, say how the soil feels
    2 cm down, when you last watered, or what changed, then press **Check the advice
    again** under it (anything typed in the box under **Ask a question** goes too). A changed headline shows the old one struck
-   through. Five refines per answer.
+   through. A note in the box that says where it grows or what you see ("It is in a pot on a
+   sunny balcony and the lower leaves are going yellow.") moves the chips to match ("In a
+   container (you said)") and is said back under the headline's first line: "You told us: in
+   a pot, on a balcony, sunny, lower leaves yellow". Five refines per answer.
 5. **Ask about this plant.** Under **Ask a question**, type in the same box, for example "What if I
    move it inside?" or "What if I don't water it this week?", and press **Ask about this
    plant** (or Enter; Shift+Enter is a new line), or tap one of the three questions. The reply appears under the box and the advice stays as it is. What-ifs are

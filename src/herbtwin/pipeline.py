@@ -42,7 +42,7 @@ from herbtwin.answer import (
     weather_explains,
 )
 from herbtwin.chat import about_the_plant
-from herbtwin.confidence import SEVERAL, FactorInputs, assess
+from herbtwin.confidence import SEVERAL, FactorInputs, assess, photo_issue
 from herbtwin.config import Settings
 from herbtwin.consequences import SEASONAL, consequence_for
 from herbtwin.history import (
@@ -57,6 +57,7 @@ from herbtwin.history import (
 )
 from herbtwin.indoor_care import indoor_care_for
 from herbtwin.light import light_block, light_class, light_factor, need_of, read_light
+from herbtwin.note_facts import note_facts
 from herbtwin.outcomes import outcome_for, problems_for, problems_in
 from herbtwin.plant_model import (
     Verdict,
@@ -273,8 +274,8 @@ def evidence_of(reading: Reading) -> Evidence:
 def reading_from(stored: StoredAnswer) -> Reading:
     """A stored answer's Reading, rebuilt for a refine after the 1-hour cache."""
     e, obs = stored.evidence, stored.observation
-    if stored.told is not None and stored.told.setting and obs.setting != stored.told.setting:
-        obs = obs.model_copy(update={"setting": stored.told.setting})  # "Wrong? Switch"
+    if stored.told is not None:  # "Wrong? Switch", and where their note says it grows
+        obs = told_observation(obs, stored.told)
     rec = AnalysisRecord(
         record_id=stored.id.replace("-", ""),
         taken_at=stored.taken_at,
@@ -608,7 +609,13 @@ def read_photo(
     species, common = (top.name, top.common_name) if top else ("unknown", "unknown")
     name = (top.common_name or top.name) if top else "the plant"
     read_by = won[-1] if won else answered[-1] if answered else None
-    _say(progress, PlantFound(name, read_by))
+    # a rough read (blurry, dark, …) of a plant it can't name surely: the wait says the name
+    # is a guess and shows no season card for it (22 Oct walk: a blurred parsley was
+    # "Found garden mint", then "Normal for garden mint in October")
+    rough = top is not None and (
+        photo_issue(obs.photo_quality, obs.quality_note, top.confidence) is not None
+    )
+    _say(progress, PlantFound(f"{name} (not sure)" if rough else name, read_by))
     if top and tapped:
         rec.notes.append(TAPPED_NOTE.format(name=name.lower()))
     elif top and several_plants(obs):
@@ -621,7 +628,7 @@ def read_photo(
     loc = rec.location
     # the UK outdoor season, as the answer's own gate: indoors it does not apply (answer.py)
     outdoor_uk = loc is not None and in_uk(loc.lat, loc.lon) and obs.setting != "indoor"
-    if match.key and outdoor_uk:
+    if match.key and outdoor_uk and not rough:
         norm = normal_for(match.key, month)
         if norm is not None:  # shown while the rest of the read runs, before the weather
             _say(
@@ -726,12 +733,52 @@ def resettle(deps: Deps, reading: Reading, setting: str) -> Reading:
     return _located(deps, reading, rec)
 
 
+def told_where(told: Told) -> tuple[str | None, str | None]:
+    """Indoors or out, and pot or ground, as the person told us: the switch first, then
+    their own note (22 Oct site walk: "in a pot on a sunny balcony" left the band at "In the
+    ground", the soil maps and a bed's advice)."""
+    heard = note_facts(told.question)
+    return told.setting or heard.setting, heard.container
+
+
+def changes_read(told: Told) -> bool:
+    """What was told corrects the photo read or its place, so the reading is redone."""
+    setting, container = told_where(told)
+    return bool(told.place or setting or container)
+
+
+def told_observation(obs: Observation, told: Told) -> Observation:
+    """The read with where the person says it grows."""
+    setting, container = told_where(told)
+    update = {
+        k: v
+        for k, v in (("setting", setting), ("container", container))
+        if v and getattr(obs, k) != v
+    }
+    return obs.model_copy(update=update) if update else obs
+
+
+def rehouse(reading: Reading, container: str) -> Reading:
+    """Pot or ground as the person said: the same read and location evidence, the twin and
+    the soil prior follow the observation when the advice is decided again."""
+    obs = reading.rec.observation
+    if obs is None or obs.container == container:
+        return reading
+    rec = reading.rec.model_copy(deep=True)
+    rec.observation = obs.model_copy(update={"container": container})
+    return replace(reading, rec=rec)
+
+
 def as_told(deps: Deps, reading: Reading, told: Told) -> Reading:
-    """The reading with what the person corrected under the answer: the place, the setting."""
+    """The reading with what the person corrected under the answer: the place, the setting
+    (the switch, or their note), pot or ground (their note)."""
+    setting, container = told_where(told)
     if told.place:
         reading = relocate(deps, reading, told.place)
-    if told.setting:
-        reading = resettle(deps, reading, told.setting)
+    if setting:
+        reading = resettle(deps, reading, setting)
+    if container:
+        reading = rehouse(reading, container)
     return reading
 
 
@@ -821,6 +868,7 @@ LED_WITH = {  # the advisors' call, in the note under the headline when a rule o
     "move_light": "moving it to better light",
     "other": "another job",
     "isolate": "keeping it away from other plants",
+    "leave_normal": "leaving it",
 }
 
 
@@ -841,13 +889,21 @@ def tender_first(
     cold night the twin marks, or when the photo shows it struggling outdoors. The
     gardener's review (19 Oct, s052): "Cut it back." led a stressed outdoor basil in
     mid-October while protection was left for later in the week. A call that treats a
-    problem or waters keeps its place, as does any plant indoors."""
+    problem or waters keeps its place, as does any plant indoors. "Leave it" gives way
+    only when there is no forecast (the twin always tests shelter when it runs): with one,
+    its own headline says to protect it before a cold night; without one, "this is normal
+    for October" would leave a tender plant out unwarned (22 Oct walk)."""
+    unwarned = panel.primary == "leave_normal" and "shelter" not in views
     if (
         not tender
         or month not in TENDER_MONTHS
         or setting == "indoor"
-        or panel.primary not in GIVES_WAY
-        or not (shelters_from_cold(views.get("shelter")) or (setting == "outdoor" and struggling))
+        or not (panel.primary in GIVES_WAY or unwarned)
+        or not (
+            unwarned
+            or shelters_from_cold(views.get("shelter"))
+            or (setting == "outdoor" and struggling)
+        )
     ):
         return panel
     return _led_by(panel, "shelter")

@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 {% from "_nav.html" import site_nav %}
 {% import "_spot_questions.html" as spotq %}
-{# "What could grow here", three jobs in order: the verdict (the site sheet and a line per
-   group), the top picks (5 a group, only what is not fine about each), then the two
-   questions that sharpen it and the details, folded. Groups and rows come from
-   web/spotting.py (groups, split_lead). On a wide screen the verdict and picks take the
-   left, the questions and details the right. Styles: static/pages/spot.css (.spot-page). #}
+{# "What could grow here", three jobs: the verdict (the site sheet and a line per group),
+   the questions that sharpen it, then the top picks (5 a group, only what is not fine
+   about each), with the details folded last. Groups and rows come from web/spotting.py
+   (groups, split_lead). The source runs in a phone's order, so a phone, a screen reader
+   and the Tab key all meet the question before the long lists (22 Oct: it sat 2,700 px
+   down). On a wide screen spot.css floats the verdict and picks left, the questions and
+   details right. Styles: static/pages/spot.css (.spot-page). #}
 {% block title %}What could grow here · herbtwin{% endblock %}
 {% block page %}spot-page has-band{% endblock %}
 {% block nav %}{{ site_nav(person, accounts) }}{% endblock %}
@@ -85,17 +87,6 @@
   </form>{% endif %}
 </header>
 
-<div class="spot-picks">
-{% if seen.differ %}<p class="note differ-key"><span aria-hidden="true">±</span> = the RHS and Garden Organic give different months: tap it for the other.</p>{% endif %}
-{% for key in ("good_now", "worth_a_try") if key in by %}{% set g = by[key] %}
-<section class="tier" id="{{ key|replace('_', '-') }}">
-<h2>{{ g.title }}</h2>{{ rows(g) }}
-</section>
-{% endfor %}
-{% if lead_up %}<p class="tray warn lead-note"><strong>Check the soil for lead.</strong> {{ lead_note }}</p>{% endif %}
-</div>
-
-<aside class="spot-side">
 {% if ask_facing or ask_squeeze %}<section class="sharpen" id="sharpen">
 <h2>{% if ask_facing and ask_squeeze %}Two quick answers make this surer{% else %}One quick answer makes this surer{% endif %}</h2>
 {% if spot.compass %}<form class="tray ask" id="facing" method="post" action="/spots/{{ run.record_id }}/told">{{ spotq.compass_field(compass_first) }}
@@ -110,6 +101,17 @@
   <p class="actions"><button type="submit">Use it</button></p></form>{% endif %}
 </section>{% endif %}
 
+<div class="spot-picks">
+{% if seen.differ %}<p class="note differ-key"><span aria-hidden="true">±</span> = the RHS and Garden Organic give different months: tap it for the other.</p>{% endif %}
+{% for key in ("good_now", "worth_a_try") if key in by %}{% set g = by[key] %}
+<section class="tier" id="{{ key|replace('_', '-') }}">
+<h2>{{ g.title }}</h2>{{ rows(g) }}
+</section>
+{% endfor %}
+{% if lead_up %}<p class="tray warn lead-note"><strong>Check the soil for lead.</strong> {{ lead_note }}</p>{% endif %}
+</div>
+
+<aside class="spot-side">
 <section class="spot-details">
 <h2>The details</h2>
 {% if "coming_up" in by %}<details id="coming-up"><summary>Coming up ({{ by.coming_up.rows|length }})</summary>

@@ -5,6 +5,7 @@ import json
 import re
 
 import httpx
+import pytest
 import respx
 
 from herbtwin.answer import (
@@ -223,6 +224,20 @@ def test_a_struggling_tender_herb_outside_comes_in_even_without_a_cold_night():
     assert a.do[0].if_you_do_from == "none"  # no twin line argues "no cold nights forecast"
 
 
+@pytest.mark.parametrize("setting", ["outdoor", "unknown"])
+def test_leave_it_gives_way_for_a_tender_herb_out_in_october_with_no_forecast(setting):
+    # 22 Oct walk: outdoor basil on 21 Oct, no forecast (Open-Meteo's limit), all three
+    # advisors "leave it": the page said "Leave it. This is normal for October." beside a
+    # season card saying outdoor basil is finished. With no twin, nothing warns of a frost
+    moved = tender_first(
+        _panel("leave_normal", "leave_normal", "leave_normal"), {}, tender=True, month=10,
+        setting=setting, struggling=False,
+    )  # fmt: skip
+    assert moved.primary == "shelter" and moved.agree == 0
+    a = _build("ocimum basilicum", 10, moved, {}, tender=True, container="pot")
+    assert a.headline == TENDER_HEADLINE
+
+
 def test_tender_first_keeps_every_other_call():
     views = {"shelter": COLD}
     kept = [
@@ -231,7 +246,11 @@ def test_tender_first_keeps_every_other_call():
         (_panel("prune"), views, dict(tender=True, month=10, setting="indoor")),  # inside
         (_panel("treat_or_remove"), views, dict(tender=True, month=10, setting="outdoor")),
         (_panel("water"), views, dict(tender=True, month=10, setting="outdoor")),
+        # with a forecast, leave it keeps its place: its headline warns of the cold night
         (_panel("leave_normal"), views, dict(tender=True, month=10, setting="outdoor")),
+        (_panel("leave_normal"), {}, dict(tender=True, month=10, setting="indoor")),  # inside
+        (_panel("leave_normal"), {}, dict(tender=True, month=6, setting="outdoor")),  # summer
+        (_panel("leave_normal"), {}, dict(tender=False, month=10, setting="outdoor")),  # hardy
         (_panel("prune"), {}, dict(tender=True, month=10, setting="outdoor")),  # nothing ahead
         (_panel("prune"), {}, dict(tender=True, month=10, setting="unknown", struggling=True)),
     ]

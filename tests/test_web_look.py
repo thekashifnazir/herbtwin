@@ -166,4 +166,4 @@ def test_clay_labels_keep_their_text_readable_in_dark_mode():
         seen += len(rules)
         white = re.compile(r"(?<![-\w])color:\s*(#fff\b|#ffffff\b|white\b)", re.I)
         assert not any(white.search(r) for r in rules), sheet.name
-    assert seen >= 2  # the home tags; a rename must not leave this checking nothing
+    assert seen >= 1  # home's Don't tag (its If left out tag went, 22 Oct); never nothing

@@ -4,7 +4,7 @@
    fragment brings something: nothing found, a failure or no script leaves it hidden, with no
    empty box. `hidden` stays in the markup and the class is skipped too, so the rater text
    (answer_text.plan_text) never reads it. Styled by static/pages/answer.css #}
-{% if reported_on and rec.observation and rec.observation.species %}<section class="reported" id="reported" aria-labelledby="reported-h" data-src="/answers/{{ rec.record_id }}/reported" hidden>
+{% if reported_on and rec.observation and rec.observation.species and not (rec.answer and rec.answer.photo_issue) %}<section class="reported" id="reported" aria-labelledby="reported-h" data-src="/answers/{{ rec.record_id }}/reported" hidden>
   <h2 id="reported-h">Seen recently in the UK</h2>
   <div class="reported-found"></div>
 </section>

@@ -74,14 +74,23 @@
 .spot-page .credits { color: var(--muted-fg); font-size: 16px; }
 .spot-page .spot-again { margin-top: 32px; }
 
-/* ---------- a wide screen: the verdict and picks left, the questions and details right ---------- */
+/* ---------- a wide screen: the verdict and picks left, the questions and details right ----------
+   The source runs in a phone's order (verdict, questions, picks, details), so a phone, a
+   screen reader and Tab meet the question before the long lists (22 Oct: it sat 2,700 px
+   down). Wide, each column stacks on its own: the verdict and picks float left (the picks
+   clear the verdict), the questions float right, and the details clear only the
+   questions, so neither column waits for the other's height. A grid can't do this when the
+   two columns alternate in the source: a shared row would leave a gap in one of them. */
 @media (min-width: 960px) {
-  .spot-page .spot-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(22rem, 26rem);
-    column-gap: 56px; align-items: start; }
-  .spot-page .spot-hero, .spot-page .spot-picks { grid-column: 1; }
-  .spot-page .spot-side { grid-column: 2; grid-row: 1 / span 2; }
-  .spot-page .spot-side > :first-child { margin-top: 8px; }
-  .spot-page .spot-again { grid-column: 1 / -1; }
+  .spot-page .spot-layout { display: flow-root; }
+  .spot-page .spot-hero, .spot-page .spot-picks { float: left; clear: left; width: calc(100% - 26rem - 56px); }
+  .spot-page .spot-picks { margin-bottom: 32px; }
+  .spot-page .sharpen { float: right; width: 26rem; margin: 8px 0 40px; }
+  .spot-page .sharpen > :last-child { margin-bottom: 0; }
+  .spot-page .spot-side { display: flow-root; clear: right; width: 26rem; margin-left: auto; }
+  .spot-page .spot-side > .spot-details { margin-top: 8px; }
+  .spot-page .sharpen ~ .spot-side > .spot-details { margin-top: 0; }   /* the question's 40px is the gap */
+  .spot-page .spot-again { clear: both; }
 }
 
 /* ---------- the wait card on the progress page ---------- */

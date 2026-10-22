@@ -59,12 +59,15 @@ from herbtwin.history import HistoryError
 from herbtwin.light import light_said
 from herbtwin.local_help import local_help_from
 from herbtwin.mail import Mailer, MailError, mailer_from
+from herbtwin.note_facts import echo as told_echo
+from herbtwin.note_facts import note_facts
 from herbtwin.pipeline import (
     LATE_TOLD,
     Deps,
     Reading,
     as_told,
     build_deps,
+    changes_read,
     decide,
     how_led,
     name_in_doubt,
@@ -216,6 +219,8 @@ TEMPLATES.env.globals["by_part"] = by_part  # See it by part: the plan sorted, n
 TEMPLATES.env.globals["chat_sources"] = chat_sources  # a kept reply's links, after a reload
 TEMPLATES.env.globals["reply_to"] = reply_to  # "You asked: …" and the advisor's reply
 TEMPLATES.env.globals["is_question"] = is_question  # "You asked" or "You said"
+TEMPLATES.env.globals["note_facts"] = note_facts  # the chips follow their note
+TEMPLATES.env.globals["told_echo"] = told_echo  # "You told us: in a pot, sunny"
 TEMPLATES.env.globals["no_data"] = NO_DATA  # an "if you do" line that says nothing: hidden
 TEMPLATES.env.globals["site_css"] = Markup(style.CSS)
 TEMPLATES.env.globals["mark"] = Markup(style.MARK)
@@ -926,7 +931,7 @@ def create_app(
         if hit is None:
             raise HTTPException(404, EXPIRED)
         reading, first = hit
-        if told.place or told.setting:
+        if changes_read(told):  # the place, the switch, or where their note says it grows
             reading = as_told(app.state.deps, reading, told)
             app.state.answers.set_reading(answer_id, reading)
         before_model()
@@ -1499,6 +1504,8 @@ def create_app(
         loc = rec.location if rec is not None else None
         if rec is None or rec.answer is None or (loc and not in_uk(loc.lat, loc.lon)):
             return _with_cookies(Response(status_code=204), holder)  # UK sources: UK only
+        if rec.answer.photo_issue:  # a rough read: the plant is a guess, so are its pests
+            return _with_cookies(Response(status_code=204), holder)
         subject = subject_of(rec)
         if subject is None:  # no plant we know: nothing to ask about
             return _with_cookies(Response(status_code=204), holder)

@@ -117,8 +117,10 @@
   {# where it grows, the date and the place as a row of chips, white on a lighter green, not
      a small muted line (21 Oct, Kash: "a lot of text not clear to the eye") #}
   <p class="where">
-    {%- if obs.setting in ("indoor", "outdoor") %}<span class="chip setting">{{ obs.setting|capitalize }}s{% if rec.told and rec.told.setting %} (you said){% endif %}</span> {% endif %}
-    {%- if held %}<span class="chip held">{{ held|capitalize }}</span> {% endif -%}
+    {#- what their note under the answer said counts as said too (22 Oct site walk) #}
+    {%- set heard = note_facts(rec.told.question if rec.told else none) %}
+    {%- if obs.setting in ("indoor", "outdoor") %}<span class="chip setting">{{ obs.setting|capitalize }}s{% if rec.told and rec.told.setting or heard.setting == obs.setting %} (you said){% endif %}</span> {% endif %}
+    {%- if held %}<span class="chip held">{{ held|capitalize }}{% if heard.container and heard.container == obs.container %} (you said){% endif %}</span> {% endif -%}
     <span class="chip when">{{ when }}</span>
     {%- if place %} <span class="chip place">{{ place }}</span>{% endif -%}
   </p>
@@ -257,6 +259,9 @@
       {% if rec.refined_from %}{% if rec.refined_from != a.headline %}<p class="checked">Changed after what you told us. Was: <s>{{ rec.refined_from }}</s></p>
       {% else %}{% set feel = a.factors|selectattr("name", "equalto", "soil_feel")|first %}
       <p class="checked">{% if not (rec.told and rec.told.soil_feel) %}Checked again with what you told us: same advice.{% elif feel and feel.effect != "lowers" %}Checked again: same advice, and the soil feel fits it.{% else %}Checked again: same advice.{% endif %}</p>{% endif %}{% endif %}
+      {# what their note said, back in a few words of ours: "Changed after what you told us"
+         never said what (22 Oct site walk, Top 5 #1) #}
+      {% if rec.refined_from and rec.told %}{% set echoed = told_echo(rec.told.question) %}{% if echoed %}<p class="told-echo">{{ echoed }}</p>{% endif %}{% endif %}
       {% if retake %}<p class="rough-read">{{ retake[0] }}, so this is a rough read. {{ retake[1] }} for a firmer answer.</p>{% endif %}
       {# leaving it is not a job for today: no time tag on it #}
       {% if first and first.action != "leave_normal" %}<span class="tag">{{ tag[first.when] }}</span>{% endif %}
@@ -422,9 +427,12 @@
        lives here, after the reader has the whole plan, not inside the main card #}
     <section class="next-step ink" aria-labelledby="next-step">
       <h2 id="next-step">What next</h2>
-      {# under "Remove it" there is no plant to photo again, add photos of or keep (22 Oct site walk) #}
+      {# under "Remove it" there is no plant to photo again or keep (22 Oct site walk); but
+         binning can't be undone, so while the photo check or the answer is unsure, the offer
+         of more photos stays (follow-up to #404) #}
       {% set gone = a.headline == no_cure_headline %}
       {% if gone %}<p>{{ no_cure_next }}</p>
+      {% if a.level != "sure" or (rec.problem and not rec.problem.sure) %}{% include "_more_photos.html" %}{% endif %}
       {% else %}<p>In a few days, send a new photo of the same plant to see how it is doing.</p>
       {% include "_more_photos.html" %}{% endif %}
         {# "I did it": the answer gets an ending. Shown by the script, so a page without it never
@@ -661,7 +669,9 @@
           add("assistant", body.reply, body.sources);
           // asked and answered: the log keeps it, the box is free. A fact they told us stays,
           // for one tap on "Check the advice again" (the chat API's `fact`)
-          if (!body.fact) form.question.value = "";
+          // ... and only if it still holds what was asked: a note typed while the reply was on
+          // its way is theirs, for "Check the advice again" (22 Oct site walk: it was wiped)
+          if (!body.fact && form.question.value.trim() === text) form.question.value = "";
           note.textContent = (body.note ? body.note + " " : "") + body.left + " questions left.";
           mine.scrollIntoView({block: "start", behavior: motion});  // the reply is under the box
         } catch {

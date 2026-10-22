@@ -61,7 +61,8 @@ def test_a_fact_told_in_the_chat_stays_in_the_box_for_check_again():
     from pathlib import Path
 
     src = (Path(__file__).parents[1] / "src/herbtwin/web/templates/result.html").read_text()
-    assert 'if (!body.fact) form.question.value = "";' in src
+    # (22 Oct site walk) and only when the box still holds what was asked
+    assert 'if (!body.fact && form.question.value.trim() === text) form.question.value = "";' in src
 
 
 def test_a_place_with_no_forecast_says_so_once_in_the_band(tmp_path):

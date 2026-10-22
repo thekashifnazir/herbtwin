@@ -410,9 +410,12 @@ def _main(page):
 
 
 @respx.mock
-def test_the_verdict_comes_first_then_the_top_picks_then_the_questions(tmp_path):
-    """Round 3, three jobs: a line per group on the first screen, the picks, then the two
-    questions above the folded details; a row never repeats the fine conditions."""
+def test_the_verdict_comes_first_then_the_questions_then_the_top_picks(tmp_path):
+    """Round 3, three jobs: a line per group on the first screen, then the two questions,
+    then the picks; a row never repeats the fine conditions. 22 Oct: the questions came
+    after both long lists in the source, so a phone (and Tab, and a screen reader) met
+    them 2,700 px down. The source now runs in the phone's order, details last, so Tab
+    and a screen reader follow what a phone shows."""
     climate._cache.clear()
     respx.get(ARCHIVE_URL).mock(return_value=_archive())
     c, _ = _client(tmp_path, observe=[json.dumps(WALLED)])
@@ -420,14 +423,18 @@ def test_the_verdict_comes_first_then_the_top_picks_then_the_questions(tmp_path)
     order = [
         '<ul class="verdict">',
         '<a href="#good-now">Good now</a>: ',
-        "<h2>Good now</h2>",
+        '<dl class="sheet">',
         "<h2>Two quick answers make this surer</h2>",
         'name="direction"',
         'name="squeeze"',
+        "<h2>Good now</h2>",
+        '<li class="pick">',
+        "<h2>Worth a try</h2>",
         "<h2>The details</h2>",
         "<summary>The spot: sun and frost</summary>",
         "<summary>The soil</summary>",
         "<summary>Where this comes from</summary>",
+        'class="actions spot-again"',
     ]
     at = [main.index(s) for s in order]
     assert at == sorted(at), order
@@ -435,6 +442,23 @@ def test_the_verdict_comes_first_then_the_top_picks_then_the_questions(tmp_path)
         assert fine not in main, fine
     assert "Sources:" not in main and main.count('class="src"') > 0  # one small link a row
     climate._cache.clear()
+
+
+def test_a_wide_screen_keeps_the_questions_and_details_in_the_side_column():
+    """The source runs verdict, questions, picks, details (a phone's order). Wide, the
+    verdict and picks float left and the questions right, and the details clear only the
+    questions, so each column stacks on its own as the old two-column grid did."""
+    css = (style.STATIC / "pages" / "spot.css").read_text()
+    wide = css.split("@media (min-width: 960px) {", 1)[1].split("\n}", 1)[0]
+    assert (
+        "float: left; clear: left;"
+        in wide.split(".spot-page .spot-hero, .spot-page .spot-picks")[1]
+    )
+    assert ".spot-page .sharpen { float: right; width: 26rem;" in wide
+    assert ".spot-page .spot-side { display: flow-root; clear: right; width: 26rem;" in wide
+    assert ".spot-page .spot-again { clear: both; }" in wide
+    assert not re.search(r"[{;]\s*order:", css)  # nothing is shown out of source order
+    assert ".spot-side { display: contents" not in css
 
 
 @respx.mock

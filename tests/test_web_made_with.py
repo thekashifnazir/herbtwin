@@ -82,7 +82,8 @@ def test_the_credits_fold_has_its_own_padding_and_stacks_on_a_phone():
 def test_the_cards_share_one_grid_so_each_is_the_same_size():
     # 21 Oct: 7 cards wrapped into cramped 3-across tiles of uneven heights
     css = style.CSS
-    assert "grid-auto-rows: 1fr;" in css.split(".made-with .made-cards {", 1)[1].split("}", 1)[0]
+    cards = css.split("} .made-with .made-cards {", 1)[1].split("}", 1)[0]
+    assert "grid-auto-rows: 1fr;" in cards
     wide = css.split("@media (min-width: 960px) { .made-groups {", 1)[1].split("} }", 1)[0]
     assert "grid-template-columns: repeat(4, minmax(0, 1fr));" in wide
     assert ".made-group { display: grid; grid-template-columns: subgrid;" in wide
