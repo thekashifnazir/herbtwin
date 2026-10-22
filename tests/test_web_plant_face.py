@@ -125,7 +125,7 @@ def test_a_no_cure_answer_wears_the_poorly_face_and_says_why_compare_is_empty(tm
     rec.answer.headline, rec.answer.compare = NO_CURE_HEADLINE, []
     page = _page(rec)
     assert _mood(page, 'id="voice"') == "poorly"
-    compare = page.split("Compare all choices (next 2 weeks)</span>", 1)[1].split("</details>")[0]
+    compare = page.split('<details class="compare fold', 1)[1].split("</details>")[0]
     assert "Not compared: there is no cure, so the choices don't apply." in compare
     assert "No 2-week forecast" not in compare
 

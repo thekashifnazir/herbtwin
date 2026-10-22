@@ -47,14 +47,14 @@ def test_the_why_details_say_how_often_this_level_matched_the_experts(tmp_path):
     rec = _full_plan(tmp_path)
     kept = "In our tests on 624 questions answered by experts"
     page = _render(rec)
-    assert '<span class="fold-title">Why it\'s our best read</span>' in page
+    assert '<span class="fold-kind">Why it&#39;s our best read</span>' in page
     assert (
         f"{kept}, answers at this level matched the expert's first step about half the time."
         in page
     )
     rec.answer.level = "fairly_sure"
     page = _render(rec)
-    assert '<span class="fold-title">Why we\'re not sure</span>' in page
+    assert '<span class="fold-kind">Why we&#39;re not sure</span>' in page
     assert (
         f"{kept}, answers at this level matched the expert's first step about 1 in 3 times." in page
     )

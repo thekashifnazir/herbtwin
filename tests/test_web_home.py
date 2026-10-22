@@ -354,9 +354,7 @@ def test_the_home_example_is_one_framed_example_with_its_input_and_no_date(tmp_p
     assert 'src="/static/samples/3-basil-yellow-leaves-thumb.jpg"' in head
     # one line: what went in, then the arrow to what came out (19 Oct home pass)
     assert "<strong>A basil photo, a cold week in London</strong>" in head and "→" in head
-    assert 'aria-label="Example answer"' in frame
-    # the twin's verdict is the slider's to show, not a second tile (22 Oct site walk)
-    assert "Next 2 weeks vs leaving it" not in frame
+    assert 'aria-label="Example answer"' in frame and "Next 2 weeks vs leaving it" in frame
     # how it works is not part of this answer: one line under the frame, no "4 models" box
     assert "home-how-sources" not in frame and "4 models" not in home
     assert "Try this example" not in home
@@ -371,31 +369,101 @@ def test_the_example_frame_keeps_its_tab_on_the_edge_and_a_small_thumbnail():
     assert "width: 56px" in thumb  # a fixed small thumbnail, never the 480 px file's width
 
 
-def test_home_shows_basil_twice_and_keeps_the_models_line_as_a_label(tmp_path):
-    # 22 Oct site walk: the same basil three times (slider, example, How it works cards)
-    # and 5,057 px on a phone. The slider and the example stay; the steps are on About
+def test_how_it_works_is_four_photo_cards_of_the_examples_real_output(tmp_path):
+    # 18 Oct judge ideas, item 12: the pipeline at a glance, one chip of output per step.
+    # #408 took it out; back on 22 Oct (Kash: "it was nice getting a how to on the bottom")
     home = _home(tmp_path)
-    assert '<section class="home-how"' not in home and "home-how-cards" not in home
-    # past the form's sample chips: the slider (both halves), then the example's input
-    shown = home.split('<figure class="home-twin">', 1)[1].split('<section class="made-with"', 1)[0]
-    pictures = re.findall(r'<img (?:class="[^"]+" )?src="([^"]+)"', shown)
-    assert pictures == [
-        "/static/twin/qwen__basil__if_you_do.jpg",
-        "/static/twin/qwen__basil__if_you_dont.jpg",
-        "/static/samples/3-basil-yellow-leaves-thumb.jpg",
+    how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
+    assert '<h2 id="home-how-h">How it works</h2>' in how
+    cards = how.split('<ol class="home-how-cards">', 1)[1].split("</ol>", 1)[0].split("<li>")[1:]
+    chips = [re.search(r'class="home-how-chip">([^<]+)<', c).group(1) for c in cards]
+    assert chips == [
+        "Found basil",
+        "3 °C nights from Wed",
+        "Twin: shelter ✓ better",
+        "Shelter it this week · our best read",
     ]
-    # the judges' line stays in view, right before Made with, with no link (21 Oct, Kash)
-    pill = home.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
+    # the chips agree with the example above them
+    frame = home.split('<section class="home-example"', 1)[1].split("</section>", 1)[0]
+    assert "<h2>Basil</h2>" in frame  # Found basil
+    assert "3 °C" in frame and "Nights from Wednesday" in frame  # 3 °C nights from Wed
+    assert (
+        "Shelter it" in frame and "How sure we are: Our best read." in frame
+    )  # Shelter it this week · our best read
+    assert re.search(r"Better</span>\s*<strong>Protect it</strong>", frame)  # shelter ✓ better
+    # card 3's picture is the twin left out, said on the picture, under the verdict chip
+    assert '<span class="home-how-tag">If left out</span>' in cards[2]
+    # only the openly licensed basil sample and the twin pictures drawn from it
+    srcs = re.findall(r'<img src="([^"]+)"', how)
+    assert srcs and all(
+        s in {"/static/samples/3-basil-yellow-leaves-thumb.jpg"}
+        or s.startswith("/static/twin/qwen__basil__")
+        for s in srcs
+    )
+    # no link at all (21 Oct, Kash: "do we even need the link to go to a separate page? We
+    # already have that info below"): Made with is the next section, and the nav has About
+    pill = how.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
     assert pill == "Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory"
-    after = home.split('<p class="home-how-sources">', 1)[1]
-    assert after.index('<section class="made-with"') < after.index("</main>")
-    # a label, never a filled green: green is for a press (22 Oct walk)
-    rule = style.CSS.split(".home-page .home-how-sources {", 1)[1].split("}", 1)[0]
-    assert "border: 1.5px solid var(--fg); background: none; color: var(--fg);" in rule
     assert "Forest and Kim Starr" in _credits(home)
     # Made with at home's foot, on a phone: two to a row, job and name (About has them in full)
     phone = style.CSS.split("@media (max-width: 560px) { .home-page .made-with .made-cards {", 1)
     assert len(phone) == 2 and phone[1].startswith(" grid-template-columns: repeat(2,")
+
+
+def _rule(selector: str) -> str:
+    return style.CSS.split(selector + " {", 1)[1].split("}", 1)[0]
+
+
+def _mix(top: str, under: str, share: float) -> str:
+    """color-mix(in srgb, top share, transparent) over `under`, as a hex colour"""
+    ch = [
+        round(int(top[i : i + 2], 16) * share + int(under[i : i + 2], 16) * (1 - share))
+        for i in (1, 3, 5)
+    ]
+    return "#" + "".join(f"{c:02x}" for c in ch)
+
+
+def test_the_models_line_keeps_the_green_but_never_the_shape_of_a_button():
+    # 22 Oct, Kash on the filled pill: "like the colour but it does look like a button"; the
+    # ink outline (#408) lost the green. Green words, centred, with no box at all
+    rule = _rule(".home-page .home-how-sources")
+    assert "color: var(--ok);" in rule and "text-align: center;" in rule
+    assert not re.search(r"background|border|padding|display", rule)
+    for i in (0, 1):  # light, dark
+        assert _contrast(_tokens("ok")[i], _tokens("bg")[i]) >= 4.5
+
+
+def test_the_two_week_box_has_the_twins_colour_and_its_verdicts_are_words(tmp_path):
+    # 22 Oct, Kash: the filled green "Better" looked pressable, and the box's amber meant
+    # nothing (walk A10). The box is the twin's verdict, so the twin's deep green (the band's,
+    # where the slider sits); Better and Same are small tinted tags, like Also do: no border,
+    # no shadow, tight, never the primary green of a press
+    frame = _home(tmp_path).split('<div class="home-bento"', 1)[1].split("</section>", 1)[0]
+    tiles = frame.split('<div class="card home-tile')[1:]
+    assert "Next 2 weeks vs leaving it" in tiles[2]  # :nth-child(3)
+    box = _rule(".home-page .home-tile:nth-child(3)")
+    assert "background: var(--band); color: var(--band-fg);" in box and "warn" not in box
+    same = " ".join(_rule(".home-page .home-verdict").split())
+    better = " ".join(_rule(".home-page .home-outlook .better .home-verdict").split())
+    assert "padding: 2px 10px;" in same and "14px" in same
+    wash = "background: color-mix(in srgb, var(--band-fg) 18%, transparent); color: var(--band-fg);"
+    assert wash in same
+    assert better == "background: var(--soft); color: var(--ok);"
+    for rule in (same, better):
+        assert not re.search(r"border:|shadow|--primary", rule)
+    assert "primary" not in tiles[2]  # nothing to press in the box
+    # on a phone each choice is one row (tag, name, note), and the rule outranks the base one
+    phone = HOME_CSS.split("@media (max-width: 720px)")[-1]
+    assert ".home-page .home-bento .home-outlook li { flex-direction: row;" in " ".join(
+        phone.split()
+    )
+    assert _rule(".home-page .home-tile:nth-child(3) .muted") == " color: var(--band-muted); "
+    for i in (0, 1):  # each tag's words read on it; the notes and the words on the twin's green
+        assert _contrast(_tokens("ok")[i], _tokens("soft")[i]) >= 4.5
+        band = _tokens("band")[i]
+        assert _contrast(_tokens("band-fg")[i], _mix(_tokens("band-fg")[i], band, 0.18)) >= 4.5
+        assert _contrast(_tokens("band-muted")[i], band) >= 4.5
+        assert _contrast(_tokens("band-fg")[i], band) >= 4.5
 
 
 def test_how_it_works_names_open_plantbook_only_when_it_is_asked(tmp_path, monkeypatch):

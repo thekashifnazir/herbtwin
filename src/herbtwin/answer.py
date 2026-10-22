@@ -1164,6 +1164,21 @@ class AdvisorsSaid(NamedTuple):
     note: str  # whose plan the page is: ours by rule, the most said, or a split; may be ""
 
 
+def shown_call(a: Answer, primary: str, label: Mapping[str, str]) -> str:
+    """One call in the page's words (`label` is its card labels), with the page's own swaps:
+    a light tidy for a resting herb, thinning for seedlings, "Remove it" under no cure, and
+    treating for a bed plant that cannot go apart (in_proportion)."""
+    if primary == "prune" and a.winter_rest:
+        return TIDY_LABEL
+    if primary == "prune" and a.no_cut_growth:
+        return THIN_LABEL
+    if primary == "isolate" and a.in_ground:
+        primary = "treat_or_remove"
+    if primary == "treat_or_remove" and a.headline == NO_CURE_HEADLINE:
+        return REMOVE_LABEL
+    return label.get(primary, label.get("other", ""))
+
+
 def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid:
     """Each stored ask's call, in the page's words (`label` is its card labels), with the
     page's own swaps: a light tidy for a resting herb, thinning for seedlings, "Remove it"
@@ -1175,19 +1190,7 @@ def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid
     if a is None or not a.runs:
         return AdvisorsSaid([], "")
     no_cure = a.headline == NO_CURE_HEADLINE
-
-    def call(primary: str) -> str:
-        if primary == "prune" and a.winter_rest:
-            return TIDY_LABEL
-        if primary == "prune" and a.no_cut_growth:
-            return THIN_LABEL
-        if primary == "isolate" and a.in_ground:
-            primary = "treat_or_remove"
-        if primary == "treat_or_remove" and no_cure:
-            return REMOVE_LABEL
-        return label.get(primary, label.get("other", ""))
-
-    calls = [call(r.primary) for r in a.runs]
+    calls = [shown_call(a, r.primary, label) for r in a.runs]
     n = len(calls)
     same = n > 1 and len(set(calls)) == 1
     if same:

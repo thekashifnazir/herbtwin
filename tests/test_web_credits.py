@@ -47,16 +47,17 @@ def test_each_image_group_on_home_links_to_the_credits_it_needs(tmp_path):
     # "Photo credits" by each group opens the fold (the pill's link went on 21 Oct)
     link = re.compile(r'<a class="credits-link" href="#credits">Photo credits</a>')
     twin = home.split('<figure class="home-twin">', 1)[1].split("</figure>", 1)[0]
+    how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
     samples = home.split('<div class="home-chips"', 1)[1].split('<fieldset class="home-where">', 1)[
         0
     ]
-    for group in (twin, samples):  # How it works and its pictures went (22 Oct walk)
+    for group in (twin, how, samples):
         assert link.search(group)
     credits = _credits(home)
     for author in AUTHORS:  # the bed photo too: the spot answer is on here
         assert author in credits, author
     # the full credit lines left the groups: only the link stays by the pictures
-    for group in (twin, samples):
+    for group in (twin, how, samples):
         assert "CC BY" not in group and "Qwen-Image-Edit" not in group
     # a credits link opens the folded section (it starts closed)
     assert '<details class="made-credits" id="credits">' in home and "box.open = true" in home

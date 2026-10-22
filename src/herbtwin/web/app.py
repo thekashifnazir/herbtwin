@@ -56,6 +56,7 @@ from herbtwin.chat import links_from as chat_links
 from herbtwin.compass import tap_from_sensor
 from herbtwin.config import Settings, load_settings, parse_coordinate
 from herbtwin.consequences import NO_DATA
+from herbtwin.fold_titles import fold_titles
 from herbtwin.history import HistoryError
 from herbtwin.light import light_said
 from herbtwin.local_help import local_help_from
@@ -214,6 +215,7 @@ TEMPLATES.env.globals["dont_if_dry"] = dont_if_dry  # the Don't card with the so
 TEMPLATES.env.globals["tray_check"] = TRAY_CHECK  # under "Bring it indoors" for a pot
 TEMPLATES.env.globals["sample_files"] = sample_files  # home: a picked sample is set in London
 TEMPLATES.env.globals["twin_chart"] = twin_chart  # Compare's 14-day line
+TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
 TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the year
 TEMPLATES.env.globals["starters"] = starters  # "Ask about this plant": 3 to tap
 TEMPLATES.env.globals["watch_list"] = watch_list  # Keep an eye on, one sign a line

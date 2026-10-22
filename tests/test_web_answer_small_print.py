@@ -41,7 +41,7 @@ def test_how_sure_is_listed_once(tmp_path):
     rec = _full_plan(tmp_path)
     assert rec.answer is not None and rec.answer.factors
     page = _render(rec)
-    evidence = page.split('<span class="fold-title">Weather, forecast and sources</span>', 1)[1]
+    evidence = page.split('<details class="evidence fold">', 1)[1]
     evidence = evidence.split("</details>", 1)[0]
     evidence = evidence.split('<details class="assumptions">', 1)[0]
     why = page.split('<details class="why fold', 1)[1].split("</details>", 1)[0]

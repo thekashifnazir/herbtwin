@@ -16,7 +16,7 @@ def test_the_details_use_plain_words(tmp_path):
         assert word not in page, word
     assert f"record {rid}" not in page and f"Ref {rid}" in page
     assert "From the photo: droopy" in page  # water_stress 2 in the fixture
-    evidence = page.split('<span class="fold-title">Weather, forecast and sources</span>', 1)[1]
+    evidence = page.split('<details class="evidence fold">', 1)[1]
     evidence = evidence.split('<p class="record">', 1)[0]
     assert not re.findall(r">[^<]*https?://", evidence)  # a source is a link, not a raw URL
     assert ">RHS</a>" in evidence and ">rhs.org.uk</a>" not in evidence

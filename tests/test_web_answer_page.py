@@ -56,9 +56,10 @@ def test_the_answer_reads_in_order_of_importance(tmp_path):
         "Check the advice again",
         "Ask about this plant",
         # block 3, the details, folded
-        '<span class="fold-title">Why ',
-        '<span class="fold-title">Compare all choices (next 2 weeks)</span>',
-        '<span class="fold-title">Weather, forecast and sources</span>',
+        # the folds by their tags: each title is now its finding (fold_titles.py, 22 Oct)
+        '<details class="why fold',
+        '<details class="compare fold',
+        '<details class="evidence fold">',
         f"Ref {rid}",
     ]
     at = [page.find(text) for text in order]
@@ -169,7 +170,7 @@ def test_not_sure_puts_the_question_that_would_help_first_in_the_asks(tmp_path):
             '<form class="refine" method="post"',
             "Ask about this plant",
             "Check the advice again",
-            '<span class="fold-title">Why we\'re not sure</span>',
+            '<span class="fold-kind">Why we&#39;re not sure</span>',
         ],
     )
     assert 'name="place"' in page
@@ -237,7 +238,7 @@ def test_not_sure_without_a_question_says_where_to_look(tmp_path):
     # with no question to ask, the form still sits in the asks, after the plan
     _in_order(page, ['<h2 id="next-step">What next</h2>', '<hr class="divider">',
                      "Tell us more and we'll check the advice", "Ask about this plant",
-                     '<span class="fold-title">Why '])  # fmt: skip
+                     '<details class="why fold'])  # fmt: skip
 
 
 def test_not_sure_with_a_question_the_page_can_take_points_to_it(tmp_path):
@@ -273,7 +274,7 @@ def test_without_a_question_the_form_sits_after_the_plan(tmp_path):
             "Tell us more and we'll check the advice",
             "Check the advice again",
             "Ask about this plant",
-            '<span class="fold-title">Why ',
+            '<details class="why fold',
         ],
     )
 

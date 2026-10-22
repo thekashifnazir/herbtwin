@@ -46,9 +46,15 @@ def test_stage_errors_stay_in_the_logs_not_on_the_page():
 def test_the_summary_reads_in_english_for_every_level():
     # 19 Oct answer-quality check: two summaries, "our best read" and "not sure"
     page = _source()
-    assert "Why it's our best read" in page
-    assert "Why we're not sure" in page
-    assert "could go either way" not in page
+    # the two now label the why fold, from fold_titles.py (22 Oct, "B2")
+    from pathlib import Path
+
+    import herbtwin.fold_titles
+
+    titles = Path(herbtwin.fold_titles.__file__).read_text()
+    assert "Why it's our best read" in titles
+    assert "Why we're not sure" in titles
+    assert "could go either way" not in page and "could go either way" not in titles
 
 
 def test_repo_paths_are_never_cited_as_sources():
@@ -83,11 +89,9 @@ def test_the_middle_level_reads_as_not_sure_on_the_page(tmp_path):
     rec = _unsure_record(tmp_path)
     rec.answer.level = "fairly_sure"
     page = _render(rec)
-    assert '<span class="fold-title">Why we\'re not sure</span>' in page
-    assert (
-        "could go either way" not in page
-        and "&#39;" not in page.split('<span class="fold-title">Why')[1][:40]
-    )
+    # the label is filled in from fold_titles.py, so its apostrophe comes escaped (B2)
+    assert '<span class="fold-kind">Why we&#39;re not sure</span>' in page
+    assert "could go either way" not in page and "Why we&#39;re could" not in page
 
 
 def test_a_repo_path_source_shows_as_our_care_notes(tmp_path):

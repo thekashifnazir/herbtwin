@@ -216,8 +216,12 @@
   {% if failed.get("research") %}<p class="note">Species facts unavailable this time, so general care thresholds were used.</p>{% endif %}
   </div>
   {# the evidence: in block 3 under an answer, on its own when the advice failed #}
-  {% set evidence %}<details class="evidence fold"><summary><span class="fold-head"><span class="fold-title">{% if obs and obs.setting == "indoor" %}The photo and sources{% else %}Weather, forecast and sources{% endif %}</span>
-    <span class="fold-peek">What the photo showed{% if rec.season and not (obs and obs.setting == "indoor") %}, the season{% endif %} and where the care facts came from</span></span></summary>
+  {# each shut fold's title says what it found, a small label above it says what it is
+     (22 Oct, Kash chose "B2": Perplexity Finance's finding-as-title, Turo's key value in the
+     shut row); with nothing true to say, the old title (fold_titles.py) #}
+  {% set ft = fold_titles(rec, label, source_names, failed.get("environment") is not none) %}
+  {% set evidence %}<details class="evidence fold"><summary><span class="fold-head">{% if ft.weather.found %}<span class="fold-kind">{{ ft.weather.kind }}</span>{% endif %}<span class="fold-title">{{ ft.weather.title }}</span>{% if ft.weather.peek %}
+    <span class="fold-peek">{{ ft.weather.peek }}</span>{% endif %}</span></summary>
     {% set droop = ["not drooping", "a little droopy", "droopy", "badly wilted"] %}
     {% set decline = ["healthy-looking", "a little tired", "declining", "badly declining"] %}
     <p>From the photo: {{ droop[obs.water_stress] }}, {{ decline[obs.decline] }}{% if obs.leaf_colour != "not_visible" %} · leaves {{ obs.leaf_colour|replace("_", " ") }}{% endif %}{% if obs.soil_surface != "not_visible" %} · soil surface {{ obs.soil_surface|replace("_", " ") }}{% endif %}{% if obs.symptoms %} · seen: {{ obs.symptoms|join(", ") }}{% endif %}</p>
@@ -748,7 +752,7 @@
          once opened and not"): a title, then one line of what it holds #}
       {% if a.chips %}{% set up = a.chips|selectattr("effect", "equalto", "raises")|map(attribute="name")|map("lower")|list %}
       {%- set down = a.chips|selectattr("effect", "in", ["lowers", "missing"])|map(attribute="name")|map("lower")|list %}
-      <details class="why fold {{ 'fold-good' if best else 'fold-check' }}"><summary><span class="fold-head"><span class="fold-title">{% if best %}Why it's our best read{% else %}Why we're not sure{% endif %}</span>
+      <details class="why fold {{ 'fold-good' if best else 'fold-check' }}"><summary><span class="fold-head">{% if ft.why.found %}<span class="fold-kind">{{ ft.why.kind }}</span>{% endif %}<span class="fold-title">{{ ft.why.title }}</span>
         <span class="fold-peek">{% if up %}Helped: {{ up[:3]|join(", ") }}{% endif %}{% if up and down %} · {% endif %}{% if down %}Held back: {{ down[:3]|join(", ") }}{% endif %}{% if not up and not down %}What raised or lowered how sure we are{% endif %}</span></span></summary>
         <p class="small">In our tests on 624 questions answered by experts, answers at this level matched the expert's first step {{ record }}.</p>
         <ul>{% for effect, said in (("raises", "Helped"), ("lowers", "Lowered it"), ("missing", "Missing"), ("neutral", "No effect on how sure we are")) %}
@@ -762,8 +766,8 @@
          twin chart open by default); a no-cure answer's "Not compared" line stays folded #}
       {% if a.compare or a.headline == no_cure_headline %}
       {% set cmp = namespace(better=[]) %}{% for r in a.compare if r.vs_leaving_it == "better" and r.action != "leave_normal" %}{% set cmp.better = cmp.better + [label[r.action]|lower] %}{% endfor %}
-      <details class="compare fold fold-twin"{{ ' open' if a.compare else '' }}><summary><span class="fold-head"><span class="fold-title">Compare all choices (next 2 weeks)</span>
-        <span class="fold-peek">{% if not a.compare %}No cure, so the choices don't apply{% elif cmp.better %}Better than leaving it: {{ cmp.better[:2]|join(", ") }}{% else %}None beat leaving it{% endif %}{% if a.compare %}, tested on your plant's twin{% endif %}</span></span></summary>
+      {% set fc = ft.compare %}<details class="compare fold fold-twin"{{ ' open' if a.compare else '' }}><summary><span class="fold-head">{% if fc.found %}<span class="fold-kind">{{ fc.kind }}</span>{% endif %}<span class="fold-title">{{ fc.title }}</span>
+        {% if not fc.found %}<span class="fold-peek">{% if not a.compare %}No cure, so the choices don't apply{% elif cmp.better %}Better than leaving it: {{ cmp.better[:2]|join(", ") }}{% else %}None beat leaving it{% endif %}{% if a.compare %}, tested on your plant's twin{% endif %}</span>{% elif fc.peek %}<span class="fold-peek">{{ fc.peek }}</span>{% endif %}</span></summary>
         {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
            a tap on a choice shows its line (idea 3, 18 Oct) #}
         {% set tc = twin_chart(rec, label) if a.compare else none %}

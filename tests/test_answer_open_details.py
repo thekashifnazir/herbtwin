@@ -31,7 +31,10 @@ def test_why_says_what_helped_and_held_it_back_before_it_opens(tmp_path):
     ]
     head = _summary(_render(rec), "why")
     assert "fold-check" in head  # not sure: the amber mark
-    assert '<span class="fold-title">Why we\'re not sure</span>' in head.replace("&#39;", "'")
+    # the old title is the small label now, the title says how many advisors said the plan
+    head = head.replace("&#39;", "'")
+    assert '<span class="fold-kind">Why we\'re not sure</span>' in head
+    assert '<span class="fold-title">2 of 3 advisors said: leave it</span>' in head
     assert '<span class="fold-peek">Helped: season, photo · Held back: soil</span>' in head
 
 
@@ -44,15 +47,18 @@ def test_compare_names_what_beats_leaving_it(tmp_path):
     ]
     head = _summary(_render(rec), "compare")
     assert "fold-twin" in head
-    assert re.search(r'<span class="fold-peek">Better than leaving it: [^<,]+, tested on', head)
+    # the finding is the title now, what did nothing or harm under it (22 Oct, "B2")
+    assert '<span class="fold-title">Protecting it beats leaving it</span>' in head
+    assert '<span class="fold-peek">Watering makes it worse</span>' in head
     rec.answer.compare = [r for r in rec.answer.compare if r.vs_leaving_it != "better"]
-    assert "None beat leaving it" in _summary(_render(rec), "compare")
+    assert "Nothing beats leaving it" in _summary(_render(rec), "compare")
 
 
 def test_the_sources_fold_says_what_it_holds(tmp_path):
+    # no place, so no forecast: the title says so, the label says what the fold is (B2)
     head = _summary(_render(_unsure_record(tmp_path)), "evidence")
-    assert '<span class="fold-title">Weather, forecast and sources</span>' in head
-    assert "where the care facts came from</span>" in head
+    assert re.search(r'<span class="fold-kind">Weather · \d+ sources?</span>', head)
+    assert '<span class="fold-title">No forecast this time</span>' in head
 
 
 def test_the_fold_lines_read_on_every_tint_in_both_schemes():

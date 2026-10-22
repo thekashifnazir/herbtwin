@@ -222,7 +222,7 @@ def test_result_page_shows_layout_b(tmp_path):
         '<strong>How sure we are<span class="sr-only">:</span></strong>',
         "Keep an eye on",
         "Compare all choices",
-        "Weather, forecast and sources",
+        '<details class="evidence fold">',  # its title says what the weather holds (B2)
         "the photo carried no date",  # said once, under what the model assumes
     ):
         assert text in r.text, text

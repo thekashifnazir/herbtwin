@@ -260,7 +260,7 @@ def test_the_page_names_the_seen_problem_and_says_to_check_first(tmp_path):
     assert page.index('id="main-action"') < page.index('id="seen-problem"')
     assert page.index('id="seen-problem"') < page.index('id="also-do"')
     host = entry["source"].split("/")[2].removeprefix("www.")
-    evidence = page.split('<span class="fold-title">Weather, forecast and sources</span>')[1]
+    evidence = page.split('<details class="evidence fold">')[1]
     assert "Photo check: basil downy mildew (fuzz below). Signs from " in evidence
     assert f'<a href="{entry["source"]}" rel="noopener noreferrer">{host}</a>' in evidence
     assert 'style="' not in page

@@ -131,6 +131,10 @@
 .answer-page details.fold[open] > summary { background: var(--fold-tint, var(--muted)); }
 .answer-page .fold-head { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .answer-page .fold-title { font: 700 18px/1.3 var(--sans); }
+/* the shut fold's title is its finding; this small label above it says what the fold is, in
+   line with the title's words after its mark (22 Oct, "B2") */
+.answer-page .fold-kind { margin-left: 20px; color: var(--muted-fg); font: 600 13px/1.3 var(--sans);
+  letter-spacing: .04em; text-transform: uppercase; }
 .answer-page .fold-peek { color: var(--muted-fg); font: 400 16px/1.4 var(--sans); }
 /* what each advisor said, under Who advised: a short quiet list, the call in bold (21 Oct) */
 .answer-page .advisor-said { margin: 12px 0 16px; }
