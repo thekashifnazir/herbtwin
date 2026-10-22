@@ -198,8 +198,13 @@ answer appears in **My plants**.
 - **UK, outdoors, herbs.** Season norms are UK-only; a place outside the UK gets a note
   and no season norm. The weather and the plant's twin are for plants outside.
 - **Indoor light is not measured.** A plant indoors or on a windowsill gets no plant
-  model, and the advice leans on the photo and the care facts. The answer page says so
-  beside "How sure we are" and asks which window it's by.
+  model and no forecast test. Its light comes from a window question ("South window,
+  close", "East or west window, close", "North window, or a metre or more back", "Away
+  from any window") and low-light signs in the photo (stretched, pale or leaning stems).
+  Beside "How sure we are" the answer says "We can't measure light indoors from a photo.
+  Tell us which window it's by."; once told, How sure names the window ("by a south-facing
+  window, close to it (you told us)") and is not raised by it, as nothing was measured. A
+  gardener friend's question started this.
 - **A photo is not a soil test.** Soil moisture is guessed from the surface; the refine
   questions (how the soil feels 2 cm down) are there to correct it.
 - **Models:** the photo is read by GLM-5.3-Flash (`zai-org/GLM-5.3-Flash`) and the advice

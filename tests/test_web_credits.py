@@ -22,7 +22,7 @@ def test_credits_page_names_every_author_with_source_and_licence(tmp_path):
     # the credits are About's last section now (21 Oct); /credits lands on it
     page = _spot_client(tmp_path)[0].get("/credits")
     assert page.status_code == 200 and page.url.path == "/about"
-    body = page.text.split('<section class="made-with about-credits" id="credits"', 1)[1]
+    body = page.text.split('<details class="made-credits" id="credits">', 1)[1]
     for author in AUTHORS:
         assert author in body, author
     for name, url in LICENCES.items():
@@ -107,9 +107,12 @@ def test_the_about_page_has_its_own_headings_and_the_credits_open_last(tmp_path)
     levels = [int(n) for n in re.findall(r"<h([1-6])\b", page)]
     assert levels[0] == 1 and all(b <= a + 1 for a, b in zip(levels, levels[1:], strict=False))
     assert '<section id="made-with" aria-labelledby="built">' in page
-    credits = page.split('<section class="made-with about-credits" id="credits"', 1)[1]
+    credits = page.split(
+        '<section class="made-with about-credits" aria-labelledby="credits-h">', 1
+    )[1]
     assert '<h2 id="credits-h">Credits</h2>' in credits and "<h3>Sample photos</h3>" in credits
-    assert "<details" not in credits  # open on About, never folded
+    # folded, as home's are (22 Oct, Kash); #credits names the fold and opens it
+    assert '<details class="made-credits" id="credits">' in credits
     assert "<section" not in credits  # the page's last section
     assert page.count('id="credits"') == 1 and page.count('id="made-with"') == 1
     assert ".made-with .made-credits { padding: 0 16px 16px; }" in style.CSS

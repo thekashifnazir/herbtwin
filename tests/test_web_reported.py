@@ -213,7 +213,7 @@ def test_the_privacy_page_says_what_gbif_and_tavily_get(tmp_path):
 def test_the_about_page_credits_gbif_and_its_licences(tmp_path):
     c, _, _ = _answer(tmp_path)
     page = c.get("/about").text
-    credits = page.split('<section class="made-with about-credits" id="credits"', 1)[1]
+    credits = page.split('<details class="made-credits" id="credits">', 1)[1]
     assert "<dt>Pest and disease sightings</dt>" in credits
     assert '<a href="https://www.gbif.org/" rel="noopener noreferrer">GBIF.org</a>' in credits
     assert ">CC0</a>" in credits and ">CC BY 4.0</a>" in credits

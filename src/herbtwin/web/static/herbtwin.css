@@ -318,8 +318,10 @@ th { background: var(--muted); font-weight: 700; }
    (`.band-overlap`). `.ink` is the home tiles' edge: an ink line and a hard shadow, so a
    card stands off the paper. Lime is for the one thing to press on the band. */
 :root { --lime: #C9F27B; --lime-fg: #12291C; --ink-shadow: var(--fg);
-  --sky: #E3EEF6; --sky-fg: #2F6690; }
-@media (prefers-color-scheme: dark) { :root { --ink-shadow: #000; --sky: #1B2B3A; --sky-fg: #8CC2EE; } }
+  --sky: #E3EEF6; --sky-fg: #2F6690;
+  --lilac: #EEE8F7; --lilac-fg: #5B3F8F; }  /* Tavily search, wherever it shows (About, 22 Oct) */
+@media (prefers-color-scheme: dark) { :root { --ink-shadow: #000; --sky: #1B2B3A; --sky-fg: #8CC2EE;
+  --lilac: #251E33; --lilac-fg: #C4B2EE; } }
 .has-band { overflow-x: clip; }   /* a band never scrolls the page sideways */
 .has-band main { padding-top: 0; }
 /* the band's full bleed (50% - 50cqw) holds only in a centred column: a page that keeps the

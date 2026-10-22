@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% from "_credits.html" import credit_lists %}
 {% from "_plant_face.html" import plant_face %}
-{# About (21 Oct, Kash: "like my other hackathon projects"; 22 Oct: "still very claude coded
-   ... rather than sticking to more of our design language and where is the colour"). The
-   shape of Moveset's and Step Out's About pages: why I built it, what it does, how it's built
-   (a row of the stack, then one drawn flow), how I know it works, what didn't work, what's
-   next, who made it. In herbtwin's own language: the green band, sticker cards and colour
-   with meaning (the twin's deep green, mint for the advisors, sky blue for weather, amber
-   for our rules). Every claim is one the Devpost story or a report in the repo makes. #}
+{# About (21 Oct, Kash: "like my other hackathon projects"; 22 Oct: "where is the colour", then
+   "looking much better but we can still improve it"). The shape of Moveset's and Step Out's
+   About pages: why I built it, what it does, how it's built (the stack, then one drawn flow),
+   how I know it works, what didn't work, what's next, who made it. In herbtwin's own language:
+   the green band and sticker cards, and colour that says what a thing is, the same in the
+   flow, the tiles and the cards (the legend under the flow names them). Every claim is one
+   the Devpost story or a report in the repo makes. #}
 {% block title %}About · herbtwin{% endblock %}
 {% block page %}about-page has-band{% endblock %}
 {% block wrap %} wide{% endblock %}
@@ -19,17 +19,17 @@
 <p class="actions"><a class="button primary" href="/">Check a plant</a></p>
 </div>
 
-<ul class="about-stats band-overlap" aria-label="In numbers">
-  <li class="ink"><strong>2%</strong><span>"Treat it" when the expert didn't (Nemotron 3 Super, 150 questions)</span></li>
-  <li class="ink"><strong>0 of 149</strong><span>False alarms on healthy plants</span></li>
-  <li class="ink"><strong>0.846</strong><span>Plant named right first time (149 photos, 15 kinds)</span></li>
-  <li class="ink"><strong>$0.0040</strong><span>Model cost of one example answer</span></li>
-</ul>
-
 <div class="about">
 <section aria-labelledby="what">
   <h2 id="what">What it does</h2>
-  <p>Photo a herb and say where it grows. In 15 to 35 seconds, with no account, you get one thing to do and how sure we are. It is for UK growers with herbs outdoors: the season norms, frost data and soil maps are all UK. Signed in, you get an email when it's time to look again, and the next photo asks "Did you do it?".{% if spot_on %} <strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.{% endif %}</p>
+  <div class="about-two">
+    <p>Photo a herb and say where it grows. In 15 to 35 seconds, with no account, you get one thing to do and how sure we are. It is for UK growers with herbs outdoors: the season norms, frost data and soil maps are all UK. Signed in, you get an email when it's time to look again, and the next photo asks "Did you do it?".{% if spot_on %} <strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.{% endif %}</p>
+    <div class="about-receipt about-card ink">
+      <h3>What an answer costs</h3>
+      <p>Every answer lists which model did each step, its time and its cost. One example read (basil, 21 Oct): <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> had every step run on Nemotron 3 Ultra.</p>
+      <p class="made-note">One example, not an average. The Ultra figure is an estimate: the same tokens at Ultra's listed price.</p>
+    </div>
+  </div>
 </section>
 
 <section id="made-with" aria-labelledby="built">{# the answer page's "What it's made with" lands here #}
@@ -43,12 +43,12 @@
       <li><div class="node">
         <strong>Your photo and place</strong>
         <span>Up to 3 photos, and a UK town, postcode or the photo's location</span></div></li>
-      <li><div class="node">
+      <li><div class="node photo">
         <strong>Read the photo</strong><em>GLM-5.3-Flash</em>
         <span>Names the plant, reads leaves and soil; DeepSeek V4.1 Flash races it after 14 s</span>
         <b>e.g. 17.4 s · $0.0016</b></div>
         <p class="flow-by">alongside</p>
-        <div class="node minor"><strong>If a problem shows</strong>
+        <div class="node photo"><i class="tag">Tavily</i><strong>If a problem shows</strong>
         <span>The photo model checks the plant's known problems; Tavily finds how to treat one</span></div></li>
       <li><div class="node">
         <strong>Care and season</strong>
@@ -75,26 +75,27 @@
     <div class="flow-under">
       <p class="flow-by">Under the answer</p>
       <ul class="under">
-          <li><strong>Chat</strong> NVIDIA Nemotron 3 Nano, with Tavily search</li>
-          {% if check_on %}<li><strong>Trusted-page check</strong> NVIDIA Nemotron 3 Ultra reads a page; code quotes it only if it backs the answer</li>{% endif %}
-          <li><strong>Shops, gardeners</strong> Tavily</li>
-          <li><strong>Seen in the UK</strong> GBIF pest sightings, the last 60 days</li>
+        <li class="advisors"><i class="tag">Tavily</i><strong>Chat</strong> NVIDIA Nemotron 3 Nano, with Tavily search</li>
+        {% if check_on %}<li class="advisors"><i class="tag">Tavily</i><strong>Trusted-page check</strong> NVIDIA Nemotron 3 Ultra reads a page; code quotes it only if it backs the answer</li>{% endif %}
+        <li class="tavily"><i class="tag">Tavily</i><strong>Shops, gardeners</strong> Tavily finds them for what the answer asks</li>
+        <li class="gbif"><i class="tag">GBIF</i><strong>Seen in the UK</strong> GBIF pest sightings, the last 60 days</li>
       </ul>
     </div>
-    <p class="flow-key" aria-hidden="true"><span><i class="key-a"></i> your weather, tried on the twin</span> <span><i class="key-d"></i> not built yet</span></p>
+    <ul class="flow-key" aria-label="What the colours mean">
+      <li><i class="sw advisors"></i>NVIDIA Nemotron</li><li><i class="sw photo"></i>photo model</li>
+      <li><i class="sw tavily"></i>Tavily search</li><li><i class="sw weather"></i>your weather</li>
+      <li><i class="sw twin"></i>the twin</li><li><i class="sw rules"></i>our rules, what didn't work</li>
+      <li><i class="sw gbif"></i>GBIF sightings</li><li><i class="sw path"></i>the weather's path</li>
+      <li><i class="sw plain"></i>you, our notes, the answer</li><li><i class="sw later"></i>not built yet</li>
+    </ul>
     <figcaption>Each box names its model. <strong>Your weather is tried on the plant's twin</strong> before three advisors decide; <strong>our rules have the last word</strong>.</figcaption>
   </figure>
   <h3>A few decisions I'd call out</h3>
-  <ul class="about-calls">
-    <li><strong>Super decides, not Ultra.</strong> Ultra, the largest, over-treated: 12.7% against Super's 2%.</li>
-    <li><strong>Nano talks.</strong> The chat, 10 of 10 on our what-if check, in about half Super's time.</li>
-    <li><strong>GLM-5.3-Flash reads the photo.</strong> Four NVIDIA vision models named the plant less often: 0.54 to 0.627, against 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>).</li>
+  <ul class="about-cards">
+    <li class="about-card advisors ink"><strong>Super decides, not Ultra.</strong> Ultra, the largest, over-treated: 12.7% against Super's 2%.</li>
+    <li class="about-card advisors ink"><strong>Nano talks.</strong> The chat, 10 of 10 on our what-if check, in about half Super's time.</li>
+    <li class="about-card photo ink"><strong>GLM-5.3-Flash reads the photo.</strong> Four NVIDIA vision models named the plant less often: 0.54 to 0.627, against 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>).</li>
   </ul>
-  <div class="about-receipt">
-    <h3>What an answer costs</h3>
-    <p>Every answer lists which model did each step, its time and its cost. One example read (basil, 21 Oct): <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> had every step run on Nemotron 3 Ultra.</p>
-    <p class="made-note">One example, not an average. The Ultra figure is an estimate: the same tokens at Ultra's listed price.</p>
-  </div>
 </section>
 
 <section aria-labelledby="works">
@@ -109,63 +110,80 @@
     </ol>
     <figcaption><strong>The bar is set before the run.</strong> A pass ships; a fail goes under What didn't work.</figcaption>
   </figure>
-  <div class="about-table"><table>
-      <thead><tr><th scope="col">What we measured</th><th scope="col">Result</th></tr></thead>
-      <tbody>
-        <tr><td>Says "treat it" when the expert did not (150 Stack Exchange questions, one ask each)</td><td><strong>Super 2%</strong> (Ultra 12.7%, Nano 7.3%)</td></tr>
-        <tr><td>Problem check on 149 healthy and 102 problem photos</td><td><strong>0 false alarms</strong>; 33 named right, 0 wrong</td></tr>
-        <tr><td>"Did you do it?" two-photo check</td><td><strong>38 of 38</strong> changes seen, 0 of 32 false</td></tr>
-        <tr><td>Plant named right first time (149 GBIF photos, 15 kinds)</td><td><strong>0.846</strong></td></tr>
-        <tr><td>Confidence ranks right advice above wrong (624 held-out expert questions)</td><td><strong>0.63</strong> (AUROC)</td></tr>
-        <tr><td>Main action matches the expert's (150 Stack Exchange questions; 200 from MIRAGE, a published plant-care benchmark)</td><td><strong>0.43</strong> and <strong>0.41</strong> (ceiling about 0.8)</td></tr>
-        <tr><td>Chat answers right, with and without Tavily search (30 factual herb questions)</td><td><strong>25</strong> with, 15 without (re-checked 22 Oct: 26 with, 18 without)</td></tr>
-        {% if spot_on %}<tr><td>What can I grow here?, against the RHS monthly picks</td><td><strong>0.90</strong> in the top two lists, 0 hard errors</td></tr>{% endif %}
-      </tbody>
-    </table></div>
-  <p>The expert questions are text only, so they score Nemotron without the twin. More than 4,000 automated tests run before every push (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p>
-  <p><strong>An expert's review.</strong> A paid professional gardener graded 3 openly licensed photos: every first action Acceptable, 3 of 5 overall. Four rules changed, and "7 in 10" was retired after we measured 51% on 624 expert questions. One expert, three photos (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>).</p>
-  <p><strong>A real user.</strong> A former tree surgeon asked where to get the things the answer tells you to use. That became the shops card under the answer.</p>
+  <ul class="about-tiles" aria-label="What we measured">
+    <li class="advisors ink"><strong>2%</strong><span>"Treat it" when the expert didn't: Super (Ultra 12.7%, Nano 7.3%; 150 Stack Exchange questions)</span></li>
+    <li class="advisors ink"><strong>0.43 · 0.41</strong><span>Main action matches the expert's (150 Stack Exchange; 200 from MIRAGE, a plant-care benchmark; ceiling about 0.8)</span></li>
+    <li class="advisors ink"><strong>0.63</strong><span>Confidence ranks right advice above wrong (AUROC, 624 held-out expert questions)</span></li>
+    <li class="photo ink"><strong>0.846</strong><span>Plant named right first time (149 GBIF photos, 15 kinds)</span></li>
+    <li class="photo ink"><strong>0 false alarms</strong><span>Problem check on 149 healthy and 102 problem photos; 33 named right, 0 wrong</span></li>
+    <li class="photo ink"><strong>38 of 38</strong><span>"Did you do it?" changes seen, 0 of 32 false</span></li>
+    <li class="tavily ink"><strong>25 vs 15</strong><span>Chat answers right with Tavily search and without (30 herb questions; re-checked 22 Oct: 26 vs 18)</span></li>
+    {% if spot_on %}<li class="ink"><strong>0.90</strong><span>What can I grow here?: the RHS's monthly picks in our top two lists, 0 hard errors</span></li>{% endif %}
+  </ul>
+  <p class="made-note">The expert questions are text only, so they score Nemotron without the twin. More than 4,000 automated tests run before every push (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p>
+  <div class="about-two">
+    <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A paid professional gardener graded 3 openly licensed photos: every first action Acceptable, 3 of 5 overall. Four rules changed, and "7 in 10" was retired after we measured 51% on 624 expert questions. One expert, three photos (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>).</p></blockquote>
+    <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get the things the answer tells you to use. That became the shops card under the answer.</p></blockquote>
+  </div>
 </section>
 
 <section aria-labelledby="didnt">
   <h2 id="didnt">What didn't work</h2>
-  <ul class="about-list didnt">
-    <li><strong>Specialist advisors</strong> failed all three rules they were judged on (774 expert questions), so the three asks stay plain.</li>
-    <li><strong>The trusted-page check</strong> failed four pre-registered rounds; the fifth passed but backed nothing on real pages (round 6), and round 7 failed (4 false agrees in 205). Round 8 shipped: 3 false agrees in 418, under our 3% bar, but it finds 10 of the 26 quotes that should show (target 50%).</li>
-    <li><strong>Nano on our own GPU</strong> agreed with Token Factory on 81% of answers but matched the expert 4.8 points less often.</li>
-    <li><strong>Cosmos video</strong> did not show the change asked for, where an image editor did (5 of 6).</li>
-    <li><strong>Prices for the things to buy</strong>: a Nemotron 3 Nano reader got 11 of 21 right, 9 wrong and 1 left blank, and 4 of 6 shops block a direct fetch, so we show the item and the shop, not a price.</li>
+  <ul class="about-cards">
+    <li class="about-card rules ink"><strong>Specialist advisors</strong> failed all three rules they were judged on (774 expert questions), so the three asks stay plain.</li>
+    <li class="about-card rules ink"><strong>The trusted-page check</strong> failed rounds 1 to 4; round 5's pass backed nothing on real pages; round 7 failed (4 false agrees in 205). Round 8 shipped: 3 false agrees in 418, under our 3% bar, but it finds 10 of the 26 quotes that should show (target 50%).</li>
+    <li class="about-card rules ink"><strong>Nano on our own GPU</strong> agreed with Token Factory on 81% of answers but matched the expert 4.8 points less often.</li>
+    <li class="about-card rules ink"><strong>Cosmos video</strong> didn't show the change asked for; an image editor did (5 of 6).</li>
+    <li class="about-card rules ink"><strong>Prices for the things to buy</strong> failed a zero-wrong bar: a Nemotron 3 Nano reader got 11 of 21 right, 9 wrong and 1 left blank, and 4 of 6 shops block a direct fetch, so we show the item and the shop, not a price.</li>
   </ul>
 </section>
 
 <section aria-labelledby="whats-next">
   <h2 id="whats-next">What's next</h2>
-  <ul class="about-list">
-    <li>A twin for indoor plants, and a Nemotron photo reader (Nemotron 3.5 Super VL first).</li>
-    <li>Naming more problems: the check still doesn't name slugs.</li>
-    <li>A real screen-reader test, a beginners' user test, and more than one server.</li>
+  <ul class="about-cards small">
+    <li class="about-card later">A twin for indoor plants, and a Nemotron photo reader (Nemotron 3.5 Super VL first).</li>
+    <li class="about-card later">Naming more problems: the check still doesn't name slugs.</li>
+    <li class="about-card later">A real screen-reader test, a beginners' user test, and more than one server.</li>
   </ul>
 </section>
 
 <section aria-labelledby="access">
   <h2 id="access">Accessibility</h2>
-  <p>axe-core (WCAG 2.2 AA) on the main pages, light and dark: one miss, a dark-mode "(optional)" at 3.98:1, now 5.4:1. Focus rings on every stop, 44 px buttons, no sideways scroll at 320 px, motion off under Reduce Motion (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">the checks</a>).</p>
+  <p class="about-card">axe-core (WCAG 2.2 AA) on the main pages, light and dark: one miss, a dark-mode "(optional)" at 3.98:1, now 5.4:1. Focus rings on every stop, 44 px buttons, no sideways scroll at 320 px, motion off under Reduce Motion (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">the checks</a>).</p>
 </section>
 
 <section aria-labelledby="who">
   <h2 id="who">Who made it</h2>
-  <p>I'm Kash, a Senior Technical Architect based in London. My day job is cloud, AI strategy and enterprise modernisation, where I set direction and prove out ideas far more often than I write the code myself.</p>
-  <p>herbtwin inverts that: one idea, one person, built end to end for the NVIDIA × Nebius hackathon (I was at the London event). I lean on AI heavily to do it and say so plainly; the architecture and the judgement calls are mine. The first commit is 2 Oct 2026.</p>
-  <div class="about-close ink">
-    <p><strong>All of it is public.</strong> The code, the eval reports and the Devpost story.</p>
-    <p class="actions"><a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">herbtwin on GitHub</a></p>
+  <div class="about-two">
+    <div>
+      <p>I'm Kash, a Senior Technical Architect based in London. My day job is cloud, AI strategy and enterprise modernisation, where I set direction and prove out ideas far more often than I write the code myself.</p>
+      <p>herbtwin inverts that: one idea, one person, built end to end for the NVIDIA × Nebius hackathon (I was at the London event). I lean on AI heavily to do it and say so plainly; the architecture and the judgement calls are mine. The first commit is 2 Oct 2026.</p>
+    </div>
+    <div class="about-close about-card ink">
+      <p><strong>All of it is public.</strong> The code, the eval reports and the Devpost story.</p>
+      <p class="actions"><a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">herbtwin on GitHub</a></p>
+    </div>
   </div>
 </section>
 
-<section class="made-with about-credits" id="credits" aria-labelledby="credits-h">
+{# folded, as home's credits are (22 Oct, Kash: "do same for credits as we do for the home
+   page"); /credits and #credits open it #}
+<section class="made-with about-credits" aria-labelledby="credits-h">
   <h2 id="credits-h">Credits</h2>
-  <p class="made-note">Every photo, picture, data source and model herbtwin uses, with who made it and its licence.</p>
-  {{ credit_lists(spot_on=spot_on, plantbook_on=plantbook_on, sightings_on=sightings_on) }}
+  <details class="made-credits" id="credits">
+    <summary>Every photo, picture, data source and model, with its licence</summary>
+    {{ credit_lists(spot_on=spot_on, plantbook_on=plantbook_on, sightings_on=sightings_on) }}
+  </details>
 </section>
+<script>
+  // a link to #credits opens the fold it names (the footer's Credits, /credits)
+  (() => {
+    const open = () => { if (location.hash === "#credits") document.getElementById("credits").open = true; };
+    open();
+    addEventListener("hashchange", open);
+    // again after it was closed, when the hash is already #credits
+    addEventListener("click", (e) => { if (e.target.closest('a[href$="#credits"]')) setTimeout(open); });
+  })();
+</script>
 </div>
 {% endblock %}

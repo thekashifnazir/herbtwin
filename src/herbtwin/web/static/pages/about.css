@@ -1,25 +1,22 @@
 /* the About page (templates/about.html), in the shape of Moveset's and Step Out's About but
-   in herbtwin's own language (22 Oct, Kash: "where is the colour"): the green band, four
-   numbers pulled up over its edge, the story in the reading column, and one drawn flow in a
-   framed panel, its boxes the home page's sticker tiles, coloured by what they are. Theme
+   in herbtwin's own language (22 Oct, Kash: "where is the colour", then "we can still improve
+   it"): the green band, then every section across the whole frame, the prose beside its card
+   rather than in a narrow column with a dead right half. One palette says what a thing is,
+   the same in the flow, the tiles and the cards: mint an NVIDIA Nemotron model, grey the photo
+   model, lilac Tavily search, sky blue the weather, the twin its deep green, amber our rules
+   and what didn't work, clay GBIF's sightings, white you, our notes and the answer. Theme
    tokens only, so dark mode follows. Nothing under 16px. */
 .about-page .about-kicker { margin: 0 0 6px; font: 700 16px/1.2 var(--sans); letter-spacing: .08em;
   text-transform: uppercase; color: var(--band-muted); }
-.about-page .about-stats { list-style: none; margin: 0 0 32px; padding: 0; display: grid; gap: 16px;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.about-page .about-stats li { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px;
-  border-radius: var(--surface); background: var(--card); }
-.about-page .about-stats strong { font: 700 36px/1 var(--display); font-variant-numeric: tabular-nums; color: var(--ok); }
-.about-page .about-stats span { font-size: 16px; color: var(--muted-fg); }
-@media (max-width: 960px) { .about-page .about-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 480px) { .about-page .about-stats { grid-template-columns: 1fr; } }
 .about-page .about section { margin: 0 0 44px; }
-.about-page .about section > :is(p, ul, h3) { max-width: var(--measure); }
+.about-page .about section > p:not(.about-card) { max-width: var(--measure); }
+/* prose beside its card on a wide screen; one under the other on a phone */
+.about-page .about-two { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px 32px;
+  align-items: start; }
+.about-page .about-two > p { margin: 0; }
+@media (max-width: 860px) { .about-page .about-two { grid-template-columns: minmax(0, 1fr); } }
 .about-page .about h2 { margin: 0 0 12px; }
 .about-page .about h3 { margin: 24px 0 8px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
-.about-page .about-list li + li, .about-page .about-calls li + li { margin-top: 10px; }
-.about-page .about-list { padding-left: 1.2em; }
-.about-page .about-list.didnt li::marker { color: var(--warn); }  /* amber: as its box in the flow */
 
 /* the stack, as the sibling pages show it: a row of chips on the green tray */
 .about-page .about .about-chips { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-wrap: wrap;
@@ -51,6 +48,8 @@
 .about-page .node.then { margin-top: 14px; }
 .about-page .node.then::before { content: "\2193" / ""; position: absolute; left: 50%; top: -30px;
   transform: translateX(-50%); font: 700 22px/1 var(--sans); color: var(--muted-fg); }
+.about-page .node.photo { background: var(--muted); }
+.about-page .node.tavily { background: var(--lilac); }
 .about-page .node.weather { background: var(--sky); }
 .about-page .node.weather em { color: var(--sky-fg); }
 .about-page .node.twin { background: var(--band); color: var(--band-fg); }
@@ -60,23 +59,30 @@
 .about-page .node.advisors { background: var(--soft); }
 .about-page .node.rules { background: var(--warn-bg); border-color: var(--warn); }
 .about-page .node.rules strong { color: var(--warn); }
-.about-page .node.minor { box-shadow: none; border-color: var(--border); }
 .about-page .node.later { box-shadow: none; border: 2px dashed var(--muted-fg); background: transparent; }
 .about-page .node.answer { padding-top: 12px; }
+/* the source a box leans on, named where colour alone might not say it */
+.about-page .tag { align-self: flex-start; padding: 0 8px; border-radius: var(--pill); font: 700 16px/1.5 var(--sans);
+  font-style: normal; background: var(--card); color: var(--lilac-fg); border: 1.5px solid currentColor; }
+.about-page .gbif .tag { color: var(--clay); }
 .about-page .flow-by { margin: -6px 0 -8px; font: 700 16px/1.2 var(--sans); color: var(--muted-fg); }
 /* what hangs off the answer, in a row of its own under the flow */
 .about-page .flow-under { margin-top: 24px; padding-top: 16px; border-top: 1.5px dashed var(--border); }
 .about-page .flow-under .flow-by { margin: 0 0 10px; }
 .about-page .flow .under, .about-page .flow-under .under { list-style: none; margin: 0; padding: 0; display: grid;
   gap: 12px; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
-.about-page .flow-under .under li { padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 12px;
+.about-page .flow-under .under li { display: flex; flex-direction: column; gap: 4px; padding: 10px 14px;
+  border: 1.5px solid var(--fg); border-radius: 12px; box-shadow: 3px 3px 0 var(--ink-shadow);
   background: var(--card); color: var(--muted-fg); font-size: 16px; line-height: 1.35; }
 .about-page .flow-under .under strong { display: block; color: var(--fg); }
-.about-page .flow-key { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 20px 0 4px;
+/* the legend: every colour the flow, the tiles and the cards use */
+.about-page .flow-key { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 22px 0 4px; padding: 0;
   font-size: 16px; color: var(--muted-fg); }
-.about-page .flow-key span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-.about-page .flow-key i { display: inline-block; width: 28px; height: 0; border-top: 3px solid var(--ok); }
-.about-page .flow-key .key-d { border-top: 2px dashed var(--muted-fg); }
+.about-page .flow-key li { display: inline-flex; align-items: center; gap: 8px; }
+.about-page .sw { display: inline-block; width: 26px; height: 20px; border-radius: 6px; border: 1.5px solid var(--fg);
+  background: var(--card); }
+.about-page .sw.path { height: 0; width: 28px; border: 0; border-top: 3px solid var(--ok); border-radius: 0; }
+.about-page .sw.later { border: 2px dashed var(--muted-fg); background: transparent; }
 .about-page .flow-panel figcaption { margin-top: 6px; font-size: 16px; color: var(--muted-fg); }
 .about-page .flow-panel figcaption strong { color: var(--fg); }
 /* the plant's face on the answer, as the answer page draws it */
@@ -92,26 +98,49 @@
 }
 @media (max-width: 480px) { .about-page .flow-panel { padding: 16px; } }
 
-/* the decisions, as the sibling pages call them out: a bold claim, then why */
-.about-page .about-calls { list-style: none; margin: 12px 0 16px; padding-left: 0; }
-.about-page .about-calls li { position: relative; padding-left: 20px; }
-.about-page .about-calls li::before { content: "" / ""; position: absolute; left: 2px; top: .62em; width: 8px; height: 8px;
-  border-radius: 50%; background: var(--ok); }
-.about-page .about-receipt { max-width: var(--measure); padding: 14px 18px; border-left: 4px solid var(--ok);
-  border-radius: 0 var(--surface) var(--surface) 0; background: var(--card); }
+/* who made it ends on one closing card, as the sibling pages do */
+.about-page .about-card:is(.about-close, .about-receipt) { background: var(--soft); }
 .about-page .about-receipt h3 { margin-top: 0; }
 .about-page .about-receipt p:last-child { margin-bottom: 0; }
-/* the results: a table that scrolls inside itself on a narrow phone, never the page */
-.about-page .about-table { max-width: 52rem; overflow-x: auto; margin: 20px 0 16px; }
-.about-page .about-table table { width: 100%; border-collapse: collapse; font-size: 16px; }
-.about-page .about-table th, .about-page .about-table td { padding: 10px 12px; text-align: left; vertical-align: top;
-  border-bottom: 1px solid var(--border); }
-.about-page .about-table th { font-weight: 700; color: var(--muted-fg); }
-.about-page .about-table td:last-child { min-width: 11rem; }
-/* who made it ends on one closing card, as the sibling pages do */
-.about-page .about-close { max-width: var(--measure); margin-top: 20px; padding: 16px 20px;
-  border-radius: var(--surface); background: var(--soft); }
 .about-page .about-close p { margin: 0; }
 .about-page .about-close .actions { margin-top: 12px; }
 /* the credits: open, as the page's last section */
 .about-page .about-credits h3 { margin: 16px 0 8px; }
+
+/* one palette for the flow's boxes, the legend, the result tiles and the cards */
+.about-page :is(.sw, .about-tiles li, .about-card, .under li).advisors { background: var(--soft); }
+.about-page :is(.sw, .about-tiles li, .about-card).photo { background: var(--muted); }
+.about-page :is(.sw, .about-tiles li, .under li).tavily { background: var(--lilac); }
+.about-page :is(.sw, .under li).gbif { background: var(--clay-bg); }
+.about-page .sw.weather { background: var(--sky); }
+.about-page .sw.twin { background: var(--band); }
+.about-page :is(.sw, .about-card).rules { background: var(--warn-bg); border-color: var(--warn); }
+.about-page .about-card.rules strong { color: var(--warn); }
+
+/* cards, after the "All of it is public" card Kash liked: a tinted sticker, a bold lead, a line */
+.about-page .about-card { margin: 0; padding: 14px 18px; border-radius: var(--surface); background: var(--card);
+  font-size: 16px; line-height: 1.45; }
+.about-page .about-card:not(.ink) { border: 1.5px solid var(--border); }
+.about-page .about-card.later { border: 2px dashed var(--muted-fg); background: transparent; }
+.about-page .about .about-cards { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); max-width: none; }
+.about-page .about-cards.small { grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
+.about-page :is(.about-cards > li, .about-card.quote p, .about-close p) > strong:first-child { display: block;
+  margin-bottom: 2px; }
+.about-page .about-card a { color: var(--fg); }  /* AA on every tint */
+.about-page .about-card.quote p { margin: 0; }
+.about-page .about-card.quote { border-left-width: 6px; }
+
+/* the results as tiles (22 Oct, Kash: a table "not clear it's a table"): the number big,
+   what it measures under it, coloured by what was measured */
+.about-page .about .about-tiles { list-style: none; margin: 20px 0 12px; padding: 0; display: grid; gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); max-width: none; }
+.about-page .about-tiles li { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px;
+  border-radius: var(--surface); background: var(--card); }
+.about-page .about-tiles strong { font: 700 30px/1.05 var(--display); font-variant-numeric: tabular-nums; }
+.about-page .about-tiles span { font-size: 16px; color: var(--muted-fg); line-height: 1.4; }
+.about-page .about .made-note { max-width: var(--measure); }
+
+/* the credits: folded, as home's are; #credits opens it */
+.about-page .about-credits .made-credits { border: 1.5px solid var(--border); border-radius: var(--surface);
+  background: var(--card); }

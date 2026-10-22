@@ -52,7 +52,7 @@ def test_old_credits_links_land_on_the_credits_section(tmp_path):
 
 def test_the_answers_example_cost_is_labelled_one_example_and_an_estimate(tmp_path):
     page = _about(tmp_path)
-    cost = page.split('<div class="about-receipt">', 1)[1].split("</div>", 1)[0]
+    cost = page.split('<div class="about-receipt about-card ink">', 1)[1].split("</div>", 1)[0]
     assert "<strong>$0.0040</strong>" in cost and "<strong>about $0.0177</strong>" in cost
     assert "One example, not an average." in cost
     assert "the same tokens at Ultra's listed price" in cost
@@ -111,7 +111,7 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, mo
         "0.846",
         "0.63",
         "38 of 38",
-        "25</strong> with",
+        "<strong>25 vs 15</strong>",
         "51%",
         "$0.0040",
     ):
@@ -190,7 +190,7 @@ def test_how_its_built_is_the_stack_then_one_coloured_flow(tmp_path, monkeypatch
     flow = built.split('<ol class="flow"', 1)[1].split("</figure>", 1)[0]
     # six steps, then what hangs off the answer in a row of its own
     assert '<div class="flow-under">' in flow
-    steps = re.findall(r"\n      <li[ >]", flow)
+    steps = re.findall(r"\n      <li[ >]", flow.split('<div class="flow-under">', 1)[0])
     assert len(steps) == 6
     # the numbers the flow states come from the code that does them
     from herbtwin.pipeline import HOLD_WATER_DAYS
@@ -224,7 +224,7 @@ def test_how_its_built_is_the_stack_then_one_coloured_flow(tmp_path, monkeypatch
         assert said in flow, said
     # one green path: the arrows into the twin and the advisors
     assert flow.count('<li class="acc">') == 2
-    assert "<figcaption>" in built and '<i class="key-d">' in built
+    assert "<figcaption>" in built and '<i class="sw later"></i>not built yet' in built
     css = style.CSS
     assert ".about-page .node.twin { background: var(--band); color: var(--band-fg); }" in css
     assert ".about-page .node.weather { background: var(--sky); }" in css
@@ -266,3 +266,104 @@ def test_who_made_it_is_kashs_own_bio_and_ends_on_the_public_repo(tmp_path):
     assert "I'm Kash, a Senior Technical Architect based in London." in who
     assert "the architecture and the judgement calls are mine" in who
     assert '<a class="button" href="https://github.com/thekashifnazir/herbtwin"' in who
+
+
+def test_round_two_colours_every_source_and_says_what_each_colour_means(tmp_path, monkeypatch):
+    # 22 Oct, Kash on round 1: "Tavily isn't made clear in colour like the others", and "under
+    # the answer same issue". Each source has its colour, in the flow, the tiles and the cards,
+    # and the legend names them all; Tavily and GBIF boxes carry a tag too
+    page, built, works = _flows(tmp_path, True, monkeypatch)
+    assert (
+        # the problem check is the photo model's call; Tavily only finds how to treat what
+        # it names, so the box is the photo model's grey with a Tavily tag (22 Oct review)
+        '<div class="node photo"><i class="tag">Tavily</i><strong>If a problem shows</strong>'
+        in built
+    )
+    assert '<div class="node photo">' in built
+    under = built.split('<div class="flow-under">', 1)[1].split("</div>", 1)[0]
+    assert (
+        under.count('<i class="tag">Tavily</i>') == 3
+        and '<li class="gbif"><i class="tag">GBIF</i>' in under
+    )
+    assert '<li class="tavily"><i class="tag">Tavily</i><strong>Shops, gardeners</strong>' in under
+    key = built.split('<ul class="flow-key"', 1)[1].split("</ul>", 1)[0]
+    for swatch, said in (
+        ("advisors", "NVIDIA Nemotron"),
+        ("photo", "photo model"),
+        ("tavily", "Tavily search"),
+        ("weather", "your weather"),
+        ("twin", "the twin"),
+        ("rules", "our rules, what didn't work"),
+        ("gbif", "GBIF sightings"),
+        ("plain", "you, our notes, the answer"),
+    ):
+        assert f'<i class="sw {swatch}"></i>{said}' in key, swatch
+    css = style.CSS
+    assert (
+        "--lilac: #EEE8F7; --lilac-fg: #5B3F8F;" in css
+        and "--lilac: #251E33; --lilac-fg: #C4B2EE;" in css
+    )
+    assert ".about-page .node.tavily { background: var(--lilac); }" in css
+
+
+def test_round_two_has_no_bare_numbers_and_shows_results_as_coloured_tiles(tmp_path, monkeypatch):
+    # Kash: the top numbers "don't really tell us much"; the table "not clear it's a table".
+    # The flow leads; the results are sticker tiles, coloured by what was measured
+    page, _, works = _flows(tmp_path, True, monkeypatch)
+    assert "about-stats" not in page and "<table" not in page
+    tiles = works.split('<ul class="about-tiles"', 1)[1].split("</ul>", 1)[0]
+    assert len(re.findall(r'<li class="[a-z ]*ink">', tiles)) == 8
+    for colour, number in (
+        ("advisors", "2%"),
+        ("advisors", "0.63"),
+        ("photo", "0.846"),
+        ("photo", "38 of 38"),
+        ("tavily", "25 vs 15"),
+    ):
+        assert f'<li class="{colour} ink"><strong>{number}</strong>' in tiles, number
+
+
+def test_round_two_turns_the_long_text_into_cards(tmp_path):
+    # Kash: "just not helpful"; the "All of it is public" card ("like this!") is the model
+    page = _about(tmp_path)
+    didnt = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
+    assert didnt.count('<li class="about-card rules ink"><strong>') == 5
+    nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
+    assert nxt.count('<li class="about-card later">') == 3
+    assert page.count('<blockquote class="about-card quote ink">') == 2
+    css = style.CSS
+    assert (
+        ".about-page .about-card:is(.about-close, .about-receipt) { background: var(--soft); }"
+        in css
+    )
+    assert ".about-page .about-two { display: grid;" in css
+
+
+def test_the_credits_are_folded_and_a_credits_link_opens_them(tmp_path):
+    # Kash: "do same for credits as we do for the home page instead of out so it's hidden away"
+    page = _about(tmp_path)
+    credits = page.split('<h2 id="credits-h">Credits</h2>', 1)[1]
+    assert credits.lstrip().startswith('<details class="made-credits" id="credits">')
+    assert '<details class="made-credits" id="credits" open' not in page
+    assert (
+        'if (location.hash === "#credits") document.getElementById("credits").open = true;' in page
+    )
+
+
+def test_the_palette_tints_each_kind_of_box_and_card():
+    # one palette for the flow, the legend, the tiles and the cards; a dropped tint shows here
+    css = style.CSS
+    for rule in (
+        ".about-page :is(.sw, .about-tiles li, .about-card, .under li).advisors { background: var(--soft); }",
+        ".about-page :is(.sw, .about-tiles li, .about-card).photo { background: var(--muted); }",
+        ".about-page :is(.sw, .about-tiles li, .under li).tavily { background: var(--lilac); }",
+        ".about-page :is(.sw, .under li).gbif { background: var(--clay-bg); }",
+        ".about-page :is(.sw, .about-card).rules { background: var(--warn-bg); border-color: var(--warn); }",
+    ):
+        assert rule in css, rule
+
+
+def test_without_the_spot_feature_the_spot_tile_goes(tmp_path):
+    page = _about(tmp_path)  # spot off
+    tiles = page.split('<ul class="about-tiles"', 1)[1].split("</ul>", 1)[0]
+    assert "What can I grow here?" not in tiles and len(re.findall(r"<li class=", tiles)) == 7
