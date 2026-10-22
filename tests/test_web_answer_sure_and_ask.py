@@ -131,7 +131,8 @@ def test_starters_are_tapped_into_the_chat_and_enter_sends(tmp_path):
     script = page.split('const starters = box.querySelector(".starters");', 1)[1]
     assert "form.question.value = b.textContent; ask.click();" in script
     assert 'e.key !== "Enter" || e.shiftKey || e.isComposing || e.keyCode === 229' in script
-    assert 'p.append(" (found with Tavily)")' in page  # the chat's sources, as before
+    # the chat's sources, with one "Found with Tavily" line for the set (22 Oct site walk)
+    assert 'found.textContent = "Found with Tavily";' in page
 
 
 def test_an_older_answers_question_shows_with_the_advisors_reply(tmp_path):
@@ -312,3 +313,36 @@ def test_a_statement_gets_no_pointer_to_the_headline(tmp_path):
     a.runs = [a.runs[0].model_copy(update={"answer": "The soil is dry."})]
     assert reply_to(a, "I repotted it last week", 10) == ""
     assert reply_to(a, "Did repotting hurt it?", 10).startswith("Our answer: ")
+
+
+def test_a_refine_keeps_the_questions_and_chat_under_the_card_on_a_phone(tmp_path):
+    # 22 Oct site walk: after a refine the answer rose to "Our best read" and its question
+    # was answered, so ask-up dropped and Tell us more, with what they had just said, fell
+    # below Where to get it, halfway down a phone page. A refine keeps it under the card
+    from herbtwin.schemas import Told
+
+    rec = _unsure_record(tmp_path)
+    rec.observation.setting = "outdoor"
+    rec.told = Told(soil_feel="dry", question="It is in a pot on a sunny balcony")
+    rec.answer.level, rec.answer.tell_me, rec.answer.tell_me_key = "sure", None, None
+    assert 'class="answer-cols ask-up"' not in _render(rec)  # not refined: as before
+    rec.refined_from = "Leave it for now and keep an eye on it."
+    assert 'class="answer-cols ask-up"' in _render(rec)
+    # still not sure, its question now answered, or only the band's place left to ask
+    rec.answer.level = "not_sure"
+    assert 'class="answer-cols ask-up"' in _render(rec)
+    rec.answer.tell_me_key, rec.answer.tell_me = "location", "Tell us where it grows."
+    assert 'class="answer-cols ask-up"' in _render(rec, asks=["question"])
+
+
+def test_a_switch_alone_does_not_lift_an_empty_tell_us_more(tmp_path):
+    # a refine that only switched Indoors/Outdoors (or gave the band a town) left no words in
+    # the chat: Tell us more stays where a sure answer keeps it (review of this PR)
+    from herbtwin.schemas import Told
+
+    rec = _unsure_record(tmp_path)
+    rec.answer.level, rec.answer.tell_me, rec.answer.tell_me_key = "sure", None, None
+    rec.refined_from = "Leave it for now and keep an eye on it."
+    for told in (Told(setting="indoor"), Told(place="London")):
+        rec.told = told
+        assert 'class="answer-cols ask-up"' not in _render(rec), told

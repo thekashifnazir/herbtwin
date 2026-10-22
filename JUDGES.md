@@ -25,7 +25,9 @@ is in the submission form; it is not in this repository.
    (the big green button; **Analyse** on a site without the spot answer).
 2. **Watch it work.** The page names the step it is on at the top and lists each step as it happens ("Reading the photo",
    "Found …", "Looking up how … likes to grow", "Checking the weather where you are",
-   "Thinking about what it needs"), then opens the answer. Section 4 says why.
+   "Thinking about what it needs"), then opens the answer. When the weather does not come
+   back, or no place was given, an amber line says so ("Weather unavailable this time",
+   "No place given: skipping the weather"). Section 4 says why.
 3. **Read the answer.** It comes in three blocks (on a wide screen the first is on the
    left, the other two on the right):
    - **What to do.** The plant, then where it grows, the date and the place as a row of
@@ -70,7 +72,8 @@ is in the submission form; it is not in this repository.
      watered), then **Check the advice again**; **Ask a question** (one text box, **Ask
      about this plant**, three questions to tap for this plant, such as "Is it safe to
      eat?", and the replies); **Reminders**. With no questions to answer, both buttons
-     sit under the text box;
+     sit under the text box, **Ask about this plant** first and green, so a typed question
+     goes to the chat;
    - **How we worked it out**: first, who advised, in plain words (today one model asked the
      same question three times; each answer is an "advisor"); then **What each advisor said**: each
      one's call in bold, in the page's words and never the advisor's own (so nothing the plan

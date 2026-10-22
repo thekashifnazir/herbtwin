@@ -30,6 +30,7 @@ from herbtwin.pipeline import (
     SeasonFound,
     TwinTested,
     WeatherFound,
+    WeatherMissed,
 )
 from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT, about_problem
 from herbtwin.stages.problem import signs as problem_signs
@@ -366,6 +367,21 @@ def _weather_card(w: WeatherFound) -> str:
     return _fact("weather", "Weather where you are", "".join(lines))
 
 
+# the weather step's outcome when it did not come back: an amber "check first" line, never
+# the green of a step done (22 Oct site walk)
+WEATHER_MISSED = {
+    "fetch_failed": "Weather unavailable this time",
+    "no_location": "No place given: skipping the weather",
+    "place_not_found": "Couldn't find that place: skipping the weather",
+    "photo_too_old": "Photo taken too long ago: skipping the weather",
+}
+
+
+def _missed_line(m: WeatherMissed) -> str:
+    said = WEATHER_MISSED.get(m.why, WEATHER_MISSED["fetch_failed"])
+    return f'<li class="missed">{html.escape(said)}</li>{NOW_CALL}\n'
+
+
 CHECKING = "Checking the advice with what you told us…"
 NOT_SURE = "not_sure"
 # what a reply was about, in the thanks line ({what}), so a tap on one question never reads
@@ -467,6 +483,8 @@ def _step(said: object, advisor: str | None = None) -> str:
             return _season_cards(said)
         if isinstance(said, WeatherFound):
             return _weather_card(said)
+        if isinstance(said, WeatherMissed):
+            return _missed_line(said)
         if said in STOPPED_LINES:
             return _line(str(said)) + DROP_ASKS
         if said == THINKING:

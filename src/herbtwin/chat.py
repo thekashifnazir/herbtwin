@@ -74,6 +74,10 @@ MAX_CALLS = 3  # tool calls run per round; more get an error result
 MAX_REPLY = 4000  # chat_messages.content check
 MAX_TOKENS = 2048
 MAX_SOURCES = 5
+# links shown under a reply (22 Oct site walk: five RHS cultivar pages, each "(found with
+# Tavily)"); the reply's citations are still checked against every listed page
+MAX_LINKS = 2
+LINK_CHARS = 48
 LESS_SURE = "Less sure: we couldn't check this against your plant's forecast or a gardening source."
 UNAVAILABLE = "The chat is not available right now. Try again in a minute."
 NO_ANSWER = "I could not form an answer to that. Try asking it another way."
@@ -739,6 +743,109 @@ def sources_from(tools: list[dict] | None) -> list[dict]:
             # who found it, for the page's "found with Tavily"
             out.append({"title": title, "url": h["url"], "provider": result.get("provider")})
     return out[:MAX_SOURCES]
+
+
+# a site's short name, for a link's label ("RHS: parsley"); one per trusted site
+_SITE_LABELS = {
+    "rhs.org.uk": "RHS",
+    "kew.org": "Kew",
+    "gardenersworld.com": "Gardeners' World",
+    "missouribotanicalgarden.org": "Missouri Botanical Garden",
+    "extension.umn.edu": "UMN Extension",
+    "extension.psu.edu": "Penn State Extension",
+    "plants.ces.ncsu.edu": "NC State Extension",
+    "ipm.ucanr.edu": "UC IPM",
+    "extension.illinois.edu": "Illinois Extension",
+    "gardenorganic.org.uk": "Garden Organic",
+    "rbge.org.uk": "RBGE",
+    "herbsociety.org.uk": "The Herb Society",
+    "planthealthportal.defra.gov.uk": "Defra",
+    "pfaf.org": "PFAF",
+}
+# a cultivar's quoted name ("'Bravour'"), never an apostrophe ("Gardeners' World")
+_CULTIVAR = re.compile(r"\s*(?<!\w)['\u2018][^'\u2018\u2019]+['\u2019](?!\w)")
+_TITLE_PARTS = re.compile(r"\s+[|\u2013\u2014-]\s+")
+_SITE_TAIL = re.compile(r"\s+PFAF Plant Database\s*$")  # PFAF's titles end so, unparted
+
+
+def _domain(url: str) -> str:
+    host = (urlsplit(url).hostname or "").lower()
+    return next((d for d in _SITE_LABELS if host == d or host.endswith(f".{d}")), host)
+
+
+def _named(domain: str, text: str) -> bool:
+    """The reply names this site in brackets ("(RHS)"), as the citation check reads it."""
+    return any(
+        _site(n) == domain
+        for m in _BRACKET.finditer(text)
+        for n in _NAME_SPLIT.split(_CITE_WORD.sub("", m[2].strip()))
+        if n
+    )
+
+
+def _topic(title: str, domain: str) -> str:
+    """What a page is about, from its title: less the site's own name as a part of its own
+    ("| RHS Guide", "RHS - "; never mid-title: "Growing herbs with the RHS" keeps it) or a
+    known tail ("PFAF Plant Database"), and any cultivar name; an RHS plant record's "Latin
+    | common" gives its common name ("Petroselinum crispum | parsley" is "parsley")."""
+    names = [k for k, d in _SITE_NAMES.items() if d == domain]
+
+    def the_site(part: str) -> bool:
+        bare = " ".join(re.sub(r"[^a-z0-9\s]", "", part.casefold()).split())
+        return any(bare == k or bare.startswith(f"{k} ") for k in names)
+
+    split = _TITLE_PARTS.split(_SITE_TAIL.sub("", title))
+    parts = []
+    for part in split:
+        if len(split) > 1 and the_site(part):
+            continue
+        kept = " ".join(_CULTIVAR.sub("", part).split())
+        if kept:
+            parts.append(kept)
+    if not parts:
+        return ""
+    topic = parts[-1] if len(parts) > 1 and parts[-1][:1].islower() else parts[0]
+    if len(topic) > LINK_CHARS:
+        topic = topic[:LINK_CHARS].rsplit(" ", 1)[0].rstrip(",;:") + "\u2026"
+    return topic
+
+
+def shown_links(sources: list[dict], text: str = "") -> list[dict]:
+    """The links shown under a reply: at most MAX_LINKS (more only for sites the reply
+    names), one per site, each a short label ("RHS: parsley"). A site the reply names comes
+    first, then a site with a page about the
+    plant or the problem before one with only a cultivar's page; each site's own page
+    before its cultivars' (22 Oct site walk). Only https links."""
+    best: dict[str, tuple[bool, int, dict]] = {}
+    for i, s in enumerate(sources):
+        url = str(s.get("url") or "")
+        if not url.startswith("https://"):
+            continue
+        cultivar = bool(_CULTIVAR.search(str(s.get("title") or "")))
+        domain = _domain(url)
+        if domain not in best or (best[domain][0] and not cultivar):
+            best[domain] = (cultivar, i, s)
+    ranked = sorted(best.items(), key=lambda kv: (not _named(kv[0], text), kv[1][0], kv[1][1]))
+    # every site the reply names keeps its link, past MAX_LINKS: #414 keeps its bracket only
+    # while its link is listed (review of this PR); the others fill any room left
+    named = sum(_named(d, text) for d in best)
+    out = []
+    for domain, (_, _, s) in ranked[: max(named, MAX_LINKS)]:
+        site = _SITE_LABELS.get(domain, domain.removeprefix("www."))
+        topic = _topic(str(s.get("title") or ""), domain)
+        out.append(
+            {
+                "label": f"{site}: {topic}" if topic else site,
+                "url": s["url"],
+                "provider": s.get("provider"),
+            }
+        )
+    return out
+
+
+def links_from(tools: list[dict] | None, text: str = "") -> list[dict]:
+    """A kept reply's shown links, rebuilt from its tool results after a reload."""
+    return shown_links(sources_from(tools), text)
 
 
 def _unfence(text: str) -> str:

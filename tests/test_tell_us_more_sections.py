@@ -116,8 +116,9 @@ def test_with_nothing_to_send_above_the_box_both_buttons_sit_under_it(tmp_path):
         [
             '<div class="part chat"><h3>Ask a question</h3>',
             '<textarea name="question"',
-            "Check the advice again</button>",
+            # the green one asks; the re-run is the quiet one beside it (22 Oct site walk)
             "Ask about this plant</button>",
+            "Check the advice again</button>",
         ],
     )
     assert form.count('<div class="actions">') == 2  # the buttons' row and the starters'
@@ -195,8 +196,9 @@ def test_the_indoors_or_outside_question_sits_over_the_box_that_answers_it(tmp_p
             '<div class="part chat needed"><h3>Ask a question</h3>',
             '<div class="tray warn"><p>Tell us whether it is indoors or outside.</p></div>',
             '<textarea name="question"',
-            "Check the advice again</button>",
+            # the green one asks; the re-run is the quiet one beside it (22 Oct site walk)
             "Ask about this plant</button>",
+            "Check the advice again</button>",
         ],
     )
     assert '<div class="actions send">' not in form and 'name="place"' not in form

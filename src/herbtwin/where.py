@@ -30,6 +30,8 @@ log = logging.getLogger(__name__)
 
 UK_BOX = (49.8, 61.0, -10.7, 1.9)  # lat min, lat max, lon min, lon max: GB + Ireland
 GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
+# the end of the note a typed place that could not be found leaves (the wait reads it too)
+PLACE_NOT_FOUND_HINT = "try a nearby town or postcode"
 # Open-Meteo knows towns but no UK postcodes, so a typed postcode goes to postcodes.io
 POSTCODE_URL = "https://api.postcodes.io"
 _OUTCODE = r"[A-Z]{1,2}[0-9][A-Z0-9]?"
@@ -310,7 +312,7 @@ def resolve_location(
             return geocode(place, client=client), notes
         except GeocodeError as e:
             log.exception("geocode failed")
-            notes.append(f"{e}; try a nearby town or postcode")
+            notes.append(f"{e}; {PLACE_NOT_FOUND_HINT}")
     gps = exif_gps(image)
     if gps is None and not is_sample(image):  # a sample is set in London, as home says
         gps = next((g for g in map(exif_gps, more) if g is not None), None)

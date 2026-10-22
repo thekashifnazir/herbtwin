@@ -222,9 +222,11 @@
     {% set decline = ["healthy-looking", "a little tired", "declining", "badly declining"] %}
     <p>From the photo: {{ droop[obs.water_stress] }}, {{ decline[obs.decline] }}{% if obs.leaf_colour != "not_visible" %} · leaves {{ obs.leaf_colour|replace("_", " ") }}{% endif %}{% if obs.soil_surface != "not_visible" %} · soil surface {{ obs.soil_surface|replace("_", " ") }}{% endif %}{% if obs.symptoms %} · seen: {{ obs.symptoms|join(", ") }}{% endif %}</p>
     {# what the season is, then who says so (judge live walk of rev 00040: "Season: RHS, our care notes") #}
+    {# only the sources behind the season, never the pest and disease pages behind its
+       problem signs (22 Oct site walk: mildew papers on a healthy plant's season line) #}
     {# its main state in plain words: never "normal dieback and active growth" or "evergreen hold" #}
     {% set season_said = {"active_growth": "growing", "flowering": "flowering", "bolting_risk": "may run to seed", "normal_dieback": "dying back", "dormant": "resting", "regrowth": "growing again", "leaf_fall": "dropping its leaves", "evergreen_hold": "holding its leaves"} %}
-    {% if rec.season and not (obs and obs.setting == "indoor") %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(rec.season.sources) }}</p>{% endif %}
+    {% if rec.season and not (obs and obs.setting == "indoor") %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(season_sources(rec.season)) }}</p>{% endif %}
     {% if rec.pack and rec.pack.sources %}<p>Care facts: {{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
     {% if rec.problem %}{% set src = rec.problem.page %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
     <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}.{% if src %} Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.{% endif %}</p>{% endif %}
@@ -250,7 +252,11 @@
     {% set level_label = "Our best read" if best else "Not sure, check first" %}
     {% set level_line = "Right about half the time in our tests." if best else "Right about 1 in 3 times in our tests." %}
     {% set record = "about half the time" if best else "about 1 in 3 times" %}
-    <div class="answer-cols{{ ' ask-up' if a.level == 'not_sure' and a.tell_me and not (place_on_band and not quick) else '' }}">
+    {# a refine keeps the questions and its chat under the card on a phone, as before it ran
+       (22 Oct site walk: the answer rose to "Our best read", ask-up dropped, and what they had
+       just said fell halfway down the page). Only when they wrote something: a switch or a
+       town alone leaves the chat empty, and an empty Tell us more stays put #}
+    <div class="answer-cols{{ ' ask-up' if (rec.refined_from and rec.told and rec.told.question) or (a.level == 'not_sure' and a.tell_me and not (place_on_band and not quick)) else '' }}">
     {# the photo you sent, from this browser tab's own copy (index.html keeps it on send):
        never sent again, so nothing new is stored; hidden where the tab has no copy. Big,
        above the main card on a phone and beside it from 960px, not a thumbnail in the band
@@ -535,19 +541,23 @@
         {% for v, text in choices[q].items() %}<option value="{{ v }}"{% if rec.told and rec.told[q] == v %} selected{% endif %}>{{ text }}</option>{% endfor %}
         </select></label>{% endfor %}
       {% if "soil_texture" in asks %}{{ spotq.squeeze_field(choices["squeeze"], rec.told.squeeze if rec.told else none) }}{% endif %}</div>{% endif %}
-      {# one green button in the panel: asking is the quiet one (21 Oct, Kash). Their names
-         say what each does, so no explainer line under them. With groups above, "Check the
-         advice again" closes them, so it reads as their send; the box still goes with it #}
-      {% set check_button %}<button class="primary big" type="submit">Check the advice again</button>{% endset %}
+      {# one green button in the panel (21 Oct, Kash). Their names say what each does, so
+         no explainer line under them. With groups above, "Check the advice again" closes
+         them, green, as their send, and asking is the quiet one; the box still goes with it.
+         With the box alone, the green one asks: a question typed there went to the paid
+         re-run, the green button beside it (22 Oct site walk), so the re-run is quiet. Ask
+         needs the script, so the page is sent with Check green and the script hands the
+         green to Ask as it shows it: one green button with the script or without (#420) #}
       {% if has_where or has_changed %}<div class="actions send">
-        {{ check_button }}
+        <button class="primary big" type="submit">Check the advice again</button>
       </div>{% endif %}
       <div class="part chat{{ ' needed' if tray_in == 'chat' else '' }}"><h3>Ask a question</h3>
       {% if tray_in == "chat" %}{{ tray }}{% endif %}
       <label>Tell us something, or ask a question (optional)<textarea name="question" maxlength="{{ [max_question, max_chat]|min }}" rows="3" placeholder="{{ 'What if I move it to a brighter window?' if obs.setting == 'indoor' else 'What if I move it inside?' }}">{{ rec.told.question if rec.told and rec.told.question else "" }}</textarea></label>
       <div class="actions">
-        {% if not (has_where or has_changed) %}{{ check_button }}
-        {% endif %}<button class="big quiet ask-chat" type="button" hidden>Ask about this plant</button>
+        <button class="big quiet ask-chat" type="button"{{ '' if has_where or has_changed else ' data-lead' }} hidden>Ask about this plant</button>
+        {%- if not (has_where or has_changed) %}
+        <button class="primary big" type="submit">Check the advice again</button>{% endif %}
       </div>
       {# "Ask about this plant" made plain (19 Oct, Kash): three to tap, through the chat #}
       <div class="starters" hidden><h4>Or tap a question to ask</h4>
@@ -556,8 +566,9 @@
       {% if rec.told and rec.told.question %}{% set reply = reply_to(a, rec.told.question, rec.taken_at.month) %}<div class="asked"><p class="msg user">{{ "You asked" if is_question(rec.told.question) else "You said" }}: {{ rec.told.question }}</p>{% if reply %}<p class="msg assistant">{{ reply }}</p>{% endif %}</div>{% endif %}
       <div class="chatlog"{% if not chat %} hidden{% endif %}><h4>Your questions</h4>{% for m in chat %}<p class="msg {{ m.role }}">{{ m.content }}
         {#- a kept reply's sources, as the script's add() shows a new one (judge walk of #269:
-            the links went on reload); chat_sources comes with the chat backend's own PR -#}
-        {%- if m.role == "assistant" and chat_sources is defined %}{% for s in chat_sources(m.tools) if s.url.startswith("https://") %}<br><a href="{{ s.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ s.title or s.url }}</a>{% if s.provider == "tavily" %} (found with Tavily){% endif %}{% endfor %}{% endif %}</p>{% endfor %}</div>
+            the links went on reload); at most 2 short ones and one "Found with Tavily" line for
+            the set when Tavily found them all, else on each it found (review of this PR), not one per link (22 Oct site walk) -#}
+        {%- if m.role == "assistant" and chat_links is defined %}{% set ns = namespace(shown=[], tavily=0) %}{% for s in chat_links(m.tools, m.content) if s.url.startswith("https://") %}{% set ns.shown = ns.shown + [s] %}{% if s.provider == "tavily" %}{% set ns.tavily = ns.tavily + 1 %}{% endif %}{% endfor %}{% set all_tavily = ns.shown and ns.tavily == ns.shown|length %}{% for s in ns.shown %}<br><a href="{{ s.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ s.label or s.url }}</a>{% if not all_tavily and s.provider == "tavily" %} (found with Tavily){% endif %}{% endfor %}{% if all_tavily %}<br><small>Found with Tavily</small>{% endif %}{% endif %}</p>{% endfor %}</div>
       </div>
       </form>
       {% if reminder %}<div class="part remind"><h3>Reminders</h3>
@@ -614,6 +625,10 @@
       const noteText = note.textContent;
       const motion = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
       ask.hidden = false;
+      if ("lead" in ask.dataset) {  // the box alone: the green one asks, the re-run goes quiet
+        ask.classList.replace("quiet", "primary");
+        check.classList.replace("primary", "quiet");
+      }
       // Check the advice again reloads the page after ~15 s: show it started, and stop a
       // second press sending it twice
       form.addEventListener("submit", (e) => {
@@ -645,13 +660,21 @@
         const p = document.createElement("p");
         p.className = "msg " + role;
         p.textContent = text;
-        for (const s of sources || []) {
-          if (!String(s.url).startsWith("https://")) continue;
+        const links = (sources || []).filter((s) => String(s.url).startsWith("https://"));
+        // one line for the set when Tavily found them all (22 Oct site walk), else on each
+        // link it found: never Tavily's name on another finder's page (review of this PR)
+        const allTavily = links.length && links.every((s) => s.provider === "tavily");
+        for (const s of links) {
           const a = document.createElement("a");
-          a.href = s.url; a.textContent = s.title || s.url;
+          a.href = s.url; a.textContent = s.label || s.url;
           a.rel = "noopener noreferrer nofollow"; a.target = "_blank";
           p.append(document.createElement("br"), a);
-          if (s.provider === "tavily") p.append(" (found with Tavily)");
+          if (!allTavily && s.provider === "tavily") p.append(" (found with Tavily)");
+        }
+        if (allTavily) {
+          const found = document.createElement("small");
+          found.textContent = "Found with Tavily";
+          p.append(document.createElement("br"), found);
         }
         log.hidden = false;
         log.appendChild(p);

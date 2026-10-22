@@ -139,24 +139,24 @@ def test_a_kept_reply_shows_its_sources_once_the_chat_can_rebuild_them(tmp_path)
     page = _render(rec, chat=chat)  # kept tools with no search results: the reply alone
     assert '<p class="msg assistant">Remove the worst leaves.</p>' in page
     found = [
-        {"title": "RHS downy mildew", "url": "https://www.rhs.org.uk/x", "provider": "tavily"},
-        {"title": "bad", "url": "javascript:alert(1)", "provider": "tavily"},
+        {"label": "RHS: downy mildew", "url": "https://www.rhs.org.uk/x", "provider": "tavily"},
+        {"label": "bad", "url": "javascript:alert(1)", "provider": "tavily"},
     ]
-    real = TEMPLATES.env.globals.get("chat_sources")
-    TEMPLATES.env.globals["chat_sources"] = lambda tools: (
+    real = TEMPLATES.env.globals.get("chat_links")
+    TEMPLATES.env.globals["chat_links"] = lambda tools, text: (
         [SimpleNamespace(**s) for s in found] if tools else []
     )
     try:
         page = _render(rec, chat=chat)
     finally:  # put the real one back: deleting it would hide every later test's links
         if real is None:
-            del TEMPLATES.env.globals["chat_sources"]
+            del TEMPLATES.env.globals["chat_links"]
         else:
-            TEMPLATES.env.globals["chat_sources"] = real
+            TEMPLATES.env.globals["chat_links"] = real
     reply = page.split('<p class="msg assistant">', 1)[1].split("</p>", 1)[0]
     assert reply == (
         'Remove the worst leaves.<br><a href="https://www.rhs.org.uk/x" rel="noopener noreferrer '
-        'nofollow" target="_blank">RHS downy mildew</a> (found with Tavily)'
+        'nofollow" target="_blank">RHS: downy mildew</a><br><small>Found with Tavily</small>'
     )
     assert '<p class="msg user">How do I treat it?</p>' in page
 

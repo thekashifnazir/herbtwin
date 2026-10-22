@@ -167,8 +167,8 @@ def test_not_sure_puts_the_question_that_would_help_first_in_the_asks(tmp_path):
             '<span class="badge check">Not sure, check first',
             "Tell us more and we'll check the advice",
             '<form class="refine" method="post"',
-            "Check the advice again",
             "Ask about this plant",
+            "Check the advice again",
             '<span class="fold-title">Why we\'re not sure</span>',
         ],
     )

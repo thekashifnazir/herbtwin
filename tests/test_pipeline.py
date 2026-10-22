@@ -1103,6 +1103,100 @@ def test_the_wait_gets_no_season_without_a_uk_place(tmp_path):
     assert not any(isinstance(x, SeasonFound | WeatherFound) for x in lines)
 
 
+@pytest.mark.parametrize(
+    "fails",
+    [httpx.Response(500), httpx.ReadTimeout("open-meteo took too long")],
+    ids=["500", "timeout"],
+)
+@respx.mock
+def test_the_wait_says_when_the_weather_did_not_come_back(tmp_path, fails):
+    # 22 Oct site walk: "Checking the weather where you are" ticked as done although the
+    # fetch failed. The step after it now says the weather did not come back
+    from herbtwin.pipeline import WeatherMissed, analyse_with_reading
+
+    route = respx.get(OPEN_METEO_URL)
+    route.mock(**({"return_value": fails} if isinstance(fails, httpx.Response) else {"side_effect": fails}))  # fmt: skip
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
+    lines: list = []
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    assert rec.environment is None and route.called
+    step = lines.index("Checking the weather where you are")
+    assert lines[step + 1] == WeatherMissed("fetch_failed")
+    assert not any(isinstance(x, WeatherFound) for x in lines)
+
+
+@respx.mock
+def test_the_wait_says_no_place_means_no_weather(tmp_path):
+    # 22 Oct site walk: with no place given, the wait says it skipped the weather, never
+    # "Checking the weather"; and the fetch is never made
+    from herbtwin.pipeline import WeatherMissed, analyse_with_reading
+
+    route = respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3, env={})
+    lines: list = []
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    assert rec.location is None and not route.called
+    assert "Checking the weather where you are" not in lines
+    assert lines.count(WeatherMissed("no_location")) == 1
+    # said where the weather would be checked: after the care facts, before the advisors
+    at = lines.index(WeatherMissed("no_location"))
+    assert (
+        lines.index("Looking up how basil likes to grow")
+        < at
+        < lines.index("Thinking about what it needs")
+    )
+
+
+@respx.mock
+def test_a_typed_place_we_could_not_find_is_not_no_place_given(tmp_path):
+    # they typed a place and it was not found: the wait says so, not "No place given"
+    # (review of #422); the answer page keeps its own not-found note
+    from herbtwin.pipeline import WeatherMissed, analyse_with_reading
+    from herbtwin.where import GEOCODE_URL, PLACE_NOT_FOUND_HINT
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json={"results": []}))
+    route = respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3, env={})
+    lines: list = []
+    rec, _ = analyse_with_reading(
+        deps, JPEG, "image/jpeg", received=WHEN, place="Nowhereville", progress=lines.append
+    )
+    assert rec.location is None and not route.called
+    assert any(n.endswith(PLACE_NOT_FOUND_HINT) for n in rec.notes)
+    assert WeatherMissed("place_not_found") in lines
+    assert WeatherMissed("no_location") not in lines
+
+
+@respx.mock
+def test_a_photo_too_old_for_the_weather_says_so(tmp_path, monkeypatch):
+    # a photo taken more than two weeks before it was sent: no fetch, and the wait says why
+    import herbtwin.pipeline as pl
+    from herbtwin.pipeline import WeatherMissed, analyse_with_reading
+
+    monkeypatch.setattr(
+        pl, "photo_date", lambda image, received: (WHEN - timedelta(days=30), "exif")
+    )
+    route = respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    deps = _deps(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
+    lines: list = []
+    analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    assert not route.called and "Checking the weather where you are" not in lines
+    assert lines.count(WeatherMissed("photo_too_old")) == 1
+
+
+@respx.mock
+def test_the_wait_says_nothing_about_the_weather_indoors_or_when_it_came_back(tmp_path):
+    # indoors the weather is not asked for (not "missed"); a fetch that worked is not missed
+    from herbtwin.pipeline import WeatherMissed, analyse_with_reading
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    for obs, env in ((dict(OBS, setting="indoor"), {}), (OBS, HOME)):
+        deps = _deps(tmp_path, [json.dumps(obs)], [json.dumps(ADV)] * 3, env=env)
+        lines: list = []
+        analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+        assert not any(isinstance(x, WeatherMissed) for x in lines)
+
+
 @respx.mock
 def test_the_wait_gets_no_outdoor_season_for_an_indoor_plant(tmp_path):
     # #328 follow-up review: "outdoor plant finished" beside an indoor basil; the answer

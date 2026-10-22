@@ -51,8 +51,8 @@ from herbtwin.answer import (
 from herbtwin.answer_cache import AnswerCache
 from herbtwin.asks import questions_for
 from herbtwin.auth import EXPIRED_LINK, AuthError, valid_email
-from herbtwin.chat import LIMIT, MAX_CHARS, ChatError, clean_message, starters
-from herbtwin.chat import sources_from as chat_sources
+from herbtwin.chat import LIMIT, MAX_CHARS, ChatError, clean_message, shown_links, starters
+from herbtwin.chat import links_from as chat_links
 from herbtwin.compass import tap_from_sensor
 from herbtwin.config import Settings, load_settings, parse_coordinate
 from herbtwin.consequences import NO_DATA
@@ -94,6 +94,7 @@ from herbtwin.schemas import (
     Told,
 )
 from herbtwin.scoring import score_lines
+from herbtwin.seasonal import season_sources
 from herbtwin.shops import DailyCap, shops_from
 from herbtwin.sightings import sightings_from
 from herbtwin.species import display_name, name_parts
@@ -217,7 +218,8 @@ TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the 
 TEMPLATES.env.globals["starters"] = starters  # "Ask about this plant": 3 to tap
 TEMPLATES.env.globals["watch_list"] = watch_list  # Keep an eye on, one sign a line
 TEMPLATES.env.globals["by_part"] = by_part  # See it by part: the plan sorted, nothing new
-TEMPLATES.env.globals["chat_sources"] = chat_sources  # a kept reply's links, after a reload
+TEMPLATES.env.globals["season_sources"] = season_sources  # the season line's "from ..."
+TEMPLATES.env.globals["chat_links"] = chat_links  # a kept reply's links, after a reload
 TEMPLATES.env.globals["reply_to"] = reply_to  # "You asked: …" and the advisor's reply
 TEMPLATES.env.globals["is_question"] = is_question  # "You asked" or "You said"
 TEMPLATES.env.globals["note_facts"] = note_facts  # the chips follow their note
@@ -2430,7 +2432,8 @@ def create_app(
         out = JSONResponse(
             {
                 "reply": turn.reply.text,
-                "sources": turn.reply.sources,
+                # at most 2 short links, one per site (22 Oct site walk)
+                "sources": shown_links(turn.reply.sources, turn.reply.text),
                 "fact": turn.reply.fact,  # told, not asked: the page may keep it in the box
                 "left": turn.left,
                 "note": turn.note,

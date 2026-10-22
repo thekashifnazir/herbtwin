@@ -124,5 +124,13 @@ body.has-dock { padding-bottom: calc(150px + env(safe-area-inset-bottom)); } /* 
 /* empty, it takes no room but stays a live region: display:none would hide it from a
    screen reader, which may then miss the first reply's line */
 .wait-asks .sent:empty { margin: 0; }
+/* the weather did not come back, or no place was given (WeatherMissed): amber "check
+   first", never the done green, and still even as the newest step (22 Oct site walk) */
+.progress ol > li.missed { color: var(--warn); }
+.progress ol > li.missed::before { background: var(--warn); opacity: 1; animation: none; box-shadow: none; }
+/* without script the last step reads as the one being worked on (herbtwin.css): a missed
+   weather line that is last stays amber and still there too (review of this PR) */
+html:not(.js) .progress-steps ol:last-of-type > li.missed.missed:last-of-type { color: var(--warn); font-weight: inherit; }
+html:not(.js) .progress-steps ol:last-of-type > li.missed.missed:last-of-type::before { animation: none; box-shadow: none; }
 /* what the advisors are, under "Thinking about what it needs" */
 .progress li .note { display: block; font-weight: 400; font-size: 16px; color: var(--muted-fg); }

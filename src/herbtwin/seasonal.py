@@ -8,6 +8,7 @@ October) and name the signs that would NOT be normal now.
 from __future__ import annotations
 
 import json
+import re
 from functools import cache
 from pathlib import Path
 from typing import Literal
@@ -25,6 +26,21 @@ SeasonalStatus = Literal[
     "evergreen_hold",
 ]
 
+# a source about a pest or disease backs an entry's problem signs, never what is normal now
+# (22 Oct site walk: "Season in October: dying back, from RHS, our care notes, Frontiers,
+# AHDB, UF/IFAS, UConn" cited mildew papers for a season fact): the RHS's pest, disease and
+# problem pages, and the other problem papers the table cites by name
+_PROBLEM_PAGE = re.compile(r"rhs\.org\.uk/(?:biodiversity|disease|problems)/")
+PROBLEM_PAPERS = frozenset(
+    {
+        "https://www.frontiersin.org/journals/plant-science/articles/10.3389/fpls.2023.1237577/pdf",
+        "https://archive.ahdb.org.uk/pe-024a-improving-knowledge-and-control-of-downy-mildew-in-protected-and-outdoor-crops",
+        "https://ask.ifas.ufl.edu/publication/PP271",
+        "https://homegarden.cahnr.uconn.edu/factsheets/basil-downy-mildew",
+        "https://en.wikipedia.org/w/index.php?title=Puccinia_menthae&oldid=1224542185",
+        "https://hgic.clemson.edu/factsheet/rose-diseases/",
+    }
+)
 NORMS_PATH = Path(__file__).resolve().parents[2] / "data" / "seasonal" / "norms_uk.json"
 
 
@@ -64,6 +80,12 @@ def normal_for(plant: str, month: int, region: str = "UK") -> SeasonalNorm | Non
     norm = _index().get((plant.strip().casefold(), month))
     # Deep copy: the index is cached, so a caller editing a list must not change later lookups.
     return norm.model_copy(deep=True) if norm else None
+
+
+def season_sources(norm: SeasonalNorm) -> list[str]:
+    """The sources behind what is normal now (the season line's "from ..."): the entry's
+    own, less the pest and disease pages behind its problem signs."""
+    return [s for s in norm.sources if not (_PROBLEM_PAGE.search(s) or s in PROBLEM_PAPERS)]
 
 
 def plants() -> list[str]:

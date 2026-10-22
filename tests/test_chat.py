@@ -20,6 +20,7 @@ from herbtwin.chat import (
     reply,
     said_a_fact,
     shown,
+    shown_links,
     sources_from,
 )
 from herbtwin.schemas import Answer, ProblemSeen, SpeciesCandidate, Told
@@ -1416,3 +1417,168 @@ def test_ruling_a_product_out_is_kept_with_either_apostrophe(tmp_path, ruled_out
     m = MockAdapter([f"{ruled_out} Remove the worst leaves."])
     r = reply(m, rec, message="how do I treat it?", past=[], history=None, search=None)
     assert r.text.startswith(ruled_out) and NO_SPRAYS not in r.text
+
+
+# 22 Oct site walk: a reply listed 5 RHS cultivar pages, each "(found with Tavily)". At most
+# 2 short links ("RHS: parsley"), the plant's own page before a cultivar's, one per site
+_RHS = "https://www.rhs.org.uk/plants"
+_PARSLEY_PAGES = [
+    {
+        "title": "Petroselinum crispum 'Bravour' | parsley (curled) 'Bravour'",
+        "url": f"{_RHS}/122214/petroselinum-crispum-bravour/details",
+        "provider": "tavily",
+    },
+    {
+        "title": "Petroselinum crispum 'Moss Curled' | parsley 'Moss Curled'",
+        "url": f"{_RHS}/112445/petroselinum-crispum-moss-curled/details",
+        "provider": "tavily",
+    },
+    {
+        "title": "Petroselinum crispum | parsley",
+        "url": f"{_RHS}/41248/petroselinum-crispum/details",
+        "provider": "tavily",
+    },
+    {
+        "title": "How to grow Parsley | RHS Guide",
+        "url": "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+        "provider": "tavily",
+    },
+    {
+        "title": "How to Grow Parsley | BBC Gardeners World Magazine",
+        "url": "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-parsley",
+        "provider": "tavily",
+    },
+]
+
+
+def test_a_reply_shows_at_most_two_short_links_one_per_site():
+    links = shown_links(_PARSLEY_PAGES, "Bring it in if potted.")
+    assert [s["label"] for s in links] == ["RHS: parsley", "Gardeners' World: How to Grow Parsley"]
+    assert [s["url"] for s in links] == [_PARSLEY_PAGES[2]["url"], _PARSLEY_PAGES[4]["url"]]
+    assert all(s["provider"] == "tavily" for s in links)
+
+
+def test_a_cultivar_page_shows_only_when_its_site_has_nothing_else():
+    links = shown_links(_PARSLEY_PAGES[:2], "")
+    assert [s["label"] for s in links] == ["RHS: parsley (curled)"]
+    assert links[0]["url"] == _PARSLEY_PAGES[0]["url"]
+
+
+def test_a_site_the_reply_names_is_linked_first():
+    # its "(Kew)" stays only while a Kew link is listed (#414): the shown links keep it
+    pages = [
+        {"title": "Rosemary | RHS", "url": "https://www.rhs.org.uk/rosemary", "provider": "tavily"},
+        {
+            "title": "Rosemary | BBC Gardeners World Magazine",
+            "url": "https://www.gardenersworld.com/rosemary",
+            "provider": "tavily",
+        },
+        {
+            "title": "Salvia rosmarinus",
+            "url": "https://www.kew.org/plants/rosemary",
+            "provider": "tavily",
+        },
+    ]
+    links = shown_links(pages, "Hardy to -10C (Kew).")
+    assert [s["label"] for s in links] == ["Kew: Salvia rosmarinus", "RHS: Rosemary"]
+
+
+def test_an_apostrophe_is_not_taken_for_a_cultivar():
+    pages = [
+        {
+            "title": "Rosemary's beetle | Gardeners' World",
+            "url": "https://www.gardenersworld.com/b",
+            "provider": "tavily",
+        },
+        {"title": "Rosemary beetle | RHS", "url": "https://www.rhs.org.uk/b", "provider": "tavily"},
+    ]
+    assert [s["label"] for s in shown_links(pages, "")] == [
+        "Gardeners' World: Rosemary's beetle",
+        "RHS: Rosemary beetle",
+    ]
+
+
+def test_a_site_name_in_the_title_is_left_out_of_the_label():
+    pages = [
+        {
+            "title": "Petroselinum crispum Parsley PFAF Plant Database",
+            "url": "https://pfaf.org/user/plant.aspx?LatinName=Petroselinum+crispum",
+            "provider": "tavily",
+        },
+        {
+            "title": "Basil downy mildew | UMN Extension",
+            "url": "https://extension.umn.edu/diseases/basil-downy-mildew",
+            "provider": "tavily",
+        },
+    ]
+    assert [s["label"] for s in shown_links(pages, "")] == [
+        "PFAF: Petroselinum crispum Parsley",
+        "UMN Extension: Basil downy mildew",
+    ]
+
+
+def test_a_long_title_is_cut_at_a_word_and_a_link_not_https_is_never_shown():
+    pages = [
+        {"title": "x", "url": "javascript:alert(1)", "provider": "tavily"},
+        {
+            "title": "Growing basil outdoors in a cold wet British summer without a greenhouse",
+            "url": "https://www.rhs.org.uk/basil",
+            "provider": None,
+        },
+    ]
+    links = shown_links(pages, "")
+    assert [s["url"] for s in links] == ["https://www.rhs.org.uk/basil"]
+    assert links[0]["label"] == "RHS: Growing basil outdoors in a cold wet British…"
+    assert shown_links([], "") == []
+
+
+def test_the_reply_still_cites_what_the_search_listed(tmp_path):
+    # the citation check (#414) still runs on every listed page, not only the 2 shown
+    rec = _answered(_rec(tmp_path, env=_env()))
+    hits = [Hit(f"Rosemary {i}", f"https://www.rhs.org.uk/r{i}", "Hardy.") for i in range(4)]
+    hits.append(Hit("Rosemary | Kew", "https://www.kew.org/rosemary", "Hardy."))
+    m = MockAdapter([_tool("search_web", query="rosemary"), "Hardy (RHS). Sun (Kew)."])
+    found = Found(hits, "tavily", None)
+    r = reply(m, rec, message="how hardy?", past=[], history=None, search=FakeSearch(found))
+    assert len(r.sources) == 5 and r.text == "Hardy (RHS). Sun (Kew)."
+    assert [s["label"] for s in shown_links(r.sources, r.text)] == [
+        "RHS: Rosemary 0",
+        "Kew: Rosemary",
+    ]
+
+
+def test_every_site_the_reply_names_keeps_its_link_past_two(tmp_path):
+    # review of this PR: "(UMN Extension)" kept by #414's check had no link under the reply
+    rec = _answered(_rec(tmp_path, env=_env()))
+    hits = [
+        Hit("Rosemary | RHS", "https://www.rhs.org.uk/rosemary", "Hardy."),
+        Hit("Rosemary", "https://www.kew.org/rosemary", "Sun."),
+        Hit("Rosemary | Garden Organic", "https://www.gardenorganic.org.uk/rosemary", "x"),
+        Hit("Rosemary | UMN Extension", "https://extension.umn.edu/rosemary", "Mildew."),
+    ]
+    said = "Warm (RHS). Sun (Kew). Mildew risk (UMN Extension)."
+    m = MockAdapter([_tool("search_web", query="rosemary"), said])
+    r = reply(
+        m, rec, message="q?", past=[], history=None, search=FakeSearch(Found(hits, "tavily", None))
+    )
+    assert r.text == said  # #414 keeps all three
+    links = shown_links(r.sources, r.text)
+    assert [s["label"] for s in links] == [
+        "RHS: Rosemary",
+        "Kew: Rosemary",
+        "UMN Extension: Rosemary",
+    ]
+
+
+def test_a_site_name_mid_title_stays_in_the_label():
+    # review of this PR: "Growing herbs with the RHS" was cut to "Growing herbs with the"
+    pages = [
+        {
+            "title": "Growing herbs with the RHS",
+            "url": "https://www.rhs.org.uk/h",
+            "provider": "tavily",
+        },
+        {"title": "RHS - Parsley", "url": "https://www.rhs.org.uk/p", "provider": "tavily"},
+    ]
+    assert shown_links(pages[:1], "")[0]["label"] == "RHS: Growing herbs with the RHS"
+    assert shown_links(pages[1:], "")[0]["label"] == "RHS: Parsley"

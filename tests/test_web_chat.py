@@ -212,9 +212,13 @@ def test_a_page_tavily_found_is_labelled_so(tmp_path):
     c.app.state.deps = dataclasses.replace(deps, search=FakeSearch(Found([hit], "tavily", None)))
     rid = _first(c)
     body = c.post(ASK.format(rid), json={"message": "does it like warmth?"}).json()
-    assert body["sources"] == [{"title": "Basil", "url": hit.url, "provider": "tavily"}]
+    assert body["sources"] == [{"label": "RHS: Basil", "url": hit.url, "provider": "tavily"}]
     page = c.get(f"/answers/{rid}").text
-    assert 'if (s.provider === "tavily") p.append(" (found with Tavily)");' in page
+    # one line for the set, not one per link (22 Oct site walk)
+    assert 'found.textContent = "Found with Tavily";' in page
+    assert (
+        "(found with Tavily)" not in page.split('<div class="chatlog"', 1)[1].split("</script>")[0]
+    )
 
 
 @respx.mock
@@ -254,7 +258,7 @@ def test_a_replys_links_are_still_listed_after_a_reload(tmp_path):
     page = c.post(f"/answers/{rid}/refine", data={"soil_feel": "wet"}).text
     log = page.split('<div class="chatlog"', 1)[1].split("</div>", 1)[0]
     assert '<a href="https://www.rhs.org.uk/basil-mildew"' in log
-    assert "Basil downy mildew | RHS</a> (found with Tavily)" in log
+    assert "RHS: Basil downy mildew</a><br><small>Found with Tavily</small>" in log
 
 
 @respx.mock
@@ -271,3 +275,68 @@ def test_a_stated_fact_is_flagged_for_the_page_to_keep_for_the_advice(tmp_path):
     assert "kitchen windowsill indoors" not in body["reply"]
     body = c.post(ASK.format(rid), json={"message": "Does it like sun?"}).json()
     assert body["fact"] is False
+
+
+@respx.mock
+def test_a_replys_five_pages_show_as_two_short_links_and_one_tavily_line(tmp_path):
+    # 22 Oct site walk: 5 RHS cultivar pages under one reply, each "(found with Tavily)"
+    from herbtwin.search import Found, Hit
+
+    rhs = "https://www.rhs.org.uk/plants"
+    pages = [
+        ("Ocimum basilicum 'Genovese' | basil 'Genovese'", f"{rhs}/1/ocimum-genovese/details"),
+        ("Ocimum basilicum 'Siam Queen' | basil 'Siam Queen'", f"{rhs}/2/ocimum-siam/details"),
+        ("Ocimum basilicum | basil", f"{rhs}/3/ocimum-basilicum/details"),
+        ("How to grow Basil | RHS Guide", "https://www.rhs.org.uk/herbs/basil/grow-your-own"),
+        ("How to Grow Basil | BBC Gardeners World Magazine", "https://www.gardenersworld.com/b"),
+    ]
+
+    class Search:
+        def search(self, query):
+            return Found([Hit(t, u, "Basil likes warmth.") for t, u in pages], "tavily", None)
+
+    _weather()
+    advise = [json.dumps(ADV)] * 3 + [_tool("search_web", query="basil"), "Warm (RHS)."]
+    c = _client(tmp_path, [json.dumps(OBS)], advise + [HOLD] * 3)
+    c.app.state.deps.search = Search()
+    rid = _first(c)
+    body = c.post(ASK.format(rid), json={"message": "Does it like warmth?"}).json()
+    assert [s["label"] for s in body["sources"]] == [
+        "RHS: basil",
+        "Gardeners' World: How to Grow Basil",
+    ]
+    page = c.post(f"/answers/{rid}/refine", data={"soil_feel": "wet"}).text
+    log = page.split('<div class="chatlog"', 1)[1].split("</div>", 1)[0]
+    assert log.count("<a href=") == 2 and log.count("Found with Tavily") == 1
+    assert "found with Tavily" not in log and "Genovese" not in log
+
+
+@respx.mock
+def test_mixed_finders_credit_each_link_and_never_claim_tavily_for_all(tmp_path):
+    # review of this PR: Tavily failed and the chain fell to Exa, yet one "Found with
+    # Tavily" line sat under both links
+    from herbtwin.history import ChatMessage
+
+    _weather()
+    c = _client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3 + [HOLD] * 3)
+    rid = _first(c)
+    found = [
+        ("tavily", "Basil | RHS", "https://www.rhs.org.uk/basil"),
+        ("exa", "Basil", "https://www.kew.org/basil"),
+    ]
+    tools = [
+        {"name": "search_web", "arguments": {"query": "basil"},
+         "result": {"provider": p, "results": [{"title": t, "url": u, "snippet": "x"}]}}
+        for p, t, u in found
+    ]  # fmt: skip
+    c.app.state.answers.add_chat(rid, ChatMessage(role="user", content="Is it hardy?"))
+    c.app.state.answers.add_chat(
+        rid, ChatMessage(role="assistant", content="Warm (RHS). Sun (Kew).", tools=tools)
+    )
+    page = c.post(f"/answers/{rid}/refine", data={"soil_feel": "wet"}).text
+    log = page.split('<div class="chatlog"', 1)[1].split("</div>", 1)[0]
+    assert "RHS: Basil</a> (found with Tavily)<br>" in log
+    assert "Kew: Basil</a></p>" in log and "Found with Tavily" not in log
+    # the script says the same for a fresh reply
+    assert 'links.length && links.every((s) => s.provider === "tavily")' in page
+    assert 'if (!allTavily && s.provider === "tavily") p.append(" (found with Tavily)");' in page

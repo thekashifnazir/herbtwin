@@ -120,7 +120,7 @@ Which NVIDIA models we tried and why some lost: [docs/reference/nvidia-models.md
 | Says "treat it" when the expert did not (150 questions) | **Super 2%**, Ultra 12.7% |
 | Names the species, top-1 (149 photos) | **0.846** |
 | Confidence ranks right advice above wrong (AUROC, 624 held-out questions) | **0.63** |
-| Chat answers right with Tavily search vs without (30 questions) | **25 vs 15** |
+| Chat answers right with Tavily search vs without (30 questions) | **25 vs 15**; re-checked 22 Oct: 26 vs 18 |
 
 Every number, its interval and the command that reruns it:
 [docs/reference/results.md](docs/reference/results.md). The reports are also mirrored on

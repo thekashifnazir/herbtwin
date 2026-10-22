@@ -608,6 +608,29 @@ def test_rain_and_frost_take_the_weather_blue_and_a_mild_dry_day_stays_plain():
     assert 'class="wet"' not in mild and 'class="cold"' not in mild
 
 
+def test_a_weather_step_that_missed_says_so_in_amber_not_the_done_green():
+    # 22 Oct site walk: "Checking the weather where you are" ticked as done although the
+    # weather failed. The step after it says what happened, as a "check first" line
+    from herbtwin.pipeline import WeatherMissed
+    from herbtwin.web.style import CSS
+    from tests.test_web_home import _contrast, _tokens
+
+    for why, said in (
+        ("fetch_failed", "Weather unavailable this time"),
+        ("no_location", "No place given: skipping the weather"),
+        ("place_not_found", "Couldn&#x27;t find that place: skipping the weather"),
+        ("photo_too_old", "Photo taken too long ago: skipping the weather"),
+    ):
+        body = "".join(_collect(lambda say, w=why: (say(WeatherMissed(w)), "/a/b")[1]))
+        assert f'<li class="missed">{said}</li><script>herbtwinNow()</script>' in body
+    # amber, never the green of a step done; still, even while it is the newest step
+    assert ".progress ol > li.missed { color: var(--warn); }" in CSS
+    assert ".progress ol > li.missed::before { background: var(--warn); opacity: 1; animation: none; box-shadow: none; }" in CSS  # fmt: skip
+    card, warn = (_tokens(t)[:2] for t in ("card", "warn"))
+    for theme in (0, 1):  # light, dark
+        assert _contrast(warn[theme], card[theme]) >= 4.5
+
+
 def test_the_normal_and_weather_cards_carry_their_colour_at_aa_in_light_and_dark():
     from herbtwin.web.style import CSS
     from tests.test_web_home import _contrast, _tokens
@@ -734,3 +757,14 @@ def test_the_step_now_line_says_ready_and_goes_on_a_failure():
     failed = _failed("the photo read took too long")
     assert "document.getElementById('wait-now')" in failed and ".hidden=true" in failed
     assert failed.index("wait-now") < failed.index('class="err"')
+
+
+def test_without_script_a_missed_weather_line_that_is_last_stays_amber_and_still():
+    # without script the last step reads as the live one (herbtwin.css): its rule must not
+    # turn a missed weather line back into the bold, pulsing done look (review of this PR)
+    from pathlib import Path
+
+    css = Path("src/herbtwin/web/static/pages/wait.css").read_text()
+    last = "html:not(.js) .progress-steps ol:last-of-type > li.missed.missed:last-of-type"
+    assert f"{last} {{ color: var(--warn); font-weight: inherit; }}" in css
+    assert f"{last}::before {{ animation: none; box-shadow: none; }}" in css

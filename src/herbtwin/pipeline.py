@@ -107,6 +107,7 @@ from herbtwin.sun import sun_hours
 from herbtwin.tracing import StageTracer, TraceStore, bind
 from herbtwin.twin_bank import key as twin_key
 from herbtwin.where import (
+    PLACE_NOT_FOUND_HINT,
     exif_exposure,
     for_model,
     geocode,
@@ -363,6 +364,16 @@ class WeatherFound:
 
 
 @dataclass(frozen=True)
+class WeatherMissed:
+    """The weather did not come back (`fetch_failed`), there was no place to ask it for
+    (`no_location`), the place typed was not found (`place_not_found`), or the photo is too
+    old for it (`photo_too_old`): the wait says which, never a step done (22 Oct site walk:
+    "Checking the weather where you are" ticked as done although the fetch had failed)."""
+
+    why: str
+
+
+@dataclass(frozen=True)
 class PlantFound:
     """The plant the photo model named, and that model's id, from the trace of the call
     whose reply was read: the backup's when the backup answered (21 Oct, judges: which
@@ -373,7 +384,8 @@ class PlantFound:
 
 
 Progress = Callable[
-    [str | TwinTested | AdvisorReplied | SeasonFound | WeatherFound | PlantFound], None
+    [str | TwinTested | AdvisorReplied | SeasonFound | WeatherFound | WeatherMissed | PlantFound],
+    None,
 ]
 
 NOT_A_PLANT_LINE = "This doesn't look like a plant"
@@ -403,7 +415,13 @@ LATE_TOLD: ContextVar[Callable[[Told | None], Told | None] | None] = ContextVar(
 
 def _say(
     progress: Progress | None,
-    line: str | TwinTested | AdvisorReplied | SeasonFound | WeatherFound | PlantFound,
+    line: str
+    | TwinTested
+    | AdvisorReplied
+    | SeasonFound
+    | WeatherFound
+    | WeatherMissed
+    | PlantFound,
 ) -> None:
     """Tell the person what the run is doing (D58). A broken hook never stops a run."""
     if progress is None:
@@ -445,8 +463,12 @@ def _location_evidence(
         weather_missing = "indoors"
     elif rec.location is None:
         weather_missing = "no_location"
+        # they typed a place we could not find: not "no place given" (review of #422)
+        typed = any(note.endswith(PLACE_NOT_FOUND_HINT) for note in rec.notes)
+        _say(progress, WeatherMissed("place_not_found" if typed else weather_missing))
     elif not -1 <= age_days <= WEATHER_DAYS_BACK:
         weather_missing = "photo_too_old"
+        _say(progress, WeatherMissed(weather_missing))
     else:
         weather_missing = None
 
@@ -467,6 +489,7 @@ def _location_evidence(
             log.exception("environment failed run=%s", rec.record_id)
             failures.append(StageFailure(stage="environment", message=str(e)))
             weather_missing = "fetch_failed"
+            _say(progress, WeatherMissed(weather_missing))
     return season_missing, weather_missing, weather, failures
 
 
