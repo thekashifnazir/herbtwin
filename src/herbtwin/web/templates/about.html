@@ -20,10 +20,13 @@
 </div>
 
 <div class="about">
-<section aria-labelledby="what">
-  <h2 id="what">What it does</h2>
+<section class="about-what" aria-labelledby="what">{# round 3 (22 Oct, Kash): two short lines, the heading level with the card's top #}
   <div class="about-two">
-    <p>Photo a herb and say where it grows. In 15 to 35 seconds, with no account, you get one thing to do and how sure we are. It is for UK growers with herbs outdoors: the season norms, frost data and soil maps are all UK. Signed in, you get an email when it's time to look again, and the next photo asks "Did you do it?".{% if spot_on %} <strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.{% endif %}</p>
+    <div>
+      <h2 id="what">What it does</h2>
+      <p>Signed in, you get an email when it's time to look again, and your next photo asks "Did you do it?".</p>
+      {% if spot_on %}<p><strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.</p>{% endif %}
+    </div>
     <div class="about-receipt about-card ink">
       <h3>What an answer costs</h3>
       <p>Every answer lists which model did each step, its time and its cost. One example read (basil, 21 Oct): <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> had every step run on Nemotron 3 Ultra.</p>
@@ -34,12 +37,15 @@
 
 <section id="made-with" aria-labelledby="built">{# the answer page's "What it's made with" lands here #}
   <h2 id="built">How it's built</h2>
+  {# round 3 (22 Oct, Kash's notes): the chips take the flow's colours, so they are its key
+     for the sources; our rules sit in the main row; the flow runs in two rows of four on a
+     wide screen, so the boxes and their words can be bigger #}
   <ul class="about-chips" aria-label="The stack">
-    <li>Python 3.12</li><li>FastAPI</li><li>Cloud Run</li><li>Cloudflare Worker</li><li>Nebius Token Factory</li><li>NVIDIA Nemotron 3</li><li>Tavily</li><li>Open-Meteo</li><li>GBIF</li><li>Supabase</li>
+    <li>Python 3.12</li><li>FastAPI</li><li>Cloud Run</li><li>Cloudflare Worker</li><li>Nebius Token Factory</li><li class="nvidia">NVIDIA Nemotron 3</li><li class="tavily">Tavily</li><li class="weather">Open-Meteo</li><li class="gbif">GBIF</li><li>Supabase</li>
   </ul>
-  <p>One adapter carries every model call to Nebius Token Factory; reminders run as a Nebius AI Cloud Serverless Job.</p>
+  <p>Every AI model runs on Nebius Token Factory{% if voice_on %}, except the plant's voice (ElevenLabs){% endif %}. Reminder emails come from a small daily job on Nebius AI Cloud.</p>
   <figure class="flow-panel">
-    <ol class="flow" aria-label="How one answer is made, step by step">
+    <ol class="flow-built" role="list" aria-label="How one answer is made, step by step">
       <li><div class="node">
         <strong>Your photo and place</strong>
         <span>Up to 3 photos, and a UK town, postcode or the photo's location</span></div></li>
@@ -52,8 +58,8 @@
         <span>The photo model checks the plant's known problems; Tavily finds how to treat one</span></div></li>
       <li><div class="node">
         <strong>Care and season</strong>
-        <span>RHS notes and 360 cited rows, month by month</span></div>
-        <div class="node weather then">
+        <span>RHS notes and 360 cited rows, month by month</span></div></li>
+      <li class="turn"><div class="node weather">
         <strong>Weather</strong><em>Open-Meteo</em>
         <span>The next 2 weeks</span></div></li>
       <li class="acc"><div class="node twin">
@@ -63,8 +69,8 @@
       <li class="acc"><div class="node advisors">
         <strong>3 × NVIDIA Nemotron 3 Super</strong>
         <span>Each decides on its own; how far they agree sets how sure we are</span>
-        <b>e.g. 6.0 s · $0.0024</b></div>
-        <div class="node rules then">
+        <b>e.g. 6.0 s · $0.0024</b></div></li>
+      <li><div class="node rules">
         <strong>Our rules</strong>
         <span>No cure: remove it. Advisors say water, but nothing looks dry and the twin sees no dry day ahead: leave it.</span></div></li>
       <li><div class="node answer ink">
@@ -82,74 +88,156 @@
       </ul>
     </div>
     <ul class="flow-key" aria-label="What the colours mean">
-      <li><i class="sw advisors"></i>NVIDIA Nemotron</li><li><i class="sw photo"></i>photo model</li>
-      <li><i class="sw tavily"></i>Tavily search</li><li><i class="sw weather"></i>your weather</li>
-      <li><i class="sw twin"></i>the twin</li><li><i class="sw rules"></i>our rules, what didn't work</li>
-      <li><i class="sw gbif"></i>GBIF sightings</li><li><i class="sw path"></i>the weather's path</li>
-      <li><i class="sw plain"></i>you, our notes, the answer</li><li><i class="sw later"></i>not built yet</li>
+      <li><i class="sw path"></i>the weather's path</li><li><i class="sw plain"></i>you, our notes, the answer</li><li><i class="sw later"></i>not built yet</li>
     </ul>
-    <figcaption>Each box names its model. <strong>Your weather is tried on the plant's twin</strong> before three advisors decide; <strong>our rules have the last word</strong>.</figcaption>
+    <figcaption>Each box names its model; the chips above give the sources' colours. <strong>Your weather is tried on the plant's twin</strong> before three advisors decide; <strong>our rules have the last word</strong>.</figcaption>
   </figure>
   <h3>A few decisions I'd call out</h3>
-  <ul class="about-cards">
-    <li class="about-card advisors ink"><strong>Super decides, not Ultra.</strong> Ultra, the largest, over-treated: 12.7% against Super's 2%.</li>
-    <li class="about-card advisors ink"><strong>Nano talks.</strong> The chat, 10 of 10 on our what-if check, in about half Super's time.</li>
-    <li class="about-card photo ink"><strong>GLM-5.3-Flash reads the photo.</strong> Four NVIDIA vision models named the plant less often: 0.54 to 0.627, against 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>).</li>
+  <ul class="about-cards decisions">
+    <li class="about-card advisors ink"><strong>The mid-size model decides, not the biggest.</strong> Nemotron 3 Ultra, the biggest, said "treat it" when the expert did not in 12.7% of answers; Super, the middle size, in 2%.</li>
+    <li class="about-card advisors ink"><strong>The small model runs the chat.</strong> Nemotron 3 Nano: 10 of 10 on our what-if check, in about half Super's time.</li>
+    <li class="about-card photo ink"><strong>A non-NVIDIA model reads the photo, because it named plants better.</strong> Four NVIDIA vision models named the plant 0.54 to 0.627 of the time, against GLM-5.3-Flash's 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>).</li>
   </ul>
 </section>
 
 <section aria-labelledby="works">
   <h2 id="works">How I know it works</h2>
+  {#- one bar of a question card: the value is written beside it, so the bar is only a picture
+     of it (aria-hidden); `mark` is where the card's yardstick sits (about-works.css) #}
+  {%- macro bar(who, val, width, ours=false, mark=none) -%}
+  <li{% if ours %} class="ours"{% endif %}><span>{{ who }}</span><span class="val">{{ val }}</span><span class="bar" aria-hidden="true"><i style="width: {{ width }}%"></i>{% if mark %}<b class="mark" style="left: {{ mark }}%"></b>{% endif %}</span></li>
+  {%- endmacro %}
   <figure class="flow-panel">
-    <ol class="flow flow-evals" aria-label="How a test decides what ships">
-      <li><div class="node"><strong>Write the test down first</strong><span>The question, the data and the bar to pass, before any run</span></div></li>
-      <li><div class="node"><strong>Run it on held-out data</strong><span>150 expert questions, 149 healthy photos, 444 trusted-page items</span></div></li>
-      <li><div class="node"><strong>Label it blind</strong><span>Trusted-page rounds: 2 labellers, yes only if both agree</span></div></li>
-      <li class="fork"><p class="flow-by">passed</p><div class="node advisors"><strong>It ships</strong><span>Trusted-page check, round 8: 3 false agrees in 418</span></div>
-        <p class="flow-by">failed</p><div class="node rules"><strong>What didn't work</strong><span>Rounds 1 to 4 and 7; specialist advisors (774 questions)</span></div></li>
+    <ol class="works-flow" aria-label="How a test decides what ships">
+      <li class="step"><div class="node"><strong>Write the test down first</strong><span>The question, the data and the bar to pass, before any run</span></div></li>
+      <li class="step"><div class="node"><strong>Run it on held-out data</strong><span>150 expert questions, 149 healthy photos, 444 trusted-page items</span></div></li>
+      <li class="step"><div class="node"><strong>Label it blind</strong><span>Trusted-page rounds: 2 labellers, yes only if both agree</span></div></li>
+      <li class="fork">
+        <div class="branch"><p class="flow-by">If it passes</p><div class="node advisors"><strong>It ships</strong><span>Trusted-page check, round 8: 3 false agrees in 418</span></div></div>
+        <div class="branch"><p class="flow-by">If it fails</p><div class="node rules"><strong>What didn't work</strong><span>Rounds 1 to 4 and 7; specialist advisors (774 questions)</span></div></div>
+      </li>
     </ol>
     <figcaption><strong>The bar is set before the run.</strong> A pass ships; a fail goes under What didn't work.</figcaption>
   </figure>
-  <ul class="about-tiles" aria-label="What we measured">
-    <li class="advisors ink"><strong>2%</strong><span>"Treat it" when the expert didn't: Super (Ultra 12.7%, Nano 7.3%; 150 Stack Exchange questions)</span></li>
-    <li class="advisors ink"><strong>0.43 · 0.41</strong><span>Main action matches the expert's (150 Stack Exchange; 200 from MIRAGE, a plant-care benchmark; ceiling about 0.8)</span></li>
-    <li class="advisors ink"><strong>0.63</strong><span>Confidence ranks right advice above wrong (AUROC, 624 held-out expert questions)</span></li>
-    <li class="photo ink"><strong>0.846</strong><span>Plant named right first time (149 GBIF photos, 15 kinds)</span></li>
-    <li class="photo ink"><strong>0 false alarms</strong><span>Problem check on 149 healthy and 102 problem photos; 33 named right, 0 wrong</span></li>
-    <li class="photo ink"><strong>38 of 38</strong><span>"Did you do it?" changes seen, 0 of 32 false</span></li>
-    <li class="tavily ink"><strong>25 vs 15</strong><span>Chat answers right with Tavily search and without (30 herb questions; re-checked 22 Oct: 26 vs 18)</span></li>
-    {% if spot_on %}<li class="ink"><strong>0.90</strong><span>What can I grow here?: the RHS's monthly picks in our top two lists, 0 hard errors</span></li>{% endif %}
+  <ul class="works-cards" aria-label="What we asked, and what we measured">
+    <li class="works-card advisors ink">
+      <h3>Is the advice safe?</h3>
+      <p class="answer"><strong>2%</strong>"Treat it" when the expert didn't. Lower is safer.</p>
+      <ul class="works-bars" aria-label="Says treat it when the expert didn't, by model">
+        {{ bar("Nemotron 3 Super, the one we use", "2%", 13.3, ours=true) }}
+        {{ bar("Nemotron 3 Nano", "7.3%", 48.7) }}
+        {{ bar("Nemotron 3 Ultra", "12.7%", 84.7) }}
+      </ul>
+      <p class="from">150 Stack Exchange questions, one ask each</p>
+    </li>
+    <li class="works-card advisors ink">
+      <h3>Does it agree with experts?</h3>
+      <p class="answer"><strong>0.43 · 0.41</strong>Its main action matches the expert's, a little over halfway to the ceiling.</p>
+      <ul class="works-bars" aria-label="Main action matches the expert's, by question set">
+        {{ bar("150 Stack Exchange questions", "0.43", 43, ours=true, mark=80) }}
+        {{ bar("200 from MIRAGE, a plant-care benchmark", "0.41", 41, ours=true, mark=80) }}
+      </ul>
+      <p class="works-key"><i class="mk" aria-hidden="true"></i><span>About 0.8 is the ceiling: a hand check agreed with the expert's action, as we read it, about 80% of the time.</span></p>
+      <p class="from">Text-only questions: no photo, place or weather</p>
+    </li>
+    <li class="works-card advisors ink">
+      <h3>Does it know when it's unsure?</h3>
+      <p class="answer"><strong>63%</strong>Shown a right and a wrong answer, it was surer of the right one (AUROC 0.63).</p>
+      <ul class="works-bars" aria-label="Surer of the right answer than the wrong one">
+        {{ bar("herbtwin's confidence", "63%", 63, ours=true, mark=50) }}
+      </ul>
+      <p class="works-key"><i class="mk" aria-hidden="true"></i><span>50% is a coin flip.</span></p>
+      <p class="from">624 held-out expert questions</p>
+    </li>
+    <li class="works-card photo ink">
+      <h3>Does it read the plant right?</h3>
+      <p class="answer"><strong>0.846</strong>The plant named right first time.</p>
+      <ul class="works-bars" aria-label="Plant named right first time, by photo model">
+        {{ bar("GLM-5.3-Flash, the one we use", "0.846", 84.6, ours=true) }}
+        {{ bar("Nemotron 3.5 Super VL, the best NVIDIA model we tried", "0.627", 62.7) }}
+      </ul>
+      <p class="answer">Problem check: 0 false alarms on 149 healthy photos; on 102 problem photos, 33 named right, 0 wrong.</p>
+      <p class="from">The same 150 GBIF photos of 15 kinds (GLM: 1 failed)</p>
+    </li>
+    <li class="works-card photo ink">
+      <h3>Does it notice what you did?</h3>
+      <p class="answer"><strong>38 of 38</strong>Changes seen between two photos; 0 of 32 unchanged pairs called a change.</p>
+      <p class="from">"Did you do it?", the two-photo check</p>
+    </li>
+    <li class="works-card tavily ink">
+      <h3>Does Tavily search help?</h3>
+      <p class="answer"><strong>25 vs 15</strong>Chat answers right, with Tavily search and without.</p>
+      <ul class="works-bars" aria-label="Chat answers right, out of 30">
+        {{ bar("With Tavily search", "25 of 30", 83.3, ours=true) }}
+        {{ bar("Without", "15 of 30", 50) }}
+      </ul>
+      <p class="from">30 herb questions; re-checked 22 Oct: 26 vs 18</p>
+    </li>
+    {% if spot_on %}<li class="works-card wide ink">
+      <h3>Does "What can I grow here?" work?</h3>
+      <p class="answer"><strong>0.90</strong>The RHS's monthly picks in our top two lists, with 0 hard errors.</p>
+      <ul class="works-bars" aria-label="RHS picks in our top two lists">
+        {{ bar("In our top two lists", "0.90", 90, ours=true, mark=85) }}
+      </ul>
+      <p class="works-key"><i class="mk" aria-hidden="true"></i><span>0.85 was the pass bar.</span></p>
+      <p class="from">415 of the 461 RHS picks that fit the setting; 12 months, 4 settings</p>
+    </li>{% endif %}
   </ul>
-  <p class="made-note">The expert questions are text only, so they score Nemotron without the twin. More than 4,000 automated tests run before every push (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p>
   <div class="about-two">
-    <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A paid professional gardener graded 3 openly licensed photos: every first action Acceptable, 3 of 5 overall. Four rules changed, and "7 in 10" was retired after we measured 51% on 624 expert questions. One expert, three photos (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>).</p></blockquote>
-    <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get the things the answer tells you to use. That became the shops card under the answer.</p></blockquote>
+    <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A paid gardener graded 3 photos: every first action Acceptable, 3 of 5 overall.<br>Four rules changed, and "7 in 10" went once we measured 51% (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p></blockquote>
+    <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get what the answer tells you to use.<br>That became the shops card under the answer.</p></blockquote>
   </div>
 </section>
 
-<section aria-labelledby="didnt">
+<section aria-labelledby="didnt">{# round 3: the lesson first, then the evidence, then what we do now #}
   <h2 id="didnt">What didn't work</h2>
-  <ul class="about-cards">
-    <li class="about-card rules ink"><strong>Specialist advisors</strong> failed all three rules they were judged on (774 expert questions), so the three asks stay plain.</li>
-    <li class="about-card rules ink"><strong>The trusted-page check</strong> failed rounds 1 to 4; round 5's pass backed nothing on real pages; round 7 failed (4 false agrees in 205). Round 8 shipped: 3 false agrees in 418, under our 3% bar, but it finds 10 of the 26 quotes that should show (target 50%).</li>
-    <li class="about-card rules ink"><strong>Nano on our own GPU</strong> agreed with Token Factory on 81% of answers but matched the expert 4.8 points less often.</li>
-    <li class="about-card rules ink"><strong>Cosmos video</strong> didn't show the change asked for; an image editor did (5 of 6).</li>
-    <li class="about-card rules ink"><strong>Prices for the things to buy</strong> failed a zero-wrong bar: a Nemotron 3 Nano reader got 11 of 21 right, 9 wrong and 1 left blank, and 4 of 6 shops block a direct fetch, so we show the item and the shop, not a price.</li>
+  <ul class="about-cards about-lessons">
+    <li class="about-card rules ink"><strong>More advisors didn't mean better advice.</strong>
+      <span>Specialist advisors (season, soil and water, pests and health) failed all three rules on 774 expert questions.</span>
+      <em>Now: three plain advisors, asked the same question.</em></li>
+    <li class="about-card rules ink"><strong>A quote is only worth showing if it's right.</strong>
+      <span>The trusted-page check failed rounds 1 to 4 and 7 (4 false agrees in 205). Round 8 shipped: 3 false agrees in 418, under our 3% bar.</span>
+      <em>Now: it stays quiet unless sure, finding 10 of the 26 quotes that should show (target 50%).</em></li>
+    <li class="about-card rules ink"><strong>Our own GPU was dearer and less right.</strong>
+      <span>Nano on a Nebius GPU agreed with Token Factory on 81% of answers but matched the expert 4.8 points less often, at about $1.63 a run.</span>
+      <em>Now: every model runs on Token Factory.</em></li>
+    <li class="about-card rules ink"><strong>Video models can't show "before and after" yet.</strong>
+      <span>Cosmos didn't show the change asked for; an image editor did (5 of 6).</span>
+      <em>Now: still pictures, drawn ahead of time.</em></li>
+    <li class="about-card rules ink"><strong>Shops don't give prices to robots.</strong>
+      <span>A Nemotron 3 Nano price reader got 11 of 21 right, 9 wrong and 1 left blank; 4 of 6 shops block a direct fetch.</span>
+      <em>Now: we show the item and the shop, not a price.</em></li>
   </ul>
 </section>
 
 <section aria-labelledby="whats-next">
   <h2 id="whats-next">What's next</h2>
-  <ul class="about-cards small">
-    <li class="about-card later">A twin for indoor plants, and a Nemotron photo reader (Nemotron 3.5 Super VL first).</li>
-    <li class="about-card later">Naming more problems: the check still doesn't name slugs.</li>
-    <li class="about-card later">A real screen-reader test, a beginners' user test, and more than one server.</li>
+  <ul class="about-cards about-next">
+    <li class="about-card later"><strong>A twin for indoor plants.</strong>
+      <span>Why: indoors there's no forecast test yet. We now ask which window a plant is by; next, the twin models it.</span></li>
+    <li class="about-card later"><strong>A Nemotron photo reader, Nemotron 3.5 Super VL first.</strong>
+      <span>Why: 5 times faster than GLM, so every step runs on NVIDIA. It's behind on naming plants today.</span></li>
+    <li class="about-card later"><strong>Naming more problems, starting with slugs.</strong>
+      <span>Why: slugs are a common herb pest, and the photo check can't name them yet.</span></li>
+    <li class="about-card later"><strong>Tests with real people.</strong>
+      <span>Why: so far it's been checked by tools, one paid expert and two gardeners. Next: a screen-reader test and a beginners' test.</span></li>
+    <li class="about-card later"><strong>More than one server.</strong>
+      <span>Why: one server and a daily cap today.</span></li>
   </ul>
 </section>
 
 <section aria-labelledby="access">
   <h2 id="access">Accessibility</h2>
-  <p class="about-card">axe-core (WCAG 2.2 AA) on the main pages, light and dark: one miss, a dark-mode "(optional)" at 3.98:1, now 5.4:1. Focus rings on every stop, 44 px buttons, no sideways scroll at 320 px, motion off under Reduce Motion (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">the checks</a>).</p>
+  <div class="about-card about-access">
+    <ul>
+      <li><span aria-hidden="true">✓</span> Checked against WCAG 2.2 AA, in light and dark</li>
+      <li><span aria-hidden="true">✓</span> A focus ring on everything you can tab to</li>
+      <li><span aria-hidden="true">✓</span> Buttons at least 44 px</li>
+      <li><span aria-hidden="true">✓</span> Works at 320 px wide, with nothing scrolling sideways</li>
+      <li><span aria-hidden="true">✓</span> Respects Reduce Motion</li>
+    </ul>
+    <p><a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">See the accessibility checks</a></p>
+  </div>
 </section>
 
 <section aria-labelledby="who">

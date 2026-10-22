@@ -8,6 +8,7 @@ import re
 from datetime import UTC, datetime
 from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 
 from herbtwin.adapters.mock import MockAdapter
@@ -18,6 +19,9 @@ from herbtwin.seasonal import plants as norm_plants
 from herbtwin.tracing import TraceStore
 from herbtwin.web.app import create_app
 from tests.test_web import ADV, OBS, _client, _first
+
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
 
 ROWS = json.loads(INDOOR_PATH.read_text())
 

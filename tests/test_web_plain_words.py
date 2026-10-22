@@ -4,7 +4,12 @@ source URLs as text, and each confidence chip says why it moved."""
 
 import re
 
+import pytest
+
 from tests.test_web_answer_page import _answer
+
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
 
 JARGON = ("Droop ", "decline 0/3", "/3 ·", "ET0", "Tmin", "Tmax", "v1 assumption", "volumetric")
 

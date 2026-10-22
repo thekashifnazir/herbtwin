@@ -5,6 +5,7 @@ import json
 import re
 
 import httpx
+import pytest
 import respx
 
 from herbtwin.schemas import Told
@@ -101,6 +102,7 @@ def _with_reply(c, told, times=99):
     waits.start = started
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_a_reply_during_the_photo_read_goes_into_this_answer(tmp_path):
     c = _client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
     _with_reply(c, Told(soil_feel="dry"))
@@ -112,6 +114,7 @@ def test_a_reply_during_the_photo_read_goes_into_this_answer(tmp_path):
     assert entry.latest.told == Told(soil_feel="dry")
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_a_reply_after_the_advice_is_checked_again_on_see_your_answer(tmp_path):
     c = _client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 6)
     _with_reply(c, Told(soil_feel="dry"))
@@ -127,6 +130,7 @@ def test_a_reply_after_the_advice_is_checked_again_on_see_your_answer(tmp_path):
     assert c.post(f"/waits/{c.wait_id}/see").json() == {"go": answer}  # once only
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_a_reply_from_another_site_or_to_no_wait_is_refused(tmp_path):
     c = _client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
     _with_reply(c, Told(soil_feel="dry"))
@@ -182,6 +186,7 @@ def test_signed_in_a_reply_during_the_read_goes_into_the_stored_answer(tmp_path)
     assert told == Told(soil_feel="wet", last_watered="today")
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_an_answer_made_with_replies_is_never_replayed_to_the_same_photo_alone(tmp_path):
     c = _client(tmp_path, [json.dumps(OBS)] * 2, [json.dumps(ADV)] * 6)
     _with_reply(c, Told(soil_feel="dry"), times=1)
@@ -228,6 +233,7 @@ def test_soil_has_not_sure_too_and_it_clears_an_earlier_soil_reply():
     assert w.take(WID, None) == Told(last_watered="today")
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_not_sure_on_the_soil_is_accepted_and_sends_no_soil(tmp_path):
     c = _client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
     _with_reply(c, Told(soil_feel="dry"))
@@ -292,6 +298,7 @@ def test_the_questions_say_the_read_has_started_and_a_reply_still_counts():
     assert "They make the advice surer" not in card and "We've started" not in card
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_not_sure_on_watering_is_said_plainly_and_sends_no_watering(tmp_path):
     # 21 Oct, Kash: "Not sure" on watering said "Thanks: we'll use your answer about
     # watering", and sent "last watered: not sure" on to the advice

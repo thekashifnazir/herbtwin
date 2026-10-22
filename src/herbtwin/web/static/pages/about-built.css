@@ -1,0 +1,46 @@
+/* About, "How it's built", round 3 (22 Oct, Kash's notes: "Bigger boxes and text", "Move
+   'Our rules' into the main row", "Colour the tech chips like the diagram ... so they act as
+   part of the legend"). This sheet sorts before about.css ("-" before "."), so a rule that
+   changes one of about.css's wins on specificity, never on order. Theme tokens only. */
+
+/* the stack's chips as the key for the sources, in the flow's colours: NVIDIA mint, Tavily
+   lilac, the weather sky blue, GBIF clay; the rest plain */
+.about-page .about .about-chips li { background: var(--card); color: var(--fg);
+  border: 1.5px solid var(--border); }
+.about-page .about .about-chips li.nvidia { background: var(--soft); color: var(--ok); border-color: var(--soft-line); }
+.about-page .about .about-chips li.tavily { background: var(--lilac); color: var(--lilac-fg); border-color: var(--lilac-fg); }
+.about-page .about .about-chips li.weather { background: var(--sky); color: var(--sky-fg); border-color: var(--sky-fg); }
+.about-page .about .about-chips li.gbif { background: var(--clay-bg); color: var(--clay); border-color: var(--clay); }
+
+/* the flow: one under another on a phone; on a wide screen two rows of four, what we gather
+   then how we decide, so each box has a quarter of the frame. The weather's green path runs
+   down from the first row's end and back to the twin at the second row's start */
+.about-page .flow-built { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 48px;
+  grid-template-columns: minmax(0, 1fr); max-width: 34rem; }
+.about-page .flow-built > li { position: relative; display: flex; flex-direction: column; gap: 14px; }
+.about-page .flow-built > li + li::before { content: "\2193" / ""; position: absolute; left: 50%; top: -38px;
+  transform: translateX(-50%); font: 700 26px/1 var(--sans); color: var(--muted-fg); }
+.about-page .flow-built > li.acc::before { color: var(--ok); font-size: 32px; top: -40px; }
+.about-page .flow-built .node { padding: 16px 18px; font-size: 18px; line-height: 1.4; }
+.about-page .flow-built .node strong { font-size: 20px; }
+.about-page .flow-built .flow-by { margin: -4px 0 -6px; font-size: 17px; }
+@media (min-width: 960px) {
+  .about-page .flow-built { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 60px 44px; max-width: none; }
+  .about-page .flow-built > li + li::before { content: "\2192" / ""; left: -36px; top: 30px; transform: none; }
+  .about-page .flow-built > li.acc::before { top: 26px; }
+  /* the turn: a green line down from the weather to the gap between the rows, along it (3
+     columns and 3 gaps from the twin's middle to the weather's), and an arrow down into the
+     twin, drawn rather than a glyph so it meets the box */
+  .about-page .flow-built > li.turn::after { content: ""; flex: 1 0 0; width: 3px; margin: -14px 0 -30px;
+    align-self: center; background: var(--ok); }
+  .about-page .flow-built > .turn + li::before { content: ""; left: calc(50% - 8px); top: -31px; width: 16px;
+    height: 29px; transform: none; background: var(--ok);
+    clip-path: polygon(6.5px 0, 9.5px 0, 9.5px 17px, 16px 17px, 8px 29px, 0 17px, 6.5px 17px); }
+  .about-page .flow-built > .turn + li::after { content: ""; position: absolute; left: calc(50% - 1.5px);
+    top: -31.5px; width: calc(300% + 3 * 44px + 3px); height: 3px; background: var(--ok); }
+}
+
+/* the decisions: bigger words, the plain title on its own line */
+.about-page .about .about-cards.decisions > li { font-size: 18px; line-height: 1.45; padding: 16px 20px; }
+.about-page .about .about-cards.decisions > li > strong:first-child { font-size: 20px; line-height: 1.3;
+  margin-bottom: 6px; }

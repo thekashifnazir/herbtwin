@@ -6,6 +6,7 @@ unsubscribe and privacy wording matching what the site does."""
 import json
 import re
 
+import pytest
 import respx
 
 from herbtwin.stages import climate
@@ -179,6 +180,7 @@ def test_the_progress_page_promises_what_a_read_takes():
         assert "couple of minutes" not in head
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_signed_out_the_working_page_never_points_at_my_plants(tmp_path):
     # 18 Oct judge walk: signed out, the page said "find it in My plants", which a
     # signed-out visitor has not got; the same photo again replays the finished answer

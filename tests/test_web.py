@@ -142,6 +142,7 @@ def test_weather_outage_shows_caption_not_500(tmp_path):
     assert "Water it." in r.text  # the answer still comes back
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_plant_with_no_species_candidates_is_not_reported_as_no_plant(tmp_path):
     c = _client(tmp_path, [json.dumps(dict(OBS, species=[]))], [])
     r = follow(c, c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}))
@@ -644,6 +645,7 @@ def test_privacy_page_names_who_processes_what(tmp_path):
     assert "What can I grow here?" in r.text and "direction" in r.text
     assert "coldest winter nights" in r.text
     assert "postcodes.io" in r.text and "postcode you type" in r.text
+    # the footer links the maker's GitHub (22 Oct, Kash), so the check stops at the footer
     assert "https://github.com/thekashifnazir/herbtwin" in r.text
 
 
@@ -680,6 +682,7 @@ def test_a_missing_page_is_a_page_for_a_browser_and_json_for_the_api(tmp_path):
     assert unknown.status_code == 404 and unknown.json() == {"detail": "Not Found"}
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_an_answer_for_one_of_several_plants_says_which(tmp_path):
     shared = {**OBS, "photo_quality": "poor", "quality_note": "several plants share the frame"}
     c = _client(tmp_path, [json.dumps(shared)], [json.dumps(ADV)] * 3)

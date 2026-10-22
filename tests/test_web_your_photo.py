@@ -4,9 +4,14 @@ illustration captions and the home example's autumn advice."""
 
 import re
 
+import pytest
+
 from herbtwin.web.app import TEMPLATES
 from tests.test_web import _client
 from tests.test_web_answer_page import _answer
+
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
 
 
 def test_the_answer_has_a_place_for_your_photo(tmp_path):

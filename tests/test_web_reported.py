@@ -7,6 +7,8 @@ import json
 import re
 from datetime import date
 
+import pytest
+
 from herbtwin.reported import Reported
 from herbtwin.schemas import Location
 from herbtwin.sightings import Sighting
@@ -14,6 +16,9 @@ from herbtwin.web.answer_text import plan_text
 from tests.fakes import follow
 from tests.test_reported import StubTavily, _hit
 from tests.test_web import ADV, JPEG, OBS, _client
+
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
 
 LINK = (
     "https://www.gbif.org/occurrence/search?taxon_key=3277292&country=GB"

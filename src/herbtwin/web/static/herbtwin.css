@@ -96,7 +96,10 @@
    Not scrollbar-gutter: stable, whose empty lane on a short page shows the cream page beside
    the green band (22 Oct, sign-in at 2545 of 2560 in Kash's Chrome): a lane that is a
    scrollbar, as on a long page, the band meets */
-html { -webkit-text-size-adjust: 100%; overflow-y: scroll; }
+/* the page colour under a short page too: the body's container (below) contains its layout, so
+   its background no longer spreads to the canvas, and below the footer showed white or
+   #111 (22 Oct smoke walk) */
+html { -webkit-text-size-adjust: 100%; overflow-y: scroll; background: var(--bg); }
 /* the body is the width the bands bleed to: 100vw also counts the scrollbar's lane, so a
    50vw bleed sat half a lane left of the page and stopped short
    on the right (22 Oct, the About band at 1293 of 1300). cqw is the body's own width. */
@@ -180,6 +183,19 @@ main { padding: 32px 0 48px; }
 /* the wordmark on every page's footer (17 Oct: Kash, one product across pages); home keeps
    its giant one, pages/home.css */
 .foot-mark { font: 800 clamp(2.4rem, 7vw, 4rem)/0.9 var(--poster); color: var(--soft-strong); margin-right: 8px; }
+/* who made it, on every page (22 Oct, Kash: "our usual" footer, as on Moveset and Step Out):
+   a thin green rule, name and role left, site and icon links right, then the copyright */
+.maker .wrap { display: block; }
+.maker-row { margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--primary); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; }
+.maker-id { display: flex; flex-direction: column; }
+.foot a.maker-name { font: 800 1.25rem/1.2 var(--poster); letter-spacing: 0.01em; color: var(--fg);
+  text-decoration: none; }
+.maker-role { font-size: 15px; }
+.maker-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; }
+.maker-links > a:first-child { margin-right: 12px; }
+.foot a.maker-icon { justify-content: center; min-width: 44px; }
+.foot :is(.maker-name, .maker-links a):hover { color: var(--primary); }
+.maker-fine { margin: 8px 0 0; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; font-size: 14px; }
 .back { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* ---------- type ---------- */

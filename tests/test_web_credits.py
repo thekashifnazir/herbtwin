@@ -31,7 +31,7 @@ def test_credits_page_names_every_author_with_source_and_licence(tmp_path):
     assert "© UKRI" in body and "Open Government Licence" in body  # BGS, with the spot on
     # the models are named on the diagram of one answer (22 Oct), where /about#made-with lands
     models = page.text.split('id="made-with"', 1)[1].split("</section>", 1)[0]
-    assert "Open-Meteo.com" in body and '<ol class="flow"' in models
+    assert "Open-Meteo.com" in body and '<ol class="flow-built"' in models
     assert "3 × NVIDIA Nemotron 3 Super" in models and "GLM-5.3-Flash" in models
 
 
@@ -144,3 +144,39 @@ def test_notice_credits_every_sample_photo_the_site_serves():
         assert author in notice, author
     assert "CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/" in notice
     assert "Young_pea_plants,_Trimingham,_Norfolk.JPG" in notice
+
+
+def test_every_footer_says_who_made_it_with_named_links(tmp_path):
+    # 22 Oct, Kash: "add in our usual links to github, email and linkedin, plus my name and
+    # copyright", as on Moveset and Step Out; the wait page streams its own footer
+    from herbtwin.web import progress
+
+    c = _client(tmp_path, [], [])
+    pages = {p: c.get(p).text for p in ("/", "/privacy", "/about", "/no-such-page")}
+    pages["wait"] = progress.HEAD + progress._done("/x")
+    for path, page in pages.items():
+        foot = page.split('<footer class="foot">', 1)[1].split("</footer>", 1)[0]
+        assert (
+            '<a class="maker-name" href="https://kashifnazir.com" rel="noopener noreferrer">'
+            in foot
+        ), path
+        assert "Senior Technical Architect" in foot and "© 2026 Kashif Nazir" in foot, path
+        icons = re.findall(r'<a class="maker-icon" href="([^"]+)"([^>]*)>', foot)
+        assert [href for href, _ in icons] == [
+            "https://github.com/thekashifnazir",
+            "mailto:contact@kashifnazir.com",
+            "https://www.linkedin.com/in/kashifnazir",
+        ], path
+        for href, attrs in icons:
+            assert re.search(r'aria-label="(GitHub|Email|LinkedIn)"', attrs), (path, href)
+            assert href.startswith("mailto:") or 'rel="noopener' in attrs, (path, href)
+        # the herbtwin links stay, ahead of the maker's
+        assert foot.index('<a href="/about#credits">Credits</a>') < foot.index('class="maker"')
+
+
+def test_a_short_page_keeps_the_page_colour_below_the_footer():
+    # 22 Oct smoke walk: body's container-type contains its layout, so its background no
+    # longer spread to the canvas and a short page showed white (#111 dark) under the footer
+    css = (Path(__file__).parents[1] / "src/herbtwin/web/static/herbtwin.css").read_text()
+    html_rule = re.search(r"^html \{([^}]*)\}", css, re.M).group(1)
+    assert "background: var(--bg)" in html_rule

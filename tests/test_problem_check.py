@@ -246,6 +246,7 @@ def _page(tmp_path, observe):
     return page.text
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_the_page_names_the_seen_problem_and_says_to_check_first(tmp_path):
     from tests.test_web import OBS as WEB_OBS
 
@@ -266,6 +267,7 @@ def test_the_page_names_the_seen_problem_and_says_to_check_first(tmp_path):
     assert 'style="' not in page
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_no_seen_problem_no_box(tmp_path):
     from tests.test_web import OBS as WEB_OBS
 
@@ -316,6 +318,7 @@ def test_a_guess_of_the_same_kind_keeps_the_name_but_says_could_be():
     assert (could.sure, looks.sure) == (False, True)
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_the_page_says_could_be_when_only_the_kind_matched(tmp_path):
     from tests.test_web import OBS as WEB_OBS
 
@@ -447,6 +450,7 @@ def test_no_slug_words_or_a_plant_in_the_photo_is_not_slugs_seen():
     assert not slugs_seen(Observation.model_validate(on_leaf))
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_a_no_cure_page_says_check_before_removing_and_stands_by_its_source(tmp_path):
     # 19 Oct final look: "Remove it." over "Check a few leaves before treating", and a
     # "(less sure)" on the sourced "no known cure" beside "Likely right"

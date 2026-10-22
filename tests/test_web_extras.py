@@ -4,12 +4,17 @@ page opens, nothing when off or empty, and never part of the rater text."""
 import json
 import re
 
+import pytest
+
 from herbtwin.schemas import Location
 from herbtwin.shops import ShopFinder
 from herbtwin.web.answer_text import plan_text
 from tests.fakes import follow
 from tests.test_shops import StubTavily
 from tests.test_web import ADV, JPEG, OBS, _client
+
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
 
 METER_PAGE = "https://www.dobbies.com/soil-moisture-meter/5638482639.p"
 

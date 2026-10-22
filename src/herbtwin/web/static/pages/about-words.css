@@ -1,0 +1,36 @@
+/* About round 3, the words (22 Oct, Kash's walk): What it does, the review cards, What didn't
+   work, What's next and Accessibility. Its own sheet, so the four round-3 changes never touch
+   the same lines; it sorts before about.css ("-" before "."), so its rules carry one more
+   element than the ones they override there. Theme tokens only; nothing under 16px. */
+
+/* What it does: the heading sits level with the top of the cost card beside it */
+.about-page .about-what .about-two h2 { margin-top: 0; }
+.about-page .about-what .about-two p { margin: 0 0 8px; max-width: var(--measure); }
+
+/* What didn't work: the lesson, then the evidence, then what we do now; all the same shape,
+   filling the row (three, then two wider) with no gap left over */
+.about-page .about ul.about-lessons, .about-page .about ul.about-next { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.about-page :is(.about-lessons, .about-next) > li { grid-column: span 2; display: flex; flex-direction: column; gap: 6px; }
+.about-page :is(.about-lessons, .about-next) > li:nth-child(n+4) { grid-column: span 3; }
+.about-page :is(.about-lessons, .about-next) > li > strong { font: 700 18px/1.3 var(--sans); }
+.about-page :is(.about-lessons, .about-next) > li > span { color: var(--muted-fg); }
+.about-page .about-lessons > li > em { margin-top: auto; padding-top: 4px; font-style: normal; font-weight: 700; color: var(--fg); }
+/* What's next: still the dashed "not built yet", now filled with what and why */
+.about-page .about-next > li.about-card.later { background: var(--card); }
+@media (max-width: 960px) {
+  .about-page .about ul.about-lessons, .about-page .about ul.about-next { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .about-page :is(.about-lessons, .about-next) > li, .about-page :is(.about-lessons, .about-next) > li:nth-child(n+4) { grid-column: span 1; }
+  .about-page :is(.about-lessons, .about-next) > li:last-child { grid-column: span 2; }
+}
+@media (max-width: 600px) {
+  .about-page .about ul.about-lessons, .about-page .about ul.about-next { grid-template-columns: minmax(0, 1fr); }
+  .about-page :is(.about-lessons, .about-next) > li:last-child { grid-column: span 1; }
+}
+
+/* Accessibility: a real list in plain words at body size; the tick is decoration, the words
+   carry it; the link says where it goes */
+.about-page .about-access ul { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); }
+.about-page .about-access li { display: flex; gap: 10px; align-items: baseline; font-size: 17px; color: var(--fg); }
+.about-page .about-access li > span { flex: none; font-weight: 700; color: var(--ok); }
+.about-page .about-access p { margin: 0; font-size: 17px; }

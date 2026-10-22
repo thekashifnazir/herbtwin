@@ -11,6 +11,9 @@ from tests.fakes import follow
 from tests.test_web import JPEG, OBS, _client
 from tests.test_web_answer_page import ALSO, _answer
 
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
+
 
 def test_the_plan_reads_in_the_page_order_with_its_own_words(tmp_path):
     text = plan_text(_answer(tmp_path))

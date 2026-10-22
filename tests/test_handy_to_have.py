@@ -31,6 +31,9 @@ from tests.test_shops import FLEECE_PAGE, StubTavily
 from tests.test_web import ADV, JPEG, OBS, _client
 from tests.test_web_answer_page import _card
 
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
+
 COLD = f"• {FROST_SIGN.format(day='Saturday')} Seen it? Send a new photo."
 # two season signs as the answer writes them (answer.short_sign drops the bracketed notes)
 WET = (

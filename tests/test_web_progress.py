@@ -418,11 +418,13 @@ def test_the_wait_page_footer_has_the_site_footers_links():
 
     from herbtwin.web import progress
 
-    base = (Path(progress.__file__).parent / "templates" / "base.html").read_text()
-    site = re.findall(
-        r'<a href="([^"]+)"', base.split('<footer class="foot">')[1].split("</footer>")[0]
-    )
-    wait = re.findall(r'<a href="([^"]+)"', progress._END.split('<footer class="foot">')[1])
+    templates = Path(progress.__file__).parent / "templates"
+    base = (templates / "base.html").read_text()
+    foot = base.split('<footer class="foot">')[1].split("</footer>")[0]
+    assert '{% include "_maker.html" %}' in foot  # and who made it, from the same partial
+    foot = foot.replace('{% include "_maker.html" %}', (templates / "_maker.html").read_text())
+    site = re.findall(r'<a [^>]*href="([^"]+)"', foot)
+    wait = re.findall(r'<a [^>]*href="([^"]+)"', progress._END.split('<footer class="foot">')[1])
     assert wait == site and "/about" in wait and "/about#credits" in wait
 
 

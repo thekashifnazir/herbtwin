@@ -1,0 +1,78 @@
+/* About, "How I know it works" (round 3, 22 Oct, Kash: "fix the test-flow diagram for sure",
+   and the number tiles become the questions they answer). The flow: the three steps in a row,
+   then one fork under them, If it passes / If it fails, so no box hangs over an empty gap.
+   The cards: the question, the answer as a number, and, where the comparison is fair, small
+   bars with each value written beside its bar (the bar itself is aria-hidden). A dashed mark
+   is the card's yardstick (the ceiling, a coin flip, the pass bar), named in a
+   line under the bars. This sheet sorts before about.css, so its rules name their own
+   classes (.works-*) rather than outrank about.css's. */
+.about-page .works-flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 0 48px;
+  grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.about-page :is(.works-flow, .works-cards, .works-bars) li { margin: 0; }  /* not the site's li + li gap */
+.about-page .works-flow > .step { position: relative; display: flex; }
+.about-page .works-flow > .step > .node { flex: 1; }  /* one height across the row */
+.about-page .works-flow > .step + .step::before { content: "\2192" / ""; position: absolute; left: -38px;
+  top: 50%; transform: translateY(-50%); font: 700 28px/1 var(--sans); color: var(--muted-fg); }
+.about-page .works-flow .node { padding: 16px 18px; font-size: 18px; line-height: 1.4; }
+.about-page .works-flow .node strong { font: 700 21px/1.25 var(--sans); }
+/* the fork: a stem down from the last step (the middle of the row's third column), a bar
+   back across to the first branch, a drop into each branch */
+.about-page .works-flow > .fork { grid-column: 1 / -1; position: relative; display: grid; gap: 0 48px;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); padding-top: 44px; }
+.about-page .works-flow > .fork::before { content: ""; position: absolute; top: 0; width: 2px; height: 22px;
+  left: calc((100% - 96px) * 5 / 6 + 95px); background: var(--muted-fg); }
+.about-page .works-flow > .fork::after { content: ""; position: absolute; top: 22px; height: 2px;
+  left: calc(25% - 12px); right: calc((100% - 96px) / 6 - 1px); background: var(--muted-fg); }
+.about-page .works-flow .branch { position: relative; display: flex; flex-direction: column; align-items: center;
+  gap: 8px; }
+.about-page .works-flow .branch::before { content: ""; position: absolute; left: calc(50% - 1px); top: -22px;
+  width: 2px; height: 18px; background: var(--muted-fg); }
+.about-page .works-flow .branch .flow-by { margin: 0; font-size: 18px; }
+.about-page .works-flow .branch .node { width: 100%; max-width: 26rem; }
+.about-page .flow-panel .works-flow + figcaption { margin-top: 22px; }  /* outranks about.css's 6px */
+@media (max-width: 760px) {
+  .about-page .works-flow { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+  .about-page .works-flow > .step + .step::before { content: "\2193" / ""; left: 50%; top: -36px;
+    transform: translateX(-50%); }
+  /* on a phone the fork is a rail down the left with a branch off it each way, so the two read
+     as either/or, not one after the other */
+  .about-page .works-flow > .fork { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 0 0 0 48px; }
+  .about-page .works-flow > .fork::before { left: 27px; top: -44px; bottom: 0; height: auto; }
+  .about-page .works-flow > .fork::after { content: none; }
+  .about-page .works-flow .branch { align-items: stretch; }
+  .about-page .works-flow .branch::before { left: -21px; top: 12px; width: 18px; height: 2px; }
+  .about-page .works-flow .branch:last-child::after { content: ""; position: absolute; left: -24px; width: 8px;
+    top: 14px; bottom: 0; background: var(--bg); }
+  .about-page .works-flow .node strong { font-size: 20px; }
+}
+
+/* the question cards: three across on a wide screen, one on a phone; the grow card, when the
+   spot feature is on, is the seventh and takes a row of its own */
+.about-page .about .works-cards { list-style: none; margin: 24px 0 14px; padding: 0; display: grid; gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); max-width: none; }
+.about-page .works-card { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px;
+  border-radius: var(--surface); background: var(--card); font-size: 17px; line-height: 1.4; }
+.about-page .works-card.advisors { background: var(--soft); }
+.about-page .works-card.photo { background: var(--muted); }
+.about-page .works-card.tavily { background: var(--lilac); }
+.about-page .works-card.wide { grid-column: 1 / -1; }
+.about-page .works-card.wide > * { max-width: 36rem; }
+.about-page .about .works-card h3 { margin: 0; font: 700 20px/1.3 var(--sans); }
+.about-page .works-card p { margin: 0; }
+.about-page .works-card .answer strong { display: block; margin-bottom: 4px; font: 700 32px/1.05 var(--display);
+  font-variant-numeric: tabular-nums; }
+.about-page .works-card .from { margin-top: auto; padding-top: 4px; font-size: 16px; color: var(--muted-fg); }
+/* the bars: the name and the value on one line, the bar under them */
+.about-page .works-bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.about-page .works-bars li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 10px;
+  font-size: 16px; line-height: 1.3; }
+.about-page .works-bars .val { font-weight: 700; font-variant-numeric: tabular-nums; }
+.about-page .works-bars .ours > span:first-child { font-weight: 700; }
+.about-page .works-bars .bar { grid-column: 1 / -1; position: relative; height: 16px; border: 1.5px solid var(--fg);
+  border-radius: 5px; background: var(--card); }
+.about-page .works-bars .bar i { display: block; height: 100%; border-radius: 3px 0 0 3px; background: var(--muted-fg); }
+.about-page .works-bars .ours .bar i { background: var(--ok); }
+.about-page .works-bars .mark { position: absolute; top: -6px; bottom: -6px; width: 0;
+  border-left: 2.5px dashed var(--fg); }
+.about-page .works-key { display: flex; gap: 10px; align-items: flex-start; font-size: 16px; }
+.about-page .works-key .mk { flex: none; width: 0; height: 22px; border-left: 2.5px dashed var(--fg); }

@@ -5,6 +5,8 @@ open when shutting it would hide something the person is part way through."""
 import re
 from types import SimpleNamespace
 
+import pytest
+
 from herbtwin.schemas import Told
 from herbtwin.web import style
 from herbtwin.web.answer_text import plan_text
@@ -12,6 +14,9 @@ from tests.test_web_answer_page import _full_plan, _render, _unsure_record
 from tests.test_web_answer_reveal import _rules
 from tests.test_web_reminders import _client as _reminder_client
 from tests.test_web_reminders import _upload as _reminder_upload
+
+# offline: Open-Meteo answers "limit reached" (tests/conftest.py), never the real one
+pytestmark = pytest.mark.usefixtures("open_meteo_down")
 
 CSS = (style.STATIC / "pages" / "answer.css").read_text(encoding="utf-8")
 # a card to come to (22 Oct, Kash on A3): a leaf, the bold ask, and what it takes

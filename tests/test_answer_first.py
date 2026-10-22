@@ -31,6 +31,7 @@ def _page(tmp_path):
     return _answer(tmp_path)
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_the_band_leads_with_the_common_name_and_keeps_the_latin_under_it(tmp_path):
     page = _page(tmp_path)
     band = page.split('<div class="page-band">', 1)[1].split("</div>", 1)[0]
@@ -62,6 +63,7 @@ def _rec_with_note(tmp_path):
     return rec
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_what_next_ends_the_plan_and_holds_i_did_it(tmp_path):
     page = _page(tmp_path)
     plan_end = page.index('<h2 id="watch">Keep an eye on</h2>')
@@ -76,6 +78,7 @@ def test_what_next_ends_the_plan_and_holds_i_did_it(tmp_path):
     assert 'id="i-did"' not in main  # out of the main card: the reader has the whole plan first
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_the_rater_text_leaves_what_next_out(tmp_path):
     from herbtwin.web.answer_text import plan_text
 
@@ -117,6 +120,7 @@ def test_a_context_note_stays_in_the_band(tmp_path):
     assert how_led("The advisors led with feeding it; for this plant that waits.")
 
 
+@pytest.mark.usefixtures("open_meteo_down")
 def test_after_i_did_it_the_question_goes_too(tmp_path):
     page = _page(tmp_path)
     script = page.split('id="i-did"', 1)[1].split("</script>", 1)[0]

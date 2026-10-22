@@ -15,6 +15,7 @@ import re
 from collections.abc import AsyncIterator, Awaitable, Callable
 from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
+from pathlib import Path
 from urllib.parse import urlsplit
 
 from fastapi import HTTPException
@@ -192,7 +193,10 @@ _END = (
     '<span class="foot-mark" aria-hidden="true">herbtwin</span><a href="/about">About</a>'
     '<a href="/privacy">Privacy</a><a href="/about#credits">Credits</a>'
     '<a href="https://open-meteo.com/" rel="noopener noreferrer">Weather data by Open-Meteo.com</a>'
-    "</div></footer>\n</body></html>\n"
+    "</div>\n"
+    # who made it, word for word the partial base.html includes
+    + (Path(__file__).parent / "templates" / "_maker.html").read_text()
+    + "</footer>\n</body></html>\n"
 )
 
 
