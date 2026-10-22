@@ -8,6 +8,11 @@
    reminder, all in one fold that opens from a single line, in small headed sections. 3, the details, folded. Phones read 1, 2, 3 in one column; from 960px
    block 1 is the left column and blocks 2 and 3 the right (static/pages/answer.css). #}
 {% block title %}{% set obs = rec.observation %}{% if obs and obs.is_plant and obs.species %}{{ plant_name(obs.species[0].name, obs.species[0].common_name) }}{{ " (not sure)" if name_in_doubt(rec) else "" }} · herbtwin{% else %}Your answer · herbtwin{% endif %}{% endblock %}
+{# "Check the advice again" and the Indoors switch post to /answers/<id>/refine, and the
+   refined page came back at that address: a reload asked to send the form again, a second
+   paid run, and a copied link failed (22 Oct site walk). The answer's own address instead,
+   before the page draws; GET /answers/<id> shows the refined answer. #}
+{% block head %}<script>try{const p=location.pathname,u=p.replace(/^(\/answers\/[^/]+)\/refine$/,"$1");if(u!==p)history.replaceState(null,"",u)}catch(e){}</script>{% endblock %}
 {% block page %}answer-page has-band{% endblock %}
 {% block nav %}{{ site_nav(person=signed_in, accounts=accounts) }}{% endblock %}
 {% block wrap %} wide{% endblock %}
@@ -211,7 +216,7 @@
   {% if failed.get("research") %}<p class="note">Species facts unavailable this time, so general care thresholds were used.</p>{% endif %}
   </div>
   {# the evidence: in block 3 under an answer, on its own when the advice failed #}
-  {% set evidence %}<details class="evidence fold"><summary><span class="fold-head"><span class="fold-title">Weather, forecast and sources</span>
+  {% set evidence %}<details class="evidence fold"><summary><span class="fold-head"><span class="fold-title">{% if obs and obs.setting == "indoor" %}The photo and sources{% else %}Weather, forecast and sources{% endif %}</span>
     <span class="fold-peek">What the photo showed{% if rec.season and not (obs and obs.setting == "indoor") %}, the season{% endif %} and where the care facts came from</span></span></summary>
     {% set droop = ["not drooping", "a little droopy", "droopy", "badly wilted"] %}
     {% set decline = ["healthy-looking", "a little tired", "declining", "badly declining"] %}
@@ -221,8 +226,8 @@
     {% set season_said = {"active_growth": "growing", "flowering": "flowering", "bolting_risk": "may run to seed", "normal_dieback": "dying back", "dormant": "resting", "regrowth": "growing again", "leaf_fall": "dropping its leaves", "evergreen_hold": "holding its leaves"} %}
     {% if rec.season and not (obs and obs.setting == "indoor") %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(rec.season.sources) }}</p>{% endif %}
     {% if rec.pack and rec.pack.sources %}<p>Care facts: {{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
-    {% if rec.problem %}{% set src = rec.problem.source %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
-    <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}. Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.</p>{% endif %}
+    {% if rec.problem %}{% set src = rec.problem.page %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
+    <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}.{% if src %} Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.{% endif %}</p>{% endif %}
     {# the per-choice numbers are in "Compare all choices" in words; the model's working
        assumptions fold away here (17 Oct re-walk: raw action names and 0.00s) #}
     {% if a and a.assumptions %}<details class="assumptions"><summary>What the plant model assumes</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
@@ -255,10 +260,12 @@
     {# block 1: what to do. The main card has a green head so it reads as THE answer. #}
     <section class="card main-action" aria-labelledby="main-action">
       <div class="head">
-      {# after Check the advice again: say plainly that it ran and what it did #}
-      {% if rec.refined_from %}{% if rec.refined_from != a.headline %}<p class="checked">Changed after what you told us. Was: <s>{{ rec.refined_from }}</s></p>
+      {# after Check the advice again: say plainly that it ran and what it did. "Changed" only
+         when the advice did: the Indoors switch reworded "Leave it. This is normal for
+         October." as "Leave it for now…" and the page said Changed (22 Oct site walk) #}
+      {% if rec.refined_from %}{% if not same_advice(rec.refined_from, a.headline) %}<p class="checked">Changed after what you told us. Was: <s>{{ rec.refined_from }}</s></p>
       {% else %}{% set feel = a.factors|selectattr("name", "equalto", "soil_feel")|first %}
-      <p class="checked">{% if not (rec.told and rec.told.soil_feel) %}Checked again with what you told us: same advice.{% elif feel and feel.effect != "lowers" %}Checked again: same advice, and the soil feel fits it.{% else %}Checked again: same advice.{% endif %}</p>{% endif %}{% endif %}
+      <p class="checked">{% if rec.told and rec.told.switch_only() %}Checked again as an {{ rec.told.setting }} plant: same advice.{% elif not (rec.told and rec.told.soil_feel) %}Checked again with what you told us: same advice.{% elif feel and feel.effect != "lowers" %}Checked again: same advice, and the soil feel fits it.{% else %}Checked again: same advice.{% endif %}</p>{% endif %}{% endif %}
       {# what their note said, back in a few words of ours: "Changed after what you told us"
          never said what (22 Oct site walk, Top 5 #1) #}
       {% if rec.refined_from and rec.told %}{% set echoed = told_echo(rec.told.question) %}{% if echoed %}<p class="told-echo">{{ echoed }}</p>{% endif %}{% endif %}
@@ -691,7 +698,7 @@
     <section class="details" aria-labelledby="details">
       <h2 id="details">How we worked it out</h2>
       {# who "the advisors" are, before anything says what they did (21 Oct gardener test) #}
-      <p class="advisors">{{ advisors_said(advised_by, a.advisor_roles) }}</p>
+      <p class="advisors">{{ advisors_said(advised_by, a.advisor_roles, obs.setting == "indoor") }}</p>
       {# what each advisor said: its call only, never its raw words (21 Oct, Kash on rev
          00049: "what does each mean?") #}
       {% set said = advisor_lines(rec, label) %}{% if said.lines %}<div class="advisor-said">

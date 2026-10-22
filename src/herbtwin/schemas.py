@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from datetime import date, datetime
 from typing import Literal
 from urllib.parse import urlsplit
@@ -232,6 +233,17 @@ class TrustedCheck(BaseModel):
         return v
 
 
+def about_problem(url: str, name: str) -> bool:
+    """The page's own path names the problem, every word of it ("rosemary beetle" in
+    /biodiversity/rosemary-beetle, "powdery mildew" in /disease/powdery-mildews): a page
+    about that problem. A grow-your-own page for another plant, or a bare site, is not
+    (22 Oct site walk: rosemary beetle's "Signs from" linked the RHS sage page)."""
+    path = re.sub(r"[^a-z0-9]+", "-", urlsplit(url).path.lower())
+    words = [w for w in re.findall(r"[a-z]+", name.lower()) if w not in {"and", "the", "of"}]
+    stems = [w[:-1] if w.endswith("s") and len(w) > 4 else w for w in words]
+    return bool(stems) and all(w in path for w in stems)
+
+
 class ProblemSeen(BaseModel):
     """What the second photo check found (stages/problem.py): one of the plant's listed
     problems, described in our curated words. seen is the model's own words: data only,
@@ -245,6 +257,12 @@ class ProblemSeen(BaseModel):
     # only the kind matches, disease or pest ("Could be")
     sure: bool = True
     how: WebHow | None = None  # when no outcome row covers treating it; absent before 19 Oct
+
+    @property
+    def page(self) -> str:
+        """The source as a link: only a page about this problem, else "" and no link. Said
+        when shown, not stored, so a saved case keeps its source as it was (review)."""
+        return self.source if about_problem(self.source, self.name) else ""
 
     @field_validator("how", mode="wrap")
     @classmethod
@@ -666,6 +684,10 @@ class Told(BaseModel):
             or self.squeeze
             or self.heading
         )
+
+    def switch_only(self) -> bool:
+        """All that was told is the Indoors/Outdoors switch."""
+        return bool(self.setting) and self.model_copy(update={"setting": None}).is_empty()
 
 
 class ActionCard(BaseModel):

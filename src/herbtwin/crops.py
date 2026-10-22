@@ -64,6 +64,9 @@ class Crop:
     windows_by_source: dict[str, dict[str, frozenset[int]]] = field(default_factory=dict)
     cross_checks: int = 0  # independent calendars that cover the crop: a proxy for "common"
     spreads: bool = False  # the sources say it spreads or is invasive in open ground
+    # its Latin names, lower case, for matching a photo read to it: "mentha" for "Mentha
+    # spp.", both for "Matricaria chamomilla / Chamaemelum nobile" (22 Oct, the chat)
+    latin: tuple[str, ...] = ()
 
     def rating_in_pot(self) -> str | None:
         """One rating less hardy in a container (RHS: pots get colder)."""
@@ -94,6 +97,16 @@ def _spreads(r: dict) -> bool:
     return "spread" in said or "invasive" in said
 
 
+def _latin(name: str) -> tuple[str, ...]:
+    """Each whole Latin name, less "spp."; an abbreviated one ("R. scutatus") is left out."""
+    out = []
+    for part in name.split("/"):
+        words = part.lower().replace("spp.", "").split()
+        if words and not words[0].endswith("."):
+            out.append(" ".join(words))
+    return tuple(out)
+
+
 def crop_of(r: dict) -> Crop:
     c, s, d = r["container"], r["soil"], r.get("days_to_harvest") or {}
     return Crop(
@@ -121,6 +134,7 @@ def crop_of(r: dict) -> Crop:
         sources=tuple(x["url"] for x in r["sources"]),
         cross_checks=len(r.get("cross_checks") or {}),
         spreads=_spreads(r),
+        latin=_latin(r.get("scientific_name") or ""),
         windows_by_source={
             name: _pooled(v)
             for name, v in (r.get("cross_checks") or {}).items()

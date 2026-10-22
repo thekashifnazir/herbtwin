@@ -1,0 +1,129 @@
+{
+  "arms": {
+    "off": {
+      "cites": {
+        "hi": 0.0,
+        "lo": 0.0,
+        "n": 30,
+        "value": 0.0
+      },
+      "correct": {
+        "hi": 0.7666666666666667,
+        "lo": 0.43333333333333335,
+        "n": 30,
+        "value": 0.6
+      },
+      "correct_v2": {
+        "hi": 0.7666666666666667,
+        "lo": 0.43333333333333335,
+        "n": 30,
+        "value": 0.6
+      },
+      "less_sure": {
+        "hi": 1.0,
+        "lo": 1.0,
+        "n": 30,
+        "value": 1.0
+      },
+      "unsure": {
+        "hi": 0.4,
+        "lo": 0.1,
+        "n": 30,
+        "value": 0.23333333333333334
+      }
+    },
+    "on": {
+      "cites": {
+        "hi": 0.0,
+        "lo": 0.0,
+        "n": 30,
+        "value": 0.0
+      },
+      "correct": {
+        "hi": 0.9666666666666667,
+        "lo": 0.7333333333333333,
+        "n": 30,
+        "value": 0.8666666666666667
+      },
+      "correct_v2": {
+        "hi": 0.9666666666666667,
+        "lo": 0.7333333333333333,
+        "n": 30,
+        "value": 0.8666666666666667
+      },
+      "less_sure": {
+        "hi": 0.1,
+        "lo": 0.0,
+        "n": 30,
+        "value": 0.03333333333333333
+      },
+      "unsure": {
+        "hi": 0.1,
+        "lo": 0.0,
+        "n": 30,
+        "value": 0.03333333333333333
+      }
+    }
+  },
+  "diff": {
+    "cites": {
+      "hi": 0.0,
+      "lo": 0.0,
+      "n": 30,
+      "value": 0.0
+    },
+    "correct": {
+      "hi": 0.4666666666666667,
+      "lo": 0.06666666666666667,
+      "n": 30,
+      "value": 0.26666666666666666
+    },
+    "correct_v2": {
+      "hi": 0.43333333333333335,
+      "lo": 0.1,
+      "n": 30,
+      "value": 0.26666666666666666
+    },
+    "less_sure": {
+      "hi": -0.9,
+      "lo": -1.0,
+      "n": 30,
+      "value": -0.9666666666666667
+    },
+    "unsure": {
+      "hi": -0.03333333333333333,
+      "lo": -0.36666666666666664,
+      "n": 30,
+      "value": -0.2
+    }
+  },
+  "flips": {
+    "off_only": [
+      "basil_downy_mildew",
+      "chives_after_flower"
+    ],
+    "on_only": [
+      "basil_dm_cure",
+      "chives_divide",
+      "mint_rust",
+      "parsley_carrot_fly",
+      "parsley_leaf_miner",
+      "parsley_sow_out",
+      "rosemary_beetle",
+      "rosemary_foam",
+      "rosemary_prune",
+      "sage_speckles"
+    ]
+  },
+  "git_sha": "6a80820f",
+  "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "n_ok": 60,
+  "n_rows": 60,
+  "paired_questions": 30,
+  "run_id": "2026-10-22-chat-search",
+  "searches_rows": 42,
+  "spent_rows_usd": 0.011471,
+  "spent_this_run_usd": 0.011471,
+  "tavily_calls": 37,
+  "thinking": "off"
+}

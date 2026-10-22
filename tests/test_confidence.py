@@ -320,7 +320,11 @@ def test_the_setting_is_said_in_words_and_a_cancelled_chip_is_not_shown():
     up = Factor(name="advisor", effect="raises", detail="the advisor was sure")
     down = Factor(name="agreement", effect="lowers", detail="1 of 3 agree")
     agreement = [c for c in _chips([(up, 0.2), (down, -0.2)]) if c.name == "Agreement"]
-    assert all(c.why for c in agreement) and len(agreement) == 2
+    # one row (22 Oct site walk): reasons that cancel are said under No effect, the one that
+    # lowered it after "but"
+    assert [(c.effect, c.why) for c in agreement] == [
+        ("neutral", ["the advisor was sure, but only 1 of 3 agree"])
+    ]
 
 
 def test_with_no_forecast_choices_compared_is_only_missing():
@@ -334,9 +338,8 @@ def test_with_no_forecast_choices_compared_is_only_missing():
         (Factor(name="care_facts", effect="raises", detail="care facts verified"), 0.1),
     ]
     compared = [c for c in _chips(rows) if c.name == "Choices compared"]
-    assert [(c.effect, c.why) for c in compared] == [
-        ("missing", ["indoors: no 2-week forecast", "care facts verified"])
-    ]
+    # and only what is missing (22 Oct site walk: "care facts verified" under Missing)
+    assert [(c.effect, c.why) for c in compared] == [("missing", ["indoors: no 2-week forecast"])]
 
 
 def test_a_rule_led_call_says_a_rule_chose_it_not_that_the_advisor_was_unsure():

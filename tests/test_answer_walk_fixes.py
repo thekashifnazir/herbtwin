@@ -144,27 +144,25 @@ def test_the_agreement_is_said_once_and_the_score_does_not_move():
 
 def test_full_agreement_never_stands_alone_under_lowered_it():
     # 19 Oct judge walk, indoor basil: "▼ Lowered it · Agreement: but 3 of 3 agree"; and the
-    # walk of c485f29: "…not sure; but 3 of 3 agree" under Lowered. A reason the other way
-    # now sits under its own heading, never as a "but"
+    # walk of c485f29: "…not sure; but 3 of 3 agree" under Lowered. Since the 22 Oct site
+    # walk ("3 of 3 agree" under Helped beside a line under Lowered) a chip is one row, its
+    # net effect. A reason that lowered it is never hidden (review of that branch: a 1 of 3
+    # lead read "Agreement: the advisor was sure"): under Helped it ends the row, "…, but …"
     unsure = Factor(name="advisor", effect="lowers", detail="the advisor was not sure")
     count = Factor(name="agreement", effect="raises", detail="3 of 3 agree")
 
     def agreement(rows):
         return [(c.effect, c.why) for c in _chips(rows) if c.name == "Agreement"]
 
-    assert agreement([(unsure, -0.3), (count, 0.2)]) == [
-        ("lowers", ["the advisor was not sure"]),
-        ("raises", ["3 of 3 agree"]),
-    ]
+    assert agreement([(unsure, -0.3), (count, 0.2)]) == [("lowers", ["the advisor was not sure"])]
     sure = Factor(name="advisor", effect="raises", detail="the advisor was sure")
     split = Factor(name="agreement", effect="lowers", detail="1 of 3 agree")
     assert agreement([(sure, 0.3), (split, -0.2)]) == [
-        ("raises", ["the advisor was sure"]),
-        ("lowers", ["1 of 3 agree"]),
+        ("raises", ["the advisor was sure, but only 1 of 3 agree"])
     ]
     assert agreement([(unsure, -0.1), (count, 0.2)]) == [
-        ("raises", ["3 of 3 agree"]),
-        ("lowers", ["the advisor was not sure"]),
+        ("raises", ["3 of 3 agree, but the advisor was not sure"])
     ]
     rows = [(unsure, -0.3), (count, 0.2)]
-    assert not any(w.startswith("but ") for c in _chips(rows) for w in c.why)
+    # a raising reason never reads as a "but" under Lowered it
+    assert not any("but" in w for c in _chips(rows) for w in c.why)

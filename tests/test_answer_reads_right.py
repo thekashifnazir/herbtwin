@@ -90,8 +90,8 @@ def test_a_reason_with_no_weight_is_never_listed_under_lowered_it():
     from tests.test_confidence import BASE
 
     chips = [(c.name, c.effect, c.why) for c in assess(BASE).chips if c.name == "Weather"]
-    assert ("Weather", "lowers", [COLD_NIGHTS_NOT_YET]) in chips
-    assert ("Weather", "neutral", ["forecast available"]) in chips
+    # one row, its net effect (22 Oct site walk): the neutral line is not said beside it
+    assert chips == [("Weather", "lowers", [COLD_NIGHTS_NOT_YET])]
     assert "die-back" in COLD_NIGHTS_NOT_YET or "dieback" in COLD_NIGHTS_NOT_YET
 
 

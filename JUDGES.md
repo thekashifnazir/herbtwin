@@ -80,12 +80,14 @@ is in the submission form; it is not in this repository.
      when a rule of ours chose the lead, a note saying how
      ("The advisors led with …"); then, folded, **Why it's our best read** (or **Why
      we're not sure**: what helped (▲), what lowered it (▼), what was missing (?) and what made no
-     difference (·), in words), **Compare all choices (next 2 weeks)** (outdoors, once we
-     know where it is, or a line saying why the choices don't apply when there is no cure:
+     difference (·), in words, each factor once under its net effect), **Compare all choices
+     (next 2 weeks)** (outdoors, once we know where it is, and open from the start whenever the
+     twin ran, so its chart shows without a tap; or, folded, a line saying why the choices
+     don't apply when there is no cure:
      each action
      against leaving it, tested on the plant's twin: a small water-and-frost model of the
      plant run over the next 2 weeks of weather) and **Weather, forecast and sources**
-     (the evidence behind the answer).
+     (the evidence behind the answer; **The photo and sources** for a plant indoors).
 4. **Refine.** Tap **Want a more exact answer? Tell us more**. Under "Tell us more and
    we'll check the advice", in **What's changed**, say how the soil feels
    2 cm down, when you last watered, or what changed, then press **Check the advice
@@ -94,6 +96,8 @@ is in the submission form; it is not in this repository.
    sunny balcony and the lower leaves are going yellow.") moves the chips to match ("In a
    container (you said)") and is said back under the headline's first line: "You told us: in
    a pot, on a balcony, sunny, lower leaves yellow". Five refines per answer.
+   The same advice in other words is not a change: the Indoors switch over "Leave it" says
+   "Checked again as an indoor plant: same advice."
 5. **Ask about this plant.** Under **Ask a question**, type in the same box, for example "What if I
    move it inside?" or "What if I don't water it this week?", and press **Ask about this
    plant** (or Enter; Shift+Enter is a new line), or tap one of the three questions. The reply appears under the box and the advice stays as it is. What-ifs are

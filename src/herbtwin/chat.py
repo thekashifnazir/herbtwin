@@ -24,11 +24,13 @@ from urllib.parse import parse_qs, urlsplit
 from herbtwin.adapters.base import AdapterError, ModelAdapter, ToolCall
 from herbtwin.advice_context import FENCE_RUN, fence, history_text, told_lines
 from herbtwin.answer import NO_CURE_HEADLINE, TRAY_CHECK, dont_if_dry
+from herbtwin.confidence import SURE_NAME
+from herbtwin.crops import RATING_MIN_C, RATINGS, Crop, load_calendar
 from herbtwin.scenarios import SCENARIOS, run_scenario
 from herbtwin.schemas import AnalysisRecord, SoilFeel
 from herbtwin.search import MAX_HITS
 from herbtwin.seasonal import load_norms
-from herbtwin.species import match_species
+from herbtwin.species import match_plant, match_species, name_parts
 
 if TYPE_CHECKING:
     from herbtwin.pipeline import History
@@ -151,6 +153,9 @@ SYSTEM = (
     "to someone else only when they ask who to ask, or it needs a person to see the plant, "
     "and then name the RHS, a local garden centre or nursery, or an allotment society, "
     "never an extension service.\n"
+    # 22 Oct site walk: parsley in the ground got "moving potted parsley" for the winter
+    "Answer for the plant where PLANT says it grows: in the ground is not a pot, so never "
+    "assume a pot. For winter, go by its winter line.\n"
     "If the person tells you something rather than asking, never repeat it back: say in "
     "one sentence what it changes for this plant, from the blocks, or simply thank them.\n"
     "Do not invent facts about this plant. If nothing here supports an answer, say you are "
@@ -161,9 +166,19 @@ SYSTEM = (
 SEARCH_ON = (
     "For facts the blocks do not hold, you may call search_web. Name the site of each fact "
     "you take from it in brackets after that fact, for example (RHS) or (Kew); the pages "
-    "are listed under your reply, so write no URLs."
+    "are listed under your reply, so write no URLs. Name a site only for a fact that "
+    "site's own result says."
 )
 SEARCH_OFF = "Web search is off: answer from the blocks and tool results only."
+# only for a kitchen herb named for sure (22 Oct site walk: "Yes … but do not consume if you
+# have kidney disease, are pregnant, or have oedema", a herbal site's medicinal caution).
+# Warnings stay the model's to give: code never rewrites one (review of this PR)
+KITCHEN_RULE = (
+    "PLANT says it is a common kitchen herb: it is fine to eat in normal kitchen amounts. "
+    "Keep any warning that applies at kitchen amounts (a medicine it interacts with, such "
+    "as blood thinners, an allergy, sprays or slug pellets on it, a look-alike), but do not "
+    "give large-dose medicinal cautions as reasons not to eat it."
+)
 # every plant here is a herb people eat (#278 kept a page's chemical treatment out of the
 # answer; the chat could still suggest one)
 NO_CHEMICALS = (
@@ -356,6 +371,20 @@ def _keeps_the_dont(text: str, rec: AnalysisRecord) -> str:
     if not said:
         return line
     return f"{said}\n\n{line}" if "\n" in text else f"{said} {line}"  # a list keeps it apart
+
+
+# a caution: a site is named for one only when its own page says it (22 Oct site walk: a
+# herbal site's "do not consume if … pregnant … kidney" was credited to the RHS)
+# Each a pattern, so the same caution matches in the reply and on the page: oedema and
+# edema, breastfeed and breast-feed; "liver" never in "liverwort"
+_CAUTION = tuple(
+    re.compile(p, re.I)
+    for p in (
+        r"\bpregnan", r"\bkidney", r"\bo?edema", r"\bbreast-?feed", r"\bepilep",
+        r"\blivers?\b", r"\bmiscarr", r"\bblood thinner", r"\bwarfarin", r"\bmedication",
+        r"\btoxic", r"\bpoison", r"\ballerg",
+    )
+)  # fmt: skip
 
 
 def _ours_only(text: str) -> bool:
@@ -610,13 +639,22 @@ def _site(name: str) -> str | None:
     return _SITE_NAMES.get(" ".join(re.sub(r"[^a-z0-9\s]", "", name.casefold()).split()))
 
 
-def _linked_sites_only(text: str, sources: list[dict]) -> str:
+def _linked_sites_only(text: str, sources: list[dict], pages: dict[str, str] | None = None) -> str:
     """Each site named in brackets keeps its name only when a link to it is listed under
-    the reply; a bracket naming only unlisted sites goes. Any other bracket stays."""
+    the reply; a bracket naming only unlisted sites goes. Any other bracket stays. On a
+    sentence with a caution in it ("pregnant", "kidney", "toxic"), a site also needs its own
+    result to say each one (22 Oct site walk: a herbal site's caution was credited to the
+    RHS). `pages` is each listed result's host and words."""
     hosts = {(urlsplit(s["url"]).hostname or "").lower() for s in sources}
 
     def listed(domain: str) -> bool:
         return any(h == domain or h.endswith(f".{domain}") for h in hosts)
+
+    def says(domain: str, cautions: list[re.Pattern]) -> bool:
+        words = " ".join(
+            t for h, t in (pages or {}).items() if h == domain or h.endswith(f".{domain}")
+        )
+        return all(c.search(words) for c in cautions)
 
     def keep(m: re.Match) -> str:
         before, inside, after = m[1], m[2].strip(), m[3]
@@ -628,13 +666,38 @@ def _linked_sites_only(text: str, sources: list[dict]) -> str:
             return m[0]  # not only site names: "(rosemary)", "(about 3 in 10)", "(see RHS)"
         start = max((e.end() for e in _SENTENCE_END.finditer(m.string, 0, m.start())), default=0)
         ours = _OURS.search(m.string, start, m.start()) is not None
-        kept = [n for n, d in zip(names, sites, strict=True) if listed(d) and not ours]
+        sentence = m.string[start : m.start()]
+        cautions = [c for c in _CAUTION if c.search(sentence)]
+        kept = [
+            n
+            for n, d in zip(names, sites, strict=True)
+            if listed(d) and not ours and says(d, cautions)
+        ]
         if kept:
             return f"{before}({word}{', '.join(kept)}){after}"
         opens_line = m.start() == 0 or m.string[m.start() - 1] == "\n"
         return "" if opens_line else after  # the line it opened starts at its next word
 
     return _BRACKET.sub(keep, text).lstrip("\n")  # a dropped first bracket opens no line
+
+
+def _pages(used: list[dict]) -> dict[str, str]:
+    """Each listed search result's host and the words it said: title and snippet."""
+    out: dict[str, str] = {}
+    for u in used:
+        result = u.get("result")
+        if u.get("name") != "search_web" or not isinstance(result, dict):
+            continue
+        listed = result.get("listed")
+        for h in result.get("results") or []:
+            if not (isinstance(h, dict) and isinstance(h.get("url"), str)):
+                continue
+            if isinstance(listed, list) and h["url"] not in listed:
+                continue
+            host = (urlsplit(h["url"]).hostname or "").lower()
+            said = f"{h.get('title') or ''} {h.get('snippet') or ''}"
+            out[host] = f"{out.get(host, '')} {said}".strip()
+    return out
 
 
 def _same_page(url: str) -> str:
@@ -703,22 +766,110 @@ def _said(c) -> str:
     return c.if_you_do
 
 
+def crop(rec: AnalysisRecord) -> Crop | None:
+    """The UK crop calendar's record for the plant read, by its Latin name ("mentha" covers
+    a read of spearmint); None for a plant it does not hold, such as a houseplant. Only a
+    read named to its species: a genus alone never counts (review of this PR: pennyroyal,
+    Mentha pulegium, matched "Mentha spp." through the genus and was called a kitchen herb)."""
+    obs = rec.observation
+    if obs is None or not obs.species:
+        return None
+    # the Latin name itself, never the common one: "Parsley (Aethusa cynapium)", fool's
+    # parsley, matched parsley through its common name (second review of this PR)
+    top = obs.species[0]
+    latin = name_parts(top.name, top.common_name)[1] or top.name
+    found = match_plant(latin)
+    key = found.key
+    if key is None or found.how == "genus" or " " not in key:
+        return None
+    if _binomial(latin) != _binomial(key):  # matched through a common name, not the Latin
+        return None
+    return next(
+        (c for c in load_calendar() if any(key == n or key.startswith(f"{n} ") for n in c.latin)),
+        None,
+    )
+
+
+def _binomial(name: str) -> str:
+    return " ".join(re.sub(r"[^a-z\s'-]", " ", name.casefold()).split()[:2])
+
+
+def kitchen_herb(rec: AnalysisRecord) -> bool:
+    """A herb the crop calendar holds as one grown to eat, on a read sure of its name: an
+    unsure name or a rough read may be wrong, and a look-alike can be poisonous."""
+    found = crop(rec)
+    obs = rec.observation
+    sure = obs is not None and bool(obs.species) and obs.species[0].confidence >= SURE_NAME
+    rough = rec.answer is not None and rec.answer.photo_issue
+    return found is not None and found.group == "herb" and sure and not rough
+
+
+_SETTING_WORDS = {"indoor": "indoors", "outdoor": "outdoors", "unknown": "indoors or out not known"}
+_CONTAINER_WORDS = {
+    "pot": "in a pot",
+    "ground": "in the ground (not in a pot)",
+    "unknown": "pot or ground not known",
+}
+
+
+def _winter(found: Crop, container: str, setting: str) -> str:
+    """Its UK winter outdoors, from the crop calendar's RHS hardiness rating. In a pot, the
+    words follow our one-step-down rating (RHS: pots get colder), and only the RHS's own
+    rating is credited to it (second review of this PR: "stays outdoors … (RHS H4, H3 in a
+    pot)" for potted rosemary)."""
+    potted = container == "pot" and found.rating in RATINGS
+    applies = found.rating_in_pot() if potted else found.rating
+    if found.frost_tender:
+        said = "frost tender, does not survive a UK winter outdoors"
+    elif found.overwinters == "n":
+        said = "does not survive a UK winter outdoors"
+    elif potted and RATING_MIN_C[applies] >= RATING_MIN_C["H3"]:
+        said = "in a pot outdoors, move it under cover or protect it in hard frosts"
+    elif found.overwinters == "with_protection":
+        said = "survives a UK winter outdoors only with protection"
+    elif setting == "indoor":
+        said = "hardy outdoors in a UK winter"
+    else:
+        said = "stays outdoors over a UK winter"
+    if not found.rating:
+        return f"winter: {said}"
+    pot = "; about one step less hardy in a pot" if potted else ""
+    return f"winter: {said} (RHS {found.rating}{pot})"
+
+
+def _plant_lines(rec: AnalysisRecord) -> list[str]:
+    """The PLANT block: the read, with where it grows as the person corrected it (the switch
+    or their note, as the band shows it), and what the crop calendar says of eating it and
+    its winter (22 Oct site walk: "where: outdoor, ground" still got "potted parsley")."""
+    from herbtwin.pipeline import told_observation  # the pipeline imports this module
+
+    obs = rec.observation
+    if obs is None:
+        return []
+    if rec.told is not None:
+        obs = told_observation(obs, rec.told)
+    top = obs.species[0] if obs.species else None
+    colour = obs.leaf_colour.replace("_", " ")
+    lines = [
+        f"plant: {top.common_name} ({top.name})" if top else "plant: not identified",
+        f"where: {_SETTING_WORDS[obs.setting]}, {_CONTAINER_WORDS[obs.container]}",
+    ]
+    found = crop(rec)
+    if found is not None:
+        if kitchen_herb(rec):
+            lines.append("kitchen: a common kitchen herb, grown to eat (UK crop calendar)")
+        lines.append(_winter(found, obs.container, obs.setting))
+    return lines + [
+        f"droop {obs.water_stress}/3, decline {obs.decline}/3, leaves {colour}",
+        f"seen: {', '.join(obs.symptoms) or 'nothing unusual'}",
+        f"photo date: {rec.taken_at:%d %b %Y}",
+    ]
+
+
 def context(rec: AnalysisRecord, history: History | None) -> str:
     """The fenced blocks the chat sees: plant, answer, what we were told, history."""
     obs, a = rec.observation, rec.answer
-    plant = ""
-    if obs is not None:
-        top = obs.species[0] if obs.species else None
-        colour = obs.leaf_colour.replace("_", " ")
-        plant = "\n".join(
-            [
-                f"plant: {top.common_name} ({top.name})" if top else "plant: not identified",
-                f"where: {obs.setting}, {obs.container}",
-                f"droop {obs.water_stress}/3, decline {obs.decline}/3, leaves {colour}",
-                f"seen: {', '.join(obs.symptoms) or 'nothing unusual'}",
-                f"photo date: {rec.taken_at:%d %b %Y}",
-            ]
-        )
+    plant = "\n".join(_plant_lines(rec))
     answer = ""
     if a is not None:
         lines = [f"headline: {a.headline}"]
@@ -978,6 +1129,8 @@ def reply(
     tools = [RUN_SCENARIO] + ([SEARCH_WEB] if search is not None else [])
     system = SYSTEM.format(search=SEARCH_ON if search is not None else SEARCH_OFF)
     system = f"{system}\n{NO_CHEMICALS}"
+    if kitchen_herb(rec):
+        system = f"{system}\n{KITCHEN_RULE}"
     msgs: list[dict] = [{"role": "system", "content": f"{system}\n\n{context(rec, history)}"}]
     # our own pointer left out: shown it, the model wrote it into its next reply (19 Oct live)
     msgs += [
@@ -1076,7 +1229,7 @@ def reply(
         text = f"{kept or NOTED} {CHECK_AGAIN}"
     _mark_listed(used, text, rec)
     sources = sources_from(used)
-    text = _linked_sites_only(text, sources)
+    text = _linked_sites_only(text, sources, _pages(used))
     if not text:
         text = NO_ANSWER
     elif not grounded and not (fact and thanks) and not ours_only:

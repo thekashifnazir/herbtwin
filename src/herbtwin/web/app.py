@@ -44,6 +44,7 @@ from herbtwin.answer import (
     dont_if_dry,
     is_question,
     reply_to,
+    same_advice,
     top_doubt,
     watch_list,
 )
@@ -221,6 +222,7 @@ TEMPLATES.env.globals["reply_to"] = reply_to  # "You asked: …" and the advisor
 TEMPLATES.env.globals["is_question"] = is_question  # "You asked" or "You said"
 TEMPLATES.env.globals["note_facts"] = note_facts  # the chips follow their note
 TEMPLATES.env.globals["told_echo"] = told_echo  # "You told us: in a pot, sunny"
+TEMPLATES.env.globals["same_advice"] = same_advice  # "Changed" only when the advice did
 TEMPLATES.env.globals["no_data"] = NO_DATA  # an "if you do" line that says nothing: hidden
 TEMPLATES.env.globals["site_css"] = Markup(style.CSS)
 TEMPLATES.env.globals["mark"] = Markup(style.MARK)
@@ -1547,8 +1549,11 @@ def create_app(
             return _with_cookies(Response(status_code=204), holder)  # UK only
         # the town the person typed: for the garden centres link, and for local help when on
         typed_town = local_help.town_of(loc)
-        town = typed_town if local is not None else None
         outdoor = rec.observation is not None and rec.observation.setting == "outdoor"
+        indoor = rec.observation is not None and rec.observation.setting == "indoor"
+        # no gardener to hire for a pot indoors (22 Oct site walk: "Gardeners near London"
+        # under the Indoors switch)
+        town = typed_town if local is not None and not indoor else None
 
         async def shop_links():
             if finder is None:

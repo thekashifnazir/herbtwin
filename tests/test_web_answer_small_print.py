@@ -6,6 +6,7 @@ import re
 import respx
 
 from herbtwin.answer import NO_CURE_HEADLINE
+from herbtwin.confidence import UNSAID, load_weights
 from herbtwin.stages import climate
 from herbtwin.stages.climate import ARCHIVE_URL
 from herbtwin.web.app import TEMPLATES
@@ -45,10 +46,15 @@ def test_how_sure_is_listed_once(tmp_path):
     evidence = evidence.split('<details class="assumptions">', 1)[0]
     why = page.split('<details class="why fold', 1)[1].split("</details>", 1)[0]
     shown_once = {"advisor"}  # "the advisor was sure" goes when "N of 3 agree" says it
+    weights = load_weights()["factors"]
+    said = " ".join(w for c in rec.answer.chips for w in c.why)
     for f in rec.answer.factors:
         assert f.detail not in evidence, f.detail  # said once, under "Why we're …"
-        if f.name not in shown_once:
-            assert f.detail in why, f.detail  # and nothing lost: every factor's reason is there
+        lowered = f.effect == "lowers" and weights.get(f.name, {}).get("lowers", 0.0) < 0
+        if f.name not in shown_once | UNSAID and (lowered or f.detail in said):
+            # nothing lost: a reason that lowered it is always there (one row per chip, its
+            # net effect, since 22 Oct; only a reason the other way under Lowered it goes)
+            assert f.detail in why.replace("&#39;", "'"), f.detail
 
 
 def test_the_twin_lead_falls_to_the_picture_when_the_main_card_is_not_the_twin(tmp_path):

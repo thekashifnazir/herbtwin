@@ -487,13 +487,25 @@ AGREE_COUNT = re.compile(r"\b\d+ of \d+ agree\b")
 COLD_NIGHTS_NOT_YET = "no cold nights yet, so the autumn die-back may not have begun"
 
 
+# our own workings, never a fact about the plant: a reply that needed a second try still
+# weighs (fitted), but "needed a second try" on the page read as a doubt (22 Oct site walk)
+UNSAID = frozenset({"repair"})
+
+
 def _chips(rows: list[tuple[Factor, float]]) -> list[Chip]:
+    """One row per chip, under its net effect (22 Oct site walk: "3 of 3 agree" under Helped
+    and "needed a second try" under Lowered; Season under Lowered and under No effect). Its
+    reasons are the ones that pushed it that way, and a reason that lowered it is never
+    hidden: in a row that nets to Helped or No effect it ends the row as "…, but …" (review
+    of the branch: "1 of 3 agree" vanished under "Agreement: the advisor was sure")."""
     chips = []
     # no plant model means no forecast: care facts alone must not read as "Helped: 2-week
     # forecast" on a page that just said the weather was unavailable (17 Oct walk)
     no_model = any(f.name == "plant_model" and f.effect == "missing" for f, _ in rows)
     for name in CHIPS:
-        known = [(f, w) for f, w in rows if CHIP_OF[f.name] == name and f.effect != "missing"]
+        mine = [(f, w) for f, w in rows if CHIP_OF[f.name] == name]
+        known = [(f, w) for f, w in mine if f.effect != "missing"]
+        said = [(f, w) for f, w in mine if f.name not in UNSAID]
         total = sum(w for _, w in known)
         effect: Effect
         if not known or (name == "Choices compared" and no_model):
@@ -504,32 +516,36 @@ def _chips(rows: list[tuple[Factor, float]]) -> list[Chip]:
             effect = "lowers"
         else:
             effect = "neutral"
-        # the reasons that pushed it this way, for the page (18 Oct judge walk: "Lowered it:
-        # weather" alone read as a contradiction beside a forecast with no frost). A reason
-        # that pulled the other way sits under its own heading, never as a "but" under this
-        # one (judge walk of c485f29: "Lowered it · Agreement: …; but 3 of 3 agree")
+        # what did lower it: a "lowers" line with a negative weight (repair's is not)
+        low = _once([f.detail for f, w in said if f.effect == "lowers" and w < 0])
         if effect == "missing":
-            why = [f.detail for f, _ in rows if CHIP_OF[f.name] == name and f.effect == "missing"]
-            other = known  # under their own heading...
-            if name == "Choices compared" and no_model:
-                # ...except with no forecast: "Helped · Choices compared" beside "Missing ·
-                # Choices compared" said the same thing helped and was missing (#281 review)
-                why += [f.detail for f, _ in known]
-                other = []
-        else:
+            # only what is missing: "care facts verified" under Missing read as missing
+            # (22 Oct site walk), and beside it under Helped as helped and missing at once
+            # (#281 review)
+            why = [f.detail for f, _ in said if f.effect == "missing"]
+        elif effect == "lowers":
             # a reason with no weight never sits under "Lowered it": it did not lower it, and
-            # "Lowered it · Weather: …; forecast available" read as good news there (judge live
-            # walk of rev 00040). Beside "Helped" it reads as part of what helped, as before
-            joins = (effect, "neutral") if effect != "lowers" else (effect,)
-            why = [f.detail for f, _ in known if f.effect in joins]
-            other = [(f, w) for f, w in known if f.effect not in joins]
-        if why or effect == "missing" or not other:  # a cancelled-out chip says nothing
-            chips.append(Chip(name=name, effect=effect, why=_once(why)))
-        for against in ("raises", "lowers", "neutral"):
-            said = [f.detail for f, _ in other if f.effect == against]
-            if said and against != effect:
-                chips.append(Chip(name=name, effect=against, why=_once(said)))
+            # "Lowered it · Weather: …; forecast available" read as good news there (judge
+            # live walk of rev 00040)
+            why = low
+        else:
+            # beside "Helped" a reason with no weight reads as part of what helped, as before
+            up = _once([f.detail for f, _ in said if f.effect in ("raises", "neutral")])
+            why = up[:-1] + [f"{up[-1]}, but {_but(low)}"] if up and low else up or low
+        chips.append(Chip(name=name, effect=effect, why=why))
     return chips
+
+
+def _but(low: list[str]) -> str:
+    """The lowering reasons after "but": a count says how few ("but only 1 of 3 agree")."""
+    return " and ".join(f"only {w}" if AGREE_COUNT.fullmatch(w) else w for w in low)
+
+
+def fold_reasons(factors: list[Factor], weights: dict | None = None) -> str:
+    """Every reason the How sure fold says, as one text: what "Mostly:" may name (#review)."""
+    w = (weights or load_weights())["factors"]
+    rows = [(f, w.get(f.name, {}).get(f.effect, 0.0)) for f in factors]
+    return " · ".join(x for c in _chips(rows) for x in c.why)
 
 
 def _once(why: list[str]) -> list[str]:

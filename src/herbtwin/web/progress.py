@@ -31,7 +31,7 @@ from herbtwin.pipeline import (
     TwinTested,
     WeatherFound,
 )
-from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT
+from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT, about_problem
 from herbtwin.stages.problem import signs as problem_signs
 from herbtwin.web.style import CSS, MARK
 
@@ -299,6 +299,8 @@ def _problem_chip(name: str) -> str:
     (21 Oct, Kash), from data/outcomes/problem_signs_uk.json. With no signs, a plain chip."""
     row = problem_signs().get(name.lower(), {})
     looks, source = row.get("signs"), row.get("source") or ""
+    if not about_problem(source, name):  # only a page about it (whitefly has none: 22 Oct)
+        source = ""
     if not looks:
         return f"<li>{_plain(name)}</li>"
     site = (urlsplit(source).hostname or "").removeprefix("www.")

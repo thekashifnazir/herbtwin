@@ -18,9 +18,17 @@ from functools import cache
 from typing import Literal, NamedTuple
 
 from herbtwin.advice_context import WeatherFacts
-from herbtwin.confidence import LEVEL_TEXT, RESTING, RULE_LED, Assessment, load_weights
+from herbtwin.confidence import (
+    LEVEL_TEXT,
+    RESTING,
+    RULE_LED,
+    Assessment,
+    fold_reasons,
+    load_weights,
+)
 from herbtwin.consequences import NO_DATA, consequence_for
 from herbtwin.indoor_care import IndoorCare
+from herbtwin.outcomes import load_outcomes
 from herbtwin.plant_model import ModelView, shelters_from_cold, worth_doing
 from herbtwin.schemas import (
     ActionCard,
@@ -28,6 +36,7 @@ from herbtwin.schemas import (
     Answer,
     CareAction,
     CompareRow,
+    Factor,
     IndoorNow,
     Observation,
     ProblemSeen,
@@ -91,7 +100,28 @@ NO_CURE_HEADLINE = "Remove it. There is no cure for this."
 # against the sourced whole-plant removal, and the voice says it aloud)
 NO_CURE_BECAUSE = "this disease has no cure, and it can spread to other plants of its kind."
 NO_CURE_SEEN = "{seen}, which has no cure and can spread to other plants of its kind."
-SPARES_THE_OTHERS: frozenset[str] = frozenset({"treat_or_remove", "isolate", "check_pests"})
+# not "Keep it apart": a plant pulled out and binned has nothing left to keep apart (22 Oct
+# site walk, r2 basil downy mildew)
+SPARES_THE_OTHERS: frozenset[str] = frozenset({"treat_or_remove", "check_pests"})
+# pests that walk or fly from plant to plant: moving the pot away does not keep them off the
+# others, so "Keep it apart" was filler under them (22 Oct site walk, r5 rosemary beetle).
+# The plants nearby are what to check: by name when our outcome table lists the pest on
+# other plants too, else in general. Our own list; the pests that stay put (aphids, mites,
+# mealybugs, scale) keep "Keep it apart", the RHS's own advice for them
+MOVING_PESTS = frozenset(
+    {
+        "rosemary beetle",
+        "blue mint beetle",
+        "slugs and snails",
+        "capsid bugs",
+        "sage and ligurian leafhoppers",
+    }
+)
+NEIGHBOURS_CHECK = "check the {plants} nearby: {pest} {feeds} on {them} too."
+NEIGHBOURS_FALLBACK = "check the plants nearby for the same signs."
+# more than this and the list is no help: a pest that eats nearly everything (slugs and
+# snails) gets the plain line
+NEIGHBOURS_MAX = 3
 # What next under "Remove it": no plant to photo again, add photos of or keep (22 Oct site
 # walk: "send a new photo of the same plant" under "Remove it"). Bag and bin is the sources'
 # own; the compost is where a gardener would put it otherwise
@@ -662,6 +692,70 @@ def _bolters() -> frozenset[str]:
     return frozenset(n.plant for n in load_norms() if "bolting_risk" in n.status)
 
 
+@cache
+def _common_names() -> dict[str, str]:
+    """Each plant key's first common name in our season norms: "salvia officinalis" -> sage.
+    Never a name that says it is unsure, "mint (unknown kind)": no such plant to check."""
+    names: dict[str, str] = {}
+    for n in load_norms():
+        if n.common_names and "(" not in n.common_names[0]:
+            names.setdefault(n.plant, n.common_names[0])
+    return names
+
+
+def _same_herb(a: str, b: str) -> bool:
+    """A kind of the other, or the same: "salvia officinalis 'purpurascens'" and sage,
+    "mentha" and "mentha spicata". Two species of one genus are not (sage and rosemary)."""
+    return a == b or a.startswith(f"{b} ") or b.startswith(f"{a} ")
+
+
+def also_eats(problem: str, plant_key: str | None) -> list[str]:
+    """The other herbs our outcome table lists this problem on, by common name, in table
+    order: never this plant or a kind of it, and a kind of another listed one only once."""
+    wanted = problem.strip().casefold()
+    keys: list[str] = []
+    for row in load_outcomes():
+        if row.problem is None or row.action != "treat_or_remove":
+            continue
+        if wanted not in {n.casefold() for n in (row.problem, *row.problem_aliases)}:
+            continue
+        if plant_key and _same_herb(row.plant, plant_key):
+            continue
+        kind = next((i for i, k in enumerate(keys) if _same_herb(row.plant, k)), None)
+        if kind is None:
+            keys.append(row.plant)
+        elif _shown_first(row.plant, keys[kind]):  # sage, not purple sage, stands for both
+            keys[kind] = row.plant
+    names = _common_names()
+    return [names[k] for k in keys if k in names]
+
+
+def _shown_first(new: str, old: str) -> bool:
+    """Of two kinds of one herb, the one to name: the one with a plain name (garden mint
+    over "mint (unknown kind)"), then the plainer key (sage over purple sage)."""
+    names = _common_names()
+    return (new in names, -len(new)) > (old in names, -len(old))
+
+
+def _and(names: list[str]) -> str:
+    return names[0] if len(names) == 1 else f"{', '.join(names[:-1])} and {names[-1]}"
+
+
+def neighbours_check(problem: str, plant_key: str | None) -> str:
+    """Also do's line under a pest that moves: the herbs nearby it also eats, else any."""
+    plants = also_eats(problem, plant_key)
+    if not plants or len(plants) > NEIGHBOURS_MAX:
+        return NEIGHBOURS_FALLBACK
+    pest = problem.strip().lower()
+    # "capsid bugs feed", "rosemary beetle feeds"; "on it" for one herb (review nits)
+    return NEIGHBOURS_CHECK.format(
+        plants=_and(plants),
+        pest=pest,
+        feeds="feed" if pest.endswith("s") else "feeds",
+        them="it" if len(plants) == 1 else "them",
+    )
+
+
 def is_bolted(obs: Observation, plant_key: str | None) -> bool:
     if plant_key is None or plant_key not in _bolters():
         return False
@@ -929,34 +1023,43 @@ def _plain_doubt(name: str, detail: str) -> str:
 BASE_DOUBT = "advice of this kind is right less often"
 
 
-def top_doubt(answer: Answer) -> str | None:
-    """The one thing that lowered our sureness most, in plain words, for the line beside "How
-    sure we are" (design wave 1, C): the reason was two screens down, folded. Only a factor
-    that did lower it (a negative weight), and never one the fold leaves out: beside "N of 3
-    agree", "the advisor was not sure" is dropped there, so it is passed over here too."""
-    table = load_weights()
-    weights = table["factors"]
-    # the fold hides "the advisor was not sure" only beside an agreement line that lowered it
-    # too (confidence._once joins same-effect lines): 2 of 3 is neutral, so it stays there
-    counted = any(f.name == "agreement" and f.effect == "lowers" for f in answer.factors)
-    lows = [
+def _lows(factors: list[Factor]) -> list[tuple[float, int, Factor]]:
+    """The factors that did lower our sureness (a negative weight) and that the How sure fold
+    says: "Mostly:" never names a doubt the fold leaves out (review of the 22 Oct branch:
+    "Mostly: … a gardeners' rule of thumb" over a fold without it)."""
+    weights = load_weights()["factors"]
+    said = fold_reasons(factors)
+    return [
         (w, i, f)
-        for i, f in enumerate(answer.factors)
+        for i, f in enumerate(factors)
         if f.effect == "lowers"
         and f.detail
         and (w := weights.get(f.name, {}).get("lowers", 0.0)) < 0
-        and not (counted and f.name == "advisor" and f.detail.startswith("the advisor was"))
+        and f.detail in said
     ]
+
+
+def doubt_reason(factors: list[Factor]) -> Factor | None:
+    """The factor that lowered our sureness most, of those the fold says."""
+    lows = _lows(factors)
+    return min(lows, key=lambda x: (x[0], x[1]))[2] if lows else None
+
+
+def top_doubt(answer: Answer) -> str | None:
+    """The one thing that lowered our sureness most, in plain words, for the line beside "How
+    sure we are" (design wave 1, C): the reason was two screens down, folded. Only a factor
+    that did lower it (a negative weight), and never one the fold leaves out (beside "N of 3
+    agree", "the advisor was not sure" is dropped there, so it is passed over here too)."""
+    table = load_weights()
+    lows = _lows(answer.factors)
     do = getattr(answer, "do", None) or []
     # scored as confidence.assess scores it: feed is "other", isolate is treat_or_remove
     base = table["base"].get(coarse(do[0].action), table["base"]["default"]) if do else 0.0
     weakest = min((x[0] for x in lows), default=0.0)
     if base < 0 and base < weakest:
         return BASE_DOUBT
-    if not lows:
-        return None
-    f = min(lows, key=lambda x: (x[0], x[1]))[2]
-    return _plain_doubt(f.name, f.detail)
+    f = doubt_reason(answer.factors)
+    return None if f is None else _plain_doubt(f.name, f.detail)
 
 
 def reply_to(answer: Answer, question: str | None, month: int) -> str:
@@ -1227,6 +1330,29 @@ def _headline(primary: CareAction, norm: SeasonalNorm | None, month: int, answer
     return HEADLINES.get(primary, _first_sentence(answer))
 
 
+LEAVE_IT_LINES = re.compile(
+    r"Leave it\. This is normal for [A-Z][a-z]+\.|Leave it for now and keep an eye on it\."
+)
+
+
+def _headline_action(headline: str) -> str | None:
+    """The action a headline is the plain line of (_headline), or None for any other line."""
+    if LEAVE_IT_LINES.fullmatch(headline):
+        return "leave_normal"
+    return next((a for a, line in HEADLINES.items() if line == headline), None)
+
+
+def same_advice(before: str, after: str) -> bool:
+    """Whether a refined answer's headline gives the same advice as the first one. Leave it
+    reads "This is normal for October." only where a season stands behind it, so the Indoors
+    switch reworded the same advice and the page said "Changed" (22 Oct site walk, r3).
+    Any other line is compared as it reads."""
+    if before == after:
+        return True
+    action = _headline_action(before)
+    return action is not None and action == _headline_action(after)
+
+
 def _level_text(assessment: Assessment) -> str:
     """The middle level's "Not sure" names the check it means: the question the page asks, or none
     (18 Oct judge walk: "do the quick check first" named no check)."""
@@ -1422,6 +1548,22 @@ def build_answer(
                 do[-1] = new
             else:
                 do.append(new)
+        apart = next((i for i, c in enumerate(do) if i and c.action == "isolate"), None)
+        if apart is not None and problem.name.strip().casefold() in MOVING_PESTS:
+            # a pest that walks or flies to the next plant: check the plants nearby, in
+            # place of "Keep it apart" (22 Oct site walk, r5), and said once
+            near = ActionCard(
+                action="check_pests",
+                when=do[apart].when,
+                because=neighbours_check(problem.name, plant_key),
+                if_you_do=NO_DATA,
+                if_you_do_from="none",
+                less_sure=False,
+            )
+            look = next((i for i, c in enumerate(do) if i and c.action == "check_pests"), None)
+            do[apart if look is None else look] = near
+            if look is not None:
+                del do[apart]
     care = indoor_care if indoors else None
     if (
         care is not None

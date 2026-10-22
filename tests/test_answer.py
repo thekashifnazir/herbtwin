@@ -383,7 +383,8 @@ def test_no_cure_says_remove_it_and_drops_the_cards_that_look_after_the_plant():
     # known cure: ... pull out, bag and bin infected plants" read as a contradiction
     a = build(panel=DOWNY_PANEL, **BASIL)
     assert a.headline == "Remove it. There is no cure for this."
-    assert [c.action for c in a.do] == ["treat_or_remove", "isolate"]
+    # and no "Keep it apart": the plant is binned, nothing is left to keep apart (22 Oct)
+    assert [c.action for c in a.do] == ["treat_or_remove"]
     assert a.do[0].if_you_do.startswith("There is no known cure")
     assert a.do[0].if_you_do_from == "outcome_table" and a.do[0].when == "today"
     assert (

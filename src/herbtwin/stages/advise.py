@@ -76,24 +76,28 @@ PANEL_TEMPERATURES = (0.0, 0.7, 0.7)
 COUNTS = {1: "one", 2: "two", 3: "three", 4: "four"}
 
 
-def advisors_said(model: str | None = None, roles: list[str] | None = None) -> str:
+def advisors_said(
+    model: str | None = None, roles: list[str] | None = None, indoor: bool = False
+) -> str:
     """Who "the advisors" are, in plain words (21 Oct gardener test): today one model asked
     the same question PANEL_TEMPERATURES times, never three experts. "Asked", not
     "answered": a failed ask leaves fewer answers. The advisor reads the observe model's
     description of the photo, never the image. Specialist advisors, when an answer records
-    their roles (Answer.advisor_roles), are named instead."""
+    their roles (Answer.advisor_roles), are named instead. Indoors no weather is read, so
+    none is named (22 Oct site walk, the Indoors switch)."""
+    facts = "your photo and care facts" if indoor else "your photo, weather and care facts"
     if roles:
         n = COUNTS.get(len(roles), str(len(roles)))
         named = ", ".join(roles[:-1]) + f", and {roles[-1]}" if len(roles) > 1 else roles[0]
         who = "specialist advisor" if len(roles) == 1 else "specialist advisors"
         return (
-            f"Who advised: {n} {who}, for {named}, each from the same read of your photo,"
-            " weather and care facts. When they agree, we're surer."
+            f"Who advised: {n} {who}, for {named}, each from the same read of {facts}."
+            " When they agree, we're surer."
         )
     n = COUNTS.get(len(PANEL_TEMPERATURES), str(len(PANEL_TEMPERATURES)))
     return (
         f"Who advised: {model or 'one model'} was asked the same question {n} times, each on"
-        " its own, from the same read of your photo, weather and care facts. We call each"
+        f" its own, from the same read of {facts}. We call each"
         " answer an advisor: when they agree, we're surer."
     )
 

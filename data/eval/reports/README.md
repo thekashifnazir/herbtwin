@@ -6,6 +6,19 @@ Summaries only: counts, metrics and ids. Raw per-item rows stay in `data/eval/ru
 its replies, scrubbed, in `<run-id>.rows.jsonl` (its questions are our own, not a test
 set), so its citation and hand-check claims can be checked.
 
+## The chat's Tavily search, re-run either side of #414, 22 Oct 2026
+
+`2026-10-22-chat-search.*` (at `6a80820f`, after #414) and `2026-10-22-chat-search-before-414.*`
+(at `f3297172`, just before it), run the same day so Tavily's results are alike. Same script,
+questions, rubric and rule as 19 Oct. #414 gave the chat where the plant grows, its UK winter
+hardiness and, for a sure kitchen herb, a rule on eating it. M1 (pre-registered): with search
+26/30 in both; without search 14/30 before and 18/30 after, so the plant facts answer some
+hardiness questions with no search at all, and "not sure" without search fell from 0.37 to
+0.23. Search still wins by the rule (+0.267 [+0.067, +0.467] after). M2 (cites a web address)
+is 0 in both of today's runs, against 3/30 on 19 Oct: the replies now name the site, "(RHS)",
+in about 25 of 30 instead, which M2 does not count. A change of style in both runs, not a
+regression. Spend: $0.02 model and 74 Tavily searches (about $0.61) for the two runs.
+
 ## The chat's Tavily search, on vs off, 19 Oct 2026
 
 `2026-10-19-chat-search.*` (`scripts/measure_chat_search.py`). The metrics, rubric and
