@@ -44,7 +44,7 @@ def test_the_answer_address_shows_the_refined_answer_and_costs_nothing(tmp_path)
         again.text
     )
     assert "Hold off watering." in again.text
-    assert 'value="wet" selected' in again.text  # what was told rides along
+    assert 'value="wet" checked' in again.text  # what was told rides along
     assert len(c.app.state.deps.advise_adapter.calls) == calls  # nothing re-ran
     # the hook does nothing there: the address is already the answer's own
     assert HOOK in again.text

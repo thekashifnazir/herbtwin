@@ -96,10 +96,8 @@ def test_the_header_and_reference_are_short(tmp_path):
 def test_the_chart_caption_and_hints_are_one_short_line():
     src = _source()
     cap = src.split('<span id="twin-chart-cap">', 1)[1].split("</span>", 1)[0]
-    assert (
-        cap
-        == "Soil water over 2 weeks. Dashed: leaving it. Blue: cold nights. Tap a choice to draw it."
-    )
+    # the legend left the caption: each line is named where it ends (22 Oct, Kash)
+    assert cap == "Tap a choice to see its line on the chart."
     # the two buttons' names say what each does: no explainer line (21 Oct, Kash)
     assert "we redo the advice" not in src
 

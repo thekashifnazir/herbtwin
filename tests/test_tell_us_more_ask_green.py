@@ -10,8 +10,8 @@ from tests.test_tell_us_more_sections import ALL_ASKS, _form, _panel, _place_in_
 from tests.test_web_answer_page import _full_plan, _in_order, _render
 
 # as sent: Ask needs the script, so Check is green until the script hands the green to Ask
-ASK_LEAD = '<button class="big quiet ask-chat" type="button" data-lead hidden>Ask about this plant</button>'
-ASK_QUIET = '<button class="big quiet ask-chat" type="button" hidden>Ask about this plant</button>'
+ASK_LEAD = '<button class="quiet ask-chat" type="button" aria-label="Ask about this plant" data-lead hidden>'
+ASK_QUIET = '<button class="quiet ask-chat" type="button" aria-label="Ask about this plant" hidden>'
 CHECK_GREEN = '<button class="primary big" type="submit">Check the advice again</button>'
 
 

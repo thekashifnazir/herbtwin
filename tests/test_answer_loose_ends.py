@@ -52,9 +52,14 @@ def test_an_indoor_plant_with_no_place_is_not_promised_a_weather_test(tmp_path):
 def test_the_box_placeholder_fits_the_setting(tmp_path):
     rec = _unsure_record(tmp_path)
     rec.observation.setting = "indoor"
-    assert 'placeholder="What if I move it to a brighter window?"' in _render(rec)
+    assert (
+        'placeholder="Ask anything about this plant, e.g. What if I move it to a brighter window?"'
+        in _render(rec)
+    )
     rec.observation.setting = "outdoor"
-    assert 'placeholder="What if I move it inside?"' in _render(rec)
+    assert 'placeholder="Ask anything about this plant, e.g. What if I move it inside?"' in _render(
+        rec
+    )
 
 
 def test_a_fact_told_in_the_chat_stays_in_the_box_for_check_again():

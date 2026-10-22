@@ -51,7 +51,7 @@ def test_each_group_has_its_heading_when_it_has_something_in_it(tmp_path):
     assert 'name="place"' in where and '<div class="tray warn">' in where
     changed = _panel(page).split('<div class="part changed', 1)[1].split('<div class="part ', 1)[0]
     for q in ALL_ASKS[:3]:
-        assert f'<select name="{q}"' in changed, q
+        assert f'<input type="radio" name="{q}"' in changed, q
 
 
 def test_an_empty_group_is_left_out(tmp_path):
@@ -95,7 +95,7 @@ def test_one_refine_form_holds_both_groups_the_box_both_buttons_and_the_chat(tmp
             '<button class="primary big" type="submit">Check the advice again</button>',
             '<div class="part chat"><h3>Ask a question</h3>',
             '<textarea name="question"',
-            '<button class="big quiet ask-chat" type="button" hidden>Ask about this plant</button>',
+            '<button class="quiet ask-chat" type="button" aria-label="Ask about this plant" hidden>',
             '<div class="starters" hidden>',
             '<p class="chatnote"',
             '<div class="chatlog"',
@@ -117,7 +117,7 @@ def test_with_nothing_to_send_above_the_box_both_buttons_sit_under_it(tmp_path):
             '<div class="part chat"><h3>Ask a question</h3>',
             '<textarea name="question"',
             # the green one asks; the re-run is the quiet one beside it (22 Oct site walk)
-            "Ask about this plant</button>",
+            'aria-label="Ask about this plant"',
             "Check the advice again</button>",
         ],
     )
@@ -131,7 +131,7 @@ def test_every_script_hook_is_still_there(tmp_path):
         '<details class="tell-more"',
         '<h2 id="refine">',
         '<form class="refine"',
-        'class="big quiet ask-chat"',
+        'class="quiet ask-chat"',
         '<div class="starters" hidden>',
         'class="starter"',
         '<p class="chatnote"',
@@ -140,7 +140,7 @@ def test_every_script_hook_is_still_there(tmp_path):
         'document.querySelector("#chat > details.tell-more")',
         'document.querySelector(".answer-page form.reminder")',
         'box.querySelector("form.refine"), ask = box.querySelector(".ask-chat")',
-        'form.querySelectorAll(".actions button")',
+        'form.querySelectorAll(".actions button, .ask-chat")',
     ):
         assert hook in page, hook
 
@@ -197,7 +197,7 @@ def test_the_indoors_or_outside_question_sits_over_the_box_that_answers_it(tmp_p
             '<div class="tray warn"><p>Tell us whether it is indoors or outside.</p></div>',
             '<textarea name="question"',
             # the green one asks; the re-run is the quiet one beside it (22 Oct site walk)
-            "Ask about this plant</button>",
+            'aria-label="Ask about this plant"',
             "Check the advice again</button>",
         ],
     )

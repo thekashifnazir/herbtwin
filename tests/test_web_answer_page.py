@@ -319,11 +319,15 @@ def test_one_text_box_serves_both_the_refine_and_the_chat(tmp_path):
     assert '<textarea name="question" maxlength="500"' in form
     assert '<button class="primary big" type="submit">Check the advice again</button>' in form
     # the chat button never submits the form: without a script it stays hidden and the
-    # text goes with the refine, the one path that works without one
+    # text goes with the refine, the one path that works without one. Its send sits inside
+    # the box, as a chat app has (22 Oct, Kash on A3); Check stays under the questions
+    composer = form.split('<div class="composer">', 1)[1].split("</div>", 1)[0]
+    assert '<textarea name="question"' in composer
     assert (
-        '<button class="big quiet ask-chat" type="button" hidden>Ask about this plant</button>'
-        in form
+        '<button class="quiet ask-chat" type="button" aria-label="Ask about this plant" hidden>'
+        '<span class="ask-word">Ask</span><svg' in composer
     )
+    assert 'placeholder="Ask anything about this plant, e.g. What if I move it inside?"' in form
     assert form.index("Check the advice again") < form.index("Ask about this plant")
 
 

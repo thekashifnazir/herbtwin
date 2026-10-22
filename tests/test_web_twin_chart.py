@@ -12,7 +12,21 @@ from herbtwin.plant_model import _peak
 from herbtwin.schemas import AnalysisRecord, CompareRow
 from herbtwin.stages.environment import OPEN_METEO_URL
 from herbtwin.stages.twin import simulate
-from herbtwin.twin_chart import BOTTOM, LABEL_MAX_X, RIGHT, TOP, twin_chart
+from herbtwin.twin_chart import (
+    BOTTOM,
+    LABEL_MAX_X,
+    NAME_BOTTOM,
+    NAME_CHAR,
+    NAME_GAP,
+    NAME_TOP,
+    NEEDS_W,
+    RIGHT,
+    TOP,
+    _crosses,
+    _names,
+    plain_why,
+    twin_chart,
+)
 from herbtwin.web import style
 from tests.test_answer_walk_fixes import _render
 from tests.test_twin import PACK, _env, _obs
@@ -48,7 +62,7 @@ def test_compare_draws_the_twin_with_a_line_per_choice_and_tappable_rows(tmp_pat
     page = _render(_cold_basil(_record(tmp_path)))
     fig = page.split('<figure class="twin-chart"', 1)[1].split("</figure>", 1)[0]
     svg = fig.split("<svg", 1)[1].split("</svg>", 1)[0]
-    assert 'role="img" aria-labelledby="twin-chart-cap"' in svg
+    assert 'role="img" aria-labelledby="twin-chart-title"' in svg
     # plain words on the axis, never raw mm
     assert ">wet</text>" in svg and ">dry</text>" in svg and ">needs water</text>" in svg
     assert ">Today</text>" in svg and ">2 weeks</text>" in svg and " mm" not in fig
@@ -242,3 +256,223 @@ def test_the_twin_chart_is_open_from_the_start_when_the_twin_ran(tmp_path):
     rec.answer.compare, rec.answer.headline = [], NO_CURE_HEADLINE
     page = _render(rec)
     assert '<details class="compare fold fold-twin">' in page and 'fold-twin" open' not in page
+
+
+# 22 Oct, Kash: "Compare all choices" was not obvious to read. The chart says what it shows,
+# names its lines where they end, keeps "needs water" off the lines and marks every cold
+# window; the table's verdicts are small tags, and nothing says "baseline"
+
+
+def _two_cold_windows(rec: AnalysisRecord) -> AnalysisRecord:
+    """Leaving it has two cold spells (days 3-4 and day 10); sheltering has none."""
+    assert rec.state is not None
+    for s in rec.state.strips:
+        for i, d in enumerate(s.days):
+            d.frost = 0.9 if s.action == "do_nothing" and i in (2, 3, 9) else 0.0
+    return rec
+
+
+def _pts(points: str) -> list[tuple[float, float]]:
+    return [(float(a), float(b)) for a, b in (p.split(",") for p in points.split())]
+
+
+def test_the_chart_says_what_it_shows_above_it(tmp_path):
+    page = _render(_cold_basil(_record(tmp_path)))
+    fig = page.split('<figure class="twin-chart"', 1)[1].split("</figure>", 1)[0]
+    title = fig.split('<p class="twin-chart-title" id="twin-chart-title">', 1)[1]
+    assert title.startswith("Soil water and cold nights, next 2 weeks</p>")
+    assert fig.index("twin-chart-title") < fig.index("<svg")
+    # the caption no longer carries a legend; it says the choices draw their lines
+    cap = fig.split('<span id="twin-chart-cap">', 1)[1].split("</span>", 1)[0]
+    assert cap == "Tap a choice to see its line on the chart."
+    rec = _cold_basil(_record(tmp_path))
+    assert rec.state is not None
+    for s in rec.state.strips:
+        for d in s.days:
+            d.frost = 0.0
+    assert twin_chart(rec, LABELS).title == "Soil water over the next 2 weeks"
+
+
+def test_each_line_is_named_at_its_end_clear_of_the_lines(tmp_path):
+    rec = _cold_basil(_record(tmp_path))
+    chart = twin_chart(rec, {**LABELS, "shelter": "Protect it (shelter or bring in)"})
+    assert chart is not None
+    by = {ln.action: ln for ln in chart.lines}
+    assert by["shelter"].name == "Protect it" and by["leave_normal"].name == "Leave it"
+    base = _pts(by["leave_normal"].points)
+    for ln in chart.lines:
+        if ln.action == "leave_normal":
+            assert ln.base_name_y is None  # its own line is the one drawn: one name
+            continue
+        names = [(ln.name, ln.name_y), ("Leave it", ln.base_name_y)]
+        assert abs(ln.name_y - ln.base_name_y) >= NAME_GAP
+        for name, y in names:
+            assert NAME_TOP <= y <= NAME_BOTTOM
+            box = (RIGHT - NAME_CHAR * len(name), RIGHT, y - 10, y)
+            assert not _crosses(_pts(ln.points), *box), (ln.action, name)
+            assert not _crosses(base, *box), (ln.action, name)
+    page = _render(rec)
+    svg = page.split('<figure class="twin-chart"', 1)[1].split("</svg>", 1)[0]
+    shown = svg.split('<g class="twin-line twin-names on" data-line="shelter">', 1)[1]
+    shown = shown.split("</g>", 1)[0]
+    assert '<text class="line-name base-name" x="332"' in shown and ">Leave it</text>" in shown
+    assert re.search(
+        r'<text class="line-name" x="332" y="[\d.]+" text-anchor="end">Protect it<', shown
+    )
+    # the names sit over every line, and each in its line's colour
+    assert svg.index('polyline class="base"') < svg.index("twin-names")
+    css = style.CSS
+    assert re.search(r"\.twin-chart \.line-name \{[^}]*fill: var\(--primary\)", css)
+    assert re.search(r"\.twin-chart \.line-name\.base-name \{[^}]*fill: var\(--muted-fg\)", css)
+
+
+def test_names_near_the_axis_stay_inside_and_apart():
+    up, low = _names((118.0, 119.0), (120.0, 121.0))
+    assert NAME_TOP <= min(up, low) and max(up, low) <= NAME_BOTTOM
+    assert abs(up - low) >= NAME_GAP
+    up, low = _names((22.0, 23.0), (24.0, 25.0))  # both lines at the top: names below them
+    assert NAME_TOP <= min(up, low) and abs(up - low) >= NAME_GAP
+
+
+def test_needs_water_is_never_drawn_over_a_line(tmp_path):
+    for rec in (_cold_basil(_record(tmp_path)), _two_cold_windows(_cold_basil(_record(tmp_path)))):
+        chart = twin_chart(rec, LABELS)
+        assert chart is not None
+        x, y = chart.needs_label
+        by = {ln.action: ln for ln in chart.lines}
+        for action in (chart.shown, "leave_normal"):
+            assert not _crosses(_pts(by[action].points), x, x + NEEDS_W, y - 10, y), action
+        page = _render(rec)
+        assert f'<text class="axis needs-label" x="{x}" y="{y}">needs water</text>' in page
+
+
+def test_every_cold_window_has_a_snowflake_and_one_says_cold_nights(tmp_path):
+    rec = _two_cold_windows(_cold_basil(_record(tmp_path)))
+    chart = twin_chart(rec, LABELS)
+    assert chart is not None
+    base = next(ln for ln in chart.lines if ln.action == "leave_normal")
+    assert len(base.cold) == 3 and len(base.marks) == 2  # 3 cold nights in 2 spells
+    for m in base.marks:  # each snowflake sits under its own blue band
+        assert any(b.x <= m <= b.x + b.width for b in base.cold)
+    assert base.key is not None
+    svg = _render(rec).split('<figure class="twin-chart"', 1)[1].split("</svg>", 1)[0]
+    faint = svg.split('<g class="base-cold">', 1)[1].split("</g>", 1)[0]
+    assert faint.count('class="cold-mark"') == 2 and faint.count(">cold nights</text>") == 1
+    # a row of its own under the axis, then the week labels below it
+    assert re.search(r'class="cold-mark" x="[\d.]+" y="139"', faint)
+    assert 'y="159" text-anchor="start">Today</text>' in svg and 'viewBox="0 0 340 166"' in svg
+    css = style.CSS
+    assert re.search(r"\.twin-chart text\.cold-mark \{[^}]*fill: var\(--cold-fg\)", css)
+
+
+def test_the_compare_table_says_better_or_same_in_tags_and_never_baseline(tmp_path):
+    page = _render(_cold_basil(_record(tmp_path)))
+    fold = page.split('<details class="compare fold', 1)[1].split("</details>", 1)[0]
+    assert "baseline" not in fold.lower()
+    rows = fold.split("<tbody>", 1)[1].split("</tbody>", 1)[0].split("<tr>")[1:]
+    by = {re.search(r'data-line="(\w+)"', r)[1]: r for r in rows}
+    assert (
+        '<span class="verdict better"><span aria-hidden="true">▲</span> Better</span>'
+        in by["shelter"]
+    )
+    assert '<span class="verdict same"><span aria-hidden="true">=</span> Same</span>' in by["water"]
+    leave = by["leave_normal"]
+    # round 2 (22 Oct, Kash): a neutral tag in words, not a bare dash
+    assert '<span class="verdict start">Starting point</span>' in leave and "—" not in leave
+    assert '<td class="why">What happens if you do nothing.</td>' in leave  # its why: "baseline"
+    # the twin's own words for leaving it are kept, said as a plain sentence
+    rec = _cold_basil(_record(tmp_path))
+    rec.answer.compare[0].why = "cold risk Monday if left out"
+    assert '<td class="why">Cold could harm it on Monday if left out.</td>' in _render(rec)
+
+
+def test_the_verdict_tags_are_small_tints_not_buttons_and_a_narrow_table_stacks():
+    css = style.CSS
+    tag = css.split(".answer-page .verdict {", 1)[1].split("}", 1)[0]
+    assert "padding: 2px 10px" in tag and "14px" in tag
+    better = css.split(".answer-page .verdict.better {", 1)[1].split("}", 1)[0]
+    assert better.strip() == "background: var(--soft); color: var(--ok);"
+    for rule in (tag, better):
+        assert not re.search(r"border:|shadow|--primary", rule)
+    # the table stacks by its own width, so the desktop side column stacks too
+    assert "container: compare / inline-size" in css
+    narrow = css.split("@container compare (max-width: 560px) {", 1)[1]
+    assert ".compare-table thead { display: none; }" in narrow
+    assert re.search(r"td\.why \{ display: block;", narrow)
+    from tests.test_web_home import _contrast, _tokens
+
+    for i in (0, 1):  # light, dark: each tag's words read on its tint
+        assert _contrast(_tokens("ok")[i], _tokens("soft")[i]) >= 4.5
+        assert _contrast(_tokens("fg")[i], _tokens("muted")[i]) >= 4.5
+        assert _contrast(_tokens("clay")[i], _tokens("clay-bg")[i]) >= 4.5
+
+
+# round 2 (22 Oct, Kash): "text could be improved and explanations, and keep a line between
+# these": how to read the chart under its title, plain reasons, a line above the first row
+
+
+def test_under_the_title_it_says_how_to_read_the_lines_drawn(tmp_path):
+    rec = _cold_basil(_record(tmp_path))
+    chart = twin_chart(rec, {**LABELS, "shelter": "Protect it (shelter or bring in)"})
+    assert chart is not None
+    by = {ln.action: ln for ln in chart.lines}
+    assert by["shelter"].how == (
+        "Green: if you protect it. Dashed: if you leave it. Below the dotted line, it needs "
+        "water. \u2744\ufe0e marks cold nights."
+    )
+    # leaving it drawn: its green line is the dashed one, so the dashed one is not named twice
+    assert by["leave_normal"].how.startswith("Green: if you leave it. Below the dotted line")
+    assert "Dashed" not in by["leave_normal"].how
+    # no cold night on any line: no snowflakes drawn, so none explained
+    assert rec.state is not None
+    for s in rec.state.strips:
+        for d in s.days:
+            d.frost = 0.0
+    assert all("\u2744" not in ln.how for ln in twin_chart(rec, LABELS).lines)
+    # on the page: one sentence per drawn line, the shown one's visible, swapped by the tap
+    fig = _render(_cold_basil(_record(tmp_path))).split('<figure class="twin-chart"', 1)[1]
+    how = fig.split('<p class="twin-chart-how">', 1)[1].split("</p>", 1)[0]
+    spans = re.findall(r'<span class="twin-line twin-how( on)?" data-line="(\w+)">', how)
+    assert {a for _, a in spans} == {"leave_normal", "water", "shelter"}
+    assert [a for on, a in spans if on] == ["shelter"]
+    assert fig.index("twin-chart-how") < fig.index("<svg")
+    assert re.search(r"\.twin-chart \.twin-how:not\(\.on\) \{ ?display: none", style.CSS)
+
+
+def test_the_reasons_read_as_plain_sentences():
+    assert (
+        plain_why("cold risk Thursday if left out") == "Cold could harm it on Thursday if left out."
+    )
+    assert plain_why("frost risk Monday if left out; shelter avoids it") == (
+        "Sheltering it avoids Monday's frost."
+    )
+    assert plain_why("no difference over the next 2 weeks") == (
+        "Makes no difference in the next 2 weeks."
+    )
+    assert plain_why("dry by Friday if left; watering keeps it moist") == (
+        "It dries out by Friday if left alone. Watering keeps it moist."
+    )
+    assert plain_why("stays moist without watering; extra water risks waterlogged roots") == (
+        "It stays moist without watering. Extra water could waterlog the roots."
+    )
+    assert plain_why("no cold nights forecast") == "No cold nights forecast."
+    assert plain_why("Already a sentence.") == "Already a sentence."
+
+
+def test_plain_reasons_are_the_tables_alone_the_twins_words_are_kept(tmp_path):
+    # the chat, the Also do card and the evals read the twin's own strings
+    from herbtwin.web.answer_text import plan_text
+
+    rec = _cold_basil(_record(tmp_path))
+    rec.answer.compare[2].why = "cold risk Monday if left out; shelter avoids it"
+    page = _render(rec)
+    assert '<td class="why">Sheltering it avoids Monday\'s cold.</td>' in page.replace("&#39;", "'")
+    assert rec.answer.compare[2].why == "cold risk Monday if left out; shelter avoids it"
+    assert "Sheltering it avoids" not in plan_text(page)  # the raters' text never had Compare
+
+
+def test_a_line_sits_above_the_first_choice_too():
+    narrow = style.CSS.split("@container compare (max-width: 560px) {", 1)[1]
+    assert re.search(
+        r"\.compare-table tbody tr:first-child \{ ?border-top: 1px solid var\(--border\)", narrow
+    )

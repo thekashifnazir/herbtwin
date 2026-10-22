@@ -78,7 +78,7 @@ def test_tell_us_more_is_one_panel_with_one_green_button(tmp_path):
     panel = page.split('id="chat"', 1)[1].split("</section>", 1)[0]
     assert len(re.findall(r'class="[^"]*\bprimary\b', panel)) == 1
     assert (
-        '<button class="big quiet ask-chat" type="button" hidden>Ask about this plant</button>'
+        '<button class="quiet ask-chat" type="button" aria-label="Ask about this plant" hidden>'
         in panel
     )
     # one inked card, like the plan's cards

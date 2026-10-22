@@ -27,6 +27,8 @@
 {% set source_names = {"rhs.org.uk": "RHS", "archive.ahdb.org.uk": "AHDB", "ahdb.org.uk": "AHDB", "ask.ifas.ufl.edu": "UF/IFAS", "homegarden.cahnr.uconn.edu": "UConn", "frontiersin.org": "Frontiers", "gardenorganic.org.uk": "Garden Organic"} %}
 {% macro said_by(sources) %}{% set shown = namespace(names=[], items=[]) %}{% for x in sources %}{% if x.startswith("https://") or x.startswith("http://") %}{% set host = x.split("/")[2]|replace("www.", "", 1) %}{% set name = source_names.get(host, host) %}{% set href = x %}{% else %}{% set name = "our care notes" if x.startswith("docs/") else "Open Plantbook" if x.startswith("openplantbook:") else "OpenPlantDB (CC0)" if x.startswith("openplantdb") else x %}{% set href = "" %}{% endif %}{% if name not in shown.names %}{% set shown.names = shown.names + [name] %}{% set shown.items = shown.items + [(name, href)] %}{% endif %}{% endfor %}{% for name, href in shown.items %}{% if href %}<a href="{{ href }}" rel="noopener noreferrer">{{ name }}</a>{% else %}{{ name }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endmacro %}
 
+{# Compare's chart: a snowflake under each of a line's cold windows, and once "cold nights" #}
+{% macro cold_marks(ln) %}{% for m in ln.marks %}<text class="cold-mark" x="{{ m }}" y="139" text-anchor="middle">❄︎</text>{% endfor %}{% if ln.key %}<text class="cold-key" x="{{ ln.key[0] }}" y="139" text-anchor="{{ ln.key[1] }}">cold nights</text>{% endif %}{% endmacro %}
 {% macro your_photo(solo=false) %}<img class="your-photo ink{{ ' solo' if solo else '' }}" id="your-photo" alt="Your photo" width="480" height="360" hidden data-answer="{{ rec.record_id }}"><span class="your-more" id="your-more" hidden></span>{% endmacro %}
 {% set mark = {"raises": "▲", "lowers": "▼", "missing": "?", "neutral": "·"} %}
 {% set tag = {"today": "TODAY", "this_week": "THIS WEEK", "keep_an_eye": "KEEP AN EYE"} %}
@@ -510,8 +512,15 @@
          a script. Also when the main card says "Answer the question below" with no button to
          the fold (review of #337) #}
       {% set mid_way = chat or (rec.told and rec.told.question) or (check and (check.ask or check.line)) or rec.refined_from or reminder_saved or (not best and a.tell_me and not asks_open and not place_on_band) %}
+      {# the shut line is a card to come to, not a row of green text (22 Oct, Kash on A3):
+         a pale green tint, a leaf, the bold ask and what it takes. Never a filled button:
+         the page's one green stays the card's or the band's #}
+      {% set selects = asks|reject("in", ("question", "aspect", "soil_texture"))|list %}
+      {% set taps = {"soil_feel": "how the soil feels", "last_watered": "when you last watered", "changed": "what's changed"} %}
+      {% set tm = namespace(said=[]) %}{% for q in selects %}{% set tm.said = tm.said + [taps[q]] %}{% endfor %}{% set said = tm.said %}
       <details class="tell-more"{% if mid_way %} open{% endif %}>
-      <summary>Want a more exact answer? Tell us more</summary>
+      <summary><span class="tm-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l7-7"/></svg></span><span class="tm-say"><span class="tm-title">Want a more exact answer?</span>
+        <span class="tm-sub">{% if said %}{{ said|length }} quick tap{{ "s" if said|length != 1 else "" }}: {% if said|length > 1 %}{{ said[:-1]|join(", ") }} and {{ said[-1] }}{% else %}{{ said[0] }}{% endif %}{% else %}Tell us more, or ask anything about this plant{% endif %}</span></span></summary>
       <h2 id="refine">Tell us more and we'll check the advice</h2>
       {# in sections, each with a small heading and left out when empty (21 Oct, Kash on rev
          00049: "section it out better"): the did-it check-in, where it is, what's changed,
@@ -529,7 +538,6 @@
       {% set tray %}<div class="tray warn"><p>{{ a.tell_me }}</p>{% if a.tell_me_key == "location" %}
         <label>Where is it?<input type="text" name="place" maxlength="80" placeholder="UK town or postcode"></label>{% endif %}</div>{% endset %}
       {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?"} %}
-      {% set selects = asks|reject("in", ("question", "aspect", "soil_texture"))|list %}
       {% set has_where = tray_in == "where" or "aspect" in asks %}
       {% set has_changed = tray_in == "changed" or selects or "soil_texture" in asks %}
       {% if tray_in == "top" %}{{ tray }}{% endif %}
@@ -543,29 +551,37 @@
       {% if "aspect" in asks %}{{ spotq.compass_field(compass_first) }}{% endif %}</div>{% endif %}
       {% if has_changed %}<div class="part changed{{ ' needed' if tray_in == 'changed' else '' }}"><h3>What's changed</h3>
       {% if tray_in == "changed" %}{{ tray }}{% endif %}
-      {% for q in selects %}<label>{{ titles[q] }}
-        <select name="{{ q }}"><option value="">choose…</option>
-        {% for v, text in choices[q].items() %}<option value="{{ v }}"{% if rec.told and rec.told[q] == v %} selected{% endif %}>{{ text }}</option>{% endfor %}
-        </select></label>{% endfor %}
+      {# each quick question as quiet answer chips, not a select (22 Oct, Kash, A3: like the
+         follow-up chips under a chat answer). Radios underneath, so they work without a
+         script; with one, a tap on the last unanswered question sends the refine #}
+      {% for q in selects %}<fieldset class="picks"><legend>{{ titles[q] }}</legend><div class="choices">
+        {% for v, text in choices[q].items() %}<label><input type="radio" name="{{ q }}" value="{{ v }}"{% if rec.told and rec.told[q] == v %} checked{% endif %}><span>{{ text }}</span></label>{% endfor %}
+      </div></fieldset>{% endfor %}
       {% if "soil_texture" in asks %}{{ spotq.squeeze_field(choices["squeeze"], rec.told.squeeze if rec.told else none) }}{% endif %}</div>{% endif %}
-      {# one green button in the panel (21 Oct, Kash). Their names say what each does, so
-         no explainer line under them. With groups above, "Check the advice again" closes
-         them, green, as their send, and asking is the quiet one; the box still goes with it.
+      {# the chips are the groups' only fields: a tap answering the last one sends it (the
+         script, data-picks); the button under them stays for anyone who wants to press it #}
+      {% set picks_only = selects and not (tray_in == "where" and a.tell_me_key == "location") and "aspect" not in asks and "soil_texture" not in asks %}
+      {% set groups_send = has_where or has_changed %}
+      {# one green button in the panel (21 Oct, Kash; kept green after A3, 22 Oct, Kash).
+         Their names say what each does, so no explainer line under them. With groups above,
+         "Check the advice again" closes them, green, as their send, and asking is the quiet
+         one; the box still goes with it.
          With the box alone, the green one asks: a question typed there went to the paid
          re-run, the green button beside it (22 Oct site walk), so the re-run is quiet. Ask
          needs the script, so the page is sent with Check green and the script hands the
          green to Ask as it shows it: one green button with the script or without (#420) #}
-      {% if has_where or has_changed %}<div class="actions send">
+      {% if groups_send %}<div class="actions send"{{ ' data-picks' if picks_only else '' }}>
         <button class="primary big" type="submit">Check the advice again</button>
       </div>{% endif %}
       <div class="part chat{{ ' needed' if tray_in == 'chat' else '' }}"><h3>Ask a question</h3>
       {% if tray_in == "chat" %}{{ tray }}{% endif %}
-      <label>Tell us something, or ask a question (optional)<textarea name="question" maxlength="{{ [max_question, max_chat]|min }}" rows="3" placeholder="{{ 'What if I move it to a brighter window?' if obs.setting == 'indoor' else 'What if I move it inside?' }}">{{ rec.told.question if rec.told and rec.told.question else "" }}</textarea></label>
-      <div class="actions">
-        <button class="big quiet ask-chat" type="button"{{ '' if has_where or has_changed else ' data-lead' }} hidden>Ask about this plant</button>
-        {%- if not (has_where or has_changed) %}
-        <button class="primary big" type="submit">Check the advice again</button>{% endif %}
-      </div>
+      {# one rounded box with its send inside, as a chat app has (22 Oct, Kash on A3: a
+         full-width "Ask about this plant" did not say what it does). Ask needs the script;
+         without one the text goes with "Check the advice again" #}
+      <div class="composer"><label><span class="sr-only">Ask anything about this plant, or tell us something</span><textarea name="question" maxlength="{{ [max_question, max_chat]|min }}" rows="2" placeholder="Ask anything about this plant, e.g. {{ 'What if I move it to a brighter window?' if obs.setting == 'indoor' else 'What if I move it inside?' }}">{{ rec.told.question if rec.told and rec.told.question else "" }}</textarea></label>
+        <button class="quiet ask-chat" type="button" aria-label="Ask about this plant"{{ '' if groups_send else ' data-lead' }} hidden><span class="ask-word">Ask</span><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      {%- if not groups_send %}
+      <div class="actions"><button class="primary big" type="submit">Check the advice again</button></div>{% endif %}
       {# "Ask about this plant" made plain (19 Oct, Kash): three to tap, through the chat #}
       <div class="starters" hidden><h4>Or tap a question to ask</h4>
         <div class="actions">{% for q in starters(rec) %}<button type="button" class="starter">{{ q }}</button>{% endfor %}</div></div>
@@ -627,7 +643,8 @@
       if (!box) return;
       const form = box.querySelector("form.refine"), ask = box.querySelector(".ask-chat");
       const log = box.querySelector(".chatlog"), note = box.querySelector(".chatnote");
-      const buttons = form.querySelectorAll(".actions button");  // the starters too
+      const buttons = form.querySelectorAll(".actions button, .ask-chat");  // the starters too
+      const word = ask.querySelector(".ask-word");
       const check = form.querySelector("button[type=submit]"), checkText = check.textContent;
       const noteText = note.textContent;
       const motion = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
@@ -656,6 +673,19 @@
       starters.hidden = false;
       for (const b of starters.querySelectorAll(".starter")) {
         b.addEventListener("click", () => { form.question.value = b.textContent; ask.click(); });
+      }
+      // the answer chips, when they are the groups' only fields (data-picks on their send):
+      // the tap that leaves every question answered sends the refine (22 Oct, Kash, A3). The
+      // arrow keys only move between chips; Space picks and sends, Enter sends the form
+      const picks = [...form.querySelectorAll("fieldset.picks")];
+      if (picks.length && form.querySelector(".actions.send[data-picks]")) {
+        let keyed = false;
+        form.addEventListener("keydown", (e) => { keyed = e.key.startsWith("Arrow"); });
+        form.addEventListener("pointerdown", () => { keyed = false; });
+        form.addEventListener("change", (e) => {
+          if (keyed || !e.target.closest("fieldset.picks")) return;
+          if (picks.every((f) => f.querySelector("input:checked"))) check.click();
+        });
       }
       // Enter asks; Shift+Enter is a new line (typing a word in a composing keyboard is neither)
       form.question.addEventListener("keydown", (e) => {
@@ -692,7 +722,7 @@
         if (!text) { note.textContent = "Type your question in the box first."; form.question.focus(); return; }
         if (form.dataset.busy) { note.textContent = "Still checking the advice. Ask once it has loaded."; return; }
         for (const b of buttons) b.disabled = true;
-        ask.textContent = "Asking…";
+        word.textContent = "Asking…";
         note.textContent = "Thinking…";
         const mine = add("user", text);
         try {
@@ -717,7 +747,7 @@
         } finally {
           if (!log.querySelector(".msg")) log.hidden = true;
           for (const b of buttons) b.disabled = false;
-          ask.textContent = "Ask about this plant";
+          word.textContent = "Ask";
         }
       });
     })();
@@ -769,39 +799,56 @@
       {% set fc = ft.compare %}<details class="compare fold fold-twin"{{ ' open' if a.compare else '' }}><summary><span class="fold-head">{% if fc.found %}<span class="fold-kind">{{ fc.kind }}</span>{% endif %}<span class="fold-title">{{ fc.title }}</span>
         {% if not fc.found %}<span class="fold-peek">{% if not a.compare %}No cure, so the choices don't apply{% elif cmp.better %}Better than leaving it: {{ cmp.better[:2]|join(", ") }}{% else %}None beat leaving it{% endif %}{% if a.compare %}, tested on your plant's twin{% endif %}</span>{% elif fc.peek %}<span class="fold-peek">{{ fc.peek }}</span>{% endif %}</span></summary>
         {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
-           a tap on a choice shows its line (idea 3, 18 Oct) #}
+           a tap on a choice shows its line (idea 3, 18 Oct). 22 Oct, Kash: not obvious to
+           read, so it says what it shows above it, names each line at its end in the line's
+           colour (no legend in the small print), and marks every cold window under the axis #}
         {% set tc = twin_chart(rec, label) if a.compare else none %}
         {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ tc.shown }}">
-          <svg viewBox="0 0 340 150" role="img" aria-labelledby="twin-chart-cap">
+          <p class="twin-chart-title" id="twin-chart-title">{{ tc.title }}</p>
+          {# how to read it, naming only the lines drawn: it follows the tap like the lines #}
+          <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">{{ ln.how }}</span>{% endfor %}</p>
+          <svg viewBox="0 0 340 {{ tc.height }}" role="img" aria-labelledby="twin-chart-title">
             <text class="axis" x="4" y="26">wet</text><text class="axis" x="4" y="126">dry</text>
             <line class="frame" x1="34" y1="22" x2="34" y2="122"/><line class="frame" x1="34" y1="122" x2="332" y2="122"/>
-            {% for w_x, w in tc.weeks %}<text class="axis" x="{{ w_x }}" y="140" text-anchor="{{ 'start' if loop.first else 'end' if loop.last else 'middle' }}">{{ w }}</text>{% endfor %}
+            {% for w_x, w in tc.weeks %}<text class="axis" x="{{ w_x }}" y="{{ tc.weeks_y }}" text-anchor="{{ 'start' if loop.first else 'end' if loop.last else 'middle' }}">{{ w }}</text>{% endfor %}
             {# leaving it's cold nights, faint and always there: the reason sheltering wins shows
                before any tap (18 Oct pre-deploy check) #}
             {% for ln in tc.lines if ln.action == "leave_normal" and ln.cold %}<g class="base-cold">
               {% for b in ln.cold %}<rect x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
               <text x="{{ ln.left_out[0] }}" y="16" text-anchor="{{ ln.left_out[1] }}">{{ ln.cold_label }} if left out</text>
+              {{ cold_marks(ln) }}
             </g>{% endfor %}
             {% for ln in tc.lines %}<g class="twin-line{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">
               {% for b in ln.cold %}<rect class="cold" x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
               {% if ln.cold_label %}<text class="cold-label" x="{{ ln.cold_x }}" y="16">{{ ln.cold_label }}</text>{% endif %}
+              {{ cold_marks(ln) }}
               <polyline points="{{ ln.points }}"/>
             </g>{% endfor %}
             <line class="needs" x1="34" y1="{{ tc.needs_y }}" x2="332" y2="{{ tc.needs_y }}"/>
-            <text class="axis needs-label" x="330" y="{{ tc.needs_y - 4 }}" text-anchor="end">needs water</text>
+            <text class="axis needs-label" x="{{ tc.needs_label[0] }}" y="{{ tc.needs_label[1] }}">needs water</text>
             {% for ln in tc.lines if ln.action == "leave_normal" %}<polyline class="base" points="{{ ln.points }}"/>{% endfor %}
+            {# each line's name at its right end, over every line, in the line's colour #}
+            {% for ln in tc.lines %}<g class="twin-line twin-names{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">
+              {% if ln.base_name_y is not none %}<text class="line-name base-name" x="332" y="{{ ln.base_name_y }}" text-anchor="end">{% for b in tc.lines if b.action == "leave_normal" %}{{ b.name }}{% endfor %}</text>{% endif %}
+              <text class="line-name" x="332" y="{{ ln.name_y }}" text-anchor="end">{{ ln.name }}</text>
+            </g>{% endfor %}
             <clipPath id="twin-dot"><circle cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="9"/></clipPath>
             <circle class="today" cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="10"/>
             <image id="twin-chart-photo" x="{{ tc.today[0] - 9 }}" y="{{ tc.today[1] - 9 }}" width="18" height="18" clip-path="url(#twin-dot)" preserveAspectRatio="xMidYMid slice" hidden/>
           </svg>
-          <figcaption><span id="twin-chart-cap">Soil water over 2 weeks. Dashed: leaving it. Blue: cold nights. Tap a choice to draw it.</span>
+          <figcaption><span id="twin-chart-cap">Tap a choice to see its line on the chart.</span>
             <span class="sr-only" id="twin-chart-said" aria-live="polite">{% for ln in tc.lines if ln.action == tc.shown %}{{ ln.said }}{% endfor %}</span></figcaption>
           <template id="twin-chart-words">{% for ln in tc.lines %}<span data-line="{{ ln.action }}">{{ ln.said }}</span>{% endfor %}</template>
         </figure>{% endif %}
-        {% if a.compare %}<div class="scroll"><table><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr>
+        {# each row a choice, a small tinted tag (like home's 2-week outlook, never a button),
+           and the reason; on a phone the three stack, the reason on its own line (22 Oct,
+           Kash). Leaving it is the yardstick: its tag says "Starting point", never "baseline";
+           the reasons are the twin's, said as plain sentences (plain_why) #}
+        {% if a.compare %}<div class="scroll"><table class="compare-table"><thead><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr></thead><tbody>
         {% set drawn = tc.lines|map(attribute="action")|list if tc else [] %}
-        {% for r in a.compare %}<tr><td>{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-pressed="{{ 'true' if r.action == tc.shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="{{ r.vs_leaving_it }}">{{ "baseline" if r.action == "leave_normal" else r.vs_leaving_it }}</td><td>{{ r.why }}</td></tr>{% endfor %}
-        </table></div>{% else %}<p>Not compared: there is no cure, so the choices don't apply.</p>{% endif %}</details>
+        {% set verdict = {"better": ("▲", "Better"), "same": ("=", "Same"), "worse": ("▼", "Worse"), "unknown": ("?", "Not sure")} %}
+        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-pressed="{{ 'true' if r.action == tc.shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ plain_why(r.why) }}{% endif %}</td></tr>{% endfor %}
+        </tbody></table></div>{% else %}<p>Not compared: there is no cure, so the choices don't apply.</p>{% endif %}</details>
       {% endif %}
         {% if tc %}<script>
         // Compare: a tap on a choice draws its line; the photo, when this tab has it, is the dot on Today

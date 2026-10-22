@@ -117,7 +117,7 @@ from herbtwin.stages.trusted_page import read_more
 from herbtwin.sun_arc import sun_arc
 from herbtwin.tracing import trace_root, traced
 from herbtwin.twin_bank import figure as twin_figure
-from herbtwin.twin_chart import twin_chart
+from herbtwin.twin_chart import plain_why, twin_chart
 from herbtwin.usage import SupabaseUsage, UsageError, UsageStore, Verdict, uk_day, visitor_key
 from herbtwin.voice import UNAVAILABLE as VOICE_UNAVAILABLE
 from herbtwin.voice import Spoken, SpokenCache, VoiceError, persona_for, speak, voice_basis
@@ -215,6 +215,7 @@ TEMPLATES.env.globals["dont_if_dry"] = dont_if_dry  # the Don't card with the so
 TEMPLATES.env.globals["tray_check"] = TRAY_CHECK  # under "Bring it indoors" for a pot
 TEMPLATES.env.globals["sample_files"] = sample_files  # home: a picked sample is set in London
 TEMPLATES.env.globals["twin_chart"] = twin_chart  # Compare's 14-day line
+TEMPLATES.env.globals["plain_why"] = plain_why  # Compare's reasons as plain sentences
 TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
 TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the year
 TEMPLATES.env.globals["starters"] = starters  # "Ask about this plant": 3 to tap

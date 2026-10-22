@@ -14,7 +14,8 @@ from tests.test_web_reminders import _client as _reminder_client
 from tests.test_web_reminders import _upload as _reminder_upload
 
 CSS = (style.STATIC / "pages" / "answer.css").read_text(encoding="utf-8")
-SUMMARY = "<summary>Want a more exact answer? Tell us more</summary>"
+# a card to come to (22 Oct, Kash on A3): a leaf, the bold ask, and what it takes
+SUMMARY = '<summary><span class="tm-icon" aria-hidden="true">'
 
 
 def _panel(page: str) -> str:
@@ -70,13 +71,13 @@ def test_every_field_and_script_hook_is_inside_the_fold(tmp_path):
         '<form class="tray did-it"',
         '<form class="refine"',
         'name="place"',
-        '<select name="soil_feel"',
-        '<select name="last_watered"',
-        '<select name="changed"',
+        '<input type="radio" name="soil_feel"',
+        '<input type="radio" name="last_watered"',
+        '<input type="radio" name="changed"',
         'name="squeeze"',
         '<textarea name="question"',
         "Check the advice again</button>",
-        "Ask about this plant</button>",
+        'aria-label="Ask about this plant"',
         '<div class="starters"',
         '<p class="chatnote"',
         '<div class="chatlog"',

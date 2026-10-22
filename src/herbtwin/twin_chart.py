@@ -1,6 +1,10 @@
 """The twin drawn on Compare: each choice's next 2 weeks of soil water as a line, its
 cold nights as blue bands (idea 3, 18 Oct judge ideas; after Greg's "Water Level" curve).
 
+22 Oct, Kash: the chart was not obvious to read. It says what it shows in a title, names
+each line at its right end in the line's colour (no legend to decode), keeps "needs water"
+clear of the lines, and marks every cold window with a snowflake under the axis.
+
 The line for a choice is the twin run its verdict was judged on (plant_model's best of
 the actions it maps to), so the picture and the "better / same" word always agree. Pure:
 the template draws the SVG from these numbers, and a tap on a choice row shows its line.
@@ -8,6 +12,7 @@ the template draws the SVG from these numbers, and a tap on a choice row shows i
 
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 
 from herbtwin.plant_model import TIP, TWIN_FOR, _cold, _peak, is_tender
@@ -19,6 +24,14 @@ LEFT, RIGHT, TOP, BOTTOM = 34, 332, 22, 122
 LABEL_MAX_X = 250  # "Frost risk Wed" still fits inside the right edge
 # "Frost risk Wed if left out" starting further right would run off the edge: end it there
 LEFT_OUT_START_MAX_X = 150
+# a line's name sits just above it (baseline 6 up) or just below it (baseline 15 down), never
+# in the cold labels' row at the top nor on the axis; two names stay a line of text apart
+ABOVE, BELOW, NAME_GAP = 6.0, 15.0, 14.0
+NAME_TOP, NAME_BOTTOM = TOP + 13, BOTTOM - 3
+NAME_CHAR = 7.4  # a 14px bold letter's width, about, in viewBox units
+NEEDS_W, KEY_W = 72.0, 78.0  # "needs water", "cold nights": their width in viewBox units
+MARK_Y, AXIS_Y_COLD = 139, 159  # the snowflakes' row under the axis, then the week labels
+COLD_HEIGHT = 166  # the viewBox height when a snowflake row is drawn (else HEIGHT)
 
 
 @dataclass(frozen=True)
@@ -36,6 +49,12 @@ class Line:
     cold_x: float
     said: str  # the line in words, for screen readers
     left_out: tuple[float, str] = (0.0, "start")  # the faint "if left out" label: x, anchor
+    name: str = ""  # the choice's short name, at the line's right end: "Protect it"
+    name_y: float = 0.0
+    base_name_y: float | None = None  # where "Leave it" sits while this line is drawn
+    marks: tuple[float, ...] = ()  # a snowflake under the centre of each cold window
+    key: tuple[float, str] | None = None  # the one "cold nights" word: x, anchor
+    how: str = ""  # how to read the chart while this line is drawn, under the title
 
 
 @dataclass(frozen=True)
@@ -45,6 +64,10 @@ class TwinChart:
     today: tuple[float, float]  # the plant's photo sits here
     needs_y: float  # the "needs water" level
     weeks: list[tuple[float, str]]  # x of "Today", "1 week", "2 weeks"
+    title: str = ""  # what the chart shows, above it
+    needs_label: tuple[float, float] = (0.0, 0.0)  # "needs water": x (start-anchored), y
+    height: int = HEIGHT  # the viewBox's: taller when a snowflake row is drawn
+    weeks_y: int = 140
 
 
 def _y(mm: float, capacity: float) -> float:
@@ -55,6 +78,155 @@ def _said(name: str, strip: RiskStrip, needs: float, cold: str, word: str) -> st
     low = next((d for d in strip.days if (d.soil_water_mm or 0.0) < needs), None)
     water = f"needs water by {low.date:%A}" if low else "soil stays moist enough"
     return f"{name}: {water}; " + (f"{word} risk {cold}." if cold else f"no {word} risk.")
+
+
+def short_name(label: str) -> str:
+    """ "Protect it (shelter or bring in)" -> "Protect it": a line's name must fit its end."""
+    return label.split(" (", 1)[0]
+
+
+def _span(pts: list[tuple[float, float]], name: str) -> tuple[float, float]:
+    """The line's highest and lowest y under its name (right-anchored at the end): a sloped
+    line must clear the whole word, not only its end."""
+    x0 = RIGHT - NAME_CHAR * len(name) - 4
+    ys = [y for x, y in pts if x >= x0]
+    for (ax, ay), (bx, by) in zip(pts, pts[1:], strict=False):
+        if ax < x0 <= bx:
+            ys.append(ay + (by - ay) * (x0 - ax) / (bx - ax))
+    return min(ys), max(ys)
+
+
+def _names(upper: tuple[float, float], lower: tuple[float, float]) -> tuple[float, float]:
+    """The baselines of two names at the right end: the upper line's above it, the lower
+    line's below it (above it too when the axis is in the way), a line of text apart.
+    Each line is given as its (highest, lowest) y under its name."""
+    up, low = upper[0] - ABOVE, lower[1] + BELOW
+    if low > NAME_BOTTOM:
+        low = lower[0] - ABOVE
+    if up < NAME_TOP:
+        up = upper[1] + BELOW
+    a, b = sorted((up, low))
+    if b - a < NAME_GAP:
+        mid = (a + b) / 2
+        a, b = mid - NAME_GAP / 2, mid + NAME_GAP / 2
+    if a < NAME_TOP:
+        a, b = NAME_TOP, NAME_TOP + NAME_GAP
+    if b > NAME_BOTTOM:
+        a, b = NAME_BOTTOM - NAME_GAP, NAME_BOTTOM
+    first, second = (a, b) if up <= low else (b, a)
+    return round(first, 1), round(second, 1)
+
+
+def _crosses(pts: list[tuple[float, float]], x0: float, x1: float, y0: float, y1: float) -> bool:
+    """Whether a polyline passes through the box [x0, x1] x [y0, y1]."""
+    for (ax, ay), (bx, by) in zip(pts, pts[1:], strict=False):
+        lo, hi = max(min(ax, bx), x0), min(max(ax, bx), x1)
+        if lo > hi:
+            continue
+        if bx == ax:
+            ys = (ay, by)
+        else:
+            ys = tuple(ay + (by - ay) * (x - ax) / (bx - ax) for x in (lo, hi))
+        if min(ys) <= y1 and max(ys) >= y0:
+            return True
+    return False
+
+
+def _needs_label(
+    needs: float, today: tuple[float, float], shown: list, others: list
+) -> tuple[float, float]:
+    """ "needs water" just above its dotted line at the left (below it, or further along,
+    when a line runs through): the drawn line and leaving it's weigh most."""
+    best, score = None, None
+    for x in (LEFT + 14, LEFT + 90, LEFT + 160):
+        for y in (needs - 5, needs + 14):
+            if y - 11 < TOP + 4 or y > BOTTOM - 2:
+                continue
+            box = (x, x + NEEDS_W, y - 11, y + 2)
+            s = sum(10 for p in shown if _crosses(p, *box))
+            s += sum(1 for p in others if _crosses(p, *box))
+            if x < today[0] + 12 and abs(y - 5 - today[1]) < 16:
+                s += 10  # the photo dot on Today
+            if score is None or s < score:
+                best, score = (x, y), s
+    return best or (LEFT + 14, needs - 5)
+
+
+def _you(name: str) -> str:
+    """ "Protect it" -> "if you protect it"."""
+    return f"if you {name[:1].lower()}{name[1:]}"
+
+
+def _how(name: str, base_name: str, snow: bool) -> str:
+    """How to read the chart, from the lines actually drawn: the green one, leaving it's
+    dashed one (when it is not the green one), the dotted line, and the snowflakes when
+    any show (round 2, 22 Oct, Kash: "explanations")."""
+    said = f"Green: {_you(name)}."
+    if base_name and base_name != name:
+        said += f" Dashed: {_you(base_name)}."
+    said += " Below the dotted line, it needs water."
+    return said + (" \u2744\ufe0e marks cold nights." if snow else "")
+
+
+# the twin's reasons in plain sentences, for the Compare table only: the twin's own strings
+# stay as they are, since the chat, the Also do card and the evals read them (round 2, 22 Oct)
+_PLAIN = (
+    (r"(cold|frost) risk (\w+) if left out; shelter avoids it", "Sheltering it avoids {1}'s {0}"),
+    (
+        r"(cold|frost) risk (\w+) if left out; indoors avoids it",
+        "Bringing it indoors avoids {1}'s {0}",
+    ),
+    (r"(cold|frost) risk (\w+) if (left out|it stays out)", "{0} could harm it on {1} if {2}"),
+    (r"dry by (\w+) if left", "It dries out by {0} if left alone"),
+    (r"dry by (\w+) if you wait", "It dries out by {0} if you wait"),
+    (r"no difference over the next (.+)", "Makes no difference in the next {0}"),
+    (r"less drying than leaving it( out)?", "It dries out less than leaving it{0}"),
+    (r"dries faster than leaving it", "It dries out faster than leaving it"),
+    (r"stays moist without watering", "It stays moist without watering"),
+    (r"extra water risks waterlogged roots", "Extra water could waterlog the roots"),
+)
+
+
+def _clause(text: str) -> str:
+    for pattern, said in _PLAIN:
+        m = re.fullmatch(pattern, text)
+        if m:
+            text = said.format(*(g or "" for g in m.groups()))
+            break
+    return text[:1].upper() + text[1:] + ("" if text.endswith((".", "!", "?")) else ".")
+
+
+def plain_why(why: str) -> str:
+    """ "cold risk Thursday if left out" -> "Cold could harm it on Thursday if left out."
+    Sentence case and a full stop; a reason in two parts reads as two sentences."""
+    why = why.strip()
+    whole = next((p for p, _ in _PLAIN[:2] if re.fullmatch(p, why)), None)
+    parts = [why] if whole else [c for c in why.split("; ") if c.strip()]
+    return " ".join(_clause(c.strip()) for c in parts)
+
+
+def _windows(cold: list[int]) -> list[tuple[int, int]]:
+    """Runs of consecutive cold days, as (first, last) day indexes."""
+    runs: list[tuple[int, int]] = []
+    for i in cold:
+        if runs and runs[-1][1] == i - 1:
+            runs[-1] = (runs[-1][0], i)
+        else:
+            runs.append((i, i))
+    return runs
+
+
+def _key(marks: tuple[float, ...]) -> tuple[float, str] | None:
+    """Where the one "cold nights" word goes in the snowflakes' row: after the first mark
+    with room before the next, else before the first, else ending at the right edge."""
+    if not marks:
+        return None
+    for here, nxt in zip(marks, marks[1:] + (RIGHT + 8,), strict=True):
+        if nxt - here - 10 >= KEY_W:
+            return (round(here + 9, 1), "start")
+    if marks[0] - LEFT - 10 >= KEY_W:
+        return (round(marks[0] - 9, 1), "end")
+    return (RIGHT, "end")
 
 
 def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
@@ -76,7 +248,7 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
     def x(i: int) -> float:
         return round(LEFT + step * i, 1)
 
-    lines: list[Line] = []
+    raw: list[tuple] = []
     for row in answer.compare:
         twins = [by[a] for a in TWIN_FOR.get(row.action, ()) if a in by]
         if not twins:
@@ -84,9 +256,27 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
         strip = min(twins, key=_peak)
         pts = [(x(0), _y(state.water_mm, cap))]
         pts += [(x(i + 1), _y(d.soil_water_mm or 0.0, cap)) for i, d in enumerate(strip.days)]
-        cold = [Band(x(i), round(step, 1)) for i, d in enumerate(strip.days) if d.frost >= TIP]
+        days = [i for i, d in enumerate(strip.days) if d.frost >= TIP]
+        cold = [Band(x(i), round(step, 1)) for i in days]
+        marks = tuple(round((x(a) + x(b + 1)) / 2, 1) for a, b in _windows(days))
         first = next((d for d in strip.days if d.frost >= TIP), None)
         name = labels.get(row.action) or str(row.action)
+        raw.append((row, strip, pts, cold, marks, first, name))
+    left = next((r for r in raw if r[0].action == "leave_normal"), None)
+    base_pts, base_name = (left[2], short_name(left[6])) if left else (None, "")
+    lines: list[Line] = []
+    for row, strip, pts, cold, marks, first, name in raw:
+        short = short_name(name)
+        here = _span(pts, short)
+        if row.action == "leave_normal" or base_pts is None:
+            name_y = here[0] - ABOVE if here[0] - ABOVE >= NAME_TOP else here[1] + BELOW
+            base_y = None
+        else:
+            there = _span(base_pts, base_name)
+            if pts[-1][1] <= base_pts[-1][1]:
+                name_y, base_y = _names(here, there)
+            else:
+                base_y, name_y = _names(there, here)
         lines.append(
             Line(
                 action=row.action,
@@ -102,18 +292,34 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
                 said=_said(
                     name, strip, state.needs_water_mm, f"{first.date:%A}" if first else "", word
                 ),
+                name=short,
+                name_y=name_y,
+                base_name_y=base_y,
+                marks=marks,
+                key=_key(marks),
+                how=_how(short, base_name, bool(marks or (left and left[4]))),
             )
         )
     if not lines:
         return None
     better = next((r.action for r in answer.compare if r.vs_leaving_it == "better"), None)
     shown = better if better in {ln.action for ln in lines} else lines[0].action
+    today, needs_y = (x(0), _y(state.water_mm, cap)), _y(state.needs_water_mm, cap)
+    drawn = [r[2] for r in raw if r[0].action in (shown, "leave_normal")]
+    rest = [r[2] for r in raw if r[0].action not in (shown, "leave_normal")]
+    cold_any = any(ln.cold for ln in lines)
+    when = "2 weeks" if n == 14 else f"{n} days"
     return TwinChart(
         lines=lines,
         shown=shown,
-        today=(x(0), _y(state.water_mm, cap)),
-        needs_y=_y(state.needs_water_mm, cap),
-        weeks=[(x(0), "Today")]
-        + ([(x(7), "1 week")] if n > 7 else [])
-        + [(x(n), "2 weeks" if n == 14 else f"{n} days")],
+        today=today,
+        needs_y=needs_y,
+        # one line at 390px: "…over the next 2 weeks" wrapped once cold nights were named
+        title=f"Soil water and cold nights, next {when}"
+        if cold_any
+        else f"Soil water over the next {when}",
+        needs_label=_needs_label(needs_y, today, drawn, rest),
+        height=COLD_HEIGHT if cold_any else HEIGHT,
+        weeks_y=AXIS_Y_COLD if cold_any else 140,
+        weeks=[(x(0), "Today")] + ([(x(7), "1 week")] if n > 7 else []) + [(x(n), when)],
     )

@@ -332,7 +332,7 @@ def test_refine_page_shows_what_changed(tmp_path):
     assert "<s>Water it.</s>" in r.text and "Hold off watering." in r.text
     # a clear line, not small grey print: the check ran and this is what it did
     assert '<p class="checked">Changed after what you told us. Was: <s>Water it.</s></p>' in r.text
-    assert 'value="wet" selected' in r.text  # the form keeps what was told
+    assert 'value="wet" checked' in r.text  # the form keeps what was told
     same = c.post(f"/answers/{rid}/refine", data={"soil_feel": "dry"})
     assert "Checked again: same advice, and the soil feel fits it." in same.text
 
