@@ -96,7 +96,7 @@ from herbtwin.schemas import (
 )
 from herbtwin.scoring import score_lines
 from herbtwin.seasonal import season_sources
-from herbtwin.shops import DailyCap, shops_from
+from herbtwin.shops import DailyCap, products_for, shops_from
 from herbtwin.sightings import sightings_from
 from herbtwin.species import display_name, name_parts
 from herbtwin.spot import (
@@ -1562,25 +1562,38 @@ def create_app(
         town = typed_town if hand else None
 
         async def shop_links():
+            """(links for the job, handy to have): one or the other, never both."""
             if finder is None:
-                return []
+                return [], []
             actions = [c.action for c in rec.answer.do]
-            return await run_in_threadpool(finder.links, actions, "UK", outdoor)
+            if products_for(actions, outdoor):
+                return await run_in_threadpool(finder.links, actions, "UK", outdoor), []
+            if rec.answer.photo_issue is not None:
+                return [], []  # a rough read: the plant is a guess, so is what to watch for
+            # the answer needs nothing: say so, then what is handy for what it says to watch
+            # for, the headline's cold night first (22 Oct, Kash: products help the Tavily case)
+            signs = [rec.answer.headline, *watch_list(rec.answer.watch)[0]]
+            in_pot = rec.observation is not None and rec.observation.container == "pot"
+            # a pest the photo check named for sure ("Looks like"): a non-chemical control first
+            seen = rec.problem
+            pest = seen.name if seen is not None and seen.sure else None
+            return [], await run_in_threadpool(finder.handy, signs, "UK", outdoor, in_pot, pest)
 
         async def near():
             if town is None:
                 return []
             return await run_in_threadpool(local.links, town)  # within local_help.TIMEOUT_S
 
-        links, helpers = await asyncio.gather(shop_links(), near())
-        if not links and not helpers:
+        (links, handy), helpers = await asyncio.gather(shop_links(), near())
+        if not links and not handy and not helpers:
             return _with_cookies(Response(status_code=204), holder)
         shown = TEMPLATES.TemplateResponse(
             request,
             "_extras.html",
             {
                 "links": links,
-                "paid": any(x.paid for x in links),
+                "handy": handy,
+                "paid": any(x.paid for x in links + [o for h in handy for o in h.options]),
                 # something to buy and a typed town: garden centres near it first, a map
                 # search the person opens; nothing is sent until they tap it (21 Oct, Kash)
                 "centres": local_help.centres_near(typed_town) if links and typed_town else None,

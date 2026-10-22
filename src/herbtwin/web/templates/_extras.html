@@ -4,7 +4,9 @@
    job: known directories' pages for the town the person typed, then the RHS's advice on
    hiring; alone, the slot takes its heading (22 Oct site walk). With a typed town and
    something to buy, garden centres near it come first, a map search the person opens (21 Oct,
-   Kash: local first; online shops when there is no town) #}
+   Kash: local first; online shops when there is no town). An answer that needs nothing says
+   so, then "Handy to have": 1 to 2 things for what it says to watch for, the same search, up
+   to 3 shops each and a price only as the page listed it (shops.handy_for; 22 Oct, Kash) #}
 {% if centres %}<h3>Garden centres near {{ centres_town }}</h3>
 <p class="centres"><a class="button" href="{{ centres }}" rel="noopener noreferrer" target="_blank">Find garden centres near {{ centres_town }}</a></p>
 <p class="muted"><small>Opens a map search. Your town goes to Google Maps only when you tap it.</small></p>{% endif %}
@@ -15,7 +17,18 @@
     <span class="shop-name">at {{ l.shop }}</span></li>{% endfor %}
 </ul>
 <p class="muted"><small>Found with Tavily on UK garden retailers. We don't check prices or stock, and we never suggest sprays or pellets.{% if paid %} Some of these links earn herbtwin a small commission; that never changes the advice.{% endif %}</small></p>{% endif %}
-{% if helpers %}{% if links or centres %}<h3>Want a hand?</h3>{% endif %}
+{% if handy %}{% set priced = handy|map(attribute="options")|sum(start=[])|selectattr("price")|list %}<p class="extras-none muted">{% if handy|selectattr("control")|list %}Nothing you must buy. If they keep coming back:{% else %}Nothing you need to buy for this one.{% endif %}</p>
+<h3>Handy to have</h3>
+<ul class="shop-links handy-links">{% for h in handy %}
+  <li><span class="shop-what">{{ h.product }}</span>
+    <ul class="shop-options">{% for l in h.options %}
+      <li><a href="{{ l.url }}" rel="noopener noreferrer{{ ' sponsored' if l.paid }}" target="_blank">{{ l.title }}</a>
+        <span class="shop-name">at {{ l.shop }}</span>{% if l.price %}
+        <span class="shop-price">{{ l.price }} when we looked</span>{% endif %}</li>{% endfor %}
+    </ul></li>{% endfor %}
+</ul>
+<p class="muted"><small>Found with Tavily on UK garden retailers. {% if priced %}Prices as listed when we looked; we don't check stock{% else %}We don't check prices or stock{% endif %}, and we never suggest sprays or pellets.{% if paid %} Some of these links earn herbtwin a small commission; that never changes the advice.{% endif %}</small></p>{% endif %}
+{% if helpers %}{% if links or centres or handy %}<h3>Want a hand?</h3>{% endif %}
 <ul class="help-links" data-heading="Want a hand?">{% for h in helpers %}
   <li><a href="{{ h.url }}" rel="noopener noreferrer" target="_blank">Gardeners in {{ town }} on {{ h.name }}</a></li>{% endfor %}
   <li><a href="{{ rhs_hiring }}" rel="noopener noreferrer" target="_blank">How to hire a gardener: RHS advice</a></li>

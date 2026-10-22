@@ -24,8 +24,14 @@ class StubTavily:
         time.sleep(self.slow)
         if self.fail:
             raise SearchFailed("HTTP 500")
-        assert domains == shops.DOMAINS and n == 6
-        return [Hit(t, u, "") for q, rows in self.pages.items() if q in query for t, u in rows]
+        assert domains == shops.DOMAINS and n == shops.RESULTS
+        # a row is (title, url) or (title, url, the page's text as Tavily gives it)
+        return [
+            Hit(*r, *[""][len(r) - 2 :])
+            for q, rows in self.pages.items()
+            if q in query
+            for r in rows
+        ]
 
 
 def test_each_action_gets_its_own_things_first_action_first_at_most_three():
@@ -183,6 +189,10 @@ def test_a_page_title_is_made_plain_and_short():
         "Sylvagrow peat-free compost"
     )
     assert plain_title("Garden Fleece - Harrod Horticultural", "x") == "Garden Fleece"
+    # live on 22 Oct: a range's B&Q row read "... Covers at B&Q at B&Q"
+    assert plain_title("Garden Fleeces and Plant Fleece Covers at B&Q", "x") == (
+        "Garden Fleeces and Plant Fleece Covers"
+    )
     assert plain_title("Garden Fleeces | Plant Fleece Covers | B&Q", "x") == (
         "Garden Fleeces | Plant Fleece Covers"
     )

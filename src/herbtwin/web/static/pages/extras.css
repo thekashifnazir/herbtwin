@@ -22,3 +22,8 @@
 .extras .help-links { margin: 0 0 10px; padding-left: 20px; }
 .extras .help-links li { margin: 0 0 6px; }
 .extras .extras-found > p:last-child { margin: 0; }
+/* Handy to have: a range of shops under each thing, one a line, the price as listed beside */
+.extras .shop-options { flex: 1 0 100%; margin: 0; padding: 0; list-style: none; }
+.extras .shop-links .shop-options li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px;
+  padding: 6px 0; border: 0; }
+.extras .shop-price { color: var(--muted-fg); font-size: 16px; }
