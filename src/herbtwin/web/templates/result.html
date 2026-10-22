@@ -248,6 +248,9 @@
                     "feed": "content", "mulch": "content", "repot": "content", "change_soil": "content",
                     "rotate": "content", "humidity": "content", "move_light": "content"} %}
     {% set mood = moods.get(first.action, "unsure") if first else "content" %}
+    {# a rough read of a blurry, dark or small photo is puzzled, never a smile (22 Oct site
+       walk: the blurry parsley read as "looks healthy" with a smiling face) #}
+    {% if retake %}{% set mood = "unsure" %}{% endif %}
     {# a word badge, not a meter: 2 steps read as "2 out of 2" (21 Oct, gardener test) #}
     {% set level_label = "Our best read" if best else "Not sure, check first" %}
     {% set level_line = "Right about half the time in our tests." if best else "Right about 1 in 3 times in our tests." %}

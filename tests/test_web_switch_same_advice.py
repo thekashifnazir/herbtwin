@@ -140,9 +140,11 @@ def test_an_indoor_plant_gets_no_gardeners_to_hire(tmp_path):
     c.app.state.local_help = LocalHelp(LocalStub(LONDON_HELP))
     entry = c.app.state.answers.get_for(rid, None)
     entry.latest.location = Location(lat=51.5, lon=-0.12, source="typed", label="London, GB")
+    # a job one could be hired for, so only indoors keeps them away (22 Oct site walk)
+    assert entry.latest.observation is not None and entry.latest.answer is not None
+    entry.latest.answer.do[0].action, entry.latest.answer.headline = "prune", "Cut it back."
     got = c.get(f"/answers/{rid}/extras")
-    assert "Gardeners near" not in got.text
+    assert "Gardeners in" not in got.text
     # outdoors, the same town still gets them
-    assert entry.latest.observation is not None
     entry.latest.observation.setting = "outdoor"
-    assert "<h3>Gardeners near London</h3>" in c.get(f"/answers/{rid}/extras").text
+    assert "Gardeners in London on Bark" in c.get(f"/answers/{rid}/extras").text

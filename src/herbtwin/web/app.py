@@ -625,7 +625,7 @@ def create_app(
     # app.state.deps, never deps: deps is None in production, set only by tests (21 Oct crash)
     http = app.state.deps.http
     app.state.shops = shops_from(settings, http, extras_cap)  # "Shops we found for this"
-    app.state.local_help = local_help_from(settings, http, extras_cap)  # "Gardeners near"
+    app.state.local_help = local_help_from(settings, http, extras_cap)  # "Want a hand?"
     # "Seen recently in the UK": GBIF's UK records of the plant's pests, and news headlines
     # about them from Tavily when it is on
     app.state.sightings = sightings_from(settings, http)
@@ -1554,8 +1554,9 @@ def create_app(
         outdoor = rec.observation is not None and rec.observation.setting == "outdoor"
         indoor = rec.observation is not None and rec.observation.setting == "indoor"
         # no gardener to hire for a pot indoors (22 Oct site walk: "Gardeners near London"
-        # under the Indoors switch)
-        town = typed_town if local is not None and not indoor else None
+        # under the Indoors switch), nor for a small job (the same walk: under Leave it)
+        hand = local is not None and not indoor and local_help.wants_a_hand(rec.answer)
+        town = typed_town if hand else None
 
         async def shop_links():
             if finder is None:

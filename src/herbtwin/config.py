@@ -89,7 +89,8 @@ class Settings:
     shop_links: bool = False
     shop_affiliates: str | None = None
     shop_daily_searches: int = 200  # Tavily calls a day for shop links and local help, then none
-    # "Gardeners near <town>" under the answer (local_help.py), for a typed UK town; needs Tavily
+    # "Want a hand?" under the answer (local_help.py): gardeners for a typed UK town, on a big
+    # job only (local_help.HAND_JOBS); needs Tavily
     local_help: bool = False
 
     @property

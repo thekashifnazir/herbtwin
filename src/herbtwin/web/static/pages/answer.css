@@ -422,6 +422,10 @@
 .answer-page .i-did .face { width: 40px; height: 40px; }
 .answer-page .face .head { fill: var(--soft); stroke: var(--primary); stroke-width: 2; }
 .answer-page .face .sprout { fill: var(--primary); }
+/* poorly or unsure: amber, "check first", never the green of a well plant (22 Oct site walk:
+   a green face beside downy mildew and rosemary beetle) */
+.answer-page .face:is(.poorly, .unsure) .head { fill: var(--warn-bg); stroke: var(--warn); }
+.answer-page .face:is(.poorly, .unsure) .sprout { fill: var(--warn); }
 .answer-page .face .line { fill: none; stroke: var(--fg); stroke-width: 2; stroke-linecap: round;
   stroke-linejoin: round; }
 .answer-page .face .eye { fill: var(--fg); }
@@ -458,9 +462,9 @@
 }
 /* high-contrast modes: the face keeps its lines in the system's text colour */
 @media (forced-colors: active) {
-  .answer-page .face .head { fill: Canvas; stroke: CanvasText; }
+  .answer-page .face .head, .answer-page .face:is(.poorly, .unsure) .head { fill: Canvas; stroke: CanvasText; }
   .answer-page .face :is(.line, .brr, .mark, .snip) { stroke: CanvasText; }
-  .answer-page .face :is(.eye, .sprout, .drop) { fill: CanvasText; }
+  .answer-page .face :is(.eye, .sprout, .drop), .answer-page .face:is(.poorly, .unsure) .sprout { fill: CanvasText; }
 }
 @keyframes face-talk { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
 @keyframes leaf-out { from { transform: none; opacity: 1; } to { transform: var(--to); opacity: 0; } }

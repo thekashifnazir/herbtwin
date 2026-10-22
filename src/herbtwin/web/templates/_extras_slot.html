@@ -21,6 +21,10 @@
     .then((html) => {
       if (!html.trim()) return none();
       found.innerHTML = html;
+      // gardeners alone: a hand, not something to get (22 Oct site walk)
+      const hand = found.querySelector(".help-links[data-heading]");
+      const h2 = s.querySelector("h2");
+      if (hand && !found.querySelector(".shop-links, .centres")) h2.textContent = hand.dataset.heading;
       said.textContent = "";  // the found blocks say what they are
       said.hidden = true;
     })

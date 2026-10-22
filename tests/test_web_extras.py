@@ -112,26 +112,34 @@ def _near(tmp_path, label, shops=None):
     return c, rid
 
 
+def _cut_back(c, rid):
+    """A job a gardener could be hired for: only those get local help (22 Oct site walk)."""
+    a = c.app.state.answers.get_for(rid, None).latest.answer
+    a.do[0].action, a.headline = "prune", "Cut it back."
+
+
 def test_a_typed_town_gets_gardeners_near_it_with_the_rhs_advice(tmp_path):
     c, rid = _near(tmp_path, "Bristol, GB")
+    _cut_back(c, rid)
     got = c.get(f"/answers/{rid}/extras").text
-    assert "<h3>Gardeners near Bristol</h3>" in got  # the only block here
+    # the only block here: the slot's heading becomes "Want a hand?" (22 Oct site walk)
+    assert '<ul class="help-links" data-heading="Want a hand?">' in got and "<h3>" not in got
     assert "Shops we found" not in got
     assert (
         ">Gardeners in Bristol on Checkatrade</a>" in got
         and ">Gardeners in Bristol on Bark</a>" in got
     )
     assert ">How to hire a gardener: RHS advice</a>" in got
-    assert "found with Tavily for the town you gave. We haven't checked anyone listed." in got
+    assert "Directory pages found with Tavily, not checked by us." in got
 
 
 def test_shops_and_local_help_together_keep_one_labelled_heading(tmp_path):
-    c, rid = _near(
-        tmp_path, "Bristol, GB", {"soil moisture meter": [("Soil Moisture Meter", METER_PAGE)]}
-    )
+    secateurs = "https://www.dobbies.com/garden-secateurs/5638482640.p"
+    c, rid = _near(tmp_path, "Bristol, GB", {"garden secateurs": [("Garden Secateurs", secateurs)]})
+    _cut_back(c, rid)
     got = c.get(f"/answers/{rid}/extras").text
     assert "<h2" not in got  # the slot's own "Where to get it" heads them all
-    assert "<h3>Or order online</h3>" in got and "<h3>Gardeners near Bristol</h3>" in got
+    assert "<h3>Or order online</h3>" in got and "<h3>Want a hand?</h3>" in got
 
 
 def test_a_typed_town_and_something_to_buy_put_garden_centres_first(tmp_path):
@@ -158,8 +166,9 @@ def test_a_typed_town_and_something_to_buy_put_garden_centres_first(tmp_path):
 
 def test_nothing_to_buy_offers_no_garden_centres(tmp_path):
     c, rid = _near(tmp_path, "Bristol, GB")
+    _cut_back(c, rid)
     got = c.get(f"/answers/{rid}/extras").text
-    assert "<h3>Gardeners near Bristol</h3>" in got and "Garden centres near" not in got
+    assert "Gardeners in Bristol on Bark" in got and "Garden centres near" not in got
 
 
 def test_the_privacy_page_says_when_google_maps_gets_the_town(tmp_path):

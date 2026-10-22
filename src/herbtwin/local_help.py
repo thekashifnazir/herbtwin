@@ -16,8 +16,9 @@ from urllib.parse import quote, urlsplit
 
 import httpx
 
+from herbtwin.answer import TIDY_HEADLINE
 from herbtwin.config import Settings
-from herbtwin.schemas import Location
+from herbtwin.schemas import Answer, Location
 from herbtwin.search import TIMEOUT_S as SEARCH_TIMEOUT_S
 from herbtwin.search import SearchFailed, Tavily, is_trusted
 from herbtwin.shops import DAILY_SEARCHES, DailyCap
@@ -36,6 +37,10 @@ DIRECTORIES: dict[str, tuple[str, str]] = {
 DOMAINS = tuple(DIRECTORIES)
 MAX_LINKS = 3
 RHS_HIRING = "https://www.rhs.org.uk/garden-design/hiring-gardeners-contractors"
+# the jobs someone might pay a hand for: a hard cut back of a woody herb, repotting a big pot,
+# refreshing a bed's soil. Leaving it, watering, a pest check, picking off or binning it are
+# minutes' work (22 Oct site walk: "Gardeners near London" under a parsley clump's Leave it)
+HAND_JOBS = frozenset({"prune", "repot", "change_soil"})
 
 FOUND_TTL_S = 7 * 86400.0
 MISSED_TTL_S = 86400.0
@@ -47,6 +52,18 @@ TIMEOUT_S = 6.0  # the page shows nothing rather than wait (the search still fil
 class HelpLink:
     name: str  # the directory
     url: str
+
+
+def wants_a_hand(answer: Answer) -> bool:
+    """The main job is one a gardener could fairly be hired for: never a light tidy in the
+    plant's rest or a thinning of seedlings (no cut for growth), and never only an Also do."""
+    first = answer.do[0] if answer.do else None
+    return (
+        first is not None
+        and first.action in HAND_JOBS
+        and answer.headline != TIDY_HEADLINE
+        and not answer.no_cut_growth
+    )
 
 
 def centres_near(town: str) -> str:
