@@ -90,7 +90,9 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path):
     words = html.unescape(
         re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>", "", main, flags=re.S))
     )
-    assert len(words.split()) <= 1500  # credits included; the story alone is about 1,100
+    # credits included; the story alone is about 1,100. 1,530 since the prices failure
+    # joined What didn't work (22 Oct, Kash: keep it to show it wasn't working well)
+    assert len(words.split()) <= 1530
     repo = "https://github.com/thekashifnazir/herbtwin/blob/main/"
     for doc in (
         "docs/reference/nvidia-models.md",
@@ -112,3 +114,13 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path):
         "$0.0040",
     ):
         assert number in main, number
+
+
+def test_what_didnt_work_says_prices_failed_with_the_reports_numbers(tmp_path):
+    # 22 Oct, Kash: "keep it in our testing to show it wasn't working well" (#434 hid prices;
+    # data/eval/reports/2026-10-22-product-prices.md has the four probes)
+    page = _about(tmp_path)
+    section = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
+    assert "<strong>Prices for the things to buy</strong>" in section
+    for said in ("11 of 21 right, 9 wrong", "4 of 6 shops block", "not a price"):
+        assert said in section, said

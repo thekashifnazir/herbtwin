@@ -1,0 +1,158 @@
+[
+ {
+  "query": "horticultural fleece",
+  "shop": "Harrod Horticultural",
+  "url": "https://www.harrodhorticultural.com/garden-fleece-30gsm-pid7516.html",
+  "ms": 667,
+  "status": 200,
+  "prices": [
+   13.95
+  ],
+  "src": [
+   "jsonld"
+  ],
+  "result": "clean"
+ },
+ {
+  "query": "horticultural fleece",
+  "shop": "Dobbies",
+  "url": "https://www.dobbies.com/grow-it-frostgard-fleece/5637292297.p",
+  "ms": 26,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "copper slug tape",
+  "shop": "Homebase",
+  "url": "https://www.homebase.co.uk/en-uk/copper-slug-tape/p/8496747",
+  "ms": 371,
+  "status": 200,
+  "prices": [
+   2.99
+  ],
+  "src": [
+   "meta"
+  ],
+  "result": "clean"
+ },
+ {
+  "query": "copper slug tape",
+  "shop": "Thompson & Morgan",
+  "url": "https://www.thompson-morgan.com/p/garden-essentials-copper-slug-tape/t75843TM",
+  "ms": 84,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "copper slug tape",
+  "shop": "Dobbies",
+  "url": "https://www.dobbies.com/growing-success-slug-barrier-copper-tape-4m/5638036346.p",
+  "ms": 66,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "slug nematodes",
+  "shop": "Harrod Horticultural",
+  "url": "https://www.harrodhorticultural.com/nemaslug-slug-killer-pid7623.html",
+  "ms": 514,
+  "status": 200,
+  "prices": [
+   19.95
+  ],
+  "src": [
+   "jsonld"
+  ],
+  "result": "clean"
+ },
+ {
+  "query": "insect mesh netting",
+  "shop": "Harrod Horticultural",
+  "url": "https://www.harrodhorticultural.com/ultra-fine-insect-mesh-netting-pid7805.html",
+  "ms": 639,
+  "status": 200,
+  "prices": [
+   6.25
+  ],
+  "src": [
+   "jsonld"
+  ],
+  "result": "clean"
+ },
+ {
+  "query": "insect mesh netting",
+  "shop": "Harrod Horticultural",
+  "url": "https://www.harrodhorticultural.com/black-insect-mesh-netting-pid9426.html",
+  "ms": 703,
+  "status": 200,
+  "prices": [
+   6.95
+  ],
+  "src": [
+   "jsonld"
+  ],
+  "result": "clean"
+ },
+ {
+  "query": "insect mesh netting",
+  "shop": "Harrod Horticultural",
+  "url": "https://www.harrodhorticultural.com/insect-mesh-netting-pid7513.html",
+  "ms": 811,
+  "status": 200,
+  "prices": [
+   4.45
+  ],
+  "src": [
+   "jsonld"
+  ],
+  "result": "clean"
+ },
+ {
+  "query": "pot feet",
+  "shop": "Crocus",
+  "url": "https://www.crocus.co.uk/product/_/pot-feet-large-set-of-3/classid.2000044149",
+  "ms": 83,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "pot feet",
+  "shop": "Crocus",
+  "url": "https://www.crocus.co.uk/product/_/terracotta-pot-feet-set-of-3/classid.2000022768",
+  "ms": 100,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "pot feet",
+  "shop": "Crocus",
+  "url": "https://www.crocus.co.uk/product/_/italian-terracotta-pot-feet-grey-set-of-3/classid.2000031986",
+  "ms": 165,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "soil moisture meter for plants",
+  "shop": "Crocus",
+  "url": "https://www.crocus.co.uk/product/_/soil-moisture-meter/classid.2000031778",
+  "ms": 104,
+  "status": 403,
+  "result": "http_403"
+ },
+ {
+  "query": "soil moisture meter for plants",
+  "shop": "B&Q",
+  "url": "https://www.diy.com/departments/digital-soil-moisture-meter-soil-sensor-for-plants-soil-moisture-temperature/3391677351449_BQ.prd",
+  "ms": 15,
+  "status": 503,
+  "result": "http_503"
+ },
+ {
+  "query": "soil moisture meter for plants",
+  "shop": "B&Q",
+  "url": "https://www.diy.com/departments/soil-moisture-meter-plant-hygrometer-water-moisture-tester-no-battery-required/5060531201319_BQ.prd",
+  "ms": 16,
+  "status": 503,
+  "result": "http_503"
+ }
+]

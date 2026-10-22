@@ -1,0 +1,23 @@
+[
+ {"id":"31c821121c","label":"price","price_gbp":255.99,"evidence":"Available online only and not stocked in B&Q stores £255.99 (snippet £96.65 is a different zip-cover product)"},
+ {"id":"4ec8500bd6","label":"price","price_gbp":10.99,"evidence":"Sold & shipped by JARA TRADING LTD ... £10.99 (snippet £23.65 is a different 4-pcs product)"},
+ {"id":"effd9f9064","label":"none","price_gbp":null,"evidence":"Page text has no price; snippet 'Was £16.99 Save £2£14.99' is carousel-format, not attributable to this product"},
+ {"id":"48e97c5f98","label":"price","price_gbp":5.99,"evidence":"No text file. Snippet: 'Copper Slug Tape FROM £5.99 ... CLEARANCE SALE £9.98 £5.99 Save £3.99' (borderline: FROM)"},
+ {"id":"3009b8ca0c","label":"price","price_gbp":8.99,"evidence":"# Growing Success Slug Barrier Copper Tape 4m £8.99"},
+ {"id":"53b2dcde76","label":"price","price_gbp":6.99,"evidence":"PR30005433 4 metre pack £6.99 In stock (delivery options £5.99/£10.99 are delivery)"},
+ {"id":"58efe73794","label":"price","price_gbp":8.99,"evidence":"Sold & shipped by Gardening Naturally ... £8.99 (snippet £13.49/£6.92 are carousel items)"},
+ {"id":"caa26bdb65","label":"none","price_gbp":null,"evidence":"Page text has no price; snippet £6.92 belongs to Marco Paul 10pcs traps, another product"},
+ {"id":"2199ad767d","label":"none","price_gbp":null,"evidence":"Page text has no price; snippet £11.49/£6.92/£13.49 are carousel items for other products"},
+ {"id":"c8578b1b32","label":"price","price_gbp":10.99,"evidence":"Sold & shipped by Coopers of Stortford ... £10.99"},
+ {"id":"5d852cf4f2","label":"price","price_gbp":6.49,"evidence":"PR30010586 £6.49 In stock (£64.99 is Goes Well With pot)"},
+ {"id":"1253fe1559","label":"price","price_gbp":6.99,"evidence":"PR30008183 £6.99 £2.33 each sold out"},
+ {"id":"853bd274a3","label":"price","price_gbp":8.49,"evidence":"Sold & shipped by Venture Trade Ltd ... £8.49"},
+ {"id":"13bec7e019","label":"price","price_gbp":8.99,"evidence":"PR30010304 £8.99 In stock (£32.99/£10.99 are Goes Well With items)"},
+ {"id":"f4c97d7a97","label":"none","price_gbp":null,"evidence":"Sorry, this product is currently out of stock. No £ amount anywhere in text or snippet"},
+ {"id":"3b88197fb4","label":"none","price_gbp":null,"evidence":"Only P&P charges, gift filters and You May Also Like prices (From £8.95, £4.95 pegs)"},
+ {"id":"b3b84affb9","label":"none","price_gbp":null,"evidence":"No text file and empty snippet"},
+ {"id":"9b2b8f2a76","label":"none","price_gbp":null,"evidence":"'£3.95 P&P £3.95 P&P' is postage; 'This product is no longer available.'"},
+ {"id":"8f6dbd0970","label":"none","price_gbp":null,"evidence":"Only P&P charges and You May Also Like prices (£55.00 kit, From £8.95, From £4.45)"},
+ {"id":"362d588711","label":"several","price_gbp":null,"evidence":"3m x 1m = £6.95 (GNE-554) 3m x 5m = £31.75 ... 3m x 50m = £249.50: sizes at different prices"},
+ {"id":"810fe5aa40","label":"several","price_gbp":null,"evidence":"2.5m x 1m = £4.45 (GDN-040) 2.5m x 5m = £19.25 ... many widths/packs at different prices"}
+]

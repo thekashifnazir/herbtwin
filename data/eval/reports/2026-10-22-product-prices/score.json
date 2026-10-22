@@ -1,0 +1,579 @@
+{
+ "nano": {
+  "right": 11,
+  "wrong": 9
+ },
+ "snippet": {
+  "right": 3,
+  "wrong": 2
+ },
+ "rows": [
+  {
+   "id": "31c821121c",
+   "truth": {
+    "id": "31c821121c",
+    "label": "price",
+    "price_gbp": 255.99,
+    "evidence": "Available online only and not stocked in B&Q stores \u00a3255.99 (snippet \u00a396.65 is a different zip-cover product)"
+   },
+   "nano": {
+    "id": "31c821121c",
+    "reply": {
+     "name": "Fargro Home and Garden Heavy-Duty Horticultural Fleece 6m x 250m - 18gsm Large Area Plant Protection",
+     "price_gbp": 255.99,
+     "pack_size": null,
+     "retailer": "B&Q",
+     "is_single_product": true
+    },
+    "ms": 1306,
+    "tokens_in": 420,
+    "tokens_out": 90,
+    "cost_usd": 4.68e-05
+   },
+   "nano_result": "right",
+   "snippet_price": 96.65,
+   "snippet_result": "WRONG",
+   "jsonld": null
+  },
+  {
+   "id": "4ec8500bd6",
+   "truth": {
+    "id": "4ec8500bd6",
+    "label": "price",
+    "price_gbp": 10.99,
+    "evidence": "Sold & shipped by JARA TRADING LTD ... \u00a310.99 (snippet \u00a323.65 is a different 4-pcs product)"
+   },
+   "nano": {
+    "id": "4ec8500bd6",
+    "reply": {
+     "name": "Horticultural Fleece with Drawstring for Winter Plant Cover",
+     "price_gbp": 10.99,
+     "pack_size": "2 Pack",
+     "retailer": "JARA TRADING LTD",
+     "is_single_product": true
+    },
+    "ms": 994,
+    "tokens_in": 407,
+    "tokens_out": 77,
+    "cost_usd": 4.29e-05
+   },
+   "nano_result": "right",
+   "snippet_price": 23.65,
+   "snippet_result": "WRONG",
+   "jsonld": null
+  },
+  {
+   "id": "effd9f9064",
+   "truth": {
+    "id": "effd9f9064",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "Page text has no price; snippet 'Was \u00a316.99 Save \u00a32\u00a314.99' is carousel-format, not attributable to this product"
+   },
+   "nano": {
+    "id": "effd9f9064",
+    "reply": {
+     "name": "price_gbp",
+     "price_gbp": 14.99,
+     "pack_size": null,
+     "retailer": "B&Q",
+     "is_single_product": true
+    },
+    "ms": 738,
+    "tokens_in": 266,
+    "tokens_out": 61,
+    "cost_usd": 3.06e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "48e97c5f98",
+   "truth": {
+    "id": "48e97c5f98",
+    "label": "price",
+    "price_gbp": 5.99,
+    "evidence": "No text file. Snippet: 'Copper Slug Tape FROM \u00a35.99 ... CLEARANCE SALE \u00a39.98 \u00a35.99 Save \u00a33.99' (borderline: FROM)"
+   },
+   "nano": {
+    "id": "48e97c5f98",
+    "reply": {
+     "name": "price_gbp",
+     "price_gbp": 5.99,
+     "pack_size": "3m",
+     "retailer": "Thompson & Morgan",
+     "is_single_product": true
+    },
+    "ms": 912,
+    "tokens_in": 250,
+    "tokens_out": 63,
+    "cost_usd": 3.0119999999999996e-05
+   },
+   "nano_result": "right",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "3009b8ca0c",
+   "truth": {
+    "id": "3009b8ca0c",
+    "label": "price",
+    "price_gbp": 8.99,
+    "evidence": "# Growing Success Slug Barrier Copper Tape 4m \u00a38.99"
+   },
+   "nano": {
+    "id": "3009b8ca0c",
+    "reply": {
+     "name": "Growing Success Slug Barrier Copper Tape 4m",
+     "price_gbp": 8.99,
+     "pack_size": null,
+     "retailer": "Dobbies",
+     "is_single_product": true
+    },
+    "ms": 989,
+    "tokens_in": 618,
+    "tokens_out": 70,
+    "cost_usd": 5.387999999999999e-05
+   },
+   "nano_result": "right",
+   "snippet_price": 8.99,
+   "snippet_result": "right",
+   "jsonld": null
+  },
+  {
+   "id": "53b2dcde76",
+   "truth": {
+    "id": "53b2dcde76",
+    "label": "price",
+    "price_gbp": 6.99,
+    "evidence": "PR30005433 4 metre pack \u00a36.99 In stock (delivery options \u00a35.99/\u00a310.99 are delivery)"
+   },
+   "nano": {
+    "id": "53b2dcde76",
+    "reply": {
+     "name": "Copper snail and slug tape",
+     "price_gbp": 6.99,
+     "pack_size": "4 metre pack",
+     "retailer": "Crocus",
+     "is_single_product": true
+    },
+    "ms": 677,
+    "tokens_in": 717,
+    "tokens_out": 64,
+    "cost_usd": 5.837999999999999e-05
+   },
+   "nano_result": "right",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "58efe73794",
+   "truth": {
+    "id": "58efe73794",
+    "label": "price",
+    "price_gbp": 8.99,
+    "evidence": "Sold & shipped by Gardening Naturally ... \u00a38.99 (snippet \u00a313.49/\u00a36.92 are carousel items)"
+   },
+   "nano": {
+    "id": "58efe73794",
+    "reply": {
+     "name": "Gardening Naturally Yellow Sticky Traps - Pack of 10",
+     "price_gbp": 8.99,
+     "pack_size": "10",
+     "retailer": "B&Q",
+     "is_single_product": true
+    },
+    "ms": 720,
+    "tokens_in": 392,
+    "tokens_out": 74,
+    "cost_usd": 4.128e-05
+   },
+   "nano_result": "right",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "caa26bdb65",
+   "truth": {
+    "id": "caa26bdb65",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "Page text has no price; snippet \u00a36.92 belongs to Marco Paul 10pcs traps, another product"
+   },
+   "nano": {
+    "id": "caa26bdb65",
+    "reply": {
+     "name": "price_gbp",
+     "price_gbp": 6.92,
+     "pack_size": "7",
+     "retailer": "B&Q",
+     "is_single_product": true
+    },
+    "ms": 915,
+    "tokens_in": 260,
+    "tokens_out": 65,
+    "cost_usd": 3.12e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "2199ad767d",
+   "truth": {
+    "id": "2199ad767d",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "Page text has no price; snippet \u00a311.49/\u00a36.92/\u00a313.49 are carousel items for other products"
+   },
+   "nano": {
+    "id": "2199ad767d",
+    "reply": {
+     "name": "price_gbp",
+     "price_gbp": 11.49,
+     "pack_size": "5",
+     "retailer": "B&Q",
+     "is_single_product": true
+    },
+    "ms": 626,
+    "tokens_in": 267,
+    "tokens_out": 61,
+    "cost_usd": 3.0659999999999994e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "c8578b1b32",
+   "truth": {
+    "id": "c8578b1b32",
+    "label": "price",
+    "price_gbp": 10.99,
+    "evidence": "Sold & shipped by Coopers of Stortford ... \u00a310.99"
+   },
+   "nano": {
+    "id": "c8578b1b32",
+    "reply": {
+     "name": "Set of 24 Invisible Plant Pot Feet",
+     "price_gbp": 10.99,
+     "pack_size": "24",
+     "retailer": "Coopers of Stortford",
+     "is_single_product": true
+    },
+    "ms": 706,
+    "tokens_in": 693,
+    "tokens_out": 71,
+    "cost_usd": 5.862e-05
+   },
+   "nano_result": "right",
+   "snippet_price": 10.99,
+   "snippet_result": "right",
+   "jsonld": null
+  },
+  {
+   "id": "5d852cf4f2",
+   "truth": {
+    "id": "5d852cf4f2",
+    "label": "price",
+    "price_gbp": 6.49,
+    "evidence": "PR30010586 \u00a36.49 In stock (\u00a364.99 is Goes Well With pot)"
+   },
+   "nano": {
+    "id": "5d852cf4f2",
+    "reply": {
+     "name": "Italian terracotta pot feet grey - set of 3",
+     "price_gbp": 6.49,
+     "pack_size": "set of 3",
+     "retailer": "Crocus",
+     "is_single_product": true
+    },
+    "ms": 700,
+    "tokens_in": 940,
+    "tokens_out": 72,
+    "cost_usd": 7.368000000000001e-05
+   },
+   "nano_result": "right",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "1253fe1559",
+   "truth": {
+    "id": "1253fe1559",
+    "label": "price",
+    "price_gbp": 6.99,
+    "evidence": "PR30008183 \u00a36.99 \u00a32.33 each sold out"
+   },
+   "nano": {
+    "id": "1253fe1559",
+    "reply": {
+     "name": "Pot feet small set of 3",
+     "price_gbp": 6.99,
+     "pack_size": null,
+     "retailer": "Crocus",
+     "is_single_product": true
+    },
+    "ms": 2222,
+    "tokens_in": 1367,
+    "tokens_out": 61,
+    "cost_usd": 9.666e-05
+   },
+   "nano_result": "right",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "853bd274a3",
+   "truth": {
+    "id": "853bd274a3",
+    "label": "price",
+    "price_gbp": 8.49,
+    "evidence": "Sold & shipped by Venture Trade Ltd ... \u00a38.49"
+   },
+   "nano": {
+    "id": "853bd274a3",
+    "reply": {
+     "name": "Zuvo Soil Moisture Meter for House Plants Garden Lawn and Pots",
+     "price_gbp": 8.49,
+     "pack_size": null,
+     "retailer": "Venture Trade Ltd",
+     "is_single_product": true
+    },
+    "ms": 1141,
+    "tokens_in": 620,
+    "tokens_out": 68,
+    "cost_usd": 5.3519999999999996e-05
+   },
+   "nano_result": "right",
+   "snippet_price": 8.49,
+   "snippet_result": "right",
+   "jsonld": null
+  },
+  {
+   "id": "13bec7e019",
+   "truth": {
+    "id": "13bec7e019",
+    "label": "price",
+    "price_gbp": 8.99,
+    "evidence": "PR30010304 \u00a38.99 In stock (\u00a332.99/\u00a310.99 are Goes Well With items)"
+   },
+   "nano": {
+    "id": "13bec7e019",
+    "reply": {
+     "name": "Soil moisture meter",
+     "price_gbp": 8.99,
+     "pack_size": null,
+     "retailer": "Crocus",
+     "is_single_product": true
+    },
+    "ms": 627,
+    "tokens_in": 1610,
+    "tokens_out": 60,
+    "cost_usd": 0.000111
+   },
+   "nano_result": "right",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "f4c97d7a97",
+   "truth": {
+    "id": "f4c97d7a97",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "Sorry, this product is currently out of stock. No \u00a3 amount anywhere in text or snippet"
+   },
+   "nano": {
+    "id": "f4c97d7a97",
+    "reply": {
+     "name": "Soil Moisture Meter Plant Hygrometer Water Moisture Tester No Battery Required",
+     "price_gbp": null,
+     "pack_size": null,
+     "retailer": "B&Q",
+     "is_single_product": true
+    },
+    "ms": 973,
+    "tokens_in": 522,
+    "tokens_out": 72,
+    "cost_usd": 4.86e-05
+   },
+   "nano_result": "null",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": null
+  },
+  {
+   "id": "3b88197fb4",
+   "truth": {
+    "id": "3b88197fb4",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "Only P&P charges, gift filters and You May Also Like prices (From \u00a38.95, \u00a34.95 pegs)"
+   },
+   "nano": {
+    "id": "3b88197fb4",
+    "reply": {
+     "name": "Garden Fleece 30gsm",
+     "price_gbp": 19.95,
+     "pack_size": null,
+     "retailer": "Harrod Horticultural",
+     "is_single_product": true
+    },
+    "ms": 743,
+    "tokens_in": 595,
+    "tokens_out": 65,
+    "cost_usd": 5.13e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": 13.95
+  },
+  {
+   "id": "b3b84affb9",
+   "truth": {
+    "id": "b3b84affb9",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "No text file and empty snippet"
+   },
+   "nano": {
+    "id": "b3b84affb9",
+    "reply": {
+     "name": "price_gbp",
+     "price_gbp": 1.5,
+     "pack_size": null,
+     "retailer": "Homebase",
+     "is_single_product": true
+    },
+    "ms": 854,
+    "tokens_in": 174,
+    "tokens_out": 58,
+    "cost_usd": 2.436e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": 2.99
+  },
+  {
+   "id": "9b2b8f2a76",
+   "truth": {
+    "id": "9b2b8f2a76",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "'\u00a33.95 P&P \u00a33.95 P&P' is postage; 'This product is no longer available.'"
+   },
+   "nano": {
+    "id": "9b2b8f2a76",
+    "reply": {
+     "name": "Nemaslug Slug Killer",
+     "price_gbp": 3.95,
+     "pack_size": null,
+     "retailer": "Harrod Horticultural",
+     "is_single_product": true
+    },
+    "ms": 786,
+    "tokens_in": 532,
+    "tokens_out": 61,
+    "cost_usd": 4.6559999999999995e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": 19.95
+  },
+  {
+   "id": "8f6dbd0970",
+   "truth": {
+    "id": "8f6dbd0970",
+    "label": "none",
+    "price_gbp": null,
+    "evidence": "Only P&P charges and You May Also Like prices (\u00a355.00 kit, From \u00a38.95, From \u00a34.45)"
+   },
+   "nano": {
+    "id": "8f6dbd0970",
+    "reply": {
+     "name": "Ultra Fine Insect Mesh Netting",
+     "price_gbp": 55.0,
+     "pack_size": null,
+     "retailer": "Harrod Horticultural",
+     "is_single_product": true
+    },
+    "ms": 831,
+    "tokens_in": 594,
+    "tokens_out": 68,
+    "cost_usd": 5.1960000000000004e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": 6.25
+  },
+  {
+   "id": "362d588711",
+   "truth": {
+    "id": "362d588711",
+    "label": "several",
+    "price_gbp": null,
+    "evidence": "3m x 1m = \u00a36.95 (GNE-554) 3m x 5m = \u00a331.75 ... 3m x 50m = \u00a3249.50: sizes at different prices"
+   },
+   "nano": {
+    "id": "362d588711",
+    "reply": {
+     "name": "Black Insect Mesh Netting",
+     "price_gbp": 6.95,
+     "pack_size": "3m x 1m",
+     "retailer": "Harrod Horticultural",
+     "is_single_product": true
+    },
+    "ms": 1118,
+    "tokens_in": 650,
+    "tokens_out": 69,
+    "cost_usd": 5.556e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": 6.95
+  },
+  {
+   "id": "810fe5aa40",
+   "truth": {
+    "id": "810fe5aa40",
+    "label": "several",
+    "price_gbp": null,
+    "evidence": "2.5m x 1m = \u00a34.45 (GDN-040) 2.5m x 5m = \u00a319.25 ... many widths/packs at different prices"
+   },
+   "nano": {
+    "id": "810fe5aa40",
+    "reply": {
+     "name": "Insect Mesh Netting",
+     "price_gbp": 4.45,
+     "pack_size": "2.5m x 1m",
+     "retailer": "Harrod Horticultural",
+     "is_single_product": true
+    },
+    "ms": 968,
+    "tokens_in": 877,
+    "tokens_out": 71,
+    "cost_usd": 6.966e-05
+   },
+   "nano_result": "WRONG",
+   "snippet_price": null,
+   "snippet_result": "null",
+   "jsonld": 4.45
+  }
+ ]
+}

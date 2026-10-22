@@ -1,0 +1,296 @@
+[
+ {
+  "id": "31c821121c",
+  "reply": {
+   "name": "Fargro Home and Garden Heavy-Duty Horticultural Fleece 6m x 250m - 18gsm Large Area Plant Protection",
+   "price_gbp": 255.99,
+   "pack_size": null,
+   "retailer": "B&Q",
+   "is_single_product": true
+  },
+  "ms": 1306,
+  "tokens_in": 420,
+  "tokens_out": 90,
+  "cost_usd": 4.68e-05
+ },
+ {
+  "id": "4ec8500bd6",
+  "reply": {
+   "name": "Horticultural Fleece with Drawstring for Winter Plant Cover",
+   "price_gbp": 10.99,
+   "pack_size": "2 Pack",
+   "retailer": "JARA TRADING LTD",
+   "is_single_product": true
+  },
+  "ms": 994,
+  "tokens_in": 407,
+  "tokens_out": 77,
+  "cost_usd": 4.29e-05
+ },
+ {
+  "id": "effd9f9064",
+  "reply": {
+   "name": "price_gbp",
+   "price_gbp": 14.99,
+   "pack_size": null,
+   "retailer": "B&Q",
+   "is_single_product": true
+  },
+  "ms": 738,
+  "tokens_in": 266,
+  "tokens_out": 61,
+  "cost_usd": 3.06e-05
+ },
+ {
+  "id": "48e97c5f98",
+  "reply": {
+   "name": "price_gbp",
+   "price_gbp": 5.99,
+   "pack_size": "3m",
+   "retailer": "Thompson & Morgan",
+   "is_single_product": true
+  },
+  "ms": 912,
+  "tokens_in": 250,
+  "tokens_out": 63,
+  "cost_usd": 3.0119999999999996e-05
+ },
+ {
+  "id": "3009b8ca0c",
+  "reply": {
+   "name": "Growing Success Slug Barrier Copper Tape 4m",
+   "price_gbp": 8.99,
+   "pack_size": null,
+   "retailer": "Dobbies",
+   "is_single_product": true
+  },
+  "ms": 989,
+  "tokens_in": 618,
+  "tokens_out": 70,
+  "cost_usd": 5.387999999999999e-05
+ },
+ {
+  "id": "53b2dcde76",
+  "reply": {
+   "name": "Copper snail and slug tape",
+   "price_gbp": 6.99,
+   "pack_size": "4 metre pack",
+   "retailer": "Crocus",
+   "is_single_product": true
+  },
+  "ms": 677,
+  "tokens_in": 717,
+  "tokens_out": 64,
+  "cost_usd": 5.837999999999999e-05
+ },
+ {
+  "id": "58efe73794",
+  "reply": {
+   "name": "Gardening Naturally Yellow Sticky Traps - Pack of 10",
+   "price_gbp": 8.99,
+   "pack_size": "10",
+   "retailer": "B&Q",
+   "is_single_product": true
+  },
+  "ms": 720,
+  "tokens_in": 392,
+  "tokens_out": 74,
+  "cost_usd": 4.128e-05
+ },
+ {
+  "id": "caa26bdb65",
+  "reply": {
+   "name": "price_gbp",
+   "price_gbp": 6.92,
+   "pack_size": "7",
+   "retailer": "B&Q",
+   "is_single_product": true
+  },
+  "ms": 915,
+  "tokens_in": 260,
+  "tokens_out": 65,
+  "cost_usd": 3.12e-05
+ },
+ {
+  "id": "2199ad767d",
+  "reply": {
+   "name": "price_gbp",
+   "price_gbp": 11.49,
+   "pack_size": "5",
+   "retailer": "B&Q",
+   "is_single_product": true
+  },
+  "ms": 626,
+  "tokens_in": 267,
+  "tokens_out": 61,
+  "cost_usd": 3.0659999999999994e-05
+ },
+ {
+  "id": "c8578b1b32",
+  "reply": {
+   "name": "Set of 24 Invisible Plant Pot Feet",
+   "price_gbp": 10.99,
+   "pack_size": "24",
+   "retailer": "Coopers of Stortford",
+   "is_single_product": true
+  },
+  "ms": 706,
+  "tokens_in": 693,
+  "tokens_out": 71,
+  "cost_usd": 5.862e-05
+ },
+ {
+  "id": "5d852cf4f2",
+  "reply": {
+   "name": "Italian terracotta pot feet grey - set of 3",
+   "price_gbp": 6.49,
+   "pack_size": "set of 3",
+   "retailer": "Crocus",
+   "is_single_product": true
+  },
+  "ms": 700,
+  "tokens_in": 940,
+  "tokens_out": 72,
+  "cost_usd": 7.368000000000001e-05
+ },
+ {
+  "id": "1253fe1559",
+  "reply": {
+   "name": "Pot feet small set of 3",
+   "price_gbp": 6.99,
+   "pack_size": null,
+   "retailer": "Crocus",
+   "is_single_product": true
+  },
+  "ms": 2222,
+  "tokens_in": 1367,
+  "tokens_out": 61,
+  "cost_usd": 9.666e-05
+ },
+ {
+  "id": "853bd274a3",
+  "reply": {
+   "name": "Zuvo Soil Moisture Meter for House Plants Garden Lawn and Pots",
+   "price_gbp": 8.49,
+   "pack_size": null,
+   "retailer": "Venture Trade Ltd",
+   "is_single_product": true
+  },
+  "ms": 1141,
+  "tokens_in": 620,
+  "tokens_out": 68,
+  "cost_usd": 5.3519999999999996e-05
+ },
+ {
+  "id": "13bec7e019",
+  "reply": {
+   "name": "Soil moisture meter",
+   "price_gbp": 8.99,
+   "pack_size": null,
+   "retailer": "Crocus",
+   "is_single_product": true
+  },
+  "ms": 627,
+  "tokens_in": 1610,
+  "tokens_out": 60,
+  "cost_usd": 0.000111
+ },
+ {
+  "id": "f4c97d7a97",
+  "reply": {
+   "name": "Soil Moisture Meter Plant Hygrometer Water Moisture Tester No Battery Required",
+   "price_gbp": null,
+   "pack_size": null,
+   "retailer": "B&Q",
+   "is_single_product": true
+  },
+  "ms": 973,
+  "tokens_in": 522,
+  "tokens_out": 72,
+  "cost_usd": 4.86e-05
+ },
+ {
+  "id": "3b88197fb4",
+  "reply": {
+   "name": "Garden Fleece 30gsm",
+   "price_gbp": 19.95,
+   "pack_size": null,
+   "retailer": "Harrod Horticultural",
+   "is_single_product": true
+  },
+  "ms": 743,
+  "tokens_in": 595,
+  "tokens_out": 65,
+  "cost_usd": 5.13e-05
+ },
+ {
+  "id": "b3b84affb9",
+  "reply": {
+   "name": "price_gbp",
+   "price_gbp": 1.5,
+   "pack_size": null,
+   "retailer": "Homebase",
+   "is_single_product": true
+  },
+  "ms": 854,
+  "tokens_in": 174,
+  "tokens_out": 58,
+  "cost_usd": 2.436e-05
+ },
+ {
+  "id": "9b2b8f2a76",
+  "reply": {
+   "name": "Nemaslug Slug Killer",
+   "price_gbp": 3.95,
+   "pack_size": null,
+   "retailer": "Harrod Horticultural",
+   "is_single_product": true
+  },
+  "ms": 786,
+  "tokens_in": 532,
+  "tokens_out": 61,
+  "cost_usd": 4.6559999999999995e-05
+ },
+ {
+  "id": "8f6dbd0970",
+  "reply": {
+   "name": "Ultra Fine Insect Mesh Netting",
+   "price_gbp": 55.0,
+   "pack_size": null,
+   "retailer": "Harrod Horticultural",
+   "is_single_product": true
+  },
+  "ms": 831,
+  "tokens_in": 594,
+  "tokens_out": 68,
+  "cost_usd": 5.1960000000000004e-05
+ },
+ {
+  "id": "362d588711",
+  "reply": {
+   "name": "Black Insect Mesh Netting",
+   "price_gbp": 6.95,
+   "pack_size": "3m x 1m",
+   "retailer": "Harrod Horticultural",
+   "is_single_product": true
+  },
+  "ms": 1118,
+  "tokens_in": 650,
+  "tokens_out": 69,
+  "cost_usd": 5.556e-05
+ },
+ {
+  "id": "810fe5aa40",
+  "reply": {
+   "name": "Insect Mesh Netting",
+   "price_gbp": 4.45,
+   "pack_size": "2.5m x 1m",
+   "retailer": "Harrod Horticultural",
+   "is_single_product": true
+  },
+  "ms": 968,
+  "tokens_in": 877,
+  "tokens_out": 71,
+  "cost_usd": 6.966e-05
+ }
+]
