@@ -724,10 +724,12 @@
           {%- if chips %}<li>{{ mark[effect] }} {{ said }}<ul>{% for c in chips %}<li><strong>{{ c.name }}</strong>{% if c.why %}: {{ c.why|join("; ") }}{% endif %}</li>{% endfor %}</ul></li>{% endif %}{% endfor %}</ul>
       </details>{% endif %}
       {# an empty Compare is hidden: indoors the band already says there is no forecast test,
-         and with no place the main card asks for one (judge walk of #272) #}
+         and with no place the main card asks for one (judge walk of #272). Open from the start
+         when the twin ran: its chart is the thing only herbtwin shows (22 Oct, Kash: "yes" to the
+         twin chart open by default); a no-cure answer's "Not compared" line stays folded #}
       {% if a.compare or a.headline == no_cure_headline %}
       {% set cmp = namespace(better=[]) %}{% for r in a.compare if r.vs_leaving_it == "better" and r.action != "leave_normal" %}{% set cmp.better = cmp.better + [label[r.action]|lower] %}{% endfor %}
-      <details class="compare fold fold-twin"><summary><span class="fold-head"><span class="fold-title">Compare all choices (next 2 weeks)</span>
+      <details class="compare fold fold-twin"{{ ' open' if a.compare else '' }}><summary><span class="fold-head"><span class="fold-title">Compare all choices (next 2 weeks)</span>
         <span class="fold-peek">{% if not a.compare %}No cure, so the choices don't apply{% elif cmp.better %}Better than leaving it: {{ cmp.better[:2]|join(", ") }}{% else %}None beat leaving it{% endif %}{% if a.compare %}, tested on your plant's twin{% endif %}</span></span></summary>
         {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
            a tap on a choice shows its line (idea 3, 18 Oct) #}

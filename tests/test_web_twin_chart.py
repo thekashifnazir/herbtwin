@@ -223,3 +223,22 @@ def test_the_shown_and_left_out_bands_both_draw_their_edges(tmp_path):
         assert bands and len(edges) == len(bands)
         for (x, w), (x1, x2) in zip(bands, edges, strict=True):
             assert float(x1) == float(x) and abs(float(x2) - float(x) - float(w)) < 0.11
+
+
+def test_the_twin_chart_is_open_from_the_start_when_the_twin_ran(tmp_path):
+    # 22 Oct, Kash: the twin chart open by default; it is the thing only herbtwin shows
+    from herbtwin.schemas import CompareRow
+    from tests.test_web_answer_page import _render, _unsure_record
+
+    rec = _unsure_record(tmp_path)
+    rec.answer.compare = [
+        CompareRow(action="leave_normal", vs_leaving_it="same", why="baseline"),
+        CompareRow(action="shelter", vs_leaving_it="better", why="no cold nights"),
+    ]
+    assert '<details class="compare fold fold-twin" open>' in _render(rec)
+    # nothing compared (a no-cure answer): the "Not compared" line stays folded
+    from herbtwin.answer import NO_CURE_HEADLINE
+
+    rec.answer.compare, rec.answer.headline = [], NO_CURE_HEADLINE
+    page = _render(rec)
+    assert '<details class="compare fold fold-twin">' in page and 'fold-twin" open' not in page

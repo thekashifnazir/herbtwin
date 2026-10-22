@@ -22,6 +22,10 @@ from herbtwin.tracing import StageTracer, TraceStore, bind
 from tests.test_pipeline import JPEG, OBS, SAMPLE, WHEN, _deps
 
 HEDGE = 0.05  # the race starts this soon in these tests; live it is HEDGE_AFTER_S
+# how long a gated call waits for its cue at most. The tests say which call answers first
+# with events, not with sleeps and a wall-clock margin: under a loaded machine (several
+# suites at once) a margin of a few tenths of a second failed pushes (22 Oct)
+CUE_S = 5.0
 FULL = {**OBS, "decline": 0, "leaf_colour": "green"}  # strict reads need these too
 BASIL = json.dumps(FULL)
 MINT = json.dumps(
@@ -30,22 +34,30 @@ MINT = json.dumps(
 
 
 class Timed(ModelAdapter):
-    """Waits `delay` seconds, then answers `reply` or raises `error`; traced like a real
-    adapter. `asked` and `answered` are shared by the copies the fallback makes."""
+    """Waits `delay` seconds (and for `cue`, when given), then answers `reply` or raises
+    `error`; traced like a real adapter. The fallback copies it for each call, so what a test
+    reads back (`asked`, `started`, `answered`, `missed_cue`: a cue never came) is a shared
+    list or Event, never a plain attribute set on the copy."""
 
     def __init__(
-        self, model: str, reply: str = "", *, delay: float = 0.0, error=None, alone=None
-    ) -> None:
+        self, model: str, reply: str = "", *, delay: float = 0.0, error=None, alone=None,
+        cue: threading.Event | None = None,
+    ) -> None:  # fmt: skip
         self.model, self.reply, self.delay, self.error = model, reply, delay, error
         self.alone = reply if alone is None else alone  # the reply to one photo alone
+        self.cue = cue
         self.asked: list[str] = []
-        self.answered = threading.Event()
+        self.started, self.answered = threading.Event(), threading.Event()
+        self.missed_cue = threading.Event()
         self.before = self.after = lambda n: None  # hooks around the n-th call's trace
 
     def _answer(self, reply: str) -> str:
         self.asked.append(self.model)
+        self.started.set()
         n = len(self.asked)
         time.sleep(self.delay)
+        if self.cue is not None and not self.cue.wait(CUE_S):
+            self.missed_cue.set()
         try:
             if self.error is not None:
                 raise self.error
@@ -75,12 +87,16 @@ def _read(first: Timed, backup: Timed, tmp_path, hedge: float = HEDGE, **kwargs)
 
 
 def test_a_slow_first_model_loses_to_the_backup_soon_after_the_threshold(tmp_path):
-    first, backup = Timed("glm", BASIL, delay=0.6), Timed("deepseek", MINT)
-    obs, took, store = _read(first, backup, tmp_path)
-    assert obs.species[0].common_name == "mint"  # the backup's reading
-    assert took < 0.45  # soon after the threshold, not GLM's full 0.6 s
+    held = threading.Event()  # GLM answers only once the read is back
+    first, backup = Timed("glm", BASIL, cue=held), Timed("deepseek", MINT)
+    try:
+        obs, _, store = _read(first, backup, tmp_path)
+        assert obs.species[0].common_name == "mint"  # the backup's reading
+        assert not first.answered.is_set()  # never waited for GLM's own answer
+    finally:
+        held.set()  # never leave a racer holding its slot for later tests
     # the loser still finishes on its own, and both calls are traced under their models
-    assert first.answered.wait(2)
+    assert first.answered.wait(CUE_S)
     time.sleep(0.05)
     rows = store.rows("run")
     assert sorted(r["model"] for r in rows) == ["deepseek", "glm"]
@@ -103,17 +119,28 @@ def test_a_quick_unusable_reply_still_hands_the_photo_to_the_backup_at_once(tmp_
 
 
 def test_the_first_model_wins_when_it_answers_before_a_slower_backup(tmp_path):
-    first, backup = Timed("glm", BASIL, delay=0.2), Timed("deepseek", MINT, delay=1.0)
-    obs, took, _ = _read(first, backup, tmp_path)
-    assert obs.species[0].common_name == "basil" and backup.asked == ["deepseek"]
-    assert took < 0.6
+    held = threading.Event()  # the backup answers only once the read is back
+    backup = Timed("deepseek", MINT, cue=held)
+    first = Timed("glm", BASIL, cue=backup.started)  # GLM answers once the race is on
+    try:
+        obs, _, _ = _read(first, backup, tmp_path)
+        assert obs.species[0].common_name == "basil" and backup.asked == ["deepseek"]
+        assert not first.missed_cue.is_set()  # the backup was racing when GLM answered
+        assert not backup.answered.is_set()  # GLM's reading did not wait for the backup's
+    finally:
+        held.set()
 
 
 def test_a_first_model_that_fails_mid_race_does_not_ask_the_backup_twice(tmp_path):
-    first = Timed("glm", delay=0.2, error=AdapterError("glm: Request timed out."))
-    backup = Timed("deepseek", MINT, delay=0.3)
-    obs, took, _ = _read(first, backup, tmp_path)
-    assert obs.species[0].common_name == "mint" and took < 0.45  # raced: not 0.2 + 0.3
+    # GLM fails once the backup is racing, and the backup answers after that failure: its
+    # one call in flight is the reading, not a second call made after GLM's error
+    backup = Timed("deepseek", MINT)
+    first = Timed("glm", error=AdapterError("glm: Request timed out."), cue=backup.started)
+    backup.cue = first.answered
+    obs, _, _ = _read(first, backup, tmp_path)
+    assert obs.species[0].common_name == "mint"
+    # raced, not one after the other: GLM failed while the backup's call was in flight
+    assert not first.missed_cue.is_set() and not backup.missed_cue.is_set()
     time.sleep(0.2)  # long enough for a second backup call to have started
     assert backup.asked == ["deepseek"]
 
@@ -158,16 +185,19 @@ def test_with_no_race_slot_free_a_read_runs_one_model_after_the_other(tmp_path, 
 
 @respx.mock
 def test_the_closer_photo_check_runs_beside_the_weather(tmp_path, monkeypatch):
-    # each takes 0.4 s: one after the other the read would take 0.8 s
+    # each waits until the other has started: one after the other, neither would see that
     respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
     real_check, real_fetch = pl.check_problem, pl.fetch_environment
+    checking, fetching, saw = threading.Event(), threading.Event(), {}
 
     def slow_check(*a, **k):
-        time.sleep(0.4)
+        checking.set()
+        saw["weather"] = fetching.wait(CUE_S)
         return real_check(*a, **k)
 
     def slow_fetch(*a, **k):
-        time.sleep(0.4)
+        fetching.set()
+        saw["check"] = checking.wait(CUE_S)
         return real_fetch(*a, **k)
 
     monkeypatch.setattr(pl, "check_problem", slow_check)
@@ -176,10 +206,8 @@ def test_the_closer_photo_check_runs_beside_the_weather(tmp_path, monkeypatch):
     reply = json.dumps({"problem": "basil downy mildew", "seen": "grey fuzz"})
     deps = _deps(tmp_path, [json.dumps(seen), reply], [])
     lines: list = []
-    started = time.monotonic()
     reading = pl.read_photo(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
-    took = time.monotonic() - started
-    assert took < 0.7  # about the longer of the two, not their sum
+    assert saw == {"weather": True, "check": True}  # both ran at once
     assert reading.rec.problem is not None and reading.rec.problem.name == "basil downy mildew"
     assert reading.rec.environment is not None
     # the check is the step still running once the weather is in, so it is said last

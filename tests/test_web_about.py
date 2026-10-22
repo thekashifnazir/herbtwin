@@ -78,3 +78,37 @@ def test_nothing_on_the_about_page_or_in_made_with_is_under_16px():
     about = style.CSS.split(".about-page .about-stats {", 1)[1]
     assert "→" not in style.CSS and "↓" not in style.CSS  # the arrows are escapes, not text
     assert '.about-page .about-flow li + li::before { content: "\\2192" / "";' in about
+
+
+def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path):
+    # 22 Oct site walk: About ran to 1,961 words, Kash's other About pages a few hundred.
+    # The numbers stay; the long prose went to the reports on the public repo
+    import html
+
+    page = _spot_client(tmp_path)[0].get("/about").text
+    main = page.split("<main", 1)[1].split("</main>", 1)[0]
+    words = html.unescape(
+        re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>", "", main, flags=re.S))
+    )
+    assert len(words.split()) <= 1500  # credits included; the story alone is about 1,100
+    repo = "https://github.com/thekashifnazir/herbtwin/blob/main/"
+    for doc in (
+        "docs/reference/nvidia-models.md",
+        "docs/reference/evaluation-methods.md",
+        "data/eval/reports/2026-10-19-expert-review.md",
+        "docs/reference/accessibility.md",
+    ):
+        assert f'href="{repo}{doc}"' in main, doc
+    # the trusted-page check as it ships: round 8 (#395), not round 6's "backed nothing"
+    assert "Round 8 shipped: 3 false agrees in 418" in main and "10 of the 26" in main
+    for number in (
+        "2%",
+        "12.7%",
+        "0.846",
+        "0.63",
+        "38 of 38",
+        "25</strong> with",
+        "51%",
+        "$0.0040",
+    ):
+        assert number in main, number
