@@ -102,8 +102,9 @@ class _Plan(HTMLParser):
 
 def plan_text(page: str) -> str:
     """Block 1 of an answer page as markdown: the main card, the photo check, Also do,
-    Don't, Keep an eye on and, indoors, "Indoors in <Month>" (#340: advice, so rated), in
-    the page's order and words."""
+    Don't, Keep an eye on and, indoors, "Indoors in <Month>" (#340: advice, so rated) or,
+    outdoors, its twin "Outdoors in <Month>" (rated the same), in the page's order and
+    words."""
     p = _Plan()
     p.feed(page)
     if not p.blocks:  # the advice failed, or the template moved: never an empty rater item

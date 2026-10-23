@@ -2,9 +2,11 @@
    line links to the same search on GBIF.org: the records and who made them, the CC BY
    attribution), then news headlines about them from Tavily, each its own headline as a link
    with its site and date. Never a page's advice: the person reads it there #}
-{% if sightings %}<ul class="reported-links">{% for s in sightings %}
+{#- the records led by GBIF's clay tag, the colour About's legend gives it (23 Oct answer-page
+    critique, 4) #}
+{% if sightings %}<div class="reported-gbif"><span class="tag gbif">GBIF</span><ul class="reported-links">{% for s in sightings %}
   <li><a href="{{ s.url }}" rel="noopener noreferrer" target="_blank">{{ s.text }}</a> <span class="muted">(<i>{{ s.scientific }}</i>)</span></li>{% endfor %}
-</ul>
+</ul></div>
 <p class="muted"><small>Records of these pests anywhere in the UK, not on your plant and not near you, from <a href="https://www.gbif.org/" rel="noopener noreferrer" target="_blank">GBIF.org</a>: CC0 and CC BY datasets only. Records reach GBIF a few weeks late.</small></p>{% endif %}
 {% if reports %}<h3 class="reported-news">In the news this month</h3>
 <ul class="reported-links">{% for r in reports %}

@@ -22,8 +22,8 @@ def test_the_plan_reads_in_the_page_order_with_its_own_words(tmp_path):
         "## Water it.",
         "The soil is dry and no rain is due.",
         "**How sure we are:** ",
+        "This week",  # the panel's label (23 Oct answer-page critique, 4)
         "### Also do",
-        "**THIS WEEK**",
         "**Check for pests**",
         "### Keep an eye on",
     ]

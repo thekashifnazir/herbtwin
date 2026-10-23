@@ -5,6 +5,7 @@ more" as one tidy panel with one green button."""
 import re
 
 from herbtwin.web import style
+from herbtwin.web.app import TEMPLATES
 from tests.test_web_answer_page import _full_plan, _render, _unsure_record
 from tests.test_web_answer_reveal import _rules
 
@@ -97,8 +98,10 @@ def test_a_page_without_advice_still_shows_your_photo(tmp_path):
     assert 'id="your-photo"' in img and " hidden" in img
 
 
-def test_the_level_line_has_no_stray_space(tmp_path):
-    # #331 review: "Mostly: …. " kept its space when nothing followed it
+def test_the_level_line_has_no_stray_space(tmp_path, monkeypatch):
+    # #331 review: "Mostly: …. " kept its space when nothing followed it. A doubt the page
+    # says: the base one is left unsaid (23 Oct answer-page critique, 2)
+    monkeypatch.setitem(TEMPLATES.env.globals, "top_doubt", lambda a: "the photo is small")
     page = _render(_unsure_record(tmp_path))
     said = re.search(r'class="badge-line">.*?</span><span>(.*?)</span>', page, flags=re.S).group(1)
     assert said.startswith("Mostly: ") and said == said.strip() and "  " not in said

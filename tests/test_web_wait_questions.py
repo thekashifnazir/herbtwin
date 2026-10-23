@@ -201,7 +201,8 @@ def test_see_your_answer_sends_a_waiting_reply_first_and_never_waits_for_ever():
 
     card = asks_card(WID).split("<script>", 1)[1]
     # the reply is marked as sent before it is, so a quick tap on the button still checks
-    change = card.split("f.addEventListener('change',()=>{", 1)[1]
+    # a typed place waits for its button (22 Oct phone walk): its letters are not replies
+    change = card.split("f.addEventListener('change',e=>{if(e.target===pi)return;", 1)[1]
     assert change.startswith(f'window.herbtwinSee="/waits/{WID}/see";')
     assert "t=setTimeout(send,400)" in change  # arrow keys send only where they stop
     assert "window.herbtwinFlush=()=>t?(clearTimeout(t),send()):last" in card
@@ -252,13 +253,14 @@ def test_a_reply_says_which_question_it_answered_and_a_tap_does_nothing_else():
     # reply and says which one, never submits, jumps or reveals the answer
     card = asks_card(WID)
     assert "Thanks: we'll use your answer about {what}." in card
-    assert '{"soil_feel": "the soil", "last_watered": "watering"}' in card
+    assert '{"soil_feel": "the soil", "last_watered": "watering", "place": "where it is"}' in card
     # the questions actually sent, both when both were tapped; "not sure" on either says so
     assert "u=n.filter(q=>d.get(q)==='not_sure'),k=n.filter(q=>d.get(q)!=='not_sure')" in card
     assert "w=k.map(q=>whats[q]).join(' and ')" in card
     assert "Fine: we'll go without {none}." in card and '"soil_feel": "a soil reading"' in card
     script = card.split("<script>", 1)[1]
-    assert "f.addEventListener('submit',e=>e.preventDefault())" in script
+    # never leaves the page; the place's button or Enter sends it (22 Oct phone walk)
+    assert "f.addEventListener('submit',e=>{e.preventDefault();" in script
     assert "location" not in script and "#next" not in script and ".click(" not in script
 
 
@@ -350,3 +352,113 @@ def test_the_answer_pills_take_two_columns_and_short_words_on_a_phone():
         "@media (max-width: 720px) { .wait-asks .choices { display: grid;"
         " grid-template-columns: 1fr 1fr;" in CSS
     )
+
+
+# 22 Oct phone walk (Kash: "I thought we normally got more info"): no place was given, so
+# the answer had no weather, no twin and no Compare. The wait asks where it is
+
+LEEDS = {"results": [{"name": "Leeds", "country_code": "GB", "latitude": 53.8, "longitude": -1.55}]}
+
+
+def test_the_place_question_shows_when_the_upload_gave_no_place():
+    from herbtwin.web.progress import PLACE_ASK
+
+    asked, not_asked = asks_card(WID, ask_place=True), asks_card(WID)
+    assert '<fieldset class="wait-place" id="wait-place">' in asked
+    assert f'<legend id="wait-place-l">{PLACE_ASK}</legend>' in asked
+    assert 'aria-labelledby="wait-place-l"' in asked
+    assert PLACE_ASK == "Where is it? (UK town or postcode)"
+    assert '<h2 id="wait-asks-h">While you wait: three quick questions</h2>' in asked
+    # a place came with it: the question waits, hidden, in case the read finds none
+    assert '<fieldset class="wait-place" id="wait-place" hidden>' in not_asked
+    assert '<h2 id="wait-asks-h">While you wait: two quick questions</h2>' in not_asked
+    # it comes before the soil and the watering: the weather and the twin hang on it
+    assert asked.index('name="place"') < asked.index('name="soil_feel"')
+
+
+def test_a_read_that_finds_no_place_asks_where_it_is_and_one_that_has_one_drops_it():
+    from herbtwin.pipeline import WeatherMissed
+    from herbtwin.web.progress import ASK_PLACE, PLACE_KNOWN, _step
+
+    for why, asks in (
+        ("no_location", True),
+        ("place_not_found", True),
+        ("fetch_failed", False),
+        ("photo_too_old", False),
+    ):
+        assert (ASK_PLACE in _step(WeatherMissed(why))) is asks, why
+    assert PLACE_KNOWN in _step("Checking the weather where you are")
+    card = asks_card(WID)
+    assert "window.herbtwinAskPlace=()=>{if(!pl||f.hidden)return;pl.hidden=false;" in card
+    # an unanswered place question goes once the weather is on its way; a typed one stays
+    assert "window.herbtwinPlaceKnown=()=>{if(!pl||pi.value.trim())return;pl.hidden=true;" in card
+    # an empty box is never sent as a place
+    assert "if(!String(d.get('place')||'').trim())d.delete('place')" in card
+
+
+def _placeless(tmp_path):
+    from tests.test_web import _placeless_client
+
+    tmp_path.mkdir(exist_ok=True)
+    return _placeless_client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
+
+
+@respx.mock
+def test_a_place_typed_while_the_photo_is_read_gets_the_weather_and_the_twin(tmp_path):
+    from herbtwin.where import GEOCODE_URL
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json=LEEDS))
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    # the control: no place, so no weather and no twin
+    bare = _placeless(tmp_path / "bare")
+    page = bare.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    assert '<fieldset class="wait-place" id="wait-place">' in page  # asked from the start
+    assert "No place given: skipping the weather" in page and "Tried " not in page
+    # the same photo, with "Leeds" typed before the advisors start
+    c = _placeless(tmp_path / "told")
+    _with_reply(c, Told(place="Leeds"))
+    page = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    assert "<li>Using what you told us</li>" in page
+    assert "<li>Checking the weather where you are</li>" in page
+    assert 'id="fact-weather"' in page and '<li class="twin">Tried ' in page
+    answer = re.search(r'<a id="next" href="([^"]+)"', page)[1]
+    rec = c.app.state.answers.get_for(answer.rsplit("/", 1)[1], None).latest
+    assert rec.location is not None and round(rec.location.lat, 1) == 53.8
+    assert rec.environment is not None and rec.state is not None and rec.told.place == "Leeds"
+
+
+@respx.mock
+def test_a_place_typed_while_waiting_that_cant_be_found_says_so_and_the_answer_still_comes(
+    tmp_path,
+):
+    from herbtwin.where import GEOCODE_URL, PLACE_NOT_FOUND_HINT
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json={"results": []}))
+    c = _placeless(tmp_path)
+    _with_reply(c, Told(place="Nowhereville"))
+    page = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
+    assert "Couldn&#x27;t find that place: skipping the weather" in page
+    answer = re.search(r'<a id="next" href="([^"]+)"', page)[1]
+    rec = c.app.state.answers.get_for(answer.rsplit("/", 1)[1], None).latest
+    # review: the answer never claims a place it didn't use, and says it wasn't found
+    assert rec.location is None and (rec.told is None or rec.told.place is None)
+    assert any(n.endswith(PLACE_NOT_FOUND_HINT) for n in rec.notes)
+
+
+def test_the_wait_takes_a_place_reply(tmp_path):
+    c = _client(tmp_path, [], [])
+    c.app.state.waits.start(WID, None, None)
+    r = c.post(f"/waits/{WID}/told", data={"place": " LS1 4AP "})
+    assert r.json() == {"counted": "now"}
+    assert c.app.state.waits.take(WID, None) == Told(place="LS1 4AP")
+    assert c.post(f"/waits/{WID}/told", data={"place": "x" * 81}).status_code == 400
+
+
+def test_a_card_said_again_takes_the_old_ones_place_and_an_empty_place_sends_nothing():
+    # review: a place typed on the wait when the photo had one says its weather again; the
+    # side column keeps one weather card, not two with the same id
+    from herbtwin.web.progress import NOW_JS
+
+    assert "a.querySelectorAll('.'+id).forEach(o=>o.remove());a.append(" in NOW_JS
+    card = asks_card(WID, ask_place=True)
+    assert "if(pi&&!pi.value.trim()&&!f.querySelector('input:checked'))return;" in card

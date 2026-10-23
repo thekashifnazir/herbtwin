@@ -86,8 +86,8 @@ def test_the_judge_picks_link_their_photo_credits(tmp_path):
     from tests.test_web_judge import _client as _judge_client
 
     page = _judge_client(tmp_path).get("/judge").text
-    picks = page.split('<div class="judge-picks">', 1)[1].split("</form>", 1)[0]
-    after = page.split('<div class="judge-picks">', 1)[1].split('id="judge-said"', 1)[0]
+    grid = page.split('<div class="judge-picks" data-reveal="stagger">', 1)[1]
+    picks, after = grid.split("</form>", 1)[0], grid.split('id="judge-said"', 1)[0]
     assert "Forest and Kim Starr" not in picks  # the credit lines live in one place
     assert '<a href="/about#credits">Photo credits</a>' in after
 

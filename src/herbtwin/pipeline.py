@@ -60,6 +60,7 @@ from herbtwin.indoor_care import indoor_care_for
 from herbtwin.light import light_block, light_class, light_factor, need_of, read_light
 from herbtwin.note_facts import note_facts
 from herbtwin.outcomes import outcome_for, problems_for, problems_in
+from herbtwin.outdoor_care import outdoor_now
 from herbtwin.plant_model import (
     Verdict,
     compare_actions,
@@ -111,6 +112,7 @@ from herbtwin.tracing import StageTracer, TraceStore, bind
 from herbtwin.twin_bank import key as twin_key
 from herbtwin.where import (
     PLACE_NOT_FOUND_HINT,
+    GeocodeError,
     exif_exposure,
     for_model,
     geocode,
@@ -218,6 +220,7 @@ class Reading:
     # the trusted-page check (stages/trusted_page.py): run once the answer is first
     # decided; a refine, or a stored answer rebuilt, never searches or reads again
     checked: bool = False
+    received: date | None = None  # the day it was sent: a place typed on its wait (decide)
 
 
 @dataclass(frozen=True)
@@ -359,6 +362,16 @@ class SeasonFound:
 
 
 @dataclass(frozen=True)
+class CareFound:
+    """The plant's care facts, for the wait page as soon as they are looked up (22 Oct phone
+    walk, Kash: "Should get more info while waiting"): its light, water and cold, from our
+    plant data or its RHS page, as the advisors get them."""
+
+    name: str  # the plant as the page names it
+    pack: KnowledgePack
+
+
+@dataclass(frozen=True)
 class WeatherFound:
     """The weather the twin and the advisors get, for the wait page as soon as it is in."""
 
@@ -388,7 +401,16 @@ class PlantFound:
 
 
 Progress = Callable[
-    [str | TwinTested | AdvisorReplied | SeasonFound | WeatherFound | WeatherMissed | PlantFound],
+    [
+        str
+        | TwinTested
+        | AdvisorReplied
+        | SeasonFound
+        | CareFound
+        | WeatherFound
+        | WeatherMissed
+        | PlantFound
+    ],
     None,
 ]
 
@@ -421,6 +443,18 @@ def backup_read(adapter: ModelAdapter, read_by: str | None, raced: bool) -> Back
     return BackupRead(first=first, backup=backup, why=why)
 
 
+def has_care(pack: KnowledgePack) -> bool:
+    """Care facts worth showing on the wait: a light need we can read, a water need, or
+    frost limits from a real hardiness rating. A default pack (nothing found, or research
+    failed) has none."""
+    water = pack.water_need.lower()
+    return bool(
+        need_of(pack.sun)
+        or (water != "unknown" and not water.startswith("openplantbook"))
+        or pack.verified
+    )
+
+
 def bare_line(pot: bool) -> str:
     return f"This looks like a {'pot' if pot else 'bed'}, ready for planting"
 
@@ -443,6 +477,7 @@ def _say(
     | TwinTested
     | AdvisorReplied
     | SeasonFound
+    | CareFound
     | WeatherFound
     | WeatherMissed
     | PlantFound,
@@ -743,6 +778,8 @@ def read_photo(
         rec.pack = _fallback_pack(species, common)
     if rec.pack.found_with == "tavily":
         _say(progress, FOUND_WITH_TAVILY)
+    if top and not rough and not several and has_care(rec.pack):  # no plant before the tap
+        _say(progress, CareFound(name, rec.pack))
 
     age_days = (received.date() - taken_at.date()).days
     season_missing, weather_missing, weather, location_failures = _location_evidence(
@@ -773,6 +810,7 @@ def read_photo(
         weather_missing=weather_missing,
         weather=weather,
         failures=failures,
+        received=received.date(),
     )
 
 
@@ -850,10 +888,52 @@ def as_told(deps: Deps, reading: Reading, told: Told) -> Reading:
     return reading
 
 
-def _located(deps: Deps, reading: Reading, rec: AnalysisRecord) -> Reading:
-    age_days = (datetime.now(UTC).date() - rec.taken_at.date()).days
+def placed_late(deps: Deps, reading: Reading, place: str, progress: Progress | None) -> Reading:
+    """A place typed on the wait page before the advisors started (22 Oct phone walk: no
+    place, so no weather, no twin and no Compare): the weather, the season and the twin for
+    it, said on the wait as the read's own are. A place we can't find leaves the read as it
+    was (the same object), and the wait and the answer's notes say so."""
+    rec = reading.rec.model_copy(deep=True)
+    try:
+        rec.location = geocode(place, client=deps.http)
+    except GeocodeError as e:
+        log.info("wait place lookup failed run=%s: %s", rec.record_id, e)
+        _say(progress, WeatherMissed("place_not_found"))
+        if not any(n.endswith(PLACE_NOT_FOUND_HINT) for n in reading.rec.notes):
+            reading.rec.notes.append(f"{e}; {PLACE_NOT_FOUND_HINT}")
+        return reading
+    rec.notes = [n for n in rec.notes if not n.endswith(PLACE_NOT_FOUND_HINT)]
+    got = _located(deps, reading, rec, progress, today=reading.received)
+    obs, top = rec.observation, reading.top
+    outdoors = obs is not None and obs.setting != "indoor"
+    rough = top is None or (
+        obs is not None
+        and photo_issue(obs.photo_quality, obs.quality_note, top.confidence) is not None
+    )
+    if rec.season is not None and outdoors and not rough and reading.match.key:
+        name = top.common_name or top.name
+        problems = tuple(problems_in(reading.match.key, reading.month))
+        normal = tuple(rec.season.normal_signs)
+        _say(
+            progress,
+            SeasonFound(name, reading.month, normal, rec.season.next_change, problems),
+        )
+    today = reading.received or datetime.now(UTC).date()
+    if got.weather is not None and (today - rec.taken_at.date()).days <= 0:
+        _say(progress, WeatherFound(rec.taken_at.date(), got.weather))
+    return got
+
+
+def _located(
+    deps: Deps,
+    reading: Reading,
+    rec: AnalysisRecord,
+    progress: Progress | None = None,
+    today: date | None = None,
+) -> Reading:
+    age_days = ((today or datetime.now(UTC).date()) - rec.taken_at.date()).days
     season_missing, weather_missing, weather, location_failures = _location_evidence(
-        deps, rec, reading.match, reading.month, age_days
+        deps, rec, reading.match, reading.month, age_days, progress
     )
     failures = [failure for failure in reading.failures if failure.stage != "environment"]
     failures.extend(location_failures)
@@ -868,6 +948,7 @@ def _located(deps: Deps, reading: Reading, rec: AnalysisRecord) -> Reading:
         failures=failures,
         # the same answer, told more: its page is never searched or read again
         checked=reading.checked,
+        received=reading.received,
     )
 
 
@@ -1134,10 +1215,17 @@ def decide(
     same Reading can be decided again with what the person told us."""
     if (late := LATE_TOLD.get()) is not None:
         LATE_TOLD.set(None)  # once: a second decide in this read keeps what it was given
+        before = told.place if told else None
         try:
             told = late(told)
         except Exception:  # noqa: BLE001 - the replies are extra: never a reason to fail
             log.exception("wait replies could not be read")
+        if told is not None and told.place and told.place != before:
+            placed = placed_late(deps, reading, told.place, progress)
+            if placed is reading:  # not found: the answer never claims a place it didn't use
+                left = told.model_copy(update={"place": before})
+                told = None if left.is_empty() else left
+            reading = placed
     rec = reading.rec.model_copy(deep=True)
     failures = list(reading.failures)
     tracer = StageTracer(deps.trace_store, rec.record_id)
@@ -1361,6 +1449,11 @@ def decide(
         # placed abroad; one with no place still gets it, as the app is for UK homes
         indoor_care=indoor_care_for(match.key, month)
         if indoors and (rec.location is None or in_uk(rec.location.lat, rec.location.lon))
+        else None,
+        # outdoors, the same month's card from the UK season, by the same rule: none abroad
+        outdoor=outdoor_now(match.key, month, obs.container)
+        if obs.setting == "outdoor"
+        and (rec.location is None or in_uk(rec.location.lat, rec.location.lon))
         else None,
     )
     overrides = rule_overrides(rec.answer)

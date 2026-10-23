@@ -22,3 +22,18 @@ keys are the season table's. Same rules as above: RHS pages first (houseplant, c
 succulent, winter-care and herb pages), a Clemson herb sheet where RHS is silent, facts
 only and in our own words; `scripts/check_copied_text.py` covers it. It assumes a heated
 UK home.
+
+## Outdoors (`outdoor_care_uk.json`)
+
+The indoor table's twin, for a plant the photo shows outdoors in the UK: 2 or 3 care points
+for the month (water, picking, trimming, shelter from winter rain), one row per group of
+herbs kept alike (basil, leafy herbs, herbs that die back, woody herbs) per run of months,
+with a herb on its own where its stage differs (parsley, coriander, rosemary, bay). What is
+normal now comes from `norms_uk.json`, not this table. `pot_tips` (a pot out of the rain, a
+feed in a pot, watering a pot in hot weather) are shown only for a pot or a container the
+photo doesn't show; `bed_tips` only for a bed. Plants or months with no row (roses, ferns,
+the maple, basil from November to May, dill from September) get no card. Facts from the RHS
+grow-your-own pages for each herb, the RHS herbs-in-containers page and the RHS frost-damage
+page, only in our own words; a job point (trim, feed, repot, divide) keeps to the outcome
+table's months for that plant and job. The answer leaves out any point about a job its own
+cards already decide. `scripts/check_copied_text.py` covers it.

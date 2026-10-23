@@ -39,6 +39,7 @@ from herbtwin.schemas import (
     Factor,
     IndoorNow,
     Observation,
+    OutdoorNow,
     ProblemSeen,
     coarse,
 )
@@ -1176,6 +1177,10 @@ class AdvisorLine(NamedTuple):
 class AdvisorsSaid(NamedTuple):
     lines: list[AdvisorLine]
     note: str  # whose plan the page is: ours by rule, the most said, or a split; may be ""
+    # the vote (23 Oct answer-page critique, 9): each ask's call in order, one chip each,
+    # and the call our rules chose when a rule, not the advisors, led; else ""
+    calls: tuple[str, ...] = ()
+    chose: str = ""
 
 
 def no_cure_overrides(a: Answer | None) -> str | None:
@@ -1209,13 +1214,15 @@ def shown_call(a: Answer, primary: str, label: Mapping[str, str], advisor: bool 
     return label.get(primary, label.get("other", ""))
 
 
-def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid:
+def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str], led: bool = False) -> AdvisorsSaid:
     """Each stored ask's call, in the page's words (`label` is its card labels), with the
     page's own swaps: a light tidy for a resting herb, thinning for seedlings, "Remove it"
     under no cure, and treating for a bed plant that cannot go apart (in_proportion). The
     note counts the calls as shown, never their coarse classes (feed, rotate and water are
     all "other"). A failed ask is missing from `runs`: the lines are numbered as they came
-    back and the note says how many failed."""
+    back and the note says how many failed. `led`: the page says how our rule led in its own
+    line (pipeline.how_led), so the note leaves "our rules chose" to it, said once (23 Oct
+    answer-page critique, 9)."""
     a = rec.answer
     if a is None or not a.runs:
         return AdvisorsSaid([], "")
@@ -1228,9 +1235,13 @@ def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid
     else:
         lines = [AdvisorLine(f"Advisor {i}", c) for i, c in enumerate(calls, 1)]
     rule_led = any(f.name == "advisor" and f.detail == RULE_LED for f in a.factors)
+    ruled = bool(overrides or rule_led or led)
+    chose = shown_call(a, a.do[0].action, label) if ruled and a.do else ""
     top = max(Counter(calls).values())
     note = (
-        overrides
+        ""
+        if led  # the how-led line says whose plan it is (a rule's), once
+        else overrides
         if overrides
         else RULES_CHOSE
         if rule_led
@@ -1247,7 +1258,7 @@ def advisor_lines(rec: AnalysisRecord, label: Mapping[str, str]) -> AdvisorsSaid
         note = " ".join(
             x for x in (f"{lost} failed, so {COUNTS.get(n, str(n))} answered.", note) if x
         )
-    return AdvisorsSaid(lines, note)
+    return AdvisorsSaid(lines, note, tuple(calls), chose)
 
 
 # a comma that starts an add-on, not another sign: "..., outdoors as well as under cover",
@@ -1421,6 +1432,28 @@ def _quoted(c: ActionCard, problem: ProblemSeen) -> ActionCard:
     )
 
 
+# the job an outdoor card's point is about, by its lead word ("Pruning: none now"): a point
+# about a job the answer's own cards decide is left out (review of the outdoor card)
+TIP_JOBS = {
+    "Pruning": "prune",
+    "Trimming": "prune",
+    "Old stems": "prune",
+    "Flowers": "prune",
+    "Water": "water",
+    "Feeding": "feed",
+    "Repotting": "repot",
+    "Dividing": "repot",
+    "Pots": "shelter",
+    "Cold": "shelter",
+    "Shelter": "shelter",
+}
+SAME_JOB = {"dont_water": "water", "change_soil": "repot"}  # one job, either way round
+
+
+def tip_job(tip: str) -> str | None:
+    return TIP_JOBS.get(tip.split(":", 1)[0].strip())
+
+
 def build_answer(
     *,
     panel: Panel,
@@ -1441,6 +1474,7 @@ def build_answer(
     held_water: bool = False,
     indoor_care: IndoorCare | None = None,
     roots_crowded: bool = False,
+    outdoor: OutdoorNow | None = None,
 ) -> Answer:
     adv = panel.chosen.advice
     # the season norms are the UK outdoor year: indoors, none of their outdoor lines apply
@@ -1770,19 +1804,49 @@ def build_answer(
         if resting and panel.primary == "prune"
         else None
     )
-    return Answer(
-        headline=NO_CURE_HEADLINE
+    protect = _leave_but_protect(panel.primary, views)
+    headline = (
+        NO_CURE_HEADLINE
         if no_cure
         else how
         or ours
-        or _leave_but_protect(panel.primary, views)
+        or protect
         # a rough read can't say "normal for October": the plain leave-it line (judge walk)
         or _headline(
             panel.primary,
             None if indoors or assessment.photo_issue else norm,
             month,
             adv.answer,
-        ),
+        )
+    )
+    month_card = None
+    # outdoors, the month's card (outdoor_care.py); only when the read said outdoors, as
+    # "Outdoors in October" on an unknown setting would claim what we don't know. Not on a
+    # plant to bin, a guessed plant (a rough read), a bolted plant or seedlings, whose season
+    # signs are for a grown plant; nor under a cold-protection lead ("Bring it indoors" over
+    # "pick what you want now": review of this PR)
+    if (
+        outdoor is not None
+        and setting == "outdoor"
+        and not (no_cure or assessment.photo_issue or bolted or seedlings)
+        and not (main.action == "shelter" or ours == TENDER_HEADLINE or headline == protect)
+    ):
+        # never a point about a job the cards above already decide ("Give it a light tidy."
+        # over "Pruning: none now"; "Water it." over "only in long dry spells"), nor a cut
+        # the plant can't take now
+        decided = {SAME_JOB.get(c.action, c.action) for c in [*do, *([dont] if dont else [])]}
+        tips = [
+            t
+            for t in outdoor.tips
+            if tip_job(t) not in decided
+            and not _unsafe(t, no_cut)
+            and not (no_cut and _no_cut_for_growth(t) != t)
+        ]
+        # with every point taken by the cards, the card would be a sign list: none at all
+        if tips:
+            month_card = outdoor.model_copy(update={"tips": tips})
+    return Answer(
+        headline=headline,
         do=do,
         dont=dont,
         watch=watch,
@@ -1808,6 +1872,7 @@ def build_answer(
         indoor=IndoorNow(month=month, normal=care.normal, tips=care.tips, sources=care.sources)
         if care is not None
         else None,
+        outdoor=month_card,
     )
 
 

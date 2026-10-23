@@ -37,8 +37,10 @@ def test_the_answer_names_who_decided_it_in_view(tmp_path):
         '<a href="/about#made-with">What it\'s made with</a></p>'
     )
     assert line in page
-    card = page.split('class="card main-action"', 1)[1].split("</section>", 1)[0]
-    assert line in card  # in the main card, not folded away
+    # in view, not folded away: in the "Where this came from" line right under the main card
+    # (23 Oct answer-page critique, 2)
+    under = page.split('class="card main-action"', 1)[1].split("</section>", 1)[1]
+    assert under.lstrip().startswith('<div class="came-from">') and line in under.split("</div>")[0]
     assert 'class="decided-by"' not in _render(_full_plan(tmp_path))  # nothing named: no line
 
 

@@ -37,7 +37,9 @@
   {% if rs.plain %}{% set because = rs.plain|join("; ") %}<p class="because">{{ because[:1]|upper }}{{ because[1:] }}</p>{% endif %}
   {% if rs.differ %}{% set parts = rs.differ.split(". ") %}<details class="differ"><summary><span aria-hidden="true">±</span> {{ parts[0]|trim(".") }}<span class="visually-hidden"> (sources differ on timing)</span></summary><p>{{ parts[1:]|join(". ") }}</p></details>{% endif %}
 </li>{% endmacro %}
-{% macro rows(g) %}<ul class="picks tone-{{ g.tone }}">{% for x in g.top %}{{ row(x) }}{% endfor %}</ul>
+{# the top rows rise in turn as they arrive (the shared reveal), their flags settle just
+   after (spot.css); the folded rest never waits #}
+{% macro rows(g) %}<ul class="picks tone-{{ g.tone }}" data-reveal="stagger">{% for x in g.top %}{{ row(x) }}{% endfor %}</ul>
 {% if g.rest %}<details class="more"><summary>{{ g.rest|length }} more</summary><ul class="picks tone-{{ g.tone }}">{% for x in g.rest %}{{ row(x) }}{% endfor %}</ul></details>{% endif %}{% endmacro %}
 
 <div class="page-band">

@@ -35,11 +35,41 @@ def test_the_hero_rise_starts_only_from_the_shared_reveals_start(tmp_path):
     js = page.split("// the shared scroll reveal", 1)[1].split("})();", 1)[0]
     start = js.split("const start = () => {", 1)[1].split("\n  };\n", 1)[0]
     rise = (
-        'if (html.classList.contains("intro-done") && (!document.fonts || '
-        'document.fonts.status === "loaded")) html.classList.add("intro-go");'
+        'if (html.classList.contains("intro-done") && '
+        '!document.querySelector(".intro.is-skipped")) {'
     )
     assert rise in start
     assert start.index("if (started) return;") < start.index(rise)  # once, like the rest
+    # the fonts in at the lift: at once. Still loading: a 150 ms race, and only a win in the
+    # real fonts adds it
+    assert 'const go = () => html.classList.add("intro-go");' in start
+    assert 'if (!document.fonts || document.fonts.status === "loaded") go();' in start
+    race = (
+        "else Promise.race([document.fonts.ready.then(() => true), "
+        "new Promise((r) => setTimeout(r, 150, false))])\n"
+        '        .then((won) => { if (won && document.fonts.status === "loaded") go(); });'
+    )
+    assert race in start
+
+
+def test_the_hero_never_rises_once_the_intro_has_gone(tmp_path):
+    """Review of part 2: a 600 ms race begun at the lift let the hero rise ~0.4 s after a
+    skipped intro (its green gone in 0.15 s) had gone, and a `ready` taken at load had
+    settled before the fonts began, so a Chromium hero rose in the stand-in face. Now: no
+    rise after a skip; fonts still loading get 150 ms of the 0.9 s dissolve; the status,
+    not the promise, says they are in. The rise itself is only ever added by `go`."""
+    js = _home(tmp_path).split("// the shared scroll reveal", 1)[1].split("})();", 1)[0]
+    assert js.count('classList.add("intro-go")') == 1  # inside go, nowhere else
+    assert '!document.querySelector(".intro.is-skipped")' in js
+    # the class the intro (_intro.html) sets on a skip, before it says intro-done
+    page = _home(tmp_path)
+    assert 'o.classList.add(fast ? "is-skipped" : "is-dissolving");' in page
+    assert page.index('"is-skipped"') < page.index(
+        'dispatchEvent(new Event("herbtwin:intro-done"))'
+    )
+    assert "setTimeout(r, 150, false)" in js and "setTimeout(r, 600" not in js
+    assert "setTimeout(go" not in js and ".finally(go)" not in js  # a timeout never rises it
+    assert 'if (won && document.fonts.status === "loaded") go();' in js
 
 
 def test_the_twin_splits_after_the_intro_lifts(tmp_path):

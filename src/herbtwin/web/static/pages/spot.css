@@ -182,3 +182,16 @@
 .spot-page .differ-key { margin: 0 0 8px; }
 .spot-page .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden;
   clip-path: inset(50%); white-space: nowrap; }
+
+/* the crop rows' arrival (23 Oct, Kash: "Can we extend this animation to all our pages"):
+   each top row rises in turn as it arrives (data-reveal="stagger", the shared reveal in
+   herbtwin.css), then its flags settle onto it from 90 %, one by one, so the eye lands on
+   what is not fine about that crop. A scale, so nothing round a chip shifts; never a fade.
+   No held state of its own: before its row arrives the row is below the screen */
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-on .spot-page .picks > li.is-arriving .chip {
+    transform-origin: left; animation: reveal-settle .3s cubic-bezier(0.2,0,0,1) calc(var(--reveal-delay, 0ms) + 160ms) backwards; }
+  html.reveal-on .spot-page .picks > li.is-arriving .chip:nth-child(2) { animation-delay: calc(var(--reveal-delay, 0ms) + 220ms); }
+  html.reveal-on .spot-page .picks > li.is-arriving .chip:nth-child(n+3) { animation-delay: calc(var(--reveal-delay, 0ms) + 280ms); }
+}
+@keyframes reveal-settle { from { transform: scale(.9); } }

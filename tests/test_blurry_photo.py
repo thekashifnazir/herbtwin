@@ -124,10 +124,12 @@ def test_a_blurred_photo_waits_on_a_guessed_name_with_no_season_card(tmp_path):
     wait = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
     assert "<li>Found mint (not sure)" in wait
     assert "Normal for mint" not in wait
+    assert "What mint needs" not in wait  # nor its care facts (22 Oct phone walk)
     sharp = {**BLURRED, "photo_quality": "good", "quality_note": ""}
     c = _client(tmp_path, [json.dumps(sharp)], [json.dumps(HEALTHY)] * 3)
     wait = c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).text
     assert "<li>Found mint</li>" in wait or "<li>Found mint<" in wait  # a clear photo: no hedge
+    assert '<h2 id="fact-care-h">What mint needs</h2>' in wait
 
 
 def test_a_rough_read_links_no_page_for_its_guessed_plant():

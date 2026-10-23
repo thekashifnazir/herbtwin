@@ -151,11 +151,13 @@
   {# the switch (19 Oct, Kash): the read can be wrong about indoors or out; it re-runs the
      advice with it forced, keeping what else was told (indoors: no forecast). The chip above
      says which it is, so the switch only says what it does (21 Oct, Kash: "Looks like
-     outdoors" repeated "Outdoor"; "Wrong? Switch" did not say what would happen) #}
+     outdoors" repeated "Outdoor"; "Wrong? Switch" did not say what would happen). A small
+     link when the read gave a setting: a fix for a wrong read, not a second thing to press
+     (23 Oct answer-page critique, 1) #}
   {% if a %}{% set t = rec.told %}<form class="note setting-switch" method="post" action="/answers/{{ rec.record_id }}/refine">
     {{- told_fields(t) }}
     {%- if obs.setting in ("indoor", "outdoor") %}{% set other = "outdoor" if obs.setting == "indoor" else "indoor" %}
-    <input type="hidden" name="setting" value="{{ other }}"><button type="submit" class="switch">{{ other|capitalize }}s? Switch and we'll redo the advice for an {{ other }} plant</button>
+    <input type="hidden" name="setting" value="{{ other }}"><button type="submit" class="switch as-link">{{ other|capitalize }}s? Switch and we'll redo the advice for an {{ other }} plant</button>
     {%- else %}
     <span>Indoors or outdoors? We'll redo the advice to fit.</span> <button type="submit" class="switch" name="setting" value="indoor">Indoors</button> <button type="submit" class="switch" name="setting" value="outdoor">Outdoors</button>{% endif %}
   </form>
@@ -301,8 +303,12 @@
       {% if rec.refined_from and rec.told and not (rec.told.switch_only() and same_advice(rec.refined_from, a.headline)) %}{% set echoed = told_echo(rec.told) %}{% if echoed %}<p class="told-echo">{{ echoed }}</p>{% endif %}{% endif %}
       {% if retake %}<p class="rough-read">{{ retake[0] }}, so this is a rough read. {{ retake[1] }} for a firmer answer.</p>{% endif %}
       {# leaving it is not a job for today: no time tag on it #}
+      {# the plant's face beside the headline, not under the small print (23 Oct answer-page
+         critique, 2); with the voice on it stays with its button below #}
+      <div class="headline"><div>
       {% if first and first.action != "leave_normal" %}<span class="tag">{{ tag[first.when] }}</span>{% endif %}
       <h2 id="main-action">{{ a.headline }}</h2>
+      </div>{% if not voice %}<p class="plant-mood" id="plant-mood">{{ plant_face(mood) }}</p>{% endif %}</div>
       </div>
       {% if first and first.because %}<p class="because">{{ first.because[:1]|upper }}{{ first.because[1:] }}</p>{% endif %}
       {% if first and first.if_you_do != no_data %}{{ ifdo(first, quiet=a.headline == no_cure_headline) }}{% endif %}
@@ -319,8 +325,10 @@
       <span class="badge-line">{{ level_line }}</span>
       {#- the one thing that lowered it most, here beside the level, not two screens down
          (design wave 1, C); "tell us below" only when no Make-surer button says it (21 Oct,
-         Kash: "Add where it is" was said three times) #}
-      {%- if not best %}{% set doubt = top_doubt(a) %}<span>{% if doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
+         Kash: "Add where it is" was said three times). Never "advice of this kind is right
+         less often": the badge's line already says how often, and nothing stands in for it
+         (23 Oct answer-page critique, 2) #}
+      {%- if not best %}{% set doubt = top_doubt(a) %}{% set said_doubt = doubt and doubt != base_doubt %}<span>{% if said_doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if said_doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
       {# indoors the photo's light can't be measured (light.read_light: no open sky to
          compare with), and the page never said so (22 Oct, a gardener: "how do you tell light
          levels indoors?"). Say it once, and ask for the window, until it is told; never beside "Send a sharper
@@ -330,18 +338,9 @@
       {% if tell_more %}<p class="make-surer"><a class="button primary" href="#refine">Make this surer: tell us more</a></p>{% endif %}
       {% if retake or asks_open %}<p class="make-surer">{% if retake %}<a class="button primary" href="/">{{ retake[1] }}</a>{% endif %}
         {%- if asks_open %} <a class="button{{ '' if retake else ' primary' }}" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
-      {# where the care facts came from, in view: the built-in herbs' own file, or the page Tavily
-         found, said only when it did (19 Oct judge walk: the seed herbs never search) #}
-      {% if rec.pack and rec.pack.sources %}{% set found = namespace(on=[]) %}{% if rec.pack.found_with == "tavily" %}{% for x in rec.pack.sources if x.startswith("https://") %}{% set found.on = found.on + [x] %}{% endfor %}{% endif %}
-      <p class="sources-line">Sources: {% if found.on %}{{ said_by(found.on) }} (found with Tavily){% else %}{{ said_by(rec.pack.sources) }}{% endif %}</p>{% endif %}
       {# a trusted page's own sentence, as written, when code finds it says the same as this
          answer (stages/trusted_page.py); nothing when unsure, off, late or broken #}
       {% if rec.trusted and rec.trusted.quote %}<p class="sources-line trusted-quote">A trusted page says the same: &ldquo;{{ rec.trusted.quote }}&rdquo; ({{ said_by([rec.trusted.url]) }}, found with Tavily)</p>{% endif %}
-      {# else the page it found, as a link only: named by its site, never its title, and only
-         when its address names the plant (stages/trusted_page.read_more); no claim it agrees #}
-      {% set more = read_more(rec) %}{% if more %}<p class="sources-line read-more">Read more on {{ said_by([more]) }} (found with Tavily)</p>{% endif %}
-      {# who decided it, in view (19 Oct pre-walk: the answer never named NVIDIA or Nebius) #}
-      {% if advised_by %}<p class="decided-by">Decided by {{ advised_by }} on Nebius Token Factory · <a href="/about#made-with">What it's made with</a></p>{% endif %}
       {# the plant reads this answer aloud: its own words, never new advice; shown once the
          script runs, so a page without it never offers a button that does nothing #}
       {% if voice %}{% set obs = rec.observation %}{% set pname = obs.species[0].common_name|lower if obs and obs.species else "plant" %}
@@ -406,10 +405,25 @@
         for (const e of ["pause", "ended", "error"]) audio.addEventListener(e, talk(false));
       })();
       </script>
-      {#- no voice (switched off, 21 Oct): the plant's face on its own, where its voice was; the
-          answer's own mood, never a new judgement, and decoration for a screen reader #}
-      {%- else %}<p class="plant-mood" id="plant-mood">{{ plant_face(mood) }}</p>{% endif %}
+      {#- no voice (switched off, 21 Oct): the plant's face on its own, beside the headline above;
+          the answer's own mood, never a new judgement, and decoration for a screen reader #}
+      {%- endif %}
     </section>
+    {# where it came from, out of the card into one quiet line under it (23 Oct answer-page
+       critique, 2): where the care facts came from (the built-in herbs' own file, or the page
+       Tavily found, said only when it did: 19 Oct judge walk); the page it found to read more
+       on, named by its site and only when its address names the plant
+       (stages/trusted_page.read_more), no claim it agrees; and who decided it (19 Oct pre-walk:
+       the answer never named NVIDIA or Nebius) #}
+    {% set more = read_more(rec) %}
+    {% if (rec.pack and rec.pack.sources) or more or advised_by %}<div class="came-from"><p class="came-from-h">Where this came from</p>
+      {%- if rec.pack and rec.pack.sources %}{% set found = namespace(on=[]) %}{% if rec.pack.found_with == "tavily" %}{% for x in rec.pack.sources if x.startswith("https://") %}{% set found.on = found.on + [x] %}{% endfor %}{% endif %}
+      <p class="sources-line">Sources: {% if found.on %}{{ said_by(found.on) }} (found with Tavily){% else %}{{ said_by(rec.pack.sources) }}{% endif %}</p>{% endif %}
+      {%- if more %}
+      <p class="sources-line read-more">Read more on {{ said_by([more]) }} (found with Tavily)</p>{% endif %}
+      {%- if advised_by %}
+      <p class="decided-by">Decided by {{ advised_by }} on Nebius Token Factory · <a href="/about#made-with">What it's made with</a></p>{% endif %}
+    </div>{% endif %}
     {# the photo check named one of this plant's listed problems: our words for what it
        looks like, and a nudge to check before treating #}
     {% if rec.problem %}<section class="tray warn seen-problem" aria-labelledby="seen-problem"><h2 id="seen-problem">{{ "Looks like" if rec.problem.sure else "Could be" }} {{ rec.problem.name }}</h2><p>{{ rec.problem.looks_like[:1]|upper }}{{ rec.problem.looks_like[1:] }}.</p><p>Check a few leaves before {{ "removing it" if a and a.headline == no_cure_headline else "treating" }}: the photo alone can be wrong.</p></section>{% endif %}
@@ -426,9 +440,18 @@
       </div>
       <p class="note">Illustration for our sample photo, not a prediction. · <a href="/about#credits">Photo credits</a></p>
     </section>{% endif %}
+    {# This week (23 Oct answer-page critique, 4): Also do, Check first and Keep an eye on as
+       ruled rows of one panel, not three stacked cards. Each keeps its heading, set as a tag
+       in its colour down the left (green do, clay don't or check first, amber keep an eye
+       on), the action and why beside it; GBIF's "Seen recently in the UK" is a sub-line of
+       Keep an eye on. A panel only with a row in it: the GBIF line alone may never show.
+       Under "This week", a THIS WEEK tag on a row said it twice #}
+    {% set signs, after = watch_list(a.watch or "") %}
+    {% set week = a.do|length > 1 or a.dont or signs %}
+    {% if week %}<div class="this-week"><p class="this-week-h">This week</p>{% endif %}
     {% if a.do|length > 1 %}<section class="also" aria-labelledby="also-do">
       <h2 id="also-do">Also do</h2>
-      {% for c in a.do[1:] %}<div class="item"><span class="tag later">{{ tag[c.when] }}</span>
+      {% for c in a.do[1:] %}<div class="item">{% if c.when != "this_week" %}<span class="tag later">{{ tag[c.when] }}</span>{% endif %}
         <h3>{{ "Give it a light tidy" if c.action == "prune" and a.winter_rest else label[c.action] }}</h3>
         <p class="because">{{ c.because[:1]|upper }}{{ c.because[1:] }}</p>
         {% if c.if_you_do != no_data %}{{ ifdo(c) }}{% endif %}</div>{% endfor %}
@@ -443,12 +466,12 @@
     {# only with signs to watch for: on its own, "Send a new photo if it changes" was filler
        that What next says better, and its "Add where it is" link the main card's button said
        again (21 Oct, Kash) #}
-    {% set signs, after = watch_list(a.watch or "") %}
     {% if signs %}<section class="watch" aria-labelledby="watch">
       <h2 id="watch">Keep an eye on</h2>
       <ul>{% for s in signs %}<li>{{ s }}</li>{% endfor %}</ul>{% if after %}<p>{{ after }}</p>{% endif %}
     </section>{% endif %}
     {% include "_reported_slot.html" %}
+    {% if week %}</div>{% endif %}
     {# indoors: what is normal on a windowsill this month and how to look after it, from our
        indoor table (21 Oct, a gardener: indoor "doesn't have much info") #}
     {% if a.indoor %}<section class="indoor-now" aria-labelledby="indoor-now">
@@ -456,6 +479,15 @@
       <p>{{ a.indoor.normal }}</p>
       <ul>{% for t in a.indoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
       <p class="note">From {{ said_by(a.indoor.sources) }}</p>
+    </section>{% endif %}
+    {# outdoors, the twin: what is normal for it outdoors this month, from the UK season
+       table, and our 2 or 3 points for the month (23 Oct, Kash: "Why is tips for the month
+       on for indoor but not outdoor?"). Advice, so rated, as the indoor card is #}
+    {% if a.outdoor %}<section class="outdoor-now" aria-labelledby="outdoor-now">
+      <h2 id="outdoor-now">Outdoors in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][a.outdoor.month - 1] }}</h2>
+      {% if a.outdoor.normal %}<p>{{ a.outdoor.normal }}</p>{% endif %}
+      <ul>{% for t in a.outdoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
+      <p class="note">From {{ said_by(a.outdoor.sources) }}</p>
     </section>{% endif %}
     {# see it by part (21 Oct, gardener test: they wanted the advice by part of the setup):
        the lines above, sorted by part (answer.by_part), never new advice. Folded, so it
@@ -814,24 +846,29 @@
       {# who "the advisors" are, before anything says what they did (21 Oct gardener test) #}
       <p class="advisors">{{ advisors_said(advised_by, a.advisor_roles, obs.setting == "indoor") }}</p>
       {# what each advisor said: its call only, never its raw words (21 Oct, Kash on rev
-         00049: "what does each mean?") #}
-      {% set said = advisor_lines(rec, label) %}{% if said.lines %}<div class="advisor-said">
+         00049: "what does each mean?"). A vote (23 Oct answer-page critique, 9): a chip per
+         advisor, then the call our rules chose in amber when a rule led, and the one line
+         that says how, said once (it was said twice: the note and the how-led line) #}
+      {% set led = namespace(notes=[]) %}{% for n in rec.notes if how_led(n) %}{% set led.notes = led.notes + [n] %}{% endfor %}
+      {% set said = advisor_lines(rec, label, led=led.notes|length > 0) %}{% if said.lines %}<div class="advisor-said">
         <h3>What each advisor said</h3>
-        <ul>{% for x in said.lines %}<li>{{ x.who }}: <strong>{{ x.action }}.</strong></li>{% endfor %}</ul>
+        <ul class="vote">{% for c in said.calls %}<li class="vote-chip"><span class="sr-only">Advisor {{ loop.index }}: </span>{{ c }}</li>{% endfor %}
+          {%- if said.chose %}<li class="vote-chose">Our rules chose: <strong>{{ said.chose }}</strong></li>{% endif %}</ul>
         {% if said.note %}<p class="note">{{ said.note }}</p>{% endif %}
-      </div>{% endif %}
+        {% for n in led.notes %}<p class="note how-led">{{ n }}</p>{% endfor %}
+      </div>{% else %}{% for n in led.notes %}<p class="note how-led">{{ n }}</p>{% endfor %}{% endif %}
       {# which model did each step, its time and its cost, then the same tokens at Nemotron 3
          Ultra's price (21 Oct, judging video: "which models are being used", and savings
          "only feel real compared to a baseline"). Open, never folded away #}
       {% set mm = model_map(rec) %}{% if mm %}<div class="model-map">
         <h3>Which model did each step</h3>
-        <ul>{% for r in mm.rows %}<li><span class="mm-what"><strong>{{ r.step }}</strong> <span class="mm-model">{{ r.model }}</span>{% if r.note %}<span class="mm-note">{{ r.note }}</span>{% endif %}</span><span class="mm-cost">{{ r.seconds }} · {{ r.cost }}</span></li>{% endfor %}</ul>
+        {# a flow strip, as About draws the build (23 Oct answer-page critique, 9): each step
+           in the order it ran, coloured as About's legend (NVIDIA green, the weather's sky,
+           the twin's deep green), its time and cost under it #}
+        <ol class="mm-flow">{% for r in mm.rows %}<li class="mm-step{{ ' twin' if r.stage == 'twin' else ' weather' if r.stage == 'weather' else ' nvidia' if r.model.startswith('NVIDIA') else '' }}"><span class="mm-what"><strong>{{ r.step }}</strong> <span class="mm-model">{{ r.model }}</span>{% if r.note %}<span class="mm-note">{{ r.note }}</span>{% endif %}</span><span class="mm-cost">{{ r.seconds }} · {{ r.cost }}</span></li>{% endfor %}</ol>
         <p class="mm-total">This answer cost <strong>{{ mm.total }}</strong> in model time{% if mm.unpriced %}, not counting {{ mm.unpriced|join(" and ") }} (price not listed){% endif %}. On NVIDIA Nemotron 3 Ultra for {{ "the priced steps" if mm.unpriced else "every step" }} it would have cost about <strong>{{ mm.baseline }}</strong>.</p>
         <p class="note">The Ultra figure is an estimate: the same tokens at Ultra's listed price. A different model would use a different number of tokens.</p>
       </div>{% endif %}
-      {# how the lead was chosen, when a rule of ours chose it: here, not in the band, where
-         it explained our workings before the reader had the advice (design wave 1, A) #}
-      {% for n in rec.notes if how_led(n) %}<p class="note how-led">{{ n }}</p>{% endfor %}
       {#- each fold says what is in it before it opens (21 Oct, Kash on rev 00050: "not great
          once opened and not"): a title, then one line of what it holds #}
       {% if a.chips %}{% set up = a.chips|selectattr("effect", "equalto", "raises")|map(attribute="name")|map("lower")|list %}

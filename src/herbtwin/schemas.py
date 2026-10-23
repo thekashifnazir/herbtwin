@@ -805,6 +805,13 @@ class IndoorNow(BaseModel):
     sources: list[str]
 
 
+class OutdoorNow(IndoorNow):
+    """An outdoor answer's month, the indoor card's twin: what is normal for the plant outdoors
+    in the UK now (the season table's signs) and 2 or 3 care points from our outdoor table
+    (outdoor_care.py; 23 Oct, Kash: "Why is tips for the month on for indoor but not
+    outdoor?"). `normal` is empty when the season row lists no signs for the month."""
+
+
 class Answer(BaseModel):
     """What the page and the JSON API show (spec section 7)."""
 
@@ -840,6 +847,7 @@ class Answer(BaseModel):
     # (pipeline.twin_holds_water): the page says so (answer.rule_overrides)
     held_water: bool = False
     indoor: IndoorNow | None = None  # indoors: the month's normal and care tips
+    outdoor: OutdoorNow | None = None  # outdoors: the same, from the UK season (23 Oct)
 
 
 SqueezeAsk = Literal["ask", "offer", "no"]

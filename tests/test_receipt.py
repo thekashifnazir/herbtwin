@@ -102,8 +102,9 @@ def test_the_map_shows_on_the_answer_page_for_any_number_of_advisors(tmp_path, a
     page = _render(rec)
     mm = page.split('<div class="model-map">', 1)[1].split("</div>", 1)[0]
     assert "<h3>Which model did each step</h3>" in mm
+    # a step of the flow strip (23 Oct answer-page critique, 9), its model's colour as About's
     assert (
-        '<li><span class="mm-what"><strong>Read the photo</strong> '
+        '<li class="mm-step nvidia"><span class="mm-what"><strong>Read the photo</strong> '
         '<span class="mm-model">NVIDIA Nemotron 3.5 Super VL</span></span>'
         '<span class="mm-cost">4.2 s · $0.0009</span></li>' in mm
     )

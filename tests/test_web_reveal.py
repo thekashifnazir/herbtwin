@@ -68,7 +68,7 @@ def test_the_first_screen_is_marked_in_before_anything_is_held(tmp_path):
     js = _script(_home(tmp_path))
     # above the screen's bottom edge: in at once, no motion; below it: watched
     first = 'if (el.getBoundingClientRect().top < innerHeight) el.classList.add("is-in");'
-    assert first in js and "else arrive.observe(el);" in js
+    assert first in js and "else { arrive.observe(el); waiting.add(el); }" in js
     assert js.index(first) < js.index(ON)  # reveal-on only once the first screen is in
     # each block arrives once, and those arriving together go 80 ms apart, by place
     assert "threshold: 0" in js and "arrive.unobserve(x.target)" in js
@@ -239,6 +239,41 @@ def test_the_answer_cards_scroll_reveal_moves_but_never_fades():
     opacity below the fold: a smoke walk had to run with Reduce Motion for axe (22 Oct)."""
     frames = CSS.split("@keyframes card-reveal {", 1)[1].split("}\n", 1)[0]
     assert "opacity" not in frames and "translateY(22px)" in frames  # the same rise, no fade
+
+
+def test_a_block_a_fast_jump_skipped_settles_in_place_unseen(tmp_path):
+    """Review of #484: a fast jump to the foot of a page left every block it skipped 16 px
+    low, to be found rising when scrolled back to. One already above the screen settles in
+    place with no motion (is-in, never is-arriving): checked as blocks arrive and once when
+    a scroll ends, never per frame, and the listener goes once nothing is left waiting."""
+    js = _script(_home(tmp_path))
+    settle = js.split("const settle = () => {", 1)[1].split("\n    };\n", 1)[0]
+    assert (
+        "for (const el of waiting) if (el.getBoundingClientRect().bottom < 0) "
+        '{ el.classList.add("is-in"); arrive.unobserve(el); waiting.delete(el); }'
+    ) in settle
+    assert "is-arriving" not in settle  # no motion: it is off the screen
+    assert (
+        'if (!waiting.size) { removeEventListener("scrollend", settle); '
+        'removeEventListener("scroll", later); }'
+    ) in settle
+    # in the observer's callback, after the arrivals, and once a scroll ends
+    callback = js.split("new IntersectionObserver((entries) => {", 1)[1].split("}, {threshold", 1)[
+        0
+    ]
+    assert callback.rstrip().endswith("settle();")
+    assert "waiting.delete(x.target);" in callback
+    assert (
+        'if (waiting.size) { if ("onscrollend" in window) addEventListener("scrollend", '
+        'settle, {passive: true}); else addEventListener("scroll", later, {passive: true}); }'
+    ) in js
+    # no scrollend (Safari): the same check once scrolling has been quiet for 150 ms, never
+    # a layout read on every scroll event
+    assert "const later = () => { clearTimeout(quiet); quiet = setTimeout(settle, 150); };" in js
+    assert js.count('addEventListener("scroll"') == 1
+    assert js.index("const waiting") < js.index("new IntersectionObserver") < js.index(ON)
+    # an anchor's block, landed on, is no longer waiting either
+    assert "arrive.unobserve(el); waiting.delete(el); }" in js.split("const land", 1)[1]
 
 
 def test_a_jump_to_an_anchor_lands_on_a_block_already_in_place(tmp_path):

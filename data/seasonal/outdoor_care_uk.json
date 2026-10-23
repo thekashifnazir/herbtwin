@@ -1,0 +1,396 @@
+[
+  {
+    "group": "basil",
+    "plants": ["ocimum basilicum"],
+    "months": [6, 7, 8],
+    "tips": [
+      "Picking: pinch out shoot tips and any flower stems often, to keep leaves coming.",
+      "Water: in the morning, not the evening; it hates wet roots overnight."
+    ],
+    "pot_tips": [
+      "Feeding: in a pot, a balanced liquid feed now and then, not tomato feed."
+    ],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/basil/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "basil",
+    "plants": ["ocimum basilicum"],
+    "months": [9, 10],
+    "tips": [
+      "Picking: pick what you want now, before cold nights harm it.",
+      "Water: in the morning only, and less often as growth slows."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": ["https://www.rhs.org.uk/herbs/basil/grow-your-own"]
+  },
+  {
+    "group": "leafy herbs",
+    "plants": [
+      "petroselinum crispum",
+      "coriandrum sativum",
+      "anethum graveolens"
+    ],
+    "months": [3, 4, 5],
+    "tips": [
+      "Water: in dry spells; dry roots make it run to seed.",
+      "Picking: once it is growing well, pick a few outer leaves at a time."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+      "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+      "https://www.rhs.org.uk/herbs/dill/grow-your-own"
+    ]
+  },
+  {
+    "group": "leafy herbs",
+    "plants": [
+      "coriandrum sativum",
+      "anethum graveolens"
+    ],
+    "months": [6, 7, 8],
+    "tips": [
+      "Water: in dry spells; dry roots make it run to seed.",
+      "Picking: take a few outer leaves at a time, so the centre keeps growing.",
+      "Flowers: snip off flower stems as they form, unless you want seed."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+      "https://www.rhs.org.uk/herbs/dill/grow-your-own"
+    ]
+  },
+  {
+    "group": "parsley",
+    "plants": ["petroselinum crispum"],
+    "months": [6, 7, 8, 9],
+    "tips": [
+      "Water: in dry spells; dry roots make it run to seed.",
+      "Picking: take a few outer leaves at a time, so the centre keeps growing."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": ["https://www.rhs.org.uk/herbs/parsley/grow-your-own"]
+  },
+  {
+    "group": "coriander",
+    "plants": ["coriandrum sativum"],
+    "months": [9],
+    "tips": [
+      "Picking: take what leaves are left before it runs to seed.",
+      "Sowing: a fresh sowing under a cloche gives leaves into winter."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": ["https://www.rhs.org.uk/herbs/coriander/grow-your-own"]
+  },
+  {
+    "group": "leafy herbs",
+    "plants": [
+      "petroselinum crispum",
+      "coriandrum sativum"
+    ],
+    "months": [10, 11, 12, 1, 2],
+    "tips": [
+      "Picking: a few outer leaves at a time; growth is slow now.",
+      "Shelter: a cloche or a sheltered spot keeps leaves coming through winter."
+    ],
+    "pot_tips": [
+      "Pots: move them by a wall, out of the worst rain, so the compost never sits soaked."
+    ],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/parsley/grow-your-own",
+      "https://www.rhs.org.uk/herbs/coriander/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "herbs that die back",
+    "plants": [
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "artemisia dracunculus",
+      "origanum vulgare"
+    ],
+    "months": [3, 4, 5],
+    "tips": [
+      "Old stems: clear any dead ones left from last year as new shoots come.",
+      "Water: in dry spells, once the top of the compost is dry.",
+      "Dividing: every few years, lift a crowded clump, split it and replant a piece."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/mint/grow-your-own",
+      "https://www.rhs.org.uk/herbs/chives/grow-your-own",
+      "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+      "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+      "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+    ]
+  },
+  {
+    "group": "herbs that die back",
+    "plants": [
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "artemisia dracunculus",
+      "origanum vulgare"
+    ],
+    "months": [6, 7, 8],
+    "tips": [
+      "Picking: pick often; regular picking keeps fresh leaves coming.",
+      "Water: in dry spells; in warm weather, check it every few days."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/mint/grow-your-own",
+      "https://www.rhs.org.uk/herbs/chives/grow-your-own",
+      "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+      "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+      "https://www.rhs.org.uk/herbs/oregano/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "herbs that die back",
+    "plants": [
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "artemisia dracunculus",
+      "origanum vulgare"
+    ],
+    "months": [9],
+    "tips": [
+      "Picking: a few shoots at a time now; growth is slowing.",
+      "Water: in dry spells, but less as growth slows."
+    ],
+    "pot_tips": [],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/mint/grow-your-own",
+      "https://www.rhs.org.uk/herbs/chives/grow-your-own",
+      "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+      "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+      "https://www.rhs.org.uk/herbs/oregano/grow-your-own"
+    ]
+  },
+  {
+    "group": "herbs that die back",
+    "plants": [
+      "mentha",
+      "mentha spicata",
+      "melissa officinalis",
+      "allium schoenoprasum",
+      "allium tuberosum",
+      "artemisia dracunculus",
+      "origanum vulgare"
+    ],
+    "months": [10, 11, 12, 1, 2],
+    "tips": [
+      "Old stems: cut dead ones back to tidy it, any time until spring.",
+      "Water: much less now; cold, wet compost rots the roots."
+    ],
+    "pot_tips": [
+      "Pots: move them by a wall, out of the worst rain, so the compost never sits soaked."
+    ],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/mint/grow-your-own",
+      "https://www.rhs.org.uk/herbs/lemon-balm/grow-your-own",
+      "https://www.rhs.org.uk/herbs/tarragon/grow-your-own",
+      "https://www.rhs.org.uk/herbs/oregano/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "laurus nobilis"
+    ],
+    "months": [3],
+    "tips": [
+      "Pruning: none yet; a light trim comes later in spring.",
+      "Water: only once the compost has dried; it hates sitting wet."
+    ],
+    "pot_tips": ["Repotting: spring is the time, if roots fill the pot."],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+      "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+      "https://www.rhs.org.uk/plants/bay-tree/growing-guide"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'"
+    ],
+    "months": [4, 5],
+    "tips": [
+      "Trimming: a light trim now keeps it bushy; never into bare wood.",
+      "Water: only once the compost has dried; it hates sitting wet."
+    ],
+    "pot_tips": ["Repotting: spring is the time, if roots fill the pot."],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+      "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+    ]
+  },
+  {
+    "group": "rosemary",
+    "plants": ["salvia rosmarinus"],
+    "months": [4],
+    "tips": [
+      "Pruning: none yet; trim lightly once the spring flowers fade.",
+      "Water: only once the compost has dried; it hates sitting wet."
+    ],
+    "pot_tips": ["Repotting: spring is the time, if roots fill the pot."],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": ["https://www.rhs.org.uk/herbs/rosemary/grow-your-own"]
+  },
+  {
+    "group": "rosemary",
+    "plants": ["salvia rosmarinus"],
+    "months": [5],
+    "tips": [
+      "Trimming: a light trim once the flowers fade keeps it bushy; never into bare wood.",
+      "Water: only once the compost has dried; it hates sitting wet."
+    ],
+    "pot_tips": ["Repotting: spring is the time, if roots fill the pot."],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": ["https://www.rhs.org.uk/herbs/rosemary/grow-your-own"]
+  },
+  {
+    "group": "bay",
+    "plants": ["laurus nobilis"],
+    "months": [4, 5],
+    "tips": [
+      "Trimming: spring is the time to trim or reshape it.",
+      "Water: in dry spells, once the top of the compost is dry."
+    ],
+    "pot_tips": [
+      "Feeding: in a pot, a liquid feed every 2 to 3 weeks until late summer."
+    ],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/bay/grow-your-own",
+      "https://www.rhs.org.uk/plants/bay-tree/growing-guide"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "laurus nobilis"
+    ],
+    "months": [6, 7, 8, 9],
+    "tips": ["Picking: snip shoots as you need them, a little at a time."],
+    "pot_tips": [
+      "Water: in a pot, check every few days in hot weather; never leave it standing wet."
+    ],
+    "bed_tips": ["Water: only in long dry spells; it hates sitting wet."],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+      "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+      "https://www.rhs.org.uk/plants/bay-tree/growing-guide"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "laurus nobilis"
+    ],
+    "months": [10, 11],
+    "tips": [
+      "Pruning: none now; leave any trim until spring.",
+      "Water: less as growth slows; winter wet is the main risk."
+    ],
+    "pot_tips": [
+      "Pots: move them by a wall, out of the worst rain, so the compost never sits soaked."
+    ],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/herbs/thyme/grow-your-own",
+      "https://www.rhs.org.uk/herbs/sage/grow-your-own",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  },
+  {
+    "group": "woody herbs",
+    "plants": [
+      "salvia rosmarinus",
+      "thymus vulgaris",
+      "salvia officinalis",
+      "salvia officinalis 'purpurascens'",
+      "laurus nobilis"
+    ],
+    "months": [12, 1, 2],
+    "tips": [
+      "Pruning: none until spring.",
+      "Water: rarely, if at all; winter wet is the main risk."
+    ],
+    "pot_tips": [
+      "Cold: pots freeze faster than the ground; in a hard frost, move them to shelter."
+    ],
+    "bed_tips": [],
+    "evidence_tier": "C",
+    "sources": [
+      "https://www.rhs.org.uk/herbs/rosemary/grow-your-own",
+      "https://www.rhs.org.uk/prevention-protection/frost-damage",
+      "https://www.rhs.org.uk/herbs/containers"
+    ]
+  }
+]

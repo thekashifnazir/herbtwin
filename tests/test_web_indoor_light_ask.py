@@ -35,9 +35,9 @@ def test_an_indoor_answer_says_light_is_not_measured_and_asks_for_the_window(tmp
         page = _render(_indoor(make(tmp_path / str(i))))
         main = _main(page)
         assert f'<p class="note indoor-light">{LINE} {ASK}.</p>' in main, make.__name__
-        # by How sure we are: after its line, before the sources
+        # by How sure we are: after its line, before the sources (under the card since 23 Oct)
         assert main.index('<p class="sure">') < main.index("indoor-light")
-        assert main.index("indoor-light") < main.index('<p class="sources-line">')
+        assert page.index("indoor-light") < page.index('<p class="sources-line">')
         assert page.count("indoor-light") == 1
         # the link opens the folded Tell us more, as the Make this surer buttons do
         assert "document.querySelectorAll('a[href=\"#refine\"]')" in page

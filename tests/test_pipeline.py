@@ -14,6 +14,7 @@ from herbtwin.config import load_settings
 from herbtwin.history import Evidence
 from herbtwin.pipeline import (
     AdvisorReplied,
+    CareFound,
     Deps,
     PlantFound,
     SeasonFound,
@@ -751,6 +752,8 @@ def test_progress_lines_follow_the_stages(tmp_path):
         PlantFound("basil", "mock"),
         season,
         "Looking up how basil likes to grow",
+        # 22 Oct phone walk (Kash: "Should get more info while waiting"): its care facts
+        CareFound("basil", rec.pack),
         "Checking the weather where you are",
         weather,
         tested,

@@ -1,7 +1,7 @@
 """Licence gate for the public repo: does shipped data copy its sources word for word?
 
 Usage: uv run python scripts/check_copied_text.py [FILE ...] [--min-run 8] [--offline]
-For every row of each data file (default: the five below), compares each prose field with
+For every row of each data file (default: the six below), compares each prose field with
 every page the row cites and reports the longest run of consecutive words they share.
 A run of MIN_RUN or more words counts as copied. Most sources (RHS, Garden Organic, the
 seed shops) state no reuse licence, so facts with a link are fine but their sentences are
@@ -28,6 +28,7 @@ FILES = [
     Path("data/outcomes/problem_signs_uk.json"),
     Path("data/seasonal/norms_uk.json"),
     Path("data/seasonal/indoor_care_uk.json"),
+    Path("data/seasonal/outdoor_care_uk.json"),
     Path("data/crop_calendar/calendar.json"),
 ]
 STORE = Path("data/pages/copied")

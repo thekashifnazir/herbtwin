@@ -89,8 +89,8 @@ def test_the_switch_says_what_it_does(tmp_path):
     switch = _render(rec).split('<form class="note setting-switch"', 1)[1].split("</form>", 1)[0]
     assert 'name="setting" value="outdoor"' in switch
     assert ">Outdoors? Switch and we'll redo the advice for an outdoor plant</button>" in switch
-    # it looks like a thing to press: an outlined button on the band, not a bare link
-    assert 'class="switch"' in switch and 'class="link"' not in switch
+    # a small link now (23 Oct answer-page critique, 1): still a button posting the form
+    assert 'class="switch as-link"' in switch and 'class="link"' not in switch
 
 
 def test_the_place_ask_shows_only_outdoors_with_no_place_and_an_answer(tmp_path):

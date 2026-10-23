@@ -181,7 +181,9 @@ def test_my_plants_is_a_band_then_a_grid_of_short_cards(tmp_path):
         '<body class="plants-page has-band">' in page
         and '<main id="content" tabindex="-1"><div class="wrap wide">' in page
     )
-    assert page.index('<div class="page-band">') < page.index('<div class="plant-grid">')
+    assert page.index('<div class="page-band">') < page.index(
+        '<div class="plant-grid" data-reveal="stagger">'
+    )
     card = page.split('<article class="card plant">', 1)[1].split("</article>", 1)[0]
     top, manage = card.split('<details class="plant-manage">', 1)
     assert 'action="/plants/' in manage and "Delete this plant" in manage  # folded away

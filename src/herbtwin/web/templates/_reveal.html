@@ -4,7 +4,8 @@
    herbtwin.css and the page's own sheet say how each moves, and only under html.reveal-on.
    What is on the first screen, or above it, is marked in (.is-in) before anything is held, so
    nothing in view ever waits; the rest is marked as it arrives (.is-arriving plays its motion),
-   once, and blocks arriving together go 80 ms apart, top to bottom, left to right. With no
+   once, and blocks arriving together go 80 ms apart, top to bottom, left to right; one a
+   fast jump skipped settles in place unseen. With no
    script, no observer or Reduce Motion, reveal-on is never set and nothing is ever held. It
    starts after the first-load intro, if one plays (intro-playing, then intro-done and the
    herbtwin:intro-done event), and after 2 s at most. It replaces home's own reveal (H2) #}
@@ -18,14 +19,36 @@
     if (started) return;
     started = true;
     // the first screen's own rise (home's hero, home.css) plays as the intro lifts, on the
-    // visit it plays, and only in the real fonts: never under its green, never in a stand-in
-    if (html.classList.contains("intro-done") && (!document.fonts || document.fonts.status === "loaded")) html.classList.add("intro-go");
+    // visit it plays, and only in the real fonts: never under its green, never in a stand-in,
+    // never once the green has gone (a late rise of words on screen is a jump, #313; review:
+    // it rose 0.4 s after a skipped intro had gone). So not after a skip (its green goes in
+    // 0.15 s), and fonts still loading at the lift get 150 ms of its 0.9 s dissolve. The race
+    // starts at the lift: a `ready` taken at load can be one that settled before the fonts
+    // began, which let a Chromium hero rise in the stand-in face; the status says for sure
+    if (html.classList.contains("intro-done") && !document.querySelector(".intro.is-skipped")) {
+      const go = () => html.classList.add("intro-go");
+      if (!document.fonts || document.fonts.status === "loaded") go();
+      else Promise.race([document.fonts.ready.then(() => true), new Promise((r) => setTimeout(r, 150, false))])
+        .then((won) => { if (won && document.fonts.status === "loaded") go(); });
+    }
     const items = [];
     for (const el of document.querySelectorAll("[data-reveal]")) {
       if (el.dataset.reveal !== "stagger") items.push(el);
       else for (const kid of el.children) if (!kid.hasAttribute("data-reveal")) items.push(kid);
     }
     if (!items.length) return;
+    // a block a fast jump skipped (above the screen now, never seen arriving) settles where
+    // it belongs with no motion, so scrolling back never finds it 16 px low (review of #484).
+    // Checked as blocks arrive and once a scroll ends (no scrollend, as in Safari: once it
+    // has been quiet 150 ms), never per frame. Only above the screen: one on it gets its own
+    // rise from the observer
+    const waiting = new Set();
+    let quiet;
+    const later = () => { clearTimeout(quiet); quiet = setTimeout(settle, 150); };
+    const settle = () => {
+      for (const el of waiting) if (el.getBoundingClientRect().bottom < 0) { el.classList.add("is-in"); arrive.unobserve(el); waiting.delete(el); }
+      if (!waiting.size) { removeEventListener("scrollend", settle); removeEventListener("scroll", later); }
+    };
     const arrive = new IntersectionObserver((entries) => {
       entries.filter((x) => x.isIntersecting)
         .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
@@ -33,18 +56,21 @@
           x.target.style.setProperty("--reveal-delay", Math.min(i, 4) * 80 + "ms");
           x.target.classList.add("is-in", "is-arriving");
           arrive.unobserve(x.target);
+          waiting.delete(x.target);
         });
+      settle();
     }, {threshold: 0});
     for (const el of items) {
       if (el.getBoundingClientRect().top < innerHeight) el.classList.add("is-in");
-      else arrive.observe(el);
+      else { arrive.observe(el); waiting.add(el); }
     }
+    if (waiting.size) { if ("onscrollend" in window) addEventListener("scrollend", settle, {passive: true}); else addEventListener("scroll", later, {passive: true}); }
     // a jump to an anchor (Photo credits, #refine…) lands on the block where it will stay: the
     // block holding the target is marked in before the browser scrolls, never 16 px low (review)
     const land = (id) => {
       const target = id && document.getElementById(decodeURIComponent(id));
       if (!target) return;
-      for (const el of items) if (el.contains(target) || target.contains(el)) { el.classList.add("is-in"); arrive.unobserve(el); }
+      for (const el of items) if (el.contains(target) || target.contains(el)) { el.classList.add("is-in"); arrive.unobserve(el); waiting.delete(el); }
     };
     land(location.hash.slice(1));
     document.addEventListener("click", (e) => {

@@ -46,8 +46,9 @@ def test_the_answer_reads_in_order_of_importance(tmp_path):
         '<h2 id="main-action">Water it.</h2>',
         '<strong>How sure we are<span class="sr-only">:</span></strong>',
         # block 1, what to do: the rest of the plan sits with the main card
+        # under "This week" (23 Oct answer-page critique, 4) its rows' THIS WEEK tags went
+        '<p class="this-week-h">This week</p>',
         '<h2 id="also-do">Also do</h2>',
-        "THIS WEEK",
         "<h3>Check for pests</h3>",
         '<h2 id="watch">Keep an eye on</h2>',
         # block 2, help us be surer: one box, two buttons
@@ -231,9 +232,11 @@ def test_not_sure_without_a_question_says_where_to_look(tmp_path):
         signed_in=False, accounts=False,
     )  # fmt: skip
     sure = page.split('class="sure"')[1].split("</p>")[0]
-    # design wave 1, C: the main doubt in one line (2 of 3 is neutral, so the advisor line
-    # shows in the fold too), not "See why below."
-    assert "Mostly: " in sure and "Answer the question" not in sure
+    # design wave 1, C: the main doubt in one line, not "See why below." Here that doubt is
+    # the base one, which the badge's line already says (23 Oct answer-page critique, 2), so
+    # the line stops at the badge's
+    assert "See why below" not in sure and "Answer the question" not in sure
+    assert "Mostly: " not in sure and "in our tests." in sure
     assert '<div class="tray warn">' not in page
     # with no question to ask, the form still sits in the asks, after the plan
     _in_order(page, ['<h2 id="next-step">What next</h2>', '<hr class="divider">',
@@ -368,9 +371,10 @@ def test_sure_says_only_how_sure_and_the_others_say_what_to_do(tmp_path):
         "Not sure: do the quick check first, or take the low-risk step",
     )
     fairly = _render(rec).split('<p class="sure">')[1].split("</p>")[0]
-    # design wave 1, C: a fairly-sure answer reads "not sure, check first" and now says its
-    # main doubt; the gloss shows only when no doubt can be named
-    assert "<span>Mostly: " in fairly
+    # design wave 1, C: a fairly-sure answer reads "not sure, check first" and says its main
+    # doubt; the gloss shows only when no doubt can be named. Its doubt here is the base one,
+    # left unsaid (23 Oct answer-page critique, 2), and the gloss does not stand in for it
+    assert "Mostly: " not in fairly and "do the quick check first" not in fairly.lower()
 
 
 def test_the_plan_gives_each_kind_its_colour_and_its_words(tmp_path):

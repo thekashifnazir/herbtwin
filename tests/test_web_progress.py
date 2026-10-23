@@ -796,3 +796,87 @@ def test_without_script_a_missed_weather_line_that_is_last_stays_amber_and_still
     last = "html:not(.js) .progress-steps ol:last-of-type > li.missed.missed:last-of-type"
     assert f"{last} {{ color: var(--warn); font-weight: inherit; }}" in css
     assert f"{last}::before {{ animation: none; box-shadow: none; }}" in css
+
+
+# 22 Oct phone walk (Kash: "Should get more info while waiting, a static wait message isn't
+# a great user experience"): real content as it arrives, and what comes next
+
+
+def test_the_care_card_says_light_water_and_cold_from_the_pack():
+    from herbtwin.pipeline import CareFound
+    from herbtwin.stages.research import seed_pack
+    from herbtwin.web.progress import _step
+
+    basil = _step(CareFound("Basil", seed_pack("Ocimum basilicum")))
+    assert '<h2 id="fact-care-h">What basil needs</h2>' in basil
+    assert "<li><b>Light:</b> full sun</li>" in basil
+    assert "<li><b>Water:</b> moderate need</li>" in basil
+    # basil is tender: harmed by cold above freezing, so "Cold", not "Frost"
+    assert "<li><b>Cold:</b> damaged below 10&nbsp;°C</li>" in basil
+    assert "From our own plant data." in basil and "herbtwinAside('fact-care')" in basil
+    mint = _step(CareFound("spearmint", seed_pack("Mentha spicata")))
+    assert "<li><b>Light:</b> part shade</li>" in mint
+    assert "<li><b>Frost:</b> damaged below −6&nbsp;°C</li>" in mint
+
+
+def test_the_care_card_says_only_what_the_pack_really_knows():
+    from herbtwin.pipeline import CareFound, has_care
+    from herbtwin.schemas import KnowledgePack
+    from herbtwin.web.progress import _step
+
+    rhs = KnowledgePack(
+        species="Lavandula angustifolia", common_name="lavender", kc=0.5,
+        water_need="RHS: moisture well-drained; drought resistant",
+        sun="RHS: full sun", frost_damage_c=-15, frost_severe_c=-20,
+        sources=["https://www.rhs.org.uk/plants/9426/lavandula-angustifolia/details"],
+        verified=True,
+    )  # fmt: skip
+    card = _step(CareFound("lavender", rhs))
+    assert "<li><b>Soil:</b> well-drained; drought resistant</li>" in card
+    assert "From its RHS page." in card
+    # a lux band is not a light need, and generic thresholds are not a frost line
+    lux = rhs.model_copy(
+        update={"sun": "OpenPlantBook: light 3000-50000 lux", "verified": False, "sources": []}
+    )
+    card = _step(CareFound("lavender", lux))
+    assert "Light:" not in card and "Frost:" not in card and "Soil:" in card
+    default = KnowledgePack(
+        species="x y", common_name="x", kc=0.8, water_need="unknown", sun="unknown",
+        frost_damage_c=5.0, frost_severe_c=0.0,
+    )  # fmt: skip
+    assert not has_care(default)
+    assert _step(CareFound("x", default)) == ""
+
+
+def test_the_card_says_what_comes_next_and_roughly_how_long():
+    from herbtwin.web.progress import (
+        ADVISORS_NEXT,
+        HEAD,
+        NEXT_FOR,
+        NEXT_JS,
+        PHOTO_NEXT,
+        SPOT_HEAD,
+        _done,
+        _failed,
+    )
+
+    assert PHOTO_NEXT == "Next: naming your plant, usually 10 to 20 s"
+    assert ADVISORS_NEXT == "Next: 3 advisors, about 6 s"
+    assert f'<p class="wait-next" id="wait-next">{PHOTO_NEXT}</p>' in HEAD
+    assert HEAD.index('id="wait-now"') < HEAD.index('id="wait-next"') < HEAD.index("<ol>")
+    assert 'id="wait-next"' not in SPOT_HEAD  # a spot read has its own steps
+    assert NEXT_JS in HEAD
+    assert NEXT_FOR["Reading the photo"] == PHOTO_NEXT
+    assert NEXT_FOR["Thinking about what it needs"] == "Next: your answer"
+    assert NEXT_FOR["This doesn't look like a plant"] == ""  # nothing comes next
+    # each step carries its own next, so the head lists no step a read may not take
+    from herbtwin.pipeline import AdvisorReplied
+    from herbtwin.web.progress import _step
+
+    assert _step("Reading the photo").endswith(f'<script>herbtwinNext("{PHOTO_NEXT}")</script>\n')
+    said = _step(AdvisorReplied(("water",), 3))
+    assert said.endswith('<script>herbtwinNext("Next: your answer")</script>\n')
+    assert "herbtwinNext" not in _step("Looking up how basil likes to grow")  # the advisors
+    assert "Reading the photo" not in NEXT_JS and "herbtwinNext()" in HEAD
+    assert "document.getElementById('wait-next');if(nx)nx.hidden=true;" in _done("/answers/a")
+    assert "(document.getElementById('wait-next'))" in _failed("x")

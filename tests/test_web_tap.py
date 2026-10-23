@@ -512,6 +512,8 @@ def test_the_wait_says_there_are_several_plants_before_naming_any(tmp_path):
     assert "<li>Found basil" in one and "Normal for basil" in one  # the control
     assert "<li>We can see more than one plant: you&#x27;ll tap the one you mean next" in mixed
     assert "Found" not in mixed and "Normal for" not in mixed
+    # nor its care facts (#491): the card would name the guessed plant before the tap
+    assert '<h2 id="fact-care-h">What basil needs</h2>' in one and "fact-care" not in mixed
     assert "basil" not in mixed.split('<div class="ready"', 1)[0].lower()
     assert '<a id="next" href="/taps/' in mixed
 

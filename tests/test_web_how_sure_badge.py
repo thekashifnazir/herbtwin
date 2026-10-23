@@ -6,6 +6,7 @@ import re
 
 from herbtwin.web import style
 from herbtwin.web.answer_text import SKIP_CLASSES, plan_text
+from herbtwin.web.app import TEMPLATES
 from tests.test_web_answer_page import _full_plan, _render, _unsure_record
 from tests.test_web_answer_reveal import _rules
 
@@ -43,7 +44,9 @@ def test_no_meter_is_left_on_the_page_or_in_the_sheet(tmp_path):
     assert "meter" not in SKIP_CLASSES  # nothing left to skip
 
 
-def test_the_doubt_line_still_follows_the_badge_when_not_sure(tmp_path):
+def test_the_doubt_line_still_follows_the_badge_when_not_sure(tmp_path, monkeypatch):
+    # a doubt the page says (the base one is left unsaid: 23 Oct answer-page critique, 2)
+    monkeypatch.setitem(TEMPLATES.env.globals, "top_doubt", lambda a: "the photo is small")
     rec = _full_plan(tmp_path)
     rec.answer.level = "fairly_sure"
     sure = _sure(_render(rec))
@@ -109,7 +112,9 @@ def test_not_sure_says_in_our_tests_once(tmp_path):
 
     assert BASE_DOUBT == "advice of this kind is right less often"
     sure = _words(_sure(_render(_unsure_record(tmp_path))))
-    assert f"Mostly: {BASE_DOUBT}." in sure, sure
+    # and since 23 Oct (answer-page critique, 2) the base doubt is not said at all: the
+    # badge's line already says how often
+    assert BASE_DOUBT not in sure and "Mostly" not in sure, sure
     assert sure.count("in our tests") == 1, sure
 
 

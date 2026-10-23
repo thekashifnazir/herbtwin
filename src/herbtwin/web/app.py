@@ -35,6 +35,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from herbtwin import local_help, reminders
 from herbtwin.answer import (
+    BASE_DOUBT,
     NO_CURE_HEADLINE,
     NO_CURE_NEXT,
     NO_CURE_THANKS,
@@ -214,6 +215,7 @@ TEMPLATES.env.globals["name_in_doubt"] = name_in_doubt  # "(not sure)" in the he
 TEMPLATES.env.globals["photo_hides_name"] = photo_hides_name  # "Not clear: maybe mint"
 TEMPLATES.env.globals["name_in_sentence"] = name_in_sentence  # "maybe mint", not "maybe Mint"
 TEMPLATES.env.globals["top_doubt"] = top_doubt  # "Mostly: …" beside How sure we are
+TEMPLATES.env.globals["base_doubt"] = BASE_DOUBT  # ...never this one (it repeats the badge)
 TEMPLATES.env.globals["light_said"] = light_said  # the light we measured, on the band
 TEMPLATES.env.globals["advisors_said"] = advisors_said  # who advised, in plain words
 TEMPLATES.env.globals["advisor_lines"] = advisor_lines  # what each said, checked
@@ -1465,7 +1467,8 @@ def create_app(
         traces = app.state.deps.traces
         settle = traces.settle if traces is not None else None
         head = SIGNED_OUT_HEAD if person is None else HEAD
-        asks = asks_card(wait_id)
+        # no place typed and none from the phone: ask where it is (the photo may still hold one)
+        asks = asks_card(wait_id, ask_place=where is None and device is None)
         return _with_cookies(
             progress_response(work, settle, asks, head=head, advisor=_advised_by(settings)),
             holder,
@@ -1477,16 +1480,20 @@ def create_app(
         wait_id: str,
         soil_feel: str | None = Form(None),
         last_watered: str | None = Form(None),
+        place: str | None = Form(None),
     ):
         """A quick question answered on the wait page (by fetch): into this answer while the
-        advisor has not started, else kept for the reveal."""
+        advisor has not started, else kept for the reveal. `place`: where it is, asked when
+        the upload gave none (22 Oct phone walk)."""
         if not _is_answer_id(wait_id) or not _same_site(request, app.state.site_url):
             return JSONResponse({"counted": "gone"}, status_code=404)
         # "not sure" on either (here, on the wait page) sends no reading for it, and an
         # earlier reply to it no longer counts: the advice is never told "not sure" (21 Oct)
         asked = {"soil_feel": soil_feel, "last_watered": last_watered}
         cleared = frozenset(q for q, v in asked.items() if v == "not_sure")
-        told = _told(**{q: None if q in cleared else v for q, v in asked.items()})
+        told = _told(
+            **{q: None if q in cleared else v for q, v in asked.items()}, place=_place(place)
+        )
         if told.is_empty() and not cleared:
             return JSONResponse({"counted": "gone"}, status_code=400)
         person, holder = await who(request)

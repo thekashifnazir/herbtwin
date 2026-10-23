@@ -1,0 +1,90 @@
+/* The answer's top and its "This week" panel (23 Oct answer-page critique, parts 1 to 4):
+   the band's switch as a small link, the headline card with its face and short rows, one
+   quiet "Where this came from" line under it, the twin pictures' deep-green captions, and
+   Also do, Check first and Keep an eye on as ruled rows of one panel. Sorts after answer.css,
+   so these win over its card rules. Scoped under .answer-page; tokens only. */
+
+/* 1. Indoors or outdoors, when the read gave one: a fix for a wrong read, so a small
+   underlined link in the band's white, not a second thing to press. Still a 44px tap */
+.answer-page .page-band .setting-switch:has(.as-link) { margin: -8px 0 14px; }
+.answer-page .page-band .setting-switch .switch.as-link { min-height: 44px; padding: 0; border: 0;
+  border-radius: 0; background: none; color: var(--band-fg); font: 500 16px/1.35 var(--sans);
+  text-decoration: underline; text-underline-offset: 3px; }
+.answer-page .page-band .setting-switch .switch.as-link:hover { background: none;
+  text-decoration-thickness: 2px; }
+
+/* 2. The headline card: the face beside the headline, the reason and the twin's line as
+   short ruled rows, how sure as its chip and one line */
+.answer-page .main-action .headline { display: flex; align-items: center; gap: 16px; }
+.answer-page .main-action .headline > div { flex: 1; min-width: 0; }
+.answer-page .main-action .headline .plant-mood { flex: none; margin: 0; }
+.answer-page .main-action .headline .plant-mood .face { width: 64px; height: 64px; }
+.answer-page .main-action > .because { margin: 0 0 12px; }
+.answer-page .main-action > .ifdo { margin: 0; padding: 12px 0 0; border-top: 1px solid var(--border); }
+.answer-page .main-action > .ifdo .lead { display: block; margin: 0 0 2px; color: var(--primary);
+  font: 700 16px/1.3 var(--sans); }
+.answer-page .main-action > .sure { gap: 6px 10px; }
+.answer-page .main-action > .sure > strong { flex-basis: auto; color: var(--muted-fg);
+  font: 600 16px/1.3 var(--sans); }
+.answer-page .main-action > .sure > span:not(.badge, .badge-line) { flex: 1 1 14rem; }
+
+/* ...and where it came from, out of the card: one quiet line under it */
+.answer-page .main-action:has(+ .came-from) { margin-bottom: 12px; }
+.answer-page .came-from { margin: 0 0 28px; padding: 0 4px; color: var(--muted-fg);
+  font-size: 16px; line-height: 1.5; }
+.answer-page .came-from > p { display: inline; margin: 0; font-size: inherit; }
+.answer-page .came-from > .came-from-h { color: var(--fg); font-weight: 600; }
+.answer-page .came-from > .came-from-h::after { content: ":" / ""; }
+.answer-page .came-from > p + p:not(.came-from-h + p)::before { content: "· " / ""; }
+/* a phone stacks the columns into one list: the line stays right under its card */
+@media (max-width: 959px) {
+  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) .came-from,
+  .answer-page .answer-cols.ask-up .came-from { order: 1; }
+}
+
+/* 3. The twin pictures: each caption a chip in the twin's deep green, on the picture */
+.answer-page .twin figure { position: relative; }
+.answer-page .twin figcaption { position: absolute; left: 8px; bottom: 8px; max-width: calc(100% - 16px);
+  margin: 0; padding: 3px 10px; border-radius: var(--pill); background: var(--band);
+  color: var(--band-fg); font: 700 16px/1.3 var(--sans); }
+
+/* 4. This week: one inked panel; each part a ruled row, its heading a tag in its colour
+   down the left, the action and why beside it. Stacked on a narrow panel */
+.answer-page .this-week { margin: 0 0 20px; border: 1.5px solid var(--fg); border-radius: var(--surface);
+  box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--card); container-type: inline-size; }
+.answer-page .this-week-h { margin: 0; padding: 14px 16px 10px; color: var(--fg);
+  font: 700 21px/1.2 var(--display); }
+.answer-page .this-week > :is(.also, .dont, .watch, .reported) { display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: 6px 14px; margin: 0; padding: 14px 16px; border: 0; border-top: 1px solid var(--border);
+  border-radius: 0; box-shadow: none; background: none; }
+.answer-page .this-week > :is(.also, .dont, .watch) > h2 { justify-self: start; align-self: start; margin: 0; padding: 2px 10px;
+  border-radius: var(--pill); font: 700 16px/1.3 var(--sans); white-space: nowrap; }
+.answer-page .this-week > .also > h2 { background: var(--soft); color: var(--primary); }
+.answer-page .this-week > .dont > h2 { background: var(--clay-bg); color: var(--clay); }
+.answer-page .this-week > .watch > h2 { background: var(--warn-bg); color: var(--warn); }
+.answer-page .this-week .item h3 { margin: 0; }
+.answer-page .this-week .watch ul { margin: 0; }
+.answer-page .this-week .watch > p { margin: 0; color: var(--muted-fg); }
+@container (min-width: 480px) {
+  .answer-page .this-week > :is(.also, .dont, .watch, .reported) { grid-template-columns: 8.5rem minmax(0, 1fr);
+    grid-auto-flow: row dense; }
+  .answer-page .this-week > :is(.also, .dont, .watch) > :not(h2), .answer-page .this-week > .reported > * { grid-column: 2; }
+}
+/* wide enough: the action, then why, side by side */
+@container (min-width: 620px) {
+  .answer-page .this-week .item { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+    grid-auto-flow: row dense; gap: 2px 14px; }
+  .answer-page .this-week .item > :not(p) { grid-column: 1; justify-self: start; }
+  .answer-page .this-week .item > p { grid-column: 2; }
+}
+/* Seen recently in the UK: a sub-line of Keep an eye on, under its words, GBIF's records led
+   by its clay tag */
+.answer-page .this-week > .watch + .reported { padding-top: 0; border-top: 0; }
+.answer-page .this-week > .reported h2 { margin: 0; color: var(--fg); font: 700 16px/1.3 var(--sans); }
+.answer-page .reported-gbif { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 8px; }
+.answer-page .reported-gbif .tag.gbif { flex: none; background: var(--clay-bg); color: var(--clay); font-weight: 700; }
+.answer-page .reported-gbif .reported-links { margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .answer-page .plan > .this-week { animation: card-rise .38s cubic-bezier(0.2,0,0,1) 160ms backwards; }
+}
+.answer-page .main-action > .sure > span:empty { display: none; }

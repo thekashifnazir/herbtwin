@@ -23,9 +23,12 @@ from fastapi.responses import StreamingResponse
 
 from herbtwin.advice_context import NOT_AVAILABLE
 from herbtwin.answer import short_sign
+from herbtwin.light import need_of
 from herbtwin.pipeline import (
+    CHECKING_A_PAGE,
     STOPPED_LINES,
     AdvisorReplied,
+    CareFound,
     PlantFound,
     Progress,
     SeasonFound,
@@ -33,8 +36,10 @@ from herbtwin.pipeline import (
     WeatherFound,
     WeatherMissed,
 )
+from herbtwin.plant_model import is_tender
 from herbtwin.receipt import ON_TF
 from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT, BackupRead, about_problem
+from herbtwin.stages.advise import PANEL_TEMPERATURES
 from herbtwin.stages.problem import signs as problem_signs
 from herbtwin.web.style import CSS, MARK
 
@@ -103,14 +108,44 @@ NOW_JS = (
     # which could argue with the answer
     "const n=document.getElementById('wait-now-step'),li=s[s.length-1];if(n&&li){"
     "const t=((li.firstChild||{}).textContent||'').trim();"
-    "n.textContent=li.classList.contains('advisor')?t.split(':')[0]:t}}"
+    "n.textContent=li.classList.contains('advisor')?t.split(':')[0]:t}"
+    "if(window.herbtwinNext)herbtwinNext()}"
     # our own data for the plant (SeasonFound, WeatherFound) arrives as a step; with script
     # its card moves to the side column, without it the card stays in the list
     "function herbtwinAside(id){const e=document.getElementById(id),"
     "a=document.getElementById('wait-side');if(e&&a&&e.firstElementChild){"
+    # a card said again (a place typed on the wait: its weather) takes the old one's place
+    "a.querySelectorAll('.'+id).forEach(o=>o.remove());"
     "a.append(e.firstElementChild);a.hidden=false;e.remove()}}</script>"
 )
 NOW_CALL = "<script>herbtwinNow()</script>"
+
+# what comes next and roughly how long it takes, under the step now (22 Oct phone walk,
+# Kash: "a static wait message isn't a great user experience"). Rough times from our traces
+# (23 Oct): GLM's photo read is 14 s at the median (local, n=28; 9.9 s live on 21 Oct, so
+# "10 to 20"), and the 3 advisors run at once, the slowest of 3 taking 6.0 s at the median
+# (Nemotron 3 Super, n=111 asks). Matched on the newest step's start, as SLOW_FOR is
+ADVISORS_NEXT = f"Next: {len(PANEL_TEMPERATURES)} advisors, about 6 s"
+PHOTO_NEXT = "Next: naming your plant, usually 10 to 20 s"
+ANSWER_NEXT = "Next: your answer"
+# a step -> what comes next, said by a call after its own line, so the page's head never
+# lists steps a read may not take; any other step: the advisors are next
+NEXT_FOR = {
+    "Reading the photo": PHOTO_NEXT,
+    "Thinking about what it needs": ANSWER_NEXT,
+    CHECKING_A_PAGE: ANSWER_NEXT,
+    **dict.fromkeys(STOPPED_LINES, ""),  # the read stops at the photo
+}
+NEXT_JS = (
+    "<script>function herbtwinNext(m){const x=document.getElementById('wait-next');"
+    f"if(x)x.textContent=m===undefined?{json.dumps(ADVISORS_NEXT)}:m}}</script>"
+)
+
+
+def _next_call(nxt: str | None) -> str:
+    """What comes next after this step, when it is not the advisors (NEXT_FOR)."""
+    return "" if nxt is None else f"<script>herbtwinNext({json.dumps(nxt)})</script>"
+
 
 # the photo you sent, at the top of the steps from the first paint (19 Oct judge walk: the
 # wait opened on an empty card). It is the small copy index.html keeps in this tab on send:
@@ -138,11 +173,13 @@ WAIT_NOW = (
     '<p class="wait-now" id="wait-now"><span class="wait-now-label">Now</span>'
     '<span class="wait-now-step" id="wait-now-step">Starting on your photo</span></p>'
 )
+# a plant read: what comes next under it (NEXT_FOR); a spot read has steps of its own
+WAIT_NEXT = f'<p class="wait-next" id="wait-next">{PHOTO_NEXT}</p>{NEXT_JS}'
 
 
-def page_head(stalled: str, photo: bool = True) -> str:
+def page_head(stalled: str, photo: bool = True, nexts: bool = True) -> str:
     """The first chunk: the page's head, the photo you sent, what to do if it stalls, and
-    padding."""
+    padding. `nexts`: what comes next under the step now, for a plant read."""
     return (
         '<!doctype html>\n<html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -166,6 +203,7 @@ def page_head(stalled: str, photo: bool = True) -> str:
         '<div class="card ink band-overlap progress-steps">\n'
         + (WAIT_PHOTO if photo else "")
         + WAIT_NOW
+        + (WAIT_NEXT if nexts else "")
         # hidden until a stall; without script it shows, as the only way to say it
         + f'<p class="muted" id="stalled" hidden><small>{stalled}</small></p>'
         f'<noscript><p class="muted"><small>{stalled}</small></p></noscript>\n<ol>\n'
@@ -184,7 +222,9 @@ SIGNED_OUT_HEAD = page_head(
     "answer comes straight back."
 )
 # a spot read is never listed in My plants: it lives in the spot cache and the spots table
-SPOT_HEAD = page_head("Stuck? Try again in a minute; your photo is not kept.", photo=False)
+SPOT_HEAD = page_head(
+    "Stuck? Try again in a minute; your photo is not kept.", photo=False, nexts=False
+)
 SORRY = "something went wrong on our side"
 
 
@@ -242,7 +282,7 @@ def _found_line(f: PlantFound) -> str:
 
 def _line(text: str, note: str | None = None) -> str:
     said = f'<span class="note">{html.escape(note, quote=False)}</span>' if note else ""
-    return f"<li>{html.escape(text)}{said}</li>{NOW_CALL}\n"
+    return f"<li>{html.escape(text)}{said}</li>{NOW_CALL}{_next_call(NEXT_FOR.get(text))}\n"
 
 
 # each choice as the wait names it, mid-sentence ("Advisor 1 of 3: protect it")
@@ -293,7 +333,8 @@ def _advisor_line(r: AdvisorReplied) -> str:
     ) + "<i></i>" * max(0, r.of - n)
     return (
         f'<li class="advisor">Advisor {len(r.said)} of {r.of}: {html.escape(chose)}'
-        f'<span class="dots" aria-hidden="true">{dots}</span></li>{NOW_CALL}\n'
+        f'<span class="dots" aria-hidden="true">{dots}</span></li>{NOW_CALL}'
+        f"{_next_call(ANSWER_NEXT)}\n"
     )
 
 
@@ -357,6 +398,41 @@ def _season_cards(f: SeasonFound) -> str:
     return out
 
 
+LIGHT = {"sun": "full sun", "part_shade": "part shade", "shade": "shade"}
+
+
+def _degrees(c: float) -> str:
+    return f"{c:g}".replace("-", "\u2212") + "&nbsp;°C"
+
+
+def _care_card(f: CareFound) -> str:
+    """The plant's light, water and cold, as the advisors get them (22 Oct phone walk,
+    Kash: "Should get more info while waiting"). Only what the pack really says: no light
+    from a lux band, and no frost line from generic thresholds (an unverified pack)."""
+    pack, lines = f.pack, []
+    if need := need_of(pack.sun):
+        light = " or ".join(LIGHT[k] for k in LIGHT if k in need)
+        lines.append(f"<li><b>Light:</b> {light}</li>")
+    water = pack.water_need.strip()
+    if water.lower().startswith("rhs:"):
+        soil = water[4:].strip().removeprefix("moisture ").strip()
+        lines.append(f"<li><b>Soil:</b> {html.escape(soil)}</li>")
+    elif water.lower() in ("low", "moderate", "high"):
+        lines.append(f"<li><b>Water:</b> {water.lower()} need</li>")
+    if pack.verified:
+        cold = "Cold" if is_tender(pack) else "Frost"
+        lines.append(f"<li><b>{cold}:</b> damaged below {_degrees(pack.frost_damage_c)}</li>")
+    if not lines:
+        return ""
+    rhs = any("rhs.org.uk" in src for src in pack.sources)
+    said = "From its RHS page." if rhs else "From our own plant data."
+    return _fact(
+        "care",
+        f"What {f.name.lower()} needs",
+        f'<ul>{"".join(lines)}</ul><p class="muted"><small>{said}</small></p>',
+    )
+
+
 def _day(d) -> str:
     return f"{d:%a} {d.day} {d:%b}"  # "Mon 3 Nov", as the answer page writes a date
 
@@ -398,16 +474,25 @@ WEATHER_MISSED = {
 }
 
 
+# no place, or one we could not find: the quick questions ask where it is (asks_card)
+ASK_PLACE_ON = frozenset({"no_location", "place_not_found"})
+ASK_PLACE = "<script>if(window.herbtwinAskPlace)herbtwinAskPlace()</script>"
+# the weather is being fetched for a place we have: an unanswered place question goes
+PLACE_KNOWN = "<script>if(window.herbtwinPlaceKnown)herbtwinPlaceKnown()</script>"
+CHECKING_WEATHER = "Checking the weather where you are"
+
+
 def _missed_line(m: WeatherMissed) -> str:
     said = WEATHER_MISSED.get(m.why, WEATHER_MISSED["fetch_failed"])
-    return f'<li class="missed">{html.escape(said)}</li>{NOW_CALL}\n'
+    ask = ASK_PLACE if m.why in ASK_PLACE_ON else ""
+    return f'<li class="missed">{html.escape(said)}</li>{NOW_CALL}{ask}\n'
 
 
 CHECKING = "Checking the advice with what you told us…"
 NOT_SURE = "not_sure"
 # what a reply was about, in the thanks line ({what}), so a tap on one question never reads
 # as answering both; "not sure" on the soil sends no soil reading
-WHAT = {"soil_feel": "the soil", "last_watered": "watering"}
+WHAT = {"soil_feel": "the soil", "last_watered": "watering", "place": "where it is"}
 ASKED_NOW = "Thanks: we'll use your answer about {what}."
 ASKED_LATER = "Thanks: we'll check the advice with your answer about {what} when you open it."
 # "not sure" sends no reading for that question ({none}: what we go without)
@@ -443,20 +528,45 @@ def _choices(name: str, legend: str, choices: dict[str, str]) -> str:
     return f'<fieldset><legend>{html.escape(legend)}</legend><div class="choices">{boxes}</div></fieldset>'
 
 
-def asks_card(wait_id: str) -> str:
+PLACE_ASK = "Where is it? (UK town or postcode)"
+# the heading as it counts the questions: the place question shows or not
+ASKS_HEAD = "While you wait: {n} quick questions"
+
+
+def _place_ask(shown: bool) -> str:
+    """Where the plant is, when the upload gave no place (22 Oct phone walk, Kash: "I
+    thought we normally got more info": no place, so no weather, no twin and no Compare).
+    Sent with its button or Enter; a place sent before the advisors start is used in this
+    answer (pipeline.placed_late), after that when the answer opens, as a refine."""
+    return (
+        f'<fieldset class="wait-place" id="wait-place"{"" if shown else " hidden"}>'
+        # named by its legend: a <label> here would draw as one of the choice pills
+        f'<legend id="wait-place-l">{html.escape(PLACE_ASK)}</legend>'
+        '<div class="place-row"><input type="text" id="wait-place-in" name="place" '
+        'aria-labelledby="wait-place-l" maxlength="80" autocomplete="postal-code" '
+        'enterkeyhint="send">'
+        '<button type="submit" class="small">Use this place</button></div>'
+        '<p class="muted"><small>For the weather and the twin\'s forecast.</small></p>'
+        "</fieldset>"
+    )
+
+
+def asks_card(wait_id: str, ask_place: bool = False) -> str:
     """The quick questions, while the photo is read (21 Oct, Kash: "use the wait"). Each tap
     is sent at once; nothing waits on them. By script only: without it the form would leave
-    this page, and the answer page asks the same two."""
+    this page, and the answer page asks the same two. `ask_place`: the upload gave no place,
+    so where it is comes first; a read that finds no place asks it too (ASK_PLACE)."""
     told, see = f"/waits/{wait_id}/told", f"/waits/{wait_id}/see"
     said = json.dumps(
         {"now": ASKED_NOW, "later": ASKED_LATER, "below": ASKED_BELOW, "kept": ASKED_KEPT}
     )
     return (
         f'<form class="tray wait-asks" id="wait-asks" method="post" action="{told}" hidden>'
-        "<h2>While you wait: two quick questions</h2>"
+        f'<h2 id="wait-asks-h">{ASKS_HEAD.format(n="three" if ask_place else "two")}</h2>'
         # the read starts at once and nothing waits on these (21 Oct, Kash thought it had
         # started without them): say so, and that a reply any time before the answer counts
         f'<p class="muted">{STARTED}</p>'
+        + _place_ask(ask_place)
         + _choices(
             "soil_feel",
             "Push a finger 2 cm into the soil. How does it feel?",
@@ -473,7 +583,9 @@ def asks_card(wait_id: str) -> str:
         # each line names what was sent, so a tap on one question never reads as both; "not
         # sure" on either sends no reading for it, and says what we go without
         f"const whats={json.dumps(WHAT)},nones={json.dumps(NONE)},none={json.dumps(ASKED_NONE)};"
-        "const send=()=>{t=null;const d=new FormData(f),n=[...d.keys()],"
+        # an empty place is not an answer: never sent as one
+        "const send=()=>{t=null;const d=new FormData(f);"
+        "if(!String(d.get('place')||'').trim())d.delete('place');const n=[...d.keys()],"
         "u=n.filter(q=>d.get(q)==='not_sure'),k=n.filter(q=>d.get(q)!=='not_sure'),"
         "w=k.map(q=>whats[q]).join(' and ');"
         "last=fetch(f.action,{method:'POST',body:d,headers:{'X-Herbtwin-Fetch':'1'}})"
@@ -484,8 +596,21 @@ def asks_card(wait_id: str) -> str:
         f".catch(()=>say({json.dumps(ASK_FAILED)}));return last}};"
         # "See your answer" sends a reply still waiting first, then asks for the check
         "window.herbtwinFlush=()=>t?(clearTimeout(t),send()):last;"
-        "f.addEventListener('submit',e=>e.preventDefault());"
-        f"f.addEventListener('change',()=>{{window.herbtwinSee={json.dumps(see)};"
+        # the place's button or Enter sends at once
+        "f.addEventListener('submit',e=>{e.preventDefault();"
+        # an empty box and nothing chosen: nothing to send
+        "if(pi&&!pi.value.trim()&&!f.querySelector('input:checked'))return;"
+        f"window.herbtwinSee={json.dumps(see)};clearTimeout(t);send()}});"
+        # no place came with the photo or the read: ask where it is; a place on its way
+        # (the weather is being fetched) drops the question unless it was answered
+        "const pl=document.getElementById('wait-place'),"
+        "pi=document.getElementById('wait-place-in'),h=document.getElementById('wait-asks-h');"
+        f"window.herbtwinAskPlace=()=>{{if(!pl||f.hidden)return;pl.hidden=false;"
+        f"h.textContent={json.dumps(ASKS_HEAD.format(n='three'))}}};"
+        "window.herbtwinPlaceKnown=()=>{if(!pl||pi.value.trim())return;pl.hidden=true;"
+        f"h.textContent={json.dumps(ASKS_HEAD.format(n='two'))}}};"
+        # a typed place waits for its button: each letter is not an answer
+        f"f.addEventListener('change',e=>{{if(e.target===pi)return;window.herbtwinSee={json.dumps(see)};"
         "clearTimeout(t);t=setTimeout(send,400)})})()</script>"
     )
 
@@ -502,6 +627,8 @@ def _step(said: object, advisor: str | None = None) -> str:
             return _advisor_line(said)
         if isinstance(said, SeasonFound):
             return _season_cards(said)
+        if isinstance(said, CareFound):
+            return _care_card(said)
         if isinstance(said, WeatherFound):
             return _weather_card(said)
         if isinstance(said, WeatherMissed):
@@ -510,6 +637,8 @@ def _step(said: object, advisor: str | None = None) -> str:
             return _line(str(said)) + DROP_ASKS
         if said == THINKING:
             return _line(THINKING, advisors_note(advisor))
+        if said == CHECKING_WEATHER:
+            return _line(CHECKING_WEATHER) + PLACE_KNOWN
         return _line(str(said))
     except Exception:  # noqa: BLE001 - a bad step must not end the page mid-stream
         log.exception("wait step could not be drawn: %r", said)
@@ -561,6 +690,7 @@ def _done(target: str) -> str:
         + "const nw=document.getElementById('wait-now');if(nw){nw.classList.add('finished');"
         + "nw.querySelector('.wait-now-label').textContent='Done';"
         + "document.getElementById('wait-now-step').textContent=s}"
+        + "const nx=document.getElementById('wait-next');if(nx)nx.hidden=true;"
         + "const r=document.getElementById('ready');"
         # docked, the page's foot clears the bar at its height now, as its lines come and go
         + "const pad=()=>{if(r&&r.classList.contains('docked'))"
@@ -607,7 +737,8 @@ def _failed(reason: str, retry: str = "/") -> str:
         + "<script>document.querySelectorAll('.progress li.now')"
         ".forEach(li=>li.classList.remove('now'));"
         # no step is being worked on: the error below says what happened
-        "(e=>{if(e)e.hidden=true})(document.getElementById('wait-now'))</script>\n"
+        "(e=>{if(e)e.hidden=true})(document.getElementById('wait-now'));"
+        "(e=>{if(e)e.hidden=true})(document.getElementById('wait-next'))</script>\n"
         f'<p class="err">That didn\'t work: {html.escape(reason.rstrip("."))}. '
         f'<a href="{html.escape(retry, quote=True)}">Try again</a></p>\n{_END}'
     )

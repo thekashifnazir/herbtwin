@@ -40,7 +40,9 @@
   <form class="judge-try" id="judge-try" method="post" action="/analyse" enctype="multipart/form-data">
     <input type="file" name="photo" id="judge-photo" accept="image/jpeg" hidden>
     <input type="hidden" name="place" value="London">
-    <div class="judge-picks">
+    {# the samples rise in turn, and what shows over days after them, when they arrive
+       below the first screen (the shared reveal, 23 Oct) #}
+    <div class="judge-picks" data-reveal="stagger">
       <a class="judge-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg" data-to="/analyse">
         <img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" alt="" loading="lazy">
         <span><strong>Basil flowering</strong> The best start: the advice tested on the plant's twin, with pictures of it in about 7 days.</span></a>
@@ -60,7 +62,7 @@
   <noscript><p class="small muted">Without JavaScript, a tap opens the photo: save it, then send it from the <a href="/">home page</a> with London as the place.</p></noscript>
 </section>
 
-<section class="judge-staged" aria-labelledby="judge-staged-h">
+<section class="judge-staged" data-reveal="rise" aria-labelledby="judge-staged-h">
   <h2 id="judge-staged-h">What only shows over days</h2>
   <p>The reminder email and "Did you do it?" need a signed-in account and a second photo of the
     same plant days later, so they won't appear in a short session. Our Devpost gallery shows

@@ -2,3 +2,6 @@
    privacy.html): the band, then the page in the 38rem reading column. A wrap that holds a
    band is centred and full width (herbtwin.css), so what follows the band keeps the column */
 :is(.sign-in-page, .privacy-page) .page-band ~ * { max-width: var(--measure); }
+/* privacy's text in one block for the reveal (privacy.html): its first heading is a first
+   child now, so the 40 px a heading keeps above it moves to the block (23 Oct) */
+.privacy-page .privacy-text { margin-top: 40px; }

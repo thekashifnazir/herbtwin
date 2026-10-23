@@ -139,8 +139,9 @@ def test_the_page_lists_them_under_who_advised_and_before_the_folds(tmp_path):
     assert details.index('<p class="advisors">') < details.index('<div class="advisor-said">')
     assert details.index('<div class="advisor-said">') < details.index("<details")
     assert "<h3>What each advisor said</h3>" in said
-    assert "<li>Advisor 1: <strong>Cut it back.</strong></li>" in said
-    assert "<li>Advisor 3: <strong>Leave it.</strong></li>" in said
+    # a chip each, in order, each named for a screen reader (23 Oct answer-page critique, 9)
+    assert '<li class="vote-chip"><span class="sr-only">Advisor 1: </span>Cut it back</li>' in said
+    assert '<li class="vote-chip"><span class="sr-only">Advisor 3: </span>Leave it</li>' in said
     assert '<p class="note">The plan at the top goes with what most of them said.</p>' in said
     # with no stored replies (an older answer), nothing is shown
     rec.answer.runs = []

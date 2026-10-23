@@ -120,6 +120,7 @@ class MapRow:
     seconds: str
     cost: str
     note: str = ""  # the photo read only: the backup read it, and why
+    stage: str = ""  # its step, for the strip's colour (23 Oct answer-page critique, 9)
 
 
 @dataclass(frozen=True)
@@ -189,6 +190,7 @@ def model_map(rec: AnalysisRecord) -> ModelMap | None:
             if s.cost_usd is None
             else usd(s.cost_usd),
             _note(rec, s),
+            s.stage,
         )  # fmt: skip
         for s in steps
     ]

@@ -14,7 +14,8 @@
   <p class="actions"><a class="button primary" href="/">Upload a photo</a></p>
 </div>
 {% if plants %}
-<div class="plant-grid">
+{# below the first screen the cards rise in turn as they arrive (the shared reveal, 23 Oct) #}
+<div class="plant-grid" data-reveal="stagger">
 {% for p, visits, thumb, lines, box in plants %}
 <article class="card plant">
   <div class="plant-head">
@@ -50,13 +51,13 @@
 {% endfor %}
 </div>
 {% else %}
-<div class="card plants-empty">
+<div class="card plants-empty" data-reveal="rise">
   <h2>No plants yet</h2>
   <p>Send a photo while signed in and the plant appears here, with each answer it gets.</p>
 </div>
 {% endif %}
 <hr class="divider">
-<section class="account" aria-labelledby="account-h">
+<section class="account" aria-labelledby="account-h" data-reveal="rise">
   <h2 id="account-h">Your account</h2>
   {% if sharing %}<form class="sharing" method="post" action="/account/sharing"><input type="hidden" name="back" value="/plants">
     <p>Sharing how past advice turned out: <strong>{{ "on" if sharing.share_scored_pairs else "off" }}</strong></p>

@@ -55,7 +55,9 @@ is in the submission form; it is not in this repository.
      coloured, with their names in words: **Also do** (green, tagged THIS WEEK),
      **Don't** (clay; headed **Check first**, "Water only if the top of the compost is
      dry", when we can't tell how wet the soil is) and **Keep an eye on** (amber, when there
-     are signs to watch for); then, open, **See it by part**: the same lines sorted
+     are signs to watch for); then, for a plant the photo shows indoors or outdoors in the
+     UK, a blue month card, **Indoors in October** or **Outdoors in October**: what is normal
+     for it now and a few care points for the month, from RHS; then, open, **See it by part**: the same lines sorted
      into pot, soil, leaves and stems, and where it sits, nothing new; then a
      **What next** card: send a new photo in a few days, **Add 1 or 2 more photos** of the same
      plant for a surer answer (when that is on), **I did it** for an action you can
