@@ -84,6 +84,7 @@ from herbtwin.pipeline import (
     how_led,
     name_in_doubt,
     photo_hides_name,
+    placed_late,
     read_photo,
     reading_from,
     trusted_check_on,
@@ -921,13 +922,16 @@ def create_app(
         app.state.answers.put(got.reading, got.rec, person.user_id, got.last_decline)
         return f"/answers/{got.rec.record_id}"
 
-    def wait_for_tap(reading: Reading, data, mime, device, place, told, claim, person) -> str:
-        """Keep the photo for its tap and send the person to the tap page (tapping.py)."""
+    def wait_for_tap(
+        reading: Reading, data, mime, device, place, told, claim, person, wait_id=None
+    ) -> str:
+        """Keep the photo for its tap and send the person to the tap page (tapping.py).
+        `wait_id`: the wait page whose replies the tap's answer takes (tap_choice)."""
         tap_id = app.state.taps.put(
             tapping.TapWait(
                 data, mime, reading, device, place, told, claim,
                 person.user_id if person else None, tapping.share_of(data),
-                tapping.least_share_of(data),
+                tapping.least_share_of(data), wait_id=wait_id,
             )
         )  # fmt: skip
         return f"/taps/{tap_id}"
@@ -1147,7 +1151,9 @@ def create_app(
     def judge_page(request: Request):
         if not judge_code:
             raise HTTPException(404)
-        return TEMPLATES.TemplateResponse(request, "judge.html", judge_context())
+        # back with the cookie: the way on, not the code box again (23 Oct, Kash's phone walk)
+        state = {"done": True} if judge.is_judge(request, judge_code) else {}
+        return TEMPLATES.TemplateResponse(request, "judge.html", judge_context(**state))
 
     @app.post("/judge", response_class=HTMLResponse)
     def judge_sign_in(request: Request, code: str = Form("")):
@@ -1449,7 +1455,7 @@ def create_app(
                 )  # fmt: skip
                 if isinstance(rec, remember.Tap):  # different plants: which one? (tapping.py)
                     return wait_for_tap(
-                        rec.reading, data, mime, device, where, told_now(), key, None
+                        rec.reading, data, mime, device, where, told_now(), key, None, wait_id
                     )
                 if history_down:
                     rec.notes.append(remember.HISTORY_DOWN)
@@ -1469,7 +1475,7 @@ def create_app(
             )
             if isinstance(got, remember.Tap):
                 return wait_for_tap(
-                    got.reading, data, mime, device, where, told_now(), None, person
+                    got.reading, data, mime, device, where, told_now(), None, person, wait_id
                 )
             if isinstance(got, remember.Choose):  # which plant: decided after, with the replies
                 got = replace(got, pending=replace(got.pending, told=told_now()))
@@ -1987,6 +1993,13 @@ def create_app(
                 app.state.taps.restore(tap_id, wait)  # not used: it may be tapped later
                 return message(request, refused, 429)
         data, mime, first = wait.raw, wait.mime, wait.reading
+        # what was told on the wait page, all of it: a reply after the read ended too
+        told = wait.told
+        if wait.wait_id is not None:
+            found, now = app.state.waits.for_tap(wait.wait_id)
+            told = now if found else told
+        # a place told there: read where it is (the crop), or place the first read there
+        place = (told.place if told is not None else None) or wait.place
         if cut is not None:
             try:
                 data = await run_in_threadpool(cut, wait.raw)
@@ -1998,13 +2011,23 @@ def create_app(
             mime, first = "image/jpeg", None
 
         def work(progress: Callable[[str], None]) -> str:
+            nonlocal first, told, place
+            if first is not None and place and place != wait.place:  # the whole photo
+                placed = placed_late(app.state.deps, first, place, progress)
+                if placed is first:  # not found: never claimed as told, nor used
+                    place = wait.place
+                    if told is not None:
+                        before = wait.told.place if wait.told else None
+                        told = told.model_copy(update={"place": before})
+                        told = None if told.is_empty() else told
+                first = placed
             if person is None:
                 rec = run(
                     data,
                     mime,
                     wait.device,
-                    wait.place,
-                    wait.told,
+                    place,
+                    told,
                     progress,
                     claim=wait.claim,
                     first=first,
@@ -2015,7 +2038,7 @@ def create_app(
                 return f"/answers/{rec.record_id}"
             got = remember.start(
                 app.state.deps, person, data, mime, received=clock(), device=wait.device,
-                place=wait.place, told=wait.told, progress=progress, reading=first,
+                place=place, told=told, progress=progress, reading=first,
                 tapped=cut is not None,
             )  # fmt: skip
             return landed(person, got, (data, mime))

@@ -62,6 +62,7 @@ def test_a_missing_page_has_a_way_back(tmp_path):
 
 
 def test_the_judge_samples_are_named_as_on_the_home_page(tmp_path):
+    from tests.test_web_judge import CODE
     from tests.test_web_judge import _client as _judge_client
 
     home = _spot_client(tmp_path)[0].get("/").text
@@ -70,7 +71,7 @@ def test_the_judge_samples_are_named_as_on_the_home_page(tmp_path):
     )
     names = dict(chips)
     (tmp_path / "judge").mkdir()
-    judge = _judge_client(tmp_path / "judge").get("/judge").text
+    judge = _judge_client(tmp_path / "judge").post("/judge", data={"code": CODE}).text
     picks = re.findall(
         r'data-sample="([^"]+)"[^>]*>\s*<picture>.*?<img [^>]*></picture>\s*<span><strong>([^<]+)</strong>',
         judge,

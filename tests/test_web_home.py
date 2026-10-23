@@ -343,7 +343,7 @@ def test_no_page_asks_for_the_replaced_bed_photo_urls(tmp_path):
     home = _spot_client(tmp_path)[0].get("/").text
     env = {"HERBTWIN_JUDGE_CODE": CODE, "HERBTWIN_SPOT_ENABLED": "1"}
     (tmp_path / "j").mkdir()
-    judge = _judge_client(tmp_path / "j", env).get("/judge").text
+    judge = _judge_client(tmp_path / "j", env).post("/judge", data={"code": CODE}).text
     for page in (home, judge):
         assert "7-raised-bed" not in page and "/static/samples/7-pea-bed.jpg" in page
 

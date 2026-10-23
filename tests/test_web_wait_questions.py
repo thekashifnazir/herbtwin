@@ -462,3 +462,83 @@ def test_a_card_said_again_takes_the_old_ones_place_and_an_empty_place_sends_not
     assert "a.querySelectorAll('.'+id).forEach(o=>o.remove());a.append(" in NOW_JS
     card = asks_card(WID, ask_place=True)
     assert "if(pi&&!pi.value.trim()&&!f.querySelector('input:checked'))return;" in card
+
+
+# 23 Oct, Kash's phone walk of rev 00089: a photo of several plants, no place. London, the
+# finger test and watering were answered on the wait page after the read had ended; the
+# wait said "tell us again under your answer", and the tapped plant's answer had no weather.
+# Kash: "It should redo and add location to our information if we have done that."
+
+LONDON = {
+    "results": [{"name": "London", "country_code": "GB", "latitude": 51.5, "longitude": -0.12}]
+}
+
+
+@pytest.mark.parametrize("whole", [True, False])
+@respx.mock
+def test_what_was_told_on_the_wait_reaches_the_answer_for_the_plant_tapped(tmp_path, whole):
+    from herbtwin.web.progress import ASKED_BELOW
+    from herbtwin.where import GEOCODE_URL
+    from tests.test_web import _placeless_client
+    from tests.test_web_tap import MIXED, PHOTO
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json=LONDON))
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    reads = [json.dumps(MIXED)] + ([] if whole else [json.dumps(OBS)])  # a crop is read again
+    c = _placeless_client(tmp_path, reads, [json.dumps(ADV)] * 3)
+    _with_reply(c, Told(soil_feel="dry"))  # one reply while the photo was read
+    page = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}).text
+    assert "No place given: skipping the weather" in page
+    tap = re.search(r'<a id="next" href="/taps/([0-9a-f]+)"', page)[1]
+    # the rest after the read had ended: each is kept for the tap, and the line says so
+    told = f"/waits/{c.wait_id}/told"
+    assert c.post(told, data={"place": "London"}).json() == {"counted": "below"}
+    assert c.post(told, data={"last_watered": "today"}).json() == {"counted": "below"}
+    assert ASKED_BELOW == "Thanks: we'll use it for the plant you tap."
+    form = {"whole": "1"} if whole else {"fx": "0.25", "fy": "0.5"}
+    page = c.post(f"/taps/{tap}", data=form).text
+    answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
+    rec = c.app.state.answers.get_for(answer, None).latest
+    assert rec.told == Told(soil_feel="dry", last_watered="today", place="London")
+    assert rec.location is not None and round(rec.location.lat, 1) == 51.5  # its weather too
+    assert rec.environment is not None and rec.state is not None
+    assert "No place given" not in page
+
+
+@respx.mock
+def test_signed_in_what_was_told_on_the_wait_reaches_the_tapped_plants_answer(tmp_path):
+    from herbtwin.where import GEOCODE_URL
+    from tests.test_web_history import _signed_in
+    from tests.test_web_tap import MIXED, PHOTO
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json=LONDON))
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c, hist, _ = _signed_in(tmp_path, [json.dumps(MIXED)], [json.dumps(ADV)] * 3)
+    page = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}, data={"place": ""})
+    wait_id = re.search(r'action="/waits/([0-9a-f]+)/told"', page.text)[1]
+    tap = re.search(r'<a id="next" href="/taps/([0-9a-f]+)"', page.text)[1]
+    c.post(f"/waits/{wait_id}/told", data={"soil_feel": "wet", "place": "London"})
+    page = c.post(f"/taps/{tap}", data={"whole": "1"}).text
+    answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
+    stored = hist.for_user("u1").get_answer(answer)
+    assert stored.told == Told(soil_feel="wet", place="London")
+
+
+@respx.mock
+def test_a_wait_place_the_tap_cannot_find_says_so_and_is_not_claimed(tmp_path):
+    from herbtwin.where import GEOCODE_URL, PLACE_NOT_FOUND_HINT
+    from tests.test_web import _placeless_client
+    from tests.test_web_tap import MIXED, PHOTO
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json={"results": []}))
+    c = _placeless_client(tmp_path, [json.dumps(MIXED)], [json.dumps(ADV)] * 3)
+    page = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}).text
+    wait_id = re.search(r'action="/waits/([0-9a-f]+)/told"', page)[1]
+    tap = re.search(r'<a id="next" href="/taps/([0-9a-f]+)"', page)[1]
+    c.post(f"/waits/{wait_id}/told", data={"place": "Nowhereville", "soil_feel": "dry"})
+    page = c.post(f"/taps/{tap}", data={"whole": "1"}).text
+    assert "Couldn&#x27;t find that place: skipping the weather" in page
+    answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
+    rec = c.app.state.answers.get_for(answer, None).latest
+    assert rec.told == Told(soil_feel="dry") and rec.location is None
+    assert any(n.endswith(PLACE_NOT_FOUND_HINT) for n in rec.notes)

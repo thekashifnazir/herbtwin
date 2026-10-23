@@ -140,9 +140,12 @@ def test_the_agreement_is_said_once_and_the_score_does_not_move():
     # the words change: the chip's effect (and so the number and band) is the same
     sure = Factor(name="advisor", effect="raises", detail="the advisor was sure")
     count = Factor(name="agreement", effect="raises", detail="3 of 3 agree")
-    chip = next(c for c in _chips([(sure, 0.2), (count, 0.2)]) if c.name == "Agreement")
+    # as one chip, as "Mostly:" still reads them (fold_reasons); the page splits them (23 Oct)
+    chip = next(
+        c for c in _chips([(sure, 0.2), (count, 0.2)], split=False) if c.name == "Agreement"
+    )
     assert chip.effect == "raises" and chip.why == ["3 of 3 agree"]
-    alone = next(c for c in _chips([(sure, 0.2)]) if c.name == "Agreement")
+    alone = next(c for c in _chips([(sure, 0.2)], split=False) if c.name == "Agreement")
     assert alone.why == ["the advisor was sure"]  # no count to say it: kept
 
 
@@ -155,8 +158,8 @@ def test_full_agreement_never_stands_alone_under_lowered_it():
     unsure = Factor(name="advisor", effect="lowers", detail="the advisor was not sure")
     count = Factor(name="agreement", effect="raises", detail="3 of 3 agree")
 
-    def agreement(rows):
-        return [(c.effect, c.why) for c in _chips(rows) if c.name == "Agreement"]
+    def agreement(rows):  # as one chip, as "Mostly:" reads them (fold_reasons)
+        return [(c.effect, c.why) for c in _chips(rows, split=False) if c.name == "Agreement"]
 
     assert agreement([(unsure, -0.3), (count, 0.2)]) == [("lowers", ["the advisor was not sure"])]
     sure = Factor(name="advisor", effect="raises", detail="the advisor was sure")
@@ -170,3 +173,42 @@ def test_full_agreement_never_stands_alone_under_lowered_it():
     rows = [(unsure, -0.3), (count, 0.2)]
     # a raising reason never reads as a "but" under Lowered it
     assert not any("but" in w for c in _chips(rows) for w in c.why)
+
+
+def test_held_back_never_says_agreement_when_all_3_agreed():
+    # 23 Oct, Kash on rev 00089: "3 advisors agreed: leave it" beside "Held back: agreement",
+    # because the advisor called it unsure. Their sureness is its own chip, said in words;
+    # the score and the level do not move (the fitted weights are the same)
+    from dataclasses import replace
+
+    from herbtwin.confidence import assess, load_weights
+    from tests.test_say_it_once import BASE
+
+    got = assess(replace(BASE, advisor="low", agree=3))
+    chips = {c.key: c for c in got.chips}
+    assert chips["Agreement"].effect == "raises" and chips["Agreement"].why == ["3 of 3 agree"]
+    unsure = chips["Lead advisor sure"]
+    assert (unsure.name, unsure.effect, unsure.why) == (
+        "The lead advisor wasn't sure",
+        "lowers",
+        [],
+    )
+    held = [c.name.lower() for c in got.chips if c.effect in ("lowers", "missing")]
+    assert "agreement" not in held and "the lead advisor wasn't sure" in held
+    # the same score as one chip gave: only how it is listed changed
+    w = load_weights()["factors"]
+    assert w["advisor"] == {"raises": 0.105, "lowers": -0.179}
+    assert w["agreement"] == {"raises": 0.074, "lowers": -0.06}
+
+
+def test_a_rule_led_answer_shows_no_empty_advisor_chip():
+    # review: with a rule of ours leading, the advisor's line is about agreement, so the lead
+    # advisor's own chip has nothing to say; shown empty it read "Held back: lead advisor sure"
+    from dataclasses import replace
+
+    from herbtwin.confidence import assess
+    from tests.test_say_it_once import BASE
+
+    got = assess(replace(BASE, advisor="low", agree=3, rule_led=True))
+    assert "Lead advisor sure" not in [c.key for c in got.chips]
+    assert not any("lead advisor" in c.name.lower() for c in got.chips)

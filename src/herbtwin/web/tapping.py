@@ -207,6 +207,7 @@ class TapWait:
     share: float = CROP_SHARE  # the crop's side over the short side, for the page's preview
     least: float = 0.0  # the smallest box cut (least_side), as the same share
     since: datetime | None = None  # when it was first kept: a refused tap never extends it
+    wait_id: str | None = None  # its wait page: replies sent after the read still count
 
     def belongs_to(self, user_id: str | None, browser_key: str | None) -> bool:
         if self.user_id is not None:

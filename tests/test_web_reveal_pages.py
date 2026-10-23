@@ -99,8 +99,9 @@ def test_each_page_reveals_its_blocks_below_the_first_screen_only(tmp_path):
     )
     assert hooks["plants"] == [("plant-grid", "stagger"), ("account", "rise")]
     assert hooks["plants empty"] == [("card plants-empty", "rise"), ("account", "rise")]
-    assert hooks["judge"] == [("judge-picks", "stagger"), ("judge-staged", "rise")]
-    assert hooks["judge in"] == hooks["judge"]
+    # before the code /judge is only the code box (23 Oct, Kash's phone walk)
+    assert hooks["judge"] == []
+    assert hooks["judge in"] == [("judge-picks", "stagger"), ("judge-staged", "rise")]
     assert hooks["privacy"] == [("privacy-text", "stagger")]
     assert hooks["sign in"] == [("muted sign-in-note", "rise")]
     for still in ("sign in link", "not found", "limit"):

@@ -150,3 +150,39 @@ def test_in_the_judge_is_sent_to_the_home_page_for_the_full_visit(tmp_path):
     (tmp_path / "b").mkdir()
     first = _client(tmp_path / "b").get("/judge").text
     assert 'class="judge-home"' not in first
+
+
+def _words(page: str) -> int:
+    import html
+    import re
+
+    main = page.split("<main", 1)[1].split("</main>", 1)[0]
+    main = re.sub(r"<script.*?</script>|<noscript>.*?</noscript>", "", main, flags=re.S)
+    return len(html.unescape(re.sub(r"<[^>]+>", " ", main)).split())
+
+
+def test_before_the_code_the_page_is_only_the_code_box(tmp_path):
+    # 23 Oct, Kash's phone walk: "a lot of text and not super helpful. Also the samples below
+    # still won't work until they put their code in"
+    page = _client(tmp_path).get("/judge").text
+    main = page.split("<main", 1)[1].split("</main>", 1)[0]
+    assert 'name="code"' in main and "Enter the judges' code" in main
+    assert 'class="judge-pick"' not in main and 'class="judge-staged"' not in main
+    assert "<script>" not in main.split("</form>", 1)[1]  # no samples script either
+    assert _words(page) <= 30  # 179 before the cut
+
+
+def test_back_with_the_cookie_the_page_is_the_way_on(tmp_path):
+    # server-side, from the cookie, so it works without a script; the code box doesn't return
+    c = _client(tmp_path)
+    c.post("/judge", data={"code": CODE})
+    page = c.get("/judge").text
+    main = page.split("<main", 1)[1].split("</main>", 1)[0]
+    assert "You're in" in main and 'name="code"' not in main
+    assert '<a class="button primary" href="/">Start from the home page</a>' in main
+    assert main.count("primary") == 1  # the home page is the one green button
+    assert main.index("judge-home") < main.index('class="judge-pick"')
+    assert _words(page) <= 125  # 198 before the cut
+    # a tampered cookie is no way in
+    c.cookies.set(COOKIE, "forged")
+    assert 'name="code"' in c.get("/judge").text

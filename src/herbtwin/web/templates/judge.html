@@ -3,21 +3,23 @@
 {% block page %}judge-page has-band{% endblock %}
 {% block wrap %} wide{% endblock %}
 {% block main %}
-{# the band, as About and My plants open (22 Oct site walk: at 1300px this page was mostly
-   empty); the code card pulls up over its edge, and its button is the page's one primary #}
+{# 23 Oct, Kash's phone walk: "a lot of text and not super helpful. Also the samples below
+   still won't work until they put their code in". Before the code: the band, the code box
+   and one line on what it unlocks. After it (or back with the cookie, server-side): the way
+   on is the home page, the one green button; the samples and what shows over days below,
+   short. The code card pulls up over the band's edge (22 Oct site walk) #}
 <div class="page-band">
 <h1>Judges</h1>
 {% if done %}
 <p class="lead">You're in. Photo reads on this browser skip the daily limits for 60 days.</p>
-{# the whole visit from its first screen, as anyone sees it, is the main way on; the samples
-   below are a shortcut (21 Oct, Kash: "make it clear they can go back to the home page to
-   carry on ... I wanted to get the full experience from the start") #}
+{# the whole visit from its first screen, as anyone sees it, is the main way on (21 Oct, Kash:
+   "I wanted to get the full experience from the start") #}
 <div class="judge-home">
   <p class="actions"><a class="button primary" href="/">Start from the home page</a></p>
   <p class="small">The full visit, as anyone sees it: send a photo of a plant and follow it through.</p>
 </div>
 {% elif blocked %}
-<p class="lead" role="alert">Too many tries today. Try again tomorrow, or try a sample below.</p>
+<p class="lead" role="alert">Too many tries today. Try again tomorrow.</p>
 {% else %}
 <p class="lead">Enter the judges' code to skip the daily photo limits on this browser.</p>
 {% endif %}
@@ -31,48 +33,44 @@
   <button class="primary" type="submit">Use code</button>
 </form>
 {% endif %}
-
+{% if done %}
 {# one tap sends a sample with London set, as if picked on the home page (18 Oct judge walk) #}
 <section class="judge-start" aria-labelledby="judge-start-h">
   <h2 id="judge-start-h">Or a quick look: one tap each</h2>
-  <p>Each sends one of our sample photos with the place set to London. Answers follow the date
-    and London's weather for the next 2 weeks, so they change from week to week.</p>
+  <p>Each sends a sample photo, with London as the place.</p>
   <form class="judge-try" id="judge-try" method="post" action="/analyse" enctype="multipart/form-data">
     <input type="file" name="photo" id="judge-photo" accept="image/jpeg" hidden>
     <input type="hidden" name="place" value="London">
-    {# the samples rise in turn, and what shows over days after them, when they arrive
-       below the first screen (the shared reveal, 23 Oct). Each pick is drawn 112 x 84
-       (judge.css .judge-pick img): the box below says the same #}
+    {# the samples rise in turn when they arrive below the first screen (the shared reveal,
+       23 Oct). Each pick is drawn 112 x 84 (judge.css .judge-pick img) #}
     <div class="judge-picks" data-reveal="stagger">
       <a class="judge-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg" data-to="/analyse">
         {{ picture("/static/samples/3-basil-yellow-leaves-thumb.jpg", box=(112, 84)) }}
-        <span><strong>Basil flowering</strong> The best start: the advice tested on the plant's twin, with pictures of it in about 7 days.</span></a>
+        <span><strong>Basil flowering</strong> The best start: advice tested on the plant's twin.</span></a>
       <a class="judge-pick" href="/static/samples/6-basil-downy-mildew.jpg" data-sample="6-basil-downy-mildew.jpg" data-to="/analyse">
         {{ picture("/static/samples/6-basil-downy-mildew-thumb.jpg", box=(112, 84)) }}
-        <span><strong>Basil mildew</strong> Yellow patches and grey-purple fuzz: a disease the photo check looks for.</span></a>
+        <span><strong>Basil mildew</strong> A disease the photo check looks for.</span></a>
       <a class="judge-pick" href="/static/samples/4-rosemary-beetles.jpg" data-sample="4-rosemary-beetles.jpg" data-to="/analyse">
         {{ picture("/static/samples/4-rosemary-beetles-thumb.jpg", box=(112, 84)) }}
         <span><strong>Rosemary beetles</strong> A pest on the shoot tips.</span></a>
       {% if spot_on %}<a class="judge-pick" href="/static/samples/7-pea-bed.jpg" data-sample="7-pea-bed.jpg" data-to="/spots">
         {{ picture("/static/samples/7-pea-bed-thumb.jpg", box=(112, 84)) }}
-        <span><strong>Raised bed</strong> The second door, "What can I grow here?": which crops suit this spot in London now.</span></a>{% endif %}
+        <span><strong>Raised bed</strong> "What can I grow here?" for this spot.</span></a>{% endif %}
     </div>
   </form>
   <p class="small muted"><a href="/about#credits">Photo credits</a></p>
   <p class="small muted" id="judge-said" role="status" aria-live="polite"></p>
-  <noscript><p class="small muted">Without JavaScript, a tap opens the photo: save it, then send it from the <a href="/">home page</a> with London as the place.</p></noscript>
+  <noscript><p class="small muted">Without JavaScript, a tap opens the photo: send it from the <a href="/">home page</a>.</p></noscript>
 </section>
 
 <section class="judge-staged" data-reveal="rise" aria-labelledby="judge-staged-h">
   <h2 id="judge-staged-h">What only shows over days</h2>
-  <p>The reminder email and "Did you do it?" need a signed-in account and a second photo of the
-    same plant days later, so they won't appear in a short session. Our Devpost gallery shows
-    both with test data (images 5 and 6, marked "Staged (test data)"). Signed in, you can try them for real: tick
-    "Email me when it's time to check again" under an answer.</p>
-  <p><a class="button" href="/">Start from the home page</a></p>
+  <p>The reminder email and "Did you do it?" need an account and a second photo days later.
+    Our Devpost gallery shows both, marked "Staged (test data)".</p>
 </section>
+{% endif %}
 {% endblock %}
-{% block script %}
+{% block script %}{% if done %}
 <script>
 (() => {
   // a tap loads the sample file into the hidden input (untouched, as the home tiles do) and
@@ -122,5 +120,5 @@
     form.querySelectorAll("[aria-busy]").forEach(t => t.removeAttribute("aria-busy"));
   });
 })();
-</script>
+</script>{% endif %}
 {% endblock %}

@@ -37,7 +37,26 @@ WEIGHTS_PATH = Path(__file__).resolve().parents[2] / "data" / "confidence" / "we
 # "Choices compared" (the plant model's "Compare all choices"), not "2-week forecast": next
 # to "Weather" the old name read as the same thing helping and not helping at once (17 Oct
 # live re-walk); "Plant model" was dropped as jargon on 13 Oct
-CHIPS = ("Season", "Photo", "Choices compared", "Agreement", "Weather", "Soil", "Light", "History")
+CHIPS = (
+    "Season",
+    "Photo",
+    "Choices compared",
+    "Agreement",
+    "Lead advisor sure",
+    "Weather",
+    "Soil",
+    "Light",
+    "History",
+)
+# how many advisors agreed and whether they said they were sure are two things: as one
+# "Agreement" chip, "Held back: agreement" sat beside "3 advisors agreed" when all 3 agreed
+# but called it unsure (23 Oct, Kash on rev 00089: what does that mean?). The sureness is
+# the lead advisor's own rating of its call (Panel.advisor, the chosen ask's), so it is its
+# own chip, named for what it says
+ADVISORS_SURE = "Lead advisor sure"
+SAID_AS = {
+    ADVISORS_SURE: {"raises": "The lead advisor was sure", "lowers": "The lead advisor wasn't sure"}
+}
 CHIP_OF = {
     "season": "Season",
     "season_evidence": "Season",
@@ -48,7 +67,7 @@ CHIP_OF = {
     "plant_model_margin": "Choices compared",
     "container": "Choices compared",
     "care_facts": "Choices compared",
-    "advisor": "Agreement",
+    "advisor": ADVISORS_SURE,  # but a rule of ours leading is about agreement (chip_of)
     "agreement": "Agreement",
     "repair": "Agreement",
     "weather": "Weather",
@@ -492,7 +511,21 @@ COLD_NIGHTS_NOT_YET = "no cold nights yet, so the autumn die-back may not have b
 UNSAID = frozenset({"repair"})
 
 
-def _chips(rows: list[tuple[Factor, float]]) -> list[Chip]:
+def chip_of(f: Factor, split: bool = True) -> str:
+    """The chip a factor counts under. `split=False`: the one "Agreement" chip as it was
+    before the advisors' own sureness had its own, which "Mostly:" still reads (fold_reasons),
+    so the line beside the level says what it said before."""
+    if f.name == "advisor" and (f.detail == RULE_LED or not split):
+        return "Agreement"
+    return CHIP_OF[f.name]
+
+
+def chip_name(key: str, effect: Effect) -> str:
+    """The chip as the page says it: the advisors' sureness says which way it went."""
+    return SAID_AS.get(key, {}).get(effect, key)
+
+
+def _chips(rows: list[tuple[Factor, float]], split: bool = True) -> list[Chip]:
     """One row per chip, under its net effect (22 Oct site walk: "3 of 3 agree" under Helped
     and "needed a second try" under Lowered; Season under Lowered and under No effect). Its
     reasons are the ones that pushed it that way, and a reason that lowered it is never
@@ -502,8 +535,10 @@ def _chips(rows: list[tuple[Factor, float]]) -> list[Chip]:
     # no plant model means no forecast: care facts alone must not read as "Helped: 2-week
     # forecast" on a page that just said the weather was unavailable (17 Oct walk)
     no_model = any(f.name == "plant_model" and f.effect == "missing" for f, _ in rows)
-    for name in CHIPS:
-        mine = [(f, w) for f, w in rows if CHIP_OF[f.name] == name]
+    for name in CHIPS if split else tuple(c for c in CHIPS if c != ADVISORS_SURE):
+        mine = [(f, w) for f, w in rows if chip_of(f, split) == name]
+        if name in SAID_AS and not mine:
+            continue  # a rule of ours led: no advisor's sureness to say, not a missing one
         known = [(f, w) for f, w in mine if f.effect != "missing"]
         said = [(f, w) for f, w in mine if f.name not in UNSAID]
         total = sum(w for _, w in known)
@@ -532,7 +567,9 @@ def _chips(rows: list[tuple[Factor, float]]) -> list[Chip]:
             # beside "Helped" a reason with no weight reads as part of what helped, as before
             up = _once([f.detail for f, _ in said if f.effect in ("raises", "neutral")])
             why = up[:-1] + [f"{up[-1]}, but {_but(low)}"] if up and low else up or low
-        chips.append(Chip(name=name, effect=effect, why=why))
+        if name in SAID_AS and effect in SAID_AS[name]:
+            why = []  # its name says it: "Advisors weren't sure", not "…: the advisor was not sure"
+        chips.append(Chip(name=chip_name(name, effect), effect=effect, why=why, key=name))
     return chips
 
 
@@ -545,7 +582,7 @@ def fold_reasons(factors: list[Factor], weights: dict | None = None) -> str:
     """Every reason the How sure fold says, as one text: what "Mostly:" may name (#review)."""
     w = (weights or load_weights())["factors"]
     rows = [(f, w.get(f.name, {}).get(f.effect, 0.0)) for f in factors]
-    return " · ".join(x for c in _chips(rows) for x in c.why)
+    return " · ".join(x for c in _chips(rows, split=False) for x in c.why)
 
 
 def _once(why: list[str]) -> list[str]:

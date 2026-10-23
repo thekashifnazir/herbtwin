@@ -44,5 +44,11 @@ def test_each_chip_that_moved_the_confidence_says_why(tmp_path):
     assert groups
     for group in groups:
         for item in re.findall(r"<li>(.*?)</li>", group):
-            assert "</strong>: " in item, item  # "Weather: forecast available", not just "Weather"
+            # "Weather: forecast available", not just "Weather"; the advisors' own sureness
+            # says it in its name ("The lead advisor wasn't sure", 23 Oct)
+            said = item in (
+                "<strong>The lead advisor was sure</strong>",
+                "<strong>The lead advisor wasn't sure</strong>",
+            )
+            assert "</strong>: " in item or said, item
             assert "((" not in item and ") (" not in item  # no brackets inside brackets

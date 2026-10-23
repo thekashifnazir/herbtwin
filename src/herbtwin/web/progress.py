@@ -502,7 +502,7 @@ ASKED_KEPT = (
     "Noted. Your answer already used your first answer about {what}; change it under the answer."
 )
 ASK_FAILED = "That didn't send. You can tell us under your answer."
-ASKED_BELOW = "Thanks. This photo asks which plant first: tell us again under your answer."
+ASKED_BELOW = "Thanks: we'll use it for the plant you tap."
 # 22 Oct site walk: one short line, so the questions start higher on a phone
 STARTED = "Optional. Your answers make the advice closer."
 # watering in short words, so the pills sit two to a row on a phone (22 Oct site walk);

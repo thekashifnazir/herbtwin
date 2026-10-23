@@ -549,8 +549,9 @@ class Factor(BaseModel):
 
 
 class Chip(BaseModel):
-    name: str  # one of confidence.CHIPS
+    name: str  # as the page says it (confidence.chip_name)
     effect: Effect
+    key: str = ""  # one of confidence.CHIPS, the same whatever its name says
     why: list[str] = Field(default_factory=list)  # the details behind it, shown beside it
 
 

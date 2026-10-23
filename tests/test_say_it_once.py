@@ -251,9 +251,11 @@ def test_every_problem_we_can_name_from_a_photo_links_its_own_page_or_none():
 def test_a_minority_call_still_says_how_few_agree():
     # W2: advisor sure, 1 of 3 agree nets to Helped; "1 of 3 agree" is the doubt that matters
     got = assess(replace(BASE, advisor="high", agree=1))
+    # 23 Oct: the advisors' own sureness is its own chip, so the count lowers its own row
     agreement = next(c for c in got.chips if c.name == "Agreement")
-    assert agreement.effect == "raises"
-    assert agreement.why == ["the advisor was sure, but only 1 of 3 agree"]
+    assert agreement.effect == "lowers" and agreement.why == ["1 of 3 agree"]
+    sure = next(c for c in got.chips if c.key == "Lead advisor sure")
+    assert (sure.name, sure.effect) == ("The lead advisor was sure", "raises")
 
 
 def _lowered(got) -> list[str]:

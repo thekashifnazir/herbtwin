@@ -106,6 +106,18 @@ class Waits:
             w.taken = w.replies
             return joined(told, w.replies)
 
+    def for_tap(self, wait_id: str) -> tuple[bool, Told | None]:
+        """Every reply so far on top of what came with the upload, for a photo that asked
+        which plant: the tap's answer uses them all, even those sent after the read ended
+        (23 Oct, Kash typed London while the read asked which plant: "It should redo and
+        add location to our information"). False when the wait is gone. On the tap's own
+        request, so no owner check: the id came from that read's tap."""
+        with self._lock:
+            w = self._items.get(wait_id)
+            if w is None or self._clock() - w.at > self._ttl:
+                return False, None
+            return True, joined(w.base, w.replies)
+
     def finish(self, wait_id: str, target: str) -> None:
         with self._lock:
             if (w := self._items.get(wait_id)) is not None:

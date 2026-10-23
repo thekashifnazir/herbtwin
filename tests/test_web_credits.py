@@ -66,9 +66,12 @@ def test_each_image_group_on_home_links_to_the_credits_it_needs(tmp_path):
 
 
 def test_the_judge_page_says_the_no_script_way_only_without_script(tmp_path):
+    from tests.test_web_judge import CODE
     from tests.test_web_judge import _client as _judge_client
 
-    page = _judge_client(tmp_path).get("/judge").text
+    page = (
+        _judge_client(tmp_path).post("/judge", data={"code": CODE}).text
+    )  # samples after the code
     said = page.split('id="judge-said"', 1)[1].split("</p>", 1)[0]
     assert "Without JavaScript" not in said
     assert "<noscript><p" in page and "Without JavaScript, a tap opens the photo" in page
@@ -83,9 +86,12 @@ def test_home_keeps_its_eligibility_line_in_view(tmp_path):
 
 
 def test_the_judge_picks_link_their_photo_credits(tmp_path):
+    from tests.test_web_judge import CODE
     from tests.test_web_judge import _client as _judge_client
 
-    page = _judge_client(tmp_path).get("/judge").text
+    page = (
+        _judge_client(tmp_path).post("/judge", data={"code": CODE}).text
+    )  # samples after the code
     grid = page.split('<div class="judge-picks" data-reveal="stagger">', 1)[1]
     picks, after = grid.split("</form>", 1)[0], grid.split('id="judge-said"', 1)[0]
     assert "Forest and Kim Starr" not in picks  # the credit lines live in one place
