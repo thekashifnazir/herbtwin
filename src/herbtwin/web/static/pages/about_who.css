@@ -20,7 +20,7 @@
 .about-page .who-words p:last-child { margin-bottom: 0; }
 
 /* the figures: one ruled line, the number in the poster type, its words beside it */
-.about-page ul.who-strip { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 36px; margin: 28px 0 24px;
+.about-page ul.who-strip { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 36px; margin: 28px 0 0;
   padding: 12px 0; border-block: 1px solid var(--border); color: var(--muted-fg); }
 .about-page .who-strip li { margin: 0; }
 .about-page .who-strip strong { margin-right: 6px; font: 800 1.6rem/1 var(--poster); color: var(--primary); }
@@ -30,4 +30,6 @@
   .about-page .who-strip li { display: flex; flex-direction: column; gap: 4px; }
 }
 /* the public card after the strip: its own width, not the page's */
-.about-page .who-strip + .about-close { max-width: 40rem; }
+.about-page :is(.who-strip, .who-strip-note) + .about-close { max-width: 40rem; }
+/* where the pull requests are (23 Oct, Kash): the public repo is a curated copy */
+.about-page .about section > p.who-strip-note { margin: 8px 0 24px; color: var(--muted-fg); font-size: 16px; }

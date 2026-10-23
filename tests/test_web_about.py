@@ -664,12 +664,18 @@ def test_people_checks_have_their_own_sub_section_with_a_next_step(tmp_path):
     )
     assert found < people < access
     part = page[people:access]
-    assert "A professional gardener hired through Tendem graded 3 photos" in part
+    assert "A professional gardener hired through <strong>Tendem</strong> graded 3 photos" in part
     assert part.count('<blockquote class="about-card quote ink">') == 2
     nxt = part.split('<p class="about-people-next">', 1)[1].split("</p>", 1)[0]
-    assert nxt.startswith("<strong>Next:</strong> a first-time-user study on Toloka, not run yet")
+    assert nxt.startswith(
+        "<strong>Next:</strong> a first-time-user study on <strong>Toloka</strong>, not run yet"
+    )
     assert 'data/eval/prereg/2026-10-22-toloka-site-study.md"' in nxt
-    assert "Tendem and Toloka are paid from Nebius AI Builder programme credits." in nxt
+    # the two services in bold where they are named (23 Oct, Kash)
+    assert (
+        "<strong>Tendem</strong> and <strong>Toloka</strong> are paid from Nebius AI Builder"
+        " programme credits." in nxt
+    )
 
 
 def test_the_toloka_pilot_is_aggregates_only_and_says_how_small(tmp_path):

@@ -1,12 +1,14 @@
 {# The first-visit intro (23 Oct, Kash: "a plant growing out of our logo with a green screen,
    similar to my logo load on my other website"): his site's loader, in herbtwin's band green.
-   A plant grows up out of the logo mark, then the green lifts away; 1.4 s at most.
+   A plant grows up out of the logo mark, the finished logo holds, then the green slowly
+   dissolves to show the page (23 Oct, Kash: "stay on it for longer ... slowly dissolve");
+   2.4 s in all.
    - Made by this script, so with JS off there is nothing: the page is always there underneath.
    - Once per browser session; never under Reduce Motion; any click, tap or key skips it.
    - aria-hidden and nothing in it takes focus, so it never traps or hides anything.
    - Home and About only, on a fresh visit: never the wait page or an answer.
    - The scroll reveals (nvidia-extra) wait for it: `intro-playing` on <html> while it plays,
-     then `intro-done` and a `herbtwin:intro-done` event as it lifts. #}
+     then `intro-done` and a `herbtwin:intro-done` event as the dissolve starts. #}
 <script>
 (() => {
   const root = document.documentElement;
@@ -36,18 +38,19 @@
     removeEventListener("pointerdown", skip, true);
     removeEventListener("keydown", skip, true);
   };
-  const lift = (fast) => {
+  const dissolve = (fast) => {
     off();
     clearTimeout(timer);
-    o.classList.add(fast ? "is-skipped" : "is-lifting");
+    o.classList.add(fast ? "is-skipped" : "is-dissolving");
     root.classList.add("intro-done");
     root.classList.remove("intro-playing");
     dispatchEvent(new Event("herbtwin:intro-done"));
-    setTimeout(() => o.remove(), fast ? 200 : 400);
+    setTimeout(() => o.remove(), fast ? 150 : 900);
   };
-  const skip = () => lift(true);
+  const skip = () => dissolve(true);
   addEventListener("pointerdown", skip, true);
   addEventListener("keydown", skip, true);
-  timer = setTimeout(() => lift(false), 1000);  // grows for 1.0 s, lifts for 0.4 s
+  // grown by 0.9 s, the logo holds to 1.5 s, then a 0.9 s dissolve
+  timer = setTimeout(() => dissolve(false), 1500);
 })();
 </script>

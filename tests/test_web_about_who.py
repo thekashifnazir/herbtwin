@@ -12,7 +12,7 @@ ROOT = Path(__file__).parents[1]
 # the strip's figures, in one place: counted 23 Oct (468 merged pull requests; 4,496 tests
 # collected) and rounded down. The pull requests are pinned here, never re-counted (the
 # public repo's history isn't this one's); the tests are re-counted below
-STRIP = [("450+", "pull requests"), ("4,000+", "automated tests"), ("1", "person")]
+STRIP = [("450+", "merged pull requests"), ("4,000+", "automated tests"), ("1", "person")]
 
 
 def _who(tmp_path) -> str:
@@ -88,3 +88,18 @@ def _tests_in(folder: Path) -> int:
 def test_the_tests_figure_still_holds():
     # 4,185 on 23 Oct; below 4,000 the strip would overclaim
     assert _tests_in(ROOT / "tests") >= int(STRIP[1][0].rstrip("+").replace(",", ""))
+
+
+def test_the_strip_says_the_pull_requests_are_in_the_private_repo(tmp_path):
+    # 23 Oct, Kash: "we are talking about all the commits and PRs but those are in our private
+    # repo, not the curated public one". The card links the public copy, and the Devpost draft
+    # stays out of it (scripts/export_public.py), so the card names only the code and the reports
+    who = _who(tmp_path)
+    after = who.split('<ul class="who-strip"', 1)[1].split("</ul>", 1)[1].lstrip()
+    assert after.startswith(
+        '<p class="who-strip-note">Pull requests in the private working repo; the public repo is'
+        " a curated copy of it.</p>"
+    )
+    card = who.split('<div class="about-close about-card ink">', 1)[1]
+    assert "The code and the eval reports." in card
+    assert "Devpost story" not in card

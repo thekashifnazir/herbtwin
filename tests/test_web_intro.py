@@ -70,10 +70,25 @@ def test_any_click_tap_or_key_skips_it_and_it_never_traps_focus():
     assert "position: fixed;" in css and "pointer-events: none;" in css  # no layout shift, no catch
 
 
-def test_it_is_done_within_1_4_seconds_and_tells_the_reveals():
+def test_it_holds_the_logo_then_dissolves_within_2_5_seconds_and_tells_the_reveals():
+    # 23 Oct, Kash on the live intro: "maybe we stay on it for longer and instead of it swiping
+    # up we slowly dissolve". The plant is grown by 0.9 s; the logo holds, then the green fades
     js = _script()
-    grow = int(re.search(r"timer = setTimeout\(\(\) => lift\(false\), (\d+)\)", js).group(1))
-    lift = float(re.search(r"transition: transform (\.\d+)s", style.CSS).group(1))
-    assert grow + lift * 1000 <= 1400
-    # nvidia-extra's scroll reveals wait on this contract
-    assert 'root.classList.add("intro-done")' in js and 'new Event("herbtwin:intro-done")' in js
+    start = int(re.search(r"timer = setTimeout\(\(\) => dissolve\(false\), (\d+)\)", js).group(1))
+    css = style.CSS.split(".intro {", 1)[1].split("}", 1)[0]
+    fade = float(re.search(r"transition: opacity (\d?\.\d+)s", css).group(1))
+    assert 1500 <= start and 0.8 <= fade <= 1.0 and start + fade * 1000 <= 2500
+    assert (
+        "translateY" not in style.CSS.split(".intro {", 1)[1].split(".intro-grow", 1)[0]
+    )  # no swipe
+    assert ".intro.is-dissolving { opacity: 0; }" in style.CSS
+    skipped = style.CSS.split(".intro.is-skipped {", 1)[1].split("}", 1)[0]
+    assert "opacity: 0;" in skipped and "transition-duration: .15s;" in skipped  # a tap: at once
+    # the overlay always goes, at the end of whichever fade ran
+    assert re.search(r"setTimeout\(\(\) => o\.remove\(\), fast \? 150 : 900\)", js)
+    # the reveals begin as the page shows through: done fires as the dissolve starts
+    body = js.split("const dissolve = (fast) => {", 1)[1].split("};", 1)[0]
+    assert body.index('o.classList.add(fast ? "is-skipped" : "is-dissolving")') < body.index(
+        'new Event("herbtwin:intro-done")'
+    )
+    assert 'root.classList.add("intro-done")' in body
