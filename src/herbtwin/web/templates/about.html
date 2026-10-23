@@ -258,16 +258,39 @@
 
 <section aria-labelledby="who">{# round 4 (22 Oct, Kash: "the Moveset who made it is much better"): its voice and shape #}
   <h2 id="who">Who made it</h2>
-  <div class="about-two">
-    <div class="about-bio">
-      <p>I'm Kash, a Senior Technical Architect based in London. My day job is cloud, AI strategy and enterprise modernisation, where I set direction and prove out ideas far more often than I write the code myself.</p>
-      <p>herbtwin inverts that: one idea, one person, built end to end for the NVIDIA × Nebius hackathon, where I was at the London event. I lean on AI heavily to do it and say so plainly, because it is the reason this exists at all. I've never been a career developer, and AI assistance is what closes the distance between designing a product and shipping one. The architecture and the judgement calls are mine.</p>
-      <p>More of my writing is at <a href="https://kashifnazir.com" rel="noopener noreferrer">kashifnazir.com</a>, and I'm Kashif Nazir on <a href="https://www.linkedin.com/in/kashifnazir" rel="noopener noreferrer">LinkedIn</a>.</p>
+  {# 23 Oct, Kash yes to a redesign: a pull-quote, the facts at a glance beside his words, the
+     figures in a thin strip, then the public card. The links are the footer's (_maker.html) #}
+  <p class="who-lead">One idea, one person, built end to end.</p>
+  <div class="who-two">
+    <div class="who-facts">
+      <p class="who-name">Kashif Nazir</p>
+      <ul>
+        <li>Senior Technical Architect, London</li>
+        <li>Solo build for the NVIDIA × Nebius hackathon, at the London event</li>
+        <li>First commit 2 Oct 2026</li>
+      </ul>
+      <nav class="who-links" aria-label="Kashif Nazir's site and profiles">
+        <a href="https://kashifnazir.com" rel="noopener noreferrer">kashifnazir.com</a>
+        <a class="who-icon" href="https://github.com/thekashifnazir" rel="noopener noreferrer me" aria-label="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+        <a class="who-icon" href="https://www.linkedin.com/in/kashifnazir" rel="noopener noreferrer me" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+      </nav>
     </div>
-    <div class="about-close about-card ink">
-      <p><strong>All of it is public.</strong> The code, the eval reports and the Devpost story.</p>
-      <p class="actions"><a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">herbtwin on GitHub</a></p>
+    <div class="who-words">
+      <p>My day job is cloud, AI strategy and enterprise modernisation, where I set direction and prove out ideas far more often than I write the code myself.</p>
+      <p>herbtwin inverts that. I lean on AI heavily to do it and say so plainly, because it is the reason this exists at all. I've never been a career developer, and AI assistance is what closes the distance between designing a product and shipping one. The architecture and the judgement calls are mine.</p>
     </div>
+  </div>
+  {# counted 23 Oct and rounded down: 468 merged pull requests (gh pr list --state merged), and
+     4,496 tests collected, of which 4,185 a quick read of tests/ can see, so "4,000+";
+     tests/test_web_about_who.py pins the figures and re-counts the tests #}
+  <ul class="who-strip" aria-label="herbtwin in numbers">
+    <li><strong>450+</strong> pull requests</li>
+    <li><strong>4,000+</strong> automated tests</li>
+    <li><strong>1</strong> person</li>
+  </ul>
+  <div class="about-close about-card ink">
+    <p><strong>All of it is public.</strong> The code, the eval reports and the Devpost story.</p>
+    <p class="actions"><a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">herbtwin on GitHub</a></p>
   </div>
 </section>
 

@@ -420,16 +420,17 @@ def test_without_the_spot_feature_the_grow_card_goes(tmp_path):
 def test_who_made_it_is_kashs_own_bio_and_ends_on_the_public_repo(tmp_path):
     page = _about(tmp_path)
     who = page.split('<h2 id="who">', 1)[1].split("</section>", 1)[0]
-    assert "I'm Kash, a Senior Technical Architect based in London." in who
-    # round 4: Moveset's voice (22 Oct, Kash: "the Moveset who made it is much better")
+    # round 4: Moveset's voice (22 Oct, Kash: "the Moveset who made it is much better"); the
+    # 23 Oct layout moved the name, role and event into the facts and kept his words
     for said in (
-        "herbtwin inverts that: one idea, one person, built end to end",
-        "I was at the London event",
+        "One idea, one person, built end to end.",
+        "Senior Technical Architect, London",
+        "at the London event",
+        "herbtwin inverts that.",
         "because it is the reason this exists at all",
         "I've never been a career developer",
         "The architecture and the judgement calls are mine.",
         '<a href="https://kashifnazir.com" rel="noopener noreferrer">kashifnazir.com</a>',
-        '<a href="https://www.linkedin.com/in/kashifnazir" rel="noopener noreferrer">LinkedIn</a>',
     ):
         assert said in who, said
     assert '<a class="button" href="https://github.com/thekashifnazir/herbtwin"' in who

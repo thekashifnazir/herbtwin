@@ -1,0 +1,33 @@
+/* Who made it (23 Oct, Kash yes to a redesign; no new boxes): a pull-quote, the facts at a
+   glance beside his words, a thin strip of figures, then the public card. "about_who" sorts
+   after about_top_who.css, so it wins their ties. Theme tokens only; nothing under 16px. */
+.about-page .about section > p.who-lead { max-width: 40rem; margin: 4px 0 24px; padding-left: 18px;
+  border-left: 4px solid var(--primary); font: 700 clamp(26px, 5vw, 34px)/1.2 var(--display); text-wrap: balance; }
+
+.about-page .who-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 20px 40px; }
+@media (max-width: 860px) { .about-page .who-two { grid-template-columns: minmax(0, 1fr); } }
+
+.about-page .who-facts p.who-name { margin: 0 0 6px; font: 800 1.6rem/1.1 var(--poster); }
+.about-page .who-facts ul { list-style: none; margin: 0; padding: 0; color: var(--muted-fg); }
+.about-page .who-facts li + li { margin-top: 2px; }
+.about-page .who-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; margin-top: 8px; }
+.about-page .who-links a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
+.about-page .who-links > a:first-child { margin-right: 12px; }
+.about-page .who-links a.who-icon { min-width: 44px; color: var(--muted-fg); }
+.about-page .who-links a.who-icon:hover { color: var(--primary); }
+
+.about-page .who-words p { margin: 0 0 12px; max-width: var(--measure); }
+.about-page .who-words p:last-child { margin-bottom: 0; }
+
+/* the figures: one ruled line, the number in the poster type, its words beside it */
+.about-page ul.who-strip { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 36px; margin: 28px 0 24px;
+  padding: 12px 0; border-block: 1px solid var(--border); color: var(--muted-fg); }
+.about-page .who-strip li { margin: 0; }
+.about-page .who-strip strong { margin-right: 6px; font: 800 1.6rem/1 var(--poster); color: var(--primary); }
+/* on a phone the three figures sit side by side, each number over its words */
+@media (max-width: 560px) {
+  .about-page ul.who-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .about-page .who-strip li { display: flex; flex-direction: column; gap: 4px; }
+}
+/* the public card after the strip: its own width, not the page's */
+.about-page .who-strip + .about-close { max-width: 40rem; }

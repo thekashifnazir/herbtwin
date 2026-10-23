@@ -17,10 +17,6 @@
 .about-page .about section > p.about-nebius { max-width: none; margin: 4px 0 20px; text-align: center;
   color: var(--ok); font: 600 18px/1.4 var(--sans); }
 
-/* Who made it: prose, as Moveset's, beside the public card */
-.about-page .about-bio p { margin: 0 0 12px; max-width: var(--measure); }
-.about-page .about-bio p:last-child { margin-bottom: 0; }
-
 /* Checked by people: the pilot and the next study under the two quote cards (23 Oct) */
 .about-page .about section > p.about-people-pilot { margin: 20px 0 8px; }
 .about-page .about section > p.about-people-next { margin: 0 0 8px; }
