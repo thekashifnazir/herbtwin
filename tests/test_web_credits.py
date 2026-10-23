@@ -180,3 +180,28 @@ def test_a_short_page_keeps_the_page_colour_below_the_footer():
     css = (Path(__file__).parents[1] / "src/herbtwin/web/static/herbtwin.css").read_text()
     html_rule = re.search(r"^html \{([^}]*)\}", css, re.M).group(1)
     assert "background: var(--bg)" in html_rule
+
+
+def test_the_footer_is_one_footer_with_one_divider(tmp_path):
+    # 23 Oct, Kash on the two stacked footers: "can we combine them somehow? Want to keep the
+    # herbtwin text as like that". Wordmark and site links, who made it, then one last line
+    from herbtwin.web import progress, style
+
+    c = _client(tmp_path, [], [])
+    pages = {p: c.get(p).text for p in ("/", "/privacy", "/no-such-page")}
+    pages["wait"] = progress.HEAD + progress._done("/x")
+    for path, page in pages.items():
+        foot = page.split('<footer class="foot">', 1)[1].split("</footer>", 1)[0]
+        order = ['<div class="foot-brand">', '<nav class="foot-links"', '<div class="maker">']
+        order.append('<p class="foot-fine">© 2026 Kashif Nazir · <a href="https://open-meteo.com/"')
+        assert [foot.index(part) for part in order] == sorted(foot.index(p) for p in order), path
+        assert foot.count('class="wrap"') == 1 and "maker-row" not in foot, path
+        assert "herbtwin</span>" in foot.split('<nav class="foot-links"', 1)[0], path
+    css = style.CSS
+    assert ".foot { border-top: 2px solid var(--primary);" in css
+    # one divider: the last line's; the old second rule (.maker-row) is gone
+    assert ".maker-row" not in css and ".maker-fine" not in css
+    assert (
+        '.foot .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand maker" "links maker" "fine fine";'
+        in css
+    )

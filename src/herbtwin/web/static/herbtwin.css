@@ -166,7 +166,7 @@ main .wrap.wide { padding-right: 16px; }
 .skip:focus { top: 8px; }
 #content:focus { outline: none; }   /* the skip target: focus lands here, the ring would box the page */
 main { padding: 32px 0 48px; }
-.foot { border-top: 1px solid var(--border); padding: 16px 0 32px; font-size: 16px; color: var(--muted-fg); }
+.foot { border-top: 2px solid var(--primary); padding: 16px 0 32px; font-size: 16px; color: var(--muted-fg); }
 .foot a { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted-fg); }
 /* a link inside a sentence gets a 44px tap height without moving the text: inline padding
    adds to the hit area, not the line (19 Oct pre-walk: "Photo credits" was 82 x 20) */
@@ -179,23 +179,32 @@ main { padding: 32px 0 48px; }
   color: var(--primary-fg); }
 :is(.page-band, .home-band, .home-how-sources) :is(.credits-link, .home-how-sources a, .answer-page :is(.decided-by, .sources-line, .note:not(.bed-offer), details p, figcaption) a):focus-visible {
   background-color: var(--band-fg); color: var(--band); }
-.foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; }
+/* one footer (23 Oct, Kash: "can we combine them somehow? Want to keep the herbtwin text as like
+   that"): a green rule, the wordmark with the site's links under it, who made it on the right,
+   then one divider and one last line (the copyright and the weather credit) */
+.foot .wrap { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "brand maker" "links maker" "fine fine";
+  align-items: start; gap: 0 32px; }
+.foot-brand { grid-area: brand; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; padding-top: 8px; }
+.foot-links { grid-area: links; display: flex; flex-wrap: wrap; gap: 0 24px; }
 /* the wordmark on every page's footer (17 Oct: Kash, one product across pages); home keeps
    its giant one, pages/home.css */
-.foot-mark { font: 800 clamp(2.4rem, 7vw, 4rem)/0.9 var(--poster); color: var(--soft-strong); margin-right: 8px; }
-/* who made it, on every page (22 Oct, Kash: "our usual" footer, as on Moveset and Step Out):
-   a thin green rule, name and role left, site and icon links right, then the copyright */
-.maker .wrap { display: block; }
-.maker-row { margin-top: 16px; padding-top: 16px; border-top: 2px solid var(--primary); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px; }
-.maker-id { display: flex; flex-direction: column; }
+.foot-mark { font: 800 clamp(2.4rem, 7vw, 4rem)/0.9 var(--poster); color: var(--soft-strong); }
+.maker { grid-area: maker; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-top: 12px; }
+.maker-id { display: flex; flex-direction: column; align-items: flex-end; }
 .foot a.maker-name { font: 800 1.25rem/1.2 var(--poster); letter-spacing: 0.01em; color: var(--fg);
   text-decoration: none; }
-.maker-role { font-size: 15px; }
-.maker-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 4px; }
+.maker-role { font-size: 16px; }
+.maker-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0 4px; }
 .maker-links > a:first-child { margin-right: 12px; }
 .foot a.maker-icon { justify-content: center; min-width: 44px; }
 .foot :is(.maker-name, .maker-links a):hover { color: var(--primary); }
-.maker-fine { margin: 8px 0 0; padding-top: 12px; border-top: 1px solid var(--border); text-align: center; font-size: 14px; }
+.foot-fine { grid-area: fine; margin: 12px 0 0; padding-top: 4px; border-top: 1px solid var(--border); text-align: center; font-size: 16px; }
+/* on a phone: the wordmark and links, then who made it, then the last line */
+@media (max-width: 720px) {
+  .foot .wrap { grid-template-columns: minmax(0, 1fr); grid-template-areas: "brand" "links" "maker" "fine"; }
+  .maker, .maker-id { align-items: flex-start; }
+  .maker-links { justify-content: flex-start; }
+}
 .back { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* ---------- type ---------- */

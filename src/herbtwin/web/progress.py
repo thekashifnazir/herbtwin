@@ -188,15 +188,13 @@ SORRY = "something went wrong on our side"
 
 
 _END = (
-    '</div></div></div></main>\n<footer class="foot"><div class="wrap">'
-    # the same links as base.html's footer (Credits was missing here, 19 Oct small print)
-    '<span class="foot-mark" aria-hidden="true">herbtwin</span><a href="/about">About</a>'
-    '<a href="/privacy">Privacy</a><a href="/about#credits">Credits</a>'
-    '<a href="https://open-meteo.com/" rel="noopener noreferrer">Weather data by Open-Meteo.com</a>'
-    "</div>\n"
-    # who made it, word for word the partial base.html includes
+    '</div></div></div></main>\n<footer class="foot"><div class="wrap">\n'
+    # the same footer as base.html's: its wordmark and links here, the rest from the partial
+    '<div class="foot-brand"><span class="foot-mark" aria-hidden="true">herbtwin</span></div>\n'
+    '<nav class="foot-links" aria-label="About this site"><a href="/about">About</a>'
+    '<a href="/privacy">Privacy</a><a href="/about#credits">Credits</a></nav>\n'
     + (Path(__file__).parent / "templates" / "_maker.html").read_text()
-    + "</footer>\n</body></html>\n"
+    + "</div></footer>\n</body></html>\n"
 )
 
 

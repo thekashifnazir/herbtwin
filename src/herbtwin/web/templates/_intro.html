@@ -1,0 +1,53 @@
+{# The first-visit intro (23 Oct, Kash: "a plant growing out of our logo with a green screen,
+   similar to my logo load on my other website"): his site's loader, in herbtwin's band green.
+   A plant grows up out of the logo mark, then the green lifts away; 1.4 s at most.
+   - Made by this script, so with JS off there is nothing: the page is always there underneath.
+   - Once per browser session; never under Reduce Motion; any click, tap or key skips it.
+   - aria-hidden and nothing in it takes focus, so it never traps or hides anything.
+   - Home and About only, on a fresh visit: never the wait page or an answer.
+   - The scroll reveals (nvidia-extra) wait for it: `intro-playing` on <html> while it plays,
+     then `intro-done` and a `herbtwin:intro-done` event as it lifts. #}
+<script>
+(() => {
+  const root = document.documentElement;
+  let seen = true;
+  try {
+    seen = sessionStorage.getItem("herbtwin-intro") === "1";
+    sessionStorage.setItem("herbtwin-intro", "1");
+  } catch { seen = true; }  // no storage: never risk showing it on every page
+  if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  root.classList.add("intro-playing");
+  const o = document.createElement("div");
+  o.className = "intro";
+  o.setAttribute("aria-hidden", "true");
+  o.innerHTML = '<svg class="intro-grow" viewBox="0 0 120 130" focusable="false">'
+    + '<path class="intro-stem" pathLength="100" d="M60 86C60 72 55 60 60 46S65 26 60 14"/>'
+    + '<path class="intro-leaf l1" d="M60 66c9-1 17-8 19-19c-11 0-17 7-19 19z"/>'
+    + '<path class="intro-leaf l2" d="M59 52c-9-1-16-8-18-18c10 0 16 6 18 18z"/>'
+    + '<path class="intro-leaf l3" d="M60 24c5-3 9-9 9-15c-6 1-9 7-9 15z"/>'
+    + '<svg x="40" y="86" width="40" height="40" viewBox="0 0 32 32">'
+    + '<rect x="2" y="2" width="28" height="28" rx="5" fill="none" stroke="currentColor" stroke-width="2.5"/>'
+    + '<path d="M9 23c0-8 5-14 14-14 0 9-6 14-14 14z" fill="currentColor"/>'
+    + '<path d="M10 22l8-8" fill="none" stroke="var(--band)" stroke-width="1.6" stroke-linecap="round"/></svg>'
+    + '</svg><p class="intro-word">herbtwin</p>';
+  document.body.prepend(o);
+  let timer;
+  const off = () => {
+    removeEventListener("pointerdown", skip, true);
+    removeEventListener("keydown", skip, true);
+  };
+  const lift = (fast) => {
+    off();
+    clearTimeout(timer);
+    o.classList.add(fast ? "is-skipped" : "is-lifting");
+    root.classList.add("intro-done");
+    root.classList.remove("intro-playing");
+    dispatchEvent(new Event("herbtwin:intro-done"));
+    setTimeout(() => o.remove(), fast ? 200 : 400);
+  };
+  const skip = () => lift(true);
+  addEventListener("pointerdown", skip, true);
+  addEventListener("keydown", skip, true);
+  timer = setTimeout(() => lift(false), 1000);  // grows for 1.0 s, lifts for 0.4 s
+})();
+</script>

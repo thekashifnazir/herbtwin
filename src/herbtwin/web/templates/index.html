@@ -3,6 +3,7 @@
 {% from "_nav.html" import site_nav %}
 {% block title %}herbtwin{% endblock %}
 {% block page %}home-page{% endblock %}
+{% block intro %}{% include "_intro.html" %}{% endblock %}
 {% block nav %}{{ site_nav(person, accounts) }}{% endblock %}
 {% block wrap %} wide{% endblock %}
 {% block main %}

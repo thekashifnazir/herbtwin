@@ -89,7 +89,7 @@ def test_the_header_band_reads_in_light_and_dark():
 def test_notes_are_16px_and_muted_text_reads_on_every_surface():
     assert "small, .small { font-size: 16px; }" in style.CSS
     assert (
-        ".foot { border-top: 1px solid var(--border); padding: 16px 0 32px; font-size: 16px;"
+        ".foot { border-top: 2px solid var(--primary); padding: 16px 0 32px; font-size: 16px;"
         in (style.CSS)
     )
     assert ".home-page .home-go-for { display: block; font-size: 16px;" in style.CSS

@@ -10,6 +10,8 @@
 <style>{{ site_css }}</style>
 </head>
 <body class="{% block page %}{% endblock %}">
+{# the first-visit intro (home and About only: _intro.html); empty on every other page #}
+{% block intro %}{% endblock %}
 {# the frame is 72rem wide on every page, so the header never jumps between pages; main
    holds a 38rem reading column at its left, or the whole width with `{% block wrap %} wide{% endblock %}` #}
 {# the first stop for a keyboard: past the wordmark and the nav, straight to the page #}
@@ -21,8 +23,14 @@
 <main id="content" tabindex="-1"><div class="wrap{% block wrap %}{% endblock %}">
 {% block main %}{% endblock %}
 </div></main>
-<footer class="foot"><div class="wrap">{% block foot %}<span class="foot-mark" aria-hidden="true">herbtwin</span>{% endblock %}<a href="/about">About</a><a href="/privacy">Privacy</a><a href="/about#credits">Credits</a><a href="https://open-meteo.com/" rel="noopener noreferrer">Weather data by Open-Meteo.com</a></div>
-{% include "_maker.html" %}</footer>
+{# one footer (23 Oct, Kash: "can we combine them somehow?"): the wordmark and the site's links
+   left, who made it right, then one line for the copyright and the weather credit. _maker.html
+   holds the right column and that line; the wait page (progress.py) reads it as plain text, so
+   it carries no template tags #}
+<footer class="foot"><div class="wrap">
+<div class="foot-brand">{% block foot %}<span class="foot-mark" aria-hidden="true">herbtwin</span>{% endblock %}</div>
+<nav class="foot-links" aria-label="About this site"><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/about#credits">Credits</a></nav>
+{% include "_maker.html" %}</div></footer>
 {# the photo copy the home form leaves for the answer page (index.html): every page drops
    it, except the answer page, which claims it, and the plant choice on the way there #}
 {% block photo_copy %}<script>try { sessionStorage.removeItem("herbtwin-photo-pending"); } catch {}</script>{% endblock %}
