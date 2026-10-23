@@ -52,8 +52,7 @@
       <li class="turn"><div class="node weather">
         <strong>Weather</strong><em>Open-Meteo</em>
         <span>The next 2 weeks</span></div>
-        {# round 4 (22 Oct, Kash: "instead of a long impossible line between them, do something
-           with it"): the green path carries what the twin takes from each forecast day #}
+        {# round 4 (22 Oct): the green path carries what the twin takes from each forecast day #}
         <p class="flow-feed"><span><b>Day by day:</b> night lows, rain and drying</span></p></li>
       <li class="acc"><div class="node twin">
         <strong>The plant's twin</strong>
@@ -71,8 +70,10 @@
         <span>One thing to do, and how sure we are</span>
         <b>$0.0040 of model time, one example</b></div></li>
     </ol>
+    {# 23 Oct (Kash: "the dotted line between the normal diagram and the answers"): what hangs
+       off the answer is joined to it, a line down from its box into a bracket over the cards #}
     <div class="flow-under">
-      <p class="flow-by">Under the answer</p>
+      <p class="flow-by under-by"><span>Also on your answer page</span></p>
       <ul class="under">
         <li class="advisors"><i class="tag">Tavily</i><strong>Chat</strong> NVIDIA Nemotron 3 Nano, with Tavily search</li>
         {% if check_on %}<li class="advisors"><i class="tag">Tavily</i><strong>Trusted-page check</strong> NVIDIA Nemotron 3 Ultra reads a page; code quotes it only if it backs the answer</li>{% endif %}
@@ -86,12 +87,20 @@
     <figcaption>Each box names its model; the chips above give the sources' colours. <strong>Your weather is tried on the plant's twin</strong> before three advisors decide; <strong>our rules have the last word</strong>.</figcaption>
   </figure>
   <h3>A few decisions I'd call out</h3>
-  {# round 4 (22 Oct, Kash: "bullet points here with style like we did on Moveset instead?
-     break up the constant boxes"): a bold lead, then plain words #}
-  <ul class="about-points">
-    <li><strong>The mid-size model decides, not the biggest.</strong> Nemotron 3 Ultra, the biggest, said "treat it" when the expert did not in 12.7% of answers; Super, the middle size, in 2%.</li>
-    <li><strong>The small model runs the chat.</strong> Nemotron 3 Nano: 10 of 10 on our what-if check, in about half Super's time.</li>
-    <li><strong>A non-NVIDIA model reads the photo, because it named plants better.</strong> Four NVIDIA vision models named the plant 0.54 to 0.627 of the time, against GLM-5.3-Flash's 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>).</li>
+  {# 23 Oct (Kash: the bullets "don't do them justice", but no more boxes): three columns of
+     type split by thin rules, each read top to bottom as one sentence: we chose, what, over
+     what, the figure, why. Like for like: 0.846 and 0.627 are GLM and the best NVIDIA model
+     on the same (live) prompt; Nano over-treated 7.3%, so it's the middle size that treats least #}
+  <ul class="about-chose">
+    <li><p class="chose-we">We chose</p><p class="chose-name nvidia">Nemotron 3 Super</p>
+      <p class="chose-over">over Ultra, the biggest</p><p class="chose-fig">2% <span>vs</span> 12.7%</p>
+      <p class="chose-why">said "treat it" when the expert didn't; the middle size over-treated least</p></li>
+    <li><p class="chose-we">We chose</p><p class="chose-name nvidia">Nemotron 3 Nano</p>
+      <p class="chose-over">for the chat</p><p class="chose-fig">10 <span>of</span> 10</p>
+      <p class="chose-why">on our what-if check, in about half Super's time</p></li>
+    <li><p class="chose-we">We chose</p><p class="chose-name photo">GLM-5.3-Flash</p>
+      <p class="chose-over">over 4 NVIDIA vision models</p><p class="chose-fig">0.846 <span>vs</span> 0.627</p>
+      <p class="chose-why">plants named right first time, against the best NVIDIA one on the same prompt. All four: 0.54 to 0.627; GLM: 0.846 to 0.867 (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md" rel="noopener noreferrer">the details</a>)</p></li>
   </ul>
 </section>
 
@@ -194,7 +203,7 @@
     <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get what the answer tells you to use.<br>That became the shops card under the answer.</p></blockquote>
   </div>
   <p class="about-people-pilot"><strong>A small Toloka pilot</strong> to check our photo reading against people: beginners caught the named problem in 4 of 5 photos, but seemed to over-call with a healthy photo beside it (3 of 5). A tiny sample: 5 photos, 3 raters each.</p>
-  <p class="about-people-next"><strong>Next:</strong> a first-time-user study on Toloka, not run yet (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>). Tendem and Toloka are paid from Nebius Builder Program credits.</p>
+  <p class="about-people-next"><strong>Next:</strong> a first-time-user study on Toloka, not run yet (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>). Tendem and Toloka are paid from Nebius AI Builder programme credits.</p>
   {# 23 Oct (Kash): accessibility is one of the checks, so it closes How I know it works #}
   <h3 id="access">Accessibility</h3>
   <div class="about-card about-access">

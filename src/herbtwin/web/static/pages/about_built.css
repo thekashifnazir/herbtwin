@@ -1,40 +1,80 @@
 /* About, "How it's built", round 4 (22 Oct, Kash's notes: "boxes after boxes"). This sheet
    sorts after about.css ("_" after "."), so its rules win on order. Theme tokens only. */
 
-/* the weather's path says what it carries (Kash: "instead of a long impossible line between
-   them, do something with it"): a sky label, the weather's colour, ringed in the path's green.
-   On a phone it sits under the weather box, the green arrow below it into the twin */
+/* the weather's path says what it carries (round 4): a sky label, the weather's colour, ringed
+   in the path's green. On a phone it sits under the weather box, the green arrow below it into
+   the twin */
 .about-page .flow-built > li.turn > .flow-feed { margin: 0; align-self: center; text-align: center; }
 .about-page .flow-built .flow-feed > span { display: inline-block; max-width: 15rem; padding: 6px 14px;
   border: 2px solid var(--ok); border-radius: 999px; background: var(--sky); color: var(--sky-fg);
   font: 600 16px/1.35 var(--sans); }
 .about-page .flow-built .flow-feed > span > b { display: block; font-weight: 700; }
 @media (min-width: 960px) {
-  /* on a wide screen the second row runs back, right to left, so the twin sits under the
-     weather: the path is one straight drop through its label, not an L across the frame. The
-     answer ends bottom left, over what hangs off it */
-  .about-page .flow-built > li:nth-child(5) { grid-area: 2 / 4; }
-  .about-page .flow-built > li:nth-child(6) { grid-area: 2 / 3; }
-  .about-page .flow-built > li:nth-child(7) { grid-area: 2 / 2; }
-  .about-page .flow-built > li:nth-child(8) { grid-area: 2 / 1; }
-  .about-page .flow-built > li:nth-child(n+6)::before { content: "\2190" / ""; left: auto; right: -36px; }
-  /* the green line runs from the weather box down through the label to the arrow into the
-     twin (about-built.css), so the space under the weather says what flows */
+  /* on a wide screen the label sits on the green line down from the weather, which then turns
+     along the gap between the rows to the twin (about-built.css). 23 Oct: row two reads left
+     to right again, so the line stops at the gap's middle and turns, as before round 4 */
   .about-page .flow-built > li.turn > .flow-feed { flex: 1 0 auto; display: flex; flex-direction: column;
-    align-items: center; margin: -14px 0 -36px; }
+    align-items: center; margin: -14px 0 -33px; }  /* overlaps the 3px run: no gap at the corner */
   .about-page .flow-built > li.turn > .flow-feed::before,
   .about-page .flow-built > li.turn > .flow-feed::after { content: ""; flex: 1 0 12px; width: 3px;
     background: var(--ok); }
   .about-page .flow-built .flow-feed > span { max-width: 14rem; border-radius: var(--surface); }
 }
 
-/* the decisions as Moveset's bullets (Kash: "bullet points here with style like we did on
-   Moveset instead? break up the constant boxes"): a small green dot, the lead in bold ink,
-   the rest muted; no cards */
-.about-page .about .about-points { list-style: none; margin: 8px 0 0; padding: 0; display: flex;
-  flex-direction: column; gap: 14px; }
-.about-page .about .about-points > li { position: relative; max-width: 66ch; margin: 0; padding-left: 24px;
-  font-size: 18px; line-height: 1.5; color: var(--muted-fg); }
-.about-page .about .about-points > li::before { content: ""; position: absolute; left: 2px;
-  top: calc(0.75em - 4px); width: 8px; height: 8px; border-radius: 50%; background: var(--primary); }
-.about-page .about .about-points > li > strong { color: var(--fg); font-weight: 700; }
+/* what hangs off the answer is joined to it, not ruled off (23 Oct, Kash: "it was the dotted
+   line between the normal diagram and the answers"): no dashed rule, and the label says where
+   the cards are. Grey like the flow's other arrows; green stays the weather's path */
+.about-page .flow-under { position: relative; margin-top: 28px; padding-top: 0; border-top: 0; }
+.about-page .flow-under .under-by { margin: 0 0 12px; line-height: 20px; text-align: center; }
+/* the cards' tops level, so the bracket's arms land on the first and the last (review) */
+.about-page .flow-under .under > li { margin: 0; }
+@media (max-width: 959px) {
+  /* a phone: the flow's own arrow, down from the answer to the label */
+  .about-page .flow-under { margin-top: 48px; }
+  .about-page .flow-under::before { content: "\2193" / ""; position: absolute; left: 50%; top: -38px;
+    transform: translateX(-50%); font: 700 26px/1 var(--sans); color: var(--muted-fg); }
+}
+@media (min-width: 960px) {
+  /* a wide screen: a line down from the answer's box, at the end of row two, into a bracket
+     over the cards, its arms reaching down onto the first and the last; the label sits in it */
+  .about-page .flow-built > li:last-child::after { content: ""; position: relative; flex: 1 0 0; width: 2px;
+    align-self: center; margin: -14px 0 -39px; background: var(--muted-fg); }  /* over the box's shadow */
+  .about-page .flow-under .under-by { display: flex; gap: 14px; padding: 0 24px; }
+  .about-page .flow-under .under-by::before,
+  .about-page .flow-under .under-by::after { content: ""; flex: 1 0 0; margin: 9px 0 -12px; }
+  .about-page .flow-under .under-by::before { border-top: 2px solid var(--muted-fg);
+    border-left: 2px solid var(--muted-fg); border-top-left-radius: 10px; }
+  .about-page .flow-under .under-by::after { border-top: 2px solid var(--muted-fg);
+    border-right: 2px solid var(--muted-fg); border-top-right-radius: 10px; }
+}
+
+/* the decisions as three columns of type (23 Oct, Kash: the bullets "don't do them justice",
+   but no more boxes): no border round them, no fill; thin rules between them only, down on a
+   wide screen and across on a phone. The model's name in display type and its role's colour
+   (NVIDIA green, the photo reader ink), the figure big in ink, the why muted */
+.about-page .about .about-chose { list-style: none; margin: 16px 0 0; padding: 0; display: grid;
+  grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.about-page .about .about-chose > li { margin: 0; }
+.about-page .about .about-chose > li + li { padding-top: 20px; border-top: 1px solid var(--border); }
+.about-page .about .about-chose p { margin: 0; }
+.about-page .about .about-chose .chose-we { font: 700 16px/1.3 var(--sans); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted-fg); }
+.about-page .about .about-chose .chose-name { margin-top: 4px; font: 700 30px/1.1 var(--display);
+  letter-spacing: -0.015em; color: var(--ok); }
+.about-page .about .about-chose .chose-name.photo { color: var(--fg); }
+.about-page .about .about-chose .chose-over { margin-top: 2px; font-size: 18px; line-height: 1.4;
+  color: var(--muted-fg); }
+.about-page .about .about-chose .chose-fig { margin-top: 14px; font: 700 40px/1.05 var(--display);
+  font-variant-numeric: tabular-nums; color: var(--fg); }
+.about-page .about .about-chose .chose-fig > span { font-size: 26px; color: var(--muted-fg); }  /* "vs", "of" */
+.about-page .about .about-chose .chose-why { margin-top: 6px; font-size: 18px; line-height: 1.45;
+  color: var(--muted-fg); }
+.about-page .about .about-chose .chose-why a { color: var(--fg); }
+@media (min-width: 860px) {
+  .about-page .about .about-chose { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; }
+  .about-page .about .about-chose > li { padding: 4px 28px; }
+  .about-page .about .about-chose > li:first-child { padding-left: 0; }
+  .about-page .about .about-chose > li:last-child { padding-right: 0; }
+  .about-page .about .about-chose > li + li { padding-top: 4px; border-top: 0;
+    border-left: 1px solid var(--border); }
+}

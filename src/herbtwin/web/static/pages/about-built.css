@@ -13,8 +13,9 @@
 .about-page .about .about-chips li.gbif { background: var(--clay-bg); color: var(--clay); border-color: var(--clay); }
 
 /* the flow: one under another on a phone; on a wide screen two rows of four, what we gather
-   then how we decide, so each box has a quarter of the frame. Round 4 (about_built.css): the
-   second row runs back, right to left, so the twin sits under the weather */
+   then how we decide, so each box has a quarter of the frame. The weather's green path runs
+   down from the first row's end (through its label, about_built.css) and back to the twin at
+   the second row's start */
 .about-page .flow-built { list-style: none; margin: 0 auto; padding: 0; display: grid; gap: 48px;
   grid-template-columns: minmax(0, 1fr); max-width: 34rem; }
 .about-page .flow-built > li { position: relative; display: flex; flex-direction: column; gap: 14px; }
@@ -28,8 +29,13 @@
   .about-page .flow-built { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 60px 44px; max-width: none; }
   .about-page .flow-built > li + li::before { content: "\2192" / ""; left: -36px; top: 30px; transform: none; }
   .about-page .flow-built > li.acc::before { top: 26px; }
-  /* the arrow down into the twin, drawn rather than a glyph so it meets the box */
+  /* the turn: the green line along the gap between the rows (3 columns and 3 gaps from the
+     twin's middle to the weather's), and an arrow down into the twin, drawn rather than a
+     glyph so it meets the box. 23 Oct: back after round 4 turned row two around (Kash: "That
+     was not the line I flagged") */
   .about-page .flow-built > .turn + li::before { content: ""; left: calc(50% - 8px); top: -31px; width: 16px;
     height: 29px; transform: none; background: var(--ok);
     clip-path: polygon(6.5px 0, 9.5px 0, 9.5px 17px, 16px 17px, 8px 29px, 0 17px, 6.5px 17px); }
+  .about-page .flow-built > .turn + li::after { content: ""; position: absolute; left: calc(50% - 1.5px);
+    top: -31.5px; width: calc(300% + 3 * 44px + 3px); height: 3px; background: var(--ok); }
 }

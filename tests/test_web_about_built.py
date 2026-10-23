@@ -125,38 +125,56 @@ def test_with_the_voice_on_the_nebius_line_names_its_one_exception(tmp_path, mon
     assert "voice (ElevenLabs)" in built
 
 
-def test_the_decisions_are_bullets_not_cards_and_carry_the_reports_figures(tmp_path, monkeypatch):
-    # round 4 (22 Oct, Kash: "maybe we just do bullet points here with style like we did on
-    # Moveset instead? break up the constant boxes"): a bold lead, then plain words, no card
+def test_the_decisions_are_three_columns_that_carry_the_reports_figures(tmp_path, monkeypatch):
+    # 23 Oct, Kash: the bullets "don't do them justice", but no more boxes. Three columns of
+    # type, each read top to bottom: we chose, the model, over what, the figure, why
     built = _built(tmp_path, monkeypatch)
     decided = built.split("<h3>A few decisions I'd call out</h3>", 1)[1]
-    assert re.sub(r"\s+", " ", decided).startswith(' <ul class="about-points">')
-    cards = decided.split("</ul>", 1)[0]
-    assert "about-card" not in cards and "ink" not in cards
-    leads = re.findall(r"\n    <li><strong>([^<]+)</strong> ", cards)
-    assert leads == [
-        "The mid-size model decides, not the biggest.",
-        "The small model runs the chat.",
-        "A non-NVIDIA model reads the photo, because it named plants better.",
+    cols = decided.split('<ul class="about-chose">', 1)[1].split("</ul>", 1)[0]
+    assert "about-card" not in cols and "ink" not in cols and "about-points" not in built
+    items = re.findall(r"<li>(.*?)</li>", cols, flags=re.S)
+    assert len(items) == 3
+    got = [
+        [
+            re.sub(r"<[^>]+>", "", t).strip()
+            for t in re.findall(r'<p class="chose-[a-z]+(?: [a-z]+)?">(.*?)</p>', i, flags=re.S)
+        ]
+        for i in items
     ]
-    for figure in ("12.7%", "in 2%", "10 of 10", "about half", "0.54 to 0.627", "0.846 to 0.867"):
-        assert figure in cards, figure
+    assert [g[:4] for g in got] == [
+        ["We chose", "Nemotron 3 Super", "over Ultra, the biggest", "2% vs 12.7%"],
+        ["We chose", "Nemotron 3 Nano", "for the chat", "10 of 10"],
+        ["We chose", "GLM-5.3-Flash", "over 4 NVIDIA vision models", "0.846 vs 0.627"],
+    ]
+    assert "said &#34;treat it&#34;" in items[0] or 'said "treat it"' in items[0]
+    # the middle size treats least: Nano, the smallest, over-treated too, so "bigger was
+    # keener to treat" would mislead
+    assert "the middle size over-treated least" in items[0]
+    assert "on our what-if check, in about half Super&#39;s time" in items[1] or (
+        "on our what-if check, in about half Super's time" in items[1]
+    )
+    assert "on the same prompt. All four: 0.54 to 0.627; GLM: 0.846 to 0.867" in items[2]
     assert (
         'href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/nvidia-models.md"'
-        in cards
+        in items[2]
     )
-    # the figures as the reports state them
+    # the model's name in its role's colour, but in words too, so colour is never the signal
+    assert 'class="chose-name nvidia"' in items[0] and 'class="chose-name nvidia"' in items[1]
+    assert 'class="chose-name photo"' in items[2]
+    # the figures as the reports state them, like for like: 0.846 and 0.627 on the live prompt
     models = (ROOT / "docs/reference/nvidia-models.md").read_text("utf-8")
     assert "| **0.020** [0.000, 0.047] |" in models and "| 0.127 [0.080, 0.180] |" in models
-    assert "| 0.627 [0.547, 0.707] |" in models and "| 0.540 | not run |" in models
-    assert "**0.846** [0.785, 0.899]" in models and "| 0.867 [0.81, 0.92] |" in models
+    assert "| Nemotron 3 Nano 30B-A3B | 0.420 [0.340, 0.500] | 0.073 |" in models
+    assert "| Token Factory | live | **0.846** [0.785, 0.899]" in models
+    assert "| live | 0.627 [0.547, 0.707] |" in models
+    assert "| 0.540 | not run |" in models and "| earlier | 0.867 [0.81, 0.92] |" in models
     nano = (ROOT / "docs/reference/chat-on-nano.md").read_text("utf-8")
     assert "| 10/10, 10/10, 10/10 | 15 s, 14 s, ~15 s |" in nano and "| 32 s, 24 s |" in nano
 
 
 def test_the_weather_path_says_what_it_carries_to_the_twin(tmp_path, monkeypatch):
-    # round 4 (22 Oct, Kash: "instead of a long impossible line between them, do something
-    # with it"): the green wire from the weather carries a label naming what the twin takes
+    # round 4 (22 Oct): the green wire from the weather carries a label naming what the twin
+    # takes, kept on the wire's drop under the weather (23 Oct)
     turn = _steps(_built(tmp_path, monkeypatch))[3]
     assert turn.startswith('class="turn">')
     feed = re.search(r'<p class="flow-feed">(.*?)</p>', turn, flags=re.S)
@@ -170,26 +188,81 @@ def test_the_weather_path_says_what_it_carries_to_the_twin(tmp_path, monkeypatch
     assert "t_min, _t_max, et0, rain, watering = _apply_action(" in twin  # the high unused
     assert "frost=frost_probability(t_min," in twin
     assert "water_in = rain_mm * pot.cover_factor" in twin and "out = et0_mm * kc" in twin
-    # no L across the frame: on a wide screen the second row runs back, right to left, so the
-    # twin sits right under the weather and the wire is one straight drop through the label
-    rules = {s: b for _, s, b in _rules(SHEET_4.read_text("utf-8"))}
-    assert rules[".about-page .flow-built > li:nth-child(5)"] == "grid-area: 2 / 4;"
-    assert rules[".about-page .flow-built > li:nth-child(8)"] == "grid-area: 2 / 1;"
-    back = rules[".about-page .flow-built > li:nth-child(n+6)::before"]
-    assert 'content: "\\2190" / ""' in back  # the row's arrows point back, left
-    old = _rules(SHEET.read_text("utf-8"))
-    assert not any(s.endswith(("li.turn::after", ".turn + li::after")) for _, s, _ in old)
-    wire = next(b for s, b in rules.items() if s.endswith(".flow-feed::after"))
+
+
+def test_the_second_row_reads_left_to_right_with_the_weather_on_an_l(tmp_path, monkeypatch):
+    # 23 Oct, Kash: "That was not the line I flagged, it was the dotted line between the
+    # normal diagram and the answers." So round 4's right-to-left second row is undone: the
+    # twin starts row two again, every arrow points right, and the weather's green wire is
+    # the L again, down from the weather and back along the gap to the twin
+    both = _rules(SHEET.read_text("utf-8")) + _rules(SHEET_4.read_text("utf-8"))
+    assert not any("grid-area" in b or "grid-column" in b for _, _, b in both)
+    assert not any("\\2190" in b for _, _, b in both)  # no arrow points back, left
+    wide = {s: b for at, s, b in both if at == ("@media (min-width: 960px)",)}
+    assert 'content: "\\2192" / ""' in wide[".about-page .flow-built > li + li::before"]
+    run = wide[".about-page .flow-built > .turn + li::after"]  # along the gap, 3 columns
+    assert "width: calc(300% + 3 * 44px + 3px)" in run and "background: var(--ok)" in run
+    assert "top: -31.5px" in run
+    drop = wide[".about-page .flow-built > li.turn > .flow-feed"]  # down to meet it
+    assert "margin: -14px 0 -33px" in drop
+    wire = wide[
+        ".about-page .flow-built > li.turn > .flow-feed::before, "
+        ".about-page .flow-built > li.turn > .flow-feed::after"
+    ]
     assert "background: var(--ok)" in wire
+    # and the page order is the flow's order, so the answer ends row two on the right
+    steps = _steps(_built(tmp_path, monkeypatch))
+    assert steps[4].startswith('class="acc"><div class="node twin">')
+    assert '<div class="node answer ink">' in steps[7]
+
+
+def test_what_hangs_off_the_answer_is_joined_to_it_not_ruled_off(tmp_path, monkeypatch):
+    # 23 Oct, Kash: the dashed line "between the normal diagram and the answers" was the one
+    # to fix. The cards now hang off the answer: a line down from its box into a bracket over
+    # them, labelled with where they are; on a phone, an arrow down to the label
+    built = _built(tmp_path, monkeypatch)
+    under = built.split('<div class="flow-under">', 1)[1].split("</ul>", 1)[0]
+    assert re.sub(r"\s+", " ", under).startswith(
+        ' <p class="flow-by under-by"><span>Also on your answer page</span></p> <ul class="under">'
+    )
+    assert "Under the answer" not in built
+    # true: chat, the trusted-page quote, the shops and the sightings are all on result.html
+    result = (ROOT / "src/herbtwin/web/templates/result.html").read_text("utf-8")
+    for part in (
+        'class="chatlog"',
+        'class="sources-line trusted-quote"',
+        '"_extras_slot.html"',
+        '"_reported_slot.html"',
+    ):
+        assert part in result, part
+    rules4 = _rules(SHEET_4.read_text("utf-8"))
+    # no bare dashed rule: about.css's dashed border is overridden by this later sheet
+    assert style.CSS.index(
+        style._minify((ROOT / "src/herbtwin/web/static/pages/about.css").read_text("utf-8"))
+    ) < style.CSS.index(style._minify(SHEET_4.read_text("utf-8")))
+    flat = {s: b for at, s, b in rules4 if not at}
+    assert "border-top: 0" in flat[".about-page .flow-under"]
+    assert not any("dashed" in b for _, s, b in rules4 if "flow-under" in s)
+    wide = {s: b for at, s, b in rules4 if at == ("@media (min-width: 960px)",)}
+    drop = wide[".about-page .flow-built > li:last-child::after"]  # down from the answer
+    assert "background: var(--muted-fg)" in drop and "flex: 1 0 0" in drop
+    for side, corner in (("before", "left"), ("after", "right")):
+        arm = wide[f".about-page .flow-under .under-by::{side}"]  # the bracket's two arms
+        assert "border-top: 2px solid var(--muted-fg)" in arm, side
+        assert f"border-{corner}: 2px solid var(--muted-fg)" in arm, side
+    phone = {s: b for at, s, b in rules4 if at == ("@media (max-width: 959px)",)}
+    arrow = phone[".about-page .flow-under::before"]
+    assert 'content: "\\2193" / ""' in arrow and "color: var(--muted-fg)" in arrow
 
 
 def test_the_weather_path_label_counts_in_few_words(tmp_path, monkeypatch):
-    # the page's word cap: the label adds a handful of words, the bullets none
+    # the page's word cap: round 4's label added 8 words; 23 Oct, "Also on your answer page"
+    # added 2 and the decisions as columns 2 fewer, so the section holds at 401
     import html
 
     built = _built(tmp_path, monkeypatch)
     words = html.unescape(re.sub(r"<[^>]+>", " ", '<h2 id="built">' + built)).split()
-    assert len(words) <= 393 + 8
+    assert len(words) <= 401
 
 
 @pytest.mark.parametrize(
@@ -216,13 +289,23 @@ def test_the_flow_boxes_stay_big():
     assert int(re.search(r"font-size: (\d+)px", node).group(1)) >= 18
 
 
-def test_the_decision_bullets_are_moveset_style():
-    # Moveset's "about-list": a small round accent dot before each, the lead bold in the
-    # page's ink, the rest muted
-    rules = {s: b for _, s, b in _rules(SHEET_4.read_text("utf-8"))}
-    dot = next(b for s, b in rules.items() if s.endswith(".about-points > li::before"))
-    assert "background: var(--primary)" in dot and "border-radius: 50%" in dot
-    item = next(b for s, b in rules.items() if s.endswith(".about-points > li"))
-    assert "color: var(--muted-fg)" in item
-    lead = next(b for s, b in rules.items() if s.endswith(".about-points > li > strong"))
-    assert "color: var(--fg)" in lead
+def test_the_decision_columns_are_split_by_thin_rules_only():
+    # no boxes: no border all round, no fill, no shadow; one thin rule between columns, down
+    # on a wide screen, across when they stack on a phone
+    rules = [(at, s, b) for at, s, b in _rules(SHEET_4.read_text("utf-8")) if "about-chose" in s]
+    for _, sel, body in rules:
+        assert not re.search(r"(?:^|; )border:", body), sel
+        assert "background" not in body and "box-shadow" not in body, sel
+    flat = {s: b for at, s, b in rules if not at}
+    assert "grid-template-columns: minmax(0, 1fr)" in flat[".about-page .about .about-chose"]
+    assert (
+        "border-top: 1px solid var(--border)" in flat[".about-page .about .about-chose > li + li"]
+    )
+    wide = {s: b for at, s, b in rules if at == ("@media (min-width: 860px)",)}
+    assert "repeat(3, minmax(0, 1fr))" in wide[".about-page .about .about-chose"]
+    between = wide[".about-page .about .about-chose > li + li"]
+    assert "border-left: 1px solid var(--border)" in between and "border-top: 0" in between
+    name = flat[".about-page .about .about-chose .chose-name"]
+    assert "var(--display)" in name and "color: var(--ok)" in name
+    assert "var(--display)" in flat[".about-page .about .about-chose .chose-fig"]
+    assert "uppercase" in flat[".about-page .about .about-chose .chose-we"]

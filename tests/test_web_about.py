@@ -668,13 +668,13 @@ def test_people_checks_have_their_own_sub_section_with_a_next_step(tmp_path):
     nxt = part.split('<p class="about-people-next">', 1)[1].split("</p>", 1)[0]
     assert nxt.startswith("<strong>Next:</strong> a first-time-user study on Toloka, not run yet")
     assert 'data/eval/prereg/2026-10-22-toloka-site-study.md"' in nxt
-    assert "Tendem and Toloka are paid from Nebius Builder Program credits." in nxt
+    assert "Tendem and Toloka are paid from Nebius AI Builder programme credits." in nxt
 
 
 def test_the_toloka_pilot_is_aggregates_only_and_says_how_small(tmp_path):
     # 23 Oct, Kash: "It was a small pilot to verify our models." The 11-12 Oct run, majority
     # hits 4/5 without the reference and 3/5 with it (the private working repo's `2026-10-12-`
-    # human-judges-toloka.md); Toloka's trial terms allow aggregates only, never raw labels
+    # human-judges-toloka.md); we publish aggregates only, never raw labels
     page = _about(tmp_path)
     pilot = page.split('<p class="about-people-pilot">', 1)[1].split("</p>", 1)[0]
     assert pilot.startswith("<strong>A small Toloka pilot</strong> to check our photo reading")
@@ -688,5 +688,16 @@ def test_the_toloka_pilot_is_aggregates_only_and_says_how_small(tmp_path):
     )
     assert "**A small Toloka pilot.** To check our photo reading against people" in story
     assert "in 4 of 5 without the reference (one more partly) and 3 of 5 with it" in story
-    assert "aggregates only, as Toloka's trial terms ask" in story
+    assert "we publish aggregates only." in story and "trial terms" not in story
     assert "> **TODO (Kash), user testing:**" in story  # the site study's slot stays
+
+
+def test_one_name_for_the_builder_programme_everywhere(tmp_path):
+    # 23 Oct review: the page said "Nebius Builder Program", the story and the source "AI
+    # Builder programme"; one name for it on every page and in the story
+    story = (Path(__file__).parents[1] / "docs/submission/devpost.md").read_text("utf-8")
+    page = _about(tmp_path)
+    for text in (story, page):
+        assert "Builder Program" not in text
+    assert "Nebius AI Builder programme credits" in " ".join(story.split())
+    assert "Nebius AI Builder programme credits" in page
