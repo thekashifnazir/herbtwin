@@ -50,14 +50,17 @@ is in the submission form; it is not in this repository.
      big card with a green head: its tag (TODAY; no tag when the advice is to leave it), the
      headline with the plant's face beside it (beside its **Hear it** button when the plant's
      voice is on). When the twin ran (outdoors, with a forecast), the card's line comes from
-     it and the twin backs the advice (it rated the advice better than leaving it, or the
-     advice is to leave it), and the advice is not against the cold (bringing a tender plant
-     in, protecting it from cold nights: soil water cannot show the cold), a strip under the headline, "Your plant's twin · today to 2
-     weeks", draws the twin's soil water for the advice as a green line against leaving it
-     (for a "Leave it" answer, against the choice rated better, else the one whose line
-     differs most), with the dotted "needs water" line; its caption is the card's twin line
-     ("Tested on your plant's twin: …") and a **Compare all choices** link down to the
-     twin's section. Then short ruled rows: why, and, without the strip, what
+     it, and it backs the advice, a strip under the headline shows it. The twin backs the
+     advice when it rated it better than leaving it, or when the advice is a plain "Leave
+     it" ("Leave it, but protect it before the cold night on …" gets no strip). There is no
+     strip either when the advice is about the cold: "Bring it indoors to a bright
+     windowsill.", or a "Protect it" that spares the plant cold nights, as the strip shows
+     soil water and cannot show the cold. The strip, "Your plant's twin · today to 2 weeks",
+     draws the twin's soil water for the advice as a green line against leaving it (for a
+     "Leave it" answer, against the choice rated better, else the one whose line differs
+     most), with the dotted "needs water" line. Its caption is the card's twin line
+     ("Tested on your plant's twin: …"), and a **Compare all choices** link goes down to
+     the twin's section. Then short ruled rows: why, and, without the strip, what
      happens if you do it, led by where that comes from ("Tested on your plant's twin: …";
      when there is data on that); then "How sure we are" as a chip, a green "Our best read" or
      an amber "Not sure, check first", with one plain line beside it on what that meant in
