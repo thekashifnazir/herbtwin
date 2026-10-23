@@ -147,6 +147,43 @@ TREAT_HOW: tuple[tuple[re.Pattern[str], str], ...] = (
     (re.compile(r"\bpick(?:ing)? caterpillars off by hand", re.I), "Pick the caterpillars off by hand."),
 )  # fmt: skip
 SEASONAL_JOBS = frozenset({"prune"})  # actions whose reason ends with the season's next change
+# the season's next changes that end the plant (data/seasonal/norms_uk.json, word for word):
+# the annuals' "finished; sow again" lines. Under a main action that keeps the plant going
+# (bring it in, protect it) they argued with the headline (23 Oct, live outdoor basil: "Bring
+# it indoors" over "Cut it back ... What comes next: outdoor plant finished"). A list, not a
+# word match: "fronds finish dying back" or "ramblers finish after June" end nothing (review)
+PLANT_ENDS_NEXT: frozenset[str] = frozenset(
+    {
+        # basil
+        "growth slows as nights cool in September; season ends in October",
+        "final pickings in October; cold nights end the outdoor plant in October to November",
+        "outdoor plant finished; sow again indoors from March",
+        "sow again indoors from March",
+        "sow seed indoors from March; plant out in June once nights stay above 10 C",
+        # dill
+        "seeds ripen and the plant dies back in September to October",
+        "flowered plants finish; late sowings give the last leaves in October",
+        "last leaf pickings this month; cold weather ends the plants; sow again from March",
+        "sow again from March",
+        # coriander
+        "seeds form and turn brown in late summer to early autumn; then the plant dies",
+        "seeds turn brown and the plant dies in September; autumn sowings for winter leaves",
+        "summer plants finish; autumn sowings under cloche give leaves into early winter",
+        # parsley, a biennial
+        "second-year plants flower in summer then die; new sowings make leaves",
+    }
+)
+
+
+def next_change_line(next_change: str, primary: CareAction, brought_in: bool) -> str:
+    """The "What comes next" tail for a seasonal Also do, or "" when it would contradict the
+    main action: a plant brought indoors leaves the outdoor year (as an indoor one does), and
+    one protected outside is kept going, so a next change that ends it is no next step."""
+    if brought_in or (primary == "shelter" and next_change in PLANT_ENDS_NEXT):
+        return ""
+    return f" What comes next: {next_change.rstrip('.')}."
+
+
 # perennial herbs that rest through the UK winter: from September to February a cut "to
 # encourage bushier growth" asks for growth the plant will not make. The gardener's review
 # (19 Oct, s012 oregano) quoted it beside our own "dies back further and rests through
@@ -494,6 +531,9 @@ TRAY_CHECK = (
     "If it stands in a tray or saucer, tip out any water there: roots left sitting in water "
     "can rot."
 )
+# its card under Also do, first and for today: a second job, never a line in the main card's
+# body under the headline (23 Oct, live basil: the main card carried two actions)
+TRAY_HEADING = "Check the tray"
 TENDER_BED_BECAUSE = (  # planted out, it cannot come in (Opus review: "safer indoors" for a bed)
     "it is a tender plant: cold nights harm it, so cover it before they come."
 )
@@ -1515,6 +1555,7 @@ def build_answer(
     # advisor's words were for its own call, so the reason is ours
     led = coarse(adv.primary) != coarse(panel.primary)
     tender_lead = tender and panel.primary == "shelter" and month in TENDER_MONTHS and not indoors
+    brought_in = tender_lead and container != "ground"  # the headline is TENDER_HEADLINE
     # an isolate call that in_proportion turned into a look, led by it or by an ask that chose
     # the look (Opus review: one check_pests ask kept the plain headline)
     looked = (
@@ -1612,7 +1653,7 @@ def build_answer(
         if action == "prune" and resting:
             because = TIDY_BECAUSE
         if norm is not None and action in SEASONAL_JOBS and not indoors:
-            because = f"{because} What comes next: {norm.next_change.rstrip('.')}."
+            because += next_change_line(norm.next_change, panel.primary, brought_in)
         do.append(card(action, "this_week", because))
     if problem is not None:
         # the photo check named a listed problem: make sure there is a card to treat it,
@@ -1797,7 +1838,7 @@ def build_answer(
         compare = []
     ours = (
         TENDER_HEADLINE
-        if tender_lead and container != "ground"  # a bed of basil cannot come in
+        if brought_in  # a bed of basil cannot come in
         else PROPORTION_HEADLINE
         if looked
         else TIDY_HEADLINE

@@ -159,12 +159,19 @@ def test_the_sample_tiles_exist_on_disk(tmp_path):
     page = _spot_client(tmp_path)[0].get("/").text
     row = page.split('class="home-chip-row"', 1)[1].split("</div>", 1)[0]
     tiles = re.findall(
-        r'href="(/static/samples/[^"]+)"[^>]*>\s*<img src="(/static/samples/[^"]+)"', row
+        r'href="(/static/samples/[^"]+)"[^>]*>\s*<picture><source type="image/webp"'
+        r' srcset="([^"]+)"[^>]*><img src="(/static/samples/[^"]+)"',
+        row,
     )
     assert len(tiles) == 6, tiles  # five plants and, with the spot answer on, one bed
-    for href, src in tiles:
+    for href, srcset, src in tiles:
         assert (static / href.removeprefix("/static/")).is_file(), href
         assert (static / src.removeprefix("/static/")).is_file(), src
+        for url in (c.split()[0] for c in srcset.split(", ")):
+            assert (static / url.removeprefix("/static/")).is_file(), url
+        # the tap sends the link's file, the full-size sample the model reads: only the
+        # 40 px chip is a small copy (23 Oct image pass)
+        assert not href.endswith((".webp", "-thumb.jpg")) and src.endswith("-thumb.jpg")
     # tapping a tile loads the file into the form rather than sending you away
     script = page.split("data-sample", 1)[1] + page.split("<script>", 1)[1]
     assert "DataTransfer" in script and 'dispatchEvent(new Event("change"' in script

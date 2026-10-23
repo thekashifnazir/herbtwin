@@ -5,6 +5,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from herbtwin.history import StoredAnswer
 from herbtwin.reminders import Reminder, schedule
 from herbtwin.web.accounts import Person
 
@@ -17,8 +18,10 @@ class ReminderBox:
 
 def _planned(person: Person, answer_id: str) -> Reminder | None:
     stored = person.store.get_answer(answer_id)
-    if stored is None:
-        return None
+    return _plan_of(person, stored) if stored is not None else None
+
+
+def _plan_of(person: Person, stored: StoredAnswer) -> Reminder | None:
     names = {p.id: p.name for p in person.store.list_plants()}
     name = names.get(stored.plant_id)
     return schedule(stored, name) if name else None
@@ -26,7 +29,16 @@ def _planned(person: Person, answer_id: str) -> Reminder | None:
 
 def box_for(person: Person | None, answer_id: str, secret: str | None) -> ReminderBox | None:
     """The box for this answer, or None when none is offered. Raises HistoryError."""
-    if person is None or not secret or _planned(person, answer_id) is None:
+    if person is None or not secret:
+        return None
+    return box_of(person, answer_id, person.store.get_answer(answer_id), secret)
+
+
+def box_of(
+    person: Person | None, answer_id: str, stored: StoredAnswer | None, secret: str | None
+) -> ReminderBox | None:
+    """box_for an answer already read (None: not stored). Raises HistoryError."""
+    if person is None or stored is None or not secret or _plan_of(person, stored) is None:
         return None
     r = person.store.get_reminder(answer_id)
     if r is not None and r.sent_at is not None:

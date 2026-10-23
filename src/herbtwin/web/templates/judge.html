@@ -41,19 +41,20 @@
     <input type="file" name="photo" id="judge-photo" accept="image/jpeg" hidden>
     <input type="hidden" name="place" value="London">
     {# the samples rise in turn, and what shows over days after them, when they arrive
-       below the first screen (the shared reveal, 23 Oct) #}
+       below the first screen (the shared reveal, 23 Oct). Each pick is drawn 112 x 84
+       (judge.css .judge-pick img): the box below says the same #}
     <div class="judge-picks" data-reveal="stagger">
       <a class="judge-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg" data-to="/analyse">
-        <img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" alt="" loading="lazy">
+        {{ picture("/static/samples/3-basil-yellow-leaves-thumb.jpg", box=(112, 84)) }}
         <span><strong>Basil flowering</strong> The best start: the advice tested on the plant's twin, with pictures of it in about 7 days.</span></a>
       <a class="judge-pick" href="/static/samples/6-basil-downy-mildew.jpg" data-sample="6-basil-downy-mildew.jpg" data-to="/analyse">
-        <img src="/static/samples/6-basil-downy-mildew-thumb.jpg" width="480" height="360" alt="" loading="lazy">
+        {{ picture("/static/samples/6-basil-downy-mildew-thumb.jpg", box=(112, 84)) }}
         <span><strong>Basil mildew</strong> Yellow patches and grey-purple fuzz: a disease the photo check looks for.</span></a>
       <a class="judge-pick" href="/static/samples/4-rosemary-beetles.jpg" data-sample="4-rosemary-beetles.jpg" data-to="/analyse">
-        <img src="/static/samples/4-rosemary-beetles-thumb.jpg" width="480" height="640" alt="" loading="lazy">
+        {{ picture("/static/samples/4-rosemary-beetles-thumb.jpg", box=(112, 84)) }}
         <span><strong>Rosemary beetles</strong> A pest on the shoot tips.</span></a>
       {% if spot_on %}<a class="judge-pick" href="/static/samples/7-pea-bed.jpg" data-sample="7-pea-bed.jpg" data-to="/spots">
-        <img src="/static/samples/7-pea-bed-thumb.jpg" width="480" height="360" alt="" loading="lazy">
+        {{ picture("/static/samples/7-pea-bed-thumb.jpg", box=(112, 84)) }}
         <span><strong>Raised bed</strong> The second door, "What can I grow here?": which crops suit this spot in London now.</span></a>{% endif %}
     </div>
   </form>

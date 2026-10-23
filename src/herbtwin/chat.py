@@ -1021,7 +1021,7 @@ def context(rec: AnalysisRecord, history: History | None) -> str:
             check = dont_if_dry(obs.container if obs else "unknown").lower()
             say = f"check first: {check}" if a.dont_if_dry else "don't"
             lines.append(f"{say}: {a.dont.action}: {a.dont.if_you_do}")
-        if a.tray_check:  # the page's line under the reason; no word check here, unlike voice
+        if a.tray_check:  # the page's Also do tray card; no word check here, unlike voice
             lines.append(f"also said: {TRAY_CHECK}")
         lines += [f"keep an eye on: {a.watch}", f"confidence: {a.level_text}"]
         answer = "\n".join(lines)

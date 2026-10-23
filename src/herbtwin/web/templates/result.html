@@ -312,8 +312,6 @@
       </div>
       {% if first and first.because %}<p class="because">{{ first.because[:1]|upper }}{{ first.because[1:] }}</p>{% endif %}
       {% if first and first.if_you_do != no_data %}{{ ifdo(first, quiet=a.headline == no_cure_headline) }}{% endif %}
-      {# after the twin's line, so it never reads as tested on the twin (review of the tray PR) #}
-      {% if a.tray_check %}<p class="because">{{ tray_check }}</p>{% endif %}
       {% if a.trend %}<p class="note">{{ a.trend[:1]|upper }}{{ a.trend[1:] }}.</p>{% endif %}
       {# "Our best read" needs no gloss ("Go ahead" only repeated the headline); the others say what to do about it #}
       {# "about 3 in 10" read as a score for the plant (19 Oct, Kash): say whose sureness it is.
@@ -433,9 +431,10 @@
       <h2 id="twin">Your plant in ~7 days</h2>
       {% if twin.model_line %}<p class="because">{% if said.twin %}<span class="tag twin-chip">Twin</span>{% else %}Tested on your plant's twin:{% set said.twin = true %}{% endif %} {{ twin.model_line }}.</p>{% endif %}
       <div class="twin-pair">
-        <figure><img src="/static/twin/{{ twin.pair.do }}" alt="Illustration of your plant if you follow the advice" loading="lazy">
+        {% set half = "(min-width: 960px) 305px, calc(50vw - 21px)" %}{# two to a row in the main column #}
+        <figure>{{ picture("/static/twin/" ~ twin.pair.do, "Illustration of your plant if you follow the advice", sizes=half) }}
           <figcaption>{{ twin.do_label }}</figcaption></figure>
-        <figure><img src="/static/twin/{{ twin.pair.dont }}" alt="Illustration of your plant left as it is" loading="lazy">
+        <figure>{{ picture("/static/twin/" ~ twin.pair.dont, "Illustration of your plant left as it is", sizes=half) }}
           <figcaption>{{ twin.dont_label }}</figcaption></figure>
       </div>
       <p class="note">Illustration for our sample photo, not a prediction. · <a href="/about#credits">Photo credits</a></p>
@@ -447,10 +446,15 @@
        Keep an eye on. A panel only with a row in it: the GBIF line alone may never show.
        Under "This week", a THIS WEEK tag on a row said it twice #}
     {% set signs, after = watch_list(a.watch or "") %}
-    {% set week = a.do|length > 1 or a.dont or signs %}
+    {% set week = a.do|length > 1 or a.tray_check or a.dont or signs %}
     {% if week %}<div class="this-week"><p class="this-week-h">This week</p>{% endif %}
-    {% if a.do|length > 1 %}<section class="also" aria-labelledby="also-do">
+    {% if a.do|length > 1 or a.tray_check %}<section class="also" aria-labelledby="also-do">
       <h2 id="also-do">Also do</h2>
+      {# the tray is a second job, so it is a row here, first and for today, never a line in
+         the main card's body (23 Oct, live basil); no twin line, as it was never tested #}
+      {% if a.tray_check %}<div class="item"><span class="tag later">{{ tag["today"] }}</span>
+        <h3>{{ tray_heading }}</h3>
+        <p class="because">{{ tray_check }}</p></div>{% endif %}
       {% for c in a.do[1:] %}<div class="item">{% if c.when != "this_week" %}<span class="tag later">{{ tag[c.when] }}</span>{% endif %}
         <h3>{{ "Give it a light tidy" if c.action == "prune" and a.winter_rest else label[c.action] }}</h3>
         <p class="because">{{ c.because[:1]|upper }}{{ c.because[1:] }}</p>

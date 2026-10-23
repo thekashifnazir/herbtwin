@@ -129,6 +129,9 @@ def test_a_bank_photo_renders_the_twin_figure(tmp_path):
     assert 'class="twin"' in text
     assert "/static/twin/qwen__parsley__if_you_do.jpg" in text
     assert "/static/twin/qwen__parsley__if_you_dont.jpg" in text
+    # right-sized WebP copies, and the picture's shape held so the page doesn't jump
+    assert '<img src="/static/twin/qwen__parsley__if_you_do.jpg" width="896" height="1184"' in text
+    assert "/static/twin/qwen__parsley__if_you_do-480w.webp 480w" in text
     assert "If you water it" in text and "If you don" in text
     assert "Illustration for our sample photo, not a prediction." in text
     # 18 Oct judge walk: "twin" was only in the logo; the model's lines now say whose it is

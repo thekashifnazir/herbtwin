@@ -113,6 +113,10 @@ body {
   overflow-wrap: break-word;
 }
 img { max-width: 100%; height: auto; }
+/* web/picture.py wraps an <img> in <picture> for its WebP copies: the <img> stays the box,
+   and the <source> is never one (in a flex row it took a gap of its own) */
+picture { display: contents; }
+picture > source { display: none; }
 [hidden] { display: none !important; }   /* buttons are inline-flex; hidden must still hide */
 
 /* ---------- frame: header band, main column, footer ----------

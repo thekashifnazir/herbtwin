@@ -55,8 +55,11 @@ class Checkup:
 def _pair(person: Person, answer_id: str):
     """(earlier, later, its score or None) when an earlier visit is due a check."""
     later = person.store.get_answer(answer_id)
-    if later is None:
-        return None
+    return _pair_of(person, later) if later is not None else None
+
+
+def _pair_of(person: Person, later: StoredAnswer):
+    """_pair for an answer already read."""
     earlier = scoring.earlier_visit(person.store.answers_for(later.plant_id), later)
     if earlier is None:
         return None
@@ -77,7 +80,19 @@ def checkup_for(person: Person | None, answer_id: str) -> Checkup | None:
     if person is None:
         return None
     try:
-        got = _pair(person, answer_id)
+        later = person.store.get_answer(answer_id)
+    except HistoryError:
+        log.exception("could not read the checkup")
+        return None
+    return checkup_of(person, later)
+
+
+def checkup_of(person: Person | None, later: StoredAnswer | None) -> Checkup | None:
+    """checkup_for an answer already read (None: not stored, or it could not be read)."""
+    if person is None or later is None:
+        return None
+    try:
+        got = _pair_of(person, later)
     except HistoryError:
         log.exception("could not read the checkup")
         return None

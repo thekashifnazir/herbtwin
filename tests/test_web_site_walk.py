@@ -72,7 +72,9 @@ def test_sample_3_is_named_for_what_the_photo_shows(tmp_path):
         _home(tmp_path).split('data-sample="3-basil-yellow-leaves.jpg"', 1)[1].split("</a>", 1)[0]
     )
     assert "<span>Basil flowering</span>" in tile
-    assert "yellow" not in re.sub(r'src="[^"]*"', "", tile).lower()  # only the file names keep it
+    assert (
+        "yellow" not in re.sub(r'src(set)?="[^"]*"', "", tile).lower()
+    )  # only the file names keep it
 
 
 def test_sample_chips_carry_a_round_thumbnail_and_a_label(tmp_path):

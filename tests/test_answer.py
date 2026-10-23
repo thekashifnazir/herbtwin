@@ -203,7 +203,19 @@ def test_an_also_do_card_gives_a_reason_for_its_own_action():
     # cutting back is the seasonal job, but the season's line says what the plant does
     # next, not why to cut: on its own it read as no reason at all (Toloka dry run, 16 Oct)
     assert cards["prune"].startswith("cutting off old, dead or leggy stems")
-    assert cards["prune"].endswith(f"What comes next: {norm.next_change}.")
+    # under "Protect it" the plant is kept going: "outdoor plant finished; sow again" argued
+    # with the headline (23 Oct, live outdoor basil), so that line goes
+    assert "What comes next" not in cards["prune"]
+    look = Advice(
+        actions=["check_pests", "prune"],
+        primary="check_pests",
+        answer="Look under the leaves for aphids.",
+        confidence="high",
+    )
+    run = AdviceRun(look, 0.0, False)
+    a = build(panel=Panel((run,) * 3, (), "check_pests", run, 3, 3), norm=norm, plant_key="basil")
+    cut = next(c.because for c in a.do[1:] if c.action == "prune")
+    assert cut.endswith(f"What comes next: {norm.next_change}.")  # nothing keeps it going here
 
 
 TREAT = Advice(

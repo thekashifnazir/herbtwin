@@ -83,8 +83,15 @@ def answer_for(person: Person | None, answer_id: str, cache: AnswerCache) -> Ana
 def chat_so_far(person: Person | None, answer_id: str, cache: AnswerCache) -> list[ChatMessage]:
     """The chat to show under a page, best effort: empty when it cannot be read. A reply
     kept before a text tool call was caught shows as the lookup that failed (chat.shown)."""
-    stored = _stored(person, answer_id)
-    if stored is not None:
+    return chat_of(person, _stored(person, answer_id), answer_id, cache)
+
+
+def chat_of(
+    person: Person | None, stored: StoredAnswer | None, answer_id: str, cache: AnswerCache
+) -> list[ChatMessage]:
+    """chat_so_far for an answer already read (None: not stored, or it could not be read:
+    the cache's chat then)."""
+    if person is not None and stored is not None:
         try:
             said = person.store.chat_for(stored.id)
         except HistoryError:

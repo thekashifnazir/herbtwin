@@ -3,6 +3,7 @@ data/eval/reports/2026-10-19-expert-review.md): each line the gardener quoted, r
 
 import json
 import re
+from pathlib import Path
 
 import httpx
 import pytest
@@ -17,6 +18,7 @@ from herbtwin.answer import (
     TENDER_HEADLINE,
     TIDY_BECAUSE,
     TIDY_HEADLINE,
+    TRAY_HEADING,
     build_answer,
     reply_to,
     visible_damage,
@@ -30,6 +32,7 @@ from herbtwin.stages.advise import AdviceRun, Panel
 from herbtwin.stages.environment import OPEN_METEO_URL
 from tests.test_pipeline import JPEG, OBS, SAMPLE, WHEN, _deps
 
+NORMS = Path(__file__).parents[1] / "data/seasonal/norms_uk.json"
 ASSESS = Assessment("sure", 7, 0.1, [], [Chip(name="Season", effect="raises")], None)
 WORSE = "stays moist without watering; extra water risks waterlogged roots"
 COLD = ModelView("shelter", "better", "cold risk Saturday if left out; shelter avoids it", 4)
@@ -214,6 +217,54 @@ def test_a_pot_brought_indoors_has_its_tray_checked_whoever_led():
     assert TRAY_CHECK.startswith("If it stands in a tray or saucer, tip out any water there")
 
 
+def test_an_also_do_never_says_the_plant_is_finished_under_a_headline_that_keeps_it():
+    # 23 Oct, live outdoor basil: "Bring it indoors" over "Also do: Cut it back ... What comes
+    # next: outdoor plant finished; sow again indoors from March". A plant brought in leaves
+    # the outdoor year; one protected in its bed is kept going, so its end is no next step
+    views = {"shelter": COLD}
+    moved = tender_first(
+        _panel("prune", "prune", "prune"), views, tender=True, month=10, setting="unknown",
+        struggling=False,
+    )  # fmt: skip
+    for month in (9, 10, 11):  # "cold nights end the outdoor plant", "finished", "sow again"
+        for container in ("pot", "ground"):
+            a = _build("ocimum basilicum", month, moved, views, tender=True, container=container)
+            assert a.do[0].action == "shelter", (month, container)
+            cut = next(c.because for c in a.do[1:] if c.action == "prune")
+            assert "What comes next" not in cut, (month, container, cut)
+    # protected, a herb whose next step does not end it keeps the line
+    kept = _panel("shelter", actions=["shelter", "prune"])
+    a = _build("salvia rosmarinus", 10, kept, views, container="ground")
+    cut = next(c.because for c in a.do[1:] if c.action == "prune")
+    assert cut.endswith(
+        "What comes next: holds its leaves all winter; flowers again from mid-spring (April)."
+    )
+
+
+def test_only_the_listed_next_changes_count_as_the_plant_ending():
+    # review of #485: a word match dropped lines that end nothing under "Protect it"
+    from herbtwin.answer import PLANT_ENDS_NEXT, next_change_line
+
+    norms = {n["next_change"] for n in json.loads(NORMS.read_text())}
+    assert PLANT_ENDS_NEXT <= norms  # word for word, so a reworded norm fails here
+    for kept in (
+        "fronds finish dying back; cut dead fronds in winter; new crosiers in early spring (March)",
+        "leaves finish falling in November; bare until spring",
+        "once-flowering ramblers finish after June; repeat-flowering roses pause then flower "
+        "again; feed in mid summer after the first flush",
+        "overwintered plants regrow in spring, then flower in their second year; sow new "
+        "plants from March",
+    ):
+        assert kept in norms
+        assert next_change_line(kept, "shelter", False) == f" What comes next: {kept}."
+    assert next_change_line("sow again from March", "shelter", False) == ""
+    assert next_change_line("sow again from March", "check_pests", False)  # not kept going
+    assert (
+        next_change_line("leaves finish falling in November; bare until spring", "shelter", True)
+        == ""
+    )
+
+
 def test_a_struggling_tender_herb_outside_comes_in_even_without_a_cold_night():
     moved = tender_first(
         _panel("feed"), {}, tender=True, month=11, setting="outdoor", struggling=True
@@ -283,23 +334,32 @@ def test_the_basil_sample_leads_with_bringing_it_in_and_is_less_sure(tmp_path):
     assert chips["Agreement"] == "lowers"  # 0 of 3 advisors led with it
     assert rec.answer.level != "sure"
     assert any("tender" in n for n in rec.notes)
-    # the tray check shows under the reason, and stays out of what the plant may say: its
+    # the tray check is a step of its own under Also do, never a second action in the main
+    # card's body (23 Oct, live basil), and stays out of what the plant may say: its
     # "water" must not let "Water me well." past the voice check (review of the tray PR)
     from herbtwin.answer import TRAY_CHECK
     from herbtwin.voice import _answer_text, rejection
     from tests.test_answer_walk_fixes import _render
 
     assert rec.answer.tray_check
-    main = _render(rec).split('id="main-action"', 1)[1].split("</section>", 1)[0]
-    assert f'<p class="because">{TRAY_CHECK}</p>' in main
+    page = _render(rec)
+    main = page.split('id="main-action"', 1)[1].split("</section>", 1)[0]
+    assert "tray" not in main
+    also = page.split('id="also-do"', 1)[1].split("</section>", 1)[0]
+    assert f"<h3>{TRAY_HEADING}</h3>" in also and f'<p class="because">{TRAY_CHECK}</p>' in also
+    assert also.index(TRAY_HEADING) < also.index("<h3>", also.index(TRAY_HEADING) + 1)
+    # a row of the This week panel (#489), its first Also do row
+    assert page.index('class="this-week"') < page.index('id="also-do"') < page.index(TRAY_HEADING)
     assert "tray" not in _answer_text(rec)
     assert rejection("Bring me indoors. Water me well.", rec)
     assert rejection("Bring me indoors. Water me only when my compost is dry.", rec)
     from herbtwin.chat import context
 
     assert f"also said: {TRAY_CHECK}" in context(rec, None)  # a chat follow-up knows it
-    # placed after the twin's line under the reason, never between them
-    assert main.index("Tested on your plant") < main.index(TRAY_CHECK)
+    # the twin's line stays with the main card; the tray card was never tested on the twin
+    assert "Tested on your plant" in main
+    tray = also.split(f"<h3>{TRAY_HEADING}</h3>", 1)[1].split("</div>", 1)[0]
+    assert "twin" not in tray.casefold()
 
 
 # 4. mint: one insect and no damage is a look under the leaves, not isolation

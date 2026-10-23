@@ -44,12 +44,12 @@
   <div class="home-chips" role="group" aria-labelledby="home-chips-h">
     <p class="home-chips-h" id="home-chips-h"><strong>No herb to hand? Try one of ours:</strong></p>
     <div class="home-chip-row">
-    <a class="home-pick" href="/static/samples/1-parsley-healthy.jpg" data-sample="1-parsley-healthy.jpg"><img src="/static/samples/1-parsley-healthy-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Parsley</span></a>
-    <a class="home-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg"><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Basil flowering</span></a>
-    <a class="home-pick" href="/static/samples/4-rosemary-beetles.jpg" data-sample="4-rosemary-beetles.jpg"><img src="/static/samples/4-rosemary-beetles-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Rosemary beetles</span></a>
-    <a class="home-pick" href="/static/samples/5-coriander-flowering.jpg" data-sample="5-coriander-flowering.jpg"><img src="/static/samples/5-coriander-flowering-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Coriander</span></a>
-    <a class="home-pick" href="/static/samples/6-basil-downy-mildew.jpg" data-sample="6-basil-downy-mildew.jpg"><img src="/static/samples/6-basil-downy-mildew-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Basil mildew</span></a>
-    {% if spot_on %}<a class="home-pick" href="/static/samples/7-pea-bed.jpg" data-sample="7-pea-bed.jpg" data-go="go-spot"><img src="/static/samples/7-pea-bed-thumb.jpg" width="40" height="40" alt="" loading="lazy"><span>Raised bed</span></a>{% endif %}
+    <a class="home-pick" href="/static/samples/1-parsley-healthy.jpg" data-sample="1-parsley-healthy.jpg">{{ picture("/static/samples/1-parsley-healthy-thumb.jpg", box=(40, 40)) }}<span>Parsley</span></a>
+    <a class="home-pick" href="/static/samples/3-basil-yellow-leaves.jpg" data-sample="3-basil-yellow-leaves.jpg">{{ picture("/static/samples/3-basil-yellow-leaves-thumb.jpg", box=(40, 40)) }}<span>Basil flowering</span></a>
+    <a class="home-pick" href="/static/samples/4-rosemary-beetles.jpg" data-sample="4-rosemary-beetles.jpg">{{ picture("/static/samples/4-rosemary-beetles-thumb.jpg", box=(40, 40)) }}<span>Rosemary beetles</span></a>
+    <a class="home-pick" href="/static/samples/5-coriander-flowering.jpg" data-sample="5-coriander-flowering.jpg">{{ picture("/static/samples/5-coriander-flowering-thumb.jpg", box=(40, 40)) }}<span>Coriander</span></a>
+    <a class="home-pick" href="/static/samples/6-basil-downy-mildew.jpg" data-sample="6-basil-downy-mildew.jpg">{{ picture("/static/samples/6-basil-downy-mildew-thumb.jpg", box=(40, 40)) }}<span>Basil mildew</span></a>
+    {% if spot_on %}<a class="home-pick" href="/static/samples/7-pea-bed.jpg" data-sample="7-pea-bed.jpg" data-go="go-spot">{{ picture("/static/samples/7-pea-bed-thumb.jpg", box=(40, 40)) }}<span>Raised bed</span></a>{% endif %}
     </div>
     <p class="small"><a class="credits-link" href="#credits">Photo credits</a></p>
   </div>
@@ -91,10 +91,11 @@
 
 <figure class="home-twin" data-reveal="rise">
   <div class="home-twin-frame" id="twin-frame">
-    <img src="/static/twin/qwen__basil__if_you_do.jpg" width="1184" height="896" loading="eager"
-         alt="Basil plant thriving: the 'if you protect it' twin">
-    <img class="home-twin-dont" src="/static/twin/qwen__basil__if_you_dont.jpg" width="1184" height="896"
-         alt="Basil plant cold-damaged: the 'if you don't' twin">
+    {# above the fold on a wide screen, so never lazy; a phone takes the 720 px copies. The
+       widths follow home.css (.home-twin-frame): phone-wide, then about 800 px drawn from 1100px #}
+    {% set band = "(min-width: 1100px) 800px, calc(100vw - 32px)" %}
+    {{ picture("/static/twin/qwen__basil__if_you_do.jpg", "Basil plant thriving: the 'if you protect it' twin", sizes=band, loading="eager") }}
+    {{ picture("/static/twin/qwen__basil__if_you_dont.jpg", "Basil plant cold-damaged: the 'if you don't' twin", sizes=band, loading="eager", class_="home-twin-dont") }}
     <span class="home-twin-tag l">If you protect it</span><span class="home-twin-tag r">If you don't</span>
     <span class="home-twin-tag ex">Example</span>
     {# the handle says it moves, with or without motion: the slider itself is invisible #}
@@ -109,8 +110,7 @@
 <section class="home-example" aria-labelledby="home-example-tab">
 <p class="home-example-tab" id="home-example-tab">Example</p>
 <p class="home-example-in" data-reveal="rise">
-  <img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="56" height="42" loading="lazy"
-       alt="The basil photo this example starts from">
+  {{ picture("/static/samples/3-basil-yellow-leaves-thumb.jpg", "The basil photo this example starts from", box=(56, 42)) }}
   <strong>A basil photo, a cold week in London</strong> <span class="home-example-arrow" aria-hidden="true">→</span>
 </p>
 <article class="card home-sample" aria-label="Example answer" data-reveal="rise">
@@ -159,17 +159,19 @@
    basil sample and the twin pictures drawn from it, never anyone's own garden #}
 <section class="home-how" aria-labelledby="home-how-h">
   <h2 id="home-how-h" data-reveal="rise">How it works</h2>
+  {# 4 cards a row, 2 on a phone; the twin cards ask for the band's copies, already fetched #}
+  {% set card = "(max-width: 720px) calc(50vw - 24px), (min-width: 1184px) 270px, calc(25vw - 22px)" %}
   <ol class="home-how-cards" data-reveal="stagger">
-    <li><figure><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The basil photo">
+    <li><figure>{{ picture("/static/samples/3-basil-yellow-leaves-thumb.jpg", "The basil photo", sizes=card) }}
       <span class="home-how-chip">Found basil</span></figure>
       <h3>Your photo</h3><p class="small muted">A vision model names the plant and reads its leaves and soil.</p></li>
-    <li><figure class="cold"><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The same basil, tinted for a cold week">
+    <li><figure class="cold">{{ picture("/static/samples/3-basil-yellow-leaves-thumb.jpg", "The same basil, tinted for a cold week", sizes=card) }}
       <span class="home-how-chip">3 °C nights from Wed</span></figure>
       <h3>Your weather</h3><p class="small muted">The next 2 weeks where it grows, night by night.</p></li>
-    <li><figure><img src="/static/twin/qwen__basil__if_you_dont.jpg" width="1184" height="896" loading="lazy" alt="The basil's twin left out in the cold">
+    <li><figure>{{ picture("/static/twin/qwen__basil__if_you_dont.jpg", "The basil's twin left out in the cold", sizes=band) }}
       <span class="home-how-tag">If left out</span><span class="home-how-chip">Twin: shelter ✓ better</span></figure>
       <h3>The twin tests each choice</h3><p class="small muted">Watering, sheltering and moving it, tried on the twin first.</p></li>
-    <li><figure><img src="/static/twin/qwen__basil__if_you_do.jpg" width="1184" height="896" loading="lazy" alt="The basil's twin sheltered and thriving">
+    <li><figure>{{ picture("/static/twin/qwen__basil__if_you_do.jpg", "The basil's twin sheltered and thriving", sizes=band) }}
       <span class="home-how-chip">Shelter it this week · our best read</span></figure>
       <h3>The answer</h3><p class="small muted">One thing to do, and how sure we are.</p></li>
   </ol>

@@ -65,12 +65,15 @@ def test_the_judge_samples_are_named_as_on_the_home_page(tmp_path):
     from tests.test_web_judge import _client as _judge_client
 
     home = _spot_client(tmp_path)[0].get("/").text
-    chips = re.findall(r'data-sample="([^"]+)"[^>]*><img [^>]*><span>([^<]+)</span>', home)
+    chips = re.findall(
+        r'data-sample="([^"]+)"[^>]*><picture>.*?<img [^>]*></picture><span>([^<]+)</span>', home
+    )
     names = dict(chips)
     (tmp_path / "judge").mkdir()
     judge = _judge_client(tmp_path / "judge").get("/judge").text
     picks = re.findall(
-        r'data-sample="([^"]+)"[^>]*>\s*<img [^>]*>\s*<span><strong>([^<]+)</strong>', judge
+        r'data-sample="([^"]+)"[^>]*>\s*<picture>.*?<img [^>]*></picture>\s*<span><strong>([^<]+)</strong>',
+        judge,
     )
     assert picks
     for sample, name in picks:

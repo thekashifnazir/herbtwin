@@ -12,6 +12,7 @@ import time
 import uuid
 from collections import OrderedDict
 from collections.abc import Callable, Mapping
+from contextlib import asynccontextmanager
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from functools import partial
@@ -40,6 +41,7 @@ from herbtwin.answer import (
     NO_CURE_NEXT,
     NO_CURE_THANKS,
     TRAY_CHECK,
+    TRAY_HEADING,
     advisor_lines,
     by_part,
     dont_if_dry,
@@ -151,14 +153,15 @@ from herbtwin.web.accounts import (
     Person,
     accounts_from,
     clear_session,
-    current_person,
     delete_account,
     finish_delete,
     set_session,
+    signed_in,
 )
 from herbtwin.web.edge import EdgeGuard, visitor_ip
 from herbtwin.web.head import HeadAsGet
 from herbtwin.web.held_photos import HeldPhotos
+from herbtwin.web.picture import picture
 from herbtwin.web.progress import (
     HEAD,
     SIGNED_OUT_HEAD,
@@ -226,8 +229,10 @@ TEMPLATES.env.globals["no_cure_headline"] = NO_CURE_HEADLINE  # Compare says why
 TEMPLATES.env.globals["no_cure_next"] = NO_CURE_NEXT  # What next under "Remove it"
 TEMPLATES.env.globals["no_cure_thanks"] = NO_CURE_THANKS  # its "I did it" thanks
 TEMPLATES.env.globals["dont_if_dry"] = dont_if_dry  # the Don't card with the soil unknown
-TEMPLATES.env.globals["tray_check"] = TRAY_CHECK  # under "Bring it indoors" for a pot
+TEMPLATES.env.globals["tray_check"] = TRAY_CHECK  # Also do under "Bring it indoors", a pot
+TEMPLATES.env.globals["tray_heading"] = TRAY_HEADING
 TEMPLATES.env.globals["sample_files"] = sample_files  # home: a picked sample is set in London
+TEMPLATES.env.globals["picture"] = picture  # a shown JPEG as right-sized WebP copies
 TEMPLATES.env.globals["twin_chart"] = twin_chart  # Compare's 14-day line
 TEMPLATES.env.globals["plain_why"] = plain_why  # Compare's reasons as plain sentences
 TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
@@ -605,6 +610,14 @@ def _usage_from(settings: Settings) -> UsageStore | None:
     return SupabaseUsage(settings.supabase_url, settings.supabase_secret_key)
 
 
+@asynccontextmanager
+async def _lifespan(app: FastAPI):
+    yield
+    http = getattr(getattr(app.state, "accounts", None), "http", None)
+    if http is not None:  # the shared Supabase client (accounts.supabase_client)
+        http.close()
+
+
 def create_app(
     deps: Deps | None = None,
     clock: Callable[[], datetime] = lambda: datetime.now(UTC),
@@ -616,7 +629,7 @@ def create_app(
 ) -> FastAPI:
     """The app. Tests pass `deps` and with it everything else (accounts, usage, mail and
     `site_url`, the site's own address); without `deps` all of it comes from settings."""
-    app = FastAPI(title="herbtwin")
+    app = FastAPI(title="herbtwin", lifespan=_lifespan)
     if deps is None:
         settings = load_settings()
         app.state.deps = build_deps(settings)
@@ -834,9 +847,7 @@ def create_app(
         return state
 
     async def who(request: Request):
-        holder = HTMLResponse("")
-        person = await run_in_threadpool(current_person, request, holder, app.state.accounts)
-        return person, holder
+        return await signed_in(request, app.state.accounts)
 
     def run(
         data: bytes,
@@ -1657,6 +1668,15 @@ def create_app(
         if not _is_answer_id(answer_id):
             return message(request, EXPIRED, 404, "/", "Check a plant")
         person, holder = await who(request)
+        # the stored answer, read once: the page, the chat, the check-up and the reminder
+        # box all start from it (23 Oct audit: it was read four times, one after another)
+        stored, unread = None, False
+        if person is not None:
+            try:
+                stored = await run_in_threadpool(person.store.get_answer, answer_id)
+            except HistoryError:
+                log.exception("could not read the stored answer")
+                unread = True
         entry = app.state.answers.get_for(answer_id, person.user_id if person else None)
         if entry is None and person is not None:
             # read while sign-in was down, so kept as signed out: the id already shows it
@@ -1664,10 +1684,7 @@ def create_app(
         if entry is not None:
             rec, last = entry.latest, entry.last_decline
         elif person is not None:
-            try:
-                stored = await run_in_threadpool(person.store.get_answer, answer_id)
-            except HistoryError:
-                log.exception("could not read the stored answer")
+            if unread:
                 return message(request, remember.HISTORY_DOWN, 503)
             if stored is None:
                 return message(request, EXPIRED, 404, "/", "Check a plant")
@@ -1677,9 +1694,12 @@ def create_app(
             return message(request, remember.HISTORY_DOWN, 503)
         else:
             return message(request, EXPIRED, 404, "/", "Check a plant")
-        chat = await run_in_threadpool(followup.chat_so_far, person, answer_id, app.state.answers)
-        check = await run_in_threadpool(checkup.checkup_for, person, answer_id)
-        box = await reminder_box(person, answer_id)
+        # side by side: each read keeps its own failure (no chat, no check-up, no box)
+        chat, check, box = await asyncio.gather(
+            run_in_threadpool(followup.chat_of, person, stored, answer_id, app.state.answers),
+            run_in_threadpool(checkup.checkup_of, person, stored),
+            reminder_box(person, answer_id, stored),
+        )
         mine = claims.browser_key(request, settings.reminder_secret)
         keep = (
             f"/auth/sign-in?next=/answers/{answer_id}"
@@ -2196,11 +2216,18 @@ def create_app(
         box = await reminder_box(person, answer_id)
         return _with_cookies(page(request, rec, None, chat, check, box, person is not None), holder)
 
-    async def reminder_box(person, answer_id: str):
-        """The "email me" box, or None: no box is better than no answer page."""
+    _UNREAD = object()
+
+    async def reminder_box(person, answer_id: str, stored=_UNREAD):
+        """The "email me" box, or None: no box is better than no answer page. `stored`:
+        the answer when already read (None: not stored, or it could not be read)."""
         try:
+            if stored is _UNREAD:
+                return await run_in_threadpool(
+                    reminding.box_for, person, answer_id, settings.reminder_secret
+                )
             return await run_in_threadpool(
-                reminding.box_for, person, answer_id, settings.reminder_secret
+                reminding.box_of, person, answer_id, stored, settings.reminder_secret
             )
         except HistoryError:
             log.exception("could not read the reminder")

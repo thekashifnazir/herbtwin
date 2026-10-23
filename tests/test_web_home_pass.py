@@ -20,7 +20,8 @@ def test_the_samples_are_chips_right_under_the_photo_card(tmp_path):
     assert at == sorted(at)
     chips = form.split('class="home-chip-row"', 1)[1].split("</div>", 1)[0]
     labels = re.findall(
-        r'<a class="home-pick"[^>]*><img [^>]*alt=""[^>]*><span>([^<]+)</span>', chips
+        r'<a class="home-pick"[^>]*><picture>.*?<img [^>]*alt=""[^>]*></picture><span>([^<]+)</span>',
+        chips,
     )
     assert labels == [
         "Parsley", "Basil flowering", "Rosemary beetles", "Coriander", "Basil mildew", "Raised bed",

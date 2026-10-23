@@ -56,7 +56,9 @@ def test_made_with_groups_the_nvidia_models_the_other_model_and_the_services():
     # the licences stay one tap away, folded: a data table and a photo list with thumbnails
     fold = made.split('<details class="made-credits" id="credits">', 1)[1]
     assert '<dl class="made-data">' in fold and '<ul class="made-photos">' in fold
-    assert re.search(r'<li><img src="/static/samples/[^"]+-thumb\.jpg"[^>]*alt=""', fold)
+    assert re.search(
+        r'<li><picture>.*?<img src="/static/samples/[^"]+-thumb\.jpg"[^>]*alt=""', fold
+    )
     assert "All downscaled, with metadata removed." in fold  # the CC change notice
 
 
