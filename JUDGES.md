@@ -35,8 +35,11 @@ is in the submission form; it is not in this repository.
    "No place given: skipping the weather"). Section 4 says why.
 3. **Read the answer.** It comes in three blocks (on a wide screen the first is on the
    left, the other two on the right; on a phone it is one list, in this order: the main
-   card and where it came from, your photo, the twin pictures, Compare all choices, This
-   week, Tell us more, then the rest):
+   card and where it came from, your photo, the problem the photo check saw (when it saw
+   one), the twin pictures, Compare all choices, This week, Tell us more, then the rest.
+   When the answer is not sure and has questions to ask below (not just the one on the
+   band, such as the town or indoors or outdoors), or after a question you typed went with
+   Check the advice again, Tell us more comes straight after the card, before your photo):
    - **What to do.** The plant, then where it grows, the date and the place as a row of
      chips ("Outdoors", "In a container", "18 Oct", "London"); with no place outdoors, the
      band asks "We don't know where this is: add a town for weather-checked advice." with a
@@ -68,7 +71,8 @@ is in the submission form; it is not in this repository.
      outdoors. For a sample photo, **Your plant in ~7 days**: two pictures of the plant if
      you do it and if you don't, each captioned in a deep-green chip. Then one **This week**
      panel, a row for each kind of job, each led by a tag in its colour: **Also do**
-     (green; under "Bring it indoors to a bright windowsill.", first a "Check the tray" row for today), **Don't**
+     (green; when the headline is "Bring it indoors to a bright windowsill.", its first row is
+     "Check the tray", for today), **Don't**
      (clay; headed **Check first**, "Water only if the top of the compost is dry", when we
      can't tell how wet the soil is) and **Keep an eye on** (amber, when there are signs to
      watch for), with UK records of the plant's pests under it when there are any ("Seen
