@@ -1,0 +1,27 @@
+/* The answer on a phone, one list in the order that reads (23 Oct answer-page critique, 8
+   and 10): the main card and where it came from, your photo, the twin pictures, then Compare
+   (the twin's chart, out of How we worked it out), This week, and the chat right after it;
+   then the rest of the plan, then How we worked it out. Under 960px the two columns, and
+   How we worked it out, become one list for this; from 960px nothing here applies. With the
+   questions asked low (ask-up), answer.css keeps them right under the card. Sorts after
+   answer.css, so these orders win over its two older phone orders. */
+@media (max-width: 959px) {
+  .answer-page .answer-cols { display: flex; flex-direction: column; }
+  .answer-page .answer-cols > :is(.plan, .side), .answer-page .answer-cols > .side > .details { display: contents; }
+  /* the rest of the plan, then the side's */
+  .answer-page .answer-cols > .plan > * { order: 7; }
+  .answer-page .answer-cols > .side > *, .answer-page .answer-cols > .side > .details > * { order: 9; }
+  .answer-page .answer-cols .main-action, .answer-page .answer-cols > .plan > .came-from { order: 1; }
+  .answer-page .answer-cols > :is(.your-photo, .your-more) { order: 2; }
+  .answer-page .answer-cols > .plan > :is(.seen-problem, .twin) { order: 3; }
+  .answer-page .answer-cols > .side > .details > details.compare { order: 4; margin-bottom: 20px; }
+  .answer-page .answer-cols > .plan > :is(.this-week, .reported) { order: 5; }
+  .answer-page .answer-cols > .side > #chat { order: 6; margin-bottom: 28px; }
+  /* asked low: the questions stay right under the card, before your photo (answer.css) */
+  .answer-page .answer-cols.ask-up > .side > #chat { order: 1; }
+  /* the divider over the chat would sit by How we worked it out's own */
+  .answer-page .answer-cols > .side > .divider:first-child { display: none; }
+  /* the plan no longer pulls up over the band as one block: its card does */
+  .answer-page .page-band + .answer-cols .main-action { position: relative; margin-top: -48px; }
+}
+@media (max-width: 720px) { .answer-page .page-band + .answer-cols .main-action { margin-top: -40px; } }

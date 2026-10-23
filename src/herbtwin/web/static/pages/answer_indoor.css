@@ -1,0 +1,20 @@
+/* The headline card after a check again, and indoors (23 Oct answer-page critique, 11): "Changed
+   after what you told us. Was: …" as a small strip above the headline, not a green sentence;
+   and indoors, the light line under how sure as one line with the window as chips, a tap
+   each. Scoped under .answer-page; tokens only. */
+
+/* the strip: the card's paper on the green head, small, the old headline struck in it */
+.answer-page .main-action .head .checked { display: inline-block; max-width: 100%; margin: 0 0 8px;
+  padding: 4px 12px; border: 1px solid var(--soft-line); border-radius: 10px; background: var(--card);
+  color: var(--primary); font: 600 16px/1.35 var(--sans); }
+
+/* indoors: the line, then the windows as quiet chips (the questions' own look), never green
+   presses: the card keeps its one green button */
+.answer-page .main-action > .indoor-light { margin: 12px 0 0; padding-top: 12px; border-top: 1px solid var(--border); }
+.answer-page .main-action > .indoor-light p { margin: 0 0 8px; color: var(--muted-fg); font-size: 16px; }
+.answer-page .indoor-light .window-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.answer-page .indoor-light .window-chip { min-height: 44px; padding: 6px 14px; border: 1px solid var(--border);
+  border-radius: var(--pill); background: var(--muted); color: var(--fg); font: 500 16px/1.2 var(--sans);
+  text-align: left; cursor: pointer; }
+.answer-page .indoor-light .window-chip:hover { background: color-mix(in srgb, var(--muted) 88%, var(--fg)); }
+.answer-page .indoor-light .window-chip[aria-disabled="true"] { cursor: progress; opacity: .8; }

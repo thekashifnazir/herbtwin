@@ -332,7 +332,30 @@
          levels indoors?"). Say it once, and ask for the window, until it is told; never beside "Send a sharper
          photo" or a no-cure answer, where the window can't help. Not advice,
          so the rater text skips it (answer_text.SKIP_CLASSES) #}
-      {% if obs and obs.setting == "indoor" and not (rec.told and rec.told.window) and not retake and a.headline != no_cure_headline %}<p class="note indoor-light">We can't measure light indoors from a photo. <a href="#refine">Tell us which window it's by</a>.</p>{% endif %}
+      {#- the window as chips right here, one tap to check the advice again (23 Oct answer-page
+          critique, 11): a quiet line under how sure, each chip a button of the refine form,
+          keeping what else was told; the questions below still ask it too #}
+      {% if obs and obs.setting == "indoor" and not (rec.told and rec.told.window) and not retake and a.headline != no_cure_headline %}<form class="note indoor-light" method="post" action="/answers/{{ rec.record_id }}/refine">
+        {{- told_fields(rec.told, setting=true) }}<p id="window-ask">We can't measure light indoors from a photo. Which window is it by?</p>
+        <span class="window-chips" role="group" aria-labelledby="window-ask">{% for v, text in choices.window.items() %}<button type="submit" class="window-chip" name="window" value="{{ v }}">{{ text }}</button>{% endfor %}</span>
+      </form>
+      <script>
+      (() => {
+        // as the band's forms: say the check started, send it once, and undo on the way back
+        const form = document.currentScript.previousElementSibling;
+        const labels = [...form.querySelectorAll("button")].map((b) => b.textContent);
+        form.addEventListener("submit", (e) => {
+          if (form.dataset.busy) { e.preventDefault(); return; }
+          form.dataset.busy = "1";
+          for (const b of form.querySelectorAll("button")) b.setAttribute("aria-disabled", "true");
+          if (e.submitter) e.submitter.textContent = "Checking the advice…";
+        });
+        addEventListener("pageshow", () => {
+          delete form.dataset.busy;
+          form.querySelectorAll("button").forEach((b, i) => { b.textContent = labels[i]; b.removeAttribute("aria-disabled"); });
+        });
+      })();
+      </script>{% endif %}
       {% if tell_more %}<p class="make-surer"><a class="button primary" href="#refine">Make this surer: tell us more</a></p>{% endif %}
       {% if retake or asks_open %}<p class="make-surer">{% if retake %}<a class="button primary" href="/">{{ retake[1] }}</a>{% endif %}
         {%- if asks_open %} <a class="button{{ '' if retake else ' primary' }}" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
