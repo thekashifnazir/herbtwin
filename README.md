@@ -5,13 +5,15 @@ INCLUDE_PATTERNS would not reach the public repo) and centre them like finalchec
 <p align="center"><img src="docs/reference/img/x.png" alt="long, descriptive alt" width="720"></p>
 
 1. Hero, between the pitch and "Try it in 60 seconds": the answer page for a sample
-   photo, headline first ("Leave it. This is normal for October"), how sure it is, and the
-   What next card. A short GIF of a read (home, sample tap, wait screen, answer) could
-   replace it.
+   photo, headline first ("Leave it. This is normal for October") with the plant's face,
+   how sure it is, and the This week panel. A short GIF of a read (home, sample tap, wait
+   screen, answer) could replace it.
 2. "Try it in 60 seconds", after step 2: the wait screen mid-read: the steps as they
-   happen, the photo and advisor models named, the twin's verdicts and "Advisor 2 of 3".
+   happen, the photo and advisor models named, the "Next:" line, the plant's care facts,
+   the twin's verdicts and "Advisor 2 of 3".
 3. "Why it's different", after "Every answer shows its bill": the answer's "Which model
-   did each step" receipt, with its all-Ultra estimate.
+   did each step" strip (a box per step, with its time and cost), with its all-Ultra
+   estimate.
 4. "More", beside the story link: the About page.
 5. "Try it in 60 seconds", after the second door line: the "What can I grow here?" spot
    page for the raised bed sample (Good now, Worth a try, Coming up; sun hours; soil).

@@ -5,11 +5,19 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).parents[1]
-HONEST = "We can't measure light indoors from a photo. Tell us which window it's by."
+# the line as the answer page says it (result.html), so the notes can't drift from the page
+# again (23 Oct: the window chips changed its second sentence, and both docs kept the old one)
+HONEST = "We can't measure light indoors from a photo. Which window is it by?"
 
 
 def _flat(path: str) -> str:
     return re.sub(r"\s+", " ", (ROOT / path).read_text("utf-8"))
+
+
+def test_the_line_the_docs_quote_is_the_pages_own():
+    assert f'<p id="window-ask">{HONEST}</p>' in (
+        ROOT / "src/herbtwin/web/templates/result.html"
+    ).read_text("utf-8")
 
 
 def test_the_story_and_judges_notes_say_light_is_asked_not_measured():

@@ -25,43 +25,63 @@ is in the submission form; it is not in this repository.
    (the big green button; **Analyse** on a site without the spot answer).
 2. **Watch it work.** The page names the step it is on at the top and lists each step as it happens ("Reading the photo",
    "Found …", "Looking up how … likes to grow", "Checking the weather where you are",
-   "Thinking about what it needs"), then opens the answer. When the weather does not come
+   "Thinking about what it needs"), with what comes next under the step it is on and a rough
+   time ("Next: 3 advisors, about 6 s"), then opens the answer. Once the plant is named it
+   also shows its care facts, as far as our plant data holds them: its light, its water or
+   soil, and the cold it takes. With no
+   place, it asks "Where is it? (UK town or postcode)": a place sent before the advisors
+   start gives this answer its weather and the plant's twin. When the weather does not come
    back, or no place was given, an amber line says so ("Weather unavailable this time",
    "No place given: skipping the weather"). Section 4 says why.
 3. **Read the answer.** It comes in three blocks (on a wide screen the first is on the
-   left, the other two on the right):
+   left, the other two on the right; on a phone it is one list, in this order: the main
+   card and where it came from, your photo, the twin pictures, Compare all choices, This
+   week, Tell us more, then the rest):
    - **What to do.** The plant, then where it grows, the date and the place as a row of
      chips ("Outdoors", "In a container", "18 Oct", "London"); with no place outdoors, the
      band asks "We don't know where this is: add a town for weather-checked advice." with a
      town box and a lime **Check the advice** button; the photo you sent, big beside
      the main card (under it on a phone, so the advice is in the first screen); when the photo's exposure let us measure it, the
      light at that moment ("Light at 14:05: part shade, about 40% of open-sky light"); then the main action in one
-     big card with a green head: its tag (TODAY; no tag when the advice is to leave it),
-     the headline, why, a "→" line saying what happens if you do it (when there is data
-     on that), and "How sure we are" with a word badge, a green "Our best read" or an amber
-     "Not sure, check first", and a plain line on what that meant in our tests: "Right
-     about half the time in our tests" or "Right about 1 in 3 times in our tests". When it
-     is not sure, the line under it says what lowered it most ("Mostly: only 1 of 3 advisors agreed."), and a green **Make
+     big card with a green head: its tag (TODAY; no tag when the advice is to leave it), the
+     headline with the plant's face beside it (beside its **Hear it** button when the plant's
+     voice is on), then short ruled rows: why, and what happens
+     if you do it, led by where that comes from ("Tested on your plant's twin: …"; when
+     there is data on that); then "How sure we are" as a chip, a green "Our best read" or
+     an amber "Not sure, check first", with one plain line beside it on what that meant in
+     our tests: "Right about half the time in our tests" or "Right about 1 in 3 times in our
+     tests". When it is not sure and one thing lowered it most, the line says so ("Mostly:
+     only 1 of 3 advisors agreed."), and a green **Make
      this surer** button jumps to the questions that would help, or to the box to tell
      us more when no one fact would (a missing place is asked once, on the band, not
      again here; on a phone, the least sure answers put them under the card). Indoors, a
-     quiet line under it says "We can't measure light indoors from a photo. Tell us which
-     window it's by.", the second sentence a link to Tell us more. A
+     quiet line under it asks "We can't measure light indoors from a photo. Which window is
+     it by?", with the four windows as chips: one tap checks the advice again. Right under
+     the card, one quiet line headed "Where this came from" gives "Sources: …", "Read more
+     on …" when a trusted page was found, and "Decided by NVIDIA Nemotron 3 Super on Nebius
+     Token Factory". A
      blurry, dark or distant photo the plant can't be named from says so above the
      headline, its heading names the plant only as a guess ("Not clear: maybe mint"), and **Send a sharper photo** (or brighter, or closer) is the green button
      then, with Make this surer beside it. Under
-     the chips, "**Indoors? Switch and we'll redo the advice for an indoor plant**" (or
-     the outdoor mirror) re-runs the advice indoors (no forecast) or outdoors. Under the main card, compact and
-     coloured, with their names in words: **Also do** (green, tagged THIS WEEK),
-     **Don't** (clay; headed **Check first**, "Water only if the top of the compost is
-     dry", when we can't tell how wet the soil is) and **Keep an eye on** (amber, when there
-     are signs to watch for); then, for a plant the photo shows indoors or outdoors in the
+     the chips, a small link, "**Indoors? Switch and we'll redo the advice for an indoor
+     plant**" (or the outdoor mirror), re-runs the advice indoors (no forecast) or
+     outdoors. For a sample photo, **Your plant in ~7 days**: two pictures of the plant if
+     you do it and if you don't, each captioned in a deep-green chip. Then one **This week**
+     panel, a row for each kind of job, each led by a tag in its colour: **Also do**
+     (green; under "Bring it indoors to a bright windowsill.", first a "Check the tray" row for today), **Don't**
+     (clay; headed **Check first**, "Water only if the top of the compost is dry", when we
+     can't tell how wet the soil is) and **Keep an eye on** (amber, when there are signs to
+     watch for), with UK records of the plant's pests under it when there are any ("Seen
+     recently in the UK", with a clay GBIF tag); then, for a plant the photo shows indoors or outdoors in the
      UK, a blue month card, **Indoors in October** or **Outdoors in October**: what is normal
-     for it now and a few care points for the month, from RHS; then, open, **See it by part**: the same lines sorted
-     into pot, soil, leaves and stems, and where it sits, nothing new; then a
-     **What next** card: send a new photo in a few days, **Add 1 or 2 more photos** of the same
-     plant for a surer answer (when that is on), **I did it** for an action you can
-     carry out, and **Send another photo**; under **Remove it. There is no cure for this.**
+     for it now and a few care points for the month, from RHS; then, folded, **By part of the
+     plant**: the same lines sorted into pot, soil, leaves and stems, and where it sits,
+     nothing new; then **What next**, a short line of steps: **Today**, **I did it** for an
+     action you can carry out; **In a few days**, send a new photo (**Send another photo**);
+     **For a surer answer**, **Add 1 or 2 more photos** of the same plant (when that is on);
+     then one link, **See what grows here** (outdoors, with a place, where the spot answer is on), and **Where to get
+     it**, a short strip of shops for what the answer asks you to do (when found); under
+     **Remove it. There is no cure for this.**
      it says to bag it and bin it, not the compost, and to check the plants beside it; it
      offers more photos only while the answer or the photo check is unsure, as binning can't
      be undone. A pest the sources say to pick off by hand
@@ -82,16 +102,16 @@ is in the submission form; it is not in this repository.
      sit under the text box, **Ask about this plant** first and green, so a typed question
      goes to the chat;
    - **How we worked it out**: first, who advised, in plain words (today one model asked the
-     same question three times; each answer is an "advisor"); then **What each advisor said**: each
-     one's call in bold, in the page's words and never the advisor's own (so nothing the plan
-     leaves out comes back this way), as one line when all three agree, with a note saying
-     whose plan the top is ("Our rules then chose the plan at the top, so follow that." when
-     a rule of ours led); then,
-     when a rule of ours chose the lead, a note saying how
-     ("The advisors led with …"); then, folded, **Why it's our best read** (or **Why
+     same question three times; each answer is an "advisor"); then **What each advisor said**: a
+     chip for each advisor's call, in the page's words and never the advisor's own (so
+     nothing the plan leaves out comes back this way); when a rule of ours chose the lead, an
+     amber chip after them, "Our rules chose: …", and one line saying how ("The advisors led
+     with …"); then **Which model did each step**: a box for each step in the order it ran,
+     with its model, its seconds and its cost, then the answer's total against an estimate
+     for NVIDIA Nemotron 3 Ultra on every step; then, folded, **Why it's our best read** (or **Why
      we're not sure**: what helped (▲), what lowered it (▼), what was missing (?) and what made no
      difference (·), in words, each factor once under its net effect), **Compare all choices
-     (next 2 weeks)** (outdoors, once we know where it is, and open from the start whenever the
+     (next 2 weeks)** under a deep-green head, the twin's colour (outdoors, once we know where it is, and open from the start whenever the
      twin ran, so its chart shows without a tap; or, folded, a line saying why the choices
      don't apply when there is no cure:
      each action
@@ -103,8 +123,8 @@ is in the submission form; it is not in this repository.
 4. **Refine.** Tap **Want a more exact answer? Tell us more**. Under "Tell us more and
    we'll check the advice", in **What's changed**, say how the soil feels
    2 cm down, when you last watered, or what changed, then press **Check the advice
-   again** under it (anything typed in the box under **Ask a question** goes too). A changed headline shows the old one struck
-   through. A note in the box that says where it grows or what you see ("It is in a pot on a
+   again** under it (anything typed in the box under **Ask a question** goes too). A changed headline gets a small
+   strip above it, "Changed after what you told us. Was:" and the old one struck through. A note in the box that says where it grows or what you see ("It is in a pot on a
    sunny balcony and the lower leaves are going yellow.") moves the chips to match ("In a
    container (you said)") and is said back under the headline's first line: "You told us: in
    a pot, on a balcony, sunny, lower leaves yellow". Each pick you gave is said back on the same
@@ -205,8 +225,8 @@ answer appears in **My plants**.
   model and no forecast test. Its light comes from a window question ("South window,
   close", "East or west window, close", "North window, or a metre or more back", "Away
   from any window") and low-light signs in the photo (stretched, pale or leaning stems).
-  Beside "How sure we are" the answer says "We can't measure light indoors from a photo.
-  Tell us which window it's by."; once told, How sure names the window ("by a south-facing
+  Under "How sure we are" the answer says "We can't measure light indoors from a photo.
+  Which window is it by?", with the four windows as chips; once told, How sure names the window ("by a south-facing
   window, close to it (you told us)") and is not raised by it, as nothing was measured. A
   gardener friend's question started this.
 - **A photo is not a soil test.** Soil moisture is guessed from the surface; the refine
