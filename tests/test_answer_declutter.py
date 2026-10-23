@@ -113,29 +113,31 @@ SHOWN = ".answer-page .answer-cols:where(:has(> .your-photo:not([hidden])))"
 def test_on_a_phone_the_main_card_comes_before_the_photo():
     # 22 Oct site walk (Top 5 #5): on a phone the band and the big photo filled the first
     # screen and the headline started at its bottom edge. Under 960px the main card comes
-    # first and takes the pull-up over the band; the photo follows it, still big
-    narrow = "max-width: 959px"
-    assert "display: flex" in _rule(SHOWN, narrow) and "flex-direction: column" in _rule(
-        SHOWN, narrow
+    # first and takes the pull-up over the band; the photo follows it, still big. One phone
+    # order for every answer since 23 Oct (answer_phone.css)
+    from pathlib import Path
+
+    from tests.test_web_answer_reveal import _rules as rules_of
+
+    sheet = Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer_phone.css"
+    phone = {
+        s: b for at, s, b in rules_of(sheet.read_text()) if at == ("@media (max-width: 959px)",)
+    }
+    order = lambda sel: int(re.search(r"order: (\d+)", phone[sel]).group(1))  # noqa: E731
+    card = order(
+        ".answer-page .answer-cols .main-action, .answer-page .answer-cols > .plan > .came-from"
     )
-    assert "display: contents" in _rule(f"{SHOWN} > .plan", narrow)
-    order = lambda sel: int(re.search(r"order: (\d+)", _rule(sel, narrow)).group(1))  # noqa: E731
-    card = order(f"{SHOWN} .main-action")
-    photo = order(f"{SHOWN} > :is(.your-photo, .your-more)")
-    rest = order(f"{SHOWN} > .plan > *")
-    assert card < photo < rest and order(f"{SHOWN} > .side") >= rest
-    band = ".answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden])))"
-    assert "margin-top: -48px" in _rule(f"{band} .main-action", narrow)
-    assert "margin-top: -40px" in _rule(f"{band} .main-action", "max-width: 720px")
-    assert "margin-top: 0" in _rule(f"{band} > .your-photo", narrow)
+    photo = order(".answer-page .answer-cols > :is(.your-photo, .your-more)")
+    rest = order(".answer-page .answer-cols > .plan > *")
+    assert card < photo < rest
+    assert "margin-top: -48px" in phone[".answer-page .page-band + .answer-cols .main-action"]
+    assert "margin-top: 0" in phone[".answer-page .page-band + .answer-cols > .your-photo"]
     # asked low on a phone (ask-up), the questions stay right under the card, the photo after
     assert order(".answer-page .answer-cols.ask-up > :is(.your-photo, .your-more)") > order(
-        ".answer-page .answer-cols.ask-up #chat"
+        ".answer-page .answer-cols.ask-up > .side > #chat"
     )
-    # a desktop keeps the photo beside the main card: nothing here reaches 960px and up
-    for at, s, _b in _rules(CSS):
-        if ":where(:has(> .your-photo" in s:
-            assert any("max-width" in a for a in at), s
+    # a desktop keeps the photo beside the main card: nothing in the phone sheet reaches 960px
+    assert all(any("max-width" in a for a in at) for at, _s, _b in rules_of(sheet.read_text()))
 
 
 def test_the_main_card_before_the_photo_stays_visible_at_rest():

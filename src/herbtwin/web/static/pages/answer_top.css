@@ -36,11 +36,7 @@
 .answer-page .came-from > .came-from-h { color: var(--fg); font-weight: 600; }
 .answer-page .came-from > .came-from-h::after { content: ":" / ""; }
 .answer-page .came-from > p + p:not(.came-from-h + p)::before { content: "· " / ""; }
-/* a phone stacks the columns into one list: the line stays right under its card */
-@media (max-width: 959px) {
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) .came-from,
-  .answer-page .answer-cols.ask-up .came-from { order: 1; }
-}
+/* on a phone it stays right under its card: answer_phone.css */
 
 /* 3. The twin pictures: each caption a chip in the twin's deep green, on the picture */
 .answer-page .twin figure { position: relative; }

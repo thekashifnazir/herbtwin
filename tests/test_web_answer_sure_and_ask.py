@@ -97,10 +97,18 @@ def test_the_phone_layout_moves_the_questions_up_only_in_one_column():
     assert "ask-up" in css
     from pathlib import Path
 
-    sheet = (Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer.css").read_text()
-    rule = sheet.split("@media (max-width: 959px) {\n  .answer-page .answer-cols.ask-up", 1)[1]
-    rule = rule.split("\n}\n", 1)[0]
-    assert "display: flex" in rule and "display: contents" in rule and "#chat" in rule
+    from tests.test_web_answer_reveal import _rules as rules_of
+
+    sheet = Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer_phone.css"
+    phone = {
+        s: b for at, s, b in rules_of(sheet.read_text()) if at == ("@media (max-width: 959px)",)
+    }
+    # one list under 960px, the questions under the card when asked low (since 23 Oct, every
+    # phone order lives in answer_phone.css)
+    assert "display: flex" in phone[".answer-page .answer-cols"]
+    flat = ".answer-page .answer-cols > :is(.plan, .side), .answer-page .answer-cols > .side > .details"
+    assert "display: contents" in phone[flat]
+    assert "order: 1" in phone[".answer-page .answer-cols.ask-up > .side > #chat"]
 
 
 def test_starters_fit_the_plant_and_what_the_photo_showed(tmp_path):
@@ -248,11 +256,13 @@ def test_indoors_has_no_ground_or_border_in_its_words(tmp_path):
 
 
 def test_phones_low_show_one_divider_not_two():
-    sheet = (Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer.css").read_text()
-    rule = sheet.split("@media (max-width: 959px) {\n  .answer-page .answer-cols.ask-up", 1)[1]
-    assert (
-        ".answer-page .answer-cols.ask-up .side > .divider:first-child { display: none; }" in rule
-    )
+    from tests.test_web_answer_reveal import _rules as rules_of
+
+    sheet = Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer_phone.css"
+    phone = {
+        s: b for at, s, b in rules_of(sheet.read_text()) if at == ("@media (max-width: 959px)",)
+    }
+    assert "display: none" in phone[".answer-page .answer-cols > .side > .divider:first-child"]
 
 
 def test_indoors_a_bed_photo_says_no_bed_and_offers_no_bed(tmp_path):

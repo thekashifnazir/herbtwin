@@ -140,8 +140,12 @@ def test_the_closed_line_is_an_inked_tappable_row_and_the_phone_order_still_hold
     summary = [b for at, s, b in rules if s == ".answer-page .tell-more > summary" and not at]
     assert summary and "min-height: 56px" in summary[-1]
     # the card is the section, so #chat keeps its place under the main card on a phone
-    narrow = [b for at, s, b in rules if s == ".answer-page .answer-cols.ask-up #chat"]
-    assert narrow and "order: 2" in narrow[-1]
+    # (asked low; answer_phone.css since 23 Oct)
+    phone = (style.STATIC / "pages" / "answer_phone.css").read_text(encoding="utf-8")
+    narrow = [
+        b for at, s, b in _rules(phone) if s == ".answer-page .answer-cols.ask-up > .side > #chat"
+    ]
+    assert narrow and "order: 1" in narrow[-1]
     # the fold's content slides open only when motion is welcome
     slide = [at for at, s, b in rules if s == ".answer-page details[open] > :not(summary)"]
     assert slide and all("prefers-reduced-motion: no-preference" in " ".join(a) for a in slide)

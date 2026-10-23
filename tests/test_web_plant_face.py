@@ -253,13 +253,11 @@ def test_no_i_did_it_no_sign_in_line(tmp_path):
 
 
 def test_the_sign_in_line_is_16px_in_the_themes_colours():
-    css = (style.STATIC / "pages" / "answer.css").read_text()
-    rule = re.search(r"\.answer-page \.i-did \.keep \{([^}]*)\}", css).group(1)
+    # the line sits in What next, never inside "I did it": that rule went as dead (23 Oct)
     assert (
         ".answer-page .next-step > p.keep { margin: 0; font-size: 16px; color: var(--muted-fg); }"
         in style.CSS
     )
-    assert "font-size: 16px" in rule and "var(--muted-fg)" in rule
 
 
 def test_the_dry_face_is_thirsty_not_grumpy(tmp_path):

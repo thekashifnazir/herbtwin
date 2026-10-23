@@ -164,8 +164,11 @@ def test_the_groups_colour_says_what_they_are_and_the_phone_order_holds():
     for _at, s, b in rules:
         if ".part" in s:
             assert not re.search(r"#[0-9a-fA-F]{3,8}\b|rgb|hsl", b), (s, b)
-    narrow = [b for at, s, b in rules if s == ".answer-page .answer-cols.ask-up #chat"]
-    assert narrow and "order: 2" in narrow[-1]
+    phone = (style.STATIC / "pages" / "answer_phone.css").read_text(encoding="utf-8")
+    narrow = [
+        b for at, s, b in _rules(phone) if s == ".answer-page .answer-cols.ask-up > .side > #chat"
+    ]
+    assert narrow and "order: 1" in narrow[-1]  # answer_phone.css since 23 Oct
     assert not [s for at, s, b in rules if ".part" in s and re.search(r"(^|[ ;])order:", b)]
 
 

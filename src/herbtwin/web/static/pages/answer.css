@@ -18,7 +18,6 @@
 .answer-page .main-action .head .tag { background: var(--card); color: var(--primary); }
 .answer-page .main-action h2 { margin: 8px 0 12px; font-size: clamp(30px, 7.5vw, 38px); }
 .answer-page .main-action .because { font-size: 19px; line-height: 1.5; }
-.answer-page .head .note { margin: 0 0 4px; color: var(--muted-fg); }
 /* after Check the advice again: it ran, and this is what it did; the old headline struck */
 .answer-page .head .checked { margin: 0 0 6px; color: var(--primary); font-weight: 700; }
 .answer-page .head .checked s { color: var(--muted-fg); font-weight: 400; }
@@ -188,7 +187,6 @@
    time and cost on the right; on a phone the cost drops under them. Nothing under 16px */
 .answer-page .model-map { margin: 12px 0 16px; }
 .answer-page .model-map h3 { margin: 0 0 6px; font-size: 18px; }
-.answer-page .model-map ul { margin: 0; padding: 0 0 0 12px; list-style: none; border-left: 2px solid var(--border); }
 .answer-page .model-map li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; font-size: 16px; }
 .answer-page .model-map li + li { margin-top: 6px; }
 .answer-page .model-map .mm-model { color: var(--muted-fg); }
@@ -280,13 +278,6 @@
    to do after it; "I did it" is its one lime button */
 .answer-page .next-step { margin: 0 0 20px; padding: 14px 16px; border: 1.5px solid var(--fg);
   border-radius: var(--surface); box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--soft); }
-/* what else could grow here: What next's inked card on the sky of the spot page's own
-   "Coming up" box, so it reads as the way to another page, not more of this plan */
-.answer-page .spot-card { margin: 0 0 20px; padding: 14px 16px; border: 1.5px solid var(--fg);
-  border-radius: var(--surface); box-shadow: 5px 5px 0 var(--ink-shadow); background: var(--sky); }
-.answer-page .spot-card h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; color: var(--sky-fg); }
-.answer-page .spot-card p { margin: 0 0 10px; }
-.answer-page .spot-card > :last-child { margin-bottom: 0; }
 .answer-page .next-step h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; color: var(--primary); }
 .answer-page .next-step p { margin: 0 0 8px; }
 .answer-page .next-step > :last-child { margin-bottom: 0; }
@@ -314,23 +305,6 @@
 .answer-page .your-photo.solo { width: 100%; max-width: 560px; height: auto; aspect-ratio: 3 / 2; object-fit: cover;
   margin: 0 0 20px; border: 1.5px solid var(--fg); border-radius: var(--surface); background: var(--card); }
 @media (max-width: 720px) { .answer-page .page-band + .answer-cols > .your-photo { margin-top: -40px; } }
-/* under 960px the main card comes first and the photo follows it, still big (22 Oct site
-   walk, Top 5 #5: on a phone the band and the photo filled the first screen and the
-   headline started at its bottom edge). The two columns become one list for this, as
-   ask-up does; the card takes the pull-up over the band. No motion of its own */
-@media (max-width: 959px) {
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) { display: flex; flex-direction: column; }
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > .plan { display: contents; }
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > .plan > * { order: 3; }
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) .main-action { order: 1; position: relative; }
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > :is(.your-photo, .your-more) { order: 2; }
-  .answer-page .answer-cols:where(:has(> .your-photo:not([hidden]))) > .side { order: 4; }
-  .answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden]))) .main-action { margin-top: -48px; }
-  .answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden]))) > .your-photo { margin-top: 0; }
-  /* asked low (ask-up): the questions stay right under the card, the photo after them */
-  .answer-page .answer-cols.ask-up > :is(.your-photo, .your-more) { order: 3; }
-}
-@media (max-width: 720px) { .answer-page .page-band + .answer-cols:where(:has(> .your-photo:not([hidden]))) .main-action { margin-top: -40px; } }
 @media (min-width: 960px) {
   /* the plan down the left; the photo, then the questions and details, down the right. The
      second row takes the plan's extra height, so the photo's row is only as tall as it */
@@ -528,8 +502,6 @@
 .answer-page .voice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
 .answer-page .voice > :not(.face, .hear) { flex-basis: 100%; }
 .answer-page .i-did { margin-top: 12px; }
-/* signed out, under "I did it": how to keep the plant and get the check-again email */
-.answer-page .i-did .keep { margin: 8px 0 0; font-size: 16px; color: var(--muted-fg); }
 /* the thanks stays rendered (empty) so a screen reader hears it when it's filled */
 .answer-page .i-did .thanks { position: relative; display: flex; align-items: center; gap: 10px; margin: 0;
   font-weight: 700; color: var(--primary); }
@@ -597,18 +569,6 @@
 .answer-page .decided-by { margin: 6px 0 0; color: var(--muted-fg); font-size: 16px; }
 .answer-page .decided-by a { white-space: nowrap; }
 .answer-page .asked { margin: 20px 0 16px; }  /* not flush under the starter pills */
-/* phones, low: the questions sit under the headline card, the rest of the plan after them.
-   The two columns become one list for this; from 960px they stay side by side */
-@media (max-width: 959px) {
-  .answer-page .answer-cols.ask-up { display: flex; flex-direction: column; }
-  .answer-page .answer-cols.ask-up > :is(.plan, .side) { display: contents; }
-  .answer-page .answer-cols.ask-up > * > * { order: 3; }
-  .answer-page .answer-cols.ask-up .main-action { order: 1; position: relative; margin-top: -48px; }
-  .answer-page .answer-cols.ask-up #chat { order: 2; margin-bottom: 28px; }
-  /* the divider above the questions moved with them: it would sit beside the details' own */
-  .answer-page .answer-cols.ask-up .side > .divider:first-child { display: none; }
-}
-@media (max-width: 720px) { .answer-page .answer-cols.ask-up .main-action { margin-top: -40px; } }
 /* Compare at phone width (judge live walk of rev 00040): "vs leaving it" wrapped to three
    lines and the choice pills wrapped inside their ovals. The verdict column stays one line,
    the cells lose some padding, and a pill that must wrap takes the card's corners */

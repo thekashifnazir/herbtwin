@@ -110,10 +110,11 @@ def test_where_it_came_from_is_one_quiet_line_under_the_card(tmp_path):
 
 
 def test_on_a_phone_the_line_stays_under_its_card():
-    rules = [(at, s, b) for at, s, b in _rules(SHEET.read_text("utf-8")) if at]
-    phone = [s for at, s, b in rules if "max-width: 959px" in " ".join(at) and "order: 1" in b]
-    assert any(".came-from" in s and ".your-photo" in s for s in phone), phone
-    assert any(".ask-up .came-from" in s for s in phone), phone
+    # with the card, in every phone order (answer_phone.css since 23 Oct)
+    phone = SHEET.with_name("answer_phone.css").read_text("utf-8")
+    rules = {s: b for at, s, b in _rules(phone) if at == ("@media (max-width: 959px)",)}
+    sel = ".answer-page .answer-cols .main-action, .answer-page .answer-cols > .plan > .came-from"
+    assert "order: 1" in rules[sel]
 
 
 def test_the_rater_text_keeps_the_line_and_the_panel(tmp_path):
