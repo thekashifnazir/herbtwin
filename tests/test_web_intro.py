@@ -1,6 +1,6 @@
 """The first-visit intro (23 Oct, Kash: "a plant growing out of our logo with a green screen,
 similar to my logo load on my other website"): templates/_intro.html, pages/intro.css.
-Behaviour in a browser (no overlay with JS off or Reduce Motion, once per session, any key or
+Behaviour in a browser (no overlay with JS off or Reduce Motion, once per browser, any key or
 tap skips it, gone by 1.4 s) is checked with Playwright in the PR; these pin the code paths."""
 
 import asyncio
@@ -24,7 +24,7 @@ def _script() -> str:
 def test_only_home_and_about_carry_the_intro(tmp_path):
     c = _spot_client(tmp_path)[0]
     for path in ("/", "/about"):
-        assert 'sessionStorage.getItem("herbtwin-intro")' in c.get(path).text, path
+        assert 'localStorage.getItem("herbtwin-intro")' in c.get(path).text, path
     for path in ("/privacy", "/auth/sign-in", "/no-such-page"):
         assert "herbtwin-intro" not in c.get(path).text, path
     users = [p.name for p in TEMPLATE_DIR.glob("*.html") if '"_intro.html"' in p.read_text("utf-8")]
@@ -45,17 +45,24 @@ def test_with_js_off_there_is_no_overlay_to_block_the_page(tmp_path):
     assert '<div class="intro"' not in page and 'document.createElement("div")' in page
 
 
-def test_reduce_motion_and_a_seen_session_skip_it_before_anything_is_drawn():
+def test_reduce_motion_and_a_seen_browser_skip_it_before_anything_is_drawn():
     js = _script()
     bail = js.index('if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) return;')
     assert (
         bail < js.index('root.classList.add("intro-playing")') < js.index("document.createElement")
     )
-    # once per session; blocked storage counts as seen, so it can't repeat on every page
-    assert (
-        'sessionStorage.setItem("herbtwin-intro", "1")' in js and "} catch { seen = true; }" in js
-    )
+    # blocked storage counts as seen, so it can't repeat on every page
+    assert 'localStorage.setItem("herbtwin-intro", "1")' in js and "} catch { seen = true; }" in js
     assert "@media (prefers-reduced-motion: reduce) { .intro { display: none; } }" in style.CSS
+
+
+def test_it_shows_once_per_browser_not_every_tab():
+    # 23 Oct, Kash: once per browser. sessionStorage is per tab, so every new tab replayed it
+    js = _script()
+    assert 'seen = localStorage.getItem("herbtwin-intro") === "1";' in js
+    assert "sessionStorage" not in js
+    flag = js.split("try {", 1)[1].split("} catch { seen = true; }", 1)[0]
+    assert 'localStorage.setItem("herbtwin-intro", "1")' in flag  # read and written in the try
 
 
 def test_any_click_tap_or_key_skips_it_and_it_never_traps_focus():

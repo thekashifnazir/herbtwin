@@ -4,7 +4,8 @@
    dissolves to show the page (23 Oct, Kash: "stay on it for longer ... slowly dissolve");
    2.4 s in all.
    - Made by this script, so with JS off there is nothing: the page is always there underneath.
-   - Once per browser session; never under Reduce Motion; any click, tap or key skips it.
+   - Once per browser (localStorage; 23 Oct, Kash: once per browser, not every tab), never
+     under Reduce Motion; any click, tap or key skips it.
    - aria-hidden and nothing in it takes focus, so it never traps or hides anything.
    - Home and About only, on a fresh visit: never the wait page or an answer.
    - The scroll reveals (nvidia-extra) wait for it: `intro-playing` on <html> while it plays,
@@ -14,8 +15,8 @@
   const root = document.documentElement;
   let seen = true;
   try {
-    seen = sessionStorage.getItem("herbtwin-intro") === "1";
-    sessionStorage.setItem("herbtwin-intro", "1");
+    seen = localStorage.getItem("herbtwin-intro") === "1";
+    localStorage.setItem("herbtwin-intro", "1");
   } catch { seen = true; }  // no storage: never risk showing it on every page
   if (seen || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   root.classList.add("intro-playing");

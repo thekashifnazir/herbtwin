@@ -874,6 +874,17 @@ class StepCost(BaseModel):
     cost_usd: float | None = 0.0
 
 
+class BackupRead(BaseModel):
+    """Our backup photo model read the photo, not the first one (22 Oct phone walk, Kash:
+    "Why were we using DeepSeek and then GLM?"). `why`: the first was slow and the backup's
+    read came back first (`slow`), the first sent no usable reading (`failed`), or it failed
+    so recently that the backup went first (`resting`)."""
+
+    first: str  # the model ids
+    backup: str
+    why: Literal["slow", "failed", "resting"]
+
+
 class AnalysisRecord(BaseModel):
     record_id: str
     taken_at: datetime
@@ -895,5 +906,6 @@ class AnalysisRecord(BaseModel):
     refined_from: str | None = None  # the first answer's headline, for "what changed"
     photo_sha256: str | None = None  # the normalized photo's bank key (twin stills)
     receipt: list[StepCost] | None = None  # each step's model, time and cost (receipt.py)
+    photo_backup: BackupRead | None = None  # the backup photo model read it, and why
     notes: list[str] = Field(default_factory=list)  # plain-words notes for the page
     failures: list[StageFailure] = Field(default_factory=list)

@@ -71,6 +71,7 @@ from herbtwin.plant_model import (
 from herbtwin.remote_traces import RemoteTraces, remote_traces_from
 from herbtwin.schemas import (
     AnalysisRecord,
+    BackupRead,
     CareAction,
     KnowledgePack,
     LightClass,
@@ -383,6 +384,7 @@ class PlantFound:
 
     name: str
     read_by: str | None
+    backup: BackupRead | None = None  # the backup read it, not the first model, and why
 
 
 Progress = Callable[
@@ -397,6 +399,26 @@ NOT_A_PLANT_LINE = "This doesn't look like a plant"
 # the wait's step while the trusted page is searched and read (only when it is)
 CHECKING_A_PAGE = "Looking for a trusted gardening page with Tavily"
 FOUND_WITH_TAVILY = "Care facts from its RHS page, found with Tavily"
+
+
+# a photo of different plants asks which one once the read is done (web/tapping.py): the
+# wait says so first, and names no plant before the person picks (22 Oct phone walk: "Found
+# geranium (not sure)", then "One question first: Tap your plant")
+SEVERAL_LINE = "We can see more than one plant: you'll tap the one you mean next"
+LOOKING_UP_SEVERAL = "Looking up care facts"
+
+
+def backup_read(adapter: ModelAdapter, read_by: str | None, raced: bool) -> BackupRead | None:
+    """Our backup photo model read the photo, not the first one, and why: it won the race
+    against a slow first model that had not failed (`raced`), the first was skipped after failing recently
+    (FallbackAdapter.resting), or the first sent no usable reading. None for the first
+    model's read, or a reader with no backup."""
+    first = getattr(getattr(adapter, "first", None), "model", None)
+    backup = getattr(getattr(adapter, "backup", None), "model", None)
+    if not first or not backup or first == backup or read_by != backup:
+        return None
+    why = "slow" if raced else "resting" if getattr(adapter, "resting", False) else "failed"
+    return BackupRead(first=first, backup=backup, why=why)
 
 
 def bare_line(pot: bool) -> str:
@@ -556,6 +578,7 @@ def read_photo(
     tapped: bool = False,
     more: Sequence[tuple[bytes, str]] = (),
     same_as: AnalysisRecord | None = None,
+    asks_which: Callable[[Observation], bool] | None = None,
 ) -> AnalysisRecord | Reading:
     """The photo-reading half. A record when the run stopped early (unreadable photo,
     observe failure, not a plant), else a Reading for decide. `tapped`: the square the
@@ -564,7 +587,9 @@ def read_photo(
     the main photo in its one call; the date, light, twin key, tap and closer photo check
     stay with the main photo, and the location comes from the first photo that has one.
     `same_as`: an earlier answer of this plant read again with more photos ("Add photos for
-    a surer answer"): its place and date stand, since its held photo has no metadata left."""
+    a surer answer"): its place and date stand, since its held photo has no metadata left.
+    `asks_which`: whether this read will ask which plant once it is done (web/tapping.py),
+    so the wait names no plant before the person picks one."""
     record_id = uuid.uuid4().hex  # unguessable: it unlocks a refine of this answer
     tracer = StageTracer(deps.trace_store, record_id)
     if same_as is not None:
@@ -606,6 +631,7 @@ def read_photo(
     _say(progress, "Reading the photo")
     reader, answered = bind(deps.observe_adapter, "observe", tracer), []
     won: list[str | None] = []
+    failed_first: list[bool] = []  # the backup won the race after the first model failed
 
     def traced(call: CallRecord) -> None:
         answered.append(call.model)  # a reply, not a failure: only answered calls are traced
@@ -614,7 +640,14 @@ def read_photo(
     reader.on_call = traced
     try:
         # a race's winner, named by observe: the loser's call is traced too, maybe after it
-        obs = observe(reader, sent, sent_mime, more=cleaned, won_by=won.append)
+        obs = observe(
+            reader,
+            sent,
+            sent_mime,
+            more=cleaned,
+            won_by=won.append,
+            first_failed=lambda: failed_first.append(True),
+        )
     except ObserveError as e:
         log.exception("observe failed run=%s", record_id)
         rec.failures = [StageFailure(stage="observe", message=str(e), raw=e.raw)]
@@ -634,13 +667,23 @@ def read_photo(
     species, common = (top.name, top.common_name) if top else ("unknown", "unknown")
     name = (top.common_name or top.name) if top else "the plant"
     read_by = won[-1] if won else answered[-1] if answered else None
+    rec.photo_backup = backup_read(reader, read_by, raced=bool(won) and not failed_first)
     # a rough read (blurry, dark, …) of a plant it can't name surely: the wait says the name
     # is a guess and shows no season card for it (22 Oct walk: a blurred parsley was
     # "Found garden mint", then "Normal for garden mint in October")
     rough = top is not None and (
         photo_issue(obs.photo_quality, obs.quality_note, top.confidence) is not None
     )
-    _say(progress, PlantFound(f"{name} (not sure)" if rough else name, read_by))
+    try:
+        several = asks_which is not None and asks_which(obs)
+    except Exception:  # noqa: BLE001 - only the wait's wording: the read goes on
+        log.exception("asks_which raised run=%s", record_id)
+        several = False
+    if several:
+        _say(progress, SEVERAL_LINE)
+    else:
+        found = PlantFound(f"{name} (not sure)" if rough else name, read_by, rec.photo_backup)
+        _say(progress, found)
     if top and tapped:
         rec.notes.append(TAPPED_NOTE.format(name=name.lower()))
     elif top and several_plants(obs):
@@ -653,7 +696,7 @@ def read_photo(
     loc = rec.location
     # the UK outdoor season, as the answer's own gate: indoors it does not apply (answer.py)
     outdoor_uk = loc is not None and in_uk(loc.lat, loc.lon) and obs.setting != "indoor"
-    if match.key and outdoor_uk and not rough:
+    if match.key and outdoor_uk and not rough and not several:
         norm = normal_for(match.key, month)
         if norm is not None:  # shown while the rest of the read runs, before the weather
             _say(
@@ -690,7 +733,7 @@ def read_photo(
             _say(progress, "Looking closer at the leaves")
             rec.problem = _look_closer(*look)
 
-    _say(progress, f"Looking up how {name} likes to grow")
+    _say(progress, LOOKING_UP_SEVERAL if several else f"Looking up how {name} likes to grow")
     try:
         with receipt.timed(rec, "research"):
             rec.pack = research(species, common, cache_dir=deps.cache_dir, lookup=deps.lookup)

@@ -225,6 +225,7 @@ def test_the_wait_names_the_winner_even_when_the_losers_call_is_traced_after_it(
     # Here GLM's junk reply is traced just after DeepSeek's winning one, before "Found"
     from herbtwin import receipt
     from herbtwin.pipeline import PlantFound
+    from herbtwin.schemas import BackupRead
 
     respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
     monkeypatch.setattr(pl, "observe", functools.partial(observe, hedge_after_s=HEDGE))
@@ -240,7 +241,10 @@ def test_the_wait_names_the_winner_even_when_the_losers_call_is_traced_after_it(
     )
     lines: list = []
     reading = pl.read_photo(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
-    assert PlantFound("basil", deepseek_id) in lines
+    # 22 Oct phone walk (Kash: "Why were we using DeepSeek and then GLM?"): and why
+    slow = BackupRead(first=glm_id, backup=deepseek_id, why="slow")
+    assert PlantFound("basil", deepseek_id, slow) in lines
+    assert reading.rec.photo_backup == slow
     # both calls were billed, so once the loser's repair is in the receipt lists both
     assert glm.answered.wait(2)
     deadline = time.monotonic() + 2
@@ -251,3 +255,32 @@ def test_the_wait_names_the_winner_even_when_the_losers_call_is_traced_after_it(
     pl._note_models(deps, rec, receipt.MODEL_STAGES)
     calls = {s.model: s.calls for s in rec.receipt if s.stage == "observe"}
     assert calls == {glm_id: 2, deepseek_id: 1}
+    # the map says which read was used, and why the other was not
+    notes = {r.model: r.note for r in receipt.model_map(rec).rows if r.step == "Read the photo"}
+    assert notes == {
+        "GLM-5.3 Flash on Nebius Token Factory": "Too slow, so not used",
+        "DeepSeek V4.1 Flash on Nebius Token Factory": "Our backup: GLM-5.3 Flash was slow",
+    }
+
+
+@respx.mock
+def test_a_backup_that_wins_after_the_first_model_failed_mid_race_says_failed_not_slow(
+    tmp_path, monkeypatch
+):
+    # review of the 22 Oct backup wording: GLM was slow, then failed while the backup raced;
+    # the page must not say "GLM was slow" (nor "Too slow, so not used") of a model that failed
+    from herbtwin.adapters.fallback import FallbackAdapter
+    from herbtwin.schemas import BackupRead
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    monkeypatch.setattr(pl, "observe", functools.partial(observe, hedge_after_s=HEDGE))
+    glm_id, deepseek_id = "zai-org/GLM-5.3-Flash", "deepseek-ai/DeepSeek-V4.1-Flash"
+    deepseek = Timed(deepseek_id, BASIL)
+    glm = Timed(glm_id, error=AdapterError("glm: Request timed out."), cue=deepseek.started)
+    deepseek.cue = glm.answered  # the backup answers only once GLM has failed
+    deps = dataclasses.replace(
+        _deps(tmp_path, [], []), observe_adapter=FallbackAdapter(glm, deepseek)
+    )
+    reading = pl.read_photo(deps, JPEG, "image/jpeg", received=WHEN)
+    assert not glm.missed_cue.is_set() and not deepseek.missed_cue.is_set()  # it raced
+    assert reading.rec.photo_backup == BackupRead(first=glm_id, backup=deepseek_id, why="failed")

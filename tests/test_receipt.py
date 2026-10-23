@@ -84,7 +84,10 @@ def test_a_model_with_no_listed_price_says_so_never_zero():
     steps = receipt.from_rows(rows, receipt.MODEL_STAGES)
     assert steps[0].cost_usd is None and steps[1].cost_usd is not None
     m = receipt.model_map(AnalysisRecord.model_validate({**_bare(), "receipt": steps}))
-    assert m.rows[0].cost == "price not listed" and m.rows[0].model == "unlisted-vision"
+    assert (
+        m.rows[0].cost == "price not listed"
+        and m.rows[0].model == "unlisted-vision on Nebius Token Factory"
+    )
     assert m.unpriced == ["unlisted-vision"]
     # out of the baseline too, so the two figures are the same tokens: 10 in, 10 out on Ultra
     assert m.baseline == usd((10 * 1.00 + 10 * 3.00) / 1e6)
@@ -206,3 +209,28 @@ def test_a_step_under_a_tenth_of_a_second_says_so_never_zero():
     m = receipt.model_map(AnalysisRecord.model_validate({**_bare(), "receipt": _receipt()}))
     research = next(r for r in m.rows if r.step == "Looked up how it grows")
     assert research.seconds == "under 0.1 s"
+
+
+def test_the_map_says_the_backup_read_the_photo_and_why(tmp_path):
+    # 22 Oct phone walk (Kash: "Why were we using DeepSeek and then GLM?"): the backup's row
+    # says why it read the photo; the slow first read, billed too, says it was not used. Both
+    # are not NVIDIA's, so both say they run on Token Factory (22 Oct, Kash)
+    from herbtwin.schemas import BackupRead
+
+    glm, deepseek = "zai-org/GLM-5.3-Flash", "deepseek-ai/DeepSeek-V4.1-Flash"
+    rec = _full_plan(tmp_path)
+    rows = [_row(1, "observe", deepseek, 2000, 300, ms=8000), _row(2, "observe", glm, 2000, 300)]
+    rows += [_row(3, "advise", SUPER, 3000, 400, ms=9000)]
+    rec.receipt = receipt.assemble([], receipt.from_rows(rows, receipt.MODEL_STAGES))
+    rec.photo_backup = BackupRead(first=glm, backup=deepseek, why="slow")
+    mm = _render(rec).split('<div class="model-map">', 1)[1].split("</div>", 1)[0]
+    assert (
+        '<span class="mm-model">DeepSeek V4.1 Flash on Nebius Token Factory</span>'
+        '<span class="mm-note">Our backup: GLM-5.3 Flash was slow</span>' in mm
+    )
+    assert (
+        '<span class="mm-model">GLM-5.3 Flash on Nebius Token Factory</span>'
+        '<span class="mm-note">Too slow, so not used</span>' in mm
+    )
+    # NVIDIA's keep their labels
+    assert '<span class="mm-model">NVIDIA Nemotron 3 Super</span></span>' in mm

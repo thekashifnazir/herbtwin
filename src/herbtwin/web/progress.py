@@ -33,7 +33,8 @@ from herbtwin.pipeline import (
     WeatherFound,
     WeatherMissed,
 )
-from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT, about_problem
+from herbtwin.receipt import ON_TF
+from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT, BackupRead, about_problem
 from herbtwin.stages.problem import signs as problem_signs
 from herbtwin.web.style import CSS, MARK
 
@@ -209,16 +210,34 @@ def advisors_note(advisor: str | None) -> str:
 
 
 # the photo models by their plain names; a model not listed is never named, and never
-# by its raw id (21 Oct, judges: which model does each step?)
+# by its raw id (21 Oct, judges: which model does each step?). Neither is an NVIDIA model,
+# so each is said to run on Token Factory too (22 Oct, Kash)
 PHOTO_MODELS = {
     "zai-org/GLM-5.3-Flash": "GLM-5.3 Flash",
     "deepseek-ai/DeepSeek-V4.1-Flash": "DeepSeek V4.1 Flash",
 }
+# the backup read it, not the first model (22 Oct phone walk, Kash: "Why were we using
+# DeepSeek and then GLM?"): why, in plain words (schemas.BackupRead)
+BACKUP_WHY = {
+    "slow": "{first} was slow, so our backup {backup} read it, also " + ON_TF,
+    "failed": "{first} couldn't read it, so our backup {backup} did, also " + ON_TF,
+    "resting": "{first} failed recently, so our backup {backup} read it, also " + ON_TF,
+}
+
+
+def read_by_note(read_by: str | None, backup: BackupRead | None) -> str | None:
+    """Who read the photo, as the wait and the answer's model map say it; None for a
+    model we don't name."""
+    if backup is not None:
+        first, second = PHOTO_MODELS.get(backup.first), PHOTO_MODELS.get(backup.backup)
+        if first and second:
+            return BACKUP_WHY[backup.why].format(first=first, backup=second)
+    model = PHOTO_MODELS.get(read_by or "")
+    return f"Read by {model} {ON_TF}" if model else None
 
 
 def _found_line(f: PlantFound) -> str:
-    model = PHOTO_MODELS.get(f.read_by or "")
-    return _line(f"Found {f.name}", f"Read by {model}" if model else None)
+    return _line(f"Found {f.name}", read_by_note(f.read_by, f.backup))
 
 
 def _line(text: str, note: str | None = None) -> str:

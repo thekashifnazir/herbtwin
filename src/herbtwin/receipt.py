@@ -49,6 +49,16 @@ NAMES = {
     "Qwen/Qwen3-235B-A22B-Instruct-2507": "Qwen3 235B",
 }
 WORDS = {1: "One", 2: "Two", 3: "Three"}
+# a model that is not NVIDIA's is said to run on Token Factory too, so a model of another
+# maker never reads as off the platform (22 Oct, Kash); NVIDIA's keep their labels
+ON_TF = "on Nebius Token Factory"
+# the backup photo model read it, not the first (schemas.BackupRead): said on each one's row
+BACKUP_NOTE = {
+    "slow": "Our backup: {first} was slow",
+    "failed": "Our backup: {first} couldn't read it",
+    "resting": "Our backup: {first} failed recently",
+}
+FIRST_NOTE = {"slow": "Too slow, so not used", "failed": "No usable reading"}
 
 
 def plain_name(model: str) -> str:
@@ -109,6 +119,7 @@ class MapRow:
     model: str
     seconds: str
     cost: str
+    note: str = ""  # the photo read only: the backup read it, and why
 
 
 @dataclass(frozen=True)
@@ -145,6 +156,22 @@ def _step_words(s: StepCost) -> str:
     return f"Advisors ({s.calls} asks)"
 
 
+def _model_words(s: StepCost) -> str:
+    name = plain_name(s.model)
+    if s.stage in MODEL_STAGES and not s.model.startswith("nvidia/"):
+        return f"{name} {ON_TF}"
+    return name
+
+
+def _note(rec: AnalysisRecord, s: StepCost) -> str:
+    b = rec.photo_backup
+    if b is None or s.stage != "observe":
+        return ""
+    if s.model == b.backup:
+        return BACKUP_NOTE[b.why].format(first=plain_name(b.first))
+    return FIRST_NOTE.get(b.why, "") if s.model == b.first else ""
+
+
 def model_map(rec: AnalysisRecord) -> ModelMap | None:
     """The page's map of an answer's steps, or None for an answer kept before receipts
     (or one with no model step: nothing to compare)."""
@@ -154,13 +181,14 @@ def model_map(rec: AnalysisRecord) -> ModelMap | None:
     rows = [
         MapRow(
             _step_words(s),
-            plain_name(s.model),
+            _model_words(s),
             seconds(s.ms),
             "no model"
             if s.stage not in MODEL_STAGES
             else "price not listed"
             if s.cost_usd is None
             else usd(s.cost_usd),
+            _note(rec, s),
         )  # fmt: skip
         for s in steps
     ]

@@ -98,11 +98,11 @@ def test_the_cards_share_one_grid_so_each_is_the_same_size():
     assert "@media (min-width: 720px) { .made-credit-cols { grid-template-columns: repeat(2," in css
 
 
-def test_the_first_load_rises_in_once_a_session_and_never_with_reduced_motion(tmp_path):
+def test_the_first_load_rises_in_once_a_browser_and_never_with_reduced_motion(tmp_path):
     home = _home(tmp_path)
-    # 23 Oct: once a session is the first-visit intro's (_intro.html), never with Reduce
+    # 23 Oct: once a browser is the first-visit intro's (_intro.html), never with Reduce
     # Motion; the rise waits for it to lift (test_web_home_motion)
-    assert 'sessionStorage.getItem("herbtwin-intro")' in home
+    assert 'localStorage.getItem("herbtwin-intro")' in home
     assert 'matchMedia("(prefers-reduced-motion: reduce)").matches) return;' in home
     css = style.CSS
     moving = css.split("@media (prefers-reduced-motion: no-preference) { .intro-go .home-page", 1)

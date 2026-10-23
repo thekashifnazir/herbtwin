@@ -213,6 +213,7 @@ def start(
     got = reading or read_photo(
         deps, data, mime, received=received, device=device, place=place, progress=progress,
         tapped=tapped, more=more,
+        asks_which=(lambda obs: wants_tap(obs, data)) if offer_tap else None,
     )  # fmt: skip
     if isinstance(got, AnalysisRecord):
         return Answered(got, None, None)

@@ -526,7 +526,7 @@
     {# block 2: help us be surer. One text box, two jobs: the form posts it as the refine's
        question; the chat script sends the same text to the chat API. Without a script the
        Ask button stays hidden and the text goes with the refine. #}
-    <section class="ask chat" id="chat" aria-labelledby="refine" data-url="/api/answers/{{ rec.record_id }}/chat">
+    <section class="ask chat" id="chat" aria-labelledby="refine" data-url="/api/answers/{{ rec.record_id }}/chat" data-thinking="{% if chat_by is defined and chat_by %}Thinking with {{ chat_by }}…{% else %}Thinking…{% endif %}">
       {# one line until tapped (21 Oct, gardener test: the page was busy). It starts open when
          shutting it would hide what you were doing: a chat, a told question, a did-it ask or
          its reply, a "Check the advice again" that just ran, or a reminder just saved without
@@ -618,6 +618,10 @@
             the links went on reload); at most 2 short ones and one "Found with Tavily" line for
             the set when Tavily found them all, else on each it found (review of this PR), not one per link (22 Oct site walk) -#}
         {%- if m.role == "assistant" and chat_links is defined %}{% set ns = namespace(shown=[], tavily=0) %}{% for s in chat_links(m.tools, m.content) if s.url.startswith("https://") %}{% set ns.shown = ns.shown + [s] %}{% if s.provider == "tavily" %}{% set ns.tavily = ns.tavily + 1 %}{% endif %}{% endfor %}{% set all_tavily = ns.shown and ns.tavily == ns.shown|length %}{% for s in ns.shown %}<br><a href="{{ s.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ s.label or s.url }}</a>{% if not all_tavily and s.provider == "tavily" %} (found with Tavily){% endif %}{% endfor %}{% if all_tavily %}<br><small>Found with Tavily</small>{% endif %}{% endif %}</p>{% endfor %}</div>
+      {# the waiting line, under the question where the answer will come (23 Oct, Kash on a
+         phone: "should be waiting text"): which model is thinking, then a search only when
+         one starts. Kept in the tree, empty, so its first words are read out #}
+      <p class="chatwait" role="status" aria-live="polite"></p>
       </div>
       </form>
       {% if reminder %}<div class="part remind"><h3>Reminders</h3>
@@ -669,8 +673,8 @@
       if (!box) return;
       const form = box.querySelector("form.refine"), ask = box.querySelector(".ask-chat");
       const log = box.querySelector(".chatlog"), note = box.querySelector(".chatnote");
+      const wait = box.querySelector(".chatwait");
       const buttons = form.querySelectorAll(".actions button, .ask-chat");  // the starters too
-      const word = ask.querySelector(".ask-word");
       const check = form.querySelector("button[type=submit]"), checkText = check.textContent;
       const noteText = note.textContent;
       const motion = matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
@@ -743,22 +747,46 @@
         log.appendChild(p);
         return p;
       };
+      // the reply as it comes: a search said as it starts, never guessed (23 Oct). A plain
+      // JSON body (an error, or a proxy that will not stream) is read as before
+      const answered = async (r) => {
+        if (!r.ok || !r.body || !(r.headers.get("Content-Type") || "").includes("ndjson")) return r.json();
+        const reader = r.body.getReader(), dec = new TextDecoder();
+        let held = "", last = {};
+        for (;;) {
+          const {done, value} = await reader.read();
+          held += dec.decode(value || new Uint8Array(), {stream: !done});
+          const lines = held.split("\n");
+          held = done ? "" : lines.pop();
+          for (const line of lines) {
+            if (!line.trim()) continue;  // kept alive on a quiet wait
+            const said = JSON.parse(line);
+            if (said.step === "search") wait.textContent = "Searching trusted pages" + (said.by ? " with " + said.by : "") + "…";
+            else last = said;
+          }
+          if (done) return last;
+        }
+      };
       ask.addEventListener("click", async () => {
         const text = form.question.value.trim();
         if (!text) { note.textContent = "Type your question in the box first."; form.question.focus(); return; }
         if (form.dataset.busy) { note.textContent = "Still checking the advice. Ask once it has loaded."; return; }
         for (const b of buttons) b.disabled = true;
-        word.textContent = "Asking…";
-        note.textContent = "Thinking…";
+        // one waiting line, under their question: not "Asking…" on the button and
+        // "Thinking…" over the log at once (site walk 2)
+        note.textContent = "";
         const mine = add("user", text);
+        wait.textContent = box.dataset.thinking;
+        wait.scrollIntoView({block: "nearest", behavior: motion});
         try {
           const r = await fetch(box.dataset.url, {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: {"Content-Type": "application/json", "Accept": "application/x-ndjson"},
             body: JSON.stringify({message: text}),
           });
-          const body = await r.json();
-          if (!r.ok) { mine.remove(); note.textContent = body.detail || "Something went wrong."; return; }
+          const body = await answered(r);
+          if (!r.ok || !body.reply) { mine.remove(); note.textContent = body.detail || "Something went wrong."; return; }
+          wait.textContent = "";  // the answer takes its place
           add("assistant", body.reply, body.sources);
           // asked and answered: the log keeps it, the box is free. A fact they told us stays,
           // for one tap on "Check the advice again" (the chat API's `fact`)
@@ -771,9 +799,9 @@
           mine.remove();
           note.textContent = "Could not reach the server. Try again.";
         } finally {
+          wait.textContent = "";
           if (!log.querySelector(".msg")) log.hidden = true;
           for (const b of buttons) b.disabled = false;
-          word.textContent = "Ask";
         }
       });
     })();
@@ -797,7 +825,7 @@
          "only feel real compared to a baseline"). Open, never folded away #}
       {% set mm = model_map(rec) %}{% if mm %}<div class="model-map">
         <h3>Which model did each step</h3>
-        <ul>{% for r in mm.rows %}<li><span class="mm-what"><strong>{{ r.step }}</strong> <span class="mm-model">{{ r.model }}</span></span><span class="mm-cost">{{ r.seconds }} · {{ r.cost }}</span></li>{% endfor %}</ul>
+        <ul>{% for r in mm.rows %}<li><span class="mm-what"><strong>{{ r.step }}</strong> <span class="mm-model">{{ r.model }}</span>{% if r.note %}<span class="mm-note">{{ r.note }}</span>{% endif %}</span><span class="mm-cost">{{ r.seconds }} · {{ r.cost }}</span></li>{% endfor %}</ul>
         <p class="mm-total">This answer cost <strong>{{ mm.total }}</strong> in model time{% if mm.unpriced %}, not counting {{ mm.unpriced|join(" and ") }} (price not listed){% endif %}. On NVIDIA Nemotron 3 Ultra for {{ "the priced steps" if mm.unpriced else "every step" }} it would have cost about <strong>{{ mm.baseline }}</strong>.</p>
         <p class="note">The Ultra figure is an estimate: the same tokens at Ultra's listed price. A different model would use a different number of tokens.</p>
       </div>{% endif %}

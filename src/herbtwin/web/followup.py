@@ -10,7 +10,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 
 from herbtwin.answer_cache import AnswerCache
-from herbtwin.chat import MAX_MESSAGES, ChatReply, reply, shown
+from herbtwin.chat import MAX_MESSAGES, ChatReply, OnStep, reply, shown
 from herbtwin.history import ChatMessage, HistoryError, StoredAnswer
 from herbtwin.pipeline import Deps, History, history_for, reading_from
 from herbtwin.schemas import AnalysisRecord
@@ -107,9 +107,11 @@ def chat_turn(
     message: str,
     cache: AnswerCache,
     before_model: Callable[[], None] = _nothing,
+    on_step: OnStep | None = None,
 ) -> Turn:
     """One chat message and its reply. `before_model` runs only once the message will
-    reach the model (the answer found, the chat under its limit); it may raise to refuse."""
+    reach the model (the answer found, the chat under its limit); it may raise to refuse.
+    `on_step` hears a search as it starts, for the page's waiting line."""
     stored = _stored(person, answer_id)
     note: str | None = None
     history: History | None = None
@@ -132,7 +134,15 @@ def chat_turn(
     before_model()
     model = deps.chat_adapter or deps.advise_adapter
     adapter = bind(model, "chat", StageTracer(deps.trace_store, rec.record_id))
-    got = reply(adapter, rec, message=message, past=past, history=history, search=deps.search)
+    got = reply(
+        adapter,
+        rec,
+        message=message,
+        past=past,
+        history=history,
+        search=deps.search,
+        on_step=on_step,
+    )
     mine = ChatMessage(role="user", content=message)
     theirs = ChatMessage(role="assistant", content=got.text, tools=got.tools or None)
     if stored is not None:

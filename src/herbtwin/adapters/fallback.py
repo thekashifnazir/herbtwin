@@ -34,6 +34,9 @@ class FallbackAdapter(ModelAdapter):
     # (backup_to_race): a first model that then fails leaves the reading to that call
     # rather than asking the backup a second time
     racing = False
+    # set on the per-run copy when the first model was skipped in a cool-off, so the page
+    # can say why the backup read the photo (22 Oct phone walk)
+    resting = False
 
     def __init__(
         self,
@@ -55,7 +58,7 @@ class FallbackAdapter(ModelAdapter):
 
     def _run(self, call: Callable[[ModelAdapter], str]) -> str:
         if self.clock() < self._first_down_until["t"]:
-            self.used_backup = True
+            self.used_backup = self.resting = True
             return call(self._as_me(self.backup))
         try:
             answer = call(self._as_me(self.first))

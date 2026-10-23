@@ -51,7 +51,15 @@ from herbtwin.answer import (
 from herbtwin.answer_cache import AnswerCache
 from herbtwin.asks import questions_for
 from herbtwin.auth import EXPIRED_LINK, AuthError, valid_email
-from herbtwin.chat import LIMIT, MAX_CHARS, ChatError, clean_message, shown_links, starters
+from herbtwin.chat import (
+    LIMIT,
+    MAX_CHARS,
+    ChatError,
+    OnStep,
+    clean_message,
+    shown_links,
+    starters,
+)
 from herbtwin.chat import links_from as chat_links
 from herbtwin.compass import tap_from_sensor
 from herbtwin.config import Settings, load_settings, parse_coordinate
@@ -123,6 +131,7 @@ from herbtwin.usage import SupabaseUsage, UsageError, UsageStore, Verdict, uk_da
 from herbtwin.voice import UNAVAILABLE as VOICE_UNAVAILABLE
 from herbtwin.voice import Spoken, SpokenCache, VoiceError, persona_for, speak, voice_basis
 from herbtwin.web import (
+    asking,
     checkup,
     claims,
     followup,
@@ -477,6 +486,14 @@ def _advised_by(settings: Settings) -> str | None:
     """The advisor's name for "Decided by … on Nebius Token Factory": only when the advice
     really ran there, and only a model we can name."""
     return MODEL_NAMES.get(settings.advise_model) if settings.backend == "tokenfactory" else None
+
+
+def _chat_by(settings: Settings) -> str | None:
+    """The chat model's name for the waiting line ("Thinking with …", 23 Oct): the fast
+    model when one is set, else the advisor's; only on Token Factory, only one we can name."""
+    if settings.backend != "tokenfactory":
+        return None
+    return MODEL_NAMES.get(settings.fast_model or settings.advise_model)
 
 
 def _link_kind(kind: str) -> str:
@@ -854,6 +871,7 @@ def create_app(
         got = first or read_photo(
             app.state.deps, data, mime, received=clock(), device=device, place=place,
             progress=progress, tapped=tapped, more=more,
+            asks_which=(lambda obs: tapping.wants_tap(obs, data)) if offer_tap else None,
         )  # fmt: skip
         if isinstance(got, AnalysisRecord):
             rec, reading = got, None
@@ -1005,6 +1023,7 @@ def create_app(
                 "slugs": slugs,
                 # who decided it, named only when it really ran on Token Factory (#272 review)
                 "advised_by": _advised_by(settings),
+                "chat_by": _chat_by(settings),  # the chat's waiting line names it (23 Oct)
                 # _extras_slot.html: shop links, local help, or both
                 "extras_on": app.state.shops is not None or app.state.local_help is not None,
                 # _reported_slot.html: UK records of this plant's pests (GBIF), and news
@@ -2449,36 +2468,42 @@ def create_app(
             raise HTTPException(400, str(e)) from e
         charge = charge_hook(request, "chat message", settings.limits.chat_cost_usd)
         person, holder = await who(request)
-        try:
-            turn = await run_in_threadpool(
-                traced,
-                "chat",
-                {"answer_id": answer_id},
-                followup.chat_turn,
-                app.state.deps,
-                person,
-                answer_id,
-                text,
-                app.state.answers,
-                charge,
-            )
-        except followup.Expired:
-            raise HTTPException(404, EXPIRED) from None
-        except followup.AtLimit:
-            raise HTTPException(429, LIMIT) from None
-        except ChatError as e:
-            raise HTTPException(503, str(e)) from e
-        out = JSONResponse(
-            {
-                "reply": turn.reply.text,
+
+        def turn(on_step: OnStep | None = None) -> dict:
+            """The reply's body; a refusal as an HTTPException. Blocking."""
+            try:
+                got = traced(
+                    "chat",
+                    {"answer_id": answer_id},
+                    followup.chat_turn,
+                    app.state.deps,
+                    person,
+                    answer_id,
+                    text,
+                    app.state.answers,
+                    charge,
+                    on_step,
+                )
+            except followup.Expired:
+                raise HTTPException(404, EXPIRED) from None
+            except followup.AtLimit:
+                raise HTTPException(429, LIMIT) from None
+            except ChatError as e:
+                raise HTTPException(503, str(e)) from e
+            return {
+                "reply": got.reply.text,
                 # at most 2 short links, one per site (22 Oct site walk)
-                "sources": shown_links(turn.reply.sources, turn.reply.text),
-                "fact": turn.reply.fact,  # told, not asked: the page may keep it in the box
-                "left": turn.left,
-                "note": turn.note,
+                "sources": shown_links(got.reply.sources, got.reply.text),
+                "fact": got.reply.fact,  # told, not asked: the page may keep it in the box
+                "left": got.left,
+                "note": got.note,
             }
-        )
-        return _with_cookies(out, holder)
+
+        # the page's own ask: each step as it starts, then the reply (23 Oct, Kash: "should
+        # be waiting text"). Refused before this point, it is still a plain error
+        if asking.STREAM in request.headers.get("accept", ""):
+            return _with_cookies(asking.chat_stream(turn), holder)
+        return _with_cookies(JSONResponse(await run_in_threadpool(turn)), holder)
 
     @app.post("/api/answers/{answer_id}/voice")
     async def voice_api(request: Request, answer_id: str):

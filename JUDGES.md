@@ -74,7 +74,9 @@ is in the submission form; it is not in this repository.
      close" to "Away from any window", as light indoors is not measured), **What's changed** (how the soil feels, when you last
      watered), then **Check the advice again**; **Ask a question** (one text box, **Ask
      about this plant**, three questions to tap for this plant, such as "Is it safe to
-     eat?", and the replies); **Reminders**. With no questions to answer, both buttons
+     eat?", and the replies; while a reply is on its way, a line under the question says
+     which model is thinking, and "Searching trusted pages with Tavily…" only when a search
+     starts); **Reminders**. With no questions to answer, both buttons
      sit under the text box, **Ask about this plant** first and green, so a typed question
      goes to the chat;
    - **How we worked it out**: first, who advised, in plain words (today one model asked the

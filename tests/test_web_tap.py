@@ -493,3 +493,32 @@ def test_the_box_is_kept_within_one_to_three_and_its_edges_have_a_finger_sized_h
     assert "pointer-events: none" in edge  # drawn only: the hold is the box's own
     for e, cursor in (("n", "ns-resize"), ("e", "ew-resize")):
         assert f'{e}: "{cursor}"' in page
+
+
+@respx.mock
+def test_the_wait_says_there_are_several_plants_before_naming_any(tmp_path):
+    # 22 Oct phone walk: the wait said "Found geranium (not sure)", then "One question
+    # first: Tap your plant". Several plants are said first, and no plant is named (nor its
+    # month's normal shown) before the person picks; the same photo of one plant still is
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    where = {"lat": "52.6", "lon": "-1.1"}  # outdoors in the UK: the season card would show
+    pages = {}
+    for kind, read in (("mixed", MIXED), ("one", OBS)):
+        (tmp_path / kind).mkdir()
+        c = _client(tmp_path / kind, [json.dumps(read)], [json.dumps(ADV)] * 3)
+        files = {"photo": ("m.jpg", PHOTO, "image/jpeg")}
+        pages[kind] = c.post("/analyse", files=files, data=where).text
+    mixed, one = pages["mixed"], pages["one"]
+    assert "<li>Found basil" in one and "Normal for basil" in one  # the control
+    assert "<li>We can see more than one plant: you&#x27;ll tap the one you mean next" in mixed
+    assert "Found" not in mixed and "Normal for" not in mixed
+    assert "basil" not in mixed.split('<div class="ready"', 1)[0].lower()
+    assert '<a id="next" href="/taps/' in mixed
+
+
+@respx.mock
+def test_signed_in_the_wait_says_several_plants_too(tmp_path):
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c, _, _ = _signed_in(tmp_path, [json.dumps(MIXED)], [])
+    r = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}, data={"place": ""})
+    assert "<li>We can see more than one plant" in r.text and "Found" not in r.text

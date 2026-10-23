@@ -22,6 +22,7 @@ from herbtwin.pipeline import (
     analyse,
 )
 from herbtwin.plant_model import ModelView
+from herbtwin.schemas import BackupRead
 from herbtwin.stages.environment import OPEN_METEO_URL
 from herbtwin.tracing import TraceStore
 
@@ -762,16 +763,18 @@ def test_progress_lines_follow_the_stages(tmp_path):
 
 
 @pytest.mark.parametrize(
-    ("first", "read_by"),
+    ("first", "read_by", "why"),
     [
-        ("answers", "zai-org/GLM-5.3-Flash"),
-        ("fails", "deepseek-ai/DeepSeek-V4.1-Flash"),
+        ("answers", "zai-org/GLM-5.3-Flash", None),
+        ("fails", "deepseek-ai/DeepSeek-V4.1-Flash", "failed"),
         # its reply is traced but unusable even after the repair: observe asks the backup
-        ("unusable", "deepseek-ai/DeepSeek-V4.1-Flash"),
+        ("unusable", "deepseek-ai/DeepSeek-V4.1-Flash", "failed"),
+        # it failed on an earlier read: in the cool-off the backup goes first
+        ("resting", "deepseek-ai/DeepSeek-V4.1-Flash", "resting"),
     ],
 )
 @respx.mock
-def test_the_wait_names_the_photo_model_that_really_answered(tmp_path, first, read_by):
+def test_the_wait_names_the_photo_model_that_really_answered(tmp_path, first, read_by, why):
     # 21 Oct (judging video, 32:38: which model does each step?): from the trace of the
     # call whose reply was read, so the backup is named when it was the one that answered
     from herbtwin.adapters.base import AdapterError
@@ -786,11 +789,17 @@ def test_the_wait_names_the_photo_model_that_really_answered(tmp_path, first, re
     if first == "fails":
         glm.error = AdapterError("glm down")
     reader = FallbackAdapter(glm, Scripted("deepseek-ai/DeepSeek-V4.1-Flash", json.dumps(OBS)))
+    if first == "resting":
+        reader._first_down_until["t"] = float("inf")
     deps = dataclasses.replace(_deps(tmp_path, [], [json.dumps(ADV)] * 3), observe_adapter=reader)
     lines: list = []
-    analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
-    assert PlantFound("basil", read_by) in lines
-    assert glm.asked == ["zai-org/GLM-5.3-Flash"] * (2 if first == "unusable" else 1)
+    rec, _ = analyse_with_reading(deps, JPEG, "image/jpeg", received=WHEN, progress=lines.append)
+    # 22 Oct phone walk (Kash: "Why were we using DeepSeek and then GLM?"): and why
+    backup = BackupRead(first="zai-org/GLM-5.3-Flash", backup=read_by, why=why) if why else None
+    assert PlantFound("basil", read_by, backup) in lines
+    assert rec.photo_backup == backup
+    asked = {"answers": 1, "fails": 1, "unusable": 2, "resting": 0}[first]
+    assert glm.asked == ["zai-org/GLM-5.3-Flash"] * asked
 
 
 @pytest.mark.parametrize(("by", "said"), [("tavily", True), ("tinyfish", False), (None, False)])

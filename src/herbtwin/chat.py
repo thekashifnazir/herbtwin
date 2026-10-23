@@ -17,6 +17,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol, get_args
 from urllib.parse import parse_qs, urlsplit
@@ -1183,17 +1184,28 @@ def about_the_plant(hits: list[dict], rec: AnalysisRecord) -> list[dict]:
     return [h for h in hits if _names_the_plant(h, word, other, latin, key)]
 
 
-def _run(call: ToolCall, rec: AnalysisRecord, search: Search | None) -> tuple[dict, dict, bool]:
+# a step the page may show while the reply is on its way: ("search", the finder's name or
+# None). Said only as it starts, so the page never claims a search that did not run
+# (23 Oct, Kash: "should be waiting text")
+OnStep = Callable[[str, str | None], None]
+FINDERS = {"tavily": "Tavily", "exa": "Exa", "tinyfish": "TinyFish"}
+
+
+def _run(
+    call: ToolCall, rec: AnalysisRecord, search: Search | None, on_step: OnStep | None = None
+) -> tuple[dict, dict, bool]:
     """(arguments, result, grounded) for one tool call. Bad calls and broken tools become
     error results: the chat answers from what is known, never a 500."""
     try:
-        return _call(call, rec, search)
+        return _call(call, rec, search, on_step)
     except Exception:  # noqa: BLE001 - a twin or search bug must not break the chat
         log.exception("tool %s failed run=%s", call.name, rec.record_id)
         return {}, {"error": "the tool failed"}, False
 
 
-def _call(call: ToolCall, rec: AnalysisRecord, search: Search | None) -> tuple[dict, dict, bool]:
+def _call(
+    call: ToolCall, rec: AnalysisRecord, search: Search | None, on_step: OnStep | None = None
+) -> tuple[dict, dict, bool]:
     try:
         args = json.loads(call.arguments)
     except ValueError:
@@ -1209,7 +1221,12 @@ def _call(call: ToolCall, rec: AnalysisRecord, search: Search | None) -> tuple[d
         result = run_scenario(rec, action, feel).as_tool_result()
         return args, result, result["vs_leaving_it"] != "unknown"
     if call.name == "search_web" and search is not None:
-        found = search.search(str(args.get("query", "")))
+        query = str(args.get("query", ""))
+        if on_step is not None and query.strip():  # an empty one never reaches a finder
+            # the first in the chain is the one asked first (Tavily, when it is on)
+            first = (getattr(search, "names", None) or [None])[0]
+            on_step("search", FINDERS.get(first or ""))
+        found = search.search(query)
         hits = [{"title": h.title, "url": h.url, "snippet": h.snippet} for h in found.hits]
         about, note = about_the_plant(hits, rec), found.note
         if len(about) < len(hits):
@@ -1267,6 +1284,7 @@ def reply(
     past: list[Message],
     history: History | None,
     search: Search | None,
+    on_step: OnStep | None = None,
 ) -> ChatReply:
     tools = [RUN_SCENARIO] + ([SEARCH_WEB] if search is not None else [])
     system = SYSTEM.format(search=SEARCH_ON if search is not None else SEARCH_OFF)
@@ -1329,7 +1347,7 @@ def reply(
         msgs.append(turn.message)
         for i, call in enumerate(turn.tool_calls):
             if i < MAX_CALLS:
-                args, result, ok = _run(call, rec, search)
+                args, result, ok = _run(call, rec, search, on_step)
             else:
                 args, result, ok = {}, {"error": "too many tool calls in one turn"}, False
             grounded = grounded or ok

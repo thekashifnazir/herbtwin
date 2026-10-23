@@ -27,7 +27,7 @@ def _moving() -> list[tuple[tuple[str, ...], str, str]]:
 def test_the_hero_rise_starts_only_from_the_shared_reveals_start(tmp_path):
     """23 Oct: on a first visit the intro (_intro.html) covers the page for up to 1.4 s, and
     the hero's rise used to play unseen under it. Now it starts from the shared reveal's
-    start() as the intro lifts, on the visit the intro plays (its own once a session), and
+    start() as the intro lifts, on the visit the intro plays (its own once a browser), and
     only once the real fonts are in; never on load from a gate of its own."""
     page = _home(tmp_path)
     assert "herbtwin-intro-seen" not in page and "first-load" not in page  # one flag: the intro's

@@ -4,6 +4,7 @@ import json
 import threading
 import time
 
+import pytest
 from fastapi import HTTPException
 
 from herbtwin.web.progress import KEEPALIVE, PAD, stream
@@ -697,13 +698,38 @@ def test_the_found_step_names_the_photo_model_by_its_plain_name_only():
     from herbtwin.pipeline import PlantFound
     from herbtwin.web.progress import _step
 
+    # neither is NVIDIA's, so each says it runs on Token Factory too (22 Oct, Kash)
     glm = _step(PlantFound("basil", "zai-org/GLM-5.3-Flash"))
-    assert glm.startswith('<li>Found basil<span class="note">Read by GLM-5.3 Flash</span></li>')
+    assert glm.startswith(
+        '<li>Found basil<span class="note">Read by GLM-5.3 Flash on Nebius Token Factory'
+        "</span></li>"
+    )
     backup = _step(PlantFound("basil", "deepseek-ai/DeepSeek-V4.1-Flash"))
-    assert '<span class="note">Read by DeepSeek V4.1 Flash</span>' in backup
+    assert '<span class="note">Read by DeepSeek V4.1 Flash on Nebius Token Factory</span>' in backup
     for unnamed in ("mock", "some/new-model", None):
         line = _step(PlantFound("basil", unnamed))
         assert line.startswith("<li>Found basil</li>") and "Read by" not in line
+
+
+@pytest.mark.parametrize(
+    ("why", "said"),
+    [
+        ("slow", "GLM-5.3 Flash was slow, so our backup DeepSeek V4.1 Flash read it"),
+        ("failed", "GLM-5.3 Flash couldn't read it, so our backup DeepSeek V4.1 Flash did"),
+        ("resting", "GLM-5.3 Flash failed recently, so our backup DeepSeek V4.1 Flash read it"),
+    ],
+)
+def test_when_the_backup_reads_the_photo_the_step_says_why(why, said):
+    # 22 Oct phone walk (Kash: "Why were we using DeepSeek and then GLM?"): one read said
+    # "Read by DeepSeek V4.1 Flash", another "GLM-5.3 Flash", with nothing to say why
+    from herbtwin.pipeline import PlantFound
+    from herbtwin.schemas import BackupRead
+    from herbtwin.web.progress import _step
+
+    glm, deepseek = "zai-org/GLM-5.3-Flash", "deepseek-ai/DeepSeek-V4.1-Flash"
+    line = _step(PlantFound("basil", deepseek, BackupRead(first=glm, backup=deepseek, why=why)))
+    assert f'<span class="note">{said}, also on Nebius Token Factory</span>' in line
+    assert "Read by" not in line
 
 
 def test_the_card_opens_on_the_step_now_above_the_questions():

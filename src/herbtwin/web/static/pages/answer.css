@@ -140,6 +140,15 @@
 .answer-page .msg { margin: 0 0 12px; white-space: pre-wrap; }
 .answer-page .msg.user { margin-left: 15%; padding: 10px 16px; border-radius: var(--surface);
   background: var(--soft); font-weight: 500; }
+/* the chat's waiting line, under the question where the answer comes (23 Oct, Kash on a
+   phone: "should be waiting text"): quiet words, nothing when empty, a slow breath only
+   for those who want motion */
+.answer-page .chatwait { margin: 0 0 12px; color: var(--muted-fg); font-size: 16px; font-weight: 500; }
+.answer-page .chatwait:empty { margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .answer-page .chatwait:not(:empty) { animation: chatwait 1.8s ease-in-out infinite; }
+}
+@keyframes chatwait { 50% { opacity: .6; } }
 .answer-page .reminder { margin: 16px 0; }
 .answer-page .reminder label { display: flex; align-items: center; min-height: 44px; margin: 0; }
 .answer-page .reminder [role="status"] { margin: 4px 0 0; color: var(--ok); font-weight: 500; }
@@ -183,6 +192,7 @@
 .answer-page .model-map li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; font-size: 16px; }
 .answer-page .model-map li + li { margin-top: 6px; }
 .answer-page .model-map .mm-model { color: var(--muted-fg); }
+.answer-page .model-map .mm-note { display: block; font-size: 16px; }  /* the backup read it, and why */
 .answer-page .model-map .mm-cost { font-variant-numeric: tabular-nums; white-space: nowrap; }
 @media (max-width: 480px) { .answer-page .model-map li { flex-direction: column; } }  /* a phone: the cost under its step, every row alike */
 .answer-page .model-map .mm-total { margin: 10px 0 0; font-size: 16px; }

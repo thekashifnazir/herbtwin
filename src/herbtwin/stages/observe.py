@@ -186,6 +186,7 @@ def observe(
     more: Photos = (),
     hedge_after_s: float | None = HEDGE_AFTER_S,
     won_by: Callable[[str | None], None] | None = None,
+    first_failed: Callable[[], None] | None = None,
 ) -> Observation:
     """One vision call (plus one repair). `more`: up to two more photos of the same plant,
     sent with the main one in that same call, with more room to answer; a provider that
@@ -196,7 +197,9 @@ def observe(
     gets one call to the backup photo model, when there is one and time is left for it.
     A read with no reading after `hedge_after_s` races the backup (see _race); strict reads
     never do, so an eval scores the model it names. `won_by` hears the model whose
-    reading won a race (the loser's call is traced too, and may be traced after it)."""
+    reading won a race (the loser's call is traced too, and may be traced after it);
+    `first_failed` hears that the backup won it after the first model had failed, not only
+    been slow (the wait says which: pipeline.backup_read)."""
     start = clock()
     if more and not _takes_several(adapter):
         log.warning("%s takes one image per call: reading the main photo only", adapter.name)
@@ -205,7 +208,7 @@ def observe(
     try:
         if hedge_after_s is None or strict:
             return _read(adapter, photos, few_shot, strict)
-        return _race(adapter, photos, few_shot, strict, hedge_after_s, won_by)
+        return _race(adapter, photos, few_shot, strict, hedge_after_s, won_by, first_failed)
     except ObserveError as e:
         several = len(photos) > 1
         raced = isinstance(e, _NeitherRead)  # the backup has had its call already
@@ -233,6 +236,7 @@ def _race(
     strict: bool,
     hedge_after_s: float,
     won_by: Callable[[str | None], None] | None = None,
+    first_failed: Callable[[], None] | None = None,
 ) -> Observation:
     """The first model's read (with its repair) and, when it has no reading after
     `hedge_after_s`, the backup's one call on the same photos: the first usable reading
@@ -277,6 +281,8 @@ def _race(
             log.info("photo read by %s after a race", model)
             if won_by is not None:
                 won_by(model)
+            if job is second and first in errors and first_failed is not None:
+                first_failed()
             return obs
     # both have failed (the loop ends only once both are done); as when the backup is
     # asked after the first model, its error is the one raised
