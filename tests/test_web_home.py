@@ -139,7 +139,7 @@ def test_the_hero_names_the_twin_and_what_it_does(tmp_path):
 
 def test_the_twin_compare_uses_a_real_labelled_slider(tmp_path):
     page = _home(tmp_path)
-    fig = page.split('<figure class="home-twin">', 1)[1].split("</figure>", 1)[0]
+    fig = page.split('<figure class="home-twin" data-reveal="rise">', 1)[1].split("</figure>", 1)[0]
     assert "qwen__basil__if_you_do.jpg" in fig and "qwen__basil__if_you_dont.jpg" in fig
     assert "If you protect it" in fig and "If you don't" in fig
     assert re.search(
@@ -349,7 +349,7 @@ def test_the_home_example_is_one_framed_example_with_its_input_and_no_date(tmp_p
     assert "12 Oct" not in home
     frame = home.split('<section class="home-example"', 1)[1].split("</section>", 1)[0]
     assert '<p class="home-example-tab" id="home-example-tab">Example</p>' in frame
-    head = frame.split('<p class="home-example-in">', 1)[1].split("</p>", 1)[0]
+    head = frame.split('<p class="home-example-in" data-reveal="rise">', 1)[1].split("</p>", 1)[0]
     # an openly licensed sample (Forest and Kim Starr, CC BY 3.0 US), never Kash's own
     assert 'src="/static/samples/3-basil-yellow-leaves-thumb.jpg"' in head
     # one line: what went in, then the arrow to what came out (19 Oct home pass)
@@ -374,8 +374,12 @@ def test_how_it_works_is_four_photo_cards_of_the_examples_real_output(tmp_path):
     # #408 took it out; back on 22 Oct (Kash: "it was nice getting a how to on the bottom")
     home = _home(tmp_path)
     how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
-    assert '<h2 id="home-how-h">How it works</h2>' in how
-    cards = how.split('<ol class="home-how-cards">', 1)[1].split("</ol>", 1)[0].split("<li>")[1:]
+    assert '<h2 id="home-how-h" data-reveal="rise">How it works</h2>' in how
+    cards = (
+        how.split('<ol class="home-how-cards" data-reveal="stagger">', 1)[1]
+        .split("</ol>", 1)[0]
+        .split("<li>")[1:]
+    )
     chips = [re.search(r'class="home-how-chip">([^<]+)<', c).group(1) for c in cards]
     assert chips == [
         "Found basil",
@@ -402,7 +406,7 @@ def test_how_it_works_is_four_photo_cards_of_the_examples_real_output(tmp_path):
     )
     # no link at all (21 Oct, Kash: "do we even need the link to go to a separate page? We
     # already have that info below"): Made with is the next section, and the nav has About
-    pill = how.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
+    pill = how.split('<p class="home-how-sources" data-reveal="rise">', 1)[1].split("</p>", 1)[0]
     assert pill == "Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory"
     assert "Forest and Kim Starr" in _credits(home)
     # Made with at home's foot, on a phone: two to a row, job and name (About has them in full)
@@ -492,7 +496,7 @@ def test_open_plantbook_is_on_only_with_both_keys():
 
 def test_how_it_works_keeps_one_models_line_and_credits_hold_the_rest(tmp_path):
     home = _home(tmp_path)
-    line = home.split('<p class="home-how-sources">', 1)[1].split("</p>", 1)[0]
+    line = home.split('<p class="home-how-sources" data-reveal="rise">', 1)[1].split("</p>", 1)[0]
     # the judges' eligibility signal stays in view
     assert line.startswith("Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory")
     credits = _credits(home)

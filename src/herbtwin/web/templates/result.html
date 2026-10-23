@@ -829,7 +829,7 @@
            read, so it says what it shows above it, names each line at its end in the line's
            colour (no legend in the small print), and marks every cold window under the axis #}
         {% set tc = twin_chart(rec, label) if a.compare else none %}
-        {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ tc.shown }}">
+        {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ tc.shown }}" data-reveal="draw">
           <p class="twin-chart-title" id="twin-chart-title">{{ tc.title }}</p>
           {# how to read it, naming only the lines drawn: it follows the tap like the lines #}
           <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">{{ ln.how }}</span>{% endfor %}</p>

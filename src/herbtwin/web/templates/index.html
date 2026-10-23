@@ -7,24 +7,10 @@
 {% block nav %}{{ site_nav(person, accounts) }}{% endblock %}
 {% block wrap %} wide{% endblock %}
 {% block main %}
-{# the first load of a session: the hero rises in and the twin splits (19 Oct home pass);
-   set before the band paints, never with reduced motion, and never without a script. The
-   rise (`intro-go`) waits for the real fonts so it never plays in a stand-in face, and gives
-   up after 600 ms: the words are there from the first paint either way (H1 fix). Fonts that
-   land after the first frame skip it too: the rise starts 16 px down, so on words already
-   painted it would read as a jump (#313 review) #}
-<script>try { if (!sessionStorage.getItem("herbtwin-intro-seen") && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-  const root = document.documentElement;
-  root.classList.add("first-load"); sessionStorage.setItem("herbtwin-intro-seen", "1");
-  if (document.fonts && document.fonts.load) {
-    let painted = false;  // set in the first frame's callback, so it errs toward stillness
-    requestAnimationFrame(() => { painted = true; });
-    const fonts = Promise.all([document.fonts.load('800 1em "Fira Sans Extra Condensed"'),
-      document.fonts.load('400 1em "Alegreya Sans"'), document.fonts.load('700 1em "Alegreya Sans"')]).then(() => true);
-    const late = new Promise((ok) => setTimeout(ok, 600, false));
-    Promise.race([fonts, late]).then((go) => { if (go && !painted) root.classList.add("intro-go"); }, () => { /* no fonts: no rise */ });
-  }
-} } catch { /* no storage: no intro */ }</script>
+{# the first load of a session: the hero rises in and the twin splits (19 Oct home pass). 23 Oct:
+   both wait for the first-visit intro (_intro.html) and play only on the visit it plays, so
+   its once a session is theirs too: the rise starts from the shared reveal's start() as the
+   intro lifts (_reveal.html sets intro-go), the split from the slider's script below #}
 <div class="home-band">
 <section class="home-hero">
   <p class="home-eyebrow">Is your herb perturbed?</p>
@@ -103,7 +89,7 @@
   <p class="home-ask-said" id="ask-said" role="status" aria-live="polite" tabindex="-1"></p>
 </form>{% endif %}
 
-<figure class="home-twin">
+<figure class="home-twin" data-reveal="rise">
   <div class="home-twin-frame" id="twin-frame">
     <img src="/static/twin/qwen__basil__if_you_do.jpg" width="1184" height="896" loading="eager"
          alt="Basil plant thriving: the 'if you protect it' twin">
@@ -122,12 +108,12 @@
 
 <section class="home-example" aria-labelledby="home-example-tab">
 <p class="home-example-tab" id="home-example-tab">Example</p>
-<p class="home-example-in">
+<p class="home-example-in" data-reveal="rise">
   <img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="56" height="42" loading="lazy"
        alt="The basil photo this example starts from">
   <strong>A basil photo, a cold week in London</strong> <span class="home-example-arrow" aria-hidden="true">→</span>
 </p>
-<article class="card home-sample" aria-label="Example answer">
+<article class="card home-sample" aria-label="Example answer" data-reveal="rise">
   <h2>Basil</h2>
   <p class="home-sample-head">Shelter it from the cold nights this week.</p>
   <p class="small">How sure we are: Our best read. Right about half the time in our tests.</p>
@@ -139,7 +125,7 @@
   </ul>
 </article>
 
-<div class="home-bento" role="group" aria-label="The evidence behind the example answer">
+<div class="home-bento" data-reveal="stagger" role="group" aria-label="The evidence behind the example answer">
   <div class="card home-tile home-tile-wide">
     <h2>Why it's our best read</h2>
     <p class="home-tile-big">About half the time</p>
@@ -172,8 +158,8 @@
    piece of the example's output (18 Oct judge ideas, item 12). Only the openly licensed
    basil sample and the twin pictures drawn from it, never anyone's own garden #}
 <section class="home-how" aria-labelledby="home-how-h">
-  <h2 id="home-how-h">How it works</h2>
-  <ol class="home-how-cards">
+  <h2 id="home-how-h" data-reveal="rise">How it works</h2>
+  <ol class="home-how-cards" data-reveal="stagger">
     <li><figure><img src="/static/samples/3-basil-yellow-leaves-thumb.jpg" width="480" height="360" loading="lazy" alt="The basil photo">
       <span class="home-how-chip">Found basil</span></figure>
       <h3>Your photo</h3><p class="small muted">A vision model names the plant and reads its leaves and soil.</p></li>
@@ -192,7 +178,7 @@
   {# the one models line kept in view: it is what the judges check. No link (21 Oct, Kash: "do
      we even need the link to go to a separate page? We already have that info below"): Made
      with is the next section, and the nav has About. So a flat green strip, never a pill (22 Oct) #}
-  <p class="home-how-sources">Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory</p>
+  <p class="home-how-sources" data-reveal="rise">Decided by NVIDIA Nemotron 3 Super on Nebius Token Factory</p>
 </section>
 
 {# who and what it runs on, then every licence, folded (19 Oct home pass); /credits shows
@@ -203,28 +189,6 @@
 {% block script %}
 <script>
 {% include "_photo_gps.js" %}
-(() => {
-  // H2: only what starts below the first screen is marked (.home-later), so nothing in the
-  // first viewport is ever held back: the twin from 1100 px up, the example on a tall screen
-  // (#313 review). Each marked block rises in (home.css) the moment any of it shows, and the
-  // ones that arrive together go one after another. No script, no observer or Reduce Motion:
-  // nothing is marked, all of it shows
-  if (!window.IntersectionObserver || !matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
-  const blocks = ".home-twin, .home-example-in, .home-sample, .home-tile, .home-how > h2, " +
-    ".home-how-cards > li, .home-how-sources, .made-with > *";
-  const arrive = new IntersectionObserver((entries) => {
-    entries.filter((x) => x.isIntersecting)
-      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
-      .forEach((x, i) => {
-        x.target.style.setProperty("--reveal-delay", Math.min(i, 3) * 80 + "ms");
-        x.target.classList.add("home-in");
-        arrive.unobserve(x.target);
-      });
-  }, {threshold: 0});
-  document.querySelectorAll(blocks).forEach((e) => {
-    if (e.getBoundingClientRect().top > innerHeight) { e.classList.add("home-later"); arrive.observe(e); }
-  });
-})();
 (() => {
   // the chosen photo, shown back: a local object URL for display only. The file itself is
   // sent exactly as picked, never resized or re-encoded: the plant reader needs the detail.
@@ -439,8 +403,9 @@
   // left and back, once a visit. Never with reduced motion, never after a touch
   if (!window.IntersectionObserver || !matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
   // the first load of a session: the twin splits instead (19 Oct home pass). It opens on the
-  // healthy plant and the divider sweeps to its place, which shows it moves, so no nudge
-  const intro = document.documentElement.classList.contains("first-load");
+  // healthy plant and the divider sweeps to its place, which shows it moves, so no nudge.
+  // 23 Oct: the visit the first-visit intro plays on (_intro.html), and only once it lifts
+  const root = document.documentElement, intro = root.classList.contains("intro-playing");
   if (!intro) {
     try { if (sessionStorage.getItem("herbtwin-slider-hinted")) return; } catch { /* no storage: hint anyway */ }
   }
@@ -479,7 +444,15 @@
   const seen = new IntersectionObserver((entries) => {
     if (!entries.some((e) => e.isIntersecting)) return;
     seen.disconnect();
-    setTimeout(() => { if (touched) set(); else if (intro) sweep(); else nudge(); }, intro ? 200 : 600);
+    let went = false;
+    const go = () => {
+      if (went) return;
+      went = true;
+      setTimeout(() => { if (touched) set(); else if (intro) sweep(); else nudge(); }, intro ? 200 : 600);
+    };
+    // under the intro's green the split would play unseen: it waits for the lift, 2 s at most
+    if (root.classList.contains("intro-playing")) { addEventListener("herbtwin:intro-done", go, {once: true}); setTimeout(go, 2000); }
+    else go();
   }, {threshold: intro ? 0.3 : 0.6});  // the intro must split even half in view
   seen.observe(frame);
 })();

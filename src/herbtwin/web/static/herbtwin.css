@@ -330,6 +330,21 @@ th { background: var(--muted); font-weight: 700; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
 
+/* the scroll reveal, shared by every page (23 Oct, Kash: "make the pages feel dynamic …
+   things appear and are revealed in a way that makes sense"). _reveal.html marks the first
+   screen in, then sets html.reveal-on; a block below it waits 16 px low and rises as it
+   arrives, 0.38 s. A move, never a fade, so its words read the same mid-way (axe), and a
+   transform, so nothing round it shifts. Draws and grows live in the page's own sheet */
+@media screen and (prefers-reduced-motion: no-preference) {
+  html.reveal-on :is([data-reveal="rise"], [data-reveal="stagger"] > :not([data-reveal])):not(.is-in) {
+    transform: translateY(16px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-on :is([data-reveal="rise"], [data-reveal="stagger"] > :not([data-reveal])).is-arriving {
+    animation: reveal-rise .38s cubic-bezier(0.2,0,0,1) var(--reveal-delay, 0ms) backwards; }
+}
+@keyframes reveal-rise { from { transform: translateY(16px); } }
+
 /* "Hear it from your plant": a secondary button under the answer, the words it said below */
 .voice { display: grid; gap: 8px; justify-items: start; margin-top: 12px; }
 .voice audio { width: 100%; max-width: 360px; }

@@ -82,8 +82,9 @@ def test_cards_below_reveal_on_scroll_and_are_still_before_they_are_read():
     assert "card-rise .38s cubic-bezier(0.2,0,0,1) backwards, card-reveal linear backwards" in body
     assert "animation-timeline: auto, view()" in body
     assert "animation-range: normal, entry 0% entry 70%" in body  # still by 70% in view
-    # starts barely visible, never display:none or a script waiting to show it
-    assert "@keyframes card-reveal { from { opacity: .001; transform: translateY(22px); } }" in CSS
+    # a rise only, never a fade (23 Oct: at .001 its words failed axe until scrolled to),
+    # and never display:none or a script waiting to show it
+    assert "@keyframes card-reveal { from { transform: translateY(22px); } }" in CSS
     assert ".main-action" not in sel  # the first screen is never revealed on scroll
     # on a desktop the right column's first card is on the first screen: it rises on load
     ask = [r for r in _moving(".side > .ask") if "animation-name" in r[2]]
@@ -130,7 +131,8 @@ def test_the_compare_line_draws_itself_when_the_fold_opens_or_a_choice_is_tapped
     # no pathLength: where a browser ignores it on a polyline, a dash of "1" left the line
     # dotted on iOS (21 Oct review); the wipe needs nothing on the line itself
     assert all("pathLength" not in g for g in lines)
-    draw = _moving("polyline")
+    # the shared reveal's held line (test_web_reveal) only waits; this is the draw
+    draw = [r for r in _moving("polyline") if "reveal-on" not in r[1]]
     assert len(draw) == 1
     at, sel, body = draw[0]
     assert _opted_in(at)

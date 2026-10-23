@@ -63,7 +63,7 @@
   <p class="made-note">The "if you protect it / if you don't" pictures were drawn ahead of time by Qwen-Image-Edit from the sample photos above, made healthier or sicker: parsley from Johnathon Ridden's (CC0 1.0), basil from Forest and Kim Starr's (CC BY 3.0 US), rosemary beetles from Максим Шумских's (CC BY 4.0) and coriander from Ian Wolfe's (CC0 1.0). Illustrations, not predictions.</p>
 {% endmacro %}
 {% macro made_with(spot_on=false, plantbook_on=false, voice_on=false, tavily_on=false, open=false, check_on=false, sightings_on=false) %}
-<section class="made-with" id="made-with" aria-labelledby="made-with-h">
+<section class="made-with" id="made-with" aria-labelledby="made-with-h" data-reveal="stagger">
 <h2 id="made-with-h">Made with</h2>
 {{ made_cards(voice_on=voice_on, tavily_on=tavily_on, check_on=check_on) }}
 <details class="made-credits" id="credits"{% if open %} open{% endif %}>

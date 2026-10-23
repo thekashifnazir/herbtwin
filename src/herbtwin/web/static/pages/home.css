@@ -347,8 +347,9 @@
 
 /* the first load of a session (19 Oct home pass; H1 fix, judge's motion proposal): the hero
    rises 16 px, staggered. Only a move, never a fade, so the words are there from the first
-   paint; and only once the real fonts are in (`intro-go`, set by index.html's gate within
-   600 ms, or never), so it never plays in a stand-in face. `first-load` alone runs the twin */
+   paint. 23 Oct: `intro-go` is set by the shared reveal's start() (_reveal.html) as the
+   first-visit intro lifts, and only if the real fonts are in, so it never plays unseen under
+   the intro's green or in a stand-in face */
 @media (prefers-reduced-motion: no-preference) {
   .intro-go .home-page :is(.home-hero > *, .home-photo) { animation: intro-rise .4s cubic-bezier(0.2,0,0,1) backwards; }
   .intro-go .home-page .home-hero > :nth-child(2) { animation-delay: 80ms; }
@@ -374,20 +375,12 @@
 }
 @keyframes chips-in { from { transform: translateX(24px); } }
 
-/* H2: below the first screen, each block rises 24 px and fades in over 0.4 s the moment any
-   of it shows, and blocks that arrive together go one after another, 80 ms apart (21 Oct,
-   Kash: "make it more engaging"). The page's script marks only blocks that start below the
-   first screen (.home-later) and adds .home-in as each one reaches the screen's edge, so a
-   block is held back only while it is out of sight: nothing in view waits, and with no
-   script, no observer or Reduce Motion nothing is marked and all of it just shows. The
-   grip on the twin pops once the first-load sweep lands (index.html adds .swept) */
-@media screen and (prefers-reduced-motion: no-preference) {
-  .home-page .home-later:not(.home-in) { opacity: 0; }
-}
+/* H2: below the first screen each block rises in as it arrives, those arriving together one
+   after another (21 Oct, Kash: "make it more engaging"). 23 Oct: the shared reveal does it
+   now (_reveal.html, herbtwin.css; data-reveal in index.html), 16 px and no fade, so the
+   words read the same mid-way. The grip on the twin pops once the first-load sweep lands
+   (index.html adds .swept) */
 @media (prefers-reduced-motion: no-preference) {
-  .home-page .home-later.home-in { animation: home-reveal .4s cubic-bezier(0.2,0,0,1) backwards;
-    animation-delay: var(--reveal-delay, 0ms); }
   .home-page .home-twin-frame.swept .home-twin-grip { animation: grip-pop .4s cubic-bezier(0.2,0,0,1); }
 }
-@keyframes home-reveal { from { opacity: 0; transform: translateY(24px); } }
 @keyframes grip-pop { 50% { transform: translate(-50%, -50%) scale(1.12); } }

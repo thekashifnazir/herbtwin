@@ -130,7 +130,8 @@ def test_the_decisions_are_three_columns_that_carry_the_reports_figures(tmp_path
     # type, each read top to bottom: we chose, the model, over what, the figure, why
     built = _built(tmp_path, monkeypatch)
     decided = built.split("<h3>A few decisions I'd call out</h3>", 1)[1]
-    cols = decided.split('<ul class="about-chose">', 1)[1].split("</ul>", 1)[0]
+    cols = decided.split('<ul class="about-chose" data-reveal="stagger">', 1)[1]
+    cols = cols.split("</ul>", 1)[0]
     assert "about-card" not in cols and "ink" not in cols and "about-points" not in built
     items = re.findall(r"<li>(.*?)</li>", cols, flags=re.S)
     assert len(items) == 3

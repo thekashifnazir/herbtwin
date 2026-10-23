@@ -468,13 +468,24 @@
      dashed line is not in a .twin-line and keeps its own dashes */
   .answer-page details[open] .twin-line.on polyline {
     animation: line-draw .6s cubic-bezier(0.2,0,0,1) 120ms backwards; }
+}
+/* the chart sits low on the page, so its line drew unseen on load: now, below the first
+   screen, it waits wiped out and draws as the chart arrives (23 Oct, the shared reveal,
+   _reveal.html). Only the line waits, never the words round it */
+@media screen and (prefers-reduced-motion: no-preference) {
+  html.reveal-on .answer-page .twin-chart[data-reveal="draw"]:not(.is-in) .twin-line.on polyline {
+    clip-path: inset(-4px 100% -4px -4px); animation: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
   /* every fold slides open: its content drops in under the summary; closing is instant */
   .answer-page details[open] > :not(summary) { animation: fold-open .28s cubic-bezier(0.2,0,0,1); }
 }
 @keyframes band-rise { from { opacity: 0; transform: translateY(10px); } }
 @keyframes name-rise { from { transform: translateY(10px); } }
 @keyframes card-rise { from { opacity: 0; transform: translateY(22px); } }
-@keyframes card-reveal { from { opacity: .001; transform: translateY(22px); } }
+/* the scroll reveal moves a card, never fades it (23 Oct): at .001 its words failed contrast
+   until scrolled to, so a smoke walk had to run with Reduce Motion */
+@keyframes card-reveal { from { transform: translateY(22px); } }
 /* 4 px of room round the line's own box: the stroke's edges and caps stay whole while it draws */
 @keyframes line-draw { from { clip-path: inset(-4px 100% -4px -4px); } to { clip-path: inset(-4px); } }
 @keyframes fold-open { from { opacity: 0; transform: translateY(-8px); } }

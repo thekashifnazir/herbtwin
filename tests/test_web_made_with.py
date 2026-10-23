@@ -100,10 +100,10 @@ def test_the_cards_share_one_grid_so_each_is_the_same_size():
 
 def test_the_first_load_rises_in_once_a_session_and_never_with_reduced_motion(tmp_path):
     home = _home(tmp_path)
-    gate = home.split('<div class="home-band">', 1)[0]
-    assert 'sessionStorage.getItem("herbtwin-intro-seen")' in gate
-    assert 'matchMedia("(prefers-reduced-motion: no-preference)").matches' in gate
-    assert 'root.classList.add("first-load")' in gate
+    # 23 Oct: once a session is the first-visit intro's (_intro.html), never with Reduce
+    # Motion; the rise waits for it to lift (test_web_home_motion)
+    assert 'sessionStorage.getItem("herbtwin-intro")' in home
+    assert 'matchMedia("(prefers-reduced-motion: reduce)").matches) return;' in home
     css = style.CSS
     moving = css.split("@media (prefers-reduced-motion: no-preference) { .intro-go .home-page", 1)
     assert len(moving) == 2
@@ -118,7 +118,7 @@ def test_the_first_load_rises_in_once_a_session_and_never_with_reduced_motion(tm
 def test_on_the_first_load_the_twin_splits_instead_of_the_nudge(tmp_path):
     js = _home(tmp_path).split('const range = document.getElementById("twin-range")', 1)[1]
     js = js.split("})();", 1)[0]
-    assert 'const intro = document.documentElement.classList.contains("first-load");' in js
+    assert 'intro = root.classList.contains("intro-playing");' in js
     assert (
         'if (intro) frame.style.setProperty("--cut", "100%");' in js
     )  # opens on the healthy plant

@@ -260,8 +260,11 @@ def test_how_i_know_it_works_is_a_flow_that_ships_or_fails(tmp_path, monkeypatch
     # row and the fork takes the whole row under them, If it passes / If it fails
     _, _, works = _flows(tmp_path, True, monkeypatch)
     flow = works.split('<ol class="works-flow"', 1)[1].split("</ol>", 1)[0]
-    assert flow.count('<li class="step">') == 3 and flow.count('<li class="fork">') == 1
-    fork = flow.split('<li class="fork">', 1)[1]
+    assert (
+        flow.count('<li class="step">') == 3
+        and flow.count('<li class="fork" data-reveal="stagger">') == 1
+    )
+    fork = flow.split('<li class="fork" data-reveal="stagger">', 1)[1]
     assert fork.count('<div class="branch">') == 2
     for said in (
         "Write the test down first",
@@ -269,7 +272,7 @@ def test_how_i_know_it_works_is_a_flow_that_ships_or_fails(tmp_path, monkeypatch
         "Label it blind",
         "Trusted-page rounds: 2 labellers, yes only if both agree",
     ):
-        assert said in flow.split('<li class="fork">', 1)[0], said
+        assert said in flow.split('<li class="fork" data-reveal="stagger">', 1)[0], said
     for said in (
         '<p class="flow-by">If it passes</p><div class="node advisors"><strong>It ships</strong>',
         "round 8: 3 false agrees in 418",
@@ -599,7 +602,10 @@ def test_round_four_makes_one_lessons_panel_and_a_roadmap(tmp_path):
     assert didnt.count('<ul class="lesson-rows ink">') == 1 and didnt.count("<li><strong>") == 5
     assert "about-card" not in didnt
     nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
-    assert nxt.count('<ol class="roadmap">') == 1 and nxt.count("<li><strong>") == 5
+    assert (
+        nxt.count('<ol class="roadmap" data-reveal="stagger">') == 1
+        and nxt.count("<li><strong>") == 5
+    )
     assert "about-card" not in nxt
     css = style.CSS
     assert (

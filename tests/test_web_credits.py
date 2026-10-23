@@ -47,7 +47,8 @@ def test_each_image_group_on_home_links_to_the_credits_it_needs(tmp_path):
     home = _spot_client(tmp_path)[0].get("/").text
     # "Photo credits" by each group opens the fold (the pill's link went on 21 Oct)
     link = re.compile(r'<a class="credits-link" href="#credits">Photo credits</a>')
-    twin = home.split('<figure class="home-twin">', 1)[1].split("</figure>", 1)[0]
+    twin = home.split('<figure class="home-twin" data-reveal="rise">', 1)[1]
+    twin = twin.split("</figure>", 1)[0]
     how = home.split('<section class="home-how"', 1)[1].split("</section>", 1)[0]
     samples = home.split('<div class="home-chips"', 1)[1].split('<fieldset class="home-where">', 1)[
         0

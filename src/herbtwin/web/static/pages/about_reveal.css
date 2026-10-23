@@ -1,0 +1,58 @@
+/* About's scroll reveal (23 Oct, Kash: "make the pages feel dynamic … things appear and are
+   revealed in a way that makes sense"). The shared reveal (_reveal.html, herbtwin.css) rises
+   the flows' steps, the decisions and the roadmap's stops in turn as they arrive; this sheet
+   draws what is About's own: the weather's green path, the test cards' bars, the stops' dots.
+   Every held state needs html.reveal-on, so with no script or Reduce Motion all of it shows.
+   Lines, bars and dots only: never a fade, and the words beside them never wait. */
+
+/* How it's built, on a wide screen: when the twin's row arrives, the green path draws itself
+   from the weather down (its label riding down with it), along the gap between the rows, and
+   into the twin, about 0.75 s. On a phone there is no path, only the steps rising */
+@media screen and (prefers-reduced-motion: no-preference) and (min-width: 960px) {
+  html.reveal-on .about-page .flow-built > li.turn:has(+ li:not(.is-in)) > .flow-feed::before,
+  html.reveal-on .about-page .flow-built > li.turn:has(+ li:not(.is-in)) > .flow-feed::after,
+  html.reveal-on .about-page .flow-built > .turn + li:not(.is-in)::before { transform: scaleY(0); }
+  html.reveal-on .about-page .flow-built > li.turn:has(+ li:not(.is-in)) > .flow-feed > span {
+    transform: translateY(-12px); }
+  html.reveal-on .about-page .flow-built > .turn + li:not(.is-in)::after { transform: scaleX(0); }
+}
+@media (prefers-reduced-motion: no-preference) and (min-width: 960px) {
+  html.reveal-on .about-page .flow-built > li.turn:has(+ li.is-arriving) > .flow-feed::before {
+    transform-origin: top; animation: reveal-drop .2s linear 0ms backwards; }
+  html.reveal-on .about-page .flow-built > li.turn:has(+ li.is-arriving) > .flow-feed > span {
+    animation: reveal-ride .3s cubic-bezier(0.2,0,0,1) 100ms backwards; }
+  html.reveal-on .about-page .flow-built > li.turn:has(+ li.is-arriving) > .flow-feed::after {
+    transform-origin: top; animation: reveal-drop .12s linear 200ms backwards; }
+  /* the run goes from the weather's end to the twin's, so it grows leftward */
+  html.reveal-on .about-page .flow-built > .turn + li.is-arriving::after {
+    transform-origin: right; animation: reveal-run .3s linear 320ms backwards; }
+  html.reveal-on .about-page .flow-built > .turn + li.is-arriving::before {
+    transform-origin: top; animation: reveal-drop .15s linear 620ms backwards; }
+}
+@keyframes reveal-drop { from { transform: scaleY(0); } }
+@keyframes reveal-run { from { transform: scaleX(0); } }
+@keyframes reveal-ride { from { transform: translateY(-12px); } }
+
+/* How I know it works: each card's bars grow from the left to their value as they arrive,
+   one after another. The value is written beside each bar, so nothing is read off a bar
+   mid-way */
+@media screen and (prefers-reduced-motion: no-preference) {
+  html.reveal-on .about-page .works-bars[data-reveal="grow"]:not(.is-in) .bar > i { transform: scaleX(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-on .about-page .works-bars.is-arriving .bar > i {
+    transform-origin: left; animation: reveal-grow .4s cubic-bezier(0.2,0,0,1) 120ms backwards; }
+  html.reveal-on .about-page .works-bars.is-arriving > li:nth-child(2) .bar > i { animation-delay: 200ms; }
+  html.reveal-on .about-page .works-bars.is-arriving > li:nth-child(3) .bar > i { animation-delay: 280ms; }
+}
+@keyframes reveal-grow { from { transform: scaleX(0); } }
+
+/* What's next: each stop's dot pops onto the line as its step rises in */
+@media screen and (prefers-reduced-motion: no-preference) {
+  html.reveal-on .about-page .roadmap > li:not(.is-in)::before { transform: scale(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.reveal-on .about-page .roadmap > li.is-arriving::before {
+    animation: reveal-pop .3s cubic-bezier(0.2,0,0,1) var(--reveal-delay, 0ms) backwards; }
+}
+@keyframes reveal-pop { from { transform: scale(0); } }

@@ -1,0 +1,60 @@
+{# the shared scroll reveal (23 Oct, Kash: "make the pages feel dynamic … things appear and are
+   revealed in a way that makes sense"). A block opts in with data-reveal: rise, stagger (each
+   child rises as it arrives), draw or grow (the page's sheet draws its lines or bars).
+   herbtwin.css and the page's own sheet say how each moves, and only under html.reveal-on.
+   What is on the first screen, or above it, is marked in (.is-in) before anything is held, so
+   nothing in view ever waits; the rest is marked as it arrives (.is-arriving plays its motion),
+   once, and blocks arriving together go 80 ms apart, top to bottom, left to right. With no
+   script, no observer or Reduce Motion, reveal-on is never set and nothing is ever held. It
+   starts after the first-load intro, if one plays (intro-playing, then intro-done and the
+   herbtwin:intro-done event), and after 2 s at most. It replaces home's own reveal (H2) #}
+<script>
+(() => {
+  // the shared scroll reveal
+  if (!window.IntersectionObserver || !matchMedia("(prefers-reduced-motion: no-preference)").matches) return;
+  const html = document.documentElement;
+  let started = false;
+  const start = () => {
+    if (started) return;
+    started = true;
+    // the first screen's own rise (home's hero, home.css) plays as the intro lifts, on the
+    // visit it plays, and only in the real fonts: never under its green, never in a stand-in
+    if (html.classList.contains("intro-done") && (!document.fonts || document.fonts.status === "loaded")) html.classList.add("intro-go");
+    const items = [];
+    for (const el of document.querySelectorAll("[data-reveal]")) {
+      if (el.dataset.reveal !== "stagger") items.push(el);
+      else for (const kid of el.children) if (!kid.hasAttribute("data-reveal")) items.push(kid);
+    }
+    if (!items.length) return;
+    const arrive = new IntersectionObserver((entries) => {
+      entries.filter((x) => x.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top || a.boundingClientRect.left - b.boundingClientRect.left)
+        .forEach((x, i) => {
+          x.target.style.setProperty("--reveal-delay", Math.min(i, 4) * 80 + "ms");
+          x.target.classList.add("is-in", "is-arriving");
+          arrive.unobserve(x.target);
+        });
+    }, {threshold: 0});
+    for (const el of items) {
+      if (el.getBoundingClientRect().top < innerHeight) el.classList.add("is-in");
+      else arrive.observe(el);
+    }
+    // a jump to an anchor (Photo credits, #refine…) lands on the block where it will stay: the
+    // block holding the target is marked in before the browser scrolls, never 16 px low (review)
+    const land = (id) => {
+      const target = id && document.getElementById(decodeURIComponent(id));
+      if (!target) return;
+      for (const el of items) if (el.contains(target) || target.contains(el)) { el.classList.add("is-in"); arrive.unobserve(el); }
+    };
+    land(location.hash.slice(1));
+    document.addEventListener("click", (e) => {
+      const a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (a) land(a.getAttribute("href").slice(1));
+    }, true);
+    addEventListener("hashchange", () => land(location.hash.slice(1)));
+    html.classList.add("reveal-on");
+  };
+  if (!html.classList.contains("intro-playing") || html.classList.contains("intro-done")) start();
+  else { addEventListener("herbtwin:intro-done", start, {once: true}); setTimeout(start, 2000); }
+})();
+</script>

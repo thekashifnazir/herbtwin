@@ -1,7 +1,7 @@
 """19 Oct home motion H1-H3 (the judge's proposal): the first-visit intro never hides the
-words and waits for the real fonts; sections below the fold fade up as they scroll in; the
-sample chips slide in once on a phone. Opacity and a small move only, all off under Reduce
-Motion, and nothing hidden waiting for a script."""
+words and waits for the real fonts; sections below the fold rise as they scroll in (the shared
+reveal since 23 Oct); the sample chips slide in once on a phone. A small move only, all off
+under Reduce Motion, and nothing hidden waiting for a script."""
 
 import re
 
@@ -24,24 +24,33 @@ def _moving() -> list[tuple[tuple[str, ...], str, str]]:
 # the poster font's preload lives in base.html, shared by every page (#307), not here
 
 
-def test_the_rise_waits_for_the_fonts_and_gives_up_after_600_ms(tmp_path):
-    gate = _home(tmp_path).split('<div class="home-band">', 1)[0].rsplit("<script>", 1)[1]
-    assert "document.fonts.load('800 1em \"Fira Sans Extra Condensed\"')" in gate
-    assert "setTimeout(ok, 600, false)" in gate
-    assert 'root.classList.add("intro-go")' in gate
-    # the gate for the go class is the race: fonts first, or nothing moves
-    assert "Promise.race([fonts, late])" in gate
-    # still once a session, and never with Reduce Motion
-    assert 'sessionStorage.getItem("herbtwin-intro-seen")' in gate
-    assert 'matchMedia("(prefers-reduced-motion: no-preference)").matches' in gate
+def test_the_hero_rise_starts_only_from_the_shared_reveals_start(tmp_path):
+    """23 Oct: on a first visit the intro (_intro.html) covers the page for up to 1.4 s, and
+    the hero's rise used to play unseen under it. Now it starts from the shared reveal's
+    start() as the intro lifts, on the visit the intro plays (its own once a session), and
+    only once the real fonts are in; never on load from a gate of its own."""
+    page = _home(tmp_path)
+    assert "herbtwin-intro-seen" not in page and "first-load" not in page  # one flag: the intro's
+    assert page.count('classList.add("intro-go")') == 1
+    js = page.split("// the shared scroll reveal", 1)[1].split("})();", 1)[0]
+    start = js.split("const start = () => {", 1)[1].split("\n  };\n", 1)[0]
+    rise = (
+        'if (html.classList.contains("intro-done") && (!document.fonts || '
+        'document.fonts.status === "loaded")) html.classList.add("intro-go");'
+    )
+    assert rise in start
+    assert start.index("if (started) return;") < start.index(rise)  # once, like the rest
 
 
-def test_fonts_that_land_after_the_first_paint_skip_the_rise(tmp_path):
-    """The rise's `backwards` fill drops the words 16 px in one frame: on words already
-    painted that reads as a jump, so a late go never moves them (#313 review)."""
-    gate = _home(tmp_path).split('<div class="home-band">', 1)[0].rsplit("<script>", 1)[1]
-    assert "requestAnimationFrame(() => { painted = true; })" in gate
-    assert 'if (go && !painted) root.classList.add("intro-go");' in gate
+def test_the_twin_splits_after_the_intro_lifts(tmp_path):
+    js = _home(tmp_path).split('const range = document.getElementById("twin-range")', 1)[1]
+    js = js.split("})();", 1)[0]
+    assert 'intro = root.classList.contains("intro-playing")' in js
+    wait = (
+        'if (root.classList.contains("intro-playing")) { addEventListener("herbtwin:intro-done", '
+        "go, {once: true}); setTimeout(go, 2000); }"
+    )
+    assert wait in js and "if (went) return;" in js
 
 
 def test_the_intro_never_hides_the_words():
@@ -86,52 +95,34 @@ def test_a_chip_lifts_under_the_pointer_only_when_motion_is_welcome():
     )
 
 
-def _later_script(tmp_path) -> str:
+def test_below_the_fold_rises_as_it_arrives_staggered_by_the_shared_reveal(tmp_path):
+    """21 Oct, Kash: "make it more engaging". Each block below the first screen rises the
+    moment it starts to show, and blocks arriving together go one after another; the How it
+    works cards 1 to 4. 23 Oct: the shared reveal does it (_reveal.html, test_web_reveal), a
+    16 px rise and no fade, so home has no reveal of its own any more."""
     page = _home(tmp_path)
-    return page.split("// H2: only what starts below the first screen", 1)[1].split("})();", 1)[0]
-
-
-def test_below_the_fold_rises_24px_in_04s_staggered_as_it_arrives(tmp_path):
-    """21 Oct, Kash: "make it more engaging". Each block below the first screen rises 24 px
-    over 0.4 s the moment it starts to show, and blocks arriving together go one after
-    another. Hidden only while below the screen's edge, so nothing in view is ever held."""
-    reveal = [r for r in _moving() if "home-reveal" in r[2]]
-    assert len(reveal) == 1
-    at, sel, body = reveal[0]
-    assert sel == ".home-page .home-later.home-in"
-    assert any("prefers-reduced-motion: no-preference" in a for a in at)
-    assert "home-reveal .4s" in body and EASE in body and "backwards" in body
-    assert "animation-delay: var(--reveal-delay, 0ms)" in body
-    # held back only until it shows, and only where motion is welcome: never for a screen
-    # reader's print or a Reduce Motion visitor
-    held = [r for r in _rules(HOME_CSS) if r[1] == ".home-page .home-later:not(.home-in)"]
-    assert len(held) == 1 and "opacity: 0" in held[0][2]
-    assert any("prefers-reduced-motion: no-preference" in a and "screen" in a for a in held[0][0])
-    frames = _keyframes("home-reveal")
-    move = int(re.search(r"translateY\((\d+)px\)", frames)[1])
-    assert 20 <= move <= 24 and "opacity: 0" in frames
-    js = _later_script(tmp_path)
-    # nothing is marked without the observer or with Reduce Motion: then everything just shows
+    assert "home-later" not in page and "home-reveal" not in HOME_CSS
+    js = page.split("// the shared scroll reveal", 1)[1].split("})();", 1)[0]
+    # nothing is held without the observer or with Reduce Motion: then everything just shows
     guard = 'matchMedia("(prefers-reduced-motion: no-preference)").matches'
     assert "window.IntersectionObserver" in js and guard in js
-    assert js.index(guard) < js.index('classList.add("home-later")')
-    assert "e.getBoundingClientRect().top > innerHeight" in js
-    # shown the moment any of it is on screen, once, and the ones that arrive together stagger
-    assert "new IntersectionObserver" in js and "threshold: 0" in js
-    assert "Math.min(i, 3) * 80" in js and '"--reveal-delay"' in js
-    assert 'classList.add("home-in")' in js and "unobserve(" in js
-    for part in (
-        ".home-twin",
-        ".home-sample",
-        ".home-tile",
-        ".home-how-cards > li",
-        ".home-how-sources",
-        ".made-with",
+    assert js.index(guard) < js.index('classList.add("reveal-on")')
+    assert "el.getBoundingClientRect().top < innerHeight" in js  # the first screen never waits
+    assert "threshold: 0" in js and "Math.min(i, 4) * 80" in js and "unobserve(" in js
+    for block in (
+        '<figure class="home-twin" data-reveal="rise">',
+        '<p class="home-example-in" data-reveal="rise">',
+        'class="card home-sample" aria-label="Example answer" data-reveal="rise">',
+        '<div class="home-bento" data-reveal="stagger"',
+        '<h2 id="home-how-h" data-reveal="rise">',
+        '<ol class="home-how-cards" data-reveal="stagger">',
+        '<p class="home-how-sources" data-reveal="rise">',
+        '<section class="made-with" id="made-with" aria-labelledby="made-with-h" data-reveal="stagger">',
     ):
-        assert part in js, part
+        assert page.count(block) == 1, block
     # never the hero, the photo or the chips: they are in view at first paint
-    for kept in (".home-hero", ".home-photo", ".home-pick", ".home-go"):
-        assert kept not in js, kept
+    hero = page.split('<div class="home-band">', 1)[1].split('<figure class="home-twin"', 1)[0]
+    assert "data-reveal" not in hero
 
 
 def test_every_home_motion_is_opt_in_and_prefixed():
