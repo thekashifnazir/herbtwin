@@ -33,12 +33,12 @@ def _order(rules: dict[str, str], sel: str) -> int:
 
 
 def test_on_a_phone_compare_follows_the_twin_and_the_chat_follows_this_week():
+    # since 23 Oct Compare is in the twin's section with the twin pictures: one place
     rules = _phone()
     order = [
         _order(rules, ".answer-page .answer-cols .main-action, .answer-page .answer-cols > .plan > .came-from"),
         _order(rules, ".answer-page .answer-cols > :is(.your-photo, .your-more)"),
-        _order(rules, ".answer-page .answer-cols > .plan > :is(.seen-problem, .twin)"),
-        _order(rules, ".answer-page .answer-cols > .side > .details > details.compare"),
+        _order(rules, ".answer-page .answer-cols > .plan > :is(.seen-problem, .twin-sec)"),
         _order(rules, ".answer-page .answer-cols > .plan > :is(.this-week, .reported)"),
         _order(rules, ".answer-page .answer-cols > .side > #chat"),
         _order(rules, ".answer-page .answer-cols > .plan > *"),  # the rest of the plan
@@ -71,12 +71,14 @@ def test_the_card_still_pulls_up_over_the_band_without_its_column():
     assert "margin-top: -48px" in card and "position: relative" in card
 
 
-def test_compare_and_the_chat_stay_in_the_side_column_in_the_markup():
-    # the move is the phone's order only: on a desktop both stay in the side column, Compare
-    # inside How we worked it out
+def test_compare_is_in_the_plan_and_the_chat_in_the_side_column_in_the_markup():
+    # the chat's move is the phone's order only: on a desktop it stays in the side column.
+    # Compare moved in the markup (23 Oct, Kash: the twin front and centre): in the plan, in
+    # the twin's section; only a no-cure answer's folded line stays in How we worked it out
     src = (Path(__file__).parents[1] / "src/herbtwin/web/templates/result.html").read_text()
     side = src.index('<div class="side">')
     assert side < src.index('<section class="ask chat" id="chat"')
+    assert src.index('<div class="compare ts-panel">') < side
     assert side < src.index('<section class="details"') < src.index('<details class="compare')
 
 

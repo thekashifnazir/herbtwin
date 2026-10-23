@@ -36,7 +36,8 @@ is in the submission form; it is not in this repository.
 3. **Read the answer.** It comes in three blocks (on a wide screen the first is on the
    left, the other two on the right; on a phone it is one list, in this order: the main
    card and where it came from, your photo, the problem the photo check saw (when it saw
-   one), the twin pictures, Compare all choices, This week, Tell us more, then the rest.
+   one), **Your plant's twin** (the twin pictures and Compare all choices), This week, Tell
+   us more, then the rest.
    When the answer is not sure and has questions to ask below (not just the one on the
    band, such as the town or indoors or outdoors), or after a question you typed went with
    Check the advice again, Tell us more comes straight after the card, before your photo):
@@ -48,9 +49,17 @@ is in the submission form; it is not in this repository.
      light at that moment ("Light at 14:05: part shade, about 40% of open-sky light"); then the main action in one
      big card with a green head: its tag (TODAY; no tag when the advice is to leave it), the
      headline with the plant's face beside it (beside its **Hear it** button when the plant's
-     voice is on), then short ruled rows: why, and what happens
-     if you do it, led by where that comes from ("Tested on your plant's twin: …"; when
-     there is data on that); then "How sure we are" as a chip, a green "Our best read" or
+     voice is on). When the twin ran (outdoors, with a forecast), the card's line comes from
+     it and the twin backs the advice (it rated the advice better than leaving it, or the
+     advice is to leave it), and the advice is not against the cold (bringing a tender plant
+     in, protecting it from cold nights: soil water cannot show the cold), a strip under the headline, "Your plant's twin · today to 2
+     weeks", draws the twin's soil water for the advice as a green line against leaving it
+     (for a "Leave it" answer, against the choice rated better, else the one whose line
+     differs most), with the dotted "needs water" line; its caption is the card's twin line
+     ("Tested on your plant's twin: …") and a **Compare all choices** link down to the
+     twin's section. Then short ruled rows: why, and, without the strip, what
+     happens if you do it, led by where that comes from ("Tested on your plant's twin: …";
+     when there is data on that); then "How sure we are" as a chip, a green "Our best read" or
      an amber "Not sure, check first", with one plain line beside it on what that meant in
      our tests: "Right about half the time in our tests" or "Right about 1 in 3 times in our
      tests". When it is not sure and one thing lowered it most, the line says so ("Mostly:
@@ -68,8 +77,17 @@ is in the submission form; it is not in this repository.
      then, with Make this surer beside it. Under
      the chips, a small link, "**Indoors? Switch and we'll redo the advice for an indoor
      plant**" (or the outdoor mirror), re-runs the advice indoors (no forecast) or
-     outdoors. For a sample photo, **Your plant in ~7 days**: two pictures of the plant if
-     you do it and if you don't, each captioned in a deep-green chip. Then one **This week**
+     outdoors. Right after the card (and the photo check, when it saw a problem), when the
+     twin ran: **Your plant's twin**, a deep-green section that says what the twin is ("Each
+     choice is tried first on your plant's twin, a small water-and-frost model, against the
+     next 2 weeks of weather."), what it found ("Protecting it beats leaving it."), for a
+     sample photo **Your plant in ~7 days** (two pictures of the plant if you do it and if
+     you don't, each captioned in a deep-green chip), then
+     **Compare all choices (next 2 weeks)**: the twin's chart (each choice's soil water, cold nights in blue, starting on
+     the choice the card's strip drew; tap a choice to draw its line) and each action against
+     leaving it, tested on the plant's twin, in a row of its own (the twin can't model light:
+     where the advice sends the plant to the light, the finding and the "Move it to better
+     light" row say so, not "does nothing extra"). Then one **This week**
      panel, a row for each kind of job, each led by a tag in its colour: **Also do**
      (green; when the headline is "Bring it indoors to a bright windowsill.", its first row is
      "Check the tray", for today), **Don't**
@@ -114,13 +132,9 @@ is in the submission form; it is not in this repository.
      with its model, its seconds and its cost, then the answer's total against an estimate
      for NVIDIA Nemotron 3 Ultra on every step; then, folded, **Why it's our best read** (or **Why
      we're not sure**: what helped (▲), what lowered it (▼), what was missing (?) and what made no
-     difference (·), in words, each factor once under its net effect), **Compare all choices
-     (next 2 weeks)** under a deep-green head, the twin's colour (outdoors, once we know where it is, and open from the start whenever the
-     twin ran, so its chart shows without a tap; or, folded, a line saying why the choices
-     don't apply when there is no cure:
-     each action
-     against leaving it, tested on the plant's twin: a small water-and-frost model of the
-     plant run over the next 2 weeks of weather) and **What we went on**
+     difference (·), in words, each factor once under its net effect), for a no-cure answer
+     only, folded, **Compare all choices** saying why the choices don't apply (when the twin
+     ran, Compare is in **Your plant's twin**, above), and **What we went on**
      (the evidence behind the answer: the photo, the weather, the season, the care facts, any
      closer photo check and the model's assumptions, counted in its label; its title is what the weather holds, such
      as "2 cold spells in 2 weeks", the spells the chart marks with ❄︎).

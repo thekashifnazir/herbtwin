@@ -2,6 +2,33 @@
 
 Committed before any worker sees the task and before any Toloka spend.
 
+## Amendment, 23 Oct 2026 (before any worker, any data or any Toloka spend)
+
+**One run, not a trial and a main run.** Kash, 23 Oct, relayed by the integrator: "it
+normally takes a day right for people to do it so i will run out of time before credit can
+we just change it so we just do one run". The Toloka credit may lapse around 25 Oct, and a
+trial then a main run would need about two days of worker time.
+
+- **The run:** 1 task, overlap **11**, on the same sample, at the same pay: $1.25 a task,
+  $1.6667 with Toloka's 33%, so **$18.33** of the $20.40 balance. The forecast in Toloka's
+  deploy window stays the binding number; if its maximum is over $18.40, the overlap comes
+  down until it fits.
+  Read on 23 Oct with overlap 11: $18.34 expected and maximum. The dataset is the one-row
+  `site-study-trial-t01.json` already uploaded (task id t01, the same sample and site).
+- **Superseded below:** the "Trial" section, the cost table's Trial 3 / Main run 8 rows,
+  "the two runs together", the trial-and-main-run overlap line, and the 7-minute pay rule.
+  The run is the single overlap-11 task above.
+- **A broken task** (a field that will not save, a step nobody can follow, a site error) is
+  judged ONLY from Q2 (reached the page), Q8 (free text) and the site's own log, never from
+  the answers to Q3, Q5 or Q6. Only the rows of workers who hit the fault are dropped, and
+  they are reported with what happened. If it breaks for every worker, the run is reported
+  as failed, with no pass or fail on the bars.
+- **Unchanged:** the task's ten questions, the scoring, the bars (P1 ≥ 70%, S1 ≥ 60%, S2 ≥
+  70%; S3 to S6 reported), the two blind labellers, Wilson intervals, privacy, and raw
+  answers off git. One answer per Toloka annotator id, as before.
+- **The site does not change while workers are on it:** the integrator holds visible
+  deploys for the run. The revision is still read from the site and recorded.
+
 ## Why
 
 The story's "Not done yet" lists a beginner user test on the final site. Kash asked for

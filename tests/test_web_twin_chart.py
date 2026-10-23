@@ -71,7 +71,7 @@ def test_compare_draws_the_twin_with_a_line_per_choice_and_tappable_rows(tmp_pat
     shown = "shelter"  # the better choice is drawn first
     assert f'data-shown="{shown}"' in page and (" on", shown) in lines
     # each drawn choice is a button in the table, the shown one pressed
-    table = page.split('<details class="compare fold', 1)[1].split("</table>", 1)[0]
+    table = page.split('<div class="compare ts-panel">', 1)[1].split("</table>", 1)[0]
     picks = re.findall(r'class="twin-pick" data-line="(\w+)"[^>]*aria-pressed="(\w+)"', table)
     assert {a for a, _ in picks} == {a for _, a in lines}
     assert [a for a, p in picks if p == "true"] == [shown]
@@ -241,7 +241,8 @@ def test_the_shown_and_left_out_bands_both_draw_their_edges(tmp_path):
 
 
 def test_the_twin_chart_is_open_from_the_start_when_the_twin_ran(tmp_path):
-    # 22 Oct, Kash: the twin chart open by default; it is the thing only herbtwin shows
+    # 22 Oct, Kash: the twin chart open by default; it is the thing only herbtwin shows. Since
+    # 23 Oct it is never folded: it sits in the twin's section after the card
     from herbtwin.schemas import CompareRow
     from tests.test_web_answer_page import _render, _unsure_record
 
@@ -250,7 +251,8 @@ def test_the_twin_chart_is_open_from_the_start_when_the_twin_ran(tmp_path):
         CompareRow(action="leave_normal", vs_leaving_it="same", why="baseline"),
         CompareRow(action="shelter", vs_leaving_it="better", why="no cold nights"),
     ]
-    assert '<details class="compare fold fold-twin" open>' in _render(rec)
+    page = _render(rec)
+    assert '<section class="twin-sec"' in page and '<details class="compare' not in page
     # nothing compared (a no-cure answer): the "Not compared" line stays folded
     from herbtwin.answer import NO_CURE_HEADLINE
 
@@ -372,7 +374,7 @@ def test_every_cold_window_has_a_snowflake_and_one_says_cold_spells(tmp_path):
 
 def test_the_compare_table_says_better_or_same_in_tags_and_never_baseline(tmp_path):
     page = _render(_cold_basil(_record(tmp_path)))
-    fold = page.split('<details class="compare fold', 1)[1].split("</details>", 1)[0]
+    fold = page.split('<div class="compare ts-panel">', 1)[1].split("</table>", 1)[0]
     assert "baseline" not in fold.lower()
     rows = fold.split("<tbody>", 1)[1].split("</tbody>", 1)[0].split("<tr>")[1:]
     by = {re.search(r'data-line="(\w+)"', r)[1]: r for r in rows}

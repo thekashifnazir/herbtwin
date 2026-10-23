@@ -46,13 +46,13 @@ def test_compare_names_what_beats_leaving_it(tmp_path):
         CompareRow(action="shelter", vs_leaving_it="better", why="no cold nights"),
         CompareRow(action="water", vs_leaving_it="worse", why="wet roots"),
     ]
-    head = _summary(_render(rec), "compare")
-    assert "fold-twin" in head
-    # the finding is the title now, what did nothing or harm under it (22 Oct, "B2")
-    assert '<span class="fold-title">Protecting it beats leaving it</span>' in head
-    assert '<span class="fold-peek">Watering makes it worse</span>' in head
+    # since 23 Oct the finding heads the twin's section after the card, Compare's home now:
+    # its title in bold, what did nothing or harm after it (22 Oct, "B2")
+    find = _render(rec).split('<p class="ts-find">', 1)[1].split("</p>", 1)[0]
+    assert find == "<strong>Protecting it beats leaving it.</strong> Watering makes it worse."
     rec.answer.compare = [r for r in rec.answer.compare if r.vs_leaving_it != "better"]
-    assert "Nothing beats leaving it" in _summary(_render(rec), "compare")
+    find = _render(rec).split('<p class="ts-find">', 1)[1].split("</p>", 1)[0]
+    assert find.startswith("<strong>Nothing beats leaving it.</strong>")
 
 
 def test_the_sources_fold_says_what_it_holds(tmp_path):

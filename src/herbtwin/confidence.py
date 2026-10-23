@@ -88,8 +88,8 @@ _TIER_WORDS = {
     "D": "a gardeners' rule of thumb",
 }
 # two levels on the page, not three numbers (19 Oct answer-quality check, pre-registered on
-# 624 held-out questions): "about 7 in 10" matched the expert 0.51 [0.45, 0.57], and the
-# middle level (0.31) was no better than the bottom (0.32), so both read "not sure"
+# 624 held-out questions): "about 7 in 10" matched the gardener's answer 0.51 [0.45, 0.57],
+# and the middle level (0.31) was no better than the bottom (0.32), so both read "not sure"
 LEVEL_TEXT = {
     "not_sure": "Not sure: check first",
     "fairly_sure": "Not sure: do the quick check first, or take the low-risk step",

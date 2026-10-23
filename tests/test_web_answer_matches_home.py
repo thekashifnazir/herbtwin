@@ -75,7 +75,7 @@ def test_the_answer_uses_homes_heads_pills_and_sky():
     for rule in (
         ".answer-page .also h2, .answer-page .dont h2, .answer-page .watch h2 { margin: 0 0 4px;"
         " font: 700 18px/1.3 var(--sans); letter-spacing: 0; }",
-        ".answer-page .twin h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }",
+        ".answer-page .twin :is(h2, h3) { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }",
         ".answer-page { --cold: var(--sky); --cold-fg: var(--sky-fg); }",
         "border-radius: var(--pill);",
     ):

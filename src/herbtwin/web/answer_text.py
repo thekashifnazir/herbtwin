@@ -22,9 +22,13 @@ SKIP_TAGS = {"script", "style", "button", "audio", "figure", "svg", "template"}
 # "indoor-light": that indoor light isn't measured, and the ask for the window (22 Oct)
 # "sure-open", "sure-body": How sure's disclosure, its cue and its explanation (23 Oct): what
 # the level means and why, said about our sureness, not advice
+# the twin front and centre (23 Oct): the card strip's head and its link ("strip-h",
+# "strip-go"; its caption is the card's twin line and is kept), and the twin section's head,
+# what the twin is, its finding and Compare ("ts-h", "ts-what", "ts-find", "compare"), said
+# about the twin, not advice; the twin pictures' block in it is kept, as before
 SKIP_CLASSES = {
     "make-surer", "next-step", "by-part", "extras", "reported", "told-echo", "indoor-light",
-    "sure-open", "sure-body",
+    "sure-open", "sure-body", "strip-h", "strip-go", "ts-h", "ts-what", "ts-find", "compare",
 }  # fmt: skip
 VOID = {"img", "br", "hr", "input", "meta", "link", "source"}
 BLOCKS = {"p", "h2", "h3", "li", "ul", "div", "section"}  # each starts a new paragraph
@@ -67,7 +71,9 @@ class _Plan(HTMLParser):
         if tag in BLOCKS:
             self.flush(self.prefix)
             self.prefix = ""
-            if tag == "h2":
+            # the twin pictures' heading is an h3 inside the twin's own section (review of #511):
+            # raters read it as before, "### Your plant in ~7 days"
+            if tag == "h2" or (tag == "h3" and a.get("id") == "twin"):
                 self.prefix = "## " if a.get("id") == "main-action" else "### "
             elif tag == "li":
                 self.prefix = "- "

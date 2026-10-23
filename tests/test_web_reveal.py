@@ -231,7 +231,12 @@ def test_the_rater_text_is_untouched_by_the_hooks(tmp_path):
     page = _render_twin(_cold_basil(_record(tmp_path)))
     bare = re.sub(r' data-reveal="\w+"', "", page)
     assert plan_text(page) == plan_text(bare)
-    assert "data-reveal" not in page.split('class="plan', 1)[1].split('class="side', 1)[0]
+    # the plan's one hook is the chart's, in the twin's section (23 Oct), whose Compare panel
+    # the rater text skips; the band and the cards never wait
+    plan = page.split('class="plan', 1)[1].split('class="side', 1)[0]
+    assert re.findall(r'<(\w+)[^>]* data-reveal="(\w+)"', plan) == [("figure", "draw")]
+    panel = plan.split('<div class="compare ts-panel">', 1)[1]
+    assert panel.index('data-reveal="draw"') < panel.index("</figure>")
 
 
 def test_the_answer_cards_scroll_reveal_moves_but_never_fades():

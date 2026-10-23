@@ -67,7 +67,7 @@ from herbtwin.chat import links_from as chat_links
 from herbtwin.compass import tap_from_sensor
 from herbtwin.config import Settings, load_settings, parse_coordinate
 from herbtwin.consequences import NO_DATA
-from herbtwin.fold_titles import fold_titles
+from herbtwin.fold_titles import fold_titles, row_why
 from herbtwin.history import HistoryError
 from herbtwin.light import light_said
 from herbtwin.local_help import local_help_from
@@ -130,7 +130,7 @@ from herbtwin.stages.trusted_page import read_more
 from herbtwin.sun_arc import sun_arc
 from herbtwin.tracing import trace_root, traced
 from herbtwin.twin_bank import figure as twin_figure
-from herbtwin.twin_chart import plain_why, twin_chart
+from herbtwin.twin_chart import starting_on, twin_chart, twin_strip
 from herbtwin.usage import SupabaseUsage, UsageError, UsageStore, Verdict, uk_day, visitor_key
 from herbtwin.voice import UNAVAILABLE as VOICE_UNAVAILABLE
 from herbtwin.voice import Spoken, SpokenCache, VoiceError, persona_for, speak, voice_basis
@@ -236,7 +236,9 @@ TEMPLATES.env.globals["tray_heading"] = TRAY_HEADING
 TEMPLATES.env.globals["sample_files"] = sample_files  # home: a picked sample is set in London
 TEMPLATES.env.globals["picture"] = picture  # a shown JPEG as right-sized WebP copies
 TEMPLATES.env.globals["twin_chart"] = twin_chart  # Compare's 14-day line
-TEMPLATES.env.globals["plain_why"] = plain_why  # Compare's reasons as plain sentences
+TEMPLATES.env.globals["twin_strip"] = twin_strip  # the main card's twin strip (23 Oct)
+TEMPLATES.env.globals["starting_on"] = starting_on  # the chart starts on the strip's pair
+TEMPLATES.env.globals["row_why"] = row_why  # Compare's reasons as plain sentences
 TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
 TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the year
 TEMPLATES.env.globals["starters"] = starters  # "Ask about this plant": 3 to tap

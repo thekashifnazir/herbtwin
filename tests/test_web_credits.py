@@ -200,7 +200,10 @@ def test_the_footer_is_one_footer_with_one_divider(tmp_path):
     for path, page in pages.items():
         foot = page.split('<footer class="foot">', 1)[1].split("</footer>", 1)[0]
         order = ['<div class="foot-brand">', '<nav class="foot-links"', '<div class="maker">']
-        order.append('<p class="foot-fine">© 2026 Kashif Nazir · <a href="https://open-meteo.com/"')
+        order.append(
+            '<p class="foot-fine">© 2026 Kashif Nazir <span class="foot-credit">· '
+            '<a href="https://open-meteo.com/"'
+        )
         assert [foot.index(part) for part in order] == sorted(foot.index(p) for p in order), path
         assert foot.count('class="wrap"') == 1 and "maker-row" not in foot, path
         assert "herbtwin</span>" in foot.split('<nav class="foot-links"', 1)[0], path

@@ -13,7 +13,8 @@ from tests.test_web_twin_chart import _cold_basil, _record
 
 CSS = (style.STATIC / "pages" / "answer.css").read_text(encoding="utf-8")
 OPT_IN = "prefers-reduced-motion: no-preference"
-CARDS = ":is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details)"
+# the twin's section rises as the twin pictures did, which it now holds (23 Oct)
+CARDS = ":is(.plan, .side) > :is(.seen-problem, .twin-sec, .also, .dont, .watch, .by-part, .next-step, .ask, .details)"
 
 
 def _moving(sel_part):
@@ -123,7 +124,7 @@ def test_the_how_sure_badge_settles_in_and_no_meter_fills():
     assert "badge-in" in settle[0][2]
 
 
-def test_the_compare_line_draws_itself_when_the_fold_opens_or_a_choice_is_tapped(tmp_path):
+def test_the_compare_line_draws_itself_as_it_arrives_or_a_choice_is_tapped(tmp_path):
     page = _render(_cold_basil(_record(tmp_path)))
     svg = page.split('<figure class="twin-chart"', 1)[1].split("</svg>", 1)[0]
     lines = re.findall(r'<g class="twin-line[^"]*"[^>]*>.*?</g>', svg, flags=re.S)
@@ -136,8 +137,9 @@ def test_the_compare_line_draws_itself_when_the_fold_opens_or_a_choice_is_tapped
     assert len(draw) == 1
     at, sel, body = draw[0]
     assert _opted_in(at)
-    # the shown line, only once Compare is open: tapping another choice moves .on and redraws
-    assert sel == ".answer-page details[open] .twin-line.on polyline"
+    # the shown line: tapping another choice moves .on and redraws. Never waiting for a fold
+    # to open: since 23 Oct the chart sits in the twin's section, never in a fold
+    assert sel == ".answer-page .twin-chart .twin-line.on polyline"
     assert "line-draw" in body and ".base" not in sel
     # backwards only: unclipped once drawn; and no dashes on the line, moving or not
     assert body.rstrip(";").endswith("backwards")

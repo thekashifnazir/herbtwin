@@ -13,10 +13,10 @@ the template draws the SVG from these numbers, and a tap on a choice row shows i
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from herbtwin.plant_model import TIP, TWIN_FOR, _cold, is_tender, judged_by
-from herbtwin.schemas import AnalysisRecord, CareAction, RiskStrip
+from herbtwin.schemas import AnalysisRecord, Answer, CareAction, RiskStrip
 
 # the SVG's own coordinates (viewBox); the page scales it to the column's width
 WIDTH, HEIGHT = 340, 150
@@ -337,3 +337,141 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
         weeks_y=AXIS_Y_COLD if cold_any else 140,
         weeks=[(x(0), "Today")] + ([(x(7), "1 week")] if n > 7 else []) + [(x(n), when)],
     )
+
+
+# ---------- the main card's twin strip (23 Oct, Kash: "give it a more prominent role … It's
+# the whole point of the website, being the twin and what happens"; mock A) ----------
+# Leaving it's line against one other choice's, cropped to the band they use, with the
+# needs-water line: the chart's own numbers, never a new claim.
+STRIP_X, STRIP_W = 20.0, 318.0  # the strip's viewBox runs from just left of Today to the end
+STRIP_NAME_UP = 12.0  # a name's letters stand this far above its baseline
+STRIP_AXIS = 16.0  # the week labels' baseline under the lowest thing drawn
+
+
+@dataclass(frozen=True)
+class TwinStrip:
+    base: Line  # leaving it
+    other: Line  # the one choice drawn against it
+    lead: CareAction  # the line drawn green: the advice when it is one of the two
+    view: tuple[float, float, float, float]  # the viewBox: x, y, width, height
+    needs_y: float
+    needs_label: tuple[float, float]
+    base_name_y: float
+    other_name_y: float
+    today: tuple[float, float]
+    weeks: list[tuple[float, str]]
+    weeks_y: float
+    title: str  # its label for a screen reader: soil water, and the two lines it draws
+
+
+def strip_pick(chart: TwinChart, answer: Answer) -> CareAction | None:
+    """The one choice the strip draws against leaving it, under the card's own twin line: the
+    card's own job, so the green line is always the headline's (review of the strip, 23 Oct:
+    "Water it." over a green Protect it line). Only when the card says leave it does it pick
+    another: one the twin rated better, else the one whose line differs most from leaving it.
+    None when the card's job has no line drawn, or there is no leave-it line to draw against."""
+    by = {ln.action: ln for ln in chart.lines}
+    base = by.get("leave_normal")
+    main = answer.do[0].action if answer.do else None
+    if base is None or main is None or main not in by:
+        return None
+    if main != "leave_normal":
+        return main
+    others = [ln for ln in chart.lines if ln.action != "leave_normal"]
+    if not others:
+        return None
+    better = [r.action for r in answer.compare if r.vs_leaving_it == "better" and r.action in by]
+    better = [a for a in better if a != "leave_normal"]
+    if better:
+        return better[0]
+    ys = [y for _, y in _pts(base.points)]
+
+    def gap(ln: Line) -> float:
+        return sum(abs(a - b) for (_, a), b in zip(_pts(ln.points), ys, strict=False))
+
+    return max(others, key=gap).action  # max keeps the first of equals: Compare's order
+
+
+def twin_backs(answer: Answer) -> bool:
+    """Whether the twin backs the card's job: leave it, or a job it rated better than leaving
+    it. A "Water it." the twin rates the same as leaving it gets no strip: the card stays as it
+    was, its line in its body (review of the strip, 23 Oct: the parsley sample)."""
+    main = answer.do[0].action if answer.do else None
+    if main == "leave_normal":
+        # "Leave it, but protect it before the cold night on …" leads with leave_normal yet
+        # asks for protection: a green Leave it line would not be its advice (review of #511)
+        from herbtwin.answer import _headline_action  # answer imports this module
+
+        return _headline_action(answer.headline) == "leave_normal"
+    return any(r.action == main and r.vs_leaving_it == "better" for r in answer.compare)
+
+
+def cold_job(chart: TwinChart, answer: Answer) -> bool:
+    """Whether the card's job wins on the cold: "Bring it indoors to a bright windowsill." (a
+    tender plant from October to March, our rule), or a Protect it whose line misses cold
+    nights that leaving it has. The strip draws soil water only, so it gets none: its green
+    Protect it line sat drier than Leave it (indoors, no rain) with no cold night to say why
+    (23 Oct judge walk, a flowering basil). A Protect it that wins on drying keeps it."""
+    from herbtwin.answer import TENDER_HEADLINE  # answer imports this module
+
+    if not answer.do or answer.do[0].action != "shelter":
+        return False
+    if answer.headline == TENDER_HEADLINE:
+        return True
+    by = {ln.action: ln for ln in chart.lines}
+    base, kept = by.get("leave_normal"), by.get("shelter")
+    return base is not None and kept is not None and len(kept.cold) < len(base.cold)
+
+
+def twin_strip(chart: TwinChart | None, answer: Answer) -> TwinStrip | None:
+    """The strip's geometry from the chart's own lines, or None: no chart, the twin does not
+    back the card's job, the job wins on the cold (cold_job), or no pair to draw. The green
+    line is the card's job."""
+    if chart is None or not twin_backs(answer) or cold_job(chart, answer):
+        return None
+    pick = strip_pick(chart, answer)
+    if pick is None:
+        return None
+    by = {ln.action: ln for ln in chart.lines}
+    base, other = by["leave_normal"], by[pick]
+    lead = answer.do[0].action
+    pts = [_pts(base.points), _pts(other.points)]
+    base_y = other.base_name_y if other.base_name_y is not None else base.name_y
+    needs_label = _needs_label(chart.needs_y, chart.today, pts, [])
+    ys = [y for line in pts for _, y in line] + [chart.needs_y]
+    top = min(*ys, base_y - STRIP_NAME_UP, other.name_y - STRIP_NAME_UP, needs_label[1] - 11)
+    low = max(*ys, base_y + 3, other.name_y + 3, needs_label[1] + 3)
+    top, weeks_y = round(top - 4, 1), round(low + STRIP_AXIS, 1)
+    first, second = (base, other) if lead == base.action else (other, base)
+    return TwinStrip(
+        base=base,
+        other=other,
+        lead=lead,
+        view=(STRIP_X, top, STRIP_W, round(weeks_y + 4 - top, 1)),
+        needs_y=chart.needs_y,
+        needs_label=needs_label,
+        base_name_y=base_y,
+        other_name_y=other.name_y,
+        today=chart.today,
+        weeks=chart.weeks,
+        weeks_y=weeks_y,
+        # soil water only: the strip draws no cold nights, whatever the chart's own title says
+        title=f"Soil water over the next {chart.weeks[-1][1]}: {first.name} and {second.name}",
+    )
+
+
+def starting_on(chart: TwinChart, action: CareAction) -> TwinChart:
+    """The chart drawn first on another of its lines (the strip's, so the card and the twin's
+    section show the same pair), with "needs water" placed clear of that line, not the one it
+    would have started on."""
+    if action == chart.shown or action not in {ln.action for ln in chart.lines}:
+        return chart
+    drawn = [_pts(ln.points) for ln in chart.lines if ln.action in (action, "leave_normal")]
+    rest = [_pts(ln.points) for ln in chart.lines if ln.action not in (action, "leave_normal")]
+    return replace(
+        chart, shown=action, needs_label=_needs_label(chart.needs_y, chart.today, drawn, rest)
+    )
+
+
+def _pts(points: str) -> list[tuple[float, float]]:
+    return [(float(a), float(b)) for a, b in (p.split(",") for p in points.split())]

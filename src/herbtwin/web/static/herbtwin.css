@@ -240,6 +240,7 @@ main { padding: 32px 0 48px; }
 .foot a.maker-icon { justify-content: center; min-width: 44px; }
 .foot :is(.maker-name, .maker-links a):hover { color: var(--primary); }
 .foot-fine { grid-area: fine; margin: 12px 0 0; padding-top: 4px; border-top: 1px solid var(--border); text-align: center; font-size: 16px; }
+.foot-credit { white-space: nowrap; }  /* the dot stays with the Open-Meteo link when it wraps */
 /* on a phone: the wordmark and links, then who made it, then the last line */
 @media (max-width: 720px) {
   .foot .wrap { grid-template-columns: minmax(0, 1fr); grid-template-areas: "brand" "links" "maker" "fine"; }

@@ -101,7 +101,8 @@
      whether the card already has the one main button (review of #364: with the place the
      only question, neither had it) #}
   {% if a %}
-  {# the two levels the page shows, and what each matched on 624 held-out expert questions
+  {# the two levels the page shows, and what each matched on 624 real gardening questions with
+     answers from experienced gardeners (Stack Exchange, held out from the fit)
      (19 Oct answer-quality check; the words Kash approved) #}
   {% set best = a.level == "sure" %}
   {# the questions that would make it surer, one tap away: each select, and the place box #}
@@ -262,6 +263,14 @@
   </details>{% endset %}
   {% if a %}
     {% set first = a.do[0] if a.do else none %}
+    {# the twin drawn: its chart, in the twin's section, and the strip of it in the main card
+       (twin_chart.twin_strip). The strip only when the twin ran outdoors, the card's line is
+       the twin's own (its caption) and the twin backs the card's job, never a job against the
+       cold, which soil water cannot show (twin_chart.cold_job); its green line is that job.
+       Else the card is as it was. The chart then starts on the strip's pair #}
+    {% set tc = twin_chart(rec, label) if a.compare else none %}
+    {% set ts = twin_strip(tc, a) if tc and obs.setting == "outdoor" and first and first.if_you_do_from == "plant_model" and first.if_you_do != no_data else none %}
+    {% if ts %}{% set tc = starting_on(tc, ts.other.action) %}{% endif %}
     {# the plant's mood for its face: its own answer, never a new judgement. Every action is
        named here, so none falls to "unsure" by accident (21 Oct, Kash: "why is the plant
        face cross?"); a small good job is content #}
@@ -311,8 +320,29 @@
       <h2 id="main-action">{{ a.headline }}</h2>
       </div>{% if not voice %}<p class="plant-mood" id="plant-mood">{{ plant_face(mood) }}</p>{% endif %}</div>
       </div>
+      {# the twin, front and centre (23 Oct, Kash: "we should give it a more prominent role …
+         It's the whole point of the website, being the twin and what happens"; mock A): leaving
+         it's line against one other choice's and the needs-water line, the chart's own
+         numbers. The card's twin line is its caption, said once, here; the strip's words and
+         its link are not advice, so the rater text skips them (answer_text.SKIP_CLASSES) #}
+      {% if ts %}<div class="twin-strip">
+        <p class="strip-h"><span class="strip-name">Your plant's twin</span> <span class="strip-span">today to {{ ts.weeks[-1][1] }}</span></p>
+        <svg class="strip-chart" viewBox="{{ ts.view|join(' ') }}" role="img" aria-label="{{ ts.title }}">
+          <line class="needs" x1="34" y1="{{ ts.needs_y }}" x2="332" y2="{{ ts.needs_y }}"/>
+          {#- the advice's line green and on top, the other dashed under it #}
+          {%- for ln in ([ts.other, ts.base] if ts.lead == ts.base.action else [ts.base, ts.other]) %}
+          <polyline class="{{ 'lead' if ln.action == ts.lead else 'alt' }}" points="{{ ln.points }}"/>{% endfor %}
+          <circle class="today" cx="{{ ts.today[0] }}" cy="{{ ts.today[1] }}" r="5"/>
+          {%- for ln, y in ((ts.base, ts.base_name_y), (ts.other, ts.other_name_y)) %}
+          <text class="nm {{ 'lead' if ln.action == ts.lead else 'alt' }}" x="332" y="{{ y }}" text-anchor="end">{{ ln.name }}</text>{% endfor %}
+          <text class="ax needs-l" x="{{ ts.needs_label[0] }}" y="{{ ts.needs_label[1] }}">needs water</text>
+          {%- for w_x, w in ts.weeks %}
+          <text class="ax" x="{{ w_x }}" y="{{ ts.weeks_y }}" text-anchor="{{ 'start' if loop.first else 'end' if loop.last else 'middle' }}">{{ w }}</text>{% endfor %}
+        </svg>
+        <div class="strip-cap">{{ ifdo(first, quiet=a.headline == no_cure_headline) }} <a class="strip-go" href="#twin-sec">Compare all choices</a></div>
+      </div>{% endif %}
       {% if first and first.because %}<p class="because">{{ first.because[:1]|upper }}{{ first.because[1:] }}</p>{% endif %}
-      {% if first and first.if_you_do != no_data %}{{ ifdo(first, quiet=a.headline == no_cure_headline) }}{% endif %}
+      {% if first and first.if_you_do != no_data and not ts %}{{ ifdo(first, quiet=a.headline == no_cure_headline) }}{% endif %}
       {% if a.trend %}<p class="note">{{ a.trend[:1]|upper }}{{ a.trend[1:] }}.</p>{% endif %}
       {# "Our best read" needs no gloss ("Go ahead" only repeated the headline); the others say what to do about it #}
       {# "about 3 in 10" read as a score for the plant (19 Oct, Kash): say whose sureness it is.
@@ -328,9 +358,15 @@
           name can be a sentence: "The lead advisor wasn't sure"), the lead advisor's by which
           way it went (its sureness never "held it back"); an old answer's chip has no key, so
           its name, lowered, as the Why fold says it #}
-      {% set sure_words = {"Season": "the season", "Photo": "the photo", "Choices compared": "the choices compared", "Agreement": "how many advisors agreed", "Weather": "the weather", "Soil": "the soil", "Light": "the light", "History": "your plant's history"} %}
+      {#- two keys read by which way they went: being sure never "held it back", and "how many
+          agreed" read oddly beside "held back by" (review of #507). Agreement goes down when
+          they split, and also when a rule of ours chose the lead with all 3 agreeing
+          (confidence.chip_of folds RULE_LED into it), so down says what holds in both #}
+      {% set sure_up_words = {"Lead advisor sure": "the lead advisor's confidence", "Agreement": "the advisors agreeing"} %}
+      {% set sure_down_words = {"Lead advisor sure": "the lead advisor's doubt", "Agreement": "the advisors not backing this call"} %}
+      {% set sure_words = {"Season": "the season", "Photo": "the photo", "Choices compared": "the choices compared", "Agreement": "how far the advisors agreed", "Weather": "the weather", "Soil": "the soil", "Light": "the light", "History": "your plant's history"} %}
       {% set sure_by = namespace(up=[], down=[]) %}
-      {%- for c in a.chips if c.effect != "neutral" %}{% set w = ("the lead advisor's confidence" if c.effect == "raises" else "the lead advisor's doubt") if c.key == "Lead advisor sure" else sure_words.get(c.key) or c.name|lower %}{% if c.effect == "raises" %}{% set sure_by.up = sure_by.up + [w] %}{% else %}{% set sure_by.down = sure_by.down + [w] %}{% endif %}{% endfor %}
+      {%- for c in a.chips if c.effect != "neutral" %}{% set w = (sure_up_words if c.effect == "raises" else sure_down_words).get(c.key) or sure_words.get(c.key) or c.name|lower %}{% if c.effect == "raises" %}{% set sure_by.up = sure_by.up + [w] %}{% else %}{% set sure_by.down = sure_by.down + [w] %}{% endif %}{% endfor %}
       {%- set sure_up, sure_down = sure_by.up, sure_by.down %}
       <div class="sure"><details class="sure-more"><summary><strong>How sure we are<span class="sr-only">:</span></strong>
       <span class="badge {{ 'best' if best else 'check' }}">{{ level_label }}<span class="sr-only">.</span></span>
@@ -339,7 +375,7 @@
         <div class="sure-body">
         <p><strong>{{ level_label }}</strong> means: in our tests on 624 real gardening questions with answers from experienced gardeners, answers at this level matched the gardener's first step {{ record }}.{% if not best %} So check before you act.{% endif %} Each kind of advice starts from its own record against the gardeners, and what we know about this plant moves it up or down.</p>
         {% if sure_up or sure_down %}<p><strong>Why this answer is at this level:</strong> {% if sure_up %}helped by {{ sure_up|join(", ") }}{% endif %}{% if sure_up and sure_down %}; {% endif %}{% if sure_down %}held back by {{ sure_down|join(", ") }}{% endif %}.</p>{% endif %}
-        <p><strong>What makes it surer:</strong> {% if retake %}{{ retake[1] }}: a clearer photo is the surest way.{% elif place_on_band %}add where it is, at the top of the page, so we can test the advice against your weather.{% elif quick %}answer the {{ quick }} quick question{{ "s" if quick != 1 else "" }} in <a href="#refine">Tell us more</a> and we'll check the advice again.{% else %}tell us what you see, or how the soil feels, in <a href="#refine">Tell us more</a> and we'll check the advice again.{% endif %}</p>
+        <p><strong>What makes it surer:</strong> {% if retake %}{{ retake[1] }}: a clearer photo is the surest way.{% elif place_on_band %}add where it is, at the top of the page, so we can test the advice against your weather.{% elif quick %}answer the {{ quick }} quick question{{ "s" if quick != 1 else "" }} in <a href="#refine">Tell us more</a> and we'll check the advice again.{% else %}tell us what you see{% if not (rec.told and rec.told.soil_feel) %}, or how the soil feels,{% endif %} in <a href="#refine">Tell us more</a> and we'll check the advice again.{% endif %}</p>
         </div></details>
       {#- the one thing that lowered it most, here beside the level, not two screens down
          (design wave 1, C); "tell us below" only when no Make-surer button says it (21 Oct,
@@ -468,19 +504,110 @@
     {# the photo check named one of this plant's listed problems: our words for what it
        looks like, and a nudge to check before treating #}
     {% if rec.problem %}<section class="tray warn seen-problem" aria-labelledby="seen-problem"><h2 id="seen-problem">{{ "Looks like" if rec.problem.sure else "Could be" }} {{ rec.problem.name }}</h2><p>{{ rec.problem.looks_like[:1]|upper }}{{ rec.problem.looks_like[1:] }}.</p><p>Check a few leaves before {{ "removing it" if a and a.headline == no_cure_headline else "treating" }}: the photo alone can be wrong.</p></section>{% endif %}
-    {# the twin stills: two illustrated futures of this photo's plant, when it is in the
-       bank and the plant model ran — "branch" stills, captioned by the model's view #}
-    {% if twin %}<section class="twin" aria-labelledby="twin">
-      <h2 id="twin">Your plant in ~7 days</h2>
-      {% if twin.model_line %}<p class="because">{% if said.twin %}<span class="tag twin-chip">Twin</span>{% else %}Tested on your plant's twin:{% set said.twin = true %}{% endif %} {{ twin.model_line }}.</p>{% endif %}
-      <div class="twin-pair">
-        {% set half = "(min-width: 960px) 305px, calc(50vw - 21px)" %}{# two to a row in the main column #}
-        <figure>{{ picture("/static/twin/" ~ twin.pair.do, "Illustration of your plant if you follow the advice", sizes=half) }}
-          <figcaption>{{ twin.do_label }}</figcaption></figure>
-        <figure>{{ picture("/static/twin/" ~ twin.pair.dont, "Illustration of your plant left as it is", sizes=half) }}
-          <figcaption>{{ twin.dont_label }}</figcaption></figure>
+    {# the twin's own section (23 Oct, Kash: "It's the whole point of the website, being the
+       twin and what happens"; mock C), right after the card and the photo check: what the twin
+       is (home's sentence), what it found (Compare's finding), the twin pictures when the
+       answer has them, then each choice. Compare's home: its chart, its hint and its table
+       moved here out of How we worked it out, so the twin is said in one place. The rater
+       text keeps only the pictures' block, as before; the rest is not advice
+       (answer_text.SKIP_CLASSES) #}
+    {% if a.compare %}{% set fc = ft.compare %}<section class="twin-sec" id="twin-sec" tabindex="-1" aria-labelledby="twin-sec-h">
+      <h2 class="ts-h" id="twin-sec-h">Your plant's twin</h2>
+      <p class="ts-what">Each choice is tried first on your plant's <strong>twin</strong>, a small water-and-frost model, against the next 2 weeks of weather.</p>
+      {% set cmp = namespace(better=[]) %}{% for r in a.compare if r.vs_leaving_it == "better" and r.action != "leave_normal" %}{% set cmp.better = cmp.better + [label[r.action]|lower] %}{% endfor %}
+      <p class="ts-find">{% if fc.found %}<strong>{{ fc.title }}.</strong>{% if fc.peek %} {{ fc.peek }}.{% endif %}{% elif cmp.better %}<strong>Better than leaving it:</strong> {{ cmp.better[:2]|join(", ") }}.{% else %}<strong>None beat leaving it.</strong>{% endif %}</p>
+      {# the twin stills: two illustrated futures of this photo's plant, when it is in the
+         bank and the plant model ran — "branch" stills, captioned by the model's view #}
+      {% if twin %}<section class="twin" aria-labelledby="twin">
+        <h3 id="twin">Your plant in ~7 days</h3>
+        {% if twin.model_line %}<p class="because">{% if said.twin %}<span class="tag twin-chip">Twin</span>{% else %}Tested on your plant's twin:{% set said.twin = true %}{% endif %} {{ twin.model_line }}.</p>{% endif %}
+        <div class="twin-pair">
+          {% set half = "(min-width: 960px) 305px, calc(50vw - 21px)" %}{# two to a row in the main column #}
+          <figure>{{ picture("/static/twin/" ~ twin.pair.do, "Illustration of your plant if you follow the advice", sizes=half) }}
+            <figcaption>{{ twin.do_label }}</figcaption></figure>
+          <figure>{{ picture("/static/twin/" ~ twin.pair.dont, "Illustration of your plant left as it is", sizes=half) }}
+            <figcaption>{{ twin.dont_label }}</figcaption></figure>
+        </div>
+        <p class="note">Illustration for our sample photo, not a prediction. · <a href="/about#credits">Photo credits</a></p>
+      </section>{% endif %}
+      <div class="compare ts-panel">
+        <p class="ts-kind">{{ fc.kind }}</p>
+        {#- the chart starts on the choice the card's strip drew, so the two agree
+            (twin_chart.starting_on); else the better choice, else leaving it #}
+        {% set shown = tc.shown if tc else none %}
+        {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
+           a tap on a choice shows its line (idea 3, 18 Oct). 22 Oct, Kash: not obvious to
+           read, so it says what it shows above it, names each line at its end in the line's
+           colour (no legend in the small print), and marks every cold window under the axis #}
+        {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ shown }}" data-reveal="draw">
+          <p class="twin-chart-title" id="twin-chart-title">{{ tc.title }}</p>
+          {# how to read it, naming only the lines drawn: it follows the tap like the lines #}
+          <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">{{ ln.how }}</span>{% endfor %}</p>
+          <svg viewBox="0 0 340 {{ tc.height }}" role="img" aria-labelledby="twin-chart-title">
+            <text class="axis" x="4" y="26">wet</text><text class="axis" x="4" y="126">dry</text>
+            <line class="frame" x1="34" y1="22" x2="34" y2="122"/><line class="frame" x1="34" y1="122" x2="332" y2="122"/>
+            {% for w_x, w in tc.weeks %}<text class="axis" x="{{ w_x }}" y="{{ tc.weeks_y }}" text-anchor="{{ 'start' if loop.first else 'end' if loop.last else 'middle' }}">{{ w }}</text>{% endfor %}
+            {# leaving it's cold nights, faint and always there: the reason sheltering wins shows
+               before any tap (18 Oct pre-deploy check) #}
+            {% for ln in tc.lines if ln.action == "leave_normal" and ln.cold %}<g class="base-cold">
+              {% for b in ln.cold %}<rect x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
+              <text x="{{ ln.left_out[0] }}" y="16" text-anchor="{{ ln.left_out[1] }}">{{ ln.cold_label }} if left out</text>
+              {{ cold_marks(ln) }}
+            </g>{% endfor %}
+            {% for ln in tc.lines %}<g class="twin-line{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">
+              {% for b in ln.cold %}<rect class="cold" x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
+              {% if ln.cold_label %}<text class="cold-label" x="{{ ln.cold_x }}" y="16">{{ ln.cold_label }}</text>{% endif %}
+              {{ cold_marks(ln) }}
+              <polyline points="{{ ln.points }}"/>
+            </g>{% endfor %}
+            <line class="needs" x1="34" y1="{{ tc.needs_y }}" x2="332" y2="{{ tc.needs_y }}"/>
+            <text class="axis needs-label" x="{{ tc.needs_label[0] }}" y="{{ tc.needs_label[1] }}">needs water</text>
+            {% for ln in tc.lines if ln.action == "leave_normal" %}<polyline class="base" points="{{ ln.points }}"/>{% endfor %}
+            {# each line's name at its right end, over every line, in the line's colour #}
+            {% for ln in tc.lines %}<g class="twin-line twin-names{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">
+              {% if ln.base_name_y is not none %}<text class="line-name base-name" x="332" y="{{ ln.base_name_y }}" text-anchor="end">{% for b in tc.lines if b.action == "leave_normal" %}{{ b.name }}{% endfor %}</text>{% endif %}
+              <text class="line-name" x="332" y="{{ ln.name_y }}" text-anchor="end">{{ ln.name }}</text>
+            </g>{% endfor %}
+            <clipPath id="twin-dot"><circle cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="9"/></clipPath>
+            <circle class="today" cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="10"/>
+            <image id="twin-chart-photo" x="{{ tc.today[0] - 9 }}" y="{{ tc.today[1] - 9 }}" width="18" height="18" clip-path="url(#twin-dot)" preserveAspectRatio="xMidYMid slice" hidden/>
+          </svg>
+          <figcaption><span class="sr-only" id="twin-chart-said" aria-live="polite">{% for ln in tc.lines if ln.action == shown %}{{ ln.said }}{% endfor %}</span></figcaption>
+          <template id="twin-chart-words">{% for ln in tc.lines %}<span data-line="{{ ln.action }}">{{ ln.said }}</span>{% endfor %}</template>
+        </figure>{% endif %}
+        {# each row a choice, a small tinted tag (like home's 2-week outlook, never a button),
+           and the reason; on a phone the three stack, the reason on its own line (22 Oct,
+           Kash). Leaving it is the yardstick: its tag says "Starting point", never "baseline";
+           the reasons are the twin's, said as plain sentences (fold_titles.row_why) #}
+        {#- what to do with the chart, said before the choices and in the colour of a thing to
+            try, not a muted caption under the chart (23 Oct, Kash on rev 00089: "the
+            instruction is tiny and could be missed") #}
+        {% if tc %}<p class="twin-try" id="twin-try">Try each choice: tap one below to draw its line on the chart.</p>{% endif %}
+        <div class="scroll"><table class="compare-table"><thead><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr></thead><tbody>
+        {% set drawn = tc.lines|map(attribute="action")|list if tc else [] %}
+        {% set verdict = {"better": ("▲", "Better"), "same": ("=", "Same"), "worse": ("▼", "Worse"), "unknown": ("?", "Not sure")} %}
+        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-describedby="twin-try" aria-pressed="{{ 'true' if r.action == shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ row_why(r, a) }}{% endif %}</td></tr>{% endfor %}
+        </tbody></table></div>
       </div>
-      <p class="note">Illustration for our sample photo, not a prediction. · <a href="/about#credits">Photo credits</a></p>
+      {% if tc %}<script>
+      // Compare: a tap on a choice draws its line; the photo, when this tab has it, is the dot on Today
+      (() => {
+        const fig = document.getElementById("twin-chart"), said = document.getElementById("twin-chart-said");
+        const words = document.getElementById("twin-chart-words").content;
+        const picks = document.querySelectorAll(".twin-pick");
+        for (const b of picks) b.addEventListener("click", () => {
+          const line = b.dataset.line;
+          for (const g of fig.querySelectorAll(".twin-line")) g.classList.toggle("on", g.dataset.line === line);
+          for (const p of picks) p.setAttribute("aria-pressed", String(p === b));
+          const w = words.querySelector(`[data-line="${line}"]`);
+          said.textContent = w ? w.textContent : "";
+        });
+        const photo = document.getElementById("your-photo"), dot = document.getElementById("twin-chart-photo");
+        const show = () => { if (photo && !photo.hidden && photo.src) { dot.setAttribute("href", photo.src); dot.removeAttribute("hidden"); } };
+        show();
+        if (photo) new MutationObserver(show).observe(photo, {attributes: true, attributeFilter: ["src", "hidden"]});
+      })();
+      </script>{% endif %}
     </section>{% endif %}
     {# This week (23 Oct answer-page critique, 4): Also do, Check first and Keep an eye on as
        ruled rows of one panel, not three stacked cards. Each keeps its heading, set as a tag
@@ -936,88 +1063,10 @@
           {#- one bullet per factor, no brackets inside brackets (19 Oct small-print re-check) #}
           {%- if chips %}<li>{{ mark[effect] }} {{ said }}<ul>{% for c in chips %}<li><strong>{{ c.name }}</strong>{% if c.why %}: {{ c.why|join("; ") }}{% endif %}</li>{% endfor %}</ul></li>{% endif %}{% endfor %}</ul>
       </details>{% endif %}
-      {# an empty Compare is hidden: indoors the band already says there is no forecast test,
-         and with no place the main card asks for one (judge walk of #272). Open from the start
-         when the twin ran: its chart is the thing only herbtwin shows (22 Oct, Kash: "yes" to the
-         twin chart open by default); a no-cure answer's "Not compared" line stays folded #}
-      {% if a.compare or a.headline == no_cure_headline %}
-      {% set cmp = namespace(better=[]) %}{% for r in a.compare if r.vs_leaving_it == "better" and r.action != "leave_normal" %}{% set cmp.better = cmp.better + [label[r.action]|lower] %}{% endfor %}
-      {% set fc = ft.compare %}<details class="compare fold fold-twin"{{ ' open' if a.compare else '' }}><summary><span class="fold-head">{% if fc.found %}<span class="fold-kind">{{ fc.kind }}</span>{% endif %}<span class="fold-title">{{ fc.title }}</span>
-        {% if not fc.found %}<span class="fold-peek">{% if not a.compare %}No cure, so the choices don't apply{% elif cmp.better %}Better than leaving it: {{ cmp.better[:2]|join(", ") }}{% else %}None beat leaving it{% endif %}{% if a.compare %}, tested on your plant's twin{% endif %}</span>{% elif fc.peek %}<span class="fold-peek">{{ fc.peek }}</span>{% endif %}</span></summary>
-        {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
-           a tap on a choice shows its line (idea 3, 18 Oct). 22 Oct, Kash: not obvious to
-           read, so it says what it shows above it, names each line at its end in the line's
-           colour (no legend in the small print), and marks every cold window under the axis #}
-        {% set tc = twin_chart(rec, label) if a.compare else none %}
-        {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ tc.shown }}" data-reveal="draw">
-          <p class="twin-chart-title" id="twin-chart-title">{{ tc.title }}</p>
-          {# how to read it, naming only the lines drawn: it follows the tap like the lines #}
-          <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">{{ ln.how }}</span>{% endfor %}</p>
-          <svg viewBox="0 0 340 {{ tc.height }}" role="img" aria-labelledby="twin-chart-title">
-            <text class="axis" x="4" y="26">wet</text><text class="axis" x="4" y="126">dry</text>
-            <line class="frame" x1="34" y1="22" x2="34" y2="122"/><line class="frame" x1="34" y1="122" x2="332" y2="122"/>
-            {% for w_x, w in tc.weeks %}<text class="axis" x="{{ w_x }}" y="{{ tc.weeks_y }}" text-anchor="{{ 'start' if loop.first else 'end' if loop.last else 'middle' }}">{{ w }}</text>{% endfor %}
-            {# leaving it's cold nights, faint and always there: the reason sheltering wins shows
-               before any tap (18 Oct pre-deploy check) #}
-            {% for ln in tc.lines if ln.action == "leave_normal" and ln.cold %}<g class="base-cold">
-              {% for b in ln.cold %}<rect x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
-              <text x="{{ ln.left_out[0] }}" y="16" text-anchor="{{ ln.left_out[1] }}">{{ ln.cold_label }} if left out</text>
-              {{ cold_marks(ln) }}
-            </g>{% endfor %}
-            {% for ln in tc.lines %}<g class="twin-line{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">
-              {% for b in ln.cold %}<rect class="cold" x="{{ b.x }}" y="22" width="{{ b.width }}" height="100"/><line class="cold-edge" x1="{{ b.x }}" x2="{{ (b.x + b.width)|round(1) }}" y1="23.5" y2="23.5"/>{% endfor %}
-              {% if ln.cold_label %}<text class="cold-label" x="{{ ln.cold_x }}" y="16">{{ ln.cold_label }}</text>{% endif %}
-              {{ cold_marks(ln) }}
-              <polyline points="{{ ln.points }}"/>
-            </g>{% endfor %}
-            <line class="needs" x1="34" y1="{{ tc.needs_y }}" x2="332" y2="{{ tc.needs_y }}"/>
-            <text class="axis needs-label" x="{{ tc.needs_label[0] }}" y="{{ tc.needs_label[1] }}">needs water</text>
-            {% for ln in tc.lines if ln.action == "leave_normal" %}<polyline class="base" points="{{ ln.points }}"/>{% endfor %}
-            {# each line's name at its right end, over every line, in the line's colour #}
-            {% for ln in tc.lines %}<g class="twin-line twin-names{{ ' on' if ln.action == tc.shown else '' }}" data-line="{{ ln.action }}">
-              {% if ln.base_name_y is not none %}<text class="line-name base-name" x="332" y="{{ ln.base_name_y }}" text-anchor="end">{% for b in tc.lines if b.action == "leave_normal" %}{{ b.name }}{% endfor %}</text>{% endif %}
-              <text class="line-name" x="332" y="{{ ln.name_y }}" text-anchor="end">{{ ln.name }}</text>
-            </g>{% endfor %}
-            <clipPath id="twin-dot"><circle cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="9"/></clipPath>
-            <circle class="today" cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="10"/>
-            <image id="twin-chart-photo" x="{{ tc.today[0] - 9 }}" y="{{ tc.today[1] - 9 }}" width="18" height="18" clip-path="url(#twin-dot)" preserveAspectRatio="xMidYMid slice" hidden/>
-          </svg>
-          <figcaption><span class="sr-only" id="twin-chart-said" aria-live="polite">{% for ln in tc.lines if ln.action == tc.shown %}{{ ln.said }}{% endfor %}</span></figcaption>
-          <template id="twin-chart-words">{% for ln in tc.lines %}<span data-line="{{ ln.action }}">{{ ln.said }}</span>{% endfor %}</template>
-        </figure>{% endif %}
-        {# each row a choice, a small tinted tag (like home's 2-week outlook, never a button),
-           and the reason; on a phone the three stack, the reason on its own line (22 Oct,
-           Kash). Leaving it is the yardstick: its tag says "Starting point", never "baseline";
-           the reasons are the twin's, said as plain sentences (plain_why) #}
-        {#- what to do with the chart, said before the choices and in the colour of a thing to
-            try, not a muted caption under the chart (23 Oct, Kash on rev 00089: "the
-            instruction is tiny and could be missed") #}
-        {% if tc %}<p class="twin-try" id="twin-try">Try each choice: tap one below to draw its line on the chart.</p>{% endif %}
-        {% if a.compare %}<div class="scroll"><table class="compare-table"><thead><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr></thead><tbody>
-        {% set drawn = tc.lines|map(attribute="action")|list if tc else [] %}
-        {% set verdict = {"better": ("▲", "Better"), "same": ("=", "Same"), "worse": ("▼", "Worse"), "unknown": ("?", "Not sure")} %}
-        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-describedby="twin-try" aria-pressed="{{ 'true' if r.action == tc.shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ plain_why(r.why) }}{% endif %}</td></tr>{% endfor %}
-        </tbody></table></div>{% else %}<p>Not compared: there is no cure, so the choices don't apply.</p>{% endif %}</details>
-      {% endif %}
-        {% if tc %}<script>
-        // Compare: a tap on a choice draws its line; the photo, when this tab has it, is the dot on Today
-        (() => {
-          const fig = document.getElementById("twin-chart"), said = document.getElementById("twin-chart-said");
-          const words = document.getElementById("twin-chart-words").content;
-          const picks = document.querySelectorAll(".twin-pick");
-          for (const b of picks) b.addEventListener("click", () => {
-            const line = b.dataset.line;
-            for (const g of fig.querySelectorAll(".twin-line")) g.classList.toggle("on", g.dataset.line === line);
-            for (const p of picks) p.setAttribute("aria-pressed", String(p === b));
-            const w = words.querySelector(`[data-line="${line}"]`);
-            said.textContent = w ? w.textContent : "";
-          });
-          const photo = document.getElementById("your-photo"), dot = document.getElementById("twin-chart-photo");
-          const show = () => { if (photo && !photo.hidden && photo.src) { dot.setAttribute("href", photo.src); dot.removeAttribute("hidden"); } };
-          show();
-          if (photo) new MutationObserver(show).observe(photo, {attributes: true, attributeFilter: ["src", "hidden"]});
-        })();
-        </script>{% endif %}
+      {# a no-cure answer: nothing to compare, so no twin section; its "Not compared" line
+         stays folded here (the twin's chart and choices moved to the twin's section, 23 Oct) #}
+      {% if not a.compare and a.headline == no_cure_headline %}{% set fc = ft.compare %}<details class="compare fold fold-twin"><summary><span class="fold-head"><span class="fold-kind">{{ fc.kind }}</span><span class="fold-title">{{ fc.title }}</span></span></summary>
+        <p>Not compared: there is no cure, so the choices don't apply.</p></details>{% endif %}
       {{ evidence }}
       {# "Send another photo" is said once, in What next (21 Oct, Kash) #}
     </section>

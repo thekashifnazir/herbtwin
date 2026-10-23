@@ -1,6 +1,6 @@
 /* The answer on a phone, one list in the order that reads (23 Oct answer-page critique, 8
-   and 10): the main card and where it came from, your photo, the twin pictures, then Compare
-   (the twin's chart, out of How we worked it out), This week, and the chat right after it;
+   and 10): the main card and where it came from, your photo, the twin's section (its
+   pictures and Compare, the chart and the choices, since 23 Oct), This week, and the chat right after it;
    then the rest of the plan, then How we worked it out. Under 960px the two columns, and
    How we worked it out, become one list for this; from 960px nothing here applies. With the
    questions asked low (ask-up), they stay right under the card and your photo follows them.
@@ -15,8 +15,7 @@
   .answer-page .answer-cols .main-action { position: relative; }
   .answer-page .answer-cols > :is(.your-photo, .your-more) { order: 2; }
   .answer-page .answer-cols.ask-up > :is(.your-photo, .your-more) { order: 3; }
-  .answer-page .answer-cols > .plan > :is(.seen-problem, .twin) { order: 3; }
-  .answer-page .answer-cols > .side > .details > details.compare { order: 4; margin-bottom: 20px; }
+  .answer-page .answer-cols > .plan > :is(.seen-problem, .twin-sec) { order: 3; }
   .answer-page .answer-cols > .plan > :is(.this-week, .reported) { order: 5; }
   .answer-page .answer-cols > .side > #chat { order: 6; margin-bottom: 28px; }
   /* asked low: the questions stay right under the card, before your photo */

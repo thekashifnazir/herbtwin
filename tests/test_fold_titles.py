@@ -250,19 +250,19 @@ def test_the_page_shows_each_finding_under_its_label(tmp_path):
     why = _summary(page, "why fold")
     assert '<span class="fold-kind">Why it\'s our best read</span>' in why
     assert '<span class="fold-title">3 advisors agreed: water it</span>' in why
-    compare = _summary(page, "compare fold")
-    assert compare.startswith(' fold-twin" open>')  # the twin ran: Compare stays open
-    assert '<span class="fold-title">Protecting it beats leaving it</span>' in compare
-    assert '<span class="fold-peek">Watering does nothing extra</span>' in compare
+    # Compare's finding heads the twin's section after the card, Compare's home since 23 Oct
+    find = page.split('<p class="ts-find">', 1)[1].split("</p>", 1)[0]
+    assert find == "<strong>Protecting it beats leaving it.</strong> Watering does nothing extra."
+    assert '<details class="compare' not in page
     weather = _summary(page, "evidence fold")
     assert '<span class="fold-kind">What we went on · 5 things</span>' in weather
     assert '<span class="fold-title">2 cold spells in 2 weeks</span>' in weather
     body = page.split('<details class="evidence fold">', 1)[1].split("</summary>", 1)[1]
     said = "2 cold spells in 2 weeks if left out (3 nights in all), from Open-Meteo"
     assert f"<p>Weather: {said}</p>" in body
-    # the folds keep their order: why, Compare, then the sources
-    assert page.index('class="why fold') < page.index('class="compare fold')
-    assert page.index('class="compare fold') < page.index('class="evidence fold')
+    # the folds keep their order: why, then the sources; the twin's section before both
+    assert page.index('<section class="twin-sec"') < page.index('class="why fold')
+    assert page.index('class="why fold') < page.index('class="evidence fold')
 
 
 def test_a_fold_with_nothing_found_shows_its_old_title_and_no_label(tmp_path):
@@ -274,10 +274,9 @@ def test_a_fold_with_nothing_found_shows_its_old_title_and_no_label(tmp_path):
     why = _summary(page, "why fold")
     assert "fold-kind" not in why
     assert '<span class="fold-title">Why we\'re not sure</span>' in why
-    compare = _summary(page, "compare fold")
-    assert "fold-kind" not in compare
-    assert '<span class="fold-title">Compare all choices (next 2 weeks)</span>' in compare
-    assert "None beat leaving it, tested on your plant's twin" in compare
+    # no verdict: the twin's section says none beat leaving it, its old fold's line
+    find = page.split('<p class="ts-find">', 1)[1].split("</p>", 1)[0]
+    assert find == "<strong>None beat leaving it.</strong>"
 
 
 def test_fold_titles_gives_every_fold_its_title(tmp_path):

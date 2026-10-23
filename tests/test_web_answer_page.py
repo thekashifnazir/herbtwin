@@ -45,6 +45,10 @@ def test_the_answer_reads_in_order_of_importance(tmp_path):
         '<span class="tag">TODAY</span>',
         '<h2 id="main-action">Water it.</h2>',
         '<strong>How sure we are<span class="sr-only">:</span></strong>',
+        # the twin's own section, right after the card (23 Oct, Kash: the twin front and
+        # centre), Compare in it
+        '<section class="twin-sec"',
+        '<div class="compare ts-panel">',
         # block 1, what to do: the rest of the plan sits with the main card
         # under "This week" (23 Oct answer-page critique, 4) its rows' THIS WEEK tags went
         '<p class="this-week-h">This week</p>',
@@ -59,7 +63,6 @@ def test_the_answer_reads_in_order_of_importance(tmp_path):
         # block 3, the details, folded
         # the folds by their tags: each title is now its finding (fold_titles.py, 22 Oct)
         '<details class="why fold',
-        '<details class="compare fold',
         '<details class="evidence fold">',
         f"Ref {rid}",
     ]

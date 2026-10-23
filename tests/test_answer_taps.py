@@ -6,7 +6,7 @@ import html
 import re
 from pathlib import Path
 
-from herbtwin.confidence import CHIPS, chip_name
+from herbtwin.confidence import CHIPS, RULE_LED, chip_name
 from herbtwin.schemas import Chip
 from herbtwin.web import style
 from herbtwin.web.answer_text import plan_text
@@ -87,8 +87,8 @@ def test_a_not_sure_lead_advisor_reads_as_words_not_a_sentence_in_a_sentence(tmp
     body = html.unescape(_sure(_render(rec)).split('<div class="sure-body">', 1)[1])
     why = re.sub(r"<[^>]+>", "", body.split("</p>", 2)[1]).strip()
     assert why == (
-        "Why this answer is at this level: helped by how many advisors agreed; held back by "
-        "the lead advisor's doubt."
+        "Why this answer is at this level: helped by the advisors agreeing; held back by the "
+        "lead advisor's doubt."
     )
     assert "by the lead advisor wasn't" not in why
     # every chip key has its words: a new key would fall back to its name
@@ -96,7 +96,7 @@ def test_a_not_sure_lead_advisor_reads_as_words_not_a_sentence_in_a_sentence(tmp
 
     src = TEMPLATES.env.loader.get_source(TEMPLATES.env, "result.html")[0]
     for key in CHIPS:
-        assert f'"{key}": "' in src or f'c.key == "{key}"' in src, key
+        assert f'"{key}": "' in src, key
     # and sure, it helped
     rec.answer.chips = [
         Chip(
@@ -105,6 +105,43 @@ def test_a_not_sure_lead_advisor_reads_as_words_not_a_sentence_in_a_sentence(tmp
     ]
     body = _sure(_render(rec)).split('<div class="sure-body">', 1)[1]
     assert "helped by the lead advisor&#39;s confidence." in body
+
+
+def test_split_advisors_read_as_not_backing_the_call(tmp_path):
+    # review of #507: "held back by how many advisors agreed" read oddly
+    rec = _unsure_record(tmp_path)
+    rec.answer.chips = [
+        Chip(key="Agreement", name=chip_name("Agreement", "lowers"), effect="lowers"),
+        Chip(
+            key="Lead advisor sure", name=chip_name("Lead advisor sure", "raises"), effect="raises"
+        ),
+    ]
+    body = html.unescape(_sure(_render(rec)).split('<div class="sure-body">', 1)[1])
+    why = re.sub(r"<[^>]+>", "", body.split("</p>", 2)[1]).strip()
+    assert why == (
+        "Why this answer is at this level: helped by the lead advisor's confidence; held back "
+        "by the advisors not backing this call."
+    )
+
+
+def test_a_rule_that_led_over_three_agreeing_advisors_is_not_called_disagreement(tmp_path):
+    # review of #509: when a rule of ours chose the lead, the advisor factor (RULE_LED) sits in
+    # the Agreement chip, which then lowers even with 3 of 3 agreeing
+    rec = _unsure_record(tmp_path)
+    rec.answer.chips = [
+        Chip(
+            key="Agreement",
+            name=chip_name("Agreement", "lowers"),
+            effect="lowers",
+            why=["3 of 3 agree", RULE_LED],
+        )
+    ]
+    body = html.unescape(_sure(_render(rec)).split('<div class="sure-body">', 1)[1])
+    why = re.sub(r"<[^>]+>", "", body.split("</p>", 2)[1]).strip()
+    assert (
+        why == "Why this answer is at this level: held back by the advisors not backing this call."
+    )
+    assert "disagree" not in why
 
 
 def test_an_old_answer_without_keys_falls_back_to_its_names(tmp_path):
@@ -167,7 +204,8 @@ def test_the_switch_is_a_short_question_and_a_small_button(tmp_path):
 
 def test_the_compare_hint_comes_before_the_choices_and_the_choices_name_it():
     src = (Path(__file__).parents[1] / "src/herbtwin/web/templates/result.html").read_text()
-    fold = src.split('<details class="compare fold', 1)[1].split("</details>", 1)[0]
+    # Compare is in the twin's section since 23 Oct (the twin front and centre)
+    fold = src.split('<div class="compare ts-panel">', 1)[1].split("</table>", 1)[0]
     hint = '<p class="twin-try" id="twin-try">Try each choice: tap one below to draw its line on the chart.</p>'
     assert hint in fold and fold.index("</figure>") < fold.index(hint) < fold.index("compare-table")
     assert "Tap a choice to see its line" not in src  # no tiny caption under the chart
@@ -176,7 +214,7 @@ def test_the_compare_hint_comes_before_the_choices_and_the_choices_name_it():
         in fold
     )
     rules = _sheet()
-    tip = rules[".answer-page details.compare .twin-try"]
+    tip = rules[".answer-page .compare .twin-try"]
     assert "background: var(--soft)" in tip and "font: 700 17px" in tip
     assert "border-radius: 50%" in rules[".answer-page .twin-pick::before"]  # a dot to pick
 

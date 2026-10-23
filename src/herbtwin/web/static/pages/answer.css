@@ -34,7 +34,7 @@
 
 /* the twin stills: two illustrated futures of the plant, captioned */
 .answer-page .twin { margin: 0 0 20px; }
-.answer-page .twin h2 { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
+.answer-page .twin :is(h2, h3) { margin: 0 0 4px; font: 700 18px/1.3 var(--sans); letter-spacing: 0; }
 .answer-page .twin-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
 .answer-page .twin figure { margin: 0; }
 .answer-page .twin img { display: block; width: 100%; height: auto;
@@ -428,13 +428,13 @@
      arrive in turn (the main card, then the next, then the rest; on a desktop the right
      column's too), all still by about 0.55 s. It fills backwards only, so a card is left
      untransformed once it is done */
-  .answer-page :is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
+  .answer-page :is(.plan, .side) > :is(.seen-problem, .twin-sec, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
     animation: card-rise .38s cubic-bezier(0.2,0,0,1) backwards; }
   @supports (animation-timeline: view()) {
     /* below the first screen the scroll's reveal takes over, as before. It too fills
        backwards only: a card at least 70% in view on load is past its range, so the load
        rise under it shows instead; one at the fold finishes its reveal as you scroll */
-    .answer-page :is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
+    .answer-page :is(.plan, .side) > :is(.seen-problem, .twin-sec, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
       animation: card-rise .38s cubic-bezier(0.2,0,0,1) backwards, card-reveal linear backwards;
       animation-timeline: auto, view(); animation-range: normal, entry 0% entry 70%; }
     /* a desktop's right column starts on the first screen: its first card rises on load only */
@@ -442,16 +442,16 @@
   }
   /* the stagger: the card right under the main one (or the right column's first) at 100 ms,
      every later card at 160 ms; the second value is the scroll reveal's, which waits for nothing */
-  .answer-page :is(.plan, .side) > :is(.seen-problem, .twin, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
+  .answer-page :is(.plan, .side) > :is(.seen-problem, .twin-sec, .also, .dont, .watch, .by-part, .next-step, .ask, .details) {
     animation-delay: 160ms, 0s; }
   .answer-page .plan > .main-action + *, .answer-page .side > .ask { animation-delay: 100ms, 0s; }
-  /* Compare: the shown line draws itself left to right when the fold opens, and again when
+  /* Compare: the shown line draws itself left to right as the chart arrives (it sits in the
+     twin's section, never in a fold, since 23 Oct), and again when
      another choice is tapped (it takes .on): a wipe, not dashes, so it rests a plain solid
      stroke in every browser, and one that can't clip just shows the line (21 Oct review:
      pathLength on a polyline left the line dotted where it is ignored). Leaving it's
      dashed line is not in a .twin-line and keeps its own dashes */
-  .answer-page details[open] .twin-line.on polyline {
-    animation: line-draw .6s cubic-bezier(0.2,0,0,1) 120ms backwards; }
+  .answer-page .twin-chart .twin-line.on polyline { animation: line-draw .6s cubic-bezier(0.2,0,0,1) 120ms backwards; }
 }
 /* the chart sits low on the page, so its line drew unseen on load: now, below the first
    screen, it waits wiped out and draws as the chart arrives (23 Oct, the shared reveal,
@@ -575,7 +575,7 @@
 /* a narrow table stacks each choice: its pill and tag, then the reason on a line of its own,
    not squeezed into a third column (22 Oct, Kash). Narrow by the table's own width, so the
    desktop side column (about 430px) stacks as a phone does */
-.answer-page details.compare .scroll:has(> .compare-table) { container: compare / inline-size; }
+.answer-page .compare .scroll:has(> .compare-table) { container: compare / inline-size; }
 @container compare (max-width: 560px) { .answer-page .compare-table thead { display: none; }
   .answer-page .compare-table, .answer-page .compare-table tbody { display: block; }
   .answer-page .compare-table tr { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); }
@@ -583,13 +583,13 @@
   .answer-page .compare-table tbody tr:first-child { border-top: 1px solid var(--border); }
   /* the pill and its tag share the first line: a long pill wraps inside, never pushes the tag
      down nor runs under it */
-  .answer-page details.compare .compare-table td { display: inline-block; padding: 0; border: 0;
+  .answer-page .compare .compare-table td { display: inline-block; padding: 0; border: 0;
     vertical-align: middle; }
-  .answer-page details.compare .compare-table td.pick { max-width: calc(100% - 7.5rem); margin-right: 10px; }
-  .answer-page details.compare .compare-table td.why { display: block; margin-top: 6px; } }
-@media (max-width: 480px) { .answer-page details.compare th, .answer-page details.compare td { padding: 6px; }
-  .answer-page details.compare th:nth-child(2), .answer-page details.compare td:nth-child(2) { white-space: nowrap; }
-  .answer-page details.compare .twin-pick { border-radius: var(--surface); padding: 4px 8px; line-height: 1.3; } }
+  .answer-page .compare .compare-table td.pick { max-width: calc(100% - 7.5rem); margin-right: 10px; }
+  .answer-page .compare .compare-table td.why { display: block; margin-top: 6px; } }
+@media (max-width: 480px) { .answer-page .compare th, .answer-page .compare td { padding: 6px; }
+  .answer-page .compare th:nth-child(2), .answer-page .compare td:nth-child(2) { white-space: nowrap; }
+  .answer-page .compare .twin-pick { border-radius: var(--surface); padding: 4px 8px; line-height: 1.3; } }
 
 /* indoors: the month's normal and care tips (21 Oct, a gardener: indoor "doesn't have much
    info"), a compact inked card like Keep an eye on, in the weather-free blue; outdoors, its

@@ -1,6 +1,6 @@
 """21 Oct, gardener test: the 2-step meter read as "2 out of 2". How sure we are is now said
 as a word badge, green or amber, with one plain line on what that level meant in our tests
-(624 held-out expert questions), then the doubt line as before."""
+(624 real gardening questions, answered by experienced gardeners), then the doubt line as before."""
 
 import re
 

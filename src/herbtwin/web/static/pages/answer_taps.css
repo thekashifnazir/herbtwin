@@ -37,10 +37,11 @@
 .answer-page .page-band .setting-switch .switch.as-pill:hover { background: color-mix(in srgb, var(--band-fg) 14%, var(--band)); }
 
 /* 3. Compare: what to do with the chart, before the choices, as a thing to try; each choice
-   has a dot, filled for the one drawn, so they read as choices to pick */
-.answer-page details.compare .twin-try { display: flex; align-items: center; gap: 10px; margin: 4px 20px 12px;
+   has a dot, filled for the one drawn, so they read as choices to pick. Compare sits in the
+   twin's section since 23 Oct (answer_twin.css), on its panel's own padding */
+.answer-page .compare .twin-try { display: flex; align-items: center; gap: 10px; margin: 4px 0 12px;
   padding: 10px 14px; border-radius: 12px; background: var(--soft); color: var(--fg); font: 700 17px/1.35 var(--sans); }
-.answer-page details.compare .twin-try::before { content: "\2193" / ""; flex: none; color: var(--primary);
+.answer-page .compare .twin-try::before { content: "\2193" / ""; flex: none; color: var(--primary);
   font: 700 20px/1 var(--sans); }
 .answer-page .twin-pick { cursor: pointer; }
 .answer-page .twin-pick::before { content: ""; display: inline-block; width: 12px; height: 12px; margin: 0 8px 2px 0;

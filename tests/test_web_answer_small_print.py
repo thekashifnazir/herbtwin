@@ -7,6 +7,7 @@ import respx
 
 from herbtwin.answer import NO_CURE_HEADLINE
 from herbtwin.confidence import UNSAID, load_weights
+from herbtwin.schemas import CompareRow
 from herbtwin.stages import climate
 from herbtwin.stages.climate import ARCHIVE_URL
 from herbtwin.web.app import TEMPLATES
@@ -62,6 +63,8 @@ def test_the_twin_lead_falls_to_the_picture_when_the_main_card_is_not_the_twin(t
 
     rec = _full_plan(tmp_path)
     assert rec.answer is not None
+    # the pictures need the twin's compare rows (twin_bank.figure); they show in its section
+    rec.answer.compare = [CompareRow(action="water", vs_leaving_it="better", why="dry by Friday")]
     main_card = rec.answer.do[0]
     main_card.if_you_do, main_card.if_you_do_from = "it recovers in a week", "outcome_table"
     pair = TwinPair(do="d.jpg", dont="n.jpg", credit="c", care="water")

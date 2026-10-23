@@ -12,11 +12,11 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 
-from herbtwin.answer import NO_CURE_HEADLINE, shown_call
+from herbtwin.answer import NO_CURE_HEADLINE, TENDER_HEADLINE, shown_call
 from herbtwin.confidence import RULE_LED
 from herbtwin.plant_model import TIP, is_tender
-from herbtwin.schemas import AnalysisRecord, Answer
-from herbtwin.twin_chart import _windows
+from herbtwin.schemas import AnalysisRecord, Answer, CompareRow
+from herbtwin.twin_chart import _windows, plain_why
 
 
 @dataclass(frozen=True)
@@ -161,6 +161,29 @@ def _join(xs: list[str]) -> str:
     return " and ".join(xs[:2])
 
 
+# the twin models moving it to better light as a little faster drying (stages/twin.py), never
+# the light itself: under "Bring it indoors to a bright windowsill." its "Moving it to better
+# light does nothing extra" read as against the advice (23 Oct judge walk, a flowering basil)
+NO_LIGHT = "the twin can't model light, so moving it shows no change here"
+
+
+def light_unmodelled(a: Answer) -> bool:
+    """The advice sends it to the light (our bright windowsill, or a Move it to better light
+    card) and the twin rates moving it the same as leaving it. Only then: other answers read
+    as before (the rosemary beetle sample is in a rater study, 23 Oct)."""
+    to_light = a.headline == TENDER_HEADLINE or any(c.action == "move_light" for c in a.do)
+    same = any(r.action == "move_light" and r.vs_leaving_it == "same" for r in a.compare)
+    return to_light and same
+
+
+def row_why(r: CompareRow, a: Answer) -> str:
+    """A Compare row's reason as a plain sentence; moving it to better light says the twin
+    can't model light where light_unmodelled."""
+    if r.action == "move_light" and light_unmodelled(a):
+        return _cap(NO_LIGHT) + "."
+    return plain_why(r.why)
+
+
 def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
     """The Compare fold: which choice beat leaving it on the twin, then what did nothing extra
     or made it worse. Falls back to the old title with no verdict to report."""
@@ -170,11 +193,14 @@ def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
             return FoldTitle("Compare all choices", "No cure, so the choices don't apply")
         return FoldTitle(kind, "Compare all choices (next 2 weeks)", found=False)
     by: dict[str, list[str]] = {"better": [], "same": [], "worse": []}
+    no_light = light_unmodelled(a)
     for r in a.compare:
+        if no_light and r.action == "move_light":
+            continue  # said as NO_LIGHT, in place of "does nothing extra"
         if r.action != "leave_normal" and r.action in DOING and r.vs_leaving_it in by:
             by[r.vs_leaving_it].append(DOING[r.action])
     better, same, worse = by["better"], by["same"], by["worse"]
-    if not (better or same or worse):
+    if not (better or same or worse or no_light):
         return FoldTitle(kind, "Compare all choices (next 2 weeks)", found=False)
     # the main job is not one the twin compares (pick off the beetles): a better choice is an
     # extra, never the title's lead (site walk 2, r3: "Watering beats leaving it")
@@ -193,6 +219,8 @@ def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
         more.append(f"{_join(better[1:])} {'helps' if len(better) == 2 else 'help'} too")
     if same:
         more.append(f"{_join(same)} {'does' if len(same) == 1 else 'do'} nothing extra")
+    if no_light:
+        more.append(NO_LIGHT)
     if worse:
         more.append(f"{_join(worse)} {'makes' if len(worse) == 1 else 'make'} it worse")
     return FoldTitle(kind, title, _cap("; ".join(more)))

@@ -114,7 +114,7 @@ def test_the_compare_table_has_a_phone_layout():
     # choice pills wrapped inside their ovals
     from herbtwin.web.style import CSS
 
-    narrow = CSS.split("@media (max-width: 480px) { .answer-page details.compare th", 1)[1]
+    narrow = CSS.split("@media (max-width: 480px) { .answer-page .compare th", 1)[1]
     rules = narrow.split("} }", 1)[0]
     assert "white-space: nowrap" in rules and ".twin-pick" in rules
 
