@@ -81,7 +81,7 @@ def test_the_slot_waits_hidden_under_keep_an_eye_on_and_loads_after_the_page(tmp
     assert "s.hidden = false;" in script and "if (!html.trim()) return;" in script
     assert script.index("if (!html.trim()) return;") < script.index("s.hidden = false;")
     # under Keep an eye on, before the by-part view and What next
-    assert page.index('id="reported"') < page.index('class="next-step ink"')
+    assert page.index('id="reported"') < page.index('class="next-step"')
     if 'id="watch"' in page:
         assert page.index('id="watch"') < page.index('id="reported"')
 

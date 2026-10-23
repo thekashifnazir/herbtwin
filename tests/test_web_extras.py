@@ -35,7 +35,7 @@ def test_the_answer_loads_shop_links_for_its_action_after_it_opens(tmp_path):
     assert f'aria-labelledby="extras-h" data-src="/answers/{rid}/extras" hidden>' in slot
     assert '<h2 id="extras-h">Where to get it</h2>' in slot  # labelled from the start
     assert '<p class="extras-said muted" role="status">Looking for shops for this…</p>' in slot
-    assert page.index('class="next-step ink"') < page.index('id="extras"')  # under the plan
+    assert page.index('class="next-step"') < page.index('id="extras"')  # under the plan
     got = c.get(f"/answers/{rid}/extras")
     assert got.status_code == 200
     assert "<h3>Shops we found for this</h3>" in got.text

@@ -7,6 +7,12 @@ import respx
 
 from herbtwin.species import name_parts
 
+# What next's middle stop (23 Oct: the stop says when, the line what)
+NEXT_FEW_DAYS = (
+    '<p class="next-when">In a few days</p>\n'
+    "          <p>Send a new photo of the same plant to see how it is doing.</p>"
+)
+
 
 @pytest.mark.parametrize(
     ("name", "common", "parts"),
@@ -70,7 +76,7 @@ def test_what_next_ends_the_plan_and_holds_i_did_it(tmp_path):
     nxt = page.index('<h2 id="next-step">What next</h2>')
     assert plan_end < nxt < page.index('<h2 id="refine">')
     card = page[nxt:].split("</section>", 1)[0]
-    assert 'id="i-did"' in card and "In a few days, send a new photo of the same plant" in card
+    assert 'id="i-did"' in card and NEXT_FEW_DAYS in card
     assert "compare" not in card  # a comparison needs a kept plant and a rule window (review)
     # "Done it?" sits inside the scripted block: no script, no button to point at
     assert card.index('id="i-did"') < card.index("Done it? Tell us.")
@@ -123,5 +129,6 @@ def test_a_context_note_stays_in_the_band(tmp_path):
 @pytest.mark.usefixtures("open_meteo_down")
 def test_after_i_did_it_the_question_goes_too(tmp_path):
     page = _page(tmp_path)
-    script = page.split('id="i-did"', 1)[1].split("</script>", 1)[0]
+    # the "I did it" script (the more-photos form's comes first in the line since 23 Oct)
+    script = page.split('getElementById("i-did")', 1)[1].split("</script>", 1)[0]
     assert 'box.querySelector(".done-it").hidden = true' in script

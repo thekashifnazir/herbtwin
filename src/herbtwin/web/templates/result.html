@@ -518,45 +518,58 @@
     </section>{% endif %}
     {# see it by part (21 Oct, gardener test: they wanted the advice by part of the setup):
        the lines above, sorted by part (answer.by_part), never new advice. Folded, so it
-       shown only with two parts or more; left out of the rater text. Open from the start: it is
-       the plan said part by part (21 Oct, Kash: "should be open as a lot of good info") #}
+       shown only with two parts or more; left out of the rater text. Shut (23 Oct, answer-page
+       redesign: open, it repeated every line above word for word) #}
     {% set parts = by_part(a, label, obs.container if obs else "unknown") %}
-    {% if parts %}<details class="by-part" open><summary>See it by part: {{ parts|map(attribute=0)|join(", ")|lower }}</summary>
+    {% if parts %}<details class="by-part"><summary>By part of the plant</summary>
       {% for part, items in parts %}<div class="row"><p class="part">{{ part }}</p>
         <ul>{% for it in items %}<li data-kind="{{ it.kind }}">{% if it.kind == "dont" %}<strong>Don't:</strong> {% elif it.kind == "check" %}<strong>Check first:</strong> {% elif it.kind == "watch" %}<strong>Keep an eye on:</strong> {% endif %}{{ it.text }}</li>{% endfor %}</ul></div>
       {% endfor %}</details>{% endif %}
-    {# what next (design wave 1, D): the plan ends by saying what to do after it. "I did it"
-       lives here, after the reader has the whole plan, not inside the main card #}
-    <section class="next-step ink" aria-labelledby="next-step">
+    {# what next (design wave 1, D): the plan ends by saying what to do after it. Since the 23 Oct
+       answer-page redesign ("boxes after boxes"), a line of stops in the About roadmap's style,
+       not a box of five actions: today ("I did it", a plain button: the page keeps one green
+       one), in a few days (a new photo), surer (1 or 2 more photos); then one plain sign-in line #}
+    <section class="next-step" aria-labelledby="next-step">
       <h2 id="next-step">What next</h2>
       {# under "Remove it" there is no plant to photo again or keep (22 Oct site walk); but
          binning can't be undone, so while the photo check or the answer is unsure, the offer
          of more photos stays (follow-up to #404) #}
       {% set gone = a.headline == no_cure_headline %}
-      {% if gone %}<p>{{ no_cure_next }}</p>
-      {% if a.level != "sure" or (rec.problem and not rec.problem.sure) %}{% include "_more_photos.html" %}{% endif %}
-      {% else %}<p>In a few days, send a new photo of the same plant to see how it is doing.</p>
-      {% include "_more_photos.html" %}{% endif %}
-        {# "I did it": the answer gets an ending. Shown by the script, so a page without it never
+      {% set did_it = first and first.action not in ("leave_normal", "dont_water", "ask_first", "check_pests", "other") %}
+      {# "I did it": the answer gets an ending. Shown by the script, so a page without it never
          offers a button that does nothing; nothing is stored or sent #}
-      {% if first and first.action not in ("leave_normal", "dont_water", "ask_first", "check_pests", "other") %}<div class="i-did" id="i-did" hidden>
-        {# inside the scripted block: without a script there is no button to point at #}
-        <p class="done-it">Done it? Tell us.</p>
-        <button type="button" class="quiet">I did it</button>
-        <p class="thanks" role="status" tabindex="-1"><span class="burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>{{ plant_face("content") }}<span class="said" data-said="{{ no_cure_thanks if gone else 'Thanks for looking after me.' }}"></span></p>
-        {# signed out only. With the keep link, signing in then tapping "Keep this in My plants"
-           carries this answer over (#254); without it (no keep cookie in this browser) it says
-           to send the photo again. The email is an opt-in tick box after that. Never under
-           "Remove it": there is no plant to keep #}
-        {% if gone %}{# nothing to keep #}
-        {%- elif keep %}<p class="keep"><a href="{{ keep }}">Sign in to keep this plant; you can then ask for an email when it's time to check again</a></p>
-        {%- elif accounts and not signed_in %}<p class="keep"><a href="/auth/sign-in">Sign in, then send this photo again, to keep this plant; you can then ask for an email when it's time to check again</a></p>{% endif %}
-      </div>
-      <script>
+      {% macro i_did(thanks) %}<div class="i-did" id="i-did" hidden>
+            <p class="done-it">Done it? Tell us.</p>
+            <button type="button" class="quiet">I did it</button>
+            <p class="thanks" role="status" tabindex="-1"><span class="burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>{{ plant_face("content") }}<span class="said" data-said="{{ thanks }}"></span></p>
+          </div>{% endmacro %}
+      {% if gone %}<p>{{ no_cure_next }}</p>
+      {% if did_it %}{{ i_did(no_cure_thanks) }}{% endif %}
+      {% if a.level != "sure" or (rec.problem and not rec.problem.sure) %}{% include "_more_photos.html" %}{% endif %}
+      {% else %}<ol class="next-line">
+        {% if did_it %}<li class="next-today" hidden><p class="next-when">Today</p>
+          {{ i_did("Thanks for looking after me.") }}</li>{% endif %}
+        <li><p class="next-when">In a few days</p>
+          <p>Send a new photo of the same plant to see how it is doing.</p>
+          <p><a class="button quiet" href="/">Send another photo</a></p></li>
+        {% if more_photos_on %}<li><p class="next-when">For a surer answer</p>
+          {% include "_more_photos.html" %}</li>{% endif %}
+      </ol>{% endif %}
+      {# signed out only. With the keep link, signing in then tapping "Keep this in My plants"
+         carries this answer over (#254); without it (no keep cookie in this browser) it says to
+         send the photo again. The email is an opt-in tick box after that. Only beside "I did it"
+         (19 Oct home pass), and never under "Remove it": there is no plant to keep #}
+      {% if gone or not did_it %}{# nothing to keep #}
+      {%- elif keep %}<p class="keep"><a href="{{ keep }}">Sign in to keep this plant; you can then ask for an email when it's time to check again</a></p>
+      {%- elif accounts and not signed_in %}<p class="keep"><a href="/auth/sign-in">Sign in, then send this photo again, to keep this plant; you can then ask for an email when it's time to check again</a></p>{% endif %}
+      {% if gone %}<p><a class="button quiet" href="/">Send another photo</a></p>{% endif %}
+      {% if did_it %}<script>
       (() => {
         const box = document.getElementById("i-did"), button = box.querySelector("button");
         const thanks = box.querySelector(".thanks"), said = thanks.querySelector(".said");
         box.hidden = false;
+        const stop = box.closest(".next-today");  // Today's stop, when there is a line
+        if (stop) stop.hidden = false;
         button.addEventListener("click", () => {
           thanks.classList.add("shown");
           said.textContent = said.dataset.said;
@@ -566,17 +579,12 @@
         });
       })();
       </script>{% endif %}
-      <p><a class="button quiet" href="/">Send another photo</a></p>
     </section>
     {# what else could grow here: a card of its own under What next, not a small link at the
        foot of the details (21 Oct, Kash on rev 00050: "this is great, why is it hidden behind
        a very small hard to find hyperlink?"). Not indoors: the windowsill list offers one
        crop, a dead end from a basil (19 Oct walk). An outlined button: the page keeps one green one #}
-    {% if spot_on and rec.location and not (rec.observation and rec.observation.setting == "indoor") %}<section class="spot-card ink" aria-labelledby="spot-card-h">
-      <h2 id="spot-card-h">What could grow here</h2>
-      <p>This spot's sun through the year, its frost and soil, and the crops that suit it this month.</p>
-      <p><a class="button spot-go" href="/answers/{{ rec.record_id }}/spot">See what grows here</a></p>
-    </section>{% endif %}
+    {% if spot_on and rec.location and not (rec.observation and rec.observation.setting == "indoor") %}<p class="spot-line"><a class="spot-go" href="/answers/{{ rec.record_id }}/spot"><strong>See what grows here</strong> <span>This spot's sun through the year, its frost and soil, and the crops that suit it this month.</span></a></p>{% endif %}
     {% include "_extras_slot.html" %}
     </div>
 

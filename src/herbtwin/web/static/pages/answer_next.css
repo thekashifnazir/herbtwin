@@ -1,0 +1,52 @@
+/* The answer page's end, part B of the 23 Oct redesign (Kash: "boxes after boxes", as About):
+   What next as a line of stops, not a box; Where to get it as a lilac Tavily strip; What could
+   grow here as one sky line. "answer_next" sorts after answer.css; extras.css sorts later, so
+   its rules here carry .answer-page to win. Theme tokens only; nothing under 16px. */
+
+/* ---------- What next: no box, a dashed line down the left with a green stop per step ---------- */
+.answer-page .next-step { padding: 0; border: 0; border-radius: 0; box-shadow: none; background: none; }
+.answer-page .next-step h2 { margin: 0 0 12px; }
+.answer-page ol.next-line { --stop: 14px; position: relative; list-style: none; margin: 0 0 12px;
+  padding: 0 0 0 calc(var(--stop) + 16px); display: grid; gap: 16px; }
+.answer-page .next-line::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: calc(var(--stop) / 2 - 1px);
+  border-left: 2px dashed var(--muted-fg); }
+.answer-page .next-line > li { position: relative; margin: 0; }
+.answer-page .next-line > li::before { content: ""; position: absolute; top: 4px; left: calc(-1 * (var(--stop) + 16px));
+  width: var(--stop); height: var(--stop); box-sizing: border-box; border-radius: 50%;
+  border: 3px solid var(--primary); background: var(--bg); }
+.answer-page .next-line p { margin: 0 0 6px; }
+.answer-page .next-line > li > :last-child { margin-bottom: 0; }
+.answer-page .next-line p.next-when { margin: 0 0 2px; font: 700 16px/1.4 var(--sans); color: var(--primary); }
+/* "I did it" is a plain secondary button now: the page keeps one green press */
+.answer-page .next-step .i-did { margin: 0; }
+.answer-page .next-step .i-did > button { background: var(--soft-strong); color: var(--fg); border-color: var(--soft-line); }
+.answer-page .next-step .i-did .done-it { margin: 0 0 6px; }
+/* the more-photos form inside its stop: no card of its own */
+.answer-page .next-line .more-photos { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+/* the sign-in: one plain line under the stops */
+.answer-page .next-step > p.keep { margin: 0; font-size: 16px; color: var(--muted-fg); }
+
+/* ---------- What could grow here: one sky line, the whole of it a link ---------- */
+.answer-page p.spot-line { margin: 0 0 20px; }
+.answer-page .spot-line a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 12px 16px;
+  border-radius: var(--surface); background: var(--sky); color: var(--fg); text-decoration: none; }
+.answer-page .spot-line strong { color: var(--sky-fg); }
+.answer-page .spot-line strong::after { content: " \2192"; }
+.answer-page .spot-line span { color: var(--muted-fg); }
+.answer-page .spot-line a:hover strong { text-decoration: underline; }
+
+/* ---------- Where to get it: a lilac strip (Tavily's colour, as on About), a row per thing ---------- */
+.answer-page .extras { padding: 14px 18px; border: 0; box-shadow: none; background: var(--lilac); }
+.answer-page .extras h2 { margin: 0 0 6px; font-size: 18px; color: var(--lilac-fg); }
+.answer-page .extras h3 { margin: 0 0 4px; font-size: 16px; }
+.answer-page .extras .shop-links { margin: 0 0 6px; }
+.answer-page .extras .shop-links li { padding: 8px 0; border-top: 1px solid color-mix(in srgb, var(--lilac-fg) 30%, transparent); }
+.answer-page .extras .shop-links li:last-child { border-bottom: 0; }
+/* the thing, an arrow, the shop's page and the shop's name as a chip, on one row when it fits */
+.answer-page .extras .shop-what { flex: 0 0 auto; color: var(--fg); font-weight: 700; }
+.answer-page .extras .shop-links > li > .shop-what::after { content: " \2192"; color: var(--lilac-fg); }
+/* links in ink on the lilac: the page's green is under 4.5:1 there (axe, 23 Oct) */
+.answer-page .extras a:not(.button) { color: var(--fg); }
+.answer-page .extras .shop-links a { font-weight: 400; }
+.answer-page .extras .shop-name { padding: 0 10px; background: var(--card); color: var(--lilac-fg); }
+.answer-page .extras .extras-found > p.muted { margin: 0; }

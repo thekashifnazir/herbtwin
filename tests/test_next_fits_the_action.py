@@ -25,6 +25,12 @@ from herbtwin.web.answer_text import plan_text
 from tests.test_answer import BASIL, build
 from tests.test_web_answer_page import _full_plan, _render
 
+# What next's middle stop (23 Oct: the stop says when, the line what)
+NEXT_FEW_DAYS = (
+    '<p class="next-when">In a few days</p>\n'
+    "          <p>Send a new photo of the same plant to see how it is doing.</p>"
+)
+
 ROWS = json.loads(
     (Path(__file__).parents[1] / "data/outcomes/outcomes_uk.json").read_text(encoding="utf-8")
 )
@@ -176,7 +182,7 @@ def test_any_other_answer_keeps_its_what_next(tmp_path):
     rec = _full_plan(tmp_path)
     rec.answer.do[0] = rec.answer.do[0].model_copy(update={"action": "water"})
     nxt = _next_step(_render(rec, more_photos_on=True, keep="/keep/x"))
-    assert "In a few days, send a new photo of the same plant" in nxt
+    assert NEXT_FEW_DAYS in nxt
     assert 'class="more-photos"' in nxt and "Sign in to keep this plant" in nxt
     assert 'data-said="Thanks for looking after me."' in nxt
     assert NO_CURE_NEXT not in nxt

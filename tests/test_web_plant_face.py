@@ -234,7 +234,8 @@ def test_signed_out_i_did_it_says_how_to_keep_the_plant(tmp_path):
     # 19 Oct home pass: the one place a signed-out visitor sees what signing in is for.
     # Signing in does not carry this answer over, so it says to send the photo again
     page = _page(_with_main(tmp_path, "shelter"), accounts=True)
-    box = page.split('<div class="i-did" id="i-did" hidden>', 1)[1].split("</div>", 1)[0]
+    # one plain line under What next's stops since 23 Oct, still only beside "I did it"
+    box = page.split('<section class="next-step"', 1)[1].split("</section>", 1)[0]
     assert KEEP.replace("'", "&#39;") in box or KEEP in box
     # nothing is promised that does not happen: the email is asked for, never automatic
     assert "and get an email" not in page
@@ -254,6 +255,10 @@ def test_no_i_did_it_no_sign_in_line(tmp_path):
 def test_the_sign_in_line_is_16px_in_the_themes_colours():
     css = (style.STATIC / "pages" / "answer.css").read_text()
     rule = re.search(r"\.answer-page \.i-did \.keep \{([^}]*)\}", css).group(1)
+    assert (
+        ".answer-page .next-step > p.keep { margin: 0; font-size: 16px; color: var(--muted-fg); }"
+        in style.CSS
+    )
     assert "font-size: 16px" in rule and "var(--muted-fg)" in rule
 
 

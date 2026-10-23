@@ -48,6 +48,41 @@ def test_the_progress_page_carries_the_same_stylesheet():
     assert style.CSS in head and 'class="wordmark"' in head and "<h1>" in head
 
 
+def test_each_web_font_has_a_metric_matched_fallback_so_the_swap_moves_nothing():
+    """Until a web font arrives the text sets in a system font scaled to its width and line
+    height (size-adjust and the overrides), named straight after it in the stack."""
+    faces = re.findall(r"@font-face \{([^}]*)\}", style.CSS)
+    fallbacks = {}
+    for face in faces:
+        if "local(" in face:
+            family = re.search(r'font-family: "([^"]+)"', face).group(1)
+            fallbacks.setdefault(family, []).append(face)
+            for need in ("size-adjust:", "ascent-override:", "descent-override:",
+                         "line-gap-override:", "unicode-range:"):  # fmt: skip
+                assert need in face, (family, need)
+    stacks = {
+        "--display:": ("Alegreya", ["Alegreya Georgia", "Alegreya Noto"]),
+        "--sans:": ('"Alegreya Sans"', ["Alegreya Sans Arial", "Alegreya Sans Roboto"]),
+        "--poster:": ('"Fira Sans Extra Condensed"', ["Fira Arial Narrow", "Fira Roboto Condensed"]),
+    }  # fmt: skip
+    for token, (web, fbs) in stacks.items():
+        stack = style.CSS.split(token, 1)[1].split(";", 1)[0].strip()
+        assert stack.startswith(web + ", " + ", ".join(f'"{f}"' for f in fbs)), stack
+        assert all(f in fallbacks for f in fbs)
+    # every weight the sans web font has, its fallbacks have too
+    assert len(fallbacks["Alegreya Sans Arial"]) == len(fallbacks["Alegreya Sans Roboto"]) == 3
+
+
+def test_the_fonts_seen_first_are_preloaded(tmp_path):
+    page = _client(tmp_path, [], []).get("/privacy").text
+    head = page.split("</head>", 1)[0]
+    for name in ("alegreya-sans-400", "fira-condensed-800", "alegreya-700"):
+        assert (
+            f'<link rel="preload" href="/static/fonts/{name}.woff2" as="font" '
+            'type="font/woff2" crossorigin>'
+        ) in head, name
+
+
 def test_sign_in_and_judge_fields_have_labels(tmp_path):
     assert "<label>Your email" in _any_client(tmp_path).get("/auth/sign-in").text
     assert "<label>Judges' code" in _judge_client(tmp_path).get("/judge").text

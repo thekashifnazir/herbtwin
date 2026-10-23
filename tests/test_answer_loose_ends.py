@@ -116,13 +116,14 @@ def test_no_place_asks_for_it_once_and_keeps_no_bare_watch(tmp_path):
     assert page.count("We don't know where this is") == 1
 
 
-def test_the_spot_card_offers_a_full_size_button(tmp_path):
+def test_the_spot_line_is_one_big_link(tmp_path):
+    # 23 Oct redesign: the whole sky line is the link (12px padding round it), not a small one
     from herbtwin.schemas import Location
 
     rec = _unsure_record(tmp_path)
     rec.observation.setting = "outdoor"
     rec.location = Location(lat=51.5, lon=-0.12, source="home", label="London")
-    assert '<a class="button spot-go" href="/answers/' in _render(rec, spot_on=True)
+    assert '<p class="spot-line"><a class="spot-go" href="/answers/' in _render(rec, spot_on=True)
 
 
 def test_indoors_the_watch_does_not_promise_what_a_place_would_add(tmp_path):

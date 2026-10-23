@@ -33,7 +33,7 @@ LABEL = {
     "check_pests": "Check for pests", "isolate": "Keep it apart", "mulch": "Mulch it",
     "humidity": "Raise humidity", "rotate": "Turn the pot", "other": "Something else",
 }  # fmt: skip
-BLOCK = re.compile(r'<details class="by-part" open>.*?</details>', re.S)
+BLOCK = re.compile(r'<details class="by-part">.*?</details>', re.S)
 
 
 def _answer(do, dont=None, watch="Send a new photo if it changes.", **kw) -> Answer:
@@ -194,7 +194,8 @@ def test_the_page_folds_the_parts_between_keep_an_eye_on_and_what_next(tmp_path)
     plan = page.split('<div class="plan">')[1].split('<div class="side">')[0]
     assert plan.index('id="watch"') < plan.index('class="by-part"') < plan.index('id="next-step"')
     block = BLOCK.search(plan).group(0)
-    assert "<summary>See it by part: soil, leaves and stems</summary>" in block
+    # shut, under a plain title (23 Oct redesign: open, it repeated every line above)
+    assert "<summary>By part of the plant</summary>" in block
     # the part names are not headings: a reader's heading list keeps them out of Keep an eye on
     assert "<h3" not in block
     assert '<p class="part">Soil</p>' in block and '<p class="part">Leaves and stems</p>' in block

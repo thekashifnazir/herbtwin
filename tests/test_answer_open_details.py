@@ -16,10 +16,11 @@ def _summary(page: str, cls: str) -> str:
     return page.split(f'<details class="{cls} fold', 1)[1].split("</summary>", 1)[0]
 
 
-def test_see_it_by_part_starts_open(tmp_path):
-    # "should be open as a lot of good info in here"
+def test_by_part_starts_shut(tmp_path):
+    # 21 Oct, Kash: "should be open as a lot of good info in here"; 23 Oct answer-page
+    # redesign: open, it repeated every line above word for word, so it is a shut fold
     page = _render(_full_plan(tmp_path))
-    assert '<details class="by-part" open>' in page
+    assert '<details class="by-part"><summary>By part of the plant</summary>' in page
 
 
 def test_why_says_what_helped_and_held_it_back_before_it_opens(tmp_path):
@@ -76,29 +77,31 @@ def test_the_fold_lines_read_on_every_tint_in_both_schemes():
             assert _contrast(fg, bg) >= 4.5, (tint, scheme, fg, bg)
 
 
-def test_what_could_grow_here_is_a_card_with_a_button(tmp_path):
-    # "this is great, why is it hidden behind a very small hard to find hyperlink?"
+def test_what_could_grow_here_is_one_sky_line(tmp_path):
+    # "this is great, why is it hidden behind a very small hard to find hyperlink?" (21 Oct);
+    # 23 Oct answer-page redesign: one sky line, the whole of it the link, not another card
     rec = _full_plan(tmp_path)
     rec.observation.setting = "outdoor"
     rec.location = LONDON
     page = _render(rec, spot_on=True)
-    card = page.split('<section class="spot-card ink"', 1)[1].split("</section>", 1)[0]
-    assert '<h2 id="spot-card-h">What could grow here</h2>' in card
-    assert (
-        f'<a class="button spot-go" href="/answers/{rec.record_id}/spot">See what grows here</a>'
-        in card
+    line = page.split('<p class="spot-line">', 1)[1].split("</p>", 1)[0]
+    assert line.startswith(
+        f'<a class="spot-go" href="/answers/{rec.record_id}/spot"><strong>See what grows here</strong>'
     )
-    assert "primary" not in card  # the page keeps one green button
+    assert "the crops that suit it this month" in line
+    assert (
+        "primary" not in line and 'class="spot-card' not in page
+    )  # the page keeps one green button
     # in the plan, under What next, not at the foot of the details
     assert (
         page.index('id="next-step"')
-        < page.index('<section class="spot-card')
+        < page.index('<p class="spot-line">')
         < page.index('<div class="side"')
     )
     assert "spot-link" not in page
-    # indoors, or with no place, there is no card
+    # indoors, or with no place, there is no line
     rec.observation.setting = "indoor"
-    assert '<section class="spot-card' not in _render(rec, spot_on=True)
+    assert 'class="spot-line"' not in _render(rec, spot_on=True)
 
 
 def test_the_band_switch_has_room_and_a_tint():
