@@ -1,0 +1,49 @@
+/* Three things on the answer to tap (23 Oct, Kash on rev 00089): how sure as a disclosure, the
+   indoors/outdoors switch as a short question and a small button, and Compare's "try each
+   choice" said before the choices. Scoped under .answer-page; tokens only. */
+
+/* How sure: the line is the summary of a disclosure, the chip in its colour, "What this means"
+   the cue; open, the explanation sits under it, tinted as the level (green our best read,
+   amber check first) */
+.answer-page .main-action > .sure { display: block; }
+.answer-page .main-action .sure-more { margin: 0; padding: 0; border: 0; border-radius: 0; background: none;
+  box-shadow: none; overflow: visible; }
+.answer-page .main-action .sure-more > summary { flex-wrap: wrap; gap: 6px 10px; min-height: 44px;
+  padding: 0; border-bottom: 0; font-weight: 400; }
+.answer-page .main-action .sure-more > summary::after { display: none; }  /* the cue has its own */
+.answer-page .main-action .sure-more > summary > strong { color: var(--muted-fg); font: 600 16px/1.3 var(--sans); }
+.answer-page .main-action .sure-more > summary > .badge-line { flex: 1 1 12rem; }
+.answer-page .main-action .sure-open { display: inline-flex; align-items: center; gap: 6px; color: var(--primary);
+  font: 700 16px/1.3 var(--sans); text-decoration: underline; text-underline-offset: 3px; }
+.answer-page .main-action .sure-open::after { content: ""; width: 7px; height: 7px; margin-bottom: 3px;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); }
+.answer-page .main-action .sure-more[open] .sure-open::after { margin: 3px 0 0; transform: rotate(-135deg); }
+.answer-page .main-action .sure-more > summary:hover .sure-open { text-decoration-thickness: 2px; }
+.answer-page .main-action .sure-more > .sure-body { margin: 10px 0 0; padding: 12px 14px; border-radius: 12px;
+  background: var(--soft); }
+.answer-page .main-action .sure-more:has(.badge.check) > .sure-body { background: var(--warn-bg); }
+.answer-page .main-action .sure-body p { margin: 0 0 8px; font-size: 16px; line-height: 1.45; }
+.answer-page .main-action .sure-body > :last-child { margin-bottom: 0; }
+.answer-page .main-action .sure-doubt { margin: 6px 0 0; color: var(--muted-fg); font-size: 16px; }
+.answer-page .main-action .sure-doubt:empty { display: none; }
+
+/* 2. Indoors or outdoors, when the read gave one: "Is it indoors?" and a small outlined button
+   in the band's white, a fix for a wrong read, never the lime press */
+.answer-page .page-band .setting-switch:has(.as-pill) { gap: 10px; margin: -6px 0 14px; }
+.answer-page .page-band .setting-switch .switch-ask { color: var(--band-fg); font: 500 17px/1.35 var(--sans); }
+.answer-page .page-band .setting-switch .switch.as-pill { min-height: 44px; padding: 6px 16px;
+  border: 1.5px solid var(--band-line); border-radius: var(--pill); background: transparent;
+  color: var(--band-fg); font: 600 16px/1.2 var(--sans); }
+.answer-page .page-band .setting-switch .switch.as-pill:hover { background: color-mix(in srgb, var(--band-fg) 14%, var(--band)); }
+
+/* 3. Compare: what to do with the chart, before the choices, as a thing to try; each choice
+   has a dot, filled for the one drawn, so they read as choices to pick */
+.answer-page details.compare .twin-try { display: flex; align-items: center; gap: 10px; margin: 4px 20px 12px;
+  padding: 10px 14px; border-radius: 12px; background: var(--soft); color: var(--fg); font: 700 17px/1.35 var(--sans); }
+.answer-page details.compare .twin-try::before { content: "\2193" / ""; flex: none; color: var(--primary);
+  font: 700 20px/1 var(--sans); }
+.answer-page .twin-pick { cursor: pointer; }
+.answer-page .twin-pick::before { content: ""; display: inline-block; width: 12px; height: 12px; margin: 0 8px 2px 0;
+  border: 2px solid currentColor; border-radius: 50%; vertical-align: middle; }
+.answer-page .twin-pick[aria-pressed="true"]::before { background: currentColor; box-shadow: inset 0 0 0 2px var(--soft); }
+.answer-page .twin-pick:hover { background: var(--soft); }

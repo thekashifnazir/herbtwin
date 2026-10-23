@@ -95,9 +95,10 @@ def test_the_header_and_reference_are_short(tmp_path):
 
 def test_the_chart_caption_and_hints_are_one_short_line():
     src = _source()
-    cap = src.split('<span id="twin-chart-cap">', 1)[1].split("</span>", 1)[0]
-    # the legend left the caption: each line is named where it ends (22 Oct, Kash)
-    assert cap == "Tap a choice to see its line on the chart."
+    # the legend left the caption: each line is named where it ends (22 Oct, Kash); what to
+    # do with the chart is one short line before the choices (23 Oct, Kash on rev 00089)
+    tip = src.split('<p class="twin-try" id="twin-try">', 1)[1].split("</p>", 1)[0]
+    assert tip == "Try each choice: tap one below to draw its line on the chart."
     # the two buttons' names say what each does: no explainer line (21 Oct, Kash)
     assert "we redo the advice" not in src
 

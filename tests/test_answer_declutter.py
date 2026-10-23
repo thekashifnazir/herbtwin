@@ -103,7 +103,7 @@ def test_the_level_line_has_no_stray_space(tmp_path, monkeypatch):
     # says: the base one is left unsaid (23 Oct answer-page critique, 2)
     monkeypatch.setitem(TEMPLATES.env.globals, "top_doubt", lambda a: "the photo is small")
     page = _render(_unsure_record(tmp_path))
-    said = re.search(r'class="badge-line">.*?</span><span>(.*?)</span>', page, flags=re.S).group(1)
+    said = re.search(r'class="sure-doubt">(.*?)</p>', page, flags=re.S).group(1)
     assert said.startswith("Mostly: ") and said == said.strip() and "  " not in said
 
 

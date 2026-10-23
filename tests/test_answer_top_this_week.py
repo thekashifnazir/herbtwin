@@ -10,7 +10,7 @@ from pathlib import Path
 from herbtwin.web import style
 from herbtwin.web.answer_text import plan_text
 from herbtwin.web.app import TEMPLATES
-from tests.test_web_answer_page import _full_plan, _render, _unsure_record
+from tests.test_web_answer_page import _full_plan, _render, _sure_line, _unsure_record
 from tests.test_web_answer_reveal import _rules
 
 SHEET = Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer_top.css"
@@ -33,20 +33,19 @@ def _week(page: str) -> str:
 # ---------- 1. the band's switch ----------
 
 
-def test_the_switch_is_a_small_link_when_the_read_gave_a_setting(tmp_path):
+def test_the_switch_is_small_and_secondary_when_the_read_gave_a_setting(tmp_path):
+    # 23 Oct: a small link (critique, 1), then a short question and a small outlined button
+    # (Kash on rev 00089: the long underlined sentence was "not great"); never the lime press
     rec = _unsure_record(tmp_path)
     rec.observation.setting = "outdoor"
     switch = _render(rec).split('<form class="note setting-switch"', 1)[1].split("</form>", 1)[0]
-    assert '<button type="submit" class="switch as-link">Indoors? Switch' in switch
-    link = _sheet()[".answer-page .page-band .setting-switch .switch.as-link"]
-    for say in (
-        "background: none",
-        "border: 0",
-        "text-decoration: underline",
-        "color: var(--band-fg)",
-    ):
-        assert say in link, say
-    assert int(re.search(r"min-height: (\d+)px", link)[1]) >= 44  # still a thumb's tap
+    assert '<button type="submit" class="switch as-pill">Redo for indoors</button>' in switch
+    taps = SHEET.with_name("answer_taps.css").read_text("utf-8")
+    pill = {s: b for at, s, b in _rules(taps) if not at}[
+        ".answer-page .page-band .setting-switch .switch.as-pill"
+    ]
+    assert "background: transparent" in pill and "color: var(--band-fg)" in pill
+    assert int(re.search(r"min-height: (\d+)px", pill)[1]) >= 44  # still a thumb's tap
 
 
 def test_with_no_setting_read_the_two_choices_stay_buttons(tmp_path):
@@ -83,11 +82,10 @@ def test_how_sure_never_says_the_base_doubt_nor_anything_in_its_place(tmp_path):
     # Kash: cut "Mostly: advice of this kind is right less often"; the badge's line already
     # says how often it is right
     page = _render(_unsure_record(tmp_path))
-    sure = page.split('<p class="sure">', 1)[1].split("</p>", 1)[0]
+    sure = _sure_line(page)
     assert "less often" not in sure and "Mostly" not in sure and "See why below" not in sure
     assert "Right about 1 in 3 times in our tests." in sure
-    # on one line with its chip: the heading no longer takes a line of its own
-    assert "flex-basis: auto" in _sheet()[".answer-page .main-action > .sure > strong"]
+    # on one line with its chip (a disclosure's summary since 23 Oct: answer_taps.css)
 
 
 def test_where_it_came_from_is_one_quiet_line_under_the_card(tmp_path):

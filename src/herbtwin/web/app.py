@@ -165,6 +165,7 @@ from herbtwin.web.held_photos import HeldPhotos
 from herbtwin.web.picture import picture
 from herbtwin.web.progress import (
     HEAD,
+    SAID_BY_SERVER,
     SIGNED_OUT_HEAD,
     SPOT_HEAD,
     asks_card,
@@ -1516,7 +1517,9 @@ def create_app(
         person, holder = await who(request)
         owner = person.user_id if person is not None else None
         counted = app.state.waits.reply(wait_id, owner, told, cleared)
-        return _with_cookies(JSONResponse({"counted": counted}), holder)
+        said = SAID_BY_SERVER.get(counted)
+        body = {"counted": counted, **({"said": said} if said else {})}
+        return _with_cookies(JSONResponse(body), holder)
 
     @app.post("/waits/{wait_id}/see")
     async def wait_see(request: Request, wait_id: str):
@@ -2000,12 +2003,19 @@ def create_app(
             told = now if found else told
         # a place told there: read where it is (the crop), or place the first read there
         place = (told.place if told is not None else None) or wait.place
+        if cut is not None and told is not None and told.place:
+            # the crop's read looks it up as an upload's typed place, and like one it is
+            # never in what they told us: one it can't find is said, never claimed (#504 review)
+            told = told.model_copy(update={"place": None})
+            told = None if told.is_empty() else told
         if cut is not None:
             try:
                 data = await run_in_threadpool(cut, wait.raw)
             except ValueError:
                 log.info("tap refused for %s", tap_id, exc_info=True)
                 app.state.taps.restore(tap_id, wait)  # they may tap again
+                if wait.wait_id is not None:  # and a reply meanwhile goes into that tap
+                    app.state.waits.untap(wait.wait_id)
                 return message(request, TAP_AGAIN, 400, f"/taps/{tap_id}", "Back to the photo")
             # the crop alone is read again: the closer looks showed the whole photo's plant
             mime, first = "image/jpeg", None

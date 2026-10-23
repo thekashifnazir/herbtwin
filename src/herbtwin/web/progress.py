@@ -503,6 +503,11 @@ ASKED_KEPT = (
 )
 ASK_FAILED = "That didn't send. You can tell us under your answer."
 ASKED_BELOW = "Thanks: we'll use it for the plant you tap."
+# the plant was already tapped and its answer took the replies (review of #504)
+ASKED_TAPPED = "That came after you picked your plant: tell us again under its answer."
+# the reply lines the server sends whole, as `said` (app.wait_told): the page says them as
+# they are, so what a reply hears is tested without a browser (#508 review)
+SAID_BY_SERVER = {"tapped": ASKED_TAPPED}
 # 22 Oct site walk: one short line, so the questions start higher on a phone
 STARTED = "Optional. Your answers make the advice closer."
 # watering in short words, so the pills sit two to a row on a phone (22 Oct site walk);
@@ -558,7 +563,12 @@ def asks_card(wait_id: str, ask_place: bool = False) -> str:
     so where it is comes first; a read that finds no place asks it too (ASK_PLACE)."""
     told, see = f"/waits/{wait_id}/told", f"/waits/{wait_id}/see"
     said = json.dumps(
-        {"now": ASKED_NOW, "later": ASKED_LATER, "below": ASKED_BELOW, "kept": ASKED_KEPT}
+        {
+            "now": ASKED_NOW,
+            "later": ASKED_LATER,
+            "below": ASKED_BELOW,
+            "kept": ASKED_KEPT,
+        }
     )
     return (
         f'<form class="tray wait-asks" id="wait-asks" method="post" action="{told}" hidden>'
@@ -590,7 +600,9 @@ def asks_card(wait_id: str, ask_place: bool = False) -> str:
         "w=k.map(q=>whats[q]).join(' and ');"
         "last=fetch(f.action,{method:'POST',body:d,headers:{'X-Herbtwin-Fetch':'1'}})"
         ".then(r=>r.ok?r.json():{}).then(j=>{const m=said[j.counted];"
-        f"say(!m?{json.dumps(ASK_FAILED)}:j.counted==='kept'"
+        # a line the server words itself (too late for the tapped plant: SAID_BY_SERVER) is
+        # said as it is, whatever the reply was
+        f"say(j.said?j.said:!m?{json.dumps(ASK_FAILED)}:j.counted==='kept'"
         "?m.replace('{what}',u.map(q=>whats[q]).join(' and '))"
         ":!w?none.replace('{none}',u.map(q=>nones[q]).join(' or ')):m.replace('{what}',w))})"
         f".catch(()=>say({json.dumps(ASK_FAILED)}));return last}};"

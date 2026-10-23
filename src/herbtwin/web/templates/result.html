@@ -151,13 +151,14 @@
   {# the switch (19 Oct, Kash): the read can be wrong about indoors or out; it re-runs the
      advice with it forced, keeping what else was told (indoors: no forecast). The chip above
      says which it is, so the switch only says what it does (21 Oct, Kash: "Looks like
-     outdoors" repeated "Outdoor"; "Wrong? Switch" did not say what would happen). A small
-     link when the read gave a setting: a fix for a wrong read, not a second thing to press
-     (23 Oct answer-page critique, 1) #}
+     outdoors" repeated "Outdoor"; "Wrong? Switch" did not say what would happen). When the
+     read gave a setting: a fix for a wrong read, so a short question and a small outlined
+     button, never the lime press (23 Oct answer-page critique, 1; 23 Oct, Kash on rev
+     00089: the long underlined sentence was "not great") #}
   {% if a %}{% set t = rec.told %}<form class="note setting-switch" method="post" action="/answers/{{ rec.record_id }}/refine">
     {{- told_fields(t) }}
     {%- if obs.setting in ("indoor", "outdoor") %}{% set other = "outdoor" if obs.setting == "indoor" else "indoor" %}
-    <input type="hidden" name="setting" value="{{ other }}"><button type="submit" class="switch as-link">{{ other|capitalize }}s? Switch and we'll redo the advice for an {{ other }} plant</button>
+    <input type="hidden" name="setting" value="{{ other }}"><span class="switch-ask">Is it {{ other }}s?</span> <button type="submit" class="switch as-pill">Redo for {{ other }}s</button>
     {%- else %}
     <span>Indoors or outdoors? We'll redo the advice to fit.</span> <button type="submit" class="switch" name="setting" value="indoor">Indoors</button> <button type="submit" class="switch" name="setting" value="outdoor">Outdoors</button>{% endif %}
   </form>
@@ -318,15 +319,34 @@
          Two words, no number: "about 7 in 10" over-claimed (19 Oct answer-quality check) #}
       {# the colon and full stop are for screen readers and the rater text only: on screen the
          badge sits under the heading, so it reads "How sure we are: Our best read. Right…" #}
-      <p class="sure"><strong>How sure we are<span class="sr-only">:</span></strong>
+      {#- how sure, as a disclosure: the chip looked like a button and invited a tap (23 Oct,
+          Kash on rev 00089: "lean into it and give more information"), so it is one. The
+          summary is the line as it was; open, it says what the level means in our tests, why
+          this answer is at it (the factors Why we're not sure lists, helped and held back) and
+          what makes it surer. A summary, so it works with no script; no link inside it #}
+      {#- each factor as words that fit "helped by …" / "held back by …", by its stable key (a
+          name can be a sentence: "The lead advisor wasn't sure"), the lead advisor's by which
+          way it went (its sureness never "held it back"); an old answer's chip has no key, so
+          its name, lowered, as the Why fold says it #}
+      {% set sure_words = {"Season": "the season", "Photo": "the photo", "Choices compared": "the choices compared", "Agreement": "how many advisors agreed", "Weather": "the weather", "Soil": "the soil", "Light": "the light", "History": "your plant's history"} %}
+      {% set sure_by = namespace(up=[], down=[]) %}
+      {%- for c in a.chips if c.effect != "neutral" %}{% set w = ("the lead advisor's confidence" if c.effect == "raises" else "the lead advisor's doubt") if c.key == "Lead advisor sure" else sure_words.get(c.key) or c.name|lower %}{% if c.effect == "raises" %}{% set sure_by.up = sure_by.up + [w] %}{% else %}{% set sure_by.down = sure_by.down + [w] %}{% endif %}{% endfor %}
+      {%- set sure_up, sure_down = sure_by.up, sure_by.down %}
+      <div class="sure"><details class="sure-more"><summary><strong>How sure we are<span class="sr-only">:</span></strong>
       <span class="badge {{ 'best' if best else 'check' }}">{{ level_label }}<span class="sr-only">.</span></span>
       <span class="badge-line">{{ level_line }}</span>
+      <span class="sure-open">What this means</span></summary>
+        <div class="sure-body">
+        <p><strong>{{ level_label }}</strong> means: in our tests on 624 real gardening questions with answers from experienced gardeners, answers at this level matched the gardener's first step {{ record }}.{% if not best %} So check before you act.{% endif %} Each kind of advice starts from its own record against the gardeners, and what we know about this plant moves it up or down.</p>
+        {% if sure_up or sure_down %}<p><strong>Why this answer is at this level:</strong> {% if sure_up %}helped by {{ sure_up|join(", ") }}{% endif %}{% if sure_up and sure_down %}; {% endif %}{% if sure_down %}held back by {{ sure_down|join(", ") }}{% endif %}.</p>{% endif %}
+        <p><strong>What makes it surer:</strong> {% if retake %}{{ retake[1] }}: a clearer photo is the surest way.{% elif place_on_band %}add where it is, at the top of the page, so we can test the advice against your weather.{% elif quick %}answer the {{ quick }} quick question{{ "s" if quick != 1 else "" }} in <a href="#refine">Tell us more</a> and we'll check the advice again.{% else %}tell us what you see, or how the soil feels, in <a href="#refine">Tell us more</a> and we'll check the advice again.{% endif %}</p>
+        </div></details>
       {#- the one thing that lowered it most, here beside the level, not two screens down
          (design wave 1, C); "tell us below" only when no Make-surer button says it (21 Oct,
          Kash: "Add where it is" was said three times). Never "advice of this kind is right
          less often": the badge's line already says how often, and nothing stands in for it
          (23 Oct answer-page critique, 2) #}
-      {%- if not best %}{% set doubt = top_doubt(a) %}{% set said_doubt = doubt and doubt != base_doubt %}<span>{% if said_doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if said_doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</span>{% endif %}</p>
+      {%- if not best %}{% set doubt = top_doubt(a) %}{% set said_doubt = doubt and doubt != base_doubt %}<p class="sure-doubt">{% if said_doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if said_doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</p>{% endif %}</div>
       {# indoors the photo's light can't be measured (light.read_light: no open sky to
          compare with), and the page never said so (22 Oct, a gardener: "how do you tell light
          levels indoors?"). Say it once, and ask for the window, until it is told; never beside "Send a sharper
@@ -910,7 +930,7 @@
       {%- set down = a.chips|selectattr("effect", "in", ["lowers", "missing"])|map(attribute="name")|map("lower")|list %}
       <details class="why fold {{ 'fold-good' if best else 'fold-check' }}"><summary><span class="fold-head">{% if ft.why.found %}<span class="fold-kind">{{ ft.why.kind }}</span>{% endif %}<span class="fold-title">{{ ft.why.title }}</span>
         <span class="fold-peek">{% if up %}Helped: {{ up[:3]|join(", ") }}{% endif %}{% if up and down %} · {% endif %}{% if down %}Held back: {{ down[:3]|join(", ") }}{% endif %}{% if not up and not down %}What raised or lowered how sure we are{% endif %}</span></span></summary>
-        <p class="small">In our tests on 624 questions answered by experts, answers at this level matched the expert's first step {{ record }}.</p>
+        <p class="small">In our tests on 624 real gardening questions with answers from experienced gardeners, answers at this level matched the gardener's first step {{ record }}.</p>
         <ul>{% for effect, said in (("raises", "Helped"), ("lowers", "Lowered it"), ("missing", "Missing"), ("neutral", "No effect on how sure we are")) %}
           {%- set chips = a.chips|selectattr("effect", "equalto", effect)|list %}
           {#- one bullet per factor, no brackets inside brackets (19 Oct small-print re-check) #}
@@ -962,18 +982,21 @@
             <circle class="today" cx="{{ tc.today[0] }}" cy="{{ tc.today[1] }}" r="10"/>
             <image id="twin-chart-photo" x="{{ tc.today[0] - 9 }}" y="{{ tc.today[1] - 9 }}" width="18" height="18" clip-path="url(#twin-dot)" preserveAspectRatio="xMidYMid slice" hidden/>
           </svg>
-          <figcaption><span id="twin-chart-cap">Tap a choice to see its line on the chart.</span>
-            <span class="sr-only" id="twin-chart-said" aria-live="polite">{% for ln in tc.lines if ln.action == tc.shown %}{{ ln.said }}{% endfor %}</span></figcaption>
+          <figcaption><span class="sr-only" id="twin-chart-said" aria-live="polite">{% for ln in tc.lines if ln.action == tc.shown %}{{ ln.said }}{% endfor %}</span></figcaption>
           <template id="twin-chart-words">{% for ln in tc.lines %}<span data-line="{{ ln.action }}">{{ ln.said }}</span>{% endfor %}</template>
         </figure>{% endif %}
         {# each row a choice, a small tinted tag (like home's 2-week outlook, never a button),
            and the reason; on a phone the three stack, the reason on its own line (22 Oct,
            Kash). Leaving it is the yardstick: its tag says "Starting point", never "baseline";
            the reasons are the twin's, said as plain sentences (plain_why) #}
+        {#- what to do with the chart, said before the choices and in the colour of a thing to
+            try, not a muted caption under the chart (23 Oct, Kash on rev 00089: "the
+            instruction is tiny and could be missed") #}
+        {% if tc %}<p class="twin-try" id="twin-try">Try each choice: tap one below to draw its line on the chart.</p>{% endif %}
         {% if a.compare %}<div class="scroll"><table class="compare-table"><thead><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr></thead><tbody>
         {% set drawn = tc.lines|map(attribute="action")|list if tc else [] %}
         {% set verdict = {"better": ("▲", "Better"), "same": ("=", "Same"), "worse": ("▼", "Worse"), "unknown": ("?", "Not sure")} %}
-        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-pressed="{{ 'true' if r.action == tc.shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ plain_why(r.why) }}{% endif %}</td></tr>{% endfor %}
+        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-describedby="twin-try" aria-pressed="{{ 'true' if r.action == tc.shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ plain_why(r.why) }}{% endif %}</td></tr>{% endfor %}
         </tbody></table></div>{% else %}<p>Not compared: there is no cure, so the choices don't apply.</p>{% endif %}</details>
       {% endif %}
         {% if tc %}<script>

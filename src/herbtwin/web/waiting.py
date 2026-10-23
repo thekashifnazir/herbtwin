@@ -21,7 +21,8 @@ MAX_WAITS = 2000
 # into this answer / on reveal / under the answer (it asks which plant first) / unknown
 # "kept": "not sure" after the advice started, with nothing left to check again: the answer
 # already used the earlier reply
-Counted = Literal["now", "later", "below", "kept", "gone"]
+# "tapped": after the plant was tapped, whose answer had already taken the replies (23 Oct)
+Counted = Literal["now", "later", "below", "kept", "gone", "tapped"]
 
 
 @dataclass
@@ -34,6 +35,7 @@ class Wait:
     elsewhere: bool = False  # the read asks which plant first: a new reply is asked again
     target: str | None = None  # where the read landed
     applied: bool = False  # the late replies have had their refine
+    tapped: bool = False  # the plant was tapped: its answer took the replies (for_tap)
     at: float = 0.0
 
 
@@ -85,6 +87,8 @@ class Waits:
             if cleared and w.replies is not None:
                 kept = w.replies.model_dump(exclude_none=True, exclude=set(cleared))
                 w.replies = Told.model_validate(kept) if kept else None
+            if w.tapped:  # too late for the tapped plant's answer: never said to count,
+                return "tapped"  # nor (a "not sure") said to have been used (#508 review)
             used = w.taken is not None and any(getattr(w.taken, f) for f in cleared)
             if cleared and used and joined(w.base, w.replies) is None:
                 # the answer used the earlier reply, and a refine needs something to say
@@ -116,7 +120,15 @@ class Waits:
             w = self._items.get(wait_id)
             if w is None or self._clock() - w.at > self._ttl:
                 return False, None
+            w.tapped = True  # a reply after this is not in its answer: the page says so
             return True, joined(w.base, w.replies)
+
+    def untap(self, wait_id: str) -> None:
+        """The tap was refused and may come again: its retry takes the replies afresh, so
+        one sent meanwhile still counts, and is said to (review of this branch)."""
+        with self._lock:
+            if (w := self._items.get(wait_id)) is not None:
+                w.tapped = False
 
     def finish(self, wait_id: str, target: str) -> None:
         with self._lock:

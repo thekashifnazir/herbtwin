@@ -62,7 +62,7 @@ def test_the_switch_reruns_the_advice_indoors_then_outdoors(tmp_path):
     switch = page.split('<form class="note setting-switch"', 1)[1].split("</form>", 1)[0]
     assert '<span class="chip setting">Outdoors</span>' in page
     assert 'name="setting" value="indoor"' in switch
-    assert ">Indoors? Switch and we'll redo the advice for an indoor plant</button>" in switch
+    assert ">Redo for indoors</button>" in switch
     fetched = weather.call_count
     r = c.post(f"/answers/{rid}/refine", data={"setting": "indoor"})
     assert r.status_code == 200

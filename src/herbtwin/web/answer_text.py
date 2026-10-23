@@ -20,8 +20,11 @@ SKIP_TAGS = {"script", "style", "button", "audio", "figure", "svg", "template"}
 # extras: shop links; reported: GBIF's records and others' headlines, not our advice
 # "told-echo": what the person told us, said back, is not advice (22 Oct site walk)
 # "indoor-light": that indoor light isn't measured, and the ask for the window (22 Oct)
+# "sure-open", "sure-body": How sure's disclosure, its cue and its explanation (23 Oct): what
+# the level means and why, said about our sureness, not advice
 SKIP_CLASSES = {
     "make-surer", "next-step", "by-part", "extras", "reported", "told-echo", "indoor-light",
+    "sure-open", "sure-body",
 }  # fmt: skip
 VOID = {"img", "br", "hr", "input", "meta", "link", "source"}
 BLOCKS = {"p", "h2", "h3", "li", "ul", "div", "section"}  # each starts a new paragraph

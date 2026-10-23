@@ -499,7 +499,10 @@ def test_what_was_told_on_the_wait_reaches_the_answer_for_the_plant_tapped(tmp_p
     page = c.post(f"/taps/{tap}", data=form).text
     answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
     rec = c.app.state.answers.get_for(answer, None).latest
-    assert rec.told == Told(soil_feel="dry", last_watered="today", place="London")
+    # a crop's read looks the place up as an upload's typed place: in its location, not
+    # in what they told us (#504 review: one it can't find is never claimed)
+    place = {"place": "London"} if whole else {}
+    assert rec.told == Told(soil_feel="dry", last_watered="today", **place)
     assert rec.location is not None and round(rec.location.lat, 1) == 51.5  # its weather too
     assert rec.environment is not None and rec.state is not None
     assert "No place given" not in page
@@ -542,3 +545,96 @@ def test_a_wait_place_the_tap_cannot_find_says_so_and_is_not_claimed(tmp_path):
     rec = c.app.state.answers.get_for(answer, None).latest
     assert rec.told == Told(soil_feel="dry") and rec.location is None
     assert any(n.endswith(PLACE_NOT_FOUND_HINT) for n in rec.notes)
+
+
+def test_a_reply_after_the_plant_was_tapped_is_never_said_to_count():
+    # #504 review: the tap's answer takes the replies when the tap starts; one after that
+    # was told "we'll use it for the plant you tap", then dropped
+    from herbtwin.web.progress import ASKED_TAPPED
+
+    w = waiting.Waits()
+    w.start(WID, None, None)
+    w.reply(WID, None, Told(soil_feel="dry"))
+    w.take(WID, None, answering=False)
+    assert w.reply(WID, None, Told(last_watered="today")) == "below"  # before the tap: used
+    assert w.for_tap(WID) == (True, Told(soil_feel="dry", last_watered="today"))
+    assert w.reply(WID, None, Told(soil_feel="wet")) == "tapped"
+    assert ASKED_TAPPED == "That came after you picked your plant: tell us again under its answer."
+    # a "not sure" on a question the answer already took: still "tapped", never "kept",
+    # which would say the answer used it (#508 review)
+    assert w.reply(WID, None, Told(), frozenset({"soil_feel"})) == "tapped"
+    # the server words it, and the page says what the server sent, whatever the reply
+    assert "say(j.said?j.said:" in asks_card(WID)
+    # a refused tap may come again: a reply meanwhile goes into it, and is said to
+    w.untap(WID)
+    assert w.reply(WID, None, Told(last_watered="1_2_days")) == "below"
+
+
+@respx.mock
+def test_a_wait_place_a_tapped_crop_cannot_find_is_said_and_not_claimed(tmp_path):
+    from herbtwin.where import GEOCODE_URL, PLACE_NOT_FOUND_HINT
+    from tests.test_web import _placeless_client
+    from tests.test_web_tap import MIXED, PHOTO
+
+    respx.get(GEOCODE_URL).mock(return_value=httpx.Response(200, json={"results": []}))
+    reads = [json.dumps(MIXED), json.dumps(OBS)]  # the crop is read again
+    c = _placeless_client(tmp_path, reads, [json.dumps(ADV)] * 3)
+    page = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}).text
+    wait_id = re.search(r'action="/waits/([0-9a-f]+)/told"', page)[1]
+    tap = re.search(r'<a id="next" href="/taps/([0-9a-f]+)"', page)[1]
+    c.post(f"/waits/{wait_id}/told", data={"place": "Nowhereville", "soil_feel": "dry"})
+    page = c.post(f"/taps/{tap}", data={"fx": "0.25", "fy": "0.5"}).text
+    assert "Couldn&#x27;t find that place: skipping the weather" in page
+    answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
+    rec = c.app.state.answers.get_for(answer, None).latest
+    assert rec.told == Told(soil_feel="dry") and rec.location is None
+    assert any(n.endswith(PLACE_NOT_FOUND_HINT) for n in rec.notes)
+
+
+@respx.mock
+def test_after_a_real_tap_a_late_reply_hears_it_came_after(tmp_path):
+    from tests.test_web_tap import MIXED, PHOTO
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c = _client(tmp_path, [json.dumps(MIXED)], [json.dumps(ADV)] * 3)
+    _with_reply(c, Told(soil_feel="dry"))  # sent while the photo was read: the read took it
+    page = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}).text
+    wait_id = re.search(r'action="/waits/([0-9a-f]+)/told"', page)[1]
+    tap = re.search(r'<a id="next" href="/taps/([0-9a-f]+)"', page)[1]
+    c.post(f"/taps/{tap}", data={"whole": "1"})
+    said = "That came after you picked your plant: tell us again under its answer."
+    late = c.post(f"/waits/{wait_id}/told", data={"soil_feel": "wet"}).json()
+    assert late == {"counted": "tapped", "said": said}
+    # "not sure" on the soil the answer took: the same line, never "already used" (#508)
+    unsure = c.post(f"/waits/{wait_id}/told", data={"soil_feel": "not_sure"}).json()
+    assert unsure == {"counted": "tapped", "said": said}
+
+
+@respx.mock
+def test_a_refused_crop_lets_a_reply_meanwhile_into_the_retry(tmp_path, monkeypatch):
+    # review of #508: a crop that can't be cut puts the tap back; a reply before the retry
+    # is said to count, and the retried tap's answer has it
+    from herbtwin.web import tapping
+    from tests.test_web_tap import MIXED, PHOTO
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c = _client(tmp_path, [json.dumps(MIXED), json.dumps(OBS)], [json.dumps(ADV)] * 3)
+    page = c.post("/analyse", files={"photo": ("m.jpg", PHOTO, "image/jpeg")}).text
+    wait_id = re.search(r'action="/waits/([0-9a-f]+)/told"', page)[1]
+    tap = re.search(r'<a id="next" href="/taps/([0-9a-f]+)"', page)[1]
+    real, calls = tapping.crop_at, []
+
+    def once_refused(*a, **k):
+        calls.append(1)
+        if len(calls) == 1:
+            raise ValueError("too small")
+        return real(*a, **k)
+
+    monkeypatch.setattr(tapping, "crop_at", once_refused)
+    box = {"fx": "0.25", "fy": "0.5"}
+    assert c.post(f"/taps/{tap}", data=box).status_code == 400  # refused: tap again
+    meanwhile = c.post(f"/waits/{wait_id}/told", data={"last_watered": "today"}).json()
+    assert meanwhile == {"counted": "below"}
+    page = c.post(f"/taps/{tap}", data=box).text
+    answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
+    assert c.app.state.answers.get_for(answer, None).latest.told == Told(last_watered="today")

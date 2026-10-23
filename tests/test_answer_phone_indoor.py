@@ -124,7 +124,7 @@ def test_indoors_the_windows_are_chips_that_check_the_advice_again(tmp_path):
     assert '<input type="hidden" name="soil_feel" value="dry">' in form
     assert '<input type="hidden" name="setting" value="indoor">' in form
     # after How sure, as before
-    assert card.index('<p class="sure">') < card.index('class="note indoor-light"')
+    assert card.index('<div class="sure">') < card.index('class="note indoor-light"')
     # a chip is a quiet pick, never a second green press, and a thumb's tap
     chip = {s: b for _, s, b in _rules(INDOOR.read_text("utf-8"))}[
         ".answer-page .indoor-light .window-chip"

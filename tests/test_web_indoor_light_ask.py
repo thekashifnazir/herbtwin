@@ -37,7 +37,7 @@ def test_an_indoor_answer_says_light_is_not_measured_and_asks_for_the_window(tmp
         assert '<form class="note indoor-light" method="post" action="/answers/' in main
         assert f'<p id="window-ask">{LINE} {ASK}</p>' in main, make.__name__
         # by How sure we are: after its line, before the sources (under the card since 23 Oct)
-        assert main.index('<p class="sure">') < main.index('class="note indoor-light"')
+        assert main.index('<div class="sure">') < main.index('class="note indoor-light"')
         assert page.index('class="note indoor-light"') < page.index('<p class="sources-line">')
         assert page.count('class="note indoor-light"') == 1
 

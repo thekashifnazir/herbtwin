@@ -252,7 +252,7 @@ def test_not_sure_with_a_question_the_page_can_take_points_to_it(tmp_path):
         max_chat=500, check=None, reminder=None, compass_first="", spot_on=False,
         signed_in=False, accounts=False,
     )  # fmt: skip
-    sure = page.split('class="sure"')[1].split("</p>")[0]
+    sure = _sure_line(page)
     assert 'Answer the <a href="#refine">question below</a> and we\'ll check again.' in sure
     assert "Tell us where it is below" not in sure
     # the fold asks no place (the band's town box does, with no place at all)
@@ -289,6 +289,15 @@ def _render(rec: AnalysisRecord, **kw) -> str:
         spot_on=False, signed_in=False, accounts=False,
     )  # fmt: skip
     return TEMPLATES.get_template("result.html").render(**(ctx | kw))
+
+
+def _sure_line(page: str) -> str:
+    """How sure we are as one line, as it reads closed: the disclosure's summary (without its
+    "What this means" cue) and the Mostly line after it (23 Oct: the line became a summary)."""
+    block = page.split('<div class="sure">', 1)[1]
+    summary = block.split("<summary>", 1)[1].split("</summary>", 1)[0]
+    summary = re.sub(r'\s*<span class="sure-open">.*?</span>', "", summary)
+    return summary + block.split("</details>", 1)[1].split("</div>", 1)[0]
 
 
 def _card(action, when="this_week", because="the advisor suggested this too."):
@@ -359,7 +368,7 @@ def test_did_it_and_the_reminder_sit_with_the_asks(tmp_path):
 
 def test_sure_says_only_how_sure_and_the_others_say_what_to_do(tmp_path):
     rec = _full_plan(tmp_path)
-    sure = _render(rec).split('<p class="sure">')[1].split("</p>")[0]
+    sure = _sure_line(_render(rec))
     # whose sureness, in a word, and no number (19 Oct: "about 7 in 10" over-claimed); a
     # word badge and its line since 21 Oct, and no gloss after them
     words = " ".join(re.sub(r"<[^>]+>", " ", sure).split())
@@ -370,7 +379,7 @@ def test_sure_says_only_how_sure_and_the_others_say_what_to_do(tmp_path):
         "fairly_sure",
         "Not sure: do the quick check first, or take the low-risk step",
     )
-    fairly = _render(rec).split('<p class="sure">')[1].split("</p>")[0]
+    fairly = _sure_line(_render(rec))
     # design wave 1, C: a fairly-sure answer reads "not sure, check first" and says its main
     # doubt; the gloss shows only when no doubt can be named. Its doubt here is the base one,
     # left unsaid (23 Oct answer-page critique, 2), and the gloss does not stand in for it

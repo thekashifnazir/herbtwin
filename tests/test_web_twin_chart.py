@@ -283,9 +283,11 @@ def test_the_chart_says_what_it_shows_above_it(tmp_path):
     title = fig.split('<p class="twin-chart-title" id="twin-chart-title">', 1)[1]
     assert title.startswith("Soil water and cold nights, next 2 weeks</p>")
     assert fig.index("twin-chart-title") < fig.index("<svg")
-    # the caption no longer carries a legend; it says the choices draw their lines
-    cap = fig.split('<span id="twin-chart-cap">', 1)[1].split("</span>", 1)[0]
-    assert cap == "Tap a choice to see its line on the chart."
+    # no legend under it, and no hint: the choices draw their lines, as the line before them
+    # says (23 Oct, Kash on rev 00089: the caption was tiny and could be missed)
+    assert "Tap a choice" not in fig
+    after = page.split("</figure>", 1)[1]
+    assert after.lstrip().startswith('<p class="twin-try" id="twin-try">Try each choice')
     rec = _cold_basil(_record(tmp_path))
     assert rec.state is not None
     for s in rec.state.strips:

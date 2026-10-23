@@ -7,7 +7,7 @@ import re
 from herbtwin.web import style
 from herbtwin.web.answer_text import SKIP_CLASSES, plan_text
 from herbtwin.web.app import TEMPLATES
-from tests.test_web_answer_page import _full_plan, _render, _unsure_record
+from tests.test_web_answer_page import _full_plan, _render, _sure_line, _unsure_record
 from tests.test_web_answer_reveal import _rules
 
 CSS = (style.STATIC / "pages" / "answer.css").read_text(encoding="utf-8")
@@ -16,7 +16,7 @@ CHECK = ("check", "Not sure, check first", "Right about 1 in 3 times in our test
 
 
 def _sure(page: str) -> str:
-    return page.split('<p class="sure">', 1)[1].split("</p>", 1)[0]
+    return _sure_line(page)
 
 
 def _words(html: str) -> str:
@@ -50,8 +50,8 @@ def test_the_doubt_line_still_follows_the_badge_when_not_sure(tmp_path, monkeypa
     rec = _full_plan(tmp_path)
     rec.answer.level = "fairly_sure"
     sure = _sure(_render(rec))
-    assert "<span>Mostly: " in sure
-    assert sure.index("badge-line") < sure.index("<span>Mostly: ")
+    assert '<p class="sure-doubt">Mostly: ' in sure
+    assert sure.index("badge-line") < sure.index('<p class="sure-doubt">Mostly: ')
     rec.answer.level = "sure"
     assert "Mostly: " not in _sure(_render(rec))
 

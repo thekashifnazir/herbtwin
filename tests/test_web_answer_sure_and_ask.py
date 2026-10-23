@@ -7,7 +7,7 @@ from pathlib import Path
 
 from herbtwin.chat import starters
 from herbtwin.schemas import ProblemSeen
-from tests.test_web_answer_page import _full_plan, _render, _unsure_record
+from tests.test_web_answer_page import _full_plan, _render, _sure_line, _unsure_record
 
 PROBLEM = ProblemSeen(
     name="downy mildew",
@@ -23,7 +23,7 @@ HELD = '<span class="chip held">'
 
 def _sure(page: str) -> str:
     """How sure we are as it reads: the words, without the tags."""
-    sure = page.split('<p class="sure">', 1)[1].split("</p>", 1)[0]
+    sure = _sure_line(page)
     return " ".join(re.sub(r"<[^>]+>", " ", sure).replace(" :", ":").replace(" .", ".").split())
 
 
@@ -45,18 +45,20 @@ def test_how_sure_says_whose_sureness_it_is_in_words(tmp_path):
 
 def test_the_why_details_say_how_often_this_level_matched_the_experts(tmp_path):
     rec = _full_plan(tmp_path)
-    kept = "In our tests on 624 questions answered by experts"
+    # who answered the 624, as it was: experienced gardeners, not experts (23 Oct)
+    kept = "In our tests on 624 real gardening questions with answers from experienced gardeners"
     page = _render(rec)
     assert '<span class="fold-kind">Why it&#39;s our best read</span>' in page
     assert (
-        f"{kept}, answers at this level matched the expert's first step about half the time."
+        f"{kept}, answers at this level matched the gardener's first step about half the time."
         in page
     )
     rec.answer.level = "fairly_sure"
     page = _render(rec)
     assert '<span class="fold-kind">Why we&#39;re not sure</span>' in page
     assert (
-        f"{kept}, answers at this level matched the expert's first step about 1 in 3 times." in page
+        f"{kept}, answers at this level matched the gardener's first step about 1 in 3 times."
+        in page
     )
 
 

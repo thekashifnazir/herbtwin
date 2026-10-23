@@ -7,7 +7,7 @@ import pytest
 
 from herbtwin.answer import top_doubt
 from herbtwin.schemas import Factor
-from tests.test_web_answer_page import _render, _unsure_record
+from tests.test_web_answer_page import _render, _sure_line, _unsure_record
 
 
 def _a(*factors):
@@ -48,7 +48,7 @@ def test_a_low_answer_says_its_main_doubt_beside_the_level(tmp_path):
     rec.answer.do[0].action = "water"  # base -0.16: the -0.4 factor really is the most
     rec.answer.factors = [Factor(name="species", effect="lowers", detail="plant identity unsure")]
     # compared as a reader sees it: Jinja writes the apostrophe as &#39;
-    sure = html.unescape(_render(rec).split('<p class="sure">', 1)[1].split("</p>", 1)[0])
+    sure = html.unescape(_sure_line(_render(rec)))
     assert "Mostly: we're not sure which plant this is." in sure
     assert "See why below." not in sure  # the reason is here, not two screens down
 
@@ -61,7 +61,7 @@ def test_a_fairly_sure_answer_shown_as_not_sure_gets_both(tmp_path):
     rec.answer.do[0].action = "water"  # base -0.16: the -0.4 factor really is the most
     rec.answer.factors = [Factor(name="species", effect="lowers", detail="plant identity unsure")]
     page = html.unescape(_render(rec))
-    assert "Mostly: we're not sure which plant this is." in page.split('<p class="sure">', 1)[1]
+    assert "Mostly: we're not sure which plant this is." in _sure_line(page)
     assert "Make this surer: tell us more" in page
 
 

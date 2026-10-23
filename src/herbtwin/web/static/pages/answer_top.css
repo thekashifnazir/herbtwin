@@ -4,14 +4,8 @@
    Also do, Check first and Keep an eye on as ruled rows of one panel. Sorts after answer.css,
    so these win over its card rules. Scoped under .answer-page; tokens only. */
 
-/* 1. Indoors or outdoors, when the read gave one: a fix for a wrong read, so a small
-   underlined link in the band's white, not a second thing to press. Still a 44px tap */
-.answer-page .page-band .setting-switch:has(.as-link) { margin: -8px 0 14px; }
-.answer-page .page-band .setting-switch .switch.as-link { min-height: 44px; padding: 0; border: 0;
-  border-radius: 0; background: none; color: var(--band-fg); font: 500 16px/1.35 var(--sans);
-  text-decoration: underline; text-underline-offset: 3px; }
-.answer-page .page-band .setting-switch .switch.as-link:hover { background: none;
-  text-decoration-thickness: 2px; }
+/* 1. Indoors or outdoors, when the read gave one: a short question and a small outlined
+   button (answer_taps.css) */
 
 /* 2. The headline card: the face beside the headline, the reason and the twin's line as
    short ruled rows, how sure as its chip and one line */
