@@ -472,36 +472,49 @@ def _plain_letters(sentence: str) -> str:
 # "the soil moisture is adequate from recent rain"). Claims about the soil now, never advice
 # ("water it to keep the soil moist" stays)
 _SOIL = r"(?:soil|compost|root zone)"
-_NOW = r"(?:is|looks|remains|stays|seems|appears|feels|should be|will stay|will be)"
+# a claim about now: "stays", "should be", "will be" are advice or a forecast (review of #546)
+_NOW = r"(?:is|are|looks|remains|seems|appears|feels)"
 _WET_WORD = r"(?:moist|damp|wet|soggy|waterlogged|sodden)"
 _ENOUGH_WORD = r"(?:adequate|sufficient|fine|ok|okay|good|enough)"
 _SAYS_WET = re.compile(
-    rf"\b{_SOIL}(?:\s+moisture)?\s+{_NOW}\s+(?:still\s+|already\s+|quite\s+|very\s+)?{_WET_WORD}\b|"
-    rf"\b{_SOIL}\s+(?:is|are)\s+still\s+{_WET_WORD}\b|\bstill\s+{_WET_WORD}\b",
+    rf"\b{_SOIL}(?:\s+moisture)?\s+{_NOW}\s+(?:still\s+|already\s+|quite\s+|very\s+)?"
+    rf"{_WET_WORD}\b",
     re.I,
 )
 _SAYS_ENOUGH = re.compile(
-    rf"\b(?:{_SOIL}\s+)?moisture(?:\s+levels?)?\s+(?:is|are|looks|seems|remains)\s+"
-    rf"(?:still\s+)?{_ENOUGH_WORD}\b|"
-    r"\b(?:adequate|sufficient|enough|plenty of|good)\s+(?:soil\s+)?moisture\b",
+    rf"\b(?:{_SOIL}\s+)?moisture(?:\s+levels?)?\s+{_NOW}\s+(?:still\s+)?{_ENOUGH_WORD}\b|"
+    # "there is enough moisture", "it has plenty of moisture"; never "give it enough moisture"
+    r"\b(?:has|have|holds?|there is|there's|with)\s+(?:\w+\s+)?"
+    r"(?:adequate|sufficient|enough|plenty of)\s+(?:soil\s+)?moisture\b",
     re.I,
 )
 _SAYS_DRY = re.compile(
     rf"\b{_SOIL}\s+(?:{_NOW}|has|have)\s+(?:\w+\s+)?(?:dry|dried out|drying out|parched)\b",
     re.I,
 )
+# a condition, not a claim: "wait until the soil is dry", "once the compost has dried out"
+_IF_BEFORE = re.compile(
+    r"\b(?:until|till|once|when|whenever|if|before|unless|after)\s+(?:the\s+)?"
+    r"(?:top\s+(?:of\s+(?:the\s+)?)?)?$",
+    re.I,
+)
+
+
+def _claims(pattern: re.Pattern[str], sentence: str) -> bool:
+    return any(not _IF_BEFORE.search(sentence[: m.start()]) for m in pattern.finditer(sentence))
 
 
 def against_told_soil(sentence: str, soil: str | None) -> bool:
     """Whether a sentence says the soil is the opposite of what the person felt: moist or
     with enough water after "dry" ("cool but not moist": moist or wet only), dry after
-    "damp" or "wet". Nothing told, nothing against."""
+    "damp" or "wet". A claim about now: advice, a forecast or a condition ("until the soil
+    is dry") is none. Nothing told, nothing against."""
     if soil == "dry":
-        return bool(_SAYS_WET.search(sentence) or _SAYS_ENOUGH.search(sentence))
+        return _claims(_SAYS_WET, sentence) or _claims(_SAYS_ENOUGH, sentence)
     if soil == "cool":
-        return bool(_SAYS_WET.search(sentence))
+        return _claims(_SAYS_WET, sentence)
     if soil in ("damp", "wet"):
-        return bool(_SAYS_DRY.search(sentence))
+        return _claims(_SAYS_DRY, sentence)
     return False
 
 

@@ -418,3 +418,35 @@ def test_a_copper_or_pyrethrum_spray_is_never_quoted_but_copper_tape_is():
     assert quote_from("Treat cuckoo spit with a copper spray every week.", "cuckoo spit") is None
     assert quote_from("Treat cuckoo spit with a pyrethrum spray.", "cuckoo spit") is None
     assert quote_from("Wipe off cuckoo spit and fit copper tape round the pot.", "cuckoo spit")
+
+
+def test_the_slot_is_back_when_the_answer_returns_not_when_the_pool_gets_round_to_it(
+    tmp_path, monkeypatch
+):
+    # flaked under -n 8: the done-callback that frees the slot runs in the worker thread
+    # after result() has already returned, so the next upload could find it still taken
+    import threading
+    from concurrent.futures import Future
+
+    from herbtwin.stages import web_how
+
+    late = []
+
+    class SlowCallbacks(Future):
+        def add_done_callback(self, fn):
+            late.append(fn)  # the worker thread hasn't got round to it yet
+
+    class Pool:
+        def submit(self, fn, *args):
+            job = SlowCallbacks()
+            job.set_result(fn(*args))
+            return job
+
+    monkeypatch.setattr(web_how, "_POOL", Pool())
+    monkeypatch.setattr(web_how, "_FREE", threading.BoundedSemaphore(1))
+    rec = _rec(tmp_path, env=_env())
+    s = _found(Hit("Froghoppers", PAGE, SAYS))
+    assert find_how(s, rec, SPIT, "rosemary") is not None
+    assert find_how(s, rec, SPIT, "rosemary") is not None  # the slot came back on return
+    for fn in late:
+        fn(None)  # the callbacks running afterwards free nothing twice

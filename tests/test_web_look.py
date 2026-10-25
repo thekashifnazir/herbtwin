@@ -17,7 +17,9 @@ from tests.test_web_accounts import _accounts_client
 from tests.test_web_judge import _client as _judge_client
 
 # pages on the base template, signed out
-PAGES = ["/privacy", "/auth/sign-in", "/judge", f"/answers/{uuid.uuid4().hex}"]
+# a fixed unknown answer id: a random one at import makes each pytest-xdist worker collect
+# a different test name, so a parallel run refuses to start
+PAGES = ["/privacy", "/auth/sign-in", "/judge", "/answers/" + "0" * 32]
 
 
 def _any_client(tmp_path):

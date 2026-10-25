@@ -163,7 +163,8 @@ def test_about_gives_one_pass_figure_for_the_trusted_page_check(tmp_path, monkey
     monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)  # as live
     page = _spot_client(tmp_path)[0].get("/about").text
     works = page.split('<h2 id="works">', 1)[1].split("</section>", 1)[0]
-    assert "as the trusted-page check did in round 8 (3 false agrees in 418)" in works
+    # 25 Oct, Kash: in plain words, "3 false agrees in 418" as "3 of 418 wrong"
+    assert "the quote check only shipped once it got just 3 of 418 wrong" in works
     assert "4 false agrees in 435" not in page
 
 
@@ -262,22 +263,31 @@ def test_the_trusted_page_box_shows_only_where_the_check_runs(tmp_path, monkeypa
     assert "<strong>Trusted-page check</strong>" in on and "Trusted-page check" not in off
 
 
-def test_how_i_know_it_works_says_its_rule_in_one_sentence(tmp_path, monkeypatch):
-    # round 3 drew the rule as a flow with a fork; 25 Oct (the About audit) it is one
-    # sentence under the heading, every figure the flow gave kept
+def test_how_i_know_it_works_says_its_rule_in_plain_steps(tmp_path, monkeypatch):
+    # round 3 drew the rule as a flow with a fork; the audit made it one sentence; 25 Oct,
+    # Kash: "those numbers are all jargon in a paragraph" and "shouldn't be squashed into one
+    # column". Plain numbered steps across the page, the numbers left to the results below,
+    # each step true to the repo: the main tests' written plans (data/eval/prereg), and the
+    # blind double check, the quote check's, done by two separate AI reviewers
     _, _, works = _flows(tmp_path, True, monkeypatch)
-    assert "works-flow" not in works and "<figure" not in works
-    rule = works.split('<p class="works-rule">', 1)[1].split("</p>", 1)[0]
-    assert rule.startswith("<strong>The bar is set before the run.</strong>")
-    for said in (
-        "written down first (the question, the data and the bar to pass)",
-        "held-out data (150 expert questions, 149 healthy photos, 444 trusted-page items)",
-        "labelled blind (trusted-page rounds: 2 labellers, yes only if both agree)",
-        "round 8 (3 false agrees in 418)",
-        "a fail goes under What didn't work",
-    ):
-        assert said in rule, said
-    assert ".about-page .about p.works-rule {" in style.CSS
+    assert "works-flow" not in works and "<figure" not in works and "works-rule" not in works
+    steps = works.split('<ol class="works-steps" aria-label="How a test decides what ships">', 1)[1]
+    steps = html.unescape(steps.split("</ol>", 1)[0])
+    titles = re.findall(r'<li(?: class="works-then")?><strong>([^<]+)</strong>', steps)
+    assert titles == [
+        "We write the test first",
+        "We test on things it hasn't seen",
+        "Marked blind",
+        "Pass, or fail",
+    ], titles
+    assert "Our main tests are written down first" in steps
+    assert "two separate AI reviewers mark each item blind" in steps and "People" not in steps
+    for jargon in ("held-out", "labelled", "trusted-page items", "false agrees", "150", "444"):
+        assert jargon not in steps, jargon
+    proof = works.split('<p class="works-proof">', 1)[1].split("</p>", 1)[0]
+    assert proof == "For example, the quote check only shipped once it got just 3 of 418 wrong."
+    css = style.CSS
+    assert ".about-page .about ol.works-steps {" in css and "repeat(4, minmax(0, 1fr))" in css
 
 
 # the question cards, in order: (colour, question, the answer's number, its bars as
@@ -381,7 +391,7 @@ def test_the_question_cards_have_their_own_heading_under_the_flow(tmp_path, monk
     # heading between the test flow and the cards names the list, and each question sits a
     # level under it
     _, _, works = _flows(tmp_path, True, monkeypatch)
-    after_flow = works.split('<p class="works-rule">', 1)[1].split("</p>", 1)[1]
+    after_flow = works.split('<p class="works-proof">', 1)[1].split("</p>", 1)[1]
     assert after_flow.lstrip().startswith(
         '<h3 class="works-head" id="works-results">What the tests found</h3>\n'
         '  <ul class="works-cards" aria-labelledby="works-results">'
@@ -573,7 +583,8 @@ def test_round_three_joined_up(tmp_path):
     )
     # 25 Oct (the About audit): the chips went; the job's platform is in the pipeline's loop
     assert (
-        "<strong>Reminder email</strong><span>A small daily job on Nebius AI Cloud</span>" in page
+        "<strong>Reminder email</strong><span>A small daily job</span>"
+        '<i class="pipe-tag">Nebius AI Cloud</i>' in page
     )
     assert "Reminder emails come from a small daily job on Nebius AI Cloud." in page
     css = style.CSS
@@ -650,8 +661,11 @@ def test_the_cost_is_on_the_answer_and_accessibility_closes_the_checks(tmp_path)
         page.index("<strong>A real user</strong>"),
         page.index('<h2 id="didnt">'),
     )
-    assert access < people < real_user < didnt
-    assert page.index("</section>", access) < people
+    # 25 Oct, Kash: accessibility moved down, under the credits near the end
+    assert people < real_user < didnt < page.index('<h2 id="credits-h">') < access
+    credits = page.split('<h2 id="credits-h">', 1)[1].split("</section>", 1)[0]
+    assert '<p class="about-access" id="access">' in credits
+    assert credits.index("</details>") < credits.index('id="access"')
     assert page.count('id="access"') == 1 and '<h2 id="access">' not in page
 
 

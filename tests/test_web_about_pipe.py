@@ -16,7 +16,7 @@ STEPS = [
     ("", "Your photo and place", None),
     ("", "Read the photo", "GLM-5.3-Flash"),
     ("", "Gather evidence", None),
-    (" twin", "The plant's twin", None),
+    ("", "The plant's twin", None),  # neutral: colour says only NVIDIA Nemotron (25 Oct)
     (" advisors", "Advise", "NVIDIA Nemotron 3 Super"),
     ("", "How sure?", None),
 ]
@@ -63,7 +63,11 @@ def test_the_pipeline_leads_with_six_steps_the_answer_then_the_days_after(tmp_pa
         < built.index('<div class="about-services ink">')
         < built.index("A few decisions I'd call out")
     )
-    assert '<figcaption id="pipe-cap">How one photo becomes an answer.' in pipe
+    # its title and key at the top, as on the Devpost figure (25 Oct, Kash: "sure")
+    assert pipe.lstrip().startswith(
+        '<figcaption id="pipe-cap"><strong>How herbtwin answers one photo</strong>'
+    )
+    assert "Tinted: NVIDIA Nemotron." in pipe.split("</figcaption>", 1)[0]
 
 
 def test_the_pipelines_figures_are_the_codes(tmp_path):
@@ -141,3 +145,50 @@ def test_the_band_keeps_one_press_and_carries_the_public_code(tmp_path):
         '<a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">'
         "The code and test reports</a>" in band
     )
+
+
+# where each box runs, as a tag at its foot; None: our own code, no model or service
+TAGS = {
+    "Your photo and place": None,
+    "Read the photo": "Token Factory",
+    "Gather evidence": "Tavily",
+    "The plant's twin": None,
+    "Advise": "Token Factory",
+    "How sure?": None,
+    "Ask": "Token Factory",
+    "Reminder email": "Nebius AI Cloud",
+    "Did you do it?": "Token Factory",
+}
+
+
+def test_each_box_reads_step_model_line_then_where_it_runs(tmp_path):
+    # 25 Oct, Kash: drawn like the Devpost figure, one layout for every box: the step in bold,
+    # its model, a plain line, a small tag at its foot saying where it runs
+    pipe = _built(tmp_path).split('<figure class="pipe"', 1)[1].split("</figure>", 1)[0]
+    boxes = re.findall(r'<div class="node[a-z ]*">(.*?)</div>', pipe)
+    assert len(boxes) == 9
+    for box in boxes:
+        name = re.match(r"<strong>([^<]+)</strong>", box)[1].replace("&#39;", "'")
+        parts = re.findall(r"<(strong|em|span|i)\b", box)
+        tag = re.search(r'<i class="pipe-tag">([^<]+)</i>$', box)
+        assert parts[0] == "strong" and "span" in parts, name
+        assert (tag[1] if tag else None) == TAGS[name], name
+        if tag:
+            assert parts[-1] == "i", name  # the tag last, at the foot
+
+
+def test_the_boxes_are_flat_and_only_nemotron_is_tinted(tmp_path):
+    pipe = _built(tmp_path).split('<figure class="pipe"', 1)[1].split("</figure>", 1)[0]
+    kinds = re.findall(
+        r'<div class="node([a-z ]*)"><strong>([^<]+)</strong>(?:<em>([^<]+)</em>)?', pipe
+    )
+    for kind, name, model in kinds:
+        nemotron = bool(model and "Nemotron" in model)
+        assert (kind == " advisors") == nemotron, (name, kind)
+    rules = {sel: body for at, sel, body in _rules(SHEET.read_text("utf-8")) if not at}
+    node = rules[".about-page .pipe .node"]
+    assert "box-shadow: none" in node and "border-radius: 12px" in node
+    tag = rules[".about-page .pipe .pipe-tag"]
+    assert "margin-top: auto" in tag and "16px" in tag  # pinned at the foot; never under 16px
+    # the heading centred over the centred Nebius line
+    assert "text-align: center" in rules[".about-page .about h2#built"]

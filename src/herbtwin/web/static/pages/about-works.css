@@ -6,8 +6,35 @@
    line under the bars. This sheet sorts before about.css, so its rules name their own
    classes (.works-*) rather than outrank about.css's. */
 .about-page :is(.works-cards, .works-bars) li { margin: 0; }  /* not the site's li + li gap */
-/* the rule a test follows, said once in words under the heading (25 Oct, the About audit) */
-.about-page .about p.works-rule { max-width: 52rem; margin: 8px 0 0; font-size: 18px; line-height: 1.5; }
+/* the rule a test follows (25 Oct, Kash: the sentence was hard to read, squashed into one
+   column): a solid line across the page with a numbered stop per step, then what happens,
+   as the roadmap's (solid: these steps are done, its dashes are for not built yet); down the
+   left under 960px, as the roadmap turns */
+.about-page .about p.works-proof { margin: 14px 0 0; font-size: 17px; color: var(--muted-fg); }
+.about-page .about ol.works-steps { --stop: 28px; counter-reset: step; position: relative; list-style: none;
+  margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px;
+  max-width: none; }
+.about-page .works-steps::before { content: ""; position: absolute; top: calc(var(--stop) / 2 - 1px); left: 0;
+  right: 0; border-top: 2px solid var(--muted-fg); }
+.about-page .works-steps > li { position: relative; margin: 0; padding-top: calc(var(--stop) + 12px);
+  display: flex; flex-direction: column; gap: 4px; font-size: 17px; line-height: 1.4; counter-increment: step; }
+.about-page .works-steps > li::before { content: counter(step) / ""; position: absolute; top: 0; left: 0;
+  width: var(--stop); height: var(--stop); box-sizing: border-box; border-radius: 50%;
+  border: 2px solid var(--primary); background: var(--card); color: var(--primary);
+  font: 700 16px/24px var(--sans); text-align: center; }
+.about-page .works-steps > li.works-then { counter-increment: none; }
+.about-page .works-steps > li.works-then::before { content: "\2192" / ""; }
+.about-page .works-steps > li > strong { font: 700 18px/1.3 var(--sans); }
+.about-page .works-steps > li > span { color: var(--muted-fg); }
+.about-page .works-steps > li > span b { color: var(--fg); }
+@media (max-width: 960px) {
+  .about-page .about ol.works-steps { grid-template-columns: minmax(0, 1fr); gap: 18px;
+    padding-left: calc(var(--stop) + 16px); }
+  .about-page .works-steps::before { top: 4px; bottom: 4px; left: calc(var(--stop) / 2 - 1px); right: auto;
+    border-top: 0; border-left: 2px solid var(--muted-fg); }
+  .about-page .works-steps > li { padding-top: 0; }
+  .about-page .works-steps > li::before { top: 0; left: calc(-1 * (var(--stop) + 16px)); }
+}
 
 /* the cards' own heading (round 4, Kash: "need a heading for this section"), a step above
    the questions' 20px so the cards sit under it */

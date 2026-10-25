@@ -194,7 +194,15 @@ def find_how(
         _FREE.release()
         log.exception("web how for %s could not start", problem.name)
         return None
-    job.add_done_callback(lambda _: _FREE.release())
+    # freed once: by us when it answered in time, else by the pool when the late one ends
+    # (the done-callback can run after result() has returned, leaving the slot taken)
+    once = threading.Lock()
+
+    def free(_=None) -> None:
+        if once.acquire(blocking=False):
+            _FREE.release()
+
+    job.add_done_callback(free)
     try:
         found = job.result(timeout=budget_s)
     except Late:
@@ -202,7 +210,9 @@ def find_how(
         return None
     except Exception:  # noqa: BLE001 - the quote is extra: it never stops an answer
         log.exception("web how for %s failed", problem.name)
+        free()
         return None
+    free()
     hits = [{"title": h.title, "url": h.url, "snippet": h.snippet} for h in found.hits]
     names, _, key = plant_names(rec)
     plant = frozenset(w for n in names for w in n.split())

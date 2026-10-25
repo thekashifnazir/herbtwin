@@ -82,3 +82,28 @@ def test_the_told_soil_reaches_the_reason_on_a_refine(tmp_path):
     assert r.status_code == 200
     card = r.text.split('<section class="card main-action"', 1)[1].split("</section>", 1)[0]
     assert "adequate from recent rain" not in card
+
+
+def test_advice_and_conditions_about_the_soil_are_not_claims_about_it_now():
+    # review of the check: these cost a fallback sentence for nothing. Advice ("so the soil
+    # stays moist", "give it enough moisture"), a negation ("not still wet") and a condition
+    # ("wait until the soil is dry") say nothing about the soil now
+    fine = [
+        ("dry", "Water it so the soil stays moist."),
+        ("dry", "The soil should be moist, not soggy, after watering."),
+        ("dry", "Give it enough moisture through the week."),
+        ("dry", "The soil is not still wet, so water it."),
+        ("dry", "Water until the compost is moist."),
+        ("dry", "It is still wet weather, but the roots are thirsty."),  # no soil subject
+        ("wet", "Wait until the soil is dry before you water."),
+        ("damp", "Water only once the compost has dried out."),
+    ]
+    for soil, s in fine:
+        assert not against_told_soil(s, soil), (soil, s)
+    # and claims about now still count
+    for soil, s in (
+        ("dry", "There is enough moisture in the soil after the rain."),
+        ("dry", "The soil remains moist from the rain."),
+        ("wet", "The soil is dry, so it needs water."),
+    ):
+        assert against_told_soil(s, soil), (soil, s)

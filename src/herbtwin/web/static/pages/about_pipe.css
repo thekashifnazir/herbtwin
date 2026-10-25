@@ -1,8 +1,10 @@
-/* About, How it's built, led by the simple pipeline (25 Oct, Kash on the About audit: the
-   Devpost figure is "super clear, anyone can follow it"). Six of the flow's sticker boxes in a
-   row, the answer as a green bar with its cost, then the days after in a row of three. One
-   under another on a phone, the arrows turned down. Nemotron's boxes take the flow's NVIDIA
-   mint (.node.advisors); lime stays the band's press. The detailed flow folds under "See
+/* About, How it's built, led by the simple pipeline, drawn like the Devpost figure (25 Oct,
+   Kash: "super clear, anyone can follow it"; "sure" to the restyle): its title and key at the
+   top; flat boxes of one height in a strict grid, thin ink edge, no offset shadow; each box
+   the step, its model, a plain line and a small tag pinned at its foot saying where it runs;
+   colour says one thing, NVIDIA Nemotron (the flow's mint, .node.advisors: lime stays the
+   band's one press); the answer across the page; the days after under it with dashed arrows.
+   One under another on a phone, the arrows turned down. The detailed flow folds under "See
    every step". "about_p" sorts after about.css, so its ties go here. Tokens only. */
 .about-page .pipe { margin: 8px 0 0; }
 .about-page .pipe ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px 34px; max-width: none; }
@@ -14,15 +16,25 @@
   transform: translateY(-50%); font: 700 22px/1 var(--sans); color: var(--muted-fg); }
 .about-page .pipe .pipe-loop > li + li::before { content: "\21E2" / ""; position: absolute; left: -28px; top: 50%;
   transform: translateY(-50%); font: 700 22px/1 var(--sans); color: var(--muted-fg); }
-.about-page .pipe .node { font-size: 16px; line-height: 1.35; }
+.about-page .pipe .node { gap: 2px; padding: 12px 14px 10px; border-radius: 12px; box-shadow: none;
+  font-size: 16px; line-height: 1.35; }
 .about-page .pipe .node strong { font-size: 18px; }
+.about-page .pipe .node em { margin-top: 2px; }
+/* where it runs, pinned at the foot of the box so the tags line up across a row */
+.about-page .pipe .pipe-tag { align-self: flex-start; margin-top: auto; padding: 1px 9px; border-radius: var(--pill);
+  border: 1px solid var(--fg); color: var(--fg); font: 600 16px/1.4 var(--sans); font-style: normal; }
+.about-page .pipe .node > span + .pipe-tag { margin-top: auto; }
+.about-page .pipe .node > span { margin-bottom: 8px; }
 /* the answer: the band's green, across the page, with its one example's cost */
-.about-page .about .pipe .pipe-answer { max-width: none; margin: 22px 0; padding: 14px 18px; border-radius: var(--surface);
-  background: var(--band); color: var(--band-fg); font-size: 16px; line-height: 1.45; }
+.about-page .about .pipe .pipe-answer { max-width: none; margin: 22px 0; padding: 14px 18px; border-radius: 12px;
+  background: var(--band); color: var(--band-fg); font-size: 16px; line-height: 1.45; text-align: center; }
 .about-page .pipe .pipe-answer strong { display: block; margin-bottom: 2px; font: 700 20px/1.3 var(--sans); }
 .about-page .pipe .pipe-answer span { color: var(--band-muted); }
 .about-page .pipe .pipe-answer b { color: var(--band-fg); }
-.about-page .pipe figcaption { margin-top: 12px; font-size: 16px; color: var(--muted-fg); }
+/* the title and its key, at the top as on the Devpost figure */
+.about-page .pipe figcaption { margin: 0 0 16px; font-size: 16px; color: var(--muted-fg); }
+.about-page .pipe figcaption strong { display: block; margin-bottom: 2px; color: var(--fg);
+  font: 700 22px/1.25 var(--display); }
 /* the detailed flow, folded under the simple one, as the credits fold */
 .about-page .pipe-more { margin: 16px 0 0; border: 1.5px solid var(--border); border-radius: var(--surface);
   background: var(--card); }
@@ -40,3 +52,6 @@
     transform: none; }
   .about-page .pipe .pipe-loop > li + li::before { content: "\21E3" / ""; }
 }
+/* the heading centred over the centred Nebius line, the two as one block above the pipeline
+   (25 Oct, Kash: left-aligned, the heading looked misaligned with the line) */
+.about-page .about h2#built { text-align: center; margin-bottom: 8px; }

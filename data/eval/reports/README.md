@@ -197,8 +197,8 @@ action classes each answer recommends, extracted by Claude Sonnet. No answer tex
 stored.
 
 `2026-10-04-actions-handcheck.json`: 49 Stack Exchange answers, stratified by class,
-read by the agent and labelled by hand. That is reading comprehension, not a care
-judgement. The file holds ids, labels and a short note per item, no answer text.
+read and labelled one by one by the coding agent (an AI, not a person; "hand" below means
+these labels). That is reading comprehension, not a care judgement. The file holds ids, labels and a short note per item, no answer text.
 
 | Labels | Primary agrees with hand | Primary and whole set agree | Mean Jaccard |
 |---|---|---|---|

@@ -26,7 +26,9 @@ which names no action. 1 pasted "Curled parsley", the home page's example card.
 
 ## Measures
 
-Two fresh blind labellers, each seeing only the reference headline, Q3–Q6 and the rules.
+Two fresh blind labellers, separate AI subagents, not people (the pre-registration's Labels
+line: "two fresh subagents label each scored worker"), each seeing only the reference
+headline, Q3–Q6 and the rules.
 **They agreed on all 44 labels** (11 workers × 4 measures).
 
 | | Measure | Result | Wilson 95% | Bar | |

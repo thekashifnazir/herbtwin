@@ -24,30 +24,35 @@
 
 <div class="about">
 <section id="made-with" aria-labelledby="built">{# the answer page's "What it's made with" lands here #}
+  {#- the heading centred over the centred green line (25 Oct, Kash: left, it looked
+      misaligned with the line) #}
   <h2 id="built">How it's built</h2>
   <p class="about-nebius">Every AI model runs on Nebius Token Factory{% if voice_on %}, except the plant's voice (ElevenLabs){% endif %}. Reminder emails come from a small daily job on Nebius AI Cloud.</p>
-  {#- 25 Oct (Kash, the About audit: the Devpost pipeline figure is "super clear, anyone can
-      follow it"; this one was dense): the same six steps as sticker boxes, then the answer
-      with its cost, then the days after. Nemotron's boxes in the flow's NVIDIA tint; lime
-      stays the band's press. Every word and figure is one the detailed flow or the reports
-      give. The detailed flow folds under it, one tap away #}
+  {#- 25 Oct (Kash: "sure", restyle it like the Devpost figure, which is "super clear, anyone
+      can follow it"): its title and key at the top; flat boxes of one height on a strict
+      grid, each read top to bottom as the step, its model, a plain line and where it runs;
+      colour says one thing, NVIDIA Nemotron, in the flow's mint (lime stays the band's one
+      press); the answer across the page; the days after under it, dashed arrows. Every word
+      and figure is one the detailed flow or the reports give. The detailed flow folds under
+      it, one tap away #}
   <figure class="pipe" aria-labelledby="pipe-cap">
+    <figcaption id="pipe-cap"><strong>How herbtwin answers one photo</strong>
+      <span>The tag on each box says where it runs. Tinted: NVIDIA Nemotron.</span></figcaption>
     <ol class="pipe-steps" role="list" aria-label="How one answer is made">
       <li><div class="node"><strong>Your photo and place</strong><span>Up to 3 photos of a herb, and a UK town or postcode</span></div></li>
-      <li><div class="node"><strong>Read the photo</strong><em>GLM-5.3-Flash</em><span>Names the plant and what's wrong</span></div></li>
-      <li><div class="node"><strong>Gather evidence</strong><span>Care facts, a Tavily search and, outdoors, the 2-week forecast</span></div></li>
-      <li><div class="node twin"><strong>The plant's twin</strong><span>Outdoors, tries each choice against that weather. Indoors: no twin yet</span></div></li>
-      <li><div class="node advisors"><strong>Advise</strong><em>NVIDIA Nemotron 3 Super</em><span>Asked 3 times</span></div></li>
+      <li><div class="node"><strong>Read the photo</strong><em>GLM-5.3-Flash</em><span>Names the plant and what's wrong</span><i class="pipe-tag">Token Factory</i></div></li>
+      <li><div class="node"><strong>Gather evidence</strong><span>Care facts, a Tavily search and, outdoors, the 2-week forecast</span><i class="pipe-tag">Tavily</i></div></li>
+      <li><div class="node"><strong>The plant's twin</strong><span>Outdoors, tries each choice against that weather. Indoors: no twin yet</span></div></li>
+      <li><div class="node advisors"><strong>Advise</strong><em>NVIDIA Nemotron 3 Super</em><span>Asked 3 times</span><i class="pipe-tag">Token Factory</i></div></li>
       <li><div class="node"><strong>How sure?</strong><span>How far the 3 answers agree, plus other factors</span></div></li>
     </ol>
     <p class="pipe-answer"><strong>The answer: one thing to do today, and how sure we are.</strong>
       <span>Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <b>$0.0040</b> of model time, against <b>about $0.0177</b> with every step on Nemotron 3 Ultra. One example, not an average; the Ultra figure is an estimate: the same tokens at Ultra's listed price.</span></p>
     <ol class="pipe-loop" role="list" aria-label="The days after an answer">
-      <li><div class="node advisors"><strong>Ask</strong><em>NVIDIA Nemotron 3 Nano</em><span>Chats about your plant, with Tavily search</span></div></li>
-      <li><div class="node"><strong>Reminder email</strong><span>A small daily job on Nebius AI Cloud</span></div></li>
-      <li><div class="node"><strong>Did you do it?</strong><span>For a kept plant, your next photo asks, and compares the two</span></div></li>
+      <li><div class="node advisors"><strong>Ask</strong><em>NVIDIA Nemotron 3 Nano</em><span>Chats about your plant, with Tavily search</span><i class="pipe-tag">Token Factory</i></div></li>
+      <li><div class="node"><strong>Reminder email</strong><span>A small daily job</span><i class="pipe-tag">Nebius AI Cloud</i></div></li>
+      <li><div class="node"><strong>Did you do it?</strong><span>For a kept plant, your next photo asks, and compares the two</span><i class="pipe-tag">Token Factory</i></div></li>
     </ol>
-    <figcaption id="pipe-cap">How one photo becomes an answer. Tinted green: NVIDIA Nemotron. Dashed arrows: the days after.</figcaption>
   </figure>
   <details class="pipe-more">
     <summary>See every step</summary>
@@ -144,9 +149,20 @@
   {%- macro bar(who, val, width, ours=false, mark=none) -%}
   <li{% if ours %} class="ours"{% endif %}><span>{{ who }}</span><span class="val">{{ val }}</span><span class="bar" aria-hidden="true"><i style="width: {{ width }}%"></i>{% if mark %}<b class="mark" style="left: {{ mark }}%"></b>{% endif %}</span></li>
   {%- endmacro %}
-  {#- 25 Oct (Kash, the About audit): the rule a test follows, said once in words; the second
-      diagram it was drawn as is gone, every figure kept #}
-  <p class="works-rule"><strong>The bar is set before the run.</strong> Each test is written down first (the question, the data and the bar to pass), run on held-out data (150 expert questions, 149 healthy photos, 444 trusted-page items) and labelled blind (trusted-page rounds: 2 labellers, yes only if both agree). A pass ships, as the trusted-page check did in round 8 (3 false agrees in 418); a fail goes under What didn't work.</p>
+  {#- the rule a test follows (25 Oct, Kash: the sentence was "hard to read" and "shouldn't be
+      squashed into one column"): three numbered steps and what happens then, across the
+      page like the roadmap, every figure as it was #}
+  {#- 25 Oct, Kash: "those numbers are all jargon in a paragraph": plain steps, the numbers
+      left to the results below. Each one as the repo has it: the written plans are in
+      data/eval/prereg (the main tests, not every one); the blind double check was the quote
+      check's, by two separate AI reviewers (prereg/2026-10-22-trusted-realpage-r8.md) #}
+  <ol class="works-steps" aria-label="How a test decides what ships">
+    <li><strong>We write the test first</strong><span>Our main tests are written down first: what we'll ask, and the score it must reach, before any results.</span></li>
+    <li><strong>We test on things it hasn't seen</strong><span>Real gardeners' questions, photos of healthy plants, pages from gardening sites.</span></li>
+    <li><strong>Marked blind</strong><span>For the quote check, two separate AI reviewers mark each item blind, and it only counts if both agree.</span></li>
+    <li class="works-then"><strong>Pass, or fail</strong><span><b>Pass:</b> it ships. <b>Fail:</b> it goes under What didn't work.</span></li>
+  </ol>
+  <p class="works-proof">For example, the quote check only shipped once it got just 3 of 418 wrong.</p>
   <h3 class="works-head" id="works-results">What the tests found</h3>
   <ul class="works-cards" aria-labelledby="works-results">
     <li class="works-card advisors ink">
@@ -212,10 +228,6 @@
       <p class="from">415 of the 461 RHS picks that fit the setting; 12 months, 4 settings</p>
     </li>{% endif %}
   </ul>
-  {# 23 Oct (Kash): accessibility is one of the checks, so it closes How I know it works;
-     since 25 Oct the people's checks are a section of their own, after it #}
-  {#- 25 Oct (Kash, the About audit): one line, the same five checks and the link #}
-  <p class="about-access" id="access"><strong>Accessibility:</strong> checked against WCAG 2.2 AA, in light and dark; a focus ring on everything you can tab to; buttons at least 44 px; works at 320 px wide, with nothing scrolling sideways; respects Reduce Motion (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">see the accessibility checks</a>).</p>
 </section>
 
 {# 25 Oct (Kash: "make this section more interesting ... a Toloka section perhaps for user
@@ -345,6 +357,9 @@
     <summary>Every photo, picture, data source and model, with its licence</summary>
     {{ credit_lists(spot_on=spot_on, plantbook_on=plantbook_on, sightings_on=sightings_on) }}
   </details>
+  {#- 25 Oct (Kash): accessibility near the end, under the credits; one line, the same five
+      checks and the link, its id kept so links to #access still land #}
+  <p class="about-access" id="access"><strong>Accessibility:</strong> checked against WCAG 2.2 AA, in light and dark; a focus ring on everything you can tab to; buttons at least 44 px; works at 320 px wide, with nothing scrolling sideways; respects Reduce Motion (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">see the accessibility checks</a>).</p>
 </section>
 <script>
   // a link to #credits opens the fold it names (the footer's Credits, /credits)
