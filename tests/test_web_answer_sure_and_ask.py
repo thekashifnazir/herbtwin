@@ -128,7 +128,7 @@ def test_starters_fit_the_plant_and_what_the_photo_showed(tmp_path):
 def test_starters_are_tapped_into_the_chat_and_enter_sends(tmp_path):
     rec = _unsure_record(tmp_path)
     page = _render(rec)
-    box = page.split('<div class="starters" hidden><h4>Or tap a question to ask</h4>', 1)[1]
+    box = page.split('<div class="starters" hidden><h4>Try one of these</h4>', 1)[1]
     box = box.split("</div></div>", 1)[0]
     assert re.findall(r'<button type="button" class="starter">(.*?)</button>', box) == [
         "Is it safe to eat?",
@@ -136,8 +136,8 @@ def test_starters_are_tapped_into_the_chat_and_enter_sends(tmp_path):
         "What if I move it inside?",
     ]
     assert box in page.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
-    script = page.split('const starters = box.querySelector(".starters");', 1)[1]
-    assert "form.question.value = b.textContent; ask.click();" in script
+    script = page.split('const starters = box.querySelector(".starters")', 1)[1]
+    assert "const tap = (q) => () => { form.question.value = q; ask.click(); };" in script
     assert 'e.key !== "Enter" || e.shiftKey || e.isComposing || e.keyCode === 229' in script
     # the chat's sources, with one "Found with Tavily" line for the set (22 Oct site walk)
     assert 'found.textContent = "Found with Tavily";' in page

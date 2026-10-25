@@ -206,7 +206,7 @@ def test_the_footer_is_one_footer_with_one_divider(tmp_path):
         )
         assert [foot.index(part) for part in order] == sorted(foot.index(p) for p in order), path
         assert foot.count('class="wrap"') == 1 and "maker-row" not in foot, path
-        assert "herbtwin</span>" in foot.split('<nav class="foot-links"', 1)[0], path
+        assert "herbtwin</text></svg>" in foot.split('<nav class="foot-links"', 1)[0], path
     css = style.CSS
     assert ".foot { border-top: 2px solid var(--primary);" in css
     # one divider: the last line's; the old second rule (.maker-row) is gone

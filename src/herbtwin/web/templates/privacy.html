@@ -27,10 +27,11 @@ involves in plain words.</p>
   <li>The answer page shows your photo back from a small copy kept in your own browser tab.
     It is not sent again and goes when you close the tab.</li>
   <li>Map positions are rounded to about 1 km before anything uses or keeps them.</li>
-  <li><strong>What can I grow here?</strong> reads your photo once for the setting and the
+  {# only while it is switched on (25 Oct: it is off live) #}
+  {% if spot_on %}<li><strong>What can I grow here?</strong> reads your photo once for the setting and the
     soil and keeps no photo. The way the spot faces is the direction you pick; nothing reads
     your phone's compass. Signed in, the spot's answer and the direction you picked are kept
-    with the rounded place, so a later photo there can reuse it.</li>
+    with the rounded place, so a later photo there can reuse it.</li>{% endif %}
   <li>To keep the site within its limits we count photo reads per visitor per day. The
     visitor is stored as a scrambled code made from your internet address, never the
     address itself.</li>
@@ -68,8 +69,12 @@ involves in plain words.</p>
     is. It is told nothing else.</li>
   <li><strong>Open Plantbook</strong> gets the plant's name, to look up the light and soil
     moisture it likes. It is told nothing else.</li>
-  <li>Web search services (Tavily, Exa, TinyFish) get a search built from the plant's name
-    or your chat question when the app looks something up on gardening sites. Tavily also
+  <li>Web search services get the plant's name or your chat question, never anything about
+    you. For a plant outside our built-in list, its RHS care page is looked up with TinyFish,
+    then Tavily, which get the plant's name. For the chat and the advice's checks, Tavily gets
+    a search built from the plant's name or your chat question; Exa, then TinyFish, only when
+    Tavily can't answer. To read a gardening page whole, TinyFish or Tavily may get that
+    page's address. Tavily also
     gets the kind of thing that helps with the advice (for example, horticultural fleece), to
     find it at UK garden shops; nothing about you goes with it. If you typed a UK town or
     postcode, Tavily gets that town's name, to find pages that list gardeners there. To show

@@ -191,7 +191,7 @@
    the same section with the fold open #}
 {{ made_with(spot_on=spot_on, plantbook_on=plantbook_on, voice_on=voice_on, tavily_on=tavily_on, check_on=check_on, sightings_on=sightings_on) }}
 {% endblock %}
-{% block foot %}<span class="home-giant" aria-hidden="true">herbtwin</span>{% endblock %}
+{% block foot %}<svg class="home-giant" viewBox="0 0 350 90" aria-hidden="true" focusable="false"><text x="0" y="82" textLength="350" lengthAdjust="spacingAndGlyphs">herbtwin</text></svg>{% endblock %}
 {% block script %}
 <script>
 {% include "_photo_gps.js" %}
@@ -468,6 +468,10 @@
   // a bed tile points at "What can I grow here?" (data-go), a plant tile at the plant button
   const input = document.getElementById("photo");
   if (!input || !window.fetch || !window.DataTransfer) return;
+  // a photo the person picks is for the plant button again
+  input.addEventListener("change", () => {
+    if (!(input.herbtwinSample && input.herbtwinSample.file === input.files[0])) delete input.form.dataset.go;
+  });
   document.querySelectorAll(".home-pick").forEach(tile => {
     tile.addEventListener("click", async e => {
       e.preventDefault();  // before the first await, or the link navigates anyway
@@ -480,6 +484,8 @@
         input.files = dt.files;
         // which sample and which button it is for, by the very file (a later pick is a photo)
         input.herbtwinSample = {file: input.files[0], name: tile.textContent.trim(), go: tile.dataset.go || ""};
+        // the lime press follows: a bed sample's is "What can I grow here?" (home.css)
+        if (tile.dataset.go) input.form.dataset.go = tile.dataset.go; else delete input.form.dataset.go;
       } catch { location.href = tile.href; return; }  // can't load it: open the image instead
       input.dispatchEvent(new Event("change", {bubbles: true}));
       const go = document.getElementById(tile.dataset.go || "go-plant");  // brought into view by the where script

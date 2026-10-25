@@ -128,7 +128,7 @@ def test_sources_read_by_who_wrote_them_once_each(tmp_path):
         "https://archive.ahdb.org.uk/b", "https://www.rhs.org.uk/c",
     ]  # fmt: skip
     page = _render(rec)
-    line = page.split("<p>Care facts: ", 1)[1].split("</p>", 1)[0]
+    line = page.split('Care facts</p><p class="went-text">', 1)[1].split("</p>", 1)[0]
     assert re.sub(r"<[^>]+>", "", line) == "RHS, our care notes, AHDB"
 
 
@@ -156,12 +156,12 @@ def test_an_rhs_page_tavily_found_says_so(tmp_path):
     assert rec.pack is not None
     rec.pack.sources = ["https://www.rhs.org.uk/a"]
     rec.pack.found_with = "tavily"
-    line = _render(rec).split("<p>Care facts: ", 1)[1].split("</p>", 1)[0]
+    line = _render(rec).split('Care facts</p><p class="went-text">', 1)[1].split("</p>", 1)[0]
     assert re.sub(r"<[^>]+>", "", line) == "RHS (found with Tavily)"
     rec.pack.sources.append("openplantbook: x")
-    line = _render(rec).split("<p>Care facts: ", 1)[1].split("</p>", 1)[0]
+    line = _render(rec).split('Care facts</p><p class="went-text">', 1)[1].split("</p>", 1)[0]
     assert re.sub(r"<[^>]+>", "", line) == "RHS, Open Plantbook (the RHS page found with Tavily)"
     rec.pack.sources = ["https://www.rhs.org.uk/a"]
     rec.pack.found_with = "tinyfish"
-    line = _render(rec).split("<p>Care facts: ", 1)[1].split("</p>", 1)[0]
+    line = _render(rec).split('Care facts</p><p class="went-text">', 1)[1].split("</p>", 1)[0]
     assert re.sub(r"<[^>]+>", "", line) == "RHS"

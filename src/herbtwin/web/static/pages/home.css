@@ -141,8 +141,6 @@
 .home-page .home-go button { flex-direction: column; gap: 2px; padding: 10px 22px;
   max-width: 24rem; }
 .home-page .home-go-for { display: block; font-size: 16px; font-weight: 400; line-height: 1.3; }
-.home-page .home-band .home-go .primary { background: var(--band-btn); color: var(--band-btn-fg); }
-.home-page .home-band .home-go .primary:hover { background: color-mix(in srgb, var(--band-btn) 88%, var(--band)); }
 .home-page .home-band .home-go button:not(.primary) { background: transparent; color: var(--band-fg);
   border: 2px solid var(--band-line); }
 .home-page .home-band .home-go button:not(.primary):hover { background: rgb(255 255 255 / .08); }
@@ -192,7 +190,7 @@
    band's bottom edge. The "Example" tab sits on the frame's edge, so it labels everything
    inside, and the header shows what went in (one photo, one place) before what came out */
 .home-page .home-example { position: relative; margin: -56px 0 8px; padding: 28px 16px 8px;
-  background: var(--bg); border: 2px dashed var(--fg); border-radius: var(--surface); }
+  background: var(--stone); border: 2px dashed var(--fg); border-radius: var(--surface); }  /* About's oat (25 Oct, Kash) */
 .home-page .home-example-tab { position: absolute; top: 0; left: 20px; transform: translateY(-50%);
   margin: 0; padding: 4px 14px; border-radius: var(--pill); background: var(--fg); color: var(--bg);
   font: 700 15px/1.3 var(--sans); letter-spacing: .04em; text-transform: uppercase; }
@@ -266,8 +264,8 @@
 
 
 /* the footer wordmark: home has the giant one; every other page the smaller .foot-mark */
-.home-page .home-giant { display: block; text-align: center; font: 800 clamp(3.5rem, 13vw, 10rem)/0.9 var(--poster);
-  color: var(--soft-strong); margin: 8px 0; }
+.home-page .home-giant { display: block; height: calc(.9 * clamp(3.5rem, 13vw, 10rem)); width: auto;
+  aspect-ratio: 350 / 90; max-width: 100%; margin: 8px auto; }
 
 @media (max-width: 720px) {
   .home-page .home-twin-frame { aspect-ratio: 4/3; }
@@ -310,8 +308,24 @@
 .home-page .home-band .home-photo { background: var(--lime); color: var(--lime-fg);
   padding: 24px 26px; font-size: 26px; box-shadow: 0 10px 30px -12px color-mix(in srgb, var(--lime) 60%, transparent); }
 .home-page .home-band .home-photo .hint { color: var(--lime-fg); }
-.home-page .home-band .home-go .primary { background: var(--lime); color: var(--lime-fg); }
-.home-page .home-band .home-go .primary:hover { background: color-mix(in srgb, var(--lime) 90%, var(--lime-fg)); }
+/* one lime press at a time (25 Oct, final walk #8): the photo pill until a photo is in, then
+   the send. Until then the send is outlined; once a photo is in, the pill steps back to the
+   band's tone. :valid, as the photo field is required, so it holds with or without script */
+.home-page .home-band .home-go .primary { background: transparent; color: var(--band-fg);
+  border: 2px solid var(--band-line); }
+.home-page .home-band .home-go .primary:hover { background: rgb(255 255 255 / .08); }
+.home-page .home-band .home-form:has(#photo:valid) .home-go .primary { background: var(--lime); color: var(--lime-fg);
+  border-color: var(--lime); }
+.home-page .home-band .home-form:has(#photo:valid) .home-go .primary:hover { background: color-mix(in srgb, var(--lime) 90%, var(--lime-fg)); }
+/* a bed sample points at "What can I grow here?", the one button that is not .primary
+   (index.html sets data-go): the lime moves there. Never named by its "/spots" action, which
+   no page may carry while the spot feature is off */
+.home-page .home-band .home-form[data-go="go-spot"]:has(#photo:valid) .home-go button:not(.primary) { background: var(--lime);
+  color: var(--lime-fg); border-color: var(--lime); }
+.home-page .home-band .home-form[data-go="go-spot"]:has(#photo:valid) .home-go .primary { background: transparent;
+  color: var(--band-fg); border-color: var(--band-line); }
+.home-page .home-band .home-photo:has(#photo:valid) { background: var(--tone); color: var(--band-fg); box-shadow: none; }
+.home-page .home-band .home-photo:has(#photo:valid) .hint { color: var(--tone-muted); }
 .home-page .home-twin-tag.l { background: var(--lime); color: var(--lime-fg); }
 
 /* ---------- the example and its evidence: bold, inked boxes ----------

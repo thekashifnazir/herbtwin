@@ -406,6 +406,16 @@ def test_no_cure_says_remove_it_and_drops_the_cards_that_look_after_the_plant():
     assert a.compare == []  # no "If you protect it" row or twin chart under "Remove it"
 
 
+def test_no_cure_carries_no_twin_tested_watering_in_this_week():
+    # 25 Oct final walk: "Remove it. There is no cure" over This week's "Check first: Water
+    # only if the top of the compost is dry … Tested on your plant's twin". A plant to be
+    # binned gets no watering advice, and no twin line under it
+    assert BASIL["views"]["water"].vs_leaving_it == "worse"  # the twin would say don't water
+    a = build(panel=DOWNY_PANEL, **BASIL)
+    assert a.headline == "Remove it. There is no cure for this."
+    assert a.dont is None and not a.dont_if_dry
+
+
 def test_no_cure_holds_when_the_advisor_names_it_without_the_plant():
     # panel steadiness, 21 Oct: 1 of 5 repeats said plain "downy mildew" and headlined
     # "Treat it." over a disease with no cure

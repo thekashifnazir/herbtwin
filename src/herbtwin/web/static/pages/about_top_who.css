@@ -6,16 +6,8 @@
    the band says it) */
 .about-page .about #made-with { margin-top: 40px; }
 
-/* What each answer costs: the mint card straight after the flow it prices */
-.about-page .about .about-costs { margin-top: -12px; }
-.about-page .about-costs .about-receipt { max-width: 52rem; padding: 18px 22px; }
-.about-page .about-costs .about-receipt h3 { margin: 0 0 8px; }
-
 /* the Nebius line: across the page, green words, centred, no box, as home's "Decided by"
    line (round 4) */
 .about-page .about section > p.about-nebius { max-width: none; margin: 4px 0 20px; text-align: center;
   color: var(--ok); font: 600 18px/1.4 var(--sans); }
 
-/* Checked by people: the pilot and the next study under the two quote cards (23 Oct) */
-.about-page .about section > p.about-people-pilot { margin: 20px 0 8px; }
-.about-page .about section > p.about-people-next { margin: 0 0 8px; }

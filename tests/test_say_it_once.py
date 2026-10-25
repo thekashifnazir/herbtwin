@@ -218,7 +218,10 @@ def test_a_stored_wrong_page_is_dropped_and_the_page_shows_no_link(tmp_path):
     rec.problem = seen
     page = _render(rec)
     assert SAGE_PAGE not in page
-    assert "Photo check: rosemary beetle." in page and "Signs from" not in page
+    assert (
+        'Photo check</p><p class="went-text">rosemary beetle.</p>' in page
+        and "Signs from" not in page
+    )
 
 
 def test_the_right_page_still_links(tmp_path):

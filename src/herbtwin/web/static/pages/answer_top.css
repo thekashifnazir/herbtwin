@@ -90,9 +90,12 @@
    place of the rows, never under them */
 .answer-page .this-week > .view-switch { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; }
 .answer-page .this-week > .view-switch[hidden] { display: none; }
-.answer-page .this-week > .view-switch > .view-pick { min-height: 36px; padding: 6px 14px; border: 1.5px solid var(--primary);
-  border-radius: 999px; background: var(--card); color: var(--primary); font: 600 15px/1.2 var(--sans);
+/* the pressed one in the tray's deeper green, never the press green: "Check the advice again"
+   stays the one green press near it (25 Oct, final walk #8) */
+.answer-page .this-week > .view-switch > .view-pick { min-height: 36px; padding: 6px 14px; border: 1.5px solid var(--input);
+  border-radius: 999px; background: var(--card); color: var(--fg); font: 600 16px/1.2 var(--sans);
   box-shadow: none; cursor: pointer; }
-.answer-page .this-week > .view-switch > .view-pick[aria-pressed="true"] { background: var(--primary); color: var(--primary-fg); }
+.answer-page .this-week > .view-switch > .view-pick[aria-pressed="true"] { background: var(--soft-strong); color: var(--fg);
+  border-color: var(--soft-line); font-weight: 700; }
 .answer-page .this-week.by-parts > :is(.also, .dont, .watch, .reported) { display: none; }
 .answer-page .this-week > .by-part { margin: 0; padding: 4px 16px 12px; border-top: 1px solid var(--border); }

@@ -881,6 +881,7 @@ class StepCost(BaseModel):
     tokens_in: int = 0
     tokens_out: int = 0
     cost_usd: float | None = 0.0
+    asks: int | None = None  # the advisors: how many asks, apart from a reply asked again
 
 
 class BackupRead(BaseModel):
@@ -916,5 +917,7 @@ class AnalysisRecord(BaseModel):
     photo_sha256: str | None = None  # the normalized photo's bank key (twin stills)
     receipt: list[StepCost] | None = None  # each step's model, time and cost (receipt.py)
     photo_backup: BackupRead | None = None  # the backup photo model read it, and why
+    # the backup raced a slow first model and lost: both were billed, the first's read used
+    photo_raced: str | None = None
     notes: list[str] = Field(default_factory=list)  # plain-words notes for the page
     failures: list[StageFailure] = Field(default_factory=list)

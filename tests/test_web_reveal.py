@@ -182,7 +182,8 @@ def test_home_reveals_what_its_own_script_did(tmp_path):
 def test_about_reveals_its_flows_bars_and_stops(tmp_path):
     hooks = _hooks(_about(tmp_path))
     assert ("flow-built", "stagger") in hooks
-    assert ("works-flow", "stagger") in hooks and ("fork", "stagger") in hooks
+    # 25 Oct, the About audit: the test flow became one sentence, so no fork waits
+    assert not any(c in ("works-flow", "fork") for c, _ in hooks)
     assert ("about-chose", "stagger") in hooks and ("roadmap", "stagger") in hooks
     assert sum(1 for h in hooks if h == ("works-bars", "grow")) >= 5
     assert not any(c.startswith("page-band") for c, _ in hooks)  # the band never waits

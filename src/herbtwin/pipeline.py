@@ -455,6 +455,15 @@ def has_care(pack: KnowledgePack) -> bool:
     )
 
 
+def raced_and_lost(adapter: ModelAdapter, won: Sequence[str | None]) -> str | None:
+    """The backup that raced a slow first model and lost (`won` names a race's winner):
+    its call was billed too, so the model map says it was not used (25 Oct site walk: two
+    "Read the photo" rows and no word on which read counted)."""
+    first = getattr(getattr(adapter, "first", None), "model", None)
+    backup = getattr(getattr(adapter, "backup", None), "model", None)
+    return backup if won and first and backup and won[-1] == first else None
+
+
 def bare_line(pot: bool) -> str:
     return f"This looks like a {'pot' if pot else 'bed'}, ready for planting"
 
@@ -703,6 +712,7 @@ def read_photo(
     name = (top.common_name or top.name) if top else "the plant"
     read_by = won[-1] if won else answered[-1] if answered else None
     rec.photo_backup = backup_read(reader, read_by, raced=bool(won) and not failed_first)
+    rec.photo_raced = raced_and_lost(reader, won)
     # a rough read (blurry, dark, …) of a plant it can't name surely: the wait says the name
     # is a guess and shows no season card for it (22 Oct walk: a blurred parsley was
     # "Found garden mint", then "Normal for garden mint in October")
@@ -1472,7 +1482,8 @@ def decide(
         rec.answer.assumptions = list(rec.state.assumptions)
     if rec.taken_at_source == "assumed":
         rec.answer.assumptions.append("the photo carried no date, so the date it was sent is used")
-    _note_models(deps, rec, receipt.MODEL_STAGES, seen, {"advise": advised_ms})
+    asks = {"advise": len(asked.runs) + len(asked.errors)}  # each ask once, repaired or not
+    _note_models(deps, rec, receipt.MODEL_STAGES, seen, {"advise": advised_ms}, asks)
     rec.failures = failures
     return rec
 
@@ -1491,6 +1502,7 @@ def _note_models(
     stages: frozenset[str],
     advise_after: int = 0,
     walls: dict[str, int] | None = None,
+    asks: dict[str, int] | None = None,
 ) -> None:
     """The model steps of `stages` onto the record's receipt, from this run's trace rows.
     The advisors only from after `advise_after`: a refine asks them again, and its answer
@@ -1507,7 +1519,7 @@ def _note_models(
         had = {s.stage for s in models}
         # a stage with no rows here (a stored answer read again after a deploy) keeps its line
         kept = [s for s in rec.receipt or [] if s.stage not in had]
-        rec.receipt = receipt.assemble(kept, models, walls)
+        rec.receipt = receipt.assemble(kept, models, walls, asks)
     except Exception:  # noqa: BLE001 - the receipt is extra: it never stops an answer
         log.exception("receipt failed run=%s", rec.record_id)
 

@@ -13,6 +13,7 @@ from tests.test_web_spot import _client as _spot_client
 SECTIONS = [
     "How it's built",
     "How I know it works",
+    "Checked by people",  # its own section since 25 Oct (Kash: "make the title ... bigger")
     "What didn't work",
     "What's next",
     "Who made it",
@@ -50,11 +51,14 @@ def test_old_credits_links_land_on_the_credits_section(tmp_path):
 
 
 def test_the_answers_example_cost_is_labelled_one_example_and_an_estimate(tmp_path):
+    # 25 Oct (the About audit): the cost card became the pipeline's answer bar, word for word
     page = _about(tmp_path)
-    cost = page.split('<div class="about-receipt about-card ink">', 1)[1].split("</div>", 1)[0]
-    assert "<strong>$0.0040</strong>" in cost and "<strong>about $0.0177</strong>" in cost
-    assert "One example, not an average." in cost
+    cost = page.split('<p class="pipe-answer">', 1)[1].split("</p>", 1)[0]
+    assert "<b>$0.0040</b>" in cost and "<b>about $0.0177</b>" in cost
+    assert "One example read (basil, 21 Oct)" in cost and "every step on Nemotron 3 Ultra" in cost
+    assert "One example, not an average;" in cost
     assert "the same tokens at Ultra's listed price" in cost
+    assert "about-receipt" not in page and "What each answer costs" not in page
 
 
 def test_the_about_page_has_one_main_button_and_nothing_private(tmp_path):
@@ -95,6 +99,11 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, mo
         r'<details class="made-credits" id="credits">.*?</details>', "", main, flags=re.S
     )
     assert shown != main
+    # 25 Oct (the About audit): the detailed flow folds under "See every step", so it counts
+    # only once opened, as the credits do
+    folded = re.sub(r'<details class="pipe-more">.*?</details>', "", shown, flags=re.S)
+    assert folded != shown
+    shown = folded
     words = html.unescape(
         re.sub(r"<[^>]+>", " ", re.sub(r"<script.*?</script>", "", shown, flags=re.S))
     )
@@ -104,8 +113,12 @@ def test_about_stays_short_and_links_the_details_on_the_public_repo(tmp_path, mo
     # purpose on 23 Oct, from 1,560 (1,522 measured) to 1,620 (1,586), for Kash's "Checked by
     # people": Tendem, the 11 Oct Toloka pilot and the next study. Grown on purpose on 25 Oct,
     # to 1,760 (1,721 measured, as live), for Kash's "What each service did" panel, with
-    # "What it does" gone
-    assert len(words.split()) <= 1760
+    # "What it does" gone. Lowered on 25 Oct to 1,720 (1,680 measured, as live): What's next
+    # down to four stops. Grown on purpose the same day to 1,815 (1,776 measured), for Kash's
+    # "Checked by people" as its own section with the two Toloka runs. 25 Oct, the About
+    # audit: the folded flow counts only once opened, and the chips, the cost card, the second
+    # diagram and the public card at the end went: 1,630 (1,590 measured, as live)
+    assert len(words.split()) <= 1630
     repo = "https://github.com/thekashifnazir/herbtwin/blob/main/"
     for doc in (
         "docs/reference/nvidia-models.md",
@@ -150,7 +163,7 @@ def test_about_gives_one_pass_figure_for_the_trusted_page_check(tmp_path, monkey
     monkeypatch.setattr(web_app, "trusted_check_on", lambda settings: True)  # as live
     page = _spot_client(tmp_path)[0].get("/about").text
     works = page.split('<h2 id="works">', 1)[1].split("</section>", 1)[0]
-    assert "Trusted-page check, round 8: 3 false agrees in 418" in works
+    assert "as the trusted-page check did in round 8 (3 false agrees in 418)" in works
     assert "4 false agrees in 435" not in page
 
 
@@ -184,21 +197,13 @@ def test_how_its_built_is_the_stack_then_one_coloured_flow(tmp_path, monkeypatch
     # to right on a wide screen and one under another on a phone, the boxes home's sticker
     # tiles coloured by what they are
     _, built, _ = _flows(tmp_path, True, monkeypatch)
-    chips = built.split('<ul class="about-chips"', 1)[1].split("</ul>", 1)[0]
-    for name in (
-        "Python 3.12",
-        "FastAPI",
-        "Cloud Run",
-        "Cloudflare Worker",
-        "Nebius Token Factory",
-        "NVIDIA Nemotron 3",
-        "Tavily",
-        "Open-Meteo",
-        "GBIF",
-        "Supabase",
-    ):
-        # round 3 (22 Oct): a source's chip carries its colour class
-        assert re.search(rf'<li(?: class="[a-z]+")?>{name}</li>', chips), name
+    # 25 Oct (the About audit): the chips went, the simple pipeline leads, and this flow folds
+    # under "See every step", one tap away
+    assert "about-chips" not in built
+    assert built.index('<figure class="pipe"') < built.index('<details class="pipe-more">')
+    fold = built.split('<details class="pipe-more">', 1)[1].split("</details>", 1)[0]
+    assert fold.lstrip().startswith("<summary>See every step</summary>")
+    assert '<ol class="flow-built"' in fold
     flow = built.split('<ol class="flow-built"', 1)[1].split("</figure>", 1)[0]
     # eight steps (round 3: our rules in the main row, the weather a step of its own), then
     # what hangs off the answer in a row of its own
@@ -257,39 +262,22 @@ def test_the_trusted_page_box_shows_only_where_the_check_runs(tmp_path, monkeypa
     assert "<strong>Trusted-page check</strong>" in on and "Trusted-page check" not in off
 
 
-def test_how_i_know_it_works_is_a_flow_that_ships_or_fails(tmp_path, monkeypatch):
-    # round 3 (22 Oct, Kash: "fix the test-flow diagram for sure"): the fork sat in a fourth
-    # column, two boxes tall, leaving a big gap under the three steps. Now the steps fill one
-    # row and the fork takes the whole row under them, If it passes / If it fails
+def test_how_i_know_it_works_says_its_rule_in_one_sentence(tmp_path, monkeypatch):
+    # round 3 drew the rule as a flow with a fork; 25 Oct (the About audit) it is one
+    # sentence under the heading, every figure the flow gave kept
     _, _, works = _flows(tmp_path, True, monkeypatch)
-    flow = works.split('<ol class="works-flow"', 1)[1].split("</ol>", 1)[0]
-    assert (
-        flow.count('<li class="step">') == 3
-        and flow.count('<li class="fork" data-reveal="stagger">') == 1
-    )
-    fork = flow.split('<li class="fork" data-reveal="stagger">', 1)[1]
-    assert fork.count('<div class="branch">') == 2
+    assert "works-flow" not in works and "<figure" not in works
+    rule = works.split('<p class="works-rule">', 1)[1].split("</p>", 1)[0]
+    assert rule.startswith("<strong>The bar is set before the run.</strong>")
     for said in (
-        "Write the test down first",
-        "Run it on held-out data",
-        "Label it blind",
-        "Trusted-page rounds: 2 labellers, yes only if both agree",
+        "written down first (the question, the data and the bar to pass)",
+        "held-out data (150 expert questions, 149 healthy photos, 444 trusted-page items)",
+        "labelled blind (trusted-page rounds: 2 labellers, yes only if both agree)",
+        "round 8 (3 false agrees in 418)",
+        "a fail goes under What didn't work",
     ):
-        assert said in flow.split('<li class="fork" data-reveal="stagger">', 1)[0], said
-    for said in (
-        '<p class="flow-by">If it passes</p><div class="node advisors"><strong>It ships</strong>',
-        "round 8: 3 false agrees in 418",
-        '<p class="flow-by">If it fails</p><div class="node rules"><strong>What didn\'t work</strong>',
-        "specialist advisors (774 questions)",
-    ):
-        assert said in fork, said
-    css = style.CSS
-    assert "grid-template-columns: repeat(3, minmax(0, 1fr)); }" in css
-    assert ".about-page .works-flow > .fork { grid-column: 1 / -1;" in css
-    # bigger text than round 2's 16px and 17px
-    body = re.search(r"\.about-page \.works-flow \.node \{[^}]*font-size: (\d+)px", css)
-    head = re.search(r"\.about-page \.works-flow \.node strong \{ font: 700 (\d+)px", css)
-    assert int(body[1]) >= 18 and int(head[1]) >= 20
+        assert said in rule, said
+    assert ".about-page .about p.works-rule {" in style.CSS
 
 
 # the question cards, in order: (colour, question, the answer's number, its bars as
@@ -393,7 +381,7 @@ def test_the_question_cards_have_their_own_heading_under_the_flow(tmp_path, monk
     # heading between the test flow and the cards names the list, and each question sits a
     # level under it
     _, _, works = _flows(tmp_path, True, monkeypatch)
-    after_flow = works.split("</figure>", 1)[1]
+    after_flow = works.split('<p class="works-rule">', 1)[1].split("</p>", 1)[1]
     assert after_flow.lstrip().startswith(
         '<h3 class="works-head" id="works-results">What the tests found</h3>\n'
         '  <ul class="works-cards" aria-labelledby="works-results">'
@@ -423,7 +411,7 @@ def test_without_the_spot_feature_the_grow_card_goes(tmp_path):
     assert "What can I grow here?" not in works and len(_cards(works)) == 6
 
 
-def test_who_made_it_is_kashs_own_bio_and_ends_on_the_public_repo(tmp_path):
+def test_who_made_it_is_kashs_own_bio_and_the_public_repo_is_on_the_band(tmp_path):
     page = _about(tmp_path)
     who = page.split('<h2 id="who">', 1)[1].split("</section>", 1)[0]
     # round 4: Moveset's voice (22 Oct, Kash: "the Moveset who made it is much better"); the
@@ -439,7 +427,14 @@ def test_who_made_it_is_kashs_own_bio_and_ends_on_the_public_repo(tmp_path):
         '<a href="https://kashifnazir.com" rel="noopener noreferrer">kashifnazir.com</a>',
     ):
         assert said in who, said
-    assert '<a class="button" href="https://github.com/thekashifnazir/herbtwin"' in who
+    # 25 Oct (the About audit): the public code moved up to the band, beside the one press
+    assert "about-close" not in page and 'github.com/thekashifnazir/herbtwin"' not in who
+    band = page.split('<div class="page-band">', 1)[1].split("</div>", 1)[0]
+    assert (
+        '<a class="button primary" href="/">Check a plant</a> <a class="button" '
+        'href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">'
+        "The code and test reports</a>" in band
+    )
 
 
 def test_round_two_colours_every_source_and_says_what_each_colour_means(tmp_path, monkeypatch):
@@ -460,11 +455,10 @@ def test_round_two_colours_every_source_and_says_what_each_colour_means(tmp_path
         and '<li class="gbif"><i class="tag">GBIF</i>' in under
     )
     assert '<li class="tavily"><i class="tag">Tavily</i><strong>Shops, gardeners</strong>' in under
-    # round 3 (22 Oct, Kash: "Shrink the legend to 3 items"): the stack's chips carry the
-    # sources' colours, and the legend keeps what no chip says
-    chips = built.split('<ul class="about-chips"', 1)[1].split("</ul>", 1)[0]
-    for colour, name in (("nvidia", "NVIDIA Nemotron 3"), ("tavily", "Tavily"), ("gbif", "GBIF")):
-        assert f'<li class="{colour}">{name}</li>' in chips, name
+    # round 3 (22 Oct, Kash: "Shrink the legend to 3 items"): the sources' colours come with
+    # their names (the tags, the models in the boxes), so the legend keeps what no name says;
+    # 25 Oct the chips that also keyed them went with the About audit
+    assert "Each box names its model, and a source's tag carries its colour." in built
     key = built.split('<ul class="flow-key"', 1)[1].split("</ul>", 1)[0]
     for swatch, said in (("plain", "you, our notes, the answer"), ("later", "not built yet")):
         assert f'<i class="sw {swatch}"></i>{said}' in key, swatch
@@ -479,12 +473,12 @@ def test_round_two_turns_the_long_text_into_cards(tmp_path):
     # Kash: "just not helpful"; the "All of it is public" card ("like this!") is the model
     page = _about(tmp_path)
     # (round 4 turned What didn't work and What's next out of cards again: see below)
-    assert page.count('<blockquote class="about-card quote ink">') == 2
+    # the people's quotes are ruled quotes since 25 Oct, not cards (Checked by people, option A)
+    people = page.split('<div class="people-quotes">', 1)[1].split("</div>", 1)[0]
+    assert people.count("<blockquote><p><strong>") == 2
     css = style.CSS
-    assert (
-        ".about-page .about-card:is(.about-close, .about-receipt) { background: var(--soft); }"
-        in css
-    )
+    # 25 Oct (the About audit): the public card and the cost card went, and their rules
+    assert "about-close" not in css and "about-receipt" not in css
     assert ".about-page .about-two { display: grid;" in css
 
 
@@ -515,11 +509,10 @@ def test_round_three_quotes_are_two_lines_each_and_carry_their_link(tmp_path):
     page = _spot_client(tmp_path)[0].get("/about").text
     # the small print under the results went; its link moved into the expert's card
     assert "The expert questions are text only" not in page
-    quotes = re.findall(
-        r'<blockquote class="about-card quote ink">(.*?)</blockquote>', page, flags=re.S
-    )
-    assert len(quotes) == 2 and all(q.count("<br>") == 1 for q in quotes)  # two lines each
-    assert "An expert's review." in quotes[0] and ">how we measured</a>" in quotes[0]
+    quotes = re.findall(r"<blockquote>(.*?)</blockquote>", page, flags=re.S)
+    # a title, then what happened and what it changed (25 Oct: ruled quotes, not cards)
+    assert len(quotes) == 2 and all(q.startswith("<p><strong>") for q in quotes)
+    assert "An expert's review</strong>" in quotes[0] and ">how we measured</a>" in quotes[0]
 
 
 def test_what_didnt_work_leads_each_row_with_its_lesson(tmp_path):
@@ -548,16 +541,22 @@ def test_what_didnt_work_leads_each_row_with_its_lesson(tmp_path):
     assert "dearer" in didnt and "Cheaper" not in didnt
 
 
-def test_whats_next_says_why_and_accessibility_is_a_plain_words_list(tmp_path):
+def test_whats_next_says_why_and_accessibility_is_one_plain_line(tmp_path):
     page = _about(tmp_path)
     nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
-    assert nxt.count("<span>Why: ") == 6  # spot off adds its return
-    access = page.split('<h3 id="access">', 1)[1].split("</section>", 1)[0]
-    items = re.findall(r"<li>(.*?)</li>", access, flags=re.S)
-    assert len(items) == 5 and all(
-        i.startswith('<span aria-hidden="true">✓</span> ') for i in items
-    )
-    assert ">See the accessibility checks</a>" in access
+    assert nxt.count("<span>Why: ") == 4  # four stops, spot on or off
+    # 25 Oct (Kash, the About audit): Accessibility is one line, its five checks kept
+    access = page.split('<p class="about-access" id="access">', 1)[1].split("</p>", 1)[0]
+    assert access.startswith("<strong>Accessibility:</strong> ")
+    for check in (
+        "checked against WCAG 2.2 AA, in light and dark",
+        "a focus ring on everything you can tab to",
+        "buttons at least 44 px",
+        "works at 320 px wide, with nothing scrolling sideways",
+        "respects Reduce Motion",
+    ):
+        assert check in access, check
+    assert ">see the accessibility checks</a>" in access and "<h3" not in access
     assert "axe-core" not in access and "3.98:1" not in access  # no jargon on its face
 
 
@@ -566,15 +565,16 @@ def test_round_three_joined_up(tmp_path):
     # job's platform among the stack chips, and no leftover rules the flow no longer uses
     page = _spot_client(tmp_path)[0].get("/about").text
     nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
-    # the beginners' study ran on 23 Oct; the answer page changed after it (#517)
-    assert "no screen-reader test yet, and the beginners' study ran before the answer page" in nxt
-    assert "hasn't run" not in nxt
+    # 25 Oct, Kash: four stops; the real-people tests left the roadmap
+    assert "Tests with real people" not in nxt and "hasn't run" not in nxt
     # not "every step": the voice (when on) is ElevenLabs and the photo has a backup (review)
     assert (
         "Why: then reading the photo runs on NVIDIA too, and it's 5 times faster than GLM." in nxt
     )
-    chips = page.split('<ul class="about-chips"', 1)[1].split("</ul>", 1)[0]
-    assert "<li>Nebius AI Cloud</li>" in chips
+    # 25 Oct (the About audit): the chips went; the job's platform is in the pipeline's loop
+    assert (
+        "<strong>Reminder email</strong><span>A small daily job on Nebius AI Cloud</span>" in page
+    )
     assert "Reminder emails come from a small daily job on Nebius AI Cloud." in page
     css = style.CSS
     assert ".node.then" not in css and ".about-page .node.answer { padding-top: 12px; }" not in css
@@ -594,7 +594,7 @@ def test_round_four_top_is_clear_of_the_band_with_a_green_nebius_line(tmp_path):
 
 def test_round_four_makes_one_lessons_panel_and_a_roadmap(tmp_path):
     # 22 Oct round 4, Kash: "boxes after boxes, more variety". What didn't work is one amber
-    # panel of ruled rows; What's next is a line with five stops, not five dashed boxes
+    # panel of ruled rows; What's next is a line of stops, not dashed boxes (four since 25 Oct)
     page = _about(tmp_path)
     didnt = page.split('<h2 id="didnt">', 1)[1].split("</section>", 1)[0]
     assert didnt.count('<ul class="lesson-rows ink">') == 1 and didnt.count("<li><strong>") == 5
@@ -602,7 +602,7 @@ def test_round_four_makes_one_lessons_panel_and_a_roadmap(tmp_path):
     nxt = page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
     assert (
         nxt.count('<ol class="roadmap" data-reveal="stagger">') == 1
-        and nxt.count("<li><strong>") == 6  # spot off: its return is the sixth stop
+        and nxt.count("<li><strong>") == 4
     )
     assert "about-card" not in nxt
     css = style.CSS
@@ -634,79 +634,138 @@ def test_round_four_left_no_rules_behind(tmp_path):
         assert gone not in css, gone
 
 
-def test_the_cost_follows_the_flow_and_accessibility_closes_the_checks(tmp_path):
-    # 23 Oct, Kash: "What each answer costs" straight after How it's built; Accessibility at
-    # the end of How I know it works, before What didn't work, as a sub-heading
+def test_the_cost_is_on_the_answer_and_accessibility_closes_the_checks(tmp_path):
+    # 23 Oct, Kash: "What each answer costs" straight after How it's built; 25 Oct (the About
+    # audit) it is on the pipeline's answer, the step it prices. Accessibility at the end of
+    # How I know it works, before What didn't work, as a sub-heading
     page = _spot_client(tmp_path)[0].get("/about").text
-    built_end = page.index("</section>", page.index('<h2 id="built">'))
-    costs = page.index('<section class="about-costs" aria-labelledby="costs">')
-    works = page.index('<h2 id="works">')
-    assert built_end < costs < works
-    cost = page[costs:works]
-    assert (
-        '<h3 id="costs">What each answer costs</h3>' in cost
-        and "about-receipt about-card ink" in cost
-    )
-    access, real_user, didnt = (
-        page.index('<h3 id="access">Accessibility</h3>'),
-        page.index("<strong>A real user.</strong>"),
+    built = page.split('<h2 id="built">', 1)[1].split("</section>", 1)[0]
+    steps = built.index('<ol class="pipe-steps"')
+    assert steps < built.index('<p class="pipe-answer">') < built.index('<ol class="pipe-loop"')
+    # accessibility still closes How I know it works; the people's checks follow as their
+    # own section (25 Oct)
+    access, people, real_user, didnt = (
+        page.index('id="access"'),
+        page.index('<h2 id="people">'),
+        page.index("<strong>A real user</strong>"),
         page.index('<h2 id="didnt">'),
     )
-    assert real_user < access < didnt
+    assert access < people < real_user < didnt
+    assert page.index("</section>", access) < people
     assert page.count('id="access"') == 1 and '<h2 id="access">' not in page
 
 
-def test_people_checks_have_their_own_sub_section_with_a_next_step(tmp_path):
-    # 23 Oct, Kash: "Checked by people" in How I know it works, after the tests' cards and
-    # before Accessibility; the expert was hired through Tendem ($47.86, the review), and the
-    # Toloka study is pre-registered but has not run, so it claims no results ("and Tendem")
+def _people(tmp_path) -> str:
     page = _spot_client(tmp_path)[0].get("/about").text
-    found, people, access = (
-        page.index('id="works-results"'),
-        page.index('<h3 id="people">Checked by people</h3>'),
-        page.index('<h3 id="access">'),
+    return page.split('<section class="about-people" aria-labelledby="people">', 1)[1].split(
+        "</section>", 1
+    )[0]
+
+
+def test_checked_by_people_is_a_section_with_its_own_title(tmp_path):
+    # 25 Oct, Kash on rev 00109: "make the title for the section bigger like the others": a
+    # section title like How it's built, after How I know it works (SECTIONS, in order)
+    part = _people(tmp_path)
+    assert part.lstrip().startswith('<h2 id="people">Checked by people</h2>')
+    # its title is read as its own words, not run into the sentence (review of this branch)
+    assert "<strong>An expert's review</strong> A professional" in part
+    assert "<strong>A real user</strong> A former tree surgeon" in part
+    assert "the kind of person herbtwin is for" not in part  # they used our sample photos
+    quotes = re.findall(r"<blockquote>(.*?)</blockquote>", part, flags=re.S)
+    assert len(quotes) == 2
+    assert (
+        "A professional gardener hired through <strong>Tendem</strong> graded 3 answers: every"
+        " first action Acceptable, 3 of 5 overall." in quotes[0]
     )
-    assert found < people < access
-    part = page[people:access]
-    assert "A professional gardener hired through <strong>Tendem</strong> graded 3 photos" in part
-    assert part.count('<blockquote class="about-card quote ink">') == 2
-    nxt = part.split('<p class="about-people-next">', 1)[1].split("</p>", 1)[0]
-    # run 23 Oct: the line gives its result and links the plan and the results
-    assert nxt.startswith(
-        "<strong>A first-time-user study on Toloka</strong> (23 Oct, 11 people): all got an"
-        " answer, but only 6 could say what to do"
-    )
-    assert 'data/eval/prereg/2026-10-22-toloka-site-study.md"' in nxt
-    assert 'data/eval/reports/2026-10-23-toloka-site-study.md"' in nxt
+    assert "That became the shops card under the answer." in quotes[1]
+    # as many rules as the review lists as changed: 4 points and drainage, added later (#298)
+    review = (
+        Path(__file__).parents[1] / "data/eval/reports/2026-10-19-expert-review.md"
+    ).read_text("utf-8")
+    assert review.count("**Changed:**") == 5 and "Five rules changed" in quotes[0]
     # the two services in bold where they are named (23 Oct, Kash)
     assert (
-        "<strong>Tendem</strong> and <strong>Toloka</strong> are paid from Nebius AI Builder"
-        " programme credits." in nxt
+        '<p class="people-paid"><strong>Tendem</strong> and <strong>Toloka</strong> are paid'
+        " from Nebius AI Builder programme credits.</p>" in part
     )
 
 
-def test_the_toloka_pilot_is_aggregates_only_and_says_how_small(tmp_path):
-    # 23 Oct, Kash: "It was a small pilot to verify our models." The 11-12 Oct run, majority
-    # hits 4/5 without the reference and 3/5 with it (the private working repo's `2026-10-12-`
-    # human-judges-toloka.md); we publish aggregates only, never raw labels
-    page = _about(tmp_path)
-    pilot = page.split('<p class="about-people-pilot">', 1)[1].split("</p>", 1)[0]
-    assert pilot.startswith("<strong>A small Toloka pilot</strong> to check our photo reading")
+def _stat(run: str) -> list[tuple[str, int, int, str | None, str]]:
+    """Each row of a run's dot chart: its number, the filled and all dots, the bar's tick
+    (as dots along) and its words."""
+    rows = re.findall(
+        r'<dt>([^<]+)</dt><dd><span class="people-dots" role="img" aria-label="[^"]+">(.*?)'
+        r"</span><small>([^<]+)</small></dd>",
+        run,
+        flags=re.S,
+    )
+    out = []
+    for said, cells, words in rows:
+        tick = re.search(r'<b style="--at: ([0-9.]+)"></b>', cells)
+        out.append(
+            (said, cells.count('<i class="on">'), cells.count("<i"), tick and tick[1], words)
+        )
+    return out
+
+
+def test_the_toloka_runs_say_each_number_as_the_sources_do(tmp_path):
+    # 25 Oct (Kash: "a Toloka section ... for user testing and labelling and how it helped").
+    # The pilot: the private working repo's `2026-10-12-human-judges-toloka.md` and the story;
+    # aggregates only. The study: data/eval/reports/2026-10-23-toloka-site-study.md; its bars
+    # were set before the run, and the dashed tick sits at each one
+    part = _people(tmp_path)
+    toloka = part.split('<div class="people-toloka">', 1)[1]
     assert (
-        "4 of 5 photos" in pilot
-        and "(3 of 5)" in pilot
-        # 15 people in all: 2 arms of 3 raters a photo (devpost: "15 beginner raters",
-        # "30 ratings"); "3 raters each" read as 15 ratings (25 Oct)
-        and "A tiny sample: 5 photos, 15 raters." in pilot
+        '<h3 id="toloka"><span class="people-tag">Toloka</span> Beginners tried it, twice</h3>'
+        in toloka
     )
+    pilot = toloka.split('<div class="people-run pilot">', 1)[1].split('<div class="people-run', 1)[
+        0
+    ]
+    assert "<h4>Labelling pilot<span>11–12 Oct · 5 photos, 15 raters</span></h4>" in pilot
+    assert _stat(pilot) == [
+        ("4 of 5", 4, 5, None, "photo alone: most raters caught the problem (one more partly)"),
+        ("3 of 5", 3, 5, None, "with a healthy photo beside it"),
+    ]
+    assert "a healthy photo beside it seemed to make beginners over-call" in pilot  # as hedged
+    study = toloka.split('<div class="people-run study">', 1)[1]
+    assert "23 Oct · 11 people, our sample photo, bars set beforehand" in study
+    assert 'data/eval/prereg/2026-10-22-toloka-site-study.md"' in study
+    assert 'data/eval/reports/2026-10-23-toloka-site-study.md"' in study
+    assert _stat(study) == [
+        ("11 of 11", 11, 11, None, "got an answer"),
+        ("6 of 11", 6, 11, "7.70", "said the right thing to do · bar 70%: missed"),
+        ("6 of 11", 6, 11, "6.60", "found the source · bar 60%: missed"),
+        ("9 of 11", 9, 11, "7.70", "used the Ask box · bar 70%: met"),
+    ]
+    # what #517 changed, from the report's own list
+    # "bigger than", not "above": it is the size that changed (#534 review)
+    assert "the action is now the answer's biggest words, bigger than the plant's name" in study
+    assert 'the card ends "That\'s your answer"' in html.unescape(study)
+    report = (
+        Path(__file__).parents[1] / "data/eval/reports/2026-10-23-toloka-site-study.md"
+    ).read_text("utf-8")
+    for said in (
+        "**11 of 11**",
+        "| **P1** | Right action | **6 / 11 (55%)** | 28%–79% | ≥ 70% | **missed** |",
+        "| S1 | Found the source | 6 / 11 (55%) | 28%–79% | ≥ 60% | missed |",
+        "| S2 | Used the Ask box | 9 / 11 (82%) | 52%–95% | ≥ 70% | **met** |",
+    ):
+        assert said in report, said
     story = " ".join(
         (Path(__file__).parents[1] / "docs/submission/devpost.md").read_text("utf-8").split()
     )
-    assert "**A small Toloka pilot.** To check our photo reading against people" in story
     assert "in 4 of 5 without the reference (one more partly) and 3 of 5 with it" in story
-    assert "we publish aggregates only." in story and "trial terms" not in story
-    assert "TODO (Kash), user testing" not in story  # the site study's slot, filled 24 Oct
-    assert "**A first-time-user study on Toloka.** On 23 Oct, 11 strangers" in story
+    assert "15 beginner raters" in story and "we publish aggregates only." in story
+
+
+def test_the_people_colour_is_teal_in_light_and_dark_and_marks_only():
+    # 25 Oct: checks by people get their own colour, a mark and an edge, never a fill, so it
+    # never sits beside the green tray and the weather's sky as a third pale tray
+    css = style.CSS
+    assert "--people-fg: #1D6B65; --people-dot: #2A8C84;" in css
+    assert "--people-fg: #86D8CF; --people-dot: #5FC2B8;" in css  # dark
+    assert "background: var(--people" not in css.replace("background: var(--people-dot); }", "")
 
 
 def test_one_name_for_the_builder_programme_everywhere(tmp_path):
@@ -720,13 +779,39 @@ def test_one_name_for_the_builder_programme_everywhere(tmp_path):
     assert "Nebius AI Builder programme credits" in page
 
 
-def test_with_the_spot_feature_off_whats_next_says_why(tmp_path):
-    # 23 Oct, Kash: switched off for a focused experience; About says so under What's next
-    nxt = _about(tmp_path).split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
-    assert 'Bringing back "What can I grow here?"' in nxt
-    assert "0.90 of the time" in nxt and "as good as the plant check" in nxt
-    on = _spot_client(tmp_path)[0].get("/about").text
-    assert "Bringing back" not in on.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0]
+def test_whats_next_is_four_stops_in_one_row_and_every_why_is_true(tmp_path):
+    # 25 Oct, Kash: four stops so the line fits one row on a wide screen; the real-people tests
+    # and the spot feature's return left it. Each Why is checked against its source: slugs
+    # (no slug photo was ever scored), the spot feature (the private working repo's `deploy.sh`: off for a focused experience)
+    for page in (_about(tmp_path), _spot_client(tmp_path)[0].get("/about").text):
+        nxt = html.unescape(page.split('<h2 id="whats-next">', 1)[1].split("</section>", 1)[0])
+        heads = re.findall(r"<li><strong>(.*?)</strong>", nxt)
+        assert heads == [
+            "A twin for indoor plants.",
+            "A Nemotron photo reader, Nemotron 3.5 Super VL first.",
+            "Naming more problems, starting with slugs.",
+            "More than one server.",
+        ]
+        assert (
+            "Why: the photo check can't name slugs yet, and it has never been scored on a"
+            " photo with slugs." in " ".join(nxt.split())
+        )
+        for gone in (
+            "Tests with real people",
+            "Bringing back",
+            "common herb pest",
+            "get our signs",
+        ):
+            assert gone not in nxt, gone
+    assert "grid-template-columns: repeat(4, minmax(0, 1fr));" in style.CSS
+    assert "repeat(5, minmax(0, 1fr))" not in style.CSS
+    root = Path(__file__).parents[1]
+    for doc in ("JUDGES.md", "docs/submission/devpost.md"):
+        text = " ".join((root / doc).read_text("utf-8").split())
+        assert "the RHS's monthly picks were in our top two lists 0.90 of the time" in text, doc
+        assert "switched off" in text and "for a more focused experience" in text, doc
+        for loose in ("as good as the plant check", "matched the RHS", "0.90 against RHS"):
+            assert loose not in text, (doc, loose)
 
 
 def test_no_what_it_does_section_the_band_says_it_and_where_it_works_best(tmp_path):
@@ -775,11 +860,13 @@ def test_the_diagrams_sit_on_an_oat_panel_no_box_uses(tmp_path):
     about = (static / "pages/about.css").read_text("utf-8")
     panel = about.split(".about-page .flow-panel {", 1)[1].split("}", 1)[0]
     assert "background: var(--stone);" in panel and "border: 1.5px solid transparent;" in panel
-    # no box wears it, so the boxes always stand off the panel; only the phone fork's mask,
-    # which hides the rail's end, paints the panel's own colour (it was the page's, a pale bar)
+    # no box wears it, so the boxes always stand off the panel (25 Oct, the About audit: the
+    # test flow and its phone mask, its only other use on About, went); the home page's
+    # Example frame is a panel too, filled with the same oat (25 Oct, Kash)
     sheets = {p.name: p.read_text("utf-8") for p in (static / "pages").glob("*.css")}
-    assert sum(s.count("var(--stone)") for s in sheets.values()) == 2
-    mask = sheets["about-works.css"].split(".works-flow .branch:last-child::after {", 1)[1]
-    assert "background: var(--stone);" in mask.split("}", 1)[0]
+    uses = {n: s.count("var(--stone)") for n, s in sheets.items() if "var(--stone)" in s}
+    assert uses == {"about.css": 1, "home.css": 1}, uses
+    example = sheets["home.css"].split(".home-page .home-example {", 1)[1].split("}", 1)[0]
+    assert "background: var(--stone);" in example
     assert "var(--bg)" not in sheets["about-works.css"] + sheets["about-built.css"]
     assert style._minify(about) in style.CSS

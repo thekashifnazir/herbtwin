@@ -20,6 +20,7 @@ from urllib.parse import urlsplit
 
 from fastapi import HTTPException
 from fastapi.responses import StreamingResponse
+from jinja2 import Environment, FileSystemLoader
 
 from herbtwin.advice_context import NOT_AVAILABLE
 from herbtwin.answer import short_sign
@@ -244,10 +245,16 @@ SORRY = "something went wrong on our side"
 _END = (
     '</div></div></div></main>\n<footer class="foot"><div class="wrap">\n'
     # the same footer as base.html's: its wordmark and links here, the rest from the partial
-    '<div class="foot-brand"><span class="foot-mark" aria-hidden="true">herbtwin</span></div>\n'
+    # the wordmark as base.html draws it: a picture, not text (25 Oct, final walk #7)
+    '<div class="foot-brand"><svg class="foot-mark" viewBox="0 0 350 90" aria-hidden="true" focusable="false">'
+    '<text x="0" y="82" textLength="350" lengthAdjust="spacingAndGlyphs">herbtwin</text></svg></div>\n'
     '<nav class="foot-links" aria-label="About this site"><a href="/about">About</a>'
     '<a href="/privacy">Privacy</a><a href="/about#credits">Credits</a></nav>\n'
-    + (Path(__file__).parent / "templates" / "_maker.html").read_text()
+    # rendered as base.html includes it, never pasted raw: a {# comment #} in the partial
+    # showed as text under every wait (25 Oct site walk)
+    + Environment(loader=FileSystemLoader(Path(__file__).parent / "templates"), autoescape=True)
+    .get_template("_maker.html")
+    .render()
     + "</div></footer>\n</body></html>\n"
 )
 

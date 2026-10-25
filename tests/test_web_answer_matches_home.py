@@ -163,6 +163,8 @@ def test_a_kept_reply_shows_its_sources_once_the_chat_can_rebuild_them(tmp_path)
     assert '<p class="msg user">How do I treat it?</p>' in page
 
 
-def test_you_asked_sits_clear_of_the_starter_pills():
+def test_you_asked_sits_over_the_box_clear_of_it():
+    # it sat under the starter pills, 20px clear of them; since 25 Oct (Kash: the thread reads
+    # like a chat) it sits over the box, 16px clear of it
     sheet = (style.STATIC / "pages" / "answer.css").read_text(encoding="utf-8")
-    assert ".answer-page .asked { margin: 20px 0 16px; }" in sheet
+    assert ".answer-page .asked { margin: 0 0 16px; }" in sheet

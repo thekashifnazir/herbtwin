@@ -131,7 +131,7 @@ def test_a_plant_database_source_shows_by_name_not_its_record_key(tmp_path):
     assert rec.pack is not None
     rec.pack.sources = ["openplantdb (CC0)", "openplantbook: lavandula angustifolia"]
     page = _render(rec)
-    assert "Care facts: OpenPlantDB (CC0), Open Plantbook</p>" in page
+    assert 'Care facts</p><p class="went-text">OpenPlantDB (CC0), Open Plantbook</p>' in page
     assert "openplantbook:" not in page
 
 

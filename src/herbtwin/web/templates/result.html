@@ -245,23 +245,28 @@
     <span class="fold-peek">{{ ft.weather.peek }}</span>{% endif %}</span></summary>
     {% set droop = ["not drooping", "a little droopy", "droopy", "badly wilted"] %}
     {% set decline = ["healthy-looking", "a little tired", "declining", "badly declining"] %}
-    {% if "photo" in held %}<p>From the photo: {{ droop[obs.water_stress] }}, {{ decline[obs.decline] }}{% if obs.leaf_colour != "not_visible" %} · leaves {{ obs.leaf_colour|replace("_", " ") }}{% endif %}{% if obs.soil_surface != "not_visible" %} · soil surface {{ obs.soil_surface|replace("_", " ") }}{% endif %}{% if obs.symptoms %} · seen: {{ obs.symptoms|join(", ") }}{% endif %}</p>{% endif %}
+    {# each line under its own small label in a colour that means something (green: what we
+       read or looked up, sky: the weather, as About; amber: a problem to check; lilac: found
+       with Tavily), and the photo's read a bullet each (25 Oct, Kash on rev 00109: "hard to
+       parse if reading quickly") #}
+    {% if "photo" in held %}<p class="fold-label went-photo">From the photo</p>
+    <ul class="went-list"><li>{{ droop[obs.water_stress] }}</li><li>{{ decline[obs.decline] }}</li>{% if obs.leaf_colour != "not_visible" %}<li>leaves {{ obs.leaf_colour|replace("_", " ") }}</li>{% endif %}{% if obs.soil_surface != "not_visible" %}<li>soil surface {{ obs.soil_surface|replace("_", " ") }}</li>{% endif %}{% if obs.symptoms %}<li>seen: {{ obs.symptoms|join(", ") }}</li>{% endif %}</ul>{% endif %}
     {# the weather the title counts, from the twin's run if left out; when the chart is
        drawn, its snowflakes mark the same spells (fold_titles.py) #}
-    {% if "weather" in held %}<p>Weather: {{ ft.weather.weather }}, from Open-Meteo</p>{% endif %}
+    {% if "weather" in held %}<p class="fold-label went-weather">Weather</p><p class="went-text">{{ ft.weather.weather }}, from Open-Meteo</p>{% endif %}
     {# what the season is, then who says so (judge live walk of rev 00040: "Season: RHS, our care notes") #}
     {# only the sources behind the season, never the pest and disease pages behind its
        problem signs (22 Oct site walk: mildew papers on a healthy plant's season line) #}
     {# its main state in plain words: never "normal dieback and active growth" or "evergreen hold" #}
     {% set season_said = {"active_growth": "growing", "flowering": "flowering", "bolting_risk": "may run to seed", "normal_dieback": "dying back", "dormant": "resting", "regrowth": "growing again", "leaf_fall": "dropping its leaves", "evergreen_hold": "holding its leaves"} %}
-    {% if "season" in held %}<p>Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}: {{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(season_sources(rec.season)) }}</p>{% endif %}
-    {% if "facts" in held %}<p>Care facts: {{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
+    {% if "season" in held %}<p class="fold-label went-season">Season in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][rec.season.month - 1] }}</p><p class="went-text">{{ season_said.get(rec.season.status[0], rec.season.status[0]|replace("_", " ")) }}, from {{ said_by(season_sources(rec.season)) }}</p>{% endif %}
+    {% if "facts" in held %}<p class="fold-label went-facts{{ ' went-tavily' if rec.pack.found_with == 'tavily' }}">Care facts</p><p class="went-text">{{ said_by(rec.pack.sources) }}{% if rec.pack.found_with == "tavily" %} ({{ "found" if rec.pack.sources|length == 1 else "the RHS page found" }} with Tavily){% endif %}</p>{% endif %}
     {% if "check" in held %}{% set src = rec.problem.page %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
-    <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}.{% if src %} Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.{% endif %}</p>{% endif %}
+    <p class="fold-label went-check">Photo check</p><p class="went-text">{{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}.{% if src %} Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.{% endif %}</p>{% endif %}
     {# the per-choice numbers are in "Compare all choices" in words; the model's working
        assumptions fold away here (17 Oct re-walk: raw action names and 0.00s). Indoors no
        plant model runs, so they are ours (25 Oct real-upload render) #}
-    {% if "assumes" in held %}<details class="assumptions"><summary>{{ "What we assumed" if obs and obs.setting == "indoor" else "What the plant model assumes" }}</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
+    {% if "assumes" in held %}<details class="assumptions"><summary class="fold-label went-assumed">{{ "What we assumed" if obs and obs.setting == "indoor" else "What the plant model assumes" }}</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
     {% set missed = {"environment": "the weather", "research": "the species facts", "twin": "the plant model", "advise": "the advice", "observe": "the photo read", "problem": "the closer photo check"} %}
     {% for f in rec.failures %}<p class="note">Not available this time: {{ missed.get(f.stage, "one step") }}.</p>{% endfor %}
     <p class="record">Ref {{ rec.record_id }}</p>
@@ -334,9 +339,10 @@
         <p class="strip-h"><span class="strip-name">Your plant's twin</span> <span class="strip-span">today to {{ ts.weeks[-1][1] }}</span></p>
         <svg class="strip-chart" viewBox="{{ ts.view|join(' ') }}" role="img" aria-label="{{ ts.title }}">
           <line class="needs" x1="34" y1="{{ ts.needs_y }}" x2="332" y2="{{ ts.needs_y }}"/>
-          {#- the advice's line green and on top, the other dashed under it #}
+          {#- the advice's line green and on top, the other grey under it; leaving it is always
+              dashed, as in the twin's own chart (25 Oct final walk) #}
           {%- for ln in ([ts.other, ts.base] if ts.lead == ts.base.action else [ts.base, ts.other]) %}
-          <polyline class="{{ 'lead' if ln.action == ts.lead else 'alt' }}" points="{{ ln.points }}"/>{% endfor %}
+          <polyline class="{{ 'lead' if ln.action == ts.lead else 'alt' }}{{ ' leave' if ln.action == ts.base.action else '' }}" points="{{ ln.points }}"/>{% endfor %}
           <circle class="today" cx="{{ ts.today[0] }}" cy="{{ ts.today[1] }}" r="5"/>
           {%- for ln, y in ((ts.base, ts.base_name_y), (ts.other, ts.other_name_y)) %}
           <text class="nm {{ 'lead' if ln.action == ts.lead else 'alt' }}" x="332" y="{{ y }}" text-anchor="end">{{ ln.name }}</text>{% endfor %}
@@ -529,10 +535,13 @@
            a tap on a choice shows its line (idea 3, 18 Oct). 22 Oct, Kash: not obvious to
            read, so it says what it shows above it, names each line at its end in the line's
            colour (no legend in the small print), and marks every cold window under the axis #}
-        {% if tc %}<figure class="twin-chart" id="twin-chart" data-shown="{{ shown }}" data-reveal="draw">
+        {#- one convention with the card's strip (25 Oct final walk): leaving it is always dashed,
+            the card's job always green; on a leave-it answer that is the dashed line #}
+        {%- set leave_leads = ts and ts.lead == "leave_normal" %}
+        {% if tc %}<figure class="twin-chart{{ ' leave-leads' if leave_leads else '' }}" id="twin-chart" data-shown="{{ shown }}" data-reveal="draw">
           <p class="twin-chart-title" id="twin-chart-title">{{ tc.title }}</p>
           {# how to read it, naming only the lines drawn: it follows the tap like the lines #}
-          <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">{{ ln.how }}</span>{% endfor %}</p>
+          <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">{{ ln.how_leave if leave_leads and ln.how_leave else ln.how }}</span>{% endfor %}</p>
           <svg viewBox="0 0 340 {{ tc.height }}" role="img" aria-labelledby="twin-chart-title">
             <text class="axis" x="4" y="26">wet</text><text class="axis" x="4" y="126">dry</text>
             <line class="frame" x1="34" y1="22" x2="34" y2="122"/><line class="frame" x1="34" y1="122" x2="332" y2="122"/>
@@ -797,7 +806,9 @@
       {% if "soil_texture" in asks %}{{ spotq.squeeze_field(choices["squeeze"], rec.told.squeeze if rec.told else none) }}{% endif %}</div>{% endif %}
       {# the chips are the groups' only fields: a tap answering the last one sends it (the
          script, data-picks); the button under them stays for anyone who wants to press it #}
-      {% set picks_only = (selects or "window" in asks) and not (tray_in == "where" and a.tell_me_key == "location") and "aspect" not in asks and "soil_texture" not in asks %}
+      {#- the window is picked, then sent with the button, as the compass's direction is
+          (25 Oct, Kash on the live page: a tap on a window sent at once) #}
+      {% set picks_only = selects and not (tray_in == "where" and a.tell_me_key == "location") and "aspect" not in asks and "window" not in asks and "soil_texture" not in asks %}
       {% set groups_send = has_where or has_changed %}
       {# one green button in the panel (21 Oct, Kash; kept green after A3, 22 Oct, Kash).
          Their names say what each does, so no explainer line under them. With groups above,
@@ -812,6 +823,26 @@
       </div>{% endif %}
       <div class="part chat{{ ' needed' if tray_in == 'chat' else '' }}"><h3>Ask a question</h3>
       {% if tray_in == "chat" %}{{ tray }}{% endif %}
+      {# the thread reads like a chat (25 Oct, Kash on rev 00109: "if we ask a question
+         shouldn't this come within the box"): oldest first, the newest just over the box,
+         where the answer lands; the box, the suggestions and what's left stay under it #}
+      {% if rec.told and rec.told.question %}{% set reply = reply_to(a, rec.told.question, rec.taken_at.month) %}<div class="asked"><p class="msg user">{{ "You asked" if is_question(rec.told.question) else "You said" }}: {{ rec.told.question }}</p>{% if reply %}<p class="msg assistant">{{ reply }}</p>{% endif %}</div>{% endif %}
+      <div class="chatlog" role="log" aria-live="polite"{% if not chat %} hidden{% endif %}><h4>Your questions</h4>{% for m in chat %}<p class="msg {{ m.role }}">{{ m.content }}
+        {#- a kept reply's sources, as the script's add() shows a new one (judge walk of #269:
+            the links went on reload); at most 2 short ones and one "Found with Tavily" line for
+            the set when Tavily found them all, else on each it found (review of this PR), not one per link (22 Oct site walk) -#}
+        {%- if m.role == "assistant" and chat_links is defined %}{% set ns = namespace(shown=[], tavily=0) %}{% for s in chat_links(m.tools, m.content) if s.url.startswith("https://") %}{% set ns.shown = ns.shown + [s] %}{% if s.provider == "tavily" %}{% set ns.tavily = ns.tavily + 1 %}{% endif %}{% endfor %}{% set all_tavily = ns.shown and ns.tavily == ns.shown|length %}{% for s in ns.shown %}<br><a href="{{ s.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ s.label or s.url }}</a>{% if not all_tavily and s.provider == "tavily" %} (found with Tavily){% endif %}{% endfor %}{% if all_tavily %}<br><small>Found with Tavily</small>{% endif %}{% endif %}</p>{% endfor %}</div>
+      {# at most 2 of the suggestions not yet asked, under the latest answer (the script) #}
+      <div class="followups" hidden><div class="actions"></div></div>
+      {# the waiting line, under the question where the answer will come (23 Oct, Kash on a
+         phone: "should be waiting text"): which model is thinking, then a search only when
+         one starts. Kept in the tree, empty, so its first words are read out #}
+      <p class="chatwait" role="status" aria-live="polite"></p>
+      {# "Ask about this plant" made plain (19 Oct, Kash): three to tap, through the chat;
+         over the box as starters until the first question, when the thread takes their
+         place (25 Oct, Kash: nothing under the box should move) #}
+      <div class="starters" hidden><h4>Try one of these</h4>
+        <div class="actions">{% for q in starters(rec) %}<button type="button" class="starter">{{ q }}</button>{% endfor %}</div></div>
       {# one rounded box with its send inside, as a chat app has (22 Oct, Kash on A3: a
          full-width "Ask about this plant" did not say what it does). Ask needs the script;
          without one the text goes with "Check the advice again" #}
@@ -819,20 +850,7 @@
         <button class="quiet ask-chat" type="button" aria-label="Ask about this plant"{{ '' if groups_send else ' data-lead' }} hidden><span class="ask-word">Ask</span><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
       {%- if not groups_send %}
       <div class="actions"><button class="primary big" type="submit">Check the advice again</button></div>{% endif %}
-      {# "Ask about this plant" made plain (19 Oct, Kash): three to tap, through the chat #}
-      <div class="starters" hidden><h4>Or tap a question to ask</h4>
-        <div class="actions">{% for q in starters(rec) %}<button type="button" class="starter">{{ q }}</button>{% endfor %}</div></div>
       <p class="chatnote" role="status" aria-live="polite"></p>
-      {% if rec.told and rec.told.question %}{% set reply = reply_to(a, rec.told.question, rec.taken_at.month) %}<div class="asked"><p class="msg user">{{ "You asked" if is_question(rec.told.question) else "You said" }}: {{ rec.told.question }}</p>{% if reply %}<p class="msg assistant">{{ reply }}</p>{% endif %}</div>{% endif %}
-      <div class="chatlog"{% if not chat %} hidden{% endif %}><h4>Your questions</h4>{% for m in chat %}<p class="msg {{ m.role }}">{{ m.content }}
-        {#- a kept reply's sources, as the script's add() shows a new one (judge walk of #269:
-            the links went on reload); at most 2 short ones and one "Found with Tavily" line for
-            the set when Tavily found them all, else on each it found (review of this PR), not one per link (22 Oct site walk) -#}
-        {%- if m.role == "assistant" and chat_links is defined %}{% set ns = namespace(shown=[], tavily=0) %}{% for s in chat_links(m.tools, m.content) if s.url.startswith("https://") %}{% set ns.shown = ns.shown + [s] %}{% if s.provider == "tavily" %}{% set ns.tavily = ns.tavily + 1 %}{% endif %}{% endfor %}{% set all_tavily = ns.shown and ns.tavily == ns.shown|length %}{% for s in ns.shown %}<br><a href="{{ s.url }}" rel="noopener noreferrer nofollow" target="_blank">{{ s.label or s.url }}</a>{% if not all_tavily and s.provider == "tavily" %} (found with Tavily){% endif %}{% endfor %}{% if all_tavily %}<br><small>Found with Tavily</small>{% endif %}{% endif %}</p>{% endfor %}</div>
-      {# the waiting line, under the question where the answer will come (23 Oct, Kash on a
-         phone: "should be waiting text"): which model is thinking, then a search only when
-         one starts. Kept in the tree, empty, so its first words are read out #}
-      <p class="chatwait" role="status" aria-live="polite"></p>
       </div>
       </form>
       {% if reminder %}<div class="part remind"><h3>Reminders</h3>
@@ -915,11 +933,27 @@
         note.textContent = noteText;
         for (const b of buttons) b.removeAttribute("aria-disabled");
       });
-      const starters = box.querySelector(".starters");
-      starters.hidden = false;
-      for (const b of starters.querySelectorAll(".starter")) {
-        b.addEventListener("click", () => { form.question.value = b.textContent; ask.click(); });
-      }
+      // the suggestions: over the box as starters until the first question, then at most 2
+      // not yet asked under the latest answer, or none (25 Oct, Kash: nothing should move
+      // down the page as they go)
+      const starters = box.querySelector(".starters"), follow = box.querySelector(".followups");
+      const asks = [...starters.querySelectorAll(".starter")].map((b) => b.textContent);
+      const tap = (q) => () => { form.question.value = q; ask.click(); };
+      for (const b of starters.querySelectorAll(".starter")) b.addEventListener("click", tap(b.textContent));
+      let remaining = Infinity;  // questions left today: none to offer once the chat refuses
+      const offer = () => {
+        const asked = new Set([...log.querySelectorAll(".msg.user")].map((p) => p.textContent.trim().toLowerCase()));
+        const left = log.querySelector(".msg") && remaining > 0 ? asks.filter((q) => !asked.has(q.toLowerCase())).slice(0, 2) : [];
+        follow.querySelector(".actions").replaceChildren(...left.map((q) => {
+          const b = document.createElement("button");
+          b.type = "button"; b.className = "starter"; b.textContent = q;
+          b.addEventListener("click", tap(q));
+          return b;
+        }));
+        follow.hidden = !left.length;
+        starters.hidden = Boolean(log.querySelector(".msg"));
+      };
+      offer();
       // the answer chips, when they are the groups' only fields (data-picks on their send):
       // the tap that leaves every question answered sends the refine (22 Oct, Kash, A3). The
       // arrow keys only move between chips; Space picks and sends, Enter sends the form
@@ -943,6 +977,10 @@
         const p = document.createElement("p");
         p.className = "msg " + role;
         p.textContent = text;
+        // the live thread reads out the answer, not the asker's own words back, until the
+        // answer is in; an answer can take focus when a tapped chip has gone (review of #530)
+        if (role === "user") p.setAttribute("aria-hidden", "true");
+        else p.tabIndex = -1;
         const links = (sources || []).filter((s) => String(s.url).startsWith("https://"));
         // one line for the set when Tavily found them all (22 Oct site walk), else on each
         // link it found: never Tavily's name on another finder's page (review of this PR)
@@ -995,11 +1033,19 @@
         const text = form.question.value.trim();
         if (!text) { note.textContent = "Type your question in the box first."; form.question.focus(); return; }
         if (form.dataset.busy) { note.textContent = "Still checking the advice. Ask once it has loaded."; return; }
+        // typed and sent from the box (Enter): it gets the box back. A tapped chip never does,
+        // or a phone's keyboard opens over the new answer (review of #530)
+        const typed = document.activeElement === form.question;
         for (const b of buttons) b.disabled = true;
         // one waiting line, under their question: not "Asking…" on the button and
         // "Thinking…" over the log at once (site walk 2)
         note.textContent = "";
+        starters.hidden = true; follow.hidden = true;
         const mine = add("user", text);
+        // the question leaves the box as it is sent, and comes back if it could not go
+        // (25 Oct final walk: it sat in the box while its reply loaded)
+        form.question.value = "";
+        const restore = () => { if (!form.question.value.trim()) form.question.value = text; };
         const thinking = box.dataset.thinking.replace(/…$/, "");
         searching = "";
         still = window.herbtwinWait(wait, [
@@ -1007,6 +1053,7 @@
           [30, () => "taking longer than usual: " + (searching ? "still " + searching : "your answer is on its way")],
         ]);
         wait.scrollIntoView({block: "nearest", behavior: motion});
+        let said = null;
         try {
           const r = await fetch(box.dataset.url, {
             method: "POST",
@@ -1014,24 +1061,39 @@
             body: JSON.stringify({message: text}),
           });
           const body = await answered(r);
-          if (!r.ok || !body.reply) { mine.remove(); note.textContent = body.detail || "Something went wrong."; return; }
+          if (r.status === 429) remaining = 0;
+          if (!r.ok || !body.reply) { mine.remove(); restore(); note.textContent = body.detail || "Something went wrong."; return; }
           wait.textContent = "";  // the answer takes its place
-          add("assistant", body.reply, body.sources);
-          // asked and answered: the log keeps it, the box is free. A fact they told us stays,
-          // for one tap on "Check the advice again" (the chat API's `fact`)
-          // ... and only if it still holds what was asked: a note typed while the reply was on
-          // its way is theirs, for "Check the advice again" (22 Oct site walk: it was wiped)
-          if (!body.fact && form.question.value.trim() === text) form.question.value = "";
+          said = add("assistant", body.reply, body.sources);
+          remaining = body.left;
+          // asked and answered: the log keeps it, the box is free. A fact they told us goes
+          // back, for one tap on "Check the advice again" (the chat API's `fact`), unless they
+          // typed a note while the reply was on its way: that is theirs (22 Oct site walk)
+          if (body.fact) restore();
           note.textContent = (body.note ? body.note + " " : "") + body.left + " questions left.";
-          mine.scrollIntoView({block: "start", behavior: motion});  // the reply is under the box
+          // the answer lands over the box, where they were looking: their question, the
+          // answer and the box in view when they fit, else the answer, else from the question
+          const top = mine.getBoundingClientRect().top, composer = form.querySelector(".composer");
+          if (composer.getBoundingClientRect().bottom - top <= innerHeight) composer.scrollIntoView({block: "nearest", behavior: motion});
+          else if (said.getBoundingClientRect().bottom - top <= innerHeight) said.scrollIntoView({block: "nearest", behavior: motion});
+          else mine.scrollIntoView({block: "start", behavior: motion});
         } catch {
           mine.remove();
+          restore();
           note.textContent = "Could not reach the server. Try again.";
         } finally {
           still();
           wait.textContent = "";
           if (!log.querySelector(".msg")) log.hidden = true;
+          mine.removeAttribute("aria-hidden");  // browsing the thread now reads both sides
+          offer();
           for (const b of buttons) b.disabled = false;
+          // focus: the box again after a typed question; after a tap, left alone unless the
+          // tapped chip went with it, then on the answer (it never opens a keyboard)
+          const at = document.activeElement;
+          const lost = !at || at === document.body || !at.isConnected || Boolean(at.closest("[hidden]"));
+          if (typed) form.question.focus({preventScroll: true});
+          else if (said && lost) said.focus({preventScroll: true});
         }
       });
     })();
@@ -1095,11 +1157,16 @@
       {%- set down = a.chips|selectattr("effect", "in", ["lowers", "missing"])|map(attribute="name")|map("lower")|list %}
       <details class="why fold {{ 'fold-good' if best else 'fold-check' }}"><summary><span class="fold-head">{% if ft.why.found %}<span class="fold-kind">{{ ft.why.kind }}</span>{% endif %}<span class="fold-title">{{ ft.why.title }}</span>
         <span class="fold-peek">{% if up %}Helped: {{ up[:3]|join(", ") }}{% endif %}{% if up and down %} · {% endif %}{% if down %}Held back: {{ down[:3]|join(", ") }}{% endif %}{% if not up and not down %}What raised or lowered how sure we are{% endif %}</span></span></summary>
-        <p class="small">In our tests on 624 real gardening questions with answers from experienced gardeners, answers at this level matched the gardener's first step {{ record }}.</p>
-        <ul>{% for effect, said in (("raises", "Helped"), ("lowers", "Lowered it"), ("missing", "Missing"), ("neutral", "No effect on how sure we are")) %}
+        <p class="small sure-lead">In our tests on 624 real gardening questions with answers from experienced gardeners, answers at this level matched the gardener's first step {{ record }}.</p>
+        {#- each group under a label in its meaning's colour, each factor its own row, two or
+            more reasons a bullet each (25 Oct, Kash on rev 00109: "hard to parse if reading
+            quickly"); no brackets inside brackets (19 Oct small-print re-check) #}
+        {% for effect, said, tint in (("raises", "Helped", "f-raises"), ("lowers", "Lowered it", "f-lowers"), ("missing", "Missing", "f-missing"), ("neutral", "No effect on how sure we are", "f-neutral")) %}
           {%- set chips = a.chips|selectattr("effect", "equalto", effect)|list %}
-          {#- one bullet per factor, no brackets inside brackets (19 Oct small-print re-check) #}
-          {%- if chips %}<li>{{ mark[effect] }} {{ said }}<ul>{% for c in chips %}<li><strong>{{ c.name }}</strong>{% if c.why %}: {{ c.why|join("; ") }}{% endif %}</li>{% endfor %}</ul></li>{% endif %}{% endfor %}</ul>
+          {%- if chips %}<div class="f-group"><p class="fold-label {{ tint }}">{{ mark[effect] }} {{ said }}</p>
+          <ul class="factors">{% for c in chips %}<li class="factor"><strong class="f-name">{{ c.name }}</strong>
+            {%- if c.why|length == 1 %}<span class="sr-only">: </span><span class="f-why">{{ c.why[0] }}</span>
+            {%- elif c.why %}<span class="sr-only">: </span><ul class="f-why">{% for w in c.why %}<li>{{ w }}</li>{% endfor %}</ul>{% endif %}</li>{% endfor %}</ul></div>{% endif %}{% endfor %}
       </details>{% endif %}
       {# a no-cure answer: nothing to compare, so no twin section; its "Not compared" line
          stays folded here (the twin's chart and choices moved to the twin's section, 23 Oct) #}

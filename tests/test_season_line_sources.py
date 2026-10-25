@@ -24,7 +24,9 @@ MILDEW = ("Frontiers", "AHDB", "UF/IFAS", "UConn", "rhs.org.uk/disease/")
 
 
 def _season_line(page: str) -> str:
-    return page.split("<p>Season in ", 1)[1].split("</p>", 1)[0]
+    # the month in its label, the season and who says so on the line under it (25 Oct)
+    month, rest = page.split('<p class="fold-label went-season">Season in ', 1)[1].split("</p>", 1)
+    return f"{month}: " + rest.split('<p class="went-text">', 1)[1].split("</p>", 1)[0]
 
 
 def test_the_season_line_credits_only_the_seasons_own_sources(tmp_path):

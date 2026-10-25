@@ -228,8 +228,8 @@ def test_by_part_hides_the_job_rows_and_styles_the_pills():
         in css
     )
     assert (
-        '.view-pick[aria-pressed="true"] { background: var(--primary); color: var(--primary-fg); }'
-        in css
+        # the pressed pill in the tray's deeper green, not the press green (25 Oct, final walk #8)
+        '.view-pick[aria-pressed="true"] { background: var(--soft-strong); color: var(--fg);' in css
     )
 
 

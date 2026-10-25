@@ -305,7 +305,11 @@ def test_every_page_footer_carries_the_wordmark(tmp_path):
     c = _client(tmp_path, [], [])
     for page in (c.get("/privacy").text, progress.HEAD + progress._done("/x")):
         foot = page.split('<footer class="foot">', 1)[1]
-        assert '<span class="foot-mark" aria-hidden="true">herbtwin</span>' in foot
+        # a picture of the word since 25 Oct (final walk #7), still hidden from readers
+        assert (
+            '<svg class="foot-mark" viewBox="0 0 350 90" aria-hidden="true"' in foot
+            and ">herbtwin</text>" in foot
+        )
     from herbtwin.web.app import TEMPLATES
 
     spot = TEMPLATES.env.loader.get_source(TEMPLATES.env, "spot.html")[0]
@@ -379,6 +383,14 @@ def test_the_example_frame_keeps_its_tab_on_the_edge_and_a_small_thumbnail():
     assert "translateY(-50%)" in tab and "top: 0" in tab
     thumb = style.CSS.split(".home-page .home-example-in img {", 1)[1].split("}", 1)[0]
     assert "width: 56px" in thumb  # a fixed small thumbnail, never the 480 px file's width
+
+
+def test_the_example_frame_is_filled_with_abouts_oat():
+    # 25 Oct, Kash: "change this background colour to the same as what we did in About with
+    # the brown oat colour"; the page's own paper made the frame read as part of the page
+    frame = style.CSS.split(".home-page .home-example {", 1)[1].split("}", 1)[0]
+    assert "background: var(--stone);" in frame and "var(--bg)" not in frame
+    assert "border: 2px dashed var(--fg);" in frame  # the dashed edge and its tab stay
 
 
 def test_how_it_works_is_four_photo_cards_of_the_examples_real_output(tmp_path):

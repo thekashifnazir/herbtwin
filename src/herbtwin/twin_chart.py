@@ -57,6 +57,8 @@ class Line:
     key: tuple[float, str] | None = None  # the one "cold spells" word: x, anchor
     spell: str = "cold spell"  # "frosty spell" for a hardy plant, as the fold says (#441)
     how: str = ""  # how to read the chart while this line is drawn, under the title
+    # the same, on a leave-it answer: leaving it is the advice, green and still dashed
+    how_leave: str = ""
 
 
 @dataclass(frozen=True)
@@ -109,13 +111,19 @@ def _span(pts: list[tuple[float, float]], name: str) -> tuple[float, float]:
 
 def _names(upper: tuple[float, float], lower: tuple[float, float]) -> tuple[float, float]:
     """The baselines of two names at the right end: the upper line's above it, the lower
-    line's below it (above it too when the axis is in the way), a line of text apart.
+    line's below it (above it too when the axis is in the way), a line of text apart; both
+    under the lower line when the upper has no room above it and the two run close.
     Each line is given as its (highest, lowest) y under its name."""
     up, low = upper[0] - ABOVE, lower[1] + BELOW
     if low > NAME_BOTTOM:
         low = lower[0] - ABOVE
     if up < NAME_TOP:
-        up = upper[1] + BELOW
+        up = upper[1] + BELOW  # no room above: under its own line
+        if lower[0] - upper[1] < NAME_GAP + BELOW:
+            # ...unless the lower line runs too close under it: then both names go under the
+            # lower line, the upper's first (25 Oct final walk: "Water it" on leaving it's
+            # line, the strip and the chart alike). Far apart, each stays by its own line
+            up, low = lower[1] + BELOW, lower[1] + BELOW + NAME_GAP
     a, b = sorted((up, low))
     if b - a < NAME_GAP:
         mid = (a + b) / 2
@@ -168,13 +176,20 @@ def _you(name: str) -> str:
     return f"if you {name[:1].lower()}{name[1:]}"
 
 
-def _how(name: str, base_name: str, snow: bool, spell: str = "cold spell") -> str:
+def _how(
+    name: str, base_name: str, snow: bool, spell: str = "cold spell", leave_leads: bool = False
+) -> str:
     """How to read the chart, from the lines actually drawn: the green one, leaving it's
     dashed one (when it is not the green one), the dotted line, and the snowflakes when
-    any show (round 2, 22 Oct, Kash: "explanations")."""
-    said = f"Green: {_you(name)}."
-    if base_name and base_name != name:
-        said += f" Dashed: {_you(base_name)}."
+    any show (round 2, 22 Oct, Kash: "explanations"). Leaving it is always the dashed line;
+    on a leave-it answer it is the green one too, the other line grey (25 Oct final walk:
+    the card's strip and this chart drew the two the opposite ways)."""
+    if leave_leads and base_name and base_name != name:
+        said = f"Green, dashed: {_you(base_name)}. Grey: {_you(name)}."
+    else:
+        said = f"Green: {_you(name)}."
+        if base_name and base_name != name:
+            said += f" Dashed: {_you(base_name)}."
     said += " Below the dotted line, it needs water."
     # one snowflake a run of cold nights, so a spell, as the fold counts them (#441)
     return said + (f" \u2744\ufe0e marks each {spell}." if snow else "")
@@ -312,6 +327,9 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
                 key=_key(marks, spell),
                 spell=spell,
                 how=_how(short, base_name, bool(marks or (left and left[4])), spell),
+                how_leave=_how(
+                    short, base_name, bool(marks or (left and left[4])), spell, leave_leads=True
+                ),
             )
         )
     if not lines:

@@ -17,33 +17,40 @@
 <p class="about-kicker">About</p>
 <h1>herbtwin, and why I built it</h1>
 <p class="lead">This autumn my oregano died and my purple sage nearly did, and I couldn't tell what was normal for October. Most plant apps name the plant and list generic care; they rarely say "leave it", or how sure they are. herbtwin does. It works best for herbs grown outside.</p>
-<p class="actions"><a class="button primary" href="/">Check a plant</a></p>
+{# 25 Oct (Kash, the About audit): the public code moved up from the end of the page, as the
+   band's outline button, so the lime "Check a plant" stays the one to press #}
+<p class="actions"><a class="button primary" href="/">Check a plant</a> <a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">The code and test reports</a></p>
 </div>
 
 <div class="about">
 <section id="made-with" aria-labelledby="built">{# the answer page's "What it's made with" lands here #}
   <h2 id="built">How it's built</h2>
-  {# round 3 (22 Oct, Kash's notes): the chips take the flow's colours, so they are its key
-     for the sources; our rules sit in the main row; the flow runs in two rows of four on a
-     wide screen, so the boxes and their words can be bigger #}
-  <ul class="about-chips" aria-label="The stack">
-    <li>Python 3.12</li><li>FastAPI</li><li>Cloud Run</li><li>Cloudflare Worker</li><li>Nebius Token Factory</li><li>Nebius AI Cloud</li><li class="nvidia">NVIDIA Nemotron 3</li><li class="tavily">Tavily</li><li class="weather">Open-Meteo</li><li class="gbif">GBIF</li><li>Supabase</li>
-  </ul>
   <p class="about-nebius">Every AI model runs on Nebius Token Factory{% if voice_on %}, except the plant's voice (ElevenLabs){% endif %}. Reminder emails come from a small daily job on Nebius AI Cloud.</p>
-  {#- 25 Oct (Kash: "make sure we are super clear about how we have used" each service): one
-      panel of ruled rows, the name, what it did here, and its proof, every number as the
-      reports say it (Token Factory: the cost card below; Tavily: data/eval/reports/README.md;
-      LangSmith: #146's upload; Tendem and Toloka: their reports) #}
-  <div class="about-services ink">
-    <h3 id="services">What each service did</h3>
-    <ul class="svc-rows">
-      <li class="svc-row tf"><p class="svc-name">Nebius Token Factory</p><p class="svc-what">Runs the AI models: GLM-5.3 Flash reads the photo, NVIDIA Nemotron 3 Super decides (asked 3 times), Nemotron 3 Nano chats, Ultra checks a trusted page.</p><p class="svc-proof">One example answer: <strong>$0.0040</strong> of model time</p></li>
-      <li class="svc-row tavily"><p class="svc-name">Tavily</p><p class="svc-what">Searches trusted gardening pages for the chat's sources, the trusted-page check, and shops and gardeners near you.</p><p class="svc-proof">Chat answers right: <strong>25 of 30</strong> with it, 15 without</p></li>
-      <li class="svc-row"><p class="svc-name">LangSmith</p><p class="svc-what">Traces each model call on the live site (the text sent and returned, with photos, email addresses and locations removed; time, tokens, cost), and holds our saved evals.</p><p class="svc-proof"><strong>12 experiments</strong>, 4,052 scored runs</p></li>
-      <li class="svc-row"><p class="svc-name">Tendem</p><p class="svc-what">Found a professional gardener to grade three answers.</p><p class="svc-proof">Every first action <strong>Acceptable</strong>; 3 of 5 overall (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>)</p></li>
-      <li class="svc-row"><p class="svc-name">Toloka</p><p class="svc-what">Ran a first-time-user study with 11 people, after a photo-reading pilot.</p><p class="svc-proof">All got an answer; <strong>6 of 11</strong> could say what to do (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-23-toloka-site-study.md" rel="noopener noreferrer">the study</a>)</p></li>
-    </ul>
-  </div>
+  {#- 25 Oct (Kash, the About audit: the Devpost pipeline figure is "super clear, anyone can
+      follow it"; this one was dense): the same six steps as sticker boxes, then the answer
+      with its cost, then the days after. Nemotron's boxes in the flow's NVIDIA tint; lime
+      stays the band's press. Every word and figure is one the detailed flow or the reports
+      give. The detailed flow folds under it, one tap away #}
+  <figure class="pipe" aria-labelledby="pipe-cap">
+    <ol class="pipe-steps" role="list" aria-label="How one answer is made">
+      <li><div class="node"><strong>Your photo and place</strong><span>Up to 3 photos of a herb, and a UK town or postcode</span></div></li>
+      <li><div class="node"><strong>Read the photo</strong><em>GLM-5.3-Flash</em><span>Names the plant and what's wrong</span></div></li>
+      <li><div class="node"><strong>Gather evidence</strong><span>Care facts, a Tavily search and, outdoors, the 2-week forecast</span></div></li>
+      <li><div class="node twin"><strong>The plant's twin</strong><span>Outdoors, tries each choice against that weather. Indoors: no twin yet</span></div></li>
+      <li><div class="node advisors"><strong>Advise</strong><em>NVIDIA Nemotron 3 Super</em><span>Asked 3 times</span></div></li>
+      <li><div class="node"><strong>How sure?</strong><span>How far the 3 answers agree, plus other factors</span></div></li>
+    </ol>
+    <p class="pipe-answer"><strong>The answer: one thing to do today, and how sure we are.</strong>
+      <span>Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <b>$0.0040</b> of model time, against <b>about $0.0177</b> with every step on Nemotron 3 Ultra. One example, not an average; the Ultra figure is an estimate: the same tokens at Ultra's listed price.</span></p>
+    <ol class="pipe-loop" role="list" aria-label="The days after an answer">
+      <li><div class="node advisors"><strong>Ask</strong><em>NVIDIA Nemotron 3 Nano</em><span>Chats about your plant, with Tavily search</span></div></li>
+      <li><div class="node"><strong>Reminder email</strong><span>A small daily job on Nebius AI Cloud</span></div></li>
+      <li><div class="node"><strong>Did you do it?</strong><span>For a kept plant, your next photo asks, and compares the two</span></div></li>
+    </ol>
+    <figcaption id="pipe-cap">How one photo becomes an answer. Tinted green: NVIDIA Nemotron. Dashed arrows: the days after.</figcaption>
+  </figure>
+  <details class="pipe-more">
+    <summary>See every step</summary>
   <figure class="flow-panel">
     <ol class="flow-built" data-reveal="stagger" role="list" aria-label="How one answer is made, step by step">
       <li><div class="node">
@@ -95,8 +102,23 @@
     <ul class="flow-key" aria-label="What the colours mean">
       <li><i class="sw path"></i>the weather's path</li><li><i class="sw plain"></i>you, our notes, the answer</li><li><i class="sw later"></i>not built yet</li>
     </ul>
-    <figcaption>Each box names its model; the chips above give the sources' colours. <strong>Your weather is tried on the plant's twin</strong> before three asks of Nemotron 3 Super decide; <strong>our rules have the last word</strong>.</figcaption>
+    <figcaption>Each box names its model, and a source's tag carries its colour. <strong>Your weather is tried on the plant's twin</strong> before three asks of Nemotron 3 Super decide; <strong>our rules have the last word</strong>.</figcaption>
   </figure>
+  </details>
+  {#- 25 Oct (Kash: "make sure we are super clear about how we have used" each service): one
+      panel of ruled rows, the name, what it did here, and its proof, every number as the
+      reports say it (Token Factory: the cost card below; Tavily: data/eval/reports/README.md;
+      LangSmith: #146's upload; Tendem and Toloka: their reports) #}
+  <div class="about-services ink">
+    <h3 id="services">What each service did</h3>
+    <ul class="svc-rows">
+      <li class="svc-row tf"><p class="svc-name">Nebius Token Factory</p><p class="svc-what">Runs the AI models: GLM-5.3 Flash reads the photo, NVIDIA Nemotron 3 Super decides (asked 3 times), Nemotron 3 Nano chats, Ultra checks a trusted page.</p><p class="svc-proof">One example answer: <strong>$0.0040</strong> of model time</p></li>
+      <li class="svc-row tavily"><p class="svc-name">Tavily</p><p class="svc-what">Searches trusted gardening pages for the chat's sources, the trusted-page check, and shops and gardeners near you.</p><p class="svc-proof">Chat answers right: <strong>25 of 30</strong> with it, 15 without</p></li>
+      <li class="svc-row"><p class="svc-name">LangSmith</p><p class="svc-what">Traces each model call on the live site (the text sent and returned, with photos, email addresses and locations removed; time, tokens, cost), and holds our saved evals.</p><p class="svc-proof"><strong>12 experiments</strong>, 4,052 scored runs</p></li>
+      <li class="svc-row"><p class="svc-name">Tendem</p><p class="svc-what">Found a professional gardener to grade three answers.</p><p class="svc-proof">Every first action <strong>Acceptable</strong>; 3 of 5 overall (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>)</p></li>
+      <li class="svc-row"><p class="svc-name">Toloka</p><p class="svc-what">Ran a first-time-user study with 11 people, after a photo-reading pilot.</p><p class="svc-proof">All got an answer; <strong>6 of 11</strong> could say what to do (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-23-toloka-site-study.md" rel="noopener noreferrer">the study</a>)</p></li>
+    </ul>
+  </div>
   <h3>A few decisions I'd call out</h3>
   {# 23 Oct (Kash: the bullets "don't do them justice", but no more boxes): three columns of
      type split by thin rules, each read top to bottom as one sentence: we chose, what, over
@@ -115,14 +137,6 @@
   </ul>
 </section>
 
-<section class="about-costs" aria-labelledby="costs">{# 23 Oct (Kash): the cost, straight after the flow it prices #}
-  <div class="about-receipt about-card ink">
-    <h3 id="costs">What each answer costs</h3>
-    <p>Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <strong>$0.0040</strong> of model time, against <strong>about $0.0177</strong> with every step on Nemotron 3 Ultra.</p>
-    <p class="made-note">One example, not an average. The Ultra figure is an estimate: the same tokens at Ultra's listed price.</p>
-  </div>
-</section>
-
 <section aria-labelledby="works">
   <h2 id="works">How I know it works</h2>
   {#- one bar of a question card: the value is written beside it, so the bar is only a picture
@@ -130,18 +144,9 @@
   {%- macro bar(who, val, width, ours=false, mark=none) -%}
   <li{% if ours %} class="ours"{% endif %}><span>{{ who }}</span><span class="val">{{ val }}</span><span class="bar" aria-hidden="true"><i style="width: {{ width }}%"></i>{% if mark %}<b class="mark" style="left: {{ mark }}%"></b>{% endif %}</span></li>
   {%- endmacro %}
-  <figure class="flow-panel">
-    <ol class="works-flow" data-reveal="stagger" aria-label="How a test decides what ships">
-      <li class="step"><div class="node"><strong>Write the test down first</strong><span>The question, the data and the bar to pass, before any run</span></div></li>
-      <li class="step"><div class="node"><strong>Run it on held-out data</strong><span>150 expert questions, 149 healthy photos, 444 trusted-page items</span></div></li>
-      <li class="step"><div class="node"><strong>Label it blind</strong><span>Trusted-page rounds: 2 labellers, yes only if both agree</span></div></li>
-      <li class="fork" data-reveal="stagger">
-        <div class="branch"><p class="flow-by">If it passes</p><div class="node advisors"><strong>It ships</strong><span>Trusted-page check, round 8: 3 false agrees in 418</span></div></div>
-        <div class="branch"><p class="flow-by">If it fails</p><div class="node rules"><strong>What didn't work</strong><span>Rounds 1 to 4 and 7; specialist advisors (774 questions)</span></div></div>
-      </li>
-    </ol>
-    <figcaption><strong>The bar is set before the run.</strong> A pass ships; a fail goes under What didn't work.</figcaption>
-  </figure>
+  {#- 25 Oct (Kash, the About audit): the rule a test follows, said once in words; the second
+      diagram it was drawn as is gone, every figure kept #}
+  <p class="works-rule"><strong>The bar is set before the run.</strong> Each test is written down first (the question, the data and the bar to pass), run on held-out data (150 expert questions, 149 healthy photos, 444 trusted-page items) and labelled blind (trusted-page rounds: 2 labellers, yes only if both agree). A pass ships, as the trusted-page check did in round 8 (3 false agrees in 418); a fail goes under What didn't work.</p>
   <h3 class="works-head" id="works-results">What the tests found</h3>
   <ul class="works-cards" aria-labelledby="works-results">
     <li class="works-card advisors ink">
@@ -207,26 +212,54 @@
       <p class="from">415 of the 461 RHS picks that fit the setting; 12 months, 4 settings</p>
     </li>{% endif %}
   </ul>
-  {# 23 Oct (Kash): the checks people did, apart from the automated ones, and what's next #}
-  <h3 id="people">Checked by people</h3>
-  <div class="about-two">
-    <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A professional gardener hired through <strong>Tendem</strong> graded 3 photos: every first action Acceptable, 3 of 5 overall.<br>Four rules changed, and "7 in 10" went once we measured 51% (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p></blockquote>
-    <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get what the answer tells you to use.<br>That became the shops card under the answer.</p></blockquote>
+  {# 23 Oct (Kash): accessibility is one of the checks, so it closes How I know it works;
+     since 25 Oct the people's checks are a section of their own, after it #}
+  {#- 25 Oct (Kash, the About audit): one line, the same five checks and the link #}
+  <p class="about-access" id="access"><strong>Accessibility:</strong> checked against WCAG 2.2 AA, in light and dark; a focus ring on everything you can tab to; buttons at least 44 px; works at 320 px wide, with nothing scrolling sideways; respects Reduce Motion (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">see the accessibility checks</a>).</p>
+</section>
+
+{# 25 Oct (Kash: "make this section more interesting ... a Toloka section perhaps for user
+   testing and labelling and how it helped"; option A of three mocks, and "make the title for
+   the section bigger like the others"): its own section. The expert and the real user as two
+   quotes, then the two Toloka runs side by side, a dot per photo or person, a dashed tick at
+   the bar set before the run, and what each one told us or changed #}
+{% macro dots(n, of, bar=none, label=none) -%}
+<span class="people-dots" role="img" aria-label="{{ label or (n ~ ' of ' ~ of) }}">
+  {%- for k in range(of) %}<i{% if k < n %} class="on"{% endif %}></i>{% endfor -%}
+  {%- if bar is not none %}<b style="--at: {{ '%.2f'|format(bar * of) }}"></b>{% endif -%}
+</span>
+{%- endmacro %}
+<section class="about-people" aria-labelledby="people">
+  <h2 id="people">Checked by people</h2>
+  <div class="people-quotes">
+    <blockquote><p><strong>An expert's review</strong> A professional gardener hired through <strong>Tendem</strong> graded 3 answers: every first action Acceptable, 3 of 5 overall. Five rules changed, and "7 in 10" went once we measured 51% (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p></blockquote>
+    <blockquote><p><strong>A real user</strong> A former tree surgeon asked where to get what the answer tells you to use. That became the shops card under the answer.</p></blockquote>
   </div>
-  <p class="about-people-pilot"><strong>A small Toloka pilot</strong> to check our photo reading against people: beginners caught the named problem in 4 of 5 photos, but seemed to over-call with a healthy photo beside it (3 of 5). A tiny sample: 5 photos, 15 raters.</p>
-  <p class="about-people-next"><strong>A first-time-user study on Toloka</strong> (23 Oct, 11 people): all got an answer, but only 6 could say what to do, so the answer page now leads with the action (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-23-toloka-site-study.md" rel="noopener noreferrer">the results</a>). <strong>Tendem</strong> and <strong>Toloka</strong> are paid from Nebius AI Builder programme credits.</p>
-  {# 23 Oct (Kash): accessibility is one of the checks, so it closes How I know it works #}
-  <h3 id="access">Accessibility</h3>
-  <div class="about-card about-access">
-    <ul>
-      <li><span aria-hidden="true">✓</span> Checked against WCAG 2.2 AA, in light and dark</li>
-      <li><span aria-hidden="true">✓</span> A focus ring on everything you can tab to</li>
-      <li><span aria-hidden="true">✓</span> Buttons at least 44 px</li>
-      <li><span aria-hidden="true">✓</span> Works at 320 px wide, with nothing scrolling sideways</li>
-      <li><span aria-hidden="true">✓</span> Respects Reduce Motion</li>
-    </ul>
-    <p><a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/accessibility.md" rel="noopener noreferrer">See the accessibility checks</a></p>
+  <div class="people-toloka">
+    <h3 id="toloka"><span class="people-tag">Toloka</span> Beginners tried it, twice</h3>
+    <p class="people-lede">Paid strangers on Toloka, with our sample photos.</p>
+    <div class="people-runs">
+      <div class="people-run pilot">
+        <h4>Labelling pilot<span>11–12 Oct · 5 photos, 15 raters</span></h4>
+        <dl class="people-stat">
+          <dt>4 of 5</dt><dd>{{ dots(4, 5) }}<small>photo alone: most raters caught the problem (one more partly)</small></dd>
+          <dt>3 of 5</dt><dd>{{ dots(3, 5) }}<small>with a healthy photo beside it</small></dd>
+        </dl>
+        <p class="people-changed"><strong>What it told us:</strong> a healthy photo beside it seemed to make beginners over-call, and 5 photos can't measure agreement: a real check needs about 100 photos, 3 people each.</p>
+      </div>
+      <div class="people-run study">
+        <h4>First-time users on the live site<span>23 Oct · 11 people, our sample photo, bars set beforehand (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-23-toloka-site-study.md" rel="noopener noreferrer">the results</a>)</span></h4>
+        <dl class="people-stat">
+          <dt>11 of 11</dt><dd>{{ dots(11, 11) }}<small>got an answer</small></dd>
+          <dt>6 of 11</dt><dd>{{ dots(6, 11, 0.7, "6 of 11; bar 70%") }}<small>said the right thing to do · bar 70%: missed</small></dd>
+          <dt>6 of 11</dt><dd>{{ dots(6, 11, 0.6, "6 of 11; bar 60%") }}<small>found the source · bar 60%: missed</small></dd>
+          <dt>9 of 11</dt><dd>{{ dots(9, 11, 0.7, "9 of 11; bar 70%") }}<small>used the Ask box · bar 70%: met</small></dd>
+        </dl>
+        <p class="people-changed"><strong>What it changed:</strong> the action is now the answer's biggest words, bigger than the plant's name, and the card ends "That's your answer". Asked how often to water while the answer says hold off, the chat now says how often.</p>
+      </div>
+    </div>
   </div>
+  <p class="people-paid"><strong>Tendem</strong> and <strong>Toloka</strong> are paid from Nebius AI Builder programme credits.</p>
 </section>
 
 <section aria-labelledby="didnt">{# round 3: the lesson first, then the evidence, then what we do now.
@@ -251,7 +284,8 @@
   </ul>
 </section>
 
-<section aria-labelledby="whats-next">{# round 4: a roadmap line with five stops, no boxes #}
+<section aria-labelledby="whats-next">{# round 4: a roadmap line, no boxes. 25 Oct, Kash: four stops,
+  so the line fits one row, and every Why checked against its source #}
   <h2 id="whats-next">What's next</h2>
   <ol class="roadmap" data-reveal="stagger">
     <li><strong>A twin for indoor plants.</strong>
@@ -259,13 +293,9 @@
     <li><strong>A Nemotron photo reader, Nemotron 3.5 Super VL first.</strong>
       <span>Why: then reading the photo runs on NVIDIA too, and it's 5 times faster than GLM. It's behind on naming plants today.</span></li>
     <li><strong>Naming more problems, starting with slugs.</strong>
-      <span>Why: slugs are a common herb pest, and the photo check can't name them yet.</span></li>
-    <li><strong>Tests with real people.</strong>
-      <span>Why: no screen-reader test yet, and the beginners' study ran before the answer page changed (see Checked by people).</span></li>
+      <span>Why: the photo check can't name slugs yet, and it has never been scored on a photo with slugs.</span></li>
     <li><strong>More than one server.</strong>
       <span>Why: one server and a daily cap today.</span></li>
-    {% if not spot_on %}{# 23 Oct, Kash: switched off for a focused experience #}<li><strong>Bringing back "What can I grow here?"</strong>
-      <span>Why: it was built and tested (it matched the RHS's monthly picks 0.90 of the time), but it's switched off until it's as good as the plant check.</span></li>{% endif %}
   </ol>
 </section>
 
@@ -282,7 +312,7 @@
         <li>Solo build for the NVIDIA × Nebius hackathon. I attended its London event.</li>
         <li>First commit 2 Oct 2026</li>
       </ul>
-      <nav class="who-links" aria-label="Kashif Nazir's site and profiles">
+      <nav class="who-links" aria-label="Kashif Nazir's links, who made it">
         <a href="https://kashifnazir.com" rel="noopener noreferrer">kashifnazir.com</a>
         <a class="who-icon" href="https://github.com/thekashifnazir" rel="noopener noreferrer me" aria-label="GitHub"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
         <a class="who-icon" href="https://www.linkedin.com/in/kashifnazir" rel="noopener noreferrer me" aria-label="LinkedIn"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
@@ -293,21 +323,18 @@
       <p>herbtwin inverts that. I lean on AI heavily to do it and say so plainly, because it is the reason this exists at all. I've never been a career developer, and AI assistance is what closes the distance between designing a product and shipping one. The architecture and the judgement calls are mine.</p>
     </div>
   </div>
-  {# counted 23 Oct and rounded down: 468 merged pull requests (gh pr list --state merged), and
-     4,496 tests collected, of which 4,185 a quick read of tests/ can see, so "4,000+";
-     tests/test_web_about_who.py pins the figures and re-counts the tests #}
+  {# counted 25 Oct and rounded down: 527 merged pull requests (gh pr list --state merged), and
+     4,863 tests collected (pytest --collect-only -m ""), of which 4,504 a quick read of tests/
+     can see, so "4,800+" (the final walk: the Devpost story said over 4,700 while this said
+     4,000+); tests/test_web_about_who.py pins the figures and re-counts the tests #}
   <ul class="who-strip" aria-label="herbtwin in numbers">
-    <li><strong>450+</strong> merged pull requests</li>
-    <li><strong>4,000+</strong> automated tests</li>
+    <li><strong>500+</strong> merged pull requests</li>
+    <li><strong>4,800+</strong> automated tests</li>
     <li><strong>1</strong> person</li>
   </ul>
   {# 23 Oct, Kash: "we are talking about all the commits and PRs but those are in our private
      repo, not the curated public one" #}
   <p class="who-strip-note"><strong>Pull requests in the private working repo; the public repo is a curated copy of it.</strong></p>
-  <div class="about-close about-card ink">
-    <p><strong>All of it is public.</strong> The code and the eval reports.</p>
-    <p class="actions"><a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">herbtwin on GitHub</a></p>
-  </div>
 </section>
 
 {# folded, as home's credits are (22 Oct, Kash: "do same for credits as we do for the home

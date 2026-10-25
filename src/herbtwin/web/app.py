@@ -1148,7 +1148,11 @@ def create_app(
         return TEMPLATES.TemplateResponse(
             request,
             "privacy.html",
-            {"voice_on": settings.voice_on, "sightings_on": settings.sightings},
+            {
+                "voice_on": settings.voice_on,
+                "sightings_on": settings.sightings,
+                "spot_on": settings.spot_enabled,  # its line only while it is on
+            },
         )
 
     @app.get("/credits", include_in_schema=False)

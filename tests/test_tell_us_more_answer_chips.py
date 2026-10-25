@@ -116,8 +116,8 @@ def test_ask_is_a_chat_box_with_its_send_inside(tmp_path):
     assert '<textarea name="question"' in box and 'class="quiet ask-chat"' in box
     assert '<span class="sr-only">Ask anything about this plant' in box  # its name, unseen
     assert "Ask anything about this plant, e.g. What if I move it inside?" in box
-    # the starters come under it
-    assert form.index('<div class="composer">') < form.index('<div class="starters" hidden>')
+    # the starters sit over it until the first question (25 Oct, Kash)
+    assert form.index('<div class="starters" hidden>') < form.index('<div class="composer">')
     assert "border-radius: 24px" in _rule(".answer-page .refine .composer textarea")
     send = _rule(".answer-page .refine .composer .ask-chat")
     assert "position: absolute" in send and "right: 10px" in send and "bottom: 10px" in send

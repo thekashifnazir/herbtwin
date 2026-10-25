@@ -45,19 +45,21 @@ Send one photo of a herb and say where it is. herbtwin tells you the one thing t
 how sure it is, and when the right answer is to leave it alone. It is for UK gardeners
 with herbs outdoors.
 
+<p align="center"><img src="docs/reference/img/pipeline.png" alt="How herbtwin answers one photo: photo, read, evidence, plant model, three asks of Nemotron 3 Super, how sure, the answer, then chat, reminder email and the follow-up photo" width="900"></p>
+
 ### Try it in 60 seconds
 
 1. Open **[herbtwin.kashifnazir.com](https://herbtwin.kashifnazir.com)**. No account needed.
-2. Tap a sample photo, then **What does my plant need?** The answer arrives in about 15 to
-   35 seconds, and the page shows each step as it runs.
+2. Tap a sample photo, then **What does my plant need?** The answer usually arrives in
+   under a minute, and the page shows each step as it runs.
 3. Open **How we worked it out**: every choice compared, the sources, and **which model did
    each step**, with its time and cost.
 
 Then ask a what-if ("what if I bring it in?"). Signed in, it emails you when it is time to
 check, and your next photo asks "Did you do it?".
 
-Judges: [JUDGES.md](JUDGES.md) has the five-minute tour and the known limits. The judges'
-code is in the submission form, not in this repo.
+Judges: [JUDGES.md](JUDGES.md) has the five-minute tour and the known limits. No code is
+needed: each visitor gets 30 photo reads a day.
 
 ## Why it's different
 

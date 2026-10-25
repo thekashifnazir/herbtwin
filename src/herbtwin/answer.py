@@ -1768,7 +1768,9 @@ def build_answer(
     if how is not None:
         main.less_sure = False  # the headline rests on the sourced line, as with no cure
     dont = None
-    for action in TEMPTING:
+    # a plant to be binned gets no watering advice, and no twin line under it (25 Oct final
+    # walk: "Remove it. There is no cure" over This week's twin-tested "Water only if ... dry")
+    for action in () if no_cure else TEMPTING:
         v = views.get(action)
         if v is not None and v.vs_leaving_it == "worse" and action not in {c.action for c in do}:
             unsure = action == "water" and not soil_known

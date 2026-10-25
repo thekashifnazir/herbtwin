@@ -82,3 +82,26 @@ def test_the_spot_questions_come_only_with_the_switch():
     ]
     aspect = _answer("leave_normal", tell_me_key="aspect")
     assert questions_for(aspect, _obs(), spot=True) == ["aspect", "question"]
+
+
+def test_indoors_asks_what_outdoors_asks_with_the_window_for_the_direction():
+    # 25 Oct, Kash on an indoor answer with only the window: "are we missing something else
+    # that should be in there?" No: every question asked outdoors is asked indoors, on the
+    # same rules (the soil only for a watering call, What's changed only after a decline);
+    # indoors only swaps which way it faces for which window it's by
+    cases = [
+        (_answer("water"), _obs(), None, False),
+        (_answer("dont_water"), _obs(decline=2), None, False),
+        (_answer("shelter"), _obs(), None, False),
+        (_answer("prune", tell_me_key="soil_feel"), _obs(), None, False),
+        (_answer("move_light", tell_me_key="aspect"), _obs(decline=3), 1, True),
+    ]
+    for answer, obs, last, spot in cases:
+        outdoor = questions_for(
+            answer, obs.model_copy(update={"setting": "outdoor"}), last, spot=spot
+        )
+        indoor = questions_for(
+            answer, obs.model_copy(update={"setting": "indoor"}), last, spot=spot
+        )
+        want = [q for q in outdoor if q not in ("aspect", "question")] + ["window", "question"]
+        assert indoor == want, (answer.do[0].action, outdoor, indoor)

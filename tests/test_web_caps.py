@@ -58,6 +58,16 @@ def test_eleventh_upload_from_one_visitor_is_refused(tmp_path):
     assert 'href="/judge">Judges: enter your code</a>' in band
 
 
+def test_the_limit_page_says_the_configured_number(tmp_path):
+    # 25 Oct: the live site gives 30 a day; the page says the setting, never a fixed 10
+    c = _client(tmp_path, {"HERBTWIN_VISITOR_READS": "3"}, usage=MemoryUsage())
+    for _ in range(3):
+        assert _upload(c).status_code == 200
+    r = _upload(c)
+    assert r.status_code == 429 and "You&#39;ve used today&#39;s 3 photo reads." in r.text
+    assert "today&#39;s 10" not in r.text
+
+
 def test_day_cap_refuses_with_the_busy_page(tmp_path):
     c = _client(tmp_path, {"HERBTWIN_DAILY_READS": "1"}, usage=MemoryUsage())
     assert _upload(c).status_code == 200

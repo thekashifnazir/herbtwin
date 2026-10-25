@@ -1,11 +1,7 @@
-/* About round 3, the words (22 Oct, Kash's walk): of it, only Accessibility's list is still
-   drawn here; What it does, What didn't work and What's next moved on in round 4
+/* About round 3, the words (22 Oct, Kash's walk): of it, only Accessibility is still drawn
+   here; What it does, What didn't work and What's next moved on in round 4
    (about_top_who.css, about_didnt_next.css). Theme tokens only; nothing under 16px. */
 
-/* Accessibility: a real list in plain words at body size; the tick is decoration, the words
-   carry it; the link says where it goes */
-.about-page .about-access ul { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 8px;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); }
-.about-page .about-access li { display: flex; gap: 10px; align-items: baseline; font-size: 17px; color: var(--fg); }
-.about-page .about-access li > span { flex: none; font-weight: 700; color: var(--ok); }
-.about-page .about-access p { margin: 0; font-size: 17px; }
+/* Accessibility: one line in plain words at body size, its five checks and where they are
+   (25 Oct, the About audit) */
+.about-page .about p.about-access { max-width: 52rem; margin: 24px 0 0; font-size: 17px; line-height: 1.5; }

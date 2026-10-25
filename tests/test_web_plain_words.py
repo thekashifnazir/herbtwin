@@ -20,7 +20,9 @@ def test_the_details_use_plain_words(tmp_path):
     for word in JARGON:
         assert word not in page, word
     assert f"record {rid}" not in page and f"Ref {rid}" in page
-    assert "From the photo: droopy" in page  # water_stress 2 in the fixture
+    assert re.search(
+        r'From the photo</p>\s*<ul class="went-list"><li>droopy</li>', page
+    )  # water_stress 2 in the fixture
     evidence = page.split('<details class="evidence fold">', 1)[1]
     evidence = evidence.split('<p class="record">', 1)[0]
     assert not re.findall(r">[^<]*https?://", evidence)  # a source is a link, not a raw URL
@@ -32,7 +34,7 @@ def test_the_details_use_plain_words(tmp_path):
     assert not re.search(r"advisor said (?:high|low)", page)
     assert "the advisor was sure" not in evidence
     # the agreement said once: the count, not also "the advisor was sure" (19 Oct re-check)
-    assert re.search(r"<strong>Agreement</strong>: [^<]*\d of \d agree", why)
+    assert re.search(r'<strong class="f-name">Agreement</strong>.{0,80}\d of \d agree', why)
     assert "the advisor was sure" not in why
     assert "1 days" not in page and "same than" not in page
 
@@ -40,15 +42,22 @@ def test_the_details_use_plain_words(tmp_path):
 def test_each_chip_that_moved_the_confidence_says_why(tmp_path):
     page = _answer(tmp_path)
     why = page.split('<details class="why fold', 1)[1].split("</details>", 1)[0]
-    groups = re.findall(r"<li>[▲▼] (?:Helped|Lowered it)<ul>(.*?)</ul></li>", why)
+    # each group under its label, a row per factor (25 Oct): the name, then why
+    groups = re.findall(
+        r'<p class="fold-label f-(?:raises|lowers)">[▲▼] [^<]+</p>\s*<ul class="factors">(.*?)</ul></div>',
+        why,
+        flags=re.S,
+    )
     assert groups
     for group in groups:
-        for item in re.findall(r"<li>(.*?)</li>", group):
+        for item in re.findall(
+            r'<li class="factor">(.*?)</li>(?=<li class="factor">|$)', group, flags=re.S
+        ):
             # "Weather: forecast available", not just "Weather"; the advisors' own sureness
             # says it in its name ("The lead advisor wasn't sure", 23 Oct)
             said = item in (
-                "<strong>The lead advisor was sure</strong>",
-                "<strong>The lead advisor wasn't sure</strong>",
+                '<strong class="f-name">The lead advisor was sure</strong>',
+                '<strong class="f-name">The lead advisor wasn\'t sure</strong>',
             )
-            assert "</strong>: " in item or said, item
+            assert '</strong><span class="sr-only">: </span>' in item or said, item
             assert "((" not in item and ") (" not in item  # no brackets inside brackets

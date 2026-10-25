@@ -125,8 +125,10 @@ def test_indoors_the_assumptions_are_ours_not_a_plant_models(tmp_path):
     rec = _full_plan(tmp_path)
     assert rec.answer.assumptions  # the fold lists them
     outdoor = _render(rec, asks=ASKS)
-    assert "<summary>What the plant model assumes</summary>" in outdoor
+    assert (
+        '<summary class="fold-label went-assumed">What the plant model assumes</summary>' in outdoor
+    )
     assert "What we assumed" not in outdoor
     indoor = _render(_indoor(rec), asks=ASKS)
-    assert "<summary>What we assumed</summary>" in indoor
+    assert '<summary class="fold-label went-assumed">What we assumed</summary>' in indoor
     assert "plant model assumes" not in indoor

@@ -195,7 +195,7 @@ def test_result_page_shows_decline_and_leaf_colour(tmp_path):
     obs = dict(OBS, decline=2, leaf_colour="some_yellow")
     c = _client(tmp_path, [json.dumps(obs)], [json.dumps(ADV)] * 3)
     r = follow(c, c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}))
-    assert "From the photo: droopy, declining" in r.text and "leaves some yellow" in r.text
+    assert "<li>droopy</li><li>declining</li>" in r.text and "<li>leaves some yellow</li>" in r.text
 
 
 @respx.mock
@@ -203,7 +203,7 @@ def test_result_page_omits_leaf_colour_when_not_visible(tmp_path):
     respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
     c = _client(tmp_path, [json.dumps(OBS)], [json.dumps(ADV)] * 3)
     r = follow(c, c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}))
-    assert "From the photo: droopy, healthy-looking" in r.text and "· leaves " not in r.text
+    assert "<li>droopy</li><li>healthy-looking</li>" in r.text and "<li>leaves " not in r.text
 
 
 def test_index_offers_location_choices(tmp_path):
@@ -642,7 +642,8 @@ def test_privacy_page_names_who_processes_what(tmp_path):
     for name in ("Nebius Token Factory", "Supabase", "Resend", "Open-Meteo", "Delete account"):
         assert name in r.text
     assert "LangSmith" in r.text and "no photos, email addresses or locations" in r.text
-    assert "What can I grow here?" in r.text and "direction" in r.text
+    # "What can I grow here?" only while it is on: test_docs_live_drift.py (25 Oct)
+    assert "What can I grow here?" not in r.text
     assert "coldest winter nights" in r.text
     assert "postcodes.io" in r.text and "postcode you type" in r.text
     # the footer links the maker's GitHub (22 Oct, Kash), so the check stops at the footer
@@ -748,7 +749,7 @@ def test_an_indoor_answer_shows_no_outdoor_season_source(tmp_path):
         obs = {**OBS, "setting": setting}
         c = _client(tmp_path / setting, [json.dumps(obs)], [json.dumps(ADV)] * 3)
         page = follow(c, c.post("/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}))
-        assert ("<p>Season in " in page.text) is shown, setting
+        assert ('went-season">Season in ' in page.text) is shown, setting
 
 
 @respx.mock

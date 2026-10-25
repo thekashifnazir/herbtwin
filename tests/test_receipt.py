@@ -227,7 +227,7 @@ def test_the_map_says_the_backup_read_the_photo_and_why(tmp_path):
     mm = _render(rec).split('<div class="model-map">', 1)[1].split("</div>", 1)[0]
     assert (
         '<span class="mm-model">DeepSeek V4.1 Flash on Nebius Token Factory</span>'
-        '<span class="mm-note">Our backup: GLM-5.3 Flash was slow</span>' in mm
+        '<span class="mm-note">Our backup read it: GLM-5.3 Flash was slow</span>' in mm
     )
     assert (
         '<span class="mm-model">GLM-5.3 Flash on Nebius Token Factory</span>'
@@ -235,3 +235,56 @@ def test_the_map_says_the_backup_read_the_photo_and_why(tmp_path):
     )
     # NVIDIA's keep their labels
     assert '<span class="mm-model">NVIDIA Nemotron 3 Super</span></span>' in mm
+
+
+@respx.mock
+def test_the_map_counts_the_advisors_asks_not_a_reply_asked_again(tmp_path):
+    # 25 Oct site walk: "Advisors (4 asks)" beside "asked the same question three times": one
+    # reply came back invalid and was asked again (its repair), a call but not an advisor
+    import json
+
+    import httpx
+
+    from herbtwin.pipeline import analyse
+    from herbtwin.stages.environment import OPEN_METEO_URL
+    from tests.test_pipeline import ADV, JPEG, OBS, SAMPLE, WHEN, _deps
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    replies = ["not json", json.dumps(ADV), json.dumps(ADV), json.dumps(ADV)]
+    rec = analyse(_deps(tmp_path, [json.dumps(OBS)], replies), JPEG, "image/jpeg", received=WHEN)
+    [advise] = [s for s in rec.receipt if s.stage == "advise"]
+    assert (advise.calls, advise.asks) == (4, 3)
+    steps = [r.step for r in receipt.model_map(rec).rows]
+    assert "Three advisors, one asked again" in steps and "Advisors (4 asks)" not in steps
+    # an answer kept before asks were counted reads as it did
+    old = rec.model_copy(deep=True)
+    for s in old.receipt:
+        s.asks = None
+    assert "Advisors (4 asks)" in [r.step for r in receipt.model_map(old).rows]
+
+
+def test_a_backup_that_raced_and_lost_says_it_was_not_used(tmp_path):
+    # 25 Oct site walk: GLM answered at 15.8 s, just after DeepSeek started racing it at 14 s;
+    # both calls were billed, and the map showed two "Read the photo" rows with no word on
+    # which read counted
+    from herbtwin.adapters.fallback import FallbackAdapter
+    from herbtwin.pipeline import raced_and_lost
+    from tests.test_fallback import Scripted
+
+    glm, deepseek = "zai-org/GLM-5.3-Flash", "deepseek-ai/DeepSeek-V4.1-Flash"
+    reader = FallbackAdapter(Scripted(glm, "{}"), Scripted(deepseek, "{}"))
+    assert raced_and_lost(reader, [glm]) == deepseek  # GLM won the race
+    assert raced_and_lost(reader, [deepseek]) is None  # the backup won: BackupRead says so
+    assert raced_and_lost(reader, []) is None  # no race
+    rec = _full_plan(tmp_path)
+    rows = [_row(1, "observe", glm, 2000, 300, ms=15800), _row(2, "observe", deepseek, 2000, 300)]
+    rows += [_row(3, "advise", SUPER, 3000, 400, ms=9000)]
+    rec.receipt = receipt.assemble([], receipt.from_rows(rows, receipt.MODEL_STAGES))
+    rec.photo_raced = deepseek
+    notes = {r.model: r.note for r in receipt.model_map(rec).rows if r.step == "Read the photo"}
+    assert notes == {
+        "GLM-5.3 Flash on Nebius Token Factory": "",
+        "DeepSeek V4.1 Flash on Nebius Token Factory": (
+            "Raced as our backup; GLM-5.3 Flash answered first, so not used"
+        ),
+    }

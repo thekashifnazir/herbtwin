@@ -259,7 +259,7 @@ def test_the_wait_names_the_winner_even_when_the_losers_call_is_traced_after_it(
     notes = {r.model: r.note for r in receipt.model_map(rec).rows if r.step == "Read the photo"}
     assert notes == {
         "GLM-5.3 Flash on Nebius Token Factory": "Too slow, so not used",
-        "DeepSeek V4.1 Flash on Nebius Token Factory": "Our backup: GLM-5.3 Flash was slow",
+        "DeepSeek V4.1 Flash on Nebius Token Factory": "Our backup read it: GLM-5.3 Flash was slow",
     }
 
 

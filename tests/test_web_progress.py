@@ -880,3 +880,13 @@ def test_the_card_says_what_comes_next_and_roughly_how_long():
     assert "Reading the photo" not in NEXT_JS and "herbtwinNext()" in HEAD
     assert "document.getElementById('wait-next');if(nx)nx.hidden=true;" in _done("/answers/a")
     assert "(document.getElementById('wait-next'))" in _failed("x")
+
+
+def test_the_wait_footer_is_rendered_never_pasted_raw():
+    # 25 Oct site walk: "{#- the dot goes with the link …" showed as text under every wait
+    # and ready page: the footer partial was pasted raw, so its Jinja comment went with it
+    from herbtwin.web.progress import _done, _failed
+
+    for page in (_done("/answers/" + "a" * 32), _failed("x")):
+        assert "{#" not in page and "#}" not in page and "{%" not in page
+        assert '<p class="foot-fine">© 2026 Kashif Nazir' in page  # the footer still there

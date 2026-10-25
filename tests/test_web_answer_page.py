@@ -205,20 +205,27 @@ def test_why_folds_away_and_names_each_factor_in_words(tmp_path):
         if chips:
             # every chip says why beside its name (18 Oct judge walk); since 19 Oct the missing
             # and no-effect ones too, as the evidence no longer repeats the factor list
-            # one bullet per factor under its group (19 Oct small-print re-check)
+            # one row per factor under its group's label (19 Oct small-print re-check); two or
+            # more reasons a bullet each (25 Oct, Kash: "hard to parse if reading quickly")
+            def row(c):
+                sep = '<span class="sr-only">: </span>'
+                if len(c.why) == 1:
+                    return f'{sep}<span class="f-why">{c.why[0]}</span>'
+                bullets = "".join(f"<li>{w}</li>" for w in c.why)
+                return f'{sep}<ul class="f-why">{bullets}</ul>' if c.why else ""
+
             items = "".join(
-                f"<li><strong>{c.name}</strong>"
-                + (f": {'; '.join(c.why)}" if c.why else "")
-                + "</li>"
+                f'<li class="factor"><strong class="f-name">{c.name}</strong>{row(c)}</li>'
                 for c in chips
             )
-            assert f"<li>{said}<ul>{items}</ul></li>" in why.replace("&#39;", "'"), said
+            flat = re.sub(r">\s+<", "><", why.replace("&#39;", "'"))
+            assert f'{said}</p><ul class="factors">{items}</ul></div>' in flat, said
         else:
             assert said not in why, said
     # no place: no season norm, no weather, so no 2-week forecast either (17 Oct walk)
     # each now says what is missing in brackets (19 Oct small print)
-    missing = why.split("? Missing<ul>", 1)[1].split("</ul>", 1)[0]
-    assert re.findall(r"<li><strong>([^<]+)</strong>", missing)[:3] == [
+    missing = why.split("? Missing</p>", 1)[1].split("</div>", 1)[0]
+    assert re.findall(r'<li class="factor"><strong class="f-name">([^<]+)</strong>', missing)[:3] == [
         "Season", "Choices compared", "Weather",
     ]  # fmt: skip
     # no legend needed (the band's where-and-when chips are above the plan, 21 Oct)
@@ -346,17 +353,19 @@ def test_one_text_box_serves_both_the_refine_and_the_chat(tmp_path):
     assert form.index("Check the advice again") < form.index("Ask about this plant")
 
 
-def test_the_chat_so_far_sits_under_the_box_and_hides_when_empty(tmp_path):
+def test_the_chat_so_far_sits_over_the_box_and_hides_when_empty(tmp_path):
     rec = _full_plan(tmp_path)
     empty = _render(rec).split('<div class="chatlog"')[1].split("</div>")[0]
-    assert empty.startswith(" hidden>")
+    assert empty.startswith(' role="log" aria-live="polite" hidden>')
     chat = [SimpleNamespace(role="user", content="What if I move it inside?"),
             SimpleNamespace(role="assistant", content="Keep it off cold glass.")]  # fmt: skip
     page = _render(rec, chat=chat)
-    # under the box, in its "Ask a question" group (21 Oct: the panel in sections)
-    _in_order(page, ['<form class="refine"', '<textarea name="question"', '<p class="chatnote"', '<div class="chatlog">',
+    # over the box, in its "Ask a question" group (21 Oct: the panel in sections; 25 Oct,
+    # Kash: the thread reads like a chat, the box under it)
+    _in_order(page, ['<form class="refine"', '<div class="chatlog" role="log" aria-live="polite">',
                      '<p class="msg user">What if I move it inside?</p>',
                      '<p class="msg assistant">Keep it off cold glass.</p>',
+                     '<textarea name="question"', '<p class="chatnote"',
                      '<h2 id="details">'])  # fmt: skip
 
 

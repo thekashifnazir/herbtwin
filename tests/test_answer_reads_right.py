@@ -119,17 +119,24 @@ def test_the_compare_table_has_a_phone_layout():
     assert "white-space: nowrap" in rules and ".twin-pick" in rules
 
 
+def _season(page: str) -> str:
+    """The season line as it read before its label (25 Oct): " in October: dying back, …"."""
+    from tests.test_season_line_sources import _season_line
+
+    return " in " + _season_line(page)
+
+
 def test_the_season_line_says_what_the_season_is_before_its_sources(tmp_path):
     # judge live walk of rev 00040: "Season: RHS, our care notes", no season words
     from tests.test_web_answer_page import _full_plan, _render
 
     rec = _full_plan(tmp_path)
     rec.season = normal_for("coriandrum sativum", 10)
-    line = _render(rec).split("<p>Season", 1)[1].split("</p>", 1)[0]
+    line = _season(_render(rec))
     # its main state in plain words: never "normal dieback and active growth" (Opus review)
     assert line.startswith(" in October: dying back, from ")
     rec.season = normal_for("petroselinum crispum", 12)
-    line = _render(rec).split("<p>Season", 1)[1].split("</p>", 1)[0]
+    line = _season(_render(rec))
     assert line.startswith(" in December: resting, from ") and "evergreen" not in line
 
 

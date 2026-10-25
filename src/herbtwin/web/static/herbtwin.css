@@ -229,7 +229,11 @@ main { padding: 32px 0 48px; }
 .foot-links { grid-area: links; display: flex; flex-wrap: wrap; gap: 0 24px; }
 /* the wordmark on every page's footer (17 Oct: Kash, one product across pages); home keeps
    its giant one, pages/home.css */
-.foot-mark { font: 800 clamp(2.4rem, 7vw, 4rem)/0.9 var(--poster); color: var(--soft-strong); }
+/* a picture of the word, not text (25 Oct, final walk #7): a logotype has no contrast floor, and
+   as text the pale mark failed every page's check. The svg is the old line box (100px type is
+   350 by 90 at line-height .9), so it sits where the word did */
+.foot-mark { display: block; height: calc(.9 * clamp(2.4rem, 7vw, 4rem)); width: auto; aspect-ratio: 350 / 90; }
+:is(.foot-mark, .home-giant) text { font: 800 100px var(--poster); fill: var(--soft-strong); }
 .maker { grid-area: maker; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; padding-top: 12px; }
 .maker-id { display: flex; flex-direction: column; align-items: flex-end; }
 .foot a.maker-name { font: 800 1.25rem/1.2 var(--poster); letter-spacing: 0.01em; color: var(--fg);
@@ -402,9 +406,12 @@ th { background: var(--muted); font-weight: 700; }
 :root { --lime: #C9F27B; --lime-fg: #12291C; --ink-shadow: var(--fg);
   --sky: #E3EEF6; --sky-fg: #2F6690;
   --lilac: #EEE8F7; --lilac-fg: #5B3F8F;  /* Tavily search, wherever it shows (About, 22 Oct) */
-  --stone: #E3DACA; }  /* oat: About's diagram panels, a colour no box uses (25 Oct, Kash) */
+  --stone: #E3DACA;  /* oat: About's diagram panels, a colour no box uses (25 Oct, Kash) */
+  /* people: checks by people (About's Toloka runs, 25 Oct). A mark, a dot and an edge,
+     never a fill: a pale teal beside the green tray and the sky would read as a third tray */
+  --people-fg: #1D6B65; --people-dot: #2A8C84; }
 @media (prefers-color-scheme: dark) { :root { --ink-shadow: #000; --sky: #1B2B3A; --sky-fg: #8CC2EE;
-  --lilac: #251E33; --lilac-fg: #C4B2EE; --stone: #221F1A; } }
+  --lilac: #251E33; --lilac-fg: #C4B2EE; --stone: #221F1A; --people-fg: #86D8CF; --people-dot: #5FC2B8; } }
 .has-band { overflow-x: clip; }   /* a band never scrolls the page sideways */
 .has-band main { padding-top: 0; }
 /* the band's full bleed (50% - 50cqw) holds only in a centred column: a page that keeps the

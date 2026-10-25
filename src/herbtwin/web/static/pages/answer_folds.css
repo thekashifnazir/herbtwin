@@ -1,0 +1,41 @@
+/* the two folds at the foot of the answer, open: a small label in the colour of what it means
+   over each group or line, a row per factor, a bullet per reason (25 Oct, Kash on rev 00109:
+   "hard to parse if reading quickly"). Nothing under 16px, no side edges */
+.answer-page .fold-label { display: inline-block; margin-block: 16px 6px; padding: 2px 10px;
+  border-radius: var(--pill); background: var(--muted); color: var(--fg);
+  font: 700 16px/1.3 var(--sans); }
+/* how sure: green helped, clay lowered it, amber missing, grey no effect */
+.answer-page .fold-label.f-raises { background: var(--soft); color: var(--primary); }
+.answer-page .fold-label.f-lowers { background: var(--clay-bg); color: var(--clay); }
+.answer-page .fold-label.f-missing { background: var(--warn-bg); color: var(--warn); }
+.answer-page .fold-label.f-neutral { background: var(--muted); color: var(--muted-fg); }
+.answer-page .why .sure-lead { margin-bottom: 4px; color: var(--muted-fg); }
+.answer-page .why .factors { margin-block: 0; padding: 0; list-style: none; }
+.answer-page .why .factor { padding: 8px 0; border-top: 1px solid var(--border); font-size: 16px; line-height: 1.45; }
+.answer-page .why .factor:first-child { border-top: 0; padding-top: 2px; }
+.answer-page .why li.factor + li.factor { margin-top: 0; }
+.answer-page .why .f-name { display: block; }
+.answer-page .why .f-why { display: block; }
+.answer-page .why ul.f-why { margin: 2px 0 0; padding-left: 20px; list-style: disc; }
+.answer-page .why ul.f-why li + li { margin-top: 2px; }
+/* from a tablet up, the name in a column and its reasons beside it */
+@media (min-width: 560px) {
+  .answer-page .why .factor { display: grid; grid-template-columns: 10rem minmax(0, 1fr); gap: 0 16px; }
+  .answer-page .why ul.f-why { margin-top: 0; }
+  .answer-page .why .f-name:only-child { grid-column: 1 / -1; }  /* a name with no reason, one line */
+}
+/* what we went on: green for what we read or looked up, sky for the weather (About's legend),
+   amber for a problem to check, lilac for a page found with Tavily, grey for what we assumed */
+.answer-page .fold-label.went-photo, .answer-page .fold-label.went-facts,
+.answer-page .fold-label.went-season { background: var(--soft); color: var(--primary); }
+.answer-page .fold-label.went-weather { background: var(--sky); color: var(--sky-fg); }
+.answer-page .fold-label.went-check { background: var(--warn-bg); color: var(--warn); }
+.answer-page .fold-label.went-facts.went-tavily { background: var(--lilac); color: var(--lilac-fg); }
+.answer-page .evidence .went-text { margin-block: 0 4px; }
+.answer-page .evidence .went-list { margin-block: 0 4px; padding-left: 20px; }
+.answer-page .evidence .went-list li + li { margin-top: 2px; }
+/* the assumptions keep their own fold; its row reads as a grey label, the chevron kept */
+.answer-page .evidence details.assumptions { margin-top: 16px; overflow: hidden; }
+.answer-page .evidence summary.fold-label.went-assumed { display: flex; margin: 0; padding: 8px 20px;
+  border-radius: 0; background: var(--muted); color: var(--fg); }
+.answer-page .evidence .record { margin-top: 16px; }

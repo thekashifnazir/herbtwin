@@ -1,0 +1,34 @@
+/* About, "Checked by people" (25 Oct, Kash: "make this section more interesting", option A
+   of three mocks): the expert and the real user as two quotes with an ink rule, then the
+   Toloka runs in one panel, side by side. A dot per photo or person, filled for a yes, and a
+   dashed tick where the bar set before the run sits; each run ends on what it told us or
+   changed. Teal (--people-*) marks the checks by people: the tag, the dots, the rule. */
+.about-page .people-quotes { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 32px; margin: 0 0 20px; }
+.about-page .people-quotes blockquote { margin: 0; padding: 2px 0 2px 16px; border-left: 4px solid var(--fg); }
+.about-page .people-quotes p { margin: 0; }
+.about-page .people-quotes p > strong:first-child { display: block; font: 700 18px/1.3 var(--sans); }
+.about-page .people-toloka { padding: 18px 20px; border-radius: var(--surface); background: var(--card);
+  border: 1.5px solid var(--border); border-top: 6px solid var(--people-dot); }
+.about-page .people-toloka > h3 { margin: 0 0 4px; font: 700 22px/1.25 var(--display); display: flex; flex-wrap: wrap;
+  gap: 6px 12px; align-items: center; }
+.about-page .people-tag { display: inline-block; padding: 1px 10px; border-radius: var(--pill); border: 1.5px solid currentColor;
+  color: var(--people-fg); background: var(--card); font: 700 16px/1.4 var(--sans); letter-spacing: .02em; }
+.about-page .people-lede { margin: 0 0 14px; color: var(--muted-fg); }
+.about-page .people-runs { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px 36px; }
+.about-page .people-run h4 { margin: 0 0 8px; font: 700 18px/1.3 var(--sans); }
+.about-page .people-run h4 span { display: block; font-weight: 400; font-size: 16px; color: var(--muted-fg); }
+.about-page .people-stat { display: grid; grid-template-columns: 4.4rem minmax(0, 1fr); gap: 8px 10px; align-items: start; margin: 0; }
+.about-page .people-stat dt { font-weight: 700; font-variant-numeric: tabular-nums; line-height: 22px; white-space: nowrap; }
+.about-page .people-stat dd { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 12px; align-items: start; }
+.about-page .people-stat small { color: var(--muted-fg); line-height: 22px; }
+.about-page .people-dots { --d: 14px; --g: 5px; position: relative; display: inline-grid; grid-auto-flow: column;
+  grid-auto-columns: var(--d); gap: var(--g); margin-top: 4px; }
+.about-page .people-dots i { width: var(--d); height: var(--d); border-radius: 50%; border: 2px solid var(--people-dot); box-sizing: border-box; }
+.about-page .people-dots i.on { background: var(--people-dot); }
+.about-page .people-dots b { position: absolute; top: -5px; bottom: -5px; width: 0; border-left: 2.5px dashed var(--fg);
+  left: calc(var(--at) * (var(--d) + var(--g)) - var(--g) / 2); }
+.about-page .people-changed { margin: 10px 0 0; padding-left: 12px; border-left: 3px solid var(--people-dot); }
+.about-page .people-changed strong { color: var(--people-fg); }
+.about-page .about section > p.people-paid { margin: 14px 0 0; color: var(--muted-fg); font-size: 16px; }
+@media (max-width: 760px) { .about-page :is(.people-quotes, .people-runs) { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) { .about-page .people-stat dd { grid-template-columns: minmax(0, 1fr); } }

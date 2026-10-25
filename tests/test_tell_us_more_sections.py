@@ -94,11 +94,11 @@ def test_one_refine_form_holds_both_groups_the_box_both_buttons_and_the_chat(tmp
             '<div class="part changed',
             '<button class="primary big" type="submit">Check the advice again</button>',
             '<div class="part chat"><h3>Ask a question</h3>',
+            '<div class="chatlog"',
+            '<div class="starters" hidden>',
             '<textarea name="question"',
             '<button class="quiet ask-chat" type="button" aria-label="Ask about this plant" hidden>',
-            '<div class="starters" hidden>',
             '<p class="chatnote"',
-            '<div class="chatlog"',
         ],
     )
     # the script's "Check" is the form's first submit button and every button sits in .actions
@@ -121,7 +121,8 @@ def test_with_nothing_to_send_above_the_box_both_buttons_sit_under_it(tmp_path):
             "Check the advice again</button>",
         ],
     )
-    assert form.count('<div class="actions">') == 2  # the buttons' row and the starters'
+    # the buttons' row, the starters' and the follow-ups'
+    assert form.count('<div class="actions">') == 3
 
 
 def test_every_script_hook_is_still_there(tmp_path):

@@ -149,7 +149,11 @@ def test_the_waiting_line_is_a_polite_status_under_the_question(tmp_path):
     assert 'data-thinking="Thinking with NVIDIA Nemotron 3 Nano…"' in page
     box = _chat_section(page)
     log, after = box.split('<div class="chatlog"', 1)[1].split("</div>", 1)
-    # right under the log, where the answer will join it; read out politely
+    # right under the log, where the answer will join it (its follow-ups slot, hidden while a
+    # question is out, sits between them); read out politely
+    follow = '<div class="followups" hidden><div class="actions"></div></div>'
+    assert after.lstrip().startswith(follow)
+    after = after.lstrip()[len(follow) :]
     assert after.lstrip().startswith('<p class="chatwait" role="status" aria-live="polite"></p>')
     # no model named when none can be: plain "Thinking…"
     assert 'data-thinking="Thinking…"' in _render(rec)

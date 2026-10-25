@@ -74,28 +74,14 @@ def test_the_legend_has_three_items(tmp_path, monkeypatch):
     ]
 
 
-def test_the_stack_chips_are_coloured_like_the_flow(tmp_path, monkeypatch):
-    # Kash: "Colour the tech chips like the diagram ... so they act as part of the legend"
+def test_the_chips_went_and_the_flow_names_its_sources(tmp_path, monkeypatch):
+    # Kash (22 Oct) had the stack's chips coloured as the flow's key; 25 Oct, the About audit
+    # cut them: the pipeline and the services panel name every source, and in the folded
+    # flow each source's tag carries its colour
     built = _built(tmp_path, monkeypatch)
-    chips = built.split('<ul class="about-chips"', 1)[1].split("</ul>", 1)[0]
-    for colour, name in (
-        ("tavily", "Tavily"),
-        ("weather", "Open-Meteo"),
-        ("gbif", "GBIF"),
-        ("nvidia", "NVIDIA Nemotron 3"),
-    ):
-        assert f'<li class="{colour}">{name}</li>' in chips, name
-    for name in ("Python 3.12", "FastAPI", "Cloud Run", "Nebius Token Factory", "Supabase"):
-        assert f"<li>{name}</li>" in chips, name  # the rest neutral
-    rules = {sel: body for _, sel, body in _rules(SHEET.read_text("utf-8"))}
-    for colour, bg, fg in (
-        ("tavily", "--lilac", "--lilac-fg"),
-        ("weather", "--sky", "--sky-fg"),
-        ("gbif", "--clay-bg", "--clay"),
-        ("nvidia", "--soft", "--ok"),
-    ):
-        body = next(b for s, b in rules.items() if s.endswith(f".about-chips li.{colour}"))
-        assert f"background: var({bg})" in body and f"color: var({fg})" in body, colour
+    assert "about-chips" not in built and "about-chips" not in style.CSS
+    for tag in ('<i class="tag">Tavily</i>', '<i class="tag">GBIF</i>', "<em>Open-Meteo</em>"):
+        assert tag in built, tag
 
 
 def test_the_nebius_line_is_plain_and_true(tmp_path, monkeypatch):
@@ -260,10 +246,16 @@ def test_the_weather_path_label_counts_in_few_words(tmp_path, monkeypatch):
     import html
 
     built = _built(tmp_path, monkeypatch)
-    words = html.unescape(re.sub(r"<[^>]+>", " ", '<h2 id="built">' + built)).split()
+    # 25 Oct, the About audit: the detailed flow folds under "See every step", so it counts
+    # only once opened, as the page's cap counts it
+    shown = re.sub(r'<details class="pipe-more">.*?</details>', "", built, flags=re.S)
+    assert shown != built
+    words = html.unescape(re.sub(r"<[^>]+>", " ", '<h2 id="built">' + shown)).split()
     # grown on purpose on 25 Oct to 545 (537 measured) for Kash's "What each service did" panel,
-    # then to 560 (551) when its LangSmith row said truly what a trace carries
-    assert len(words) <= 560
+    # then to 560 (551) when its LangSmith row said truly what a trace carries; the audit's
+    # pipeline, open, with the flow folded, and the twin said to be outdoors (review): 460
+    # (448 measured)
+    assert len(words) <= 460
 
 
 @pytest.mark.parametrize(

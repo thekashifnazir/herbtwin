@@ -1,0 +1,42 @@
+/* About, How it's built, led by the simple pipeline (25 Oct, Kash on the About audit: the
+   Devpost figure is "super clear, anyone can follow it"). Six of the flow's sticker boxes in a
+   row, the answer as a green bar with its cost, then the days after in a row of three. One
+   under another on a phone, the arrows turned down. Nemotron's boxes take the flow's NVIDIA
+   mint (.node.advisors); lime stays the band's press. The detailed flow folds under "See
+   every step". "about_p" sorts after about.css, so its ties go here. Tokens only. */
+.about-page .pipe { margin: 8px 0 0; }
+.about-page .pipe ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px 34px; max-width: none; }
+.about-page .pipe li { position: relative; display: flex; margin: 0; }
+.about-page .pipe li > .node { flex: 1; }  /* one height across a row */
+.about-page .pipe .pipe-steps { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.about-page .pipe .pipe-loop { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.about-page .pipe .pipe-steps > li + li::before { content: "\2192" / ""; position: absolute; left: -28px; top: 50%;
+  transform: translateY(-50%); font: 700 22px/1 var(--sans); color: var(--muted-fg); }
+.about-page .pipe .pipe-loop > li + li::before { content: "\21E2" / ""; position: absolute; left: -28px; top: 50%;
+  transform: translateY(-50%); font: 700 22px/1 var(--sans); color: var(--muted-fg); }
+.about-page .pipe .node { font-size: 16px; line-height: 1.35; }
+.about-page .pipe .node strong { font-size: 18px; }
+/* the answer: the band's green, across the page, with its one example's cost */
+.about-page .about .pipe .pipe-answer { max-width: none; margin: 22px 0; padding: 14px 18px; border-radius: var(--surface);
+  background: var(--band); color: var(--band-fg); font-size: 16px; line-height: 1.45; }
+.about-page .pipe .pipe-answer strong { display: block; margin-bottom: 2px; font: 700 20px/1.3 var(--sans); }
+.about-page .pipe .pipe-answer span { color: var(--band-muted); }
+.about-page .pipe .pipe-answer b { color: var(--band-fg); }
+.about-page .pipe figcaption { margin-top: 12px; font-size: 16px; color: var(--muted-fg); }
+/* the detailed flow, folded under the simple one, as the credits fold */
+.about-page .pipe-more { margin: 16px 0 0; border: 1.5px solid var(--border); border-radius: var(--surface);
+  background: var(--card); }
+.about-page .pipe-more > summary { padding: 12px 18px; cursor: pointer; font: 700 17px/1.4 var(--sans); color: var(--ok); }
+.about-page .pipe-more[open] > summary { border-bottom: 1px solid var(--border); }
+.about-page .pipe-more > .flow-panel { margin: 0; border-radius: 0 0 var(--surface) var(--surface); }
+@media (max-width: 1099px) {
+  .about-page .pipe .pipe-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .about-page .pipe .pipe-steps > li:nth-child(3n + 1)::before { content: none; }
+}
+@media (max-width: 720px) {
+  .about-page .pipe :is(.pipe-steps, .pipe-loop) { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+  .about-page .pipe .pipe-steps > li + li:nth-child(3n + 1)::before { content: "\2193" / ""; }  /* not the first */
+  .about-page .pipe :is(.pipe-steps, .pipe-loop) > li + li::before { content: "\2193" / ""; left: 24px; top: -26px;
+    transform: none; }
+  .about-page .pipe .pipe-loop > li + li::before { content: "\21E3" / ""; }
+}

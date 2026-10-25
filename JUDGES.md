@@ -6,14 +6,14 @@ season. It is built for UK gardeners with herbs outdoors.
 
 **Address:** https://herbtwin.kashifnazir.com
 
-## 1. Enter the judges' code (30 seconds)
+## 1. No code needed
 
-The site caps photo reads per visitor per day. The judges' code skips the caps. The code
-is in the submission form; it is not in this repository.
+No code needed: each visitor gets 30 photo reads a day; the site-wide cap and a spending
+cap protect the credit. Open https://herbtwin.kashifnazir.com and start.
 
-1. Open https://herbtwin.kashifnazir.com/judge
-2. Type the code and press **Use code**.
-3. The page says "You're in". The code is remembered on that browser for 60 days.
+The /judge page is still there for a code the organisers can be given privately: typed
+once, it skips the daily caps on that browser for 60 days. The code is not in this
+repository.
 
 ## 2. What to try in five minutes
 
@@ -80,8 +80,8 @@ is in the submission form; it is not in this repository.
      blurry, dark or distant photo the plant can't be named from says so above the
      headline, its heading names the plant only as a guess ("Not clear: maybe mint"), and **Send a sharper photo** (or brighter, or closer) is the green button
      then, with Make this surer beside it. Under
-     the chips, a small link, "**Indoors? Switch and we'll redo the advice for an indoor
-     plant**" (or the outdoor mirror), re-runs the advice indoors (no forecast) or
+     the chips, "**Is it indoors? Redo for indoors**" (or the outdoor
+     mirror) re-runs the advice indoors (no forecast) or
      outdoors. Right after the card (and the photo check, when it saw a problem), when the
      twin ran: **Your plant's twin**, a deep-green section that says what the twin is ("Each
      choice is tried first on your plant's twin, a small water-and-frost model, against the
@@ -121,11 +121,12 @@ is in the submission form; it is not in this repository.
      in small headed sections, each shown only when it has something in it: **Where it
      is** (the place box; indoors, **Where is it?** with four chips, from "South window,
      close" to "Away from any window", as light indoors is not measured), **What's changed** (how the soil feels, when you last
-     watered), then **Check the advice again**; **Ask a question** (one text box, **Ask
-     about this plant**, three questions to tap for this plant, such as "Is it safe to
-     eat?", and the replies; while a reply is on its way, a line under the question says
-     which model is thinking, and "Searching trusted pages with Tavily…" only when a search
-     starts); **Reminders**. With no questions to answer, both buttons
+     watered), then **Check the advice again**; **Ask a question** (a chat: the replies sit above one text box
+     and its **Ask about this plant** button; before the first question, up to 3 questions to
+     tap for this plant, such as "Is it safe to eat?", sit over the box, and after each answer
+     up to 2 follow-ups not yet asked; while a reply is on its way, a waiting line under the
+     question shows a plant word and the seconds ("Germinating… 4s"), then "searching trusted
+     pages with Tavily" only when a search starts); **Reminders**. With no questions to answer, both buttons
      sit under the text box, **Ask about this plant** first and green, so a typed question
      goes to the chat;
    - **How we worked it out**: first, who advised, in plain words (today one model asked the
@@ -157,7 +158,7 @@ is in the submission form; it is not in this repository.
    "Checked again as an indoor plant: same advice."
 5. **Ask about this plant.** Under **Ask a question**, type in the same box, for example "What if I
    move it inside?" or "What if I don't water it this week?", and press **Ask about this
-   plant** (or Enter; Shift+Enter is a new line), or tap one of the three questions. The reply appears under the box and the advice stays as it is. What-ifs are
+   plant** (or Enter; Shift+Enter is a new line), or tap one of the questions over the box. The reply appears above the box and the advice stays as it is. What-ifs are
    answered by running the choice on the plant's twin; some answers cite gardening sites. Ten
    questions per answer. (The Ask button needs JavaScript; without it the box goes with
    **Check the advice again**.)
@@ -178,8 +179,8 @@ is in the submission form; it is not in this repository.
    that window. The email has a link to stop it.
 
 **What can I grow here?**, a second door for a photo of a bed, is switched off on the live
-site so the plant check gets your full attention. It was built and tested (it matched the
-RHS's monthly picks 0.90 of the time); About says why under **What's next**.
+site for a more focused experience. It was built and tested (the RHS's monthly picks
+were in our top two lists 0.90 of the time).
 
 The [privacy page](https://herbtwin.kashifnazir.com/privacy) says what is kept and who
 processes what. You can delete your account from My plants.
@@ -215,10 +216,12 @@ read suggests a pest or disease, and three to the advisor (the same question ask
 times, to see whether the answers agree). The trusted-page check reads up to six sentences
 a page from the first three trusted pages with Nemotron 3 Ultra, each with a second short
 pass when it has conditions, and one last Ultra check on any sentence the code agrees with,
-run while the advisors think. If GLM fails, the backup reads the photo too. Around them it fetches the
+run while the advisors think. If GLM has no reading after 14 s, the backup reads the photo too. Around them it fetches the
 weather and the plant's care facts; a plant outside the built-in list has its RHS page
-looked up and read. A read takes about 15 to 35 seconds: on the live site, 25 and 36
-seconds on 14 Oct, 28 on 16 Oct and 15.5 on 19 Oct. (On 12 Oct, before the second look was
+looked up and read. A read usually takes under a minute: on the live site, 25 and 36
+seconds on 14 Oct, 28 on 16 Oct, 24 to 26 seconds on 17 Oct and 15.5 on 19 Oct; 30 to 60
+seconds in a site walk on 25 Oct (its notes are not in the repo), when GLM was slow and
+its backup won the race (section 5). (On 12 Oct, before the second look was
 added, reads took 12 to 27 seconds, and one phone read took 52.) Checking the advice again
 after a refine took about 5 seconds on 12 Oct. The site keeps one copy running all the
 time, so there is no cold start.
@@ -233,8 +236,8 @@ answer appears in **My plants**.
 ## 5. Known limits
 
 - **One app instance** serves everyone, so reads at a busy moment can be slower.
-- **Daily caps:** 200 photo reads a day for the whole site and 10 per visitor (UK days).
-  Over your own 10 you get "You've used today's 10 photo reads."; over the site's 200, "The
+- **Daily caps:** 200 photo reads a day for the whole site and 30 per visitor (UK days).
+  Over your own 30 you get "You've used today's 30 photo reads."; over the site's 200, "The
   garden's had a busy day. Try again tomorrow." Both say the limit resets at midnight. The judges' code
   skips both, and also skips the stop when the site's model budget runs out.
 - **UK, outdoors, herbs.** Season norms are UK-only; a place outside the UK gets a note
@@ -250,8 +253,9 @@ answer appears in **My plants**.
   questions (how the soil feels 2 cm down) are there to correct it.
 - **Models:** the photo is read by GLM-5.3-Flash (`zai-org/GLM-5.3-Flash`) and the advice
   is written by NVIDIA Nemotron 3 Super (`nvidia/nemotron-3-super-120b-a12b`), both on
-  Nebius Token Factory. If GLM fails or gives no reply within 90 s, DeepSeek V4.1 Flash
-  (`deepseek-ai/DeepSeek-V4.1-Flash`, also on Token Factory) reads the photo instead; it
+  Nebius Token Factory. If GLM has no reading after 14 s, DeepSeek V4.1 Flash
+  (`deepseek-ai/DeepSeek-V4.1-Flash`, also on Token Factory) reads the same photo alongside
+  it, and the first usable reading wins (if GLM fails, DeepSeek reads it); it
   names the species a little less often (see `docs/reference/photo-model-fallback.md`).
   The models can be wrong about the species; the answer says how
   sure it is.

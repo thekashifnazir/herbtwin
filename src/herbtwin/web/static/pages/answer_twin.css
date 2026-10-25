@@ -17,7 +17,9 @@
 .answer-page .strip-chart { display: block; width: 100%; height: auto; margin: 6px 0 0; overflow: visible; }
 .answer-page .strip-chart polyline { fill: none; stroke-linejoin: round; stroke-linecap: round; }
 .answer-page .strip-chart polyline.lead { stroke: var(--primary); stroke-width: 3; }
-.answer-page .strip-chart polyline.alt { stroke: var(--muted-fg); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.answer-page .strip-chart polyline.alt { stroke: var(--muted-fg); stroke-width: 1.5; }
+/* leaving it is dashed, the advice or not, as in the twin's chart (25 Oct final walk) */
+.answer-page .strip-chart polyline.leave { stroke-dasharray: 5 4; }
 .answer-page .strip-chart .needs { stroke: var(--warn); stroke-width: 1; stroke-dasharray: 2 3; }
 .answer-page .strip-chart .today { fill: var(--card); stroke: var(--primary); stroke-width: 2; }
 /* the words keep a halo of the card where a line runs under them; sized in the chart's own

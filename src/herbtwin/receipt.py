@@ -53,11 +53,14 @@ WORDS = {1: "One", 2: "Two", 3: "Three"}
 # maker never reads as off the platform (22 Oct, Kash); NVIDIA's keep their labels
 ON_TF = "on Nebius Token Factory"
 # the backup photo model read it, not the first (schemas.BackupRead): said on each one's row
+# "Our backup read it", so the backup is never read as the other model (25 Oct site walk:
+# "Our backup: GLM-5.3 Flash was slow" sounded as if GLM were the backup)
 BACKUP_NOTE = {
-    "slow": "Our backup: {first} was slow",
-    "failed": "Our backup: {first} couldn't read it",
-    "resting": "Our backup: {first} failed recently",
+    "slow": "Our backup read it: {first} was slow",
+    "failed": "Our backup read it: {first} couldn't read it",
+    "resting": "Our backup read it: {first} failed recently",
 }
+RACED_NOTE = "Raced as our backup; {first} answered first, so not used"
 FIRST_NOTE = {"slow": "Too slow, so not used", "failed": "No usable reading"}
 
 
@@ -98,13 +101,19 @@ def from_rows(rows: list[dict], stages: frozenset[str], after_id: int = 0) -> li
 
 
 def assemble(
-    kept: list[StepCost], models: list[StepCost], walls: dict[str, int] | None = None
+    kept: list[StepCost],
+    models: list[StepCost],
+    walls: dict[str, int] | None = None,
+    asks: dict[str, int] | None = None,
 ) -> list[StepCost]:
     """The receipt in the order the read runs. `walls`: a step's own wall time, where its
-    calls ran side by side (the 3 advisors at once), so their times do not add up."""
+    calls ran side by side (the 3 advisors at once), so their times do not add up. `asks`:
+    how many asks a step made, where a reply asked again adds a call but not an ask."""
     for s in models:
         if walls and s.stage in walls and sum(m.stage == s.stage for m in models) == 1:
             s.ms = walls[s.stage]
+        if asks and s.stage in asks and sum(m.stage == s.stage for m in models) == 1:
+            s.asks = asks[s.stage]
     out = [*kept, *models]
     return sorted(out, key=lambda s: ORDER.index(s.stage) if s.stage in ORDER else len(ORDER))
 
@@ -152,9 +161,16 @@ def baseline_usd(steps: list[StepCost]) -> float:
 def _step_words(s: StepCost) -> str:
     if s.stage != "advise":
         return STEP.get(s.stage, s.stage)
-    if s.calls in WORDS:
-        return f"{WORDS[s.calls]} advisor{'s' if s.calls != 1 else ''}"
-    return f"Advisors ({s.calls} asks)"
+    # the asks, not the calls: a reply asked again (its repair) is one more call, not one
+    # more advisor (25 Oct site walk: "Advisors (4 asks)" beside "asked ... three times")
+    n = s.asks if s.asks is not None else s.calls
+    if n not in WORDS:
+        return f"Advisors ({n} asks)"
+    said = f"{WORDS[n]} advisor{'s' if n != 1 else ''}"
+    again = s.calls - n if s.asks is not None else 0
+    if again > 0:
+        said += f", {WORDS[again].lower() if again in WORDS else again} asked again"
+    return said
 
 
 def _model_words(s: StepCost) -> str:
@@ -166,7 +182,15 @@ def _model_words(s: StepCost) -> str:
 
 def _note(rec: AnalysisRecord, s: StepCost) -> str:
     b = rec.photo_backup
-    if b is None or s.stage != "observe":
+    if s.stage != "observe":
+        return ""
+    if b is None:
+        if rec.photo_raced and s.model == rec.photo_raced:
+            first = next(
+                (x.model for x in rec.receipt or [] if x.stage == "observe" and x.model != s.model),
+                "",
+            )
+            return RACED_NOTE.format(first=plain_name(first)) if first else ""
         return ""
     if s.model == b.backup:
         return BACKUP_NOTE[b.why].format(first=plain_name(b.first))

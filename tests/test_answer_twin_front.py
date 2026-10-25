@@ -181,7 +181,9 @@ def test_the_green_line_is_the_cards_job_whenever_the_strip_shows(tmp_path):
             assert green.action == main
             page = _render(rec)
             svg = _strip(page).split("<svg", 1)[1].split("</svg>", 1)[0]
-            assert f'<polyline class="lead" points="{green.points}"/>' in svg, (main, verdicts)
+            # leaving it's line is dashed as well when it is the job (25 Oct final walk)
+            cls = "lead leave" if main == "leave_normal" else "lead"
+            assert f'<polyline class="{cls}" points="{green.points}"/>' in svg, (main, verdicts)
     assert seen >= 6
 
 

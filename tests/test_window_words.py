@@ -1,8 +1,9 @@
 """The window answer indoors, said one way in each place from one source (22 Oct): the chip
 ("South window, close"), the "You told us" echo ("by a south window, close") and the How sure
 and advisor form ("a south-facing window, close to it") were three dicts that could drift.
-And with the advice reading the window (#456), it counts as a quick question and a tap on
-the last chip sends the form, as the other answer chips do (A3)."""
+And with the advice reading the window (#456), it counts as a quick question. 25 Oct, Kash on
+the live page: a tap on a window sent the form at once; like the compass, it is pick, then
+"Check the advice again"."""
 
 from herbtwin import light, note_facts
 from herbtwin.schemas import WINDOW, WINDOW_TEXT, Told
@@ -48,13 +49,22 @@ def test_the_window_counts_as_a_quick_question(tmp_path):
     assert "Make this surer: answer 2 quick questions" in _render(told, asks=asks)
 
 
-def test_a_window_tap_sends_once_every_shown_question_is_answered(tmp_path):
-    page = _render(_indoor(tmp_path), asks=["window", "question"], spot_on=True)
-    form = page.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
-    assert '<div class="actions send" data-picks>' in form
-    # the script sends only when every chip group has a pick (A3), the window's included
-    assert 'picks.every((f) => f.querySelector("input:checked"))' in page
-    assert '<fieldset class="picks"><legend>Pick the nearest</legend>' in form
+def test_a_window_tap_picks_and_check_the_advice_again_sends(tmp_path):
+    # as the compass's direction: a tap picks a window and "Check the advice again" sends,
+    # never the tap itself, alone or with other answer chips (25 Oct, Kash)
+    for i, asks in enumerate(
+        (["window", "question"], ["window", "soil_feel", "last_watered", "question"])
+    ):
+        (tmp_path / str(i)).mkdir()
+        page = _render(_asking(tmp_path / str(i)), asks=asks, spot_on=True)
+        form = page.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
+        assert '<fieldset class="picks"><legend>Pick the nearest</legend>' in form
+        assert form.count('type="radio" name="window"') == 4  # radios: no script, no send
+        assert "data-picks" not in form, asks
+        assert (
+            '<div class="actions send">\n        <button class="primary big" type="submit">Check the advice again</button>'
+            in form
+        )
 
 
 def test_a_window_tap_does_not_send_while_the_place_box_shares_the_section(tmp_path):

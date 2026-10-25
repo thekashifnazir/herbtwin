@@ -294,7 +294,7 @@ def test_the_page_shows_each_finding_under_its_label(tmp_path):
     assert '<span class="fold-title">2 cold spells in 2 weeks</span>' in weather
     body = page.split('<details class="evidence fold">', 1)[1].split("</summary>", 1)[1]
     said = "2 cold spells in 2 weeks if left out (3 nights in all), from Open-Meteo"
-    assert f"<p>Weather: {said}</p>" in body
+    assert f'<p class="fold-label went-weather">Weather</p><p class="went-text">{said}</p>' in body
     # the folds keep their order: why, then the sources; the twin's section before both
     assert page.index('<section class="twin-sec"') < page.index('class="why fold')
     assert page.index('class="why fold') < page.index('class="evidence fold')
@@ -344,14 +344,14 @@ def test_compare_never_leads_with_watering_under_another_job(tmp_path):
 
 def _listed(page: str) -> tuple[int, int]:
     """The evidence fold walked as rendered: (the N its label says, the things it lists).
-    A thing is a plain line or the model's assumptions; failure notes and the Ref are not."""
+    A thing is a labelled line or the model's assumptions; failure notes and the Ref are not."""
     fold = page.split('<details class="evidence fold">', 1)[1]
     head, body = fold.split("</summary>", 1)
     body = body.split('<p class="record">', 1)[0]
     body = re.sub(r'<details class="assumptions">.*?</details>', "<assumes/>", body, flags=re.S)
     said = re.search(r'<span class="fold-kind">What we went on · (\d+) things?</span>', head)
     assert said, head
-    return int(said.group(1)), len(re.findall(r"<p>|<assumes/>", body))
+    return int(said.group(1)), len(re.findall(r'<p class="fold-label|<assumes/>', body))
 
 
 def _dir(tmp_path, name):

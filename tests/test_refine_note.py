@@ -215,9 +215,14 @@ def test_a_chat_reply_never_wipes_a_note_typed_while_it_was_asked():
 
     page = Path("src/herbtwin/web/templates/result.html").read_text()
     assert 'if (!body.fact) form.question.value = "";' not in page
-    assert (
-        'if (!body.fact && form.question.value.trim() === text) form.question.value = "";' in page
-    )
+    # since 25 Oct the box empties once, as the question is sent, never after the reply; and
+    # what goes back after it only fills an empty box
+    click = page.split('ask.addEventListener("click", async () => {', 1)[1].split("\n      });", 1)[
+        0
+    ]
+    assert click.count('form.question.value = "";') == 1
+    assert click.index('form.question.value = "";') < click.index("const r = await fetch(")
+    assert "if (!form.question.value.trim()) form.question.value = text;" in click
 
 
 def test_the_switch_wins_over_the_note():

@@ -3,15 +3,6 @@
    part of the legend"). This sheet sorts before about.css ("-" before "."), so a rule that
    changes one of about.css's wins on specificity, never on order. Theme tokens only. */
 
-/* the stack's chips as the key for the sources, in the flow's colours: NVIDIA mint, Tavily
-   lilac, the weather sky blue, GBIF clay; the rest plain */
-.about-page .about .about-chips li { background: var(--card); color: var(--fg);
-  border: 1.5px solid var(--border); }
-.about-page .about .about-chips li.nvidia { background: var(--soft); color: var(--ok); border-color: var(--soft-line); }
-.about-page .about .about-chips li.tavily { background: var(--lilac); color: var(--lilac-fg); border-color: var(--lilac-fg); }
-.about-page .about .about-chips li.weather { background: var(--sky); color: var(--sky-fg); border-color: var(--sky-fg); }
-.about-page .about .about-chips li.gbif { background: var(--clay-bg); color: var(--clay); border-color: var(--clay); }
-
 /* the flow: one under another on a phone; on a wide screen two rows of four, what we gather
    then how we decide, so each box has a quarter of the frame. The weather's green path runs
    down from the first row's end (through its label, about_built.css) and back to the twin at

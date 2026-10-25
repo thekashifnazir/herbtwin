@@ -179,7 +179,7 @@ def test_the_one_box_ask_sends_the_text_to_the_chat_as_text():
     assert "JSON.stringify({message: text})" in source and "form.question.value" in source
     assert "innerHTML" not in source  # model text only ever goes in as textContent
     # after a reply the box empties (13 Oct walkthrough: a question left sitting in the box
-    # read as not sent); the log under the box keeps it
+    # read as not sent); the log over the box keeps it
     assert 'form.question.value = ""' in source
 
 

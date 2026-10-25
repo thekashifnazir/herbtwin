@@ -136,7 +136,7 @@
 .answer-page .refine .rose label > span:first-of-type { gap: 6px; }  /* room for the tick */
 .answer-page .refine .picks label:has(input:focus-visible) { outline: 2px solid var(--ring); outline-offset: 2px; }
 .answer-page .chatnote:empty { margin: 0; }
-.answer-page .chatlog { margin: 16px 0; }  /* not flush under the starter pills */
+.answer-page .chatlog { margin: 0 0 16px; }  /* the thread, over the box it was asked in */
 .answer-page .chatlog h4 { margin: 0 0 12px; font: 700 16px/1.3 var(--sans); color: var(--muted-fg); }
 .answer-page .msg { margin: 0 0 12px; white-space: pre-wrap; }
 .answer-page .msg.user { margin-left: 15%; padding: 10px 16px; border-radius: var(--surface);
@@ -359,6 +359,12 @@
 .answer-page .twin-chart polyline { fill: none; stroke: var(--primary); stroke-width: 3;
   stroke-linejoin: round; stroke-linecap: round; }
 .answer-page .twin-chart polyline.base { stroke: var(--muted-fg); stroke-width: 1.5; stroke-dasharray: 5 4; }
+/* a leave-it answer: leaving it is the advice, so its dashed line is the green one and the
+   choice drawn against it grey, as on the card's strip (25 Oct final walk) */
+.answer-page .twin-chart.leave-leads polyline.base { stroke: var(--primary); stroke-width: 3; }
+.answer-page .twin-chart.leave-leads .twin-line polyline { stroke: var(--muted-fg); stroke-width: 1.5; }
+.answer-page .twin-chart.leave-leads .line-name { font-weight: 600; fill: var(--muted-fg); }
+.answer-page .twin-chart.leave-leads .line-name.base-name { font-weight: 700; fill: var(--primary); }
 .answer-page .twin-chart .cold { fill: var(--cold); }
 /* the wash alone is 1.18:1 on the card: an edge on top of each cold night carries the 3:1 */
 .answer-page .twin-chart .cold-edge { stroke: var(--cold-fg); stroke-width: 3; }
@@ -568,16 +574,18 @@
 .answer-page .page-band .place-ask label { margin: 0 0 8px; color: var(--band-fg); font: 600 18px/1.35 var(--sans); }
 .answer-page .page-band .place-ask .place-row { display: flex; flex-wrap: wrap; gap: 8px; }
 .answer-page .page-band .place-ask input { flex: 1 1 12rem; width: auto; min-height: 44px; margin: 0; border-color: var(--band-line); }
-/* three questions to tap, then the replies under them */
-.answer-page .starters { margin-top: 20px; }
+/* three questions to tap over the box until the first is asked; then at most 2 under the
+   latest answer (25 Oct, Kash) */
+.answer-page .starters { margin: 0 0 16px; }
+.answer-page .followups { margin: -4px 0 16px; }
 .answer-page .starters h4 { margin: 0 0 8px; font: 700 16px/1.3 var(--sans); color: var(--muted-fg); }
-.answer-page .starters .actions { flex-wrap: wrap; gap: 8px; margin: 0; }
-.answer-page .refine .starters .actions button { flex: 0 1 auto; }  /* pills sized to their words */
-.answer-page .starters .starter { min-height: 44px; padding: 6px 16px; border: 1.5px solid var(--fg);
+.answer-page :is(.starters, .followups) .actions { flex-wrap: wrap; gap: 8px; margin: 0; }
+.answer-page .refine :is(.starters, .followups) .actions button { flex: 0 1 auto; }  /* pills sized to their words */
+.answer-page :is(.starters, .followups) .starter { min-height: 44px; padding: 6px 16px; border: 1.5px solid var(--fg);
   background: var(--card); font: 600 16px/1.3 var(--sans); text-align: left; }  /* home's pills */
 .answer-page .decided-by { margin: 6px 0 0; color: var(--muted-fg); font-size: 16px; }
 .answer-page .decided-by a { white-space: nowrap; }
-.answer-page .asked { margin: 20px 0 16px; }  /* not flush under the starter pills */
+.answer-page .asked { margin: 0 0 16px; }  /* the reply without the script, over the box too */
 /* Compare at phone width (judge live walk of rev 00040): "vs leaving it" wrapped to three
    lines and the choice pills wrapped inside their ovals. The verdict column stays one line,
    the cells lose some padding, and a pill that must wrap takes the card's corners */
@@ -617,11 +625,16 @@
 .answer-page .more-photos { margin: 4px 0 12px; padding: 12px 14px; border: 1px solid var(--soft-line);
   border-radius: 12px; background: var(--card); }
 .answer-page .more-photos-ask { margin: 0 0 8px; }
-.answer-page .more-photos .pick { display: flex; flex-direction: column; gap: 6px; margin: 0 0 6px; font-weight: 600; }
-.answer-page .more-photos input[type="file"] { max-width: 100%; font: inherit; }
-.answer-page .more-photos input[type="file"]::file-selector-button { min-height: 44px; margin-right: 10px;
-  padding: 8px 18px; border: 1.5px solid var(--fg); border-radius: var(--pill); background: var(--card);
-  color: var(--fg); font: 600 16px/1.2 var(--sans); cursor: pointer; }
+/* the picker is the label, a pill as on home: the browser's own field ("Choose files / No file
+   chosen") stays in the form, out of sight, and the line under it says what was picked
+   (25 Oct, final walk #10) */
+.answer-page .more-photos .pick { position: relative; display: inline-flex; align-items: center; min-height: 44px;
+  margin: 0 0 6px; padding: 8px 18px; border: 1.5px solid var(--fg); border-radius: var(--pill);
+  background: var(--card); color: var(--fg); font: 600 16px/1.2 var(--sans); cursor: pointer; }
+.answer-page .more-photos .pick:hover { background: var(--muted); }
+.answer-page .more-photos .pick input[type="file"] { position: absolute; width: 1px; height: 1px; margin: 0;
+  opacity: 0; overflow: hidden; clip-path: inset(50%); }
+.answer-page .more-photos .pick:has(input:focus-visible) { outline: 3px solid var(--ring); outline-offset: 2px; }
 .answer-page .more-photos .picked { margin: 0 0 8px; color: var(--muted-fg); font-size: 16px; }
 .answer-page .more-photos .picked:empty { margin: 0; }  /* kept in the tree so the first message is read out */
 .answer-page .more-photos button[aria-disabled="true"], .answer-page .more-photos button:disabled { opacity: .7; cursor: progress; }
