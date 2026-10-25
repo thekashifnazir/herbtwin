@@ -120,7 +120,10 @@
      2, r3) #}
   {% set on_band = place_on_band or (a.tell_me_key == "setting" and obs.setting not in ("indoor", "outdoor")) %}
   {% set quick = open.n + (1 if a.tell_me_key == "location" and not place_on_band else 0) %}
-  {% set asks_open = a.level != "sure" and a.tell_me and quick %}
+  {# indoors the window is the one quick question the card points to, sure or not, now it is
+     asked in Tell us more and not in the card (25 Oct, Kash) #}
+  {% set window_open = "window" in asks and not (rec.told and rec.told.window) %}
+  {% set asks_open = quick and ((a.level != "sure" and a.tell_me) or window_open) %}
   {# a rough read, said before the headline: what is wrong with the photo, and what to send #}
   {% set retake = {"blurry": ("This photo is blurry", "Send a sharper photo"), "dark": ("This photo is dark", "Send a brighter photo"), "small": ("The plant is small in this photo", "Send a closer photo"), "unclear": ("This photo is hard to read", "Send a clearer photo")}.get(a.photo_issue) %}
   {# every low answer can be made surer: with no one fact named, the form still takes
@@ -141,9 +144,6 @@
     <span class="chip when">{{ when }}</span>
     {%- if place %} <span class="chip place">{{ place }}</span>{% endif -%}
   </p>
-  {# indoors there is no forecast and no twin run (pipeline: weather_missing "indoors"); say so
-     up front, not only inside the folded Compare #}
-  {% if obs.setting == "indoor" %}<p class="note indoor-note">Indoors: advice for room conditions, without the forecast test.</p>{% endif %}
   {# what was told rides along in each band form, so a switch or a town loses none of it #}
   {% macro told_fields(t, setting=false) %}
     {%- if t %}{% for q in ("soil_feel", "last_watered", "changed", "squeeze", "question") if t[q] %}<input type="hidden" name="{{ q }}" value="{{ t[q] }}">{% endfor %}
@@ -259,8 +259,9 @@
     {% if "check" in held %}{% set src = rec.problem.page %}{% set host = src.split("/")[2]|replace("www.", "", 1) if "://" in src else src %}
     <p>Photo check: {{ rec.problem.name }}{% if rec.problem.seen %} ({{ rec.problem.seen }}){% endif %}.{% if src %} Signs from {% if src.startswith("https://") %}<a href="{{ src }}" rel="noopener noreferrer">{{ host }}</a>{% else %}{{ host }}{% endif %}.{% endif %}</p>{% endif %}
     {# the per-choice numbers are in "Compare all choices" in words; the model's working
-       assumptions fold away here (17 Oct re-walk: raw action names and 0.00s) #}
-    {% if "assumes" in held %}<details class="assumptions"><summary>What the plant model assumes</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
+       assumptions fold away here (17 Oct re-walk: raw action names and 0.00s). Indoors no
+       plant model runs, so they are ours (25 Oct real-upload render) #}
+    {% if "assumes" in held %}<details class="assumptions"><summary>{{ "What we assumed" if obs and obs.setting == "indoor" else "What the plant model assumes" }}</summary><ul>{% for x in a.assumptions %}<li>{{ x }}</li>{% endfor %}</ul></details>{% endif %}
     {% set missed = {"environment": "the weather", "research": "the species facts", "twin": "the plant model", "advise": "the advice", "observe": "the photo read", "problem": "the closer photo check"} %}
     {% for f in rec.failures %}<p class="note">Not available this time: {{ missed.get(f.stage, "one step") }}.</p>{% endfor %}
     <p class="record">Ref {{ rec.record_id }}</p>
@@ -387,39 +388,12 @@
          less often": the badge's line already says how often, and nothing stands in for it
          (23 Oct answer-page critique, 2) #}
       {%- if not best %}{% set doubt = top_doubt(a) %}{% set said_doubt = doubt and doubt != base_doubt %}<p class="sure-doubt">{% if said_doubt %}Mostly: {{ doubt }}.{% endif %}{% if a.tell_me and not asks_open and not on_band %}{{ " " if said_doubt else "" }}Answer the <a href="#refine">question below</a> and we'll check again.{% elif not doubt and a.level != "not_sure" and ":" in a.level_text %}{{ a.level_text.split(":", 1)[1]|trim|capitalize }}.{% elif not doubt %}See why below.{% endif %}</p>{% endif %}</div>
-      {# indoors the photo's light can't be measured (light.read_light: no open sky to
-         compare with), and the page never said so (22 Oct, a gardener: "how do you tell light
-         levels indoors?"). Say it once, and ask for the window, until it is told; never beside "Send a sharper
-         photo" or a no-cure answer, where the window can't help. Not advice,
-         so the rater text skips it (answer_text.SKIP_CLASSES) #}
-      {#- the window as chips right here, one tap to check the advice again (23 Oct answer-page
-          critique, 11): a quiet line under how sure, each chip a button of the refine form,
-          keeping what else was told; the questions below still ask it too #}
-      {% if obs and obs.setting == "indoor" and not (rec.told and rec.told.window) and not retake and a.headline != no_cure_headline %}<form class="note indoor-light" method="post" action="/answers/{{ rec.record_id }}/refine">
-        {{- told_fields(rec.told, setting=true) }}<p id="window-ask">We can't measure light indoors from a photo. Which window is it by?</p>
-        <span class="window-chips" role="group" aria-labelledby="window-ask">{% for v, text in choices.window.items() %}<button type="submit" class="window-chip" name="window" value="{{ v }}">{{ text }}</button>{% endfor %}</span>
-      </form>
-      <script>
-      (() => {
-        // as the band's forms: say the check started, send it once, and undo on the way back
-        const form = document.currentScript.previousElementSibling;
-        const labels = [...form.querySelectorAll("button")].map((b) => b.textContent);
-        form.addEventListener("submit", (e) => {
-          if (form.dataset.busy) { e.preventDefault(); return; }
-          form.dataset.busy = "1";
-          for (const b of form.querySelectorAll("button")) b.setAttribute("aria-disabled", "true");
-          if (e.submitter) {
-            e.submitter.textContent = "Checking the advice…";
-            form.still = window.herbtwinWait(e.submitter, [], {label: "Checking the advice"});
-          }
-        });
-        addEventListener("pageshow", () => {
-          if (form.still) form.still();
-          delete form.dataset.busy;
-          form.querySelectorAll("button").forEach((b, i) => { b.textContent = labels[i]; b.removeAttribute("aria-disabled"); });
-        });
-      })();
-      </script>{% endif %}
+      {# why an indoor answer is simpler, said once on every indoor answer (25 Oct, Kash, for
+         consistency with outdoor): no weather, so no twin run (pipeline weather_missing
+         "indoors"). No question here: the window is asked in Tell us more, under Where it is,
+         as outdoors asks which way it faces. Not advice, so the rater text skips it
+         (answer_text.SKIP_CLASSES) #}
+      {% if obs and obs.setting == "indoor" %}<p class="note indoor-light">Indoor herbs get a simpler answer: there's no weather to test choices against.</p>{% endif %}
       {# outlined, never the card's green press (Toloka study, 23 Oct: a worker gave "answer 3
          quick questions" as what the site told them to do); a retake stays green, as there
          the photo is the job #}
@@ -793,7 +767,7 @@
       {% set tray_in = none %}{% if a.tell_me and not on_band %}{% set tray_in = "where" if a.tell_me_key in ("location", "aspect") else ("changed" if a.tell_me_key in ("soil_feel", "soil_texture") else ("chat" if a.tell_me_key == "setting" else "top")) %}{% endif %}
       {% set tray %}<div class="tray warn"><p>{{ a.tell_me }}</p>{% if a.tell_me_key == "location" %}
         <label>Where is it?<input type="text" name="place" maxlength="80" placeholder="UK town or postcode"></label>{% endif %}</div>{% endset %}
-      {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?", "window": "Where is it?"} %}
+      {% set titles = {"soil_feel": "How does the soil feel 2 cm down?", "last_watered": "When did you last water it?", "changed": "Anything changed recently?"} %}
       {% set has_where = tray_in == "where" or "aspect" in asks or "window" in asks %}
       {% set has_changed = tray_in == "changed" or selects or "soil_texture" in asks %}
       {% if tray_in == "top" %}{{ tray }}{% endif %}
@@ -806,10 +780,12 @@
       {% if tray_in == "where" %}{{ tray }}{% endif %}
       {% if "aspect" in asks %}{{ spotq.compass_field(compass_first, rec.told.heading.direction if rec.told and rec.told.heading else none, unsure_picked=false) }}{% endif %}
       {#- indoors, which window and how close, in place of the compass (22 Oct, a gardener:
-          "how do you tell light levels indoors?"): the same quiet chips, none picked #}
-      {%- for q in ("window",) if q in asks %}<fieldset class="picks"><legend>{{ titles[q] }}</legend><div class="choices">
-        {% for v, text in choices[q].items() %}<label><input type="radio" name="{{ q }}" value="{{ v }}"{% if rec.told and rec.told[q] == v %} checked{% endif %}><span>{{ text }}</span></label>{% endfor %}
-      </div></fieldset>{% endfor %}</div>{% endif %}
+          "how do you tell light levels indoors?"), set out as the compass is: the question in
+          bold, then the picks; moved here from the card (25 Oct, Kash) #}
+      {%- if "window" in asks %}<div class="compass window-q"><p><strong>Which window is it by?</strong></p>
+      <fieldset class="picks"><legend>Pick the nearest</legend><div class="choices">
+        {% for v, text in choices.window.items() %}<label><input type="radio" name="window" value="{{ v }}"{% if rec.told and rec.told.window == v %} checked{% endif %}><span>{{ text }}</span></label>{% endfor %}
+      </div></fieldset></div>{% endif %}</div>{% endif %}
       {% if has_changed %}<div class="part changed{{ ' needed' if tray_in == 'changed' else '' }}"><h3>What's changed</h3>
       {% if tray_in == "changed" %}{{ tray }}{% endif %}
       {# each quick question as quiet answer chips, not a select (22 Oct, Kash, A3: like the

@@ -112,15 +112,18 @@ def _holds(rec: AnalysisRecord, indoor: bool, weather: bool) -> tuple[str, ...]:
 def weather_title(rec: AnalysisRecord, weather_failed: bool = False) -> FoldTitle:
     """The evidence fold: what we went on, led by what the weather holds for the plant, and
     how many things the fold lists (site walk 2, 22 Oct: "Weather · 3 sources" held no
-    weather, and counted sources, not its lines). Indoors there is no weather to look at."""
+    weather, and counted sources, not its lines). Indoors there is no weather to look at; the
+    title names what it went on, so the card's line is the page's one indoor statement (25 Oct,
+    Kash: "Indoors: no weather needed" went)."""
     obs = rec.observation
     indoor = obs is not None and obs.setting == "indoor"
     no_forecast = weather_failed or rec.environment is None
     said = None if indoor or no_forecast else _weather_finding(rec)
     holds = _holds(rec, indoor, said is not None)
     kind = f"{EVIDENCE} · {_plural(len(holds), 'thing')}" if holds else EVIDENCE
-    if indoor:
-        return FoldTitle(kind, "Indoors: no weather needed", holds=holds)
+    if indoor:  # what it went on, never "indoors" again: the card's one line says why
+        said_in = "Your photo and care facts" if "facts" in holds else "Your photo"
+        return FoldTitle(kind, said_in, holds=holds)
     if no_forecast:
         return FoldTitle(kind, "No forecast this time", holds=holds)
     if said is None:  # weather, but no day ahead of the photo to count

@@ -124,17 +124,22 @@ def test_the_green_band_holds_the_hero_form_and_twin(tmp_path):
     assert "var(--poster)" in style.CSS  # the condensed display face, band hero only
 
 
-def test_the_hero_names_the_twin_and_what_it_does(tmp_path):
-    # 18 Oct judge walk: the site never said what the twin is; 19 Oct home pass: one 27-word
-    # lead says it, and "Is your herb perturbed?" is the eyebrow above the H1
+LEAD = (
+    "<strong>One photo and one clear action!</strong><br>We model what the next 2 weeks could"
+    " look like with your herb's digital twin, trying each action we can test."
+)
+IDEAL = "Ideal for outdoor herbs, with helpful information for indoor ones too!"
+
+
+def test_the_hero_says_what_it_does_in_two_lines(tmp_path):
+    # 18 Oct judge walk: the site never said what it does; 25 Oct, Kash's hook: a bold line,
+    # then what the twin models, only the actions it can test (review: never "each possible"),
+    # and "Is your herb perturbed?" stays the eyebrow above the H1
     hero = _home(tmp_path).split('<section class="home-hero">', 1)[1].split("</section>", 1)[0]
     assert hero.index('<p class="home-eyebrow">Is your herb perturbed?</p>') < hero.index("<h1>")
-    lead = hero.split('<p class="lead">', 1)[1].split("</p>", 1)[0]
-    assert (
-        "<strong>One photo, one thing to do.</strong> Outdoors, each choice" in lead
-    )  # not indoors
-    assert "a small water-and-frost model, against the next 2 weeks of weather" in lead
-    assert len(re.sub(r"<[^>]+>", "", lead).split()) <= 27
+    assert "<h1>What does this plant need?</h1>" in hero
+    assert f'<p class="lead">{LEAD}</p>' in hero
+    assert hero.count("<p") == 2  # eyebrow and lead, nothing more
 
 
 def test_the_twin_compare_uses_a_real_labelled_slider(tmp_path):
@@ -606,3 +611,20 @@ def test_the_location_choices_say_what_this_browser_can_do_and_the_last_one_wins
         and 'said.textContent = "We\'ll use the town you typed.";' in js
     )
     assert 'place.value = "";' in js.split("getCurrentPosition", 1)[1]
+
+
+def test_the_photo_button_says_it_is_ideal_for_outdoor_herbs(tmp_path):
+    # 25 Oct, Kash: "make it clear to people what is the optimal way to use this ... if
+    # someone is using indoor, understand why they have less". One quiet line right under
+    # the Choose a photo pill, said once; never a box or a second press
+    for page in (_home(tmp_path), _spot_client(tmp_path)[0].get("/").text):
+        form = page.split('<form class="home-form"', 1)[1].split("</form>", 1)[0]
+        line = f'<p class="small muted home-ideal">{IDEAL}</p>'
+        after = form.split('<label class="home-photo">', 1)[1].split("</label>", 1)[1]
+        assert re.sub(r"\{#.*?#\}", "", after, flags=re.S).lstrip().startswith(line)
+        assert page.count(IDEAL) == 1
+        for gone in ("Best for herbs grown outside", "Built for outdoor herbs"):
+            assert gone not in page
+        assert page.count('class="primary') == 1
+    rule = re.search(r"\.home-band \.home-ideal \{([^}]*)\}", HOME_CSS).group(1)
+    assert not re.search(r"border|background|shadow", rule)

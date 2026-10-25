@@ -189,7 +189,7 @@ def test_refine_with_a_balcony_note_turns_an_indoor_read_outdoors(tmp_path):
     )
     assert _chips(first) == ["Indoors", "In a container"]
     assert _chips(page) == ["Outdoors (you said)", "In a container"]
-    assert "indoor-note" not in page
+    assert 'class="note indoor-light"' not in page  # no indoor line outdoors
 
 
 @respx.mock
@@ -233,7 +233,7 @@ def test_a_switch_to_indoors_holds_against_a_balcony_note(tmp_path):
         setting="indoor",
     )  # fmt: skip
     assert _chips(page)[0] == "Indoors (you said)"
-    assert "indoor-note" in page
+    assert 'class="note indoor-light"' in page  # the card's one indoor line (25 Oct)
 
 
 def _forms(page: str) -> list[str]:

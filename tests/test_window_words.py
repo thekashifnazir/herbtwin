@@ -54,7 +54,7 @@ def test_a_window_tap_sends_once_every_shown_question_is_answered(tmp_path):
     assert '<div class="actions send" data-picks>' in form
     # the script sends only when every chip group has a pick (A3), the window's included
     assert 'picks.every((f) => f.querySelector("input:checked"))' in page
-    assert '<fieldset class="picks"><legend>Where is it?</legend>' in form
+    assert '<fieldset class="picks"><legend>Pick the nearest</legend>' in form
 
 
 def test_a_window_tap_does_not_send_while_the_place_box_shares_the_section(tmp_path):
@@ -64,5 +64,5 @@ def test_a_window_tap_does_not_send_while_the_place_box_shares_the_section(tmp_p
     rec.answer.tell_me_key, rec.answer.tell_me = "location", "Add a town for the weather."
     page = _render(rec, asks=["window", "question"], spot_on=True)
     form = page.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
-    assert '<fieldset class="picks"><legend>Where is it?</legend>' in form
+    assert '<fieldset class="picks"><legend>Pick the nearest</legend>' in form
     assert "data-picks" not in form

@@ -27,7 +27,7 @@ LABELS = {
     "north_or_far": "North window, or a metre or more back",
     "no_window": "Away from any window",
 }
-FIELDSET = '<fieldset class="picks"><legend>Where is it?</legend>'
+FIELDSET = '<fieldset class="picks"><legend>Pick the nearest</legend>'
 
 
 def _fieldset(page: str) -> str:
@@ -108,7 +108,7 @@ def test_the_outdoor_card_still_asks_the_compass_and_not_the_window(tmp_path):
     c, _ = _spot_client(tmp_path, spot=True)
     first, _ = _answer(c)
     assert "data-compass" in first.text
-    assert 'name="window"' not in first.text and "Where is it?</legend>" not in first.text
+    assert 'name="window"' not in first.text and "Pick the nearest</legend>" not in first.text
 
 
 def test_each_window_is_said_back_in_plain_words():

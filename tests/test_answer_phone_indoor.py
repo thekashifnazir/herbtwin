@@ -1,7 +1,8 @@
 """The answer page's integration pass (23 Oct answer-page critique, 8, 10 and 11, Kash:
 "sounds great"): on a phone the chat sits right after This week and Compare right after the
 twin pictures; after a check again the "Changed… Was:" note is a small strip above the
-headline; indoors the light line under how sure carries the windows as chips, a tap each;
+headline; indoors one line under how sure (the windows, chips here until 25 Oct, are now
+asked in Tell us more);
 and with no This-week row, GBIF's records keep a card of their own."""
 
 import html
@@ -108,38 +109,29 @@ def _indoor(tmp_path):
     return rec
 
 
-def test_indoors_the_windows_are_chips_that_check_the_advice_again(tmp_path):
+def test_indoors_the_windows_are_picks_in_tell_us_more(tmp_path):
+    # 25 Oct, Kash: out of the card and into Tell us more, under Where it is, as outdoors
+    # asks which way it faces; the same `window` field of the one refine form
     rec = _indoor(tmp_path)
     rec.told = Told(setting="indoor", soil_feel="dry")
-    card = _render(rec).split('<section class="card main-action"', 1)[1].split("</section>", 1)[0]
-    form = card.split('<form class="note indoor-light"', 1)[1].split("</form>", 1)[0]
-    assert f' method="post" action="/answers/{rec.record_id}/refine">' in form
-    chips = re.findall(
-        r'<button type="submit" class="window-chip" name="window" value="([a-z_]+)">([^<]+)</button>',
-        form,
+    page = _render(rec, asks=["soil_feel", "last_watered", "window", "question"])
+    card = page.split('<section class="card main-action"', 1)[1].split("</section>", 1)[0]
+    assert "window-chip" not in page and 'name="window"' not in card
+    form = page.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
+    assert (
+        f'action="/answers/{rec.record_id}/refine">'
+        in page.split('<form class="refine"', 1)[1][:80]
     )
-    assert [v for v, _ in chips] == list(WINDOW)  # every window, in the questions' order
-    assert [html.unescape(t) for _, t in chips] == list(WINDOW_TEXT.values())
-    # a screen reader hears the question with the windows (review)
-    assert '<span class="window-chips" role="group" aria-labelledby="window-ask">' in form
-    # what else was told rides along, so a tap loses none of it
-    assert '<input type="hidden" name="soil_feel" value="dry">' in form
+    picks = re.findall(
+        r'<input type="radio" name="window" value="([a-z_]+)"><span>([^<]+)</span>', form
+    )
+    assert [v for v, _ in picks] == list(WINDOW)  # every window, in the questions' order
+    assert [html.unescape(t) for _, t in picks] == list(WINDOW_TEXT.values())
+    # what else was told rides along in the same form
     assert '<input type="hidden" name="setting" value="indoor">' in form
-    # after How sure, as before
-    assert card.index('<div class="sure">') < card.index('class="note indoor-light"')
-    # a chip is a quiet pick, never a second green press, and a thumb's tap
-    chip = {s: b for _, s, b in _rules(INDOOR.read_text("utf-8"))}[
-        ".answer-page .indoor-light .window-chip"
-    ]
-    assert "background: var(--muted)" in chip and "min-height: 44px" in chip  # the picks' look
-    assert "primary" not in chip and "lime" not in chip
-
-
-def test_the_chips_say_the_check_started_and_send_once(tmp_path):
-    page = _render(_indoor(tmp_path))
-    script = page.split('<form class="note indoor-light"', 1)[1].split("</script>", 1)[0]
-    assert 'e.submitter.textContent = "Checking the advice…"' in script
-    assert "if (form.dataset.busy) { e.preventDefault(); return; }" in script
+    # quiet picks, never a second green press: the answer chips' own look
+    assert '<fieldset class="picks"><legend>Pick the nearest</legend>' in form
+    assert "indoor-light .window-chip" not in INDOOR.read_text("utf-8")
 
 
 def test_the_rater_text_never_reads_the_chips(tmp_path):

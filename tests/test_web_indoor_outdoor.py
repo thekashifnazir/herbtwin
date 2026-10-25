@@ -2,6 +2,7 @@
 outdoor plants, and that an indoor answer is for room conditions."""
 
 import json
+import re
 
 import httpx
 import respx
@@ -13,7 +14,9 @@ from tests.test_web_answer_page import _unsure_record
 from tests.test_web_home import _home
 from tests.test_web_plant_face import _page
 
-NOTE = "Indoors: advice for room conditions, without the forecast test."
+# the band's note until 25 Oct; the card's one indoor line says why there is less now
+OLD_NOTE = "Indoors: advice for room conditions, without the forecast test."
+WHY = "Indoor herbs get a simpler answer: there's no weather to test choices against."
 
 
 def test_home_leaves_indoors_or_out_to_the_photo(tmp_path):
@@ -31,10 +34,13 @@ def test_an_indoor_answer_says_so_under_where_it_grows(tmp_path):
     rec.observation.setting = "indoor"
     rec.answer.compare = []
     page = _page(rec)
-    band = page.split('<p class="where">', 1)[1]
-    assert band.split("</p>", 1)[1].lstrip().startswith(f'<p class="note indoor-note">{NOTE}</p>')
-    # judge walk of #272: an empty Compare that opened to "Not compared" is hidden; the band
-    # above already says there is no forecast test indoors
+    # 25 Oct, Kash ("understand why they have less"): said once, in the card's indoor line
+    # (test_web_indoor_light_ask), not again on the band
+    assert "indoor-note" not in page and OLD_NOTE not in page
+    card = page.split('<section class="card main-action"', 1)[1].split("</section>", 1)[0]
+    assert page.count(WHY) == 1 and WHY in card
+    # judge walk of #272: an empty Compare that opened to "Not compared" is hidden; the card's
+    # indoor line already says there is no weather to test choices against
     assert "Compare all choices" not in page and "Not compared" not in page
 
 
@@ -66,7 +72,7 @@ def test_the_switch_reruns_the_advice_indoors_then_outdoors(tmp_path):
     fetched = weather.call_count
     r = c.post(f"/answers/{rid}/refine", data={"setting": "indoor"})
     assert r.status_code == 200
-    assert NOTE in r.text and "Compare all choices" not in r.text
+    assert WHY in r.text and "Compare all choices" not in r.text
     assert weather.call_count == fetched  # indoors: no forecast asked for
     switch = r.text.split('<form class="note setting-switch"', 1)[1].split("</form>", 1)[0]
     assert '<span class="chip setting">Indoors (you said)</span>' in r.text
@@ -75,8 +81,34 @@ def test_the_switch_reruns_the_advice_indoors_then_outdoors(tmp_path):
     refine = r.text.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
     assert '<input type="hidden" name="setting" value="indoor">' in refine
     r = c.post(f"/answers/{rid}/refine", data={"setting": "outdoor"})
-    assert r.status_code == 200 and NOTE not in r.text and "it is indoors" not in r.text
+    assert r.status_code == 200 and WHY not in r.text and "it is indoors" not in r.text
     assert "Outdoors (you said)" in r.text
+
+
+@respx.mock
+def test_the_window_picked_in_tell_us_more_checks_the_advice_again(tmp_path):
+    # 25 Oct, Kash: the window is asked in Tell us more, not the card; picked, it goes with
+    # the refine, shows as picked, and Make this surer stops counting it
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    c = _client(tmp_path, [json.dumps({**OBS, "setting": "indoor"})], [json.dumps(ADV)] * 9)
+    rid = _first(c)
+    page = c.get(f"/answers/{rid}").text
+    refine = page.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
+    assert "<strong>Which window is it by?</strong>" in refine and " checked" not in refine
+    assert WHY in page
+    r = c.post(f"/answers/{rid}/refine", data={"window": "south_close", "setting": "indoor"})
+    assert r.status_code == 200
+    refine = r.text.split('<form class="refine"', 1)[1].split("</form>", 1)[0]
+    assert '<input type="radio" name="window" value="south_close" checked>' in refine
+    assert r.text.count(WHY) == 1 and "leans on your photo" not in r.text
+    assert 0 < _quick(page) and _quick(r.text) < _quick(page)
+
+
+def _quick(page: str) -> int:
+    """The card's "Make this surer: answer N quick questions", 0 when it is not there."""
+    card = page.split('<section class="card main-action"', 1)[1].split("</section>", 1)[0]
+    m = re.search(r"Make this surer: answer (\d+) quick question", card)
+    return int(m.group(1)) if m else 0
 
 
 def test_told_says_where_it_grows_when_the_person_corrected_it():

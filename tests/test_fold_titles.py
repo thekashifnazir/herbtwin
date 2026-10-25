@@ -86,11 +86,17 @@ def test_no_weather_is_said_once_as_the_title(tmp_path):
     assert t.found and t.title == "No forecast this time" and t.peek == ""
 
 
-def test_indoors_the_fold_says_no_weather_is_needed(tmp_path):
+def test_indoors_the_fold_names_what_it_went_on(tmp_path):
+    # 25 Oct, Kash: the card's line is the one indoor statement, so the fold no longer says
+    # "Indoors: no weather needed"; it names what it went on, and still counts it
     rec = _twin(tmp_path)
     rec.observation.setting = "indoor"
+    rec.pack = PACK.model_copy(update={"sources": ["openplantdb:basil"]})
     t = weather_title(rec)
-    assert t.title == "Indoors: no weather needed" and t.kind.startswith("What we went on")
+    assert t.title == "Your photo and care facts" and t.kind.startswith("What we went on · ")
+    assert "indoor" not in (t.kind + t.title).lower()
+    rec.pack = PACK.model_copy(update={"sources": []})
+    assert weather_title(rec).title == "Your photo"
     assert "weather" not in t.holds and "season" not in t.holds
 
 

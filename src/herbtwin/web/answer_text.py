@@ -19,7 +19,7 @@ SKIP_TAGS = {"script", "style", "button", "audio", "figure", "svg", "template"}
 # lines again, sorted (21 Oct, gardener test)
 # extras: shop links; reported: GBIF's records and others' headlines, not our advice
 # "told-echo": what the person told us, said back, is not advice (22 Oct site walk)
-# "indoor-light": that indoor light isn't measured, and the ask for the window (22 Oct)
+# "indoor-light": why an indoor answer is simpler, no weather to test against (25 Oct)
 # "sure-open", "sure-body": How sure's disclosure, its cue and its explanation (23 Oct): what
 # the level means and why, said about our sureness, not advice
 # the twin front and centre (23 Oct): the card strip's head and its link ("strip-h",

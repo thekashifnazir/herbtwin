@@ -22,7 +22,8 @@ is in the submission form; it is not in this repository.
    **Use somewhere else** and type a UK town or postcode. A photo of your own that has its
    location says "Using your photo's location"; without one, type a town, or there is no
    weather and no test on the plant's twin. Press **What does my plant need?**
-   (the big green button).
+   (the big green button). A quiet line right under **Choose a photo** says "Ideal for
+   outdoor herbs, with helpful information for indoor ones too!"
 2. **Watch it work.** The page names the step it is on at the top and lists each step as it happens ("Reading the photo",
    "Found …", "Looking up how … likes to grow", "Checking the weather where you are",
    "Thinking about what it needs"), with what comes next under the step it is on and a rough
@@ -70,8 +71,9 @@ is in the submission form; it is not in this repository.
      this surer** button jumps to the questions that would help, or to the box to tell
      us more when no one fact would (a missing place is asked once, on the band, not
      again here; on a phone, the least sure answers put them under the card). Indoors, a
-     quiet line under it asks "We can't measure light indoors from a photo. Which window is
-     it by?", with the four windows as chips: one tap checks the advice again. Right under
+     quiet line under it says why there is less: "Indoor herbs get a simpler answer: there's no weather to test choices against."
+     Which window it's by is asked in Tell us more, under Where it is, as outdoors asks which
+     way it faces, and Make this surer counts it until it's told. Right under
      the card, one quiet line headed "Where this came from" gives "Sources: …", "Read more
      on …" when a trusted page was found, and "Decided by NVIDIA Nemotron 3 Super on Nebius
      Token Factory". A
@@ -241,8 +243,7 @@ answer appears in **My plants**.
   model and no forecast test. Its light comes from a window question ("South window,
   close", "East or west window, close", "North window, or a metre or more back", "Away
   from any window") and low-light signs in the photo (stretched, pale or leaning stems).
-  Under "How sure we are" the answer says "We can't measure light indoors from a photo.
-  Which window is it by?", with the four windows as chips; once told, How sure names the window ("by a south-facing
+  Under "How sure we are" the answer says "Indoor herbs get a simpler answer: there's no weather to test choices against." The window is asked in Tell us more ("Which window is it by?"); once told, How sure names the window ("by a south-facing
   window, close to it (you told us)") and is not raised by it, as nothing was measured. A
   gardener friend's question started this.
 - **A photo is not a soil test.** Soil moisture is guessed from the surface; the refine

@@ -201,7 +201,9 @@ def test_the_notes_that_carry_news_still_show_on_the_band(tmp_path):
     elsewhere = _band(_render(rec, keep_elsewhere="Kept only in the other browser."))
     assert '<p class="note">Kept only in the other browser.</p>' in elsewhere
     rec.observation.setting = "indoor"
-    assert 'class="note indoor-note"' in _band(_render(rec))
+    # indoors is said once, in the card's indoor line, not on the band (25 Oct, Kash)
+    assert "indoor-note" not in _band(_render(rec))
+    assert 'class="note indoor-light"' in _render(rec)
     (tmp_path / "x").mkdir()
     plan = _full_plan(tmp_path / "x")
     plan.observation.setting, plan.location, plan.environment = "outdoor", LONDON, None

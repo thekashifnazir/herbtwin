@@ -15,7 +15,7 @@
 <section class="home-hero">
   <p class="home-eyebrow">Is your herb perturbed?</p>
   <h1>What does this plant need?</h1>
-  <p class="lead"><strong>One photo, one thing to do.</strong> Outdoors, each choice is tried first on your plant's <strong>twin</strong>, a small water-and-frost model, against the next 2 weeks of weather.</p>
+  <p class="lead"><strong>One photo and one clear action!</strong><br>We model what the next 2 weeks could look like with your herb's digital twin, trying each action we can test.</p>
 </section>
 
 <form class="home-form" method="post" action="/analyse" enctype="multipart/form-data">
@@ -28,6 +28,10 @@
         <span class="button home-chosen-again" aria-hidden="true">Choose a different photo</span></span>
     </span>
   </label>
+  {# the best way to use it, said once, right under the photo button (25 Oct, Kash: "make it
+     clear to people what is the optimal way to use this ... if someone is using indoor,
+     understand why they have less") #}
+  <p class="small muted home-ideal">Ideal for outdoor herbs, with helpful information for indoor ones too!</p>
   {# more photos of the same plant (21 Oct, a gardener tester: "if you want a more detailed
      answer, give me more photos"): up to two closer looks, read with the main photo in its
      one call. With script it waits for the first photo and lists each one picked, with a

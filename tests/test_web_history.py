@@ -333,7 +333,7 @@ def test_signed_in_switch_keeps_the_setting_and_its_evidence_after_the_cache_for
 
     c.app.state.answers._entries.clear()
     page = c.get(f"/answers/{stored.id}").text  # rebuilt from the store, not the cache
-    assert "Indoors (you said)" in page and 'class="note indoor-note"' in page
+    assert "Indoors (you said)" in page and 'class="note indoor-light"' in page
 
     c.app.state.answers._entries.clear()
     r = c.post(f"/answers/{stored.id}/refine", data={"setting": "outdoor"})
