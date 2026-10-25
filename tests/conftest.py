@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import pytest
@@ -90,3 +91,53 @@ def _no_real_open_meteo(request, monkeypatch):
     yield
     if seen:
         pytest.fail(f"offline test called the real Open-Meteo {len(seen)}x: {seen[0]}")
+
+
+ANSWER_METHODS = (
+    "put",
+    "get",
+    "get_for",
+    "claim",
+    "unclaim",
+    "set_latest",
+    "set_reading",
+    "add_chat",
+)
+
+
+def _on_the_loop() -> bool:
+    import asyncio
+
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return False
+    return True
+
+
+@pytest.fixture(autouse=True)
+def _answers_off_the_loop(monkeypatch):
+    """The answer store is never called on the event loop's thread: live it is Supabase, and
+    a blocking call there stalls every request on the one instance (25 Oct). Every test that
+    drives the app checks it, on both stores; a call made there fails the test."""
+    from herbtwin.answer_cache import AnswerCache, SupabaseAnswerCache
+
+    seen: list[str] = []
+
+    def _watch(cls, name):
+        real = getattr(cls, name)
+
+        def call(self, *a, **k):
+            if _on_the_loop():
+                f = sys._getframe(1)
+                seen.append(f"{cls.__name__}.{name} from {f.f_code.co_name}:{f.f_lineno}")
+            return real(self, *a, **k)
+
+        return call
+
+    for cls in (AnswerCache, SupabaseAnswerCache):
+        for name in ANSWER_METHODS:
+            monkeypatch.setattr(cls, name, _watch(cls, name))
+    yield
+    if seen:
+        pytest.fail(f"answer store called on the event loop {len(seen)}x: {sorted(set(seen))}")

@@ -27,7 +27,8 @@ def _card(page: str) -> str:
 def _week(page: str) -> str:
     # up to the first thing after the panel (review: a Jinja comment never reaches the page)
     after = r'<section class="indoor-now"|<details class="by-part"|<h2 id="next-step"'
-    return re.split(after, page.split('<div class="this-week">', 1)[1], maxsplit=1)[0]
+    panel = page.split('<div class="this-week"', 1)[1].split(">", 1)[1]
+    return re.split(after, panel, maxsplit=1)[0]
 
 
 # ---------- 1. the band's switch ----------

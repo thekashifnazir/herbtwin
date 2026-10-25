@@ -227,6 +227,10 @@ class TapStore:
         self._lock = threading.Lock()
 
     def _keep(self, tap_id: str, wait: TapWait) -> None:  # under the lock
+        # a photo past its hour (privacy.html: "can no longer be used after an hour") leaves
+        # memory with the next one kept, not only when newer ones push it out
+        for old in [k for k, w in self._waits.items() if self._fresh(w) is None]:
+            del self._waits[old]
         self._waits[tap_id] = wait
         while len(self._waits) > 1 and (
             len(self._waits) > self._size

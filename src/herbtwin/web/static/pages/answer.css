@@ -16,7 +16,9 @@
 .answer-page .main-action { margin: 0 0 20px; padding: 0 20px 20px; overflow: hidden; }
 .answer-page .main-action .head { margin: 0 -20px 16px; padding: 16px 20px 4px; background: var(--soft); }
 .answer-page .main-action .head .tag { background: var(--card); color: var(--primary); }
-.answer-page .main-action h2 { margin: 8px 0 12px; font-size: clamp(30px, 7.5vw, 38px); }
+/* the action is the page's biggest words (23 Oct Toloka study: asked for the page's big
+   heading, 5 of 11 copied the plant's name, not what to do); the name steps down below */
+.answer-page .main-action h2 { margin: 8px 0 12px; font-size: clamp(32px, 8.5vw, 46px); }
 .answer-page .main-action .because { font-size: 19px; line-height: 1.5; }
 /* after Check the advice again: it ran, and this is what it did; the old headline struck */
 .answer-page .head .checked { margin: 0 0 6px; color: var(--primary); font-weight: 700; }
@@ -219,6 +221,9 @@
    The plant's name, where and when sit on the green band; the main card pulls up over its
    edge. Every card in block 1 gets the ink edge and hard shadow, keeping its own colour. */
 .answer-page .page-band h1 { max-width: 22ch; }
+/* over an answer the name is a label for it, a step under the action's size; a message page
+   (no plant found, could not read) keeps the band's full size */
+.answer-page .page-band:has(+ .answer-cols) h1 { font-size: clamp(1.6rem, 4.6vw, 2.6rem); }
 /* where it grows, the date and the place: a row of chips in the band's white on a lighter
    green, 6:1 or better in both schemes (21 Oct, Kash: the line was "hard to see"). They wrap
    on a phone, never scroll */
@@ -537,6 +542,10 @@
 /* ---------- how sure, what would help, what to ask (19 Oct, Kash) ---------- */
 /* the questions that make it surer, one tap away, under how sure we are */
 .answer-page .make-surer { display: flex; flex-wrap: wrap; gap: 8px 12px; margin: 12px 0 0; }
+/* the asks are outlined in green: the headline is the instruction, this is an offer */
+.answer-page .make-surer .button.quiet { background: var(--card); color: var(--primary);
+  border: 1.5px solid var(--primary); font-weight: 700; }
+.answer-page .make-surer .button.quiet:hover { background: var(--soft); }
 /* a rough read: amber, check first, above the headline */
 .answer-page .head .rough-read { margin: 0 0 6px; color: var(--warn); font-weight: 700; }
 /* the care facts' page Tavily found, said in the plan */
@@ -600,6 +609,8 @@
 .answer-page :is(.indoor-now, .outdoor-now) ul { margin: 4px 0 8px; padding-left: 1.2em; }
 .answer-page :is(.indoor-now, .outdoor-now) li + li { margin-top: 4px; }
 .answer-page :is(.indoor-now, .outdoor-now) > :last-child { margin-bottom: 0; }
+/* beside the plan (24 Oct): a gap under the questions' card above it */
+.answer-page .side > :is(.indoor-now, .outdoor-now) { margin-top: 20px; }
 
 /* "Add photos for a surer answer" in What next (21 Oct, Kash on rev 00049): a quiet box on the
    card, the file picker as a pill, one green send */

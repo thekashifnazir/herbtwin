@@ -42,6 +42,7 @@ from herbtwin.schemas import LAST_WATERED_TEXT, SOIL_FEEL_TEXT, BackupRead, abou
 from herbtwin.stages.advise import PANEL_TEMPERATURES
 from herbtwin.stages.problem import signs as problem_signs
 from herbtwin.web.style import CSS, MARK
+from herbtwin.web.waiting_words import WAIT_JS
 
 log = logging.getLogger(__name__)
 
@@ -83,8 +84,8 @@ WAITED_JS = (
     "p.hidden=true;return}"
     "const st=document.getElementById('stalled');"
     f"if(st&&Date.now()-(window.herbtwinAt||t)>{STALL_S}e3)st.hidden=false;"
-    # no running count of seconds (21 Oct, Kash): only a slow step is worth a line, timed
-    # from when that step began, so a new step clears it
+    # only a slow step is worth this line, timed from when that step began, so a new step
+    # clears it; the running count of seconds is the tick line's (TICK_JS, 24 Oct)
     f"if(Date.now()-(window.herbtwinAt||t)<{SLOW_S}e3){{p.hidden=true;return}}p.hidden=false;"
     "const li=[...document.querySelectorAll('.progress-steps ol>li')].pop(),"
     "k=li?(li.classList.contains('advisor')?'advisor':((li.firstChild||{}).textContent||'')):'';"
@@ -177,6 +178,15 @@ WAIT_NOW = (
 WAIT_NEXT = f'<p class="wait-next" id="wait-next">{PHOTO_NEXT}</p>{NEXT_JS}'
 
 
+# the moving line under the lead, from when the page opened until the answer, or an
+# error, is on it
+TICK_JS = (
+    f"<script>{WAIT_JS}(()=>{{const stop=herbtwinWait(document.getElementById('wait-tick'));"
+    "const i=setInterval(()=>{if(document.querySelector('#next,.err')){clearInterval(i);stop();"
+    "document.getElementById('wait-tick').hidden=true}},1000)})()</script>"
+)
+
+
 def page_head(stalled: str, photo: bool = True, nexts: bool = True) -> str:
     """The first chunk: the page's head, the photo you sent, what to do if it stalls, and
     padding. `nexts`: what comes next under the step now, for a plant read."""
@@ -195,6 +205,9 @@ def page_head(stalled: str, photo: bool = True, nexts: bool = True) -> str:
         '<div class="page-band">'
         "<h1>Working on your photo</h1>\n"
         '<p class="lead">Usually under a minute. Keep this page open.</p>\n'
+        # the plant words and seconds while it works, as every other wait (24 Oct, Kash);
+        # the steps below and #wait-said stay what a screen reader hears
+        f'<p class="wait-tick" id="wait-tick" aria-hidden="true"></p>{TICK_JS}'
         f'<p class="waited" id="waited" hidden></p>{WAITED_JS}'
         '<p class="vh" id="wait-said" role="status"></p></div>\n'
         # the steps, and beside them (below on a phone) our own data as it arrives

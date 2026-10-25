@@ -16,16 +16,11 @@
 <div class="page-band">
 <p class="about-kicker">About</p>
 <h1>herbtwin, and why I built it</h1>
-<p class="lead">This autumn my oregano died and my purple sage nearly did, and I couldn't tell what was normal for October. Most plant apps name the plant and list generic care; they rarely say "leave it", or how sure they are. herbtwin does.</p>
+<p class="lead">This autumn my oregano died and my purple sage nearly did, and I couldn't tell what was normal for October. Most plant apps name the plant and list generic care; they rarely say "leave it", or how sure they are. herbtwin does. It works best for herbs grown outside.</p>
 <p class="actions"><a class="button primary" href="/">Check a plant</a></p>
 </div>
 
 <div class="about">
-<section class="about-what" aria-labelledby="what">{# 23 Oct (Kash): just the short lead here; the cost moved under How it's built #}
-  <h2 id="what">What it does</h2>
-  <p class="about-lead">Signed in, you get an email when it's time to look again, and your next photo asks "Did you do it?".{% if spot_on %} <strong>What can I grow here?</strong> takes a photo of a bed and lists what to sow or plant this month.{% endif %}</p>
-</section>
-
 <section id="made-with" aria-labelledby="built">{# the answer page's "What it's made with" lands here #}
   <h2 id="built">How it's built</h2>
   {# round 3 (22 Oct, Kash's notes): the chips take the flow's colours, so they are its key
@@ -35,6 +30,20 @@
     <li>Python 3.12</li><li>FastAPI</li><li>Cloud Run</li><li>Cloudflare Worker</li><li>Nebius Token Factory</li><li>Nebius AI Cloud</li><li class="nvidia">NVIDIA Nemotron 3</li><li class="tavily">Tavily</li><li class="weather">Open-Meteo</li><li class="gbif">GBIF</li><li>Supabase</li>
   </ul>
   <p class="about-nebius">Every AI model runs on Nebius Token Factory{% if voice_on %}, except the plant's voice (ElevenLabs){% endif %}. Reminder emails come from a small daily job on Nebius AI Cloud.</p>
+  {#- 25 Oct (Kash: "make sure we are super clear about how we have used" each service): one
+      panel of ruled rows, the name, what it did here, and its proof, every number as the
+      reports say it (Token Factory: the cost card below; Tavily: data/eval/reports/README.md;
+      LangSmith: #146's upload; Tendem and Toloka: their reports) #}
+  <div class="about-services ink">
+    <h3 id="services">What each service did</h3>
+    <ul class="svc-rows">
+      <li class="svc-row tf"><p class="svc-name">Nebius Token Factory</p><p class="svc-what">Runs the AI models: GLM-5.3 Flash reads the photo, NVIDIA Nemotron 3 Super decides (asked 3 times), Nemotron 3 Nano chats, Ultra checks a trusted page.</p><p class="svc-proof">One example answer: <strong>$0.0040</strong> of model time</p></li>
+      <li class="svc-row tavily"><p class="svc-name">Tavily</p><p class="svc-what">Searches trusted gardening pages for the chat's sources, the trusted-page check, and shops and gardeners near you.</p><p class="svc-proof">Chat answers right: <strong>25 of 30</strong> with it, 15 without</p></li>
+      <li class="svc-row"><p class="svc-name">LangSmith</p><p class="svc-what">Traces each model call on the live site (the text sent and returned, with photos, email addresses and locations removed; time, tokens, cost), and holds our saved evals.</p><p class="svc-proof"><strong>12 experiments</strong>, 4,052 scored runs</p></li>
+      <li class="svc-row"><p class="svc-name">Tendem</p><p class="svc-what">Found a professional gardener to grade three answers.</p><p class="svc-proof">Every first action <strong>Acceptable</strong>; 3 of 5 overall (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>)</p></li>
+      <li class="svc-row"><p class="svc-name">Toloka</p><p class="svc-what">Ran a first-time-user study with 11 people, after a photo-reading pilot.</p><p class="svc-proof">All got an answer; <strong>6 of 11</strong> could say what to do (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-23-toloka-site-study.md" rel="noopener noreferrer">the study</a>)</p></li>
+    </ul>
+  </div>
   <figure class="flow-panel">
     <ol class="flow-built" data-reveal="stagger" role="list" aria-label="How one answer is made, step by step">
       <li><div class="node">
@@ -53,19 +62,20 @@
       <li class="turn"><div class="node weather">
         <strong>Weather</strong><em>Open-Meteo</em>
         <span>The next 2 weeks</span></div>
-        {# round 4 (22 Oct): the green path carries what the twin takes from each forecast day #}
-        <p class="flow-feed"><span><b>Day by day:</b> night lows, rain and drying</span></p></li>
+        {# the green path from the weather into the twin; 23 Oct, Kash: its "Day by day" label
+           meant nothing to a reader, so the line carries no words #}
+        <p class="flow-feed" aria-hidden="true"></p></li>
       <li class="acc"><div class="node twin">
         <strong>The plant's twin</strong>
         <span>A water-and-frost model: 6 choices × 14 days, each one tried</span></div>
         <div class="node later"><strong>Not built yet</strong><span>A twin indoors</span></div></li>
       <li class="acc"><div class="node advisors">
         <strong>3 × NVIDIA Nemotron 3 Super</strong>
-        <span>Each decides on its own; how far they agree sets how sure we are</span>
+        <span>Each decides on its own; how far they agree feeds into how sure we are</span>
         <b>e.g. 6.0 s · $0.0024</b></div></li>
       <li><div class="node rules">
         <strong>Our rules</strong>
-        <span>No cure: remove it. Advisors say water, but nothing looks dry and the twin sees no dry day ahead: leave it.</span></div></li>
+        <span>No cure: remove it. Nemotron says water, but nothing looks dry and the twin sees no dry day ahead: leave it.</span></div></li>
       <li><div class="node answer ink">
         {{ plant_face("content") }}<strong>The answer</strong>
         <span>One thing to do, and how sure we are</span>
@@ -85,7 +95,7 @@
     <ul class="flow-key" aria-label="What the colours mean">
       <li><i class="sw path"></i>the weather's path</li><li><i class="sw plain"></i>you, our notes, the answer</li><li><i class="sw later"></i>not built yet</li>
     </ul>
-    <figcaption>Each box names its model; the chips above give the sources' colours. <strong>Your weather is tried on the plant's twin</strong> before three advisors decide; <strong>our rules have the last word</strong>.</figcaption>
+    <figcaption>Each box names its model; the chips above give the sources' colours. <strong>Your weather is tried on the plant's twin</strong> before three asks of Nemotron 3 Super decide; <strong>our rules have the last word</strong>.</figcaption>
   </figure>
   <h3>A few decisions I'd call out</h3>
   {# 23 Oct (Kash: the bullets "don't do them justice", but no more boxes): three columns of
@@ -203,8 +213,8 @@
     <blockquote class="about-card quote ink"><p><strong>An expert's review.</strong> A professional gardener hired through <strong>Tendem</strong> graded 3 photos: every first action Acceptable, 3 of 5 overall.<br>Four rules changed, and "7 in 10" went once we measured 51% (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-19-expert-review.md" rel="noopener noreferrer">the review</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/docs/reference/evaluation-methods.md" rel="noopener noreferrer">how we measured</a>).</p></blockquote>
     <blockquote class="about-card quote ink"><p><strong>A real user.</strong> A former tree surgeon asked where to get what the answer tells you to use.<br>That became the shops card under the answer.</p></blockquote>
   </div>
-  <p class="about-people-pilot"><strong>A small Toloka pilot</strong> to check our photo reading against people: beginners caught the named problem in 4 of 5 photos, but seemed to over-call with a healthy photo beside it (3 of 5). A tiny sample: 5 photos, 3 raters each.</p>
-  <p class="about-people-next"><strong>Next:</strong> a first-time-user study on <strong>Toloka</strong>, not run yet (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>). <strong>Tendem</strong> and <strong>Toloka</strong> are paid from Nebius AI Builder programme credits.</p>
+  <p class="about-people-pilot"><strong>A small Toloka pilot</strong> to check our photo reading against people: beginners caught the named problem in 4 of 5 photos, but seemed to over-call with a healthy photo beside it (3 of 5). A tiny sample: 5 photos, 15 raters.</p>
+  <p class="about-people-next"><strong>A first-time-user study on Toloka</strong> (23 Oct, 11 people): all got an answer, but only 6 could say what to do, so the answer page now leads with the action (<a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/prereg/2026-10-22-toloka-site-study.md" rel="noopener noreferrer">the plan</a>, <a href="https://github.com/thekashifnazir/herbtwin/blob/main/data/eval/reports/2026-10-23-toloka-site-study.md" rel="noopener noreferrer">the results</a>). <strong>Tendem</strong> and <strong>Toloka</strong> are paid from Nebius AI Builder programme credits.</p>
   {# 23 Oct (Kash): accessibility is one of the checks, so it closes How I know it works #}
   <h3 id="access">Accessibility</h3>
   <div class="about-card about-access">
@@ -225,7 +235,7 @@
   <ul class="lesson-rows ink">
     <li><strong>More advisors didn't mean better advice.</strong>
       <span>Specialist advisors (season, soil and water, pests and health) failed all three rules on 774 expert questions.</span>
-      <em>Now: three plain advisors, asked the same question.</em></li>
+      <em>Now: one model, Nemotron 3 Super, asked the same question three times.</em></li>
     <li><strong>A quote is only worth showing if it's right.</strong>
       <span>The trusted-page check failed rounds 1 to 4 and 7 (4 false agrees in 205). Round 8 shipped: 3 false agrees in 418, under our 3% bar.</span>
       <em>Now: it stays quiet unless sure, finding 10 of the 26 quotes that should show (target 50%).</em></li>
@@ -251,9 +261,11 @@
     <li><strong>Naming more problems, starting with slugs.</strong>
       <span>Why: slugs are a common herb pest, and the photo check can't name them yet.</span></li>
     <li><strong>Tests with real people.</strong>
-      <span>Why: no screen-reader test yet, and the beginners' study hasn't run (see Checked by people).</span></li>
+      <span>Why: no screen-reader test yet, and the beginners' study ran before the answer page changed (see Checked by people).</span></li>
     <li><strong>More than one server.</strong>
       <span>Why: one server and a daily cap today.</span></li>
+    {% if not spot_on %}{# 23 Oct, Kash: switched off for a focused experience #}<li><strong>Bringing back "What can I grow here?"</strong>
+      <span>Why: it was built and tested (it matched the RHS's monthly picks 0.90 of the time), but it's switched off until it's as good as the plant check.</span></li>{% endif %}
   </ol>
 </section>
 
@@ -267,7 +279,7 @@
       <p class="who-name">Kashif Nazir</p>
       <ul>
         <li>Senior Technical Architect, London</li>
-        <li>Solo build for the NVIDIA × Nebius hackathon, at the London event</li>
+        <li>Solo build for the NVIDIA × Nebius hackathon. I attended its London event.</li>
         <li>First commit 2 Oct 2026</li>
       </ul>
       <nav class="who-links" aria-label="Kashif Nazir's site and profiles">
@@ -291,7 +303,7 @@
   </ul>
   {# 23 Oct, Kash: "we are talking about all the commits and PRs but those are in our private
      repo, not the curated public one" #}
-  <p class="who-strip-note">Pull requests in the private working repo; the public repo is a curated copy of it.</p>
+  <p class="who-strip-note"><strong>Pull requests in the private working repo; the public repo is a curated copy of it.</strong></p>
   <div class="about-close about-card ink">
     <p><strong>All of it is public.</strong> The code and the eval reports.</p>
     <p class="actions"><a class="button" href="https://github.com/thekashifnazir/herbtwin" rel="noopener noreferrer">herbtwin on GitHub</a></p>

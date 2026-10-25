@@ -6,21 +6,17 @@
    Lines, bars and dots only: never a fade, and the words beside them never wait. */
 
 /* How it's built, on a wide screen: when the twin's row arrives, the green path draws itself
-   from the weather down (its label riding down with it), along the gap between the rows, and
+   from the weather down, along the gap between the rows, and
    into the twin, about 0.75 s. On a phone there is no path, only the steps rising */
 @media screen and (prefers-reduced-motion: no-preference) and (min-width: 960px) {
   html.reveal-on .about-page .flow-built > li.turn:has(+ li:not(.is-in)) > .flow-feed::before,
   html.reveal-on .about-page .flow-built > li.turn:has(+ li:not(.is-in)) > .flow-feed::after,
   html.reveal-on .about-page .flow-built > .turn + li:not(.is-in)::before { transform: scaleY(0); }
-  html.reveal-on .about-page .flow-built > li.turn:has(+ li:not(.is-in)) > .flow-feed > span {
-    transform: translateY(-12px); }
   html.reveal-on .about-page .flow-built > .turn + li:not(.is-in)::after { transform: scaleX(0); }
 }
 @media (prefers-reduced-motion: no-preference) and (min-width: 960px) {
   html.reveal-on .about-page .flow-built > li.turn:has(+ li.is-arriving) > .flow-feed::before {
     transform-origin: top; animation: reveal-drop .2s linear 0ms backwards; }
-  html.reveal-on .about-page .flow-built > li.turn:has(+ li.is-arriving) > .flow-feed > span {
-    animation: reveal-ride .3s cubic-bezier(0.2,0,0,1) 100ms backwards; }
   html.reveal-on .about-page .flow-built > li.turn:has(+ li.is-arriving) > .flow-feed::after {
     transform-origin: top; animation: reveal-drop .12s linear 200ms backwards; }
   /* the run goes from the weather's end to the twin's, so it grows leftward */
@@ -31,7 +27,6 @@
 }
 @keyframes reveal-drop { from { transform: scaleY(0); } }
 @keyframes reveal-run { from { transform: scaleX(0); } }
-@keyframes reveal-ride { from { transform: translateY(-12px); } }
 
 /* How I know it works: each card's bars grow from the left to their value as they arrive,
    one after another. The value is written beside each bar, so nothing is read off a bar

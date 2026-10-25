@@ -1,7 +1,7 @@
 """The chat under an answer, signed in or out (spec section 6). Loads the answer as it
 stands (after any refine), the plant's other visits and the chat so far; runs one turn;
 keeps both messages. Signed in: the person's store (the cache when the store has no row);
-signed out: the 1-hour cache. Keeping the chat never blocks the reply."""
+signed out: the answer cache (24 hours on the live site). Keeping the chat never blocks the reply."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from herbtwin.answer_cache import AnswerCache
+from herbtwin.answer_cache import Answers
 from herbtwin.chat import MAX_MESSAGES, ChatReply, OnStep, reply, shown
 from herbtwin.history import ChatMessage, HistoryError, StoredAnswer
 from herbtwin.pipeline import Deps, History, history_for, reading_from
@@ -69,7 +69,7 @@ def _stored(person: Person | None, answer_id: str) -> StoredAnswer | None:
         return None
 
 
-def answer_for(person: Person | None, answer_id: str, cache: AnswerCache) -> AnalysisRecord:
+def answer_for(person: Person | None, answer_id: str, cache: Answers) -> AnalysisRecord:
     """The answer as it stands, for its owner only. Raises Expired when it is gone."""
     stored = _stored(person, answer_id)
     if stored is not None:
@@ -80,14 +80,14 @@ def answer_for(person: Person | None, answer_id: str, cache: AnswerCache) -> Ana
     return entry.latest
 
 
-def chat_so_far(person: Person | None, answer_id: str, cache: AnswerCache) -> list[ChatMessage]:
+def chat_so_far(person: Person | None, answer_id: str, cache: Answers) -> list[ChatMessage]:
     """The chat to show under a page, best effort: empty when it cannot be read. A reply
     kept before a text tool call was caught shows as the lookup that failed (chat.shown)."""
     return chat_of(person, _stored(person, answer_id), answer_id, cache)
 
 
 def chat_of(
-    person: Person | None, stored: StoredAnswer | None, answer_id: str, cache: AnswerCache
+    person: Person | None, stored: StoredAnswer | None, answer_id: str, cache: Answers
 ) -> list[ChatMessage]:
     """chat_so_far for an answer already read (None: not stored, or it could not be read:
     the cache's chat then)."""
@@ -112,7 +112,7 @@ def chat_turn(
     person: Person | None,
     answer_id: str,
     message: str,
-    cache: AnswerCache,
+    cache: Answers,
     before_model: Callable[[], None] = _nothing,
     on_step: OnStep | None = None,
 ) -> Turn:

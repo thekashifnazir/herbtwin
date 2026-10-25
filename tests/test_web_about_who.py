@@ -32,7 +32,7 @@ def test_who_made_it_leads_with_the_pull_quote_and_ends_on_the_public_card(tmp_p
     for said in (
         '<p class="who-name">Kashif Nazir</p>',
         "Senior Technical Architect, London",
-        "Solo build for the NVIDIA × Nebius hackathon, at the London event",
+        "Solo build for the NVIDIA × Nebius hackathon. I attended its London event.",
         "First commit 2 Oct 2026",
     ):
         assert said in facts, said
@@ -97,9 +97,16 @@ def test_the_strip_says_the_pull_requests_are_in_the_private_repo(tmp_path):
     who = _who(tmp_path)
     after = who.split('<ul class="who-strip"', 1)[1].split("</ul>", 1)[1].lstrip()
     assert after.startswith(
-        '<p class="who-strip-note">Pull requests in the private working repo; the public repo is'
-        " a curated copy of it.</p>"
+        '<p class="who-strip-note"><strong>Pull requests in the private working repo; the public'
+        " repo is a curated copy of it.</strong></p>"
     )
     card = who.split('<div class="about-close about-card ink">', 1)[1]
     assert "The code and the eval reports." in card
     assert "Devpost story" not in card
+
+
+def test_the_private_repo_note_is_bold_in_the_body_colour():
+    # 23 Oct, Kash: bold and in the normal text colour, not muted
+    css = style.CSS
+    rule = css.split("p.who-strip-note {", 1)[1].split("}", 1)[0]
+    assert "color:" not in rule

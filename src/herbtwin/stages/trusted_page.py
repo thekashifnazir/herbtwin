@@ -455,6 +455,34 @@ def read_more(rec: AnalysisRecord) -> str | None:
     return next((u for u in (page.url, *page.pages) if page_names(u, *names)), None)
 
 
+GUIDES = 2
+
+
+def guide_pages(rec: AnalysisRecord) -> list[str]:
+    """Pages for "How gardeners deal with it" when an answer has nothing to buy, so "Where to
+    get it" never ends empty-handed (24 Oct, Kash: judges look for Tavily there): the page the
+    trusted check read first when it is quoted as backing this answer, then each page whose
+    address names the plant or the problem (as read_more), one a site, at most GUIDES. None on
+    a rough read. Addresses only, never a title."""
+    page = rec.trusted
+    if page is None or (rec.answer is not None and rec.answer.photo_issue):
+        return []
+    names = [rec.problem.name if rec.problem else None]
+    if rec.pack is not None:
+        names += [rec.pack.species, *rec.pack.common_name.split("/")]
+    quoted_first = [page.url] if page.quote else []
+    named = [u for u in (page.url, *page.pages) if page_names(u, *names)]
+
+    def site(url: str) -> str:
+        return (urlsplit(url).hostname or "").removeprefix("www.")
+
+    out: list[str] = []
+    for url in (*quoted_first, *named):
+        if url.startswith("https://") and site(url) not in {site(u) for u in out}:
+            out.append(url)
+    return out[:GUIDES]
+
+
 def gated(state: PlantState) -> str:
     """The exact plant state the last gate judged, as a key: its yes holds for that state
     alone, so a refine, a shown action that differs from the advisors', or anything else

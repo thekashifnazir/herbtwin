@@ -4,9 +4,10 @@ expect it to work").
 Only the browser that got the answer can claim it. The answer's id is in its URL and in
 any shared link, so it proves nothing. Instead, a signed-out upload gives the browser a
 random key in an httponly cookie, signed with the existing reminder secret (no new
-secret), and the answer cache keeps that key beside the answer. A claim needs the cookie's
-key to match the answer's, the answer to be in the cache (an hour), and no owner yet; the
-claim sets the owner atomically (AnswerCache.claim), so it happens once. Signing in only
+secret), and the answer cache keeps that key's SHA-256 beside the answer. A claim needs the
+cookie's key to hash to the answer's, the answer to be in the cache (24 hours on the live
+site), and no owner yet; the claim sets the owner atomically (AnswerCache.claim, or the
+claim_answer function in Supabase), so it happens once. Signing in only
 brings the person back to the answer: it is kept by an explicit, same-site "Keep this in My
 plants (signed in as ...)" tap, so a sign-in someone else arranged cannot carry it off.
 Without the secret nothing is set and nothing can be claimed.
@@ -25,11 +26,11 @@ from urllib.parse import urlsplit
 
 from fastapi import Request, Response
 
-from herbtwin.answer_cache import TTL, Entry
+from herbtwin.answer_cache import KEEP, Entry, claim_hash
 
 KEY_COOKIE = "herbtwin_claim"
 NEXT_COOKIE = "herbtwin_next"
-MAX_AGE_S = int(TTL.total_seconds())  # a claim outlives no answer
+MAX_AGE_S = int(KEEP.total_seconds())  # as long as the longest an answer is kept
 _ANSWER_PATH = re.compile(r"/answers/[0-9a-f]{32}")
 
 
@@ -72,7 +73,7 @@ def give_key(request: Request, response: Response, secret: str, secure: bool) ->
 
 
 def can_claim(entry: Entry | None, key: str | None) -> bool:
-    """A cached, unowned answer made for this browser: the cache drops it after an hour."""
+    """A cached, unowned answer made for this browser: the cache drops it when its time is up."""
     return (
         entry is not None
         and entry.owner is None
@@ -80,7 +81,7 @@ def can_claim(entry: Entry | None, key: str | None) -> bool:
         and entry.latest.answer is not None
         and entry.claim is not None
         and key is not None
-        and hmac.compare_digest(entry.claim, key)
+        and hmac.compare_digest(entry.claim, claim_hash(key))
     )
 
 

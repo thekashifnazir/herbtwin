@@ -42,7 +42,7 @@
   .about-page .works-flow .branch { align-items: stretch; }
   .about-page .works-flow .branch::before { left: -21px; top: 12px; width: 18px; height: 2px; }
   .about-page .works-flow .branch:last-child::after { content: ""; position: absolute; left: -24px; width: 8px;
-    top: 14px; bottom: 0; background: var(--bg); }
+    top: 14px; bottom: 0; background: var(--stone); }  /* the panel's oat */
   .about-page .works-flow .node strong { font-size: 20px; }
 }
 

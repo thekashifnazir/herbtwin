@@ -173,22 +173,20 @@ def test_the_decisions_are_three_columns_that_carry_the_reports_figures(tmp_path
     assert "| 10/10, 10/10, 10/10 | 15 s, 14 s, ~15 s |" in nano and "| 32 s, 24 s |" in nano
 
 
-def test_the_weather_path_says_what_it_carries_to_the_twin(tmp_path, monkeypatch):
-    # round 4 (22 Oct): the green wire from the weather carries a label naming what the twin
-    # takes, kept on the wire's drop under the weather (23 Oct)
-    turn = _steps(_built(tmp_path, monkeypatch))[3]
+def test_the_weather_path_carries_no_words(tmp_path, monkeypatch):
+    # 23 Oct, Kash: the "Day by day: night lows, rain and drying" label on the green wire from
+    # the weather meant nothing to a reader, so it is gone; the wire itself stays
+    built = _built(tmp_path, monkeypatch)
+    turn = _steps(built)[3]
     assert turn.startswith('class="turn">')
-    feed = re.search(r'<p class="flow-feed">(.*?)</p>', turn, flags=re.S)
-    assert feed and re.sub(r"<[^>]+>", "", feed.group(1)) == (
-        "Day by day: night lows, rain and drying"
-    )
-    # and that is true: the twin steps each forecast day on its low (frost), its rain (water
-    # in) and its evapotranspiration (water out), and nothing else of the weather
-    twin = (ROOT / "src/herbtwin/stages/twin.py").read_text("utf-8")
-    assert "action, i, d.t_min, d.t_max, d.et0_mm, d.rain_mm, vol" in twin
-    assert "t_min, _t_max, et0, rain, watering = _apply_action(" in twin  # the high unused
-    assert "frost=frost_probability(t_min," in twin
-    assert "water_in = rain_mm * pot.cover_factor" in twin and "out = et0_mm * kc" in twin
+    assert '<p class="flow-feed" aria-hidden="true"></p>' in turn
+    assert "Day by day" not in built and "night lows" not in built
+    sheet = SHEET_4.read_text("utf-8")
+    reveal = (ROOT / "src/herbtwin/web/static/pages/about_reveal.css").read_text("utf-8")
+    assert ".flow-feed > span" not in sheet + reveal and "reveal-ride" not in reveal
+    # and on a phone, where there is no wire, the empty path adds no gap under the weather
+    narrow = {s: b for at, s, b in _rules(sheet) if at == ("@media (max-width: 959px)",)}
+    assert "display: none" in narrow[".about-page .flow-built > li.turn > .flow-feed"]
 
 
 def test_the_second_row_reads_left_to_right_with_the_weather_on_an_l(tmp_path, monkeypatch):
@@ -263,7 +261,9 @@ def test_the_weather_path_label_counts_in_few_words(tmp_path, monkeypatch):
 
     built = _built(tmp_path, monkeypatch)
     words = html.unescape(re.sub(r"<[^>]+>", " ", '<h2 id="built">' + built)).split()
-    assert len(words) <= 401
+    # grown on purpose on 25 Oct to 545 (537 measured) for Kash's "What each service did" panel,
+    # then to 560 (551) when its LangSmith row said truly what a trace carries
+    assert len(words) <= 560
 
 
 @pytest.mark.parametrize(

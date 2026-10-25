@@ -18,9 +18,10 @@ def _summary(page: str, cls: str) -> str:
 
 def test_by_part_starts_shut(tmp_path):
     # 21 Oct, Kash: "should be open as a lot of good info in here"; 23 Oct answer-page
-    # redesign: open, it repeated every line above word for word, so it is a shut fold
+    # redesign: open, it repeated every line above word for word, so it was a shut fold; 24 Oct:
+    # a view This week switches to, hidden until picked
     page = _render(_full_plan(tmp_path))
-    assert '<details class="by-part"><summary>By part of the plant</summary>' in page
+    assert '<div class="by-part" id="by-part" hidden>' in page
 
 
 def test_why_says_what_helped_and_held_it_back_before_it_opens(tmp_path):

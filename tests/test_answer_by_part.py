@@ -33,7 +33,10 @@ LABEL = {
     "check_pests": "Check for pests", "isolate": "Keep it apart", "mulch": "Mulch it",
     "humidity": "Raise humidity", "rotate": "Turn the pot", "other": "Something else",
 }  # fmt: skip
-BLOCK = re.compile(r'<details class="by-part">.*?</details>', re.S)
+# the by-part view: a hidden view inside This week since 24 Oct
+BLOCK = re.compile(
+    r'<div class="by-part" id="by-part" hidden>.*?</div>\s*</div>\s*(?=<script>)', re.S
+)
 
 
 def _answer(do, dont=None, watch="Send a new photo if it changes.", **kw) -> Answer:
@@ -189,19 +192,45 @@ def test_one_row_or_none_shows_no_block(tmp_path):
     assert 'class="by-part"' not in _render(rec)
 
 
-def test_the_page_folds_the_parts_between_keep_an_eye_on_and_what_next(tmp_path):
+def test_this_week_switches_between_jobs_and_parts(tmp_path):
+    # 24 Oct, Kash ("then they can pick"): By job / By part of the plant on This week, the
+    # same jobs either way, never a fold repeating them under it
     page = _render(_full_plan(tmp_path))
     plan = page.split('<div class="plan">')[1].split('<div class="side">')[0]
-    assert plan.index('id="watch"') < plan.index('class="by-part"') < plan.index('id="next-step"')
+    assert '<details class="by-part">' not in plan
+    week = plan.split('<div class="this-week" id="this-week">', 1)[1]
+    switch = week.split('<div class="view-switch"', 1)[1].split("</div>", 1)[0]
+    assert 'role="group" aria-label="Show this week\'s jobs" hidden>' in switch  # script shows it
+    assert (
+        '<button type="button" class="view-pick" data-view="job" aria-pressed="true">By job</button>'
+        in switch
+    )
+    assert 'data-view="part" aria-pressed="false">By part of the plant</button>' in switch
+    # the parts view: hidden until picked, after Keep an eye on, inside the panel
+    assert week.index('id="watch"') < week.index('<div class="by-part" id="by-part" hidden>')
+    assert plan.index('id="by-part"') < plan.index('id="next-step"')
     block = BLOCK.search(plan).group(0)
-    # shut, under a plain title (23 Oct redesign: open, it repeated every line above)
-    assert "<summary>By part of the plant</summary>" in block
     # the part names are not headings: a reader's heading list keeps them out of Keep an eye on
     assert "<h3" not in block
     assert '<p class="part">Soil</p>' in block and '<p class="part">Leaves and stems</p>' in block
     assert '<p class="part">Pot</p>' not in block  # nothing for the pot: no empty row
     assert '<li data-kind="dont"><strong>Don\'t:</strong> Water it</li>' in block
     assert '<li data-kind="watch"><strong>Keep an eye on:</strong> Grey fuzz' in block
+    assert 'week.classList.toggle("by-parts", byPart)' in page and "parts.hidden = !byPart" in page
+
+
+def test_by_part_hides_the_job_rows_and_styles_the_pills():
+    from pathlib import Path
+
+    css = (Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer_top.css").read_text()
+    assert (
+        ".answer-page .this-week.by-parts > :is(.also, .dont, .watch, .reported) { display: none; }"
+        in css
+    )
+    assert (
+        '.view-pick[aria-pressed="true"] { background: var(--primary); color: var(--primary-fg); }'
+        in css
+    )
 
 
 def test_every_item_is_already_said_in_the_plan(tmp_path):

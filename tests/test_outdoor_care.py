@@ -330,8 +330,13 @@ def test_an_outdoor_parsley_in_october_gets_outdoors_in_october(tmp_path):
     # who says so, linked, as the indoor card does
     assert '<p class="note">From <a href="https://www.rhs.org.uk/' in section
     assert '<section class="indoor-now"' not in page
-    # after the plan's own cards, before What next
-    assert page.index('class="outdoor-now"') < page.index('class="next-step')
+    # beside the plan since 24 Oct (Kash: "moving the October over to the right"): in the
+    # side column, after the questions, before How we worked it out; still in the rater text
+    side = page.split('<div class="side">', 1)[1]
+    assert (
+        side.index('id="chat"') < side.index('class="outdoor-now"') < side.index('class="details"')
+    )
+    assert "Outdoors in October" in plan_text(page)
 
 
 def test_no_place_still_gets_the_card_and_abroad_does_not(tmp_path):
@@ -375,3 +380,15 @@ def test_the_card_wears_the_indoor_cards_style():
     for part in ("", " h2", " ul", " li + li", " > :last-child"):
         assert f".answer-page :is(.indoor-now, .outdoor-now){part} {{" in css, part
     assert ".answer-page .indoor-now" not in css
+
+
+def test_a_hidden_month_card_stops_the_rater_text_at_its_end():
+    # review of #521: a skipped (hidden) month card must not leave the reader reading on
+    # into the side column after it
+    page = (
+        '<div class="plan"><h2 id="main-action">Do it.</h2></div>'
+        '<section class="outdoor-now" hidden><h2>Outdoors in October</h2></section>'
+        '<section class="details"><h2>How we worked it out</h2><p>not advice</p></section>'
+    )
+    assert plan_text(page) == "## Do it."
+    assert plan_text(page.replace(" hidden", "")) == "## Do it.\n\n### Outdoors in October"

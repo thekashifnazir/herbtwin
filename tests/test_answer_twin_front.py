@@ -30,8 +30,8 @@ from tests.test_web_twin_chart import _cold_basil, _record
 
 LABELS = {"leave_normal": "Leave it", "water": "Water it", "shelter": "Protect it"}
 WHAT = (
-    "Each choice is tried first on your plant's <strong>twin</strong>, a small "
-    "water-and-frost model, against the next 2 weeks of weather."
+    "Your plant's <strong>twin</strong> is a simple model of its soil water and frost risk. "
+    "Each choice is tried on it against the next 2 weeks of weather."
 )
 SHEET = Path(__file__).parents[1] / "src/herbtwin/web/static/pages/answer_twin.css"
 
@@ -378,8 +378,11 @@ def test_one_filled_green_on_the_page(tmp_path):
     rec = _outdoor(tmp_path)
     rec.answer.level = "not_sure"
     page = _render(rec, twin=_figure())
-    assert _filled_green(page) == 1
+    # at most one (24 Oct): "Make this surer" is outlined since the Toloka study, as a green
+    # button under the headline read as the instruction; with the place known, none is green
+    assert _filled_green(page) <= 1
     assert _filled_green(_strip(page) + _sec(page)) == 0
+    assert '<a class="button quiet" href="#refine">Make this surer' in page
 
 
 def test_the_rater_text_keeps_the_twin_line_once_and_skips_the_twin_parts(tmp_path):

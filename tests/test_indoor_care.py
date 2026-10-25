@@ -17,6 +17,7 @@ from herbtwin.indoor_care import INDOOR_PATH, IndoorCare, indoor_care_for, load_
 from herbtwin.pipeline import Deps
 from herbtwin.seasonal import plants as norm_plants
 from herbtwin.tracing import TraceStore
+from herbtwin.web.answer_text import plan_text
 from herbtwin.web.app import create_app
 from tests.test_web import ADV, OBS, _client, _first
 
@@ -111,8 +112,13 @@ def test_an_indoor_answer_says_what_is_normal_indoors_this_month(tmp_path):
     for tip in oct_.tips:
         assert tip in section, tip
     assert "From " in section and "rhs.org.uk" in section  # who says so, linked
-    # after the plan's own cards, before What next
-    assert page.index('class="indoor-now"') < page.index('class="next-step')
+    # beside the plan since 24 Oct (Kash: "moving the October over to the right"): in the
+    # side column, after the questions, before How we worked it out; still in the rater text
+    side = page.split('<div class="side">', 1)[1]
+    assert (
+        side.index('id="chat"') < side.index('class="indoor-now"') < side.index('class="details"')
+    )
+    assert "Indoors in October" in plan_text(page)
 
 
 def test_an_indoor_answer_gets_the_months_also_do_card(tmp_path):

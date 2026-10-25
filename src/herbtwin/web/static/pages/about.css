@@ -27,8 +27,8 @@
    weather sky blue, the twin its deep green, the advisors mint, our rules amber, the answer
    a white sticker with the plant's face. Each flow's own layout lives in about-built.css,
    about_built.css and about-works.css. */
-.about-page .flow-panel { margin: 16px 0 8px; padding: 24px; border: 1.5px solid var(--border);
-  border-radius: var(--surface); background: var(--bg); }
+.about-page .flow-panel { margin: 16px 0 8px; padding: 24px; border: 1.5px solid transparent;
+  border-radius: var(--surface); background: var(--stone); }  /* oat, no edge (25 Oct, Kash's D1) */
 .about-page .node { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 12px 14px;
   border: 1.5px solid var(--fg); border-radius: var(--surface); background: var(--card);
   box-shadow: 4px 4px 0 var(--ink-shadow); font-size: 16px; line-height: 1.35; }

@@ -51,7 +51,7 @@ from herbtwin.answer import (
     top_doubt,
     watch_list,
 )
-from herbtwin.answer_cache import AnswerCache
+from herbtwin.answer_cache import AnswerCache, Answers, SupabaseAnswerCache
 from herbtwin.asks import questions_for
 from herbtwin.auth import EXPIRED_LINK, AuthError, valid_email
 from herbtwin.chat import (
@@ -67,7 +67,7 @@ from herbtwin.chat import links_from as chat_links
 from herbtwin.compass import tap_from_sensor
 from herbtwin.config import Settings, load_settings, parse_coordinate
 from herbtwin.consequences import NO_DATA
-from herbtwin.fold_titles import fold_titles, row_why
+from herbtwin.fold_titles import fold_titles, row_why, twin_off_job
 from herbtwin.history import HistoryError
 from herbtwin.light import light_said
 from herbtwin.local_help import local_help_from
@@ -126,7 +126,7 @@ from herbtwin.spot import (
 from herbtwin.spot_questions import COMPASS_FIRST
 from herbtwin.stages.advise import advisors_said
 from herbtwin.stages.problem import signs, slugs_seen
-from herbtwin.stages.trusted_page import read_more
+from herbtwin.stages.trusted_page import guide_pages, read_more
 from herbtwin.sun_arc import sun_arc
 from herbtwin.tracing import trace_root, traced
 from herbtwin.twin_bank import figure as twin_figure
@@ -172,6 +172,7 @@ from herbtwin.web.progress import (
     progress_response,
 )
 from herbtwin.web.traces import FlushTraces
+from herbtwin.web.waiting_words import WAIT_JS
 from herbtwin.where import GeocodeError, for_model, in_uk, sample_files, strip_metadata
 
 log = logging.getLogger(__name__)
@@ -240,6 +241,7 @@ TEMPLATES.env.globals["twin_strip"] = twin_strip  # the main card's twin strip (
 TEMPLATES.env.globals["starting_on"] = starting_on  # the chart starts on the strip's pair
 TEMPLATES.env.globals["row_why"] = row_why  # Compare's reasons as plain sentences
 TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
+TEMPLATES.env.globals["twin_off_job"] = twin_off_job  # a job the twin cannot weigh
 TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the year
 TEMPLATES.env.globals["starters"] = starters  # "Ask about this plant": 3 to tap
 TEMPLATES.env.globals["watch_list"] = watch_list  # Keep an eye on, one sign a line
@@ -253,6 +255,7 @@ TEMPLATES.env.globals["told_echo"] = told_echo  # "You told us: faces north-west
 TEMPLATES.env.globals["same_advice"] = same_advice  # "Changed" only when the advice did
 TEMPLATES.env.globals["no_data"] = NO_DATA  # an "if you do" line that says nothing: hidden
 TEMPLATES.env.globals["site_css"] = Markup(style.CSS)
+TEMPLATES.env.globals["wait_js"] = Markup(WAIT_JS)  # the plant words while a wait works
 TEMPLATES.env.globals["mark"] = Markup(style.MARK)
 TEMPLATES.env.globals["has_session"] = nav.has_session  # the 404's "My plants" button
 TEMPLATES.env.globals["nav_for_page"] = nav.site_nav  # `site_nav` in _nav.html
@@ -268,12 +271,12 @@ KEEP_ELSEWHERE = (
     "device you used, or send the photo again."
 )
 NOT_KEPT_EXPIRED = (
-    "You're signed in. That answer's hour was up, so it could not be kept: send the photo "
-    "again and it will be."
+    "You're signed in. That answer's 24 hours were up, so it could not be kept: send the "
+    "photo again and it will be."
 )
 EXPIRED = "This answer has expired; upload the photo again."
 TAP_EXPIRED = "This photo has expired; upload it again."
-# "Add photos for a surer answer" (21 Oct): the first photo is held for the answer's hour
+# "Add photos for a surer answer" (21 Oct): the first photo is held for an hour
 MORE_PHOTOS_GONE = "The first photo has expired; upload all the photos again."
 MORE_PHOTOS_NONE = "Choose 1 or 2 more photos of the same plant."
 TAP_AGAIN = "Tap on the plant you mean, or use the whole photo."
@@ -614,6 +617,14 @@ def _usage_from(settings: Settings) -> UsageStore | None:
     return SupabaseUsage(settings.supabase_url, settings.supabase_secret_key)
 
 
+def _answers_from(settings: Settings, clock: Callable[[], datetime]) -> Answers:
+    """Answers for 24 hours in Supabase on the live site (the same switch and keys as the
+    caps, so local runs never write to the hosted table); in memory for an hour otherwise."""
+    if settings.caps_enabled and settings.supabase_url and settings.supabase_secret_key:
+        return SupabaseAnswerCache(settings.supabase_url, settings.supabase_secret_key, clock)
+    return AnswerCache(clock)
+
+
 @asynccontextmanager
 async def _lifespan(app: FastAPI):
     yield
@@ -630,9 +641,11 @@ def create_app(
     mail: Mailer | None = None,
     site_url: str | None = None,
     reminder_admin: reminders.ReminderAdmin | None = None,
+    answers: Answers | None = None,
 ) -> FastAPI:
-    """The app. Tests pass `deps` and with it everything else (accounts, usage, mail and
-    `site_url`, the site's own address); without `deps` all of it comes from settings."""
+    """The app. Tests pass `deps` and with it everything else (accounts, usage, mail,
+    `site_url`, the site's own address, and the answer store, else in memory); without
+    `deps` all of it comes from settings."""
     app = FastAPI(title="herbtwin", lifespan=_lifespan)
     if deps is None:
         settings = load_settings()
@@ -644,12 +657,14 @@ def create_app(
         app.state.reminder_admin = (
             reminder_admin if reminder_admin is not None else _reminder_admin_from(settings)
         )
+        app.state.answers = answers if answers is not None else _answers_from(settings, clock)
     else:
         # tests pass deps: accounts only from the caller, never from .env
         app.state.deps, app.state.accounts, app.state.site_url = deps, accounts, site_url
         settings = deps.settings
         app.state.usage, app.state.mail = usage, mail  # likewise only from the caller
         app.state.reminder_admin = reminder_admin
+        app.state.answers = answers if answers is not None else AnswerCache(clock)
     app.add_middleware(EdgeGuard, secret=settings.edge_secret)
     style.know_font_types()
     app.mount("/static", _Static(directory=style.STATIC), name="static")
@@ -662,7 +677,6 @@ def create_app(
     health: dict = {"at": None, "usage": "off"}
     mail_tried: dict = {"at": None}
     mail_lock = threading.Lock()
-    app.state.answers = AnswerCache(clock)
     app.state.replays = ReplayCache(clock)  # the same photo today: the same answer
     app.state.held = HeldPhotos(clock)  # a signed-out answer's photo, for more photos
     app.state.voices = SpokenCache()
@@ -952,6 +966,20 @@ def create_app(
         if entry is None or entry.reading is None:  # nothing to refine without a reading
             return None
         return entry.reading, entry.first_headline
+
+    # The answer store is Supabase on the live site: an async route reaches it only through
+    # these, on a worker thread, so the one instance's event loop never waits on it
+    # (tests/conftest.py fails any test that calls it on the loop).
+    async def off_loop(call: Callable, *args):
+        return await run_in_threadpool(call, *args)
+
+    async def seen_as(answer_id: str, person: Person | None):
+        """The cached answer as this person may see it: theirs, else (signed in) one read
+        while sign-in was down, so kept as signed out."""
+
+        entry = await run_in_threadpool(app.state.answers.get, answer_id)  # one round trip
+        mine = (None, person.user_id) if person is not None else (None,)
+        return entry if entry is not None and entry.owner in mine else None
 
     def refine(
         answer_id: str,
@@ -1548,10 +1576,7 @@ def create_app(
         """The answer an after-load fragment is for, as its owner may see it (the answer
         cache, then a signed-in person's store), and the cookie holder for the reply."""
         person, holder = await who(request)
-        owner = person.user_id if person is not None else None
-        entry = app.state.answers.get_for(answer_id, owner) or (
-            app.state.answers.get_for(answer_id, None) if person is not None else None
-        )
+        entry = await seen_as(answer_id, person)
         rec = entry.latest if entry is not None else None
         if rec is None and person is not None:
             try:
@@ -1651,7 +1676,10 @@ def create_app(
             return await run_in_threadpool(local.links, town)  # within local_help.TIMEOUT_S
 
         (links, handy), helpers = await asyncio.gather(shop_links(), near())
-        if not links and not handy and not helpers:
+        # nothing to buy and no one to hire: the trusted pages Tavily found for this answer,
+        # so the box never ends empty-handed (24 Oct, Kash), no new search
+        guides = [] if links or handy or helpers else guide_pages(rec)
+        if not links and not handy and not helpers and not guides:
             return _with_cookies(Response(status_code=204), holder)
         shown = TEMPLATES.TemplateResponse(
             request,
@@ -1666,6 +1694,7 @@ def create_app(
                 "centres_town": typed_town,
                 "town": town,
                 "helpers": helpers,
+                "guides": guides,
                 "rhs_hiring": local_help.RHS_HIRING,
             },
         )
@@ -1688,10 +1717,8 @@ def create_app(
             except HistoryError:
                 log.exception("could not read the stored answer")
                 unread = True
-        entry = app.state.answers.get_for(answer_id, person.user_id if person else None)
-        if entry is None and person is not None:
-            # read while sign-in was down, so kept as signed out: the id already shows it
-            entry = app.state.answers.get_for(answer_id, None)
+        # read while sign-in was down, an answer is kept as signed out: the id already shows it
+        entry = await seen_as(answer_id, person)
         if entry is not None:
             rec, last = entry.latest, entry.last_decline
         elif person is not None:
@@ -1762,7 +1789,7 @@ def create_app(
                 holder,
             )
         key = claims.browser_key(request, settings.reminder_secret)
-        entry = app.state.answers.get(answer_id)
+        entry = await off_loop(app.state.answers.get, answer_id)
         back = f"/answers/{answer_id}"
         if entry is None:
             return message(request, NOT_KEPT_EXPIRED, 404, "/", "Check a plant", signed_in=True)
@@ -1780,14 +1807,14 @@ def create_app(
             pending = remember.Pending(person.user_id, None, rec.told, tuple(found), claimed=True)
             app.state.pending.put(answer_id, pending)
             return _with_cookies(RedirectResponse(f"{back}/plant", status_code=303), holder)
-        if not app.state.answers.claim(answer_id, key, person.user_id):  # lost a race
+        if not await off_loop(app.state.answers.claim, answer_id, key, person.user_id):  # a race
             return message(request, NOT_KEPT, 409, back, NOT_KEPT_ACTION, signed_in=True)
         try:
             chat = list(entry.chat)  # the signed-out chat so far goes with it
             await run_in_threadpool(remember.keep_new, person, reading, rec, clock(), chat)
         except HistoryError:
             log.exception("could not keep the answer run=%s", answer_id)
-            app.state.answers.unclaim(answer_id, person.user_id)  # try again from the answer
+            await off_loop(app.state.answers.unclaim, answer_id, person.user_id)  # try again
             return message(request, remember.HISTORY_DOWN, 503, back, "Back", signed_in=True)
         return _with_cookies(RedirectResponse(f"{back}?kept=1", status_code=303), holder)
 
@@ -1819,15 +1846,15 @@ def create_app(
         if not _same_site(request, app.state.site_url):
             raise HTTPException(403, "That did not come from this site.")
         key = claims.browser_key(request, settings.reminder_secret)
-        entry = app.state.answers.get(answer_id)
+        entry = await off_loop(app.state.answers.get, answer_id)
         if pending.user_id != person.user_id or entry is None or entry.reading is None:
             return message(request, NOT_KEPT_EXPIRED, 404, "/", "Check a plant", signed_in=True)
         if key is None or not claims.can_claim(entry, key):
             return message(request, NOT_KEPT, 409, back, NOT_KEPT_ACTION, signed_in=True)
         if plant_id != "new" and plant_id not in {p.id for p, _, _ in pending.found}:
             return message(request, "No such plant.", 404, f"{back}/plant", "Choose again")
-        if app.state.pending.take(answer_id) is None or not app.state.answers.claim(
-            answer_id, key, person.user_id
+        if app.state.pending.take(answer_id) is None or not await off_loop(
+            app.state.answers.claim, answer_id, key, person.user_id
         ):  # a second tap, or another tab, got there first
             return message(request, NOT_KEPT, 409, back, NOT_KEPT_ACTION, signed_in=True)
         reading, rec, chat = entry.reading, entry.latest, list(entry.chat)
@@ -1842,7 +1869,7 @@ def create_app(
             await run_in_threadpool(store)
         except HistoryError:
             log.exception("could not keep the answer on a plant run=%s", answer_id)
-            app.state.answers.unclaim(answer_id, person.user_id)
+            await off_loop(app.state.answers.unclaim, answer_id, person.user_id)
             app.state.pending.put(answer_id, pending)  # the choice can be made again
             return message(request, remember.HISTORY_DOWN, 503, f"{back}/plant", "Try again")
         return _with_cookies(RedirectResponse(f"{back}?kept=1", status_code=303), holder)
@@ -1853,23 +1880,21 @@ def create_app(
         the same address makes the choice."""
         person, holder = await who(request)
         pending = app.state.pending.get(answer_id)
+        entry = await off_loop(app.state.answers.get, answer_id)
         if (
             person is None
             or pending is None
             or pending.user_id != person.user_id
+            or entry is None
             or not (
-                claims.can_claim(
-                    app.state.answers.get(answer_id),
-                    claims.browser_key(request, settings.reminder_secret),
-                )
+                claims.can_claim(entry, claims.browser_key(request, settings.reminder_secret))
                 if pending.claimed
-                else cached(answer_id, person) is not None
+                else entry.owner == person.user_id and entry.reading is not None
             )
         ):
             return message(request, EXPIRED, 404, "/", "Check a plant")
         # this photo and what it was read as, in the answer's own words (judge pre-walk, 19 Oct)
-        entry = app.state.answers.get(answer_id)
-        reading = entry.reading if entry else None
+        reading = entry.reading
         photo = None
         if pending.photo:
             try:
@@ -1895,7 +1920,7 @@ def create_app(
         pending = app.state.pending.get(answer_id)
         if person is not None and pending is not None and pending.claimed:
             return await choose_kept(request, answer_id, plant_id, person, holder, pending)
-        hit = cached(answer_id, person)
+        hit = await off_loop(cached, answer_id, person)
         if person is None or hit is None or pending is None or pending.user_id != person.user_id:
             return message(request, EXPIRED, 404, "/", "Check a plant")
         if app.state.pending.take(answer_id) is None:  # a second tap lost the race
@@ -1921,7 +1946,7 @@ def create_app(
             rec = await run_in_threadpool(decide, app.state.deps, reading, pending.told)
             rec.notes.append(remember.HISTORY_DOWN)
             got = remember.Answered(rec, reading, None)
-        app.state.answers.put(reading, got.rec, person.user_id, got.last_decline)
+        await off_loop(app.state.answers.put, reading, got.rec, person.user_id, got.last_decline)
         # post, then redirect, then get: a refresh shows the answer, never "resubmit the form?"
         answer = RedirectResponse(f"/answers/{got.rec.record_id}", status_code=303)
         return _with_cookies(answer, holder)
@@ -2150,9 +2175,7 @@ def create_app(
         if not _is_answer_id(answer_id):
             return message(request, EXPIRED, 404, "/", "Check a plant")
         person, holder = await who(request)
-        entry = app.state.answers.get_for(answer_id, person.user_id if person else None)
-        if entry is None and person is not None:  # read while sign-in was down (answer_page)
-            entry = app.state.answers.get_for(answer_id, None)
+        entry = await seen_as(answer_id, person)  # read while sign-in was down: answer_page
         first_rec = entry.latest if entry is not None else None
         plant_id = None  # signed in: the plant the first answer is kept on, if it is kept
         if person is not None:
@@ -2457,9 +2480,9 @@ def create_app(
         if not _is_answer_id(answer_id):
             return message(request, EXPIRED, 404, "/", "Check a plant")
         person, holder = await who(request)
-        hit = cached(answer_id, person)
+        hit = await off_loop(cached, answer_id, person)
         reading = hit[0] if hit else None
-        bed = _bed_record(answer_id, person) if reading is None else None
+        bed = await off_loop(_bed_record, answer_id, person) if reading is None else None
         if reading is None and bed is None and person is not None:
             try:
                 stored = await run_in_threadpool(person.store.get_answer, answer_id)

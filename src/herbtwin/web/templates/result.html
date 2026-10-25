@@ -127,7 +127,8 @@
      what the person can tell us (design wave 1, C). Once they have told us something it
      stops asking: they answered, and nagging again reads as not listening #}
   {% set tell_more = not best and not asks_open and not retake and not place_on_band and not (rec.told and not rec.told.is_empty()) %}
-  {% set card_leads = retake or asks_open or tell_more %}
+  {# only a retake leads from the card since 24 Oct: its asks are outlined (Toloka study) #}
+  {% set card_leads = retake %}
   {% endif %}
   {% if names[1] %}<p class="latin"><i>{{ names[1] }}</i></p>{% endif %}
   {# where it grows, the date and the place as a row of chips, white on a lighter green, not
@@ -176,11 +177,14 @@
         if (form.dataset.busy) { e.preventDefault(); return; }
         form.dataset.busy = "1";
         for (const b of form.querySelectorAll("button")) b.setAttribute("aria-disabled", "true");
-        (e.submitter || form.querySelector("button")).textContent = "Checking the advice…";
+        const b = e.submitter || form.querySelector("button");
+        b.textContent = "Checking the advice…";
+        form.still = window.herbtwinWait(b, [], {label: "Checking the advice"});
       });
       // back from the next page: the browser may restore this one as it was left
       const labels = [...form.querySelectorAll("button")].map((b) => b.textContent);
       addEventListener("pageshow", () => {
+        if (form.still) form.still();
         delete form.dataset.busy;
         form.querySelectorAll("button").forEach((b, i) => { b.textContent = labels[i]; b.removeAttribute("aria-disabled"); });
       });
@@ -404,17 +408,24 @@
           if (form.dataset.busy) { e.preventDefault(); return; }
           form.dataset.busy = "1";
           for (const b of form.querySelectorAll("button")) b.setAttribute("aria-disabled", "true");
-          if (e.submitter) e.submitter.textContent = "Checking the advice…";
+          if (e.submitter) {
+            e.submitter.textContent = "Checking the advice…";
+            form.still = window.herbtwinWait(e.submitter, [], {label: "Checking the advice"});
+          }
         });
         addEventListener("pageshow", () => {
+          if (form.still) form.still();
           delete form.dataset.busy;
           form.querySelectorAll("button").forEach((b, i) => { b.textContent = labels[i]; b.removeAttribute("aria-disabled"); });
         });
       })();
       </script>{% endif %}
-      {% if tell_more %}<p class="make-surer"><a class="button primary" href="#refine">Make this surer: tell us more</a></p>{% endif %}
+      {# outlined, never the card's green press (Toloka study, 23 Oct: a worker gave "answer 3
+         quick questions" as what the site told them to do); a retake stays green, as there
+         the photo is the job #}
+      {% if tell_more %}<p class="make-surer"><a class="button quiet" href="#refine">Make this surer: tell us more</a></p>{% endif %}
       {% if retake or asks_open %}<p class="make-surer">{% if retake %}<a class="button primary" href="/">{{ retake[1] }}</a>{% endif %}
-        {%- if asks_open %} <a class="button{{ '' if retake else ' primary' }}" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
+        {%- if asks_open %} <a class="button quiet" href="#refine">{% if a.tell_me_key == "location" and obs.setting != "indoor" and not place_on_band %}Add where it is for a weather-tested answer{% else %}Make this surer: answer {{ quick }} quick question{{ "s" if quick != 1 else "" }}{% endif %}</a>{% endif %}</p>{% endif %}
       {# a trusted page's own sentence, as written, when code finds it says the same as this
          answer (stages/trusted_page.py); nothing when unsure, off, late or broken #}
       {% if rec.trusted and rec.trusted.quote %}<p class="sources-line trusted-quote">A trusted page says the same: &ldquo;{{ rec.trusted.quote }}&rdquo; ({{ said_by([rec.trusted.url]) }}, found with Tavily)</p>{% endif %}
@@ -485,6 +496,9 @@
       {#- no voice (switched off, 21 Oct): the plant's face on its own, beside the headline above;
           the answer's own mood, never a new judgement, and decoration for a screen reader #}
       {%- endif %}
+      {# 23 Oct Toloka study: "was my answer only the first part or all the details below?";
+         not advice, so the rater text skips it (answer_text.SKIP_CLASSES) #}
+      <p class="answer-ends">That's your answer. The rest of the page is the detail behind it.</p>
     </section>
     {# where it came from, out of the card into one quiet line under it (23 Oct answer-page
        critique, 2): where the care facts came from (the built-in herbs' own file, or the page
@@ -513,7 +527,9 @@
        (answer_text.SKIP_CLASSES) #}
     {% if a.compare %}{% set fc = ft.compare %}<section class="twin-sec" id="twin-sec" tabindex="-1" aria-labelledby="twin-sec-h">
       <h2 class="ts-h" id="twin-sec-h">Your plant's twin</h2>
-      <p class="ts-what">Each choice is tried first on your plant's <strong>twin</strong>, a small water-and-frost model, against the next 2 weeks of weather.</p>
+      {# 23 Oct Toloka study: "It mentions my plant twins. I don't know what that means"; and
+         under a pest job its verdict read as the answer, so it says what it cannot weigh #}
+      <p class="ts-what">Your plant's <strong>twin</strong> is a simple model of its soil water and frost risk. Each choice is tried on it against the next 2 weeks of weather.{% if twin_off_job(a) %} It can't model pests or diseases, so it only checks water and frost around the job above.{% endif %}</p>
       {% set cmp = namespace(better=[]) %}{% for r in a.compare if r.vs_leaving_it == "better" and r.action != "leave_normal" %}{% set cmp.better = cmp.better + [label[r.action]|lower] %}{% endfor %}
       <p class="ts-find">{% if fc.found %}<strong>{{ fc.title }}.</strong>{% if fc.peek %} {{ fc.peek }}.{% endif %}{% elif cmp.better %}<strong>Better than leaving it:</strong> {{ cmp.better[:2]|join(", ") }}.{% else %}<strong>None beat leaving it.</strong>{% endif %}</p>
       {# the twin stills: two illustrated futures of this photo's plant, when it is in the
@@ -617,7 +633,20 @@
        Under "This week", a THIS WEEK tag on a row said it twice #}
     {% set signs, after = watch_list(a.watch or "") %}
     {% set week = a.do|length > 1 or a.tray_check or a.dont or signs %}
-    {% if week %}<div class="this-week"><p class="this-week-h">This week</p>{% endif %}
+    {% set parts = by_part(a, label, obs.container if obs else "unknown") %}
+    {% macro by_part_rows(parts) %}{% for part, items in parts %}<div class="row"><p class="part">{{ part }}</p>
+        <ul>{% for it in items %}<li data-kind="{{ it.kind }}">{% if it.kind == "dont" %}<strong>Don't:</strong> {% elif it.kind == "check" %}<strong>Check first:</strong> {% elif it.kind == "watch" %}<strong>Keep an eye on:</strong> {% endif %}{{ it.text }}</li>{% endfor %}</ul></div>
+      {% endfor %}{% endmacro %}
+    {% if week %}<div class="this-week" id="this-week"><p class="this-week-h">This week</p>
+    {# see it by part (21 Oct, gardener test: they wanted the advice by part of the setup):
+       the lines above sorted by part (answer.by_part), never new advice, left out of the
+       rater text. Since 24 Oct (Kash: "then they can pick") a switch on This week shows them
+       in place of the rows, not a fold repeating them under it. by_part needs two lines or
+       more, so it always has a This week to sit in. The switch shows only with its script #}
+    {% if parts %}<div class="view-switch" role="group" aria-label="Show this week's jobs" hidden>
+      <button type="button" class="view-pick" data-view="job" aria-pressed="true">By job</button>
+      <button type="button" class="view-pick" data-view="part" aria-pressed="false">By part of the plant</button>
+    </div>{% endif %}{% endif %}
     {% if a.do|length > 1 or a.tray_check %}<section class="also" aria-labelledby="also-do">
       <h2 id="also-do">Also do</h2>
       {# the tray is a second job, so it is a row here, first and for today, never a line in
@@ -645,33 +674,21 @@
       <ul>{% for s in signs %}<li>{{ s }}</li>{% endfor %}</ul>{% if after %}<p>{{ after }}</p>{% endif %}
     </section>{% endif %}
     {% include "_reported_slot.html" %}
+    {% if week and parts %}<div class="by-part" id="by-part" hidden>{{ by_part_rows(parts) }}</div>
+    <script>
+    (() => {
+      const week = document.getElementById("this-week"), parts = document.getElementById("by-part");
+      const box = week.querySelector(".view-switch"), picks = box.querySelectorAll(".view-pick");
+      box.hidden = false;
+      for (const b of picks) b.addEventListener("click", () => {
+        const byPart = b.dataset.view === "part";
+        week.classList.toggle("by-parts", byPart);
+        parts.hidden = !byPart;
+        for (const p of picks) p.setAttribute("aria-pressed", String(p === b));
+      });
+    })();
+    </script>{% endif %}
     {% if week %}</div>{% endif %}
-    {# indoors: what is normal on a windowsill this month and how to look after it, from our
-       indoor table (21 Oct, a gardener: indoor "doesn't have much info") #}
-    {% if a.indoor %}<section class="indoor-now" aria-labelledby="indoor-now">
-      <h2 id="indoor-now">Indoors in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][a.indoor.month - 1] }}</h2>
-      <p>{{ a.indoor.normal }}</p>
-      <ul>{% for t in a.indoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
-      <p class="note">From {{ said_by(a.indoor.sources) }}</p>
-    </section>{% endif %}
-    {# outdoors, the twin: what is normal for it outdoors this month, from the UK season
-       table, and our 2 or 3 points for the month (23 Oct, Kash: "Why is tips for the month
-       on for indoor but not outdoor?"). Advice, so rated, as the indoor card is #}
-    {% if a.outdoor %}<section class="outdoor-now" aria-labelledby="outdoor-now">
-      <h2 id="outdoor-now">Outdoors in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][a.outdoor.month - 1] }}</h2>
-      {% if a.outdoor.normal %}<p>{{ a.outdoor.normal }}</p>{% endif %}
-      <ul>{% for t in a.outdoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
-      <p class="note">From {{ said_by(a.outdoor.sources) }}</p>
-    </section>{% endif %}
-    {# see it by part (21 Oct, gardener test: they wanted the advice by part of the setup):
-       the lines above, sorted by part (answer.by_part), never new advice. Folded, so it
-       shown only with two parts or more; left out of the rater text. Shut (23 Oct, answer-page
-       redesign: open, it repeated every line above word for word) #}
-    {% set parts = by_part(a, label, obs.container if obs else "unknown") %}
-    {% if parts %}<details class="by-part"><summary>By part of the plant</summary>
-      {% for part, items in parts %}<div class="row"><p class="part">{{ part }}</p>
-        <ul>{% for it in items %}<li data-kind="{{ it.kind }}">{% if it.kind == "dont" %}<strong>Don't:</strong> {% elif it.kind == "check" %}<strong>Check first:</strong> {% elif it.kind == "watch" %}<strong>Keep an eye on:</strong> {% endif %}{{ it.text }}</li>{% endfor %}</ul></div>
-      {% endfor %}</details>{% endif %}
     {# what next (design wave 1, D): the plan ends by saying what to do after it. Since the 23 Oct
        answer-page redesign ("boxes after boxes"), a line of stops in the About roadmap's style,
        not a box of five actions: today ("I did it", a plain button: the page keeps one green
@@ -693,6 +710,9 @@
       {% if gone %}<p>{{ no_cure_next }}</p>
       {% if did_it %}{{ i_did(no_cure_thanks) }}{% endif %}
       {% if a.level != "sure" or (rec.problem and not rec.problem.sure) %}{% include "_more_photos.html" %}{% endif %}
+      {# 24 Oct (Kash: "pulling people in to click it", then "is this really better?"): the
+         23 Oct line of stops kept, each button under its own step, but numbered dots and
+         stronger step names, and the photo picker behind its button, not open #}
       {% else %}<ol class="next-line">
         {% if did_it %}<li class="next-today" hidden><p class="next-when">Today</p>
           {{ i_did("Thanks for looking after me.") }}</li>{% endif %}
@@ -700,7 +720,8 @@
           <p>Send a new photo of the same plant to see how it is doing.</p>
           <p><a class="button quiet" href="/">Send another photo</a></p></li>
         {% if more_photos_on %}<li><p class="next-when">For a surer answer</p>
-          {% include "_more_photos.html" %}</li>{% endif %}
+          <details class="next-more"><summary>Add 1 or 2 photos</summary>
+          {% include "_more_photos.html" %}</details></li>{% endif %}
       </ol>{% endif %}
       {# signed out only. With the keep link, signing in then tapping "Keep this in My plants"
          carries this answer over (#254); without it (no keep cookie in this browser) it says to
@@ -715,7 +736,7 @@
         const box = document.getElementById("i-did"), button = box.querySelector("button");
         const thanks = box.querySelector(".thanks"), said = thanks.querySelector(".said");
         box.hidden = false;
-        const stop = box.closest(".next-today");  // Today's stop, when there is a line
+        const stop = box.closest(".next-step").querySelector(".next-today");  // Today's step, when there is a strip
         if (stop) stop.hidden = false;
         button.addEventListener("click", () => {
           thanks.classList.add("shown");
@@ -903,11 +924,16 @@
         if (form.dataset.busy) { e.preventDefault(); return; }
         form.dataset.busy = "1";
         check.textContent = "Checking the advice…";
-        note.textContent = "Checking the advice again with what you told us. This takes about 15 seconds.";
+        form.still = window.herbtwinWait(note, [
+          [0, "checking the advice again with what you told us, about 15 seconds"],
+          [20, "checking the weather and the advice again"],
+          [40, "taking longer than usual: keep this page open"],
+        ]);
         for (const b of buttons) b.setAttribute("aria-disabled", "true");
       });
       // back from the next page: the browser may restore this one as it was left
       addEventListener("pageshow", () => {
+        if (form.still) form.still();
         delete form.dataset.busy;
         check.textContent = checkText;
         note.textContent = noteText;
@@ -963,6 +989,10 @@
       };
       // the reply as it comes: a search said as it starts, never guessed (23 Oct). A plain
       // JSON body (an error, or a proxy that will not stream) is read as before
+      // the moving wait line (base.html, web/waiting_words.py): what it is doing after the
+      // dot; once the search starts it says so, provider named, and its slow line keeps it
+      let still = () => {};
+      let searching = "";
       const answered = async (r) => {
         if (!r.ok || !r.body || !(r.headers.get("Content-Type") || "").includes("ndjson")) return r.json();
         const reader = r.body.getReader(), dec = new TextDecoder();
@@ -975,7 +1005,11 @@
           for (const line of lines) {
             if (!line.trim()) continue;  // kept alive on a quiet wait
             const said = JSON.parse(line);
-            if (said.step === "search") wait.textContent = "Searching trusted pages" + (said.by ? " with " + said.by : "") + "…";
+            if (said.step === "search") {
+              const by = said.by ? " with " + said.by : "";
+              searching = "searching trusted pages" + by;
+              still.say(searching);
+            }
             else last = said;
           }
           if (done) return last;
@@ -990,7 +1024,12 @@
         // "Thinking…" over the log at once (site walk 2)
         note.textContent = "";
         const mine = add("user", text);
-        wait.textContent = box.dataset.thinking;
+        const thinking = box.dataset.thinking.replace(/…$/, "");
+        searching = "";
+        still = window.herbtwinWait(wait, [
+          [0, thinking[0].toLowerCase() + thinking.slice(1)],
+          [30, () => "taking longer than usual: " + (searching ? "still " + searching : "your answer is on its way")],
+        ]);
         wait.scrollIntoView({block: "nearest", behavior: motion});
         try {
           const r = await fetch(box.dataset.url, {
@@ -1013,6 +1052,7 @@
           mine.remove();
           note.textContent = "Could not reach the server. Try again.";
         } finally {
+          still();
           wait.textContent = "";
           if (!log.querySelector(".msg")) log.hidden = true;
           for (const b of buttons) b.disabled = false;
@@ -1020,6 +1060,28 @@
       });
     })();
     </script>
+
+    {# the month's card, out of the plan into this column (24 Oct, Kash: "moving the October
+       over to the right"): background for the plan, not a job in it. Still advice, so the
+       rater text reads it, after the plan, as before (answer_text._Plan). On a phone it
+       follows This week (answer_phone.css) #}
+    {# indoors: what is normal on a windowsill this month and how to look after it, from our
+       indoor table (21 Oct, a gardener: indoor "doesn't have much info") #}
+    {% if a.indoor %}<section class="indoor-now" aria-labelledby="indoor-now">
+      <h2 id="indoor-now">Indoors in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][a.indoor.month - 1] }}</h2>
+      <p>{{ a.indoor.normal }}</p>
+      <ul>{% for t in a.indoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
+      <p class="note">From {{ said_by(a.indoor.sources) }}</p>
+    </section>{% endif %}
+    {# outdoors, the twin: what is normal for it outdoors this month, from the UK season
+       table, and our 2 or 3 points for the month (23 Oct, Kash: "Why is tips for the month
+       on for indoor but not outdoor?"). Advice, so rated, as the indoor card is #}
+    {% if a.outdoor %}<section class="outdoor-now" aria-labelledby="outdoor-now">
+      <h2 id="outdoor-now">Outdoors in {{ ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][a.outdoor.month - 1] }}</h2>
+      {% if a.outdoor.normal %}<p>{{ a.outdoor.normal }}</p>{% endif %}
+      <ul>{% for t in a.outdoor.tips %}<li>{{ t }}</li>{% endfor %}</ul>
+      <p class="note">From {{ said_by(a.outdoor.sources) }}</p>
+    </section>{% endif %}
 
     <hr class="divider">
     {# block 3: the details, folded #}

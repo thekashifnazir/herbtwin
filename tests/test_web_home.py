@@ -31,7 +31,7 @@ def test_home_is_on_the_shared_template(tmp_path):
 
 def test_home_has_one_main_action(tmp_path):
     page = _home(tmp_path)
-    assert page.count('class="primary') == 1 and ">Analyse</button>" in page
+    assert page.count('class="primary') == 1 and ">What does my plant need?</button>" in page
     spot, _ = _spot_client(tmp_path)
     on = spot.get("/").text
     assert on.count('class="primary') == 1

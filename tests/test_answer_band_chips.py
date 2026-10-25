@@ -126,8 +126,10 @@ def test_the_place_ask_posts_the_town_with_what_was_told(tmp_path):
         '<input type="hidden" name="setting" value="outdoor">',
     ):
         assert kept in form, kept
-    # outlined on the band: the page's one green button stays the card's (#364 review)
-    assert '<button type="submit" class="button">Check the advice</button>' in form
+    # green on the band since 24 Oct: the card's asks are outlined (Toloka study), so the
+    # town is the page's one green press (#364 review: never two); a retake still leads
+    assert '<button type="submit" class="button primary">Check the advice</button>' in form
+    assert '<a class="button quiet" href="#refine">Make this surer' in page
 
 
 def test_both_band_forms_say_they_started_and_reset_after_back(tmp_path):

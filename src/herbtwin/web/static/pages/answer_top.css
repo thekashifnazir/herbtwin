@@ -22,12 +22,14 @@
   font: 600 16px/1.3 var(--sans); }
 .answer-page .main-action > .sure > span:not(.badge, .badge-line) { flex: 1 1 14rem; }
 
-/* ...and where it came from, out of the card: one quiet line under it */
+/* ...and where it came from, out of the card, right under it. 23 Oct Toloka study: as one
+   quiet grey line, 5 of 11 could not name a source (8 thought they had), so it is marked
+   off with the card's green rule, in the body's colour, its label in green */
 .answer-page .main-action:has(+ .came-from) { margin-bottom: 12px; }
-.answer-page .came-from { margin: 0 0 28px; padding: 0 4px; color: var(--muted-fg);
-  font-size: 16px; line-height: 1.5; }
+.answer-page .came-from { margin: 0 0 28px; padding: 8px 14px; border-left: 4px solid var(--primary);
+  color: var(--fg); font-size: 17px; line-height: 1.5; }
 .answer-page .came-from > p { display: inline; margin: 0; font-size: inherit; }
-.answer-page .came-from > .came-from-h { color: var(--fg); font-weight: 600; }
+.answer-page .came-from > .came-from-h { color: var(--primary); font-weight: 700; }
 .answer-page .came-from > .came-from-h::after { content: ":" / ""; }
 .answer-page .came-from > p + p:not(.came-from-h + p)::before { content: "· " / ""; }
 /* on a phone it stays right under its card: answer_phone.css */
@@ -78,3 +80,19 @@
   .answer-page .plan > .this-week { animation: card-rise .38s cubic-bezier(0.2,0,0,1) 160ms backwards; }
 }
 .answer-page .main-action > .sure > span:empty { display: none; }
+
+/* the card's last line says the answer ends there (23 Oct Toloka study) */
+.answer-page .main-action > .answer-ends { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--border);
+  color: var(--muted-fg); font-size: 16px; }
+
+/* This week, by job or by part of the plant (24 Oct, Kash: "then they can pick"): two pills
+   under its title; the pressed one filled. By part shows the same jobs sorted by part in
+   place of the rows, never under them */
+.answer-page .this-week > .view-switch { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 12px; }
+.answer-page .this-week > .view-switch[hidden] { display: none; }
+.answer-page .this-week > .view-switch > .view-pick { min-height: 36px; padding: 6px 14px; border: 1.5px solid var(--primary);
+  border-radius: 999px; background: var(--card); color: var(--primary); font: 600 15px/1.2 var(--sans);
+  box-shadow: none; cursor: pointer; }
+.answer-page .this-week > .view-switch > .view-pick[aria-pressed="true"] { background: var(--primary); color: var(--primary-fg); }
+.answer-page .this-week.by-parts > :is(.also, .dont, .watch, .reported) { display: none; }
+.answer-page .this-week > .by-part { margin: 0; padding: 4px 16px 12px; border-top: 1px solid var(--border); }

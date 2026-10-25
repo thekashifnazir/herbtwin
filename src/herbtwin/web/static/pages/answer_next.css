@@ -3,26 +3,42 @@
    grow here as one sky line. "answer_next" sorts after answer.css; extras.css sorts later, so
    its rules here carry .answer-page to win. Theme tokens only; nothing under 16px. */
 
-/* ---------- What next: no box, a dashed line down the left with a green stop per step ---------- */
+/* ---------- What next: no box, a dashed line down the left, a numbered stop per step ----------
+   24 Oct (Kash: "pulling people in to click it"): the 23 Oct line kept, its stops numbered
+   and filled, the step names stronger, and the photo picker behind its button */
 .answer-page .next-step { padding: 0; border: 0; border-radius: 0; box-shadow: none; background: none; }
-.answer-page .next-step h2 { margin: 0 0 12px; }
-.answer-page ol.next-line { --stop: 14px; position: relative; list-style: none; margin: 0 0 12px;
-  padding: 0 0 0 calc(var(--stop) + 16px); display: grid; gap: 16px; }
-.answer-page .next-line::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: calc(var(--stop) / 2 - 1px);
+/* its heading as How we worked it out's (24 Oct, Kash: the page as a whole): the answer,
+   then what next, then how we worked it out, three parts the reader can see */
+.answer-page .next-step h2 { margin: 8px 0 16px; font: 700 26px/1.12 var(--display); letter-spacing: -0.015em;
+  color: var(--fg); }
+.answer-page ol.next-line { --stop: 30px; position: relative; list-style: none; margin: 0 0 12px;
+  padding: 0 0 0 calc(var(--stop) + 14px); display: grid; gap: 18px; counter-reset: step; }
+.answer-page .next-line::before { content: ""; position: absolute; top: 8px; bottom: 8px; left: calc(var(--stop) / 2 - 1px);
   border-left: 2px dashed var(--muted-fg); }
-.answer-page .next-line > li { position: relative; margin: 0; }
-.answer-page .next-line > li::before { content: ""; position: absolute; top: 4px; left: calc(-1 * (var(--stop) + 16px));
-  width: var(--stop); height: var(--stop); box-sizing: border-box; border-radius: 50%;
-  border: 3px solid var(--primary); background: var(--bg); }
-.answer-page .next-line p { margin: 0 0 6px; }
+.answer-page .next-line > li { position: relative; margin: 0; counter-increment: step; }
+.answer-page .next-line > li[hidden] { display: none; }
+.answer-page .next-line > li::before { content: counter(step); position: absolute; top: -2px; left: calc(-1 * (var(--stop) + 14px));
+  display: grid; place-items: center; width: var(--stop); height: var(--stop); border-radius: 50%;
+  background: var(--primary); color: var(--primary-fg); font: 800 15px/1 var(--sans); }
+.answer-page .next-line p { margin: 0 0 8px; }
 .answer-page .next-line > li > :last-child { margin-bottom: 0; }
-.answer-page .next-line p.next-when { margin: 0 0 2px; font: 700 16px/1.4 var(--sans); color: var(--primary); }
-/* "I did it" is a plain secondary button now: the page keeps one green press */
+.answer-page .next-line p.next-when { margin: 0 0 4px; font: 700 19px/1.3 var(--sans); color: var(--fg); }
+/* its three buttons one secondary style, the photo button's green outline (24 Oct, the page
+   as a whole: three styles side by side); the page keeps one filled green press */
 .answer-page .next-step .i-did { margin: 0; }
-.answer-page .next-step .i-did > button { background: var(--soft-strong); color: var(--fg); border-color: var(--soft-line); }
-.answer-page .next-step .i-did .done-it { margin: 0 0 6px; }
-/* the more-photos form inside its stop: no card of its own */
-.answer-page .next-line .more-photos { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.answer-page .next-step :is(.i-did > button, a.button.quiet) { background: var(--card); color: var(--primary);
+  border: 1.5px solid var(--primary); font-weight: 700; }
+.answer-page .next-step :is(.i-did > button, a.button.quiet):hover { background: var(--soft); }
+.answer-page .next-step .i-did .done-it { margin: 0 0 8px; }
+/* the photo picker behind its button: no fold box, the form flush under it when open */
+.answer-page .next-step .next-more { margin: 0; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.answer-page .next-more > summary { list-style: none; display: inline-flex; align-items: center; min-height: 44px;
+  padding: 8px 16px; border: 1.5px solid var(--primary); border-radius: var(--pill); color: var(--primary);
+  font-weight: 700; cursor: pointer; }
+.answer-page .next-more > summary::-webkit-details-marker { display: none; }
+.answer-page .next-more[open] > summary { margin-bottom: 10px; }
+.answer-page .next-more > :not(summary) { margin: 0; }
+.answer-page .next-more .more-photos { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
 /* the sign-in: one plain line under the stops */
 .answer-page .next-step > p.keep { margin: 0; font-size: 16px; color: var(--muted-fg); }
 

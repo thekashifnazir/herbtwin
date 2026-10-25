@@ -16,12 +16,17 @@ involves in plain words.</p>
 <ul>
   <li><strong>Signed in:</strong> your photos, your plants, the answers and the chat under
     them are kept in Supabase (hosted in the EU) so the app can remember your plants.</li>
-  <li><strong>Signed out:</strong> nothing is kept on disk. The answer, and the photo as the AI
-    saw it (no location data), stay in the server's memory for an hour, so you can ask
-    follow-up questions or add more photos for a surer answer, then they are gone.</li>
+  <li><strong>Signed out:</strong> the answer, what the AI read from your photo (not the photo
+    itself) and any questions you ask under it are kept in Supabase, hosted in the EU (or,
+    if Supabase can't be reached, in the server's memory), for 24 hours, so the link keeps working and you can ask more or tell us more for a surer
+    answer. What you type with the photo or under Tell us more is kept with it for those 24
+    hours too: a typed place as you wrote it, and the spot found from it rounded to about
+    1 km. Then they can no longer be opened, and the daily clean-up deletes them. The
+    photo itself is held only in the server's memory, while you pick out the plant you mean
+    or add more photos, and can no longer be used after an hour.</li>
   <li>The answer page shows your photo back from a small copy kept in your own browser tab.
     It is not sent again and goes when you close the tab.</li>
-  <li>Locations are rounded to about 1 km before anything uses or keeps them.</li>
+  <li>Map positions are rounded to about 1 km before anything uses or keeps them.</li>
   <li><strong>What can I grow here?</strong> reads your photo once for the setting and the
     soil and keeps no photo. The way the spot faces is the direction you pick; nothing reads
     your phone's compass. Signed in, the spot's answer and the direction you picked are kept
@@ -38,7 +43,12 @@ involves in plain words.</p>
     and one for 30 days. Signing out removes them.</li>
   <li><strong>Judges:</strong> entering the judges' code sets one cookie for 60 days, so
     the daily photo limits don't apply in that browser.</li>
-  <li>Signed out and without the code, the site sets no cookies.</li>
+  <li><strong>Signed out:</strong> sending a photo sets one cookie for 24 hours. It holds
+    only a random code, so that if you sign in from that answer it can be kept in My
+    plants, and only in this browser. It is not used for tracking and says nothing about
+    you. Signing in from an answer sets one more, so the emailed link brings you back to
+    that answer; it is used once. Signing out removes both.</li>
+  <li>Until you send a photo, sign in or enter the code, the site sets no cookies.</li>
 </ul>
 
 <h2>Who processes what</h2>

@@ -164,9 +164,11 @@ def test_one_waiting_line_not_asking_and_thinking_at_once(tmp_path):
     script = page.split('// "Ask about this plant"', 1)[1].split("</script>", 1)[0]
     assert 'textContent = "Asking…"' not in script and 'textContent = "Thinking…"' not in script
     assert "ask-word" not in script  # the button keeps its word
-    assert "wait.textContent = box.dataset.thinking;" in script
+    # the thinking line, then the plant words and seconds before it (24 Oct, Kash)
+    assert 'const thinking = box.dataset.thinking.replace(/…$/, "");' in script
+    assert "still = window.herbtwinWait(wait, [" in script
     # the search line is said only when the server says a search started
-    assert script.count("Searching trusted pages") == 1
+    assert script.count("searching trusted pages") == 1 and "still.say(searching);" in script
     assert 'if (said.step === "search")' in script
     assert '"Accept": "application/x-ndjson"' in script
 

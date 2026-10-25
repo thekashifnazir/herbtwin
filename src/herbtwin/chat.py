@@ -323,6 +323,21 @@ HOLD_WATER_IF_DRY = (
     "worse than leaving it."
 )
 HOLD_WATER_ADVISED = "For now, hold off watering, as the advice above says."  # no twin finding
+# "how often do I need to water my plant" was answered with the hold-off line alone, as off
+# topic (Toloka site study, 23 Oct): the frequency, in words that agree with the card
+AFTER_THAT = (
+    "There's no fixed schedule: after that, water whenever the top of the {where} is dry again."
+)
+_ASKS_HOW_OFTEN = re.compile(
+    r"\bhow (?:often|frequently|much water)\b|\bhow many times\b|\bevery how many\b|"
+    r"\bwhen (?:should|do|can|must) (?:i|we|you) (?:next )?water\b|\bwatering (?:schedule|routine)\b",
+    re.I,
+)
+
+
+def _after_that(rec: AnalysisRecord) -> str:
+    container = rec.observation.container if rec.observation else "unknown"
+    return AFTER_THAT.format(where="soil" if container == "ground" else "compost")
 
 
 def _hold_line(rec: AnalysisRecord) -> str | None:
@@ -347,18 +362,44 @@ def _sets_a_routine(sentence: str) -> bool:
     return bool(_WATERISH.search(sentence)) and not _pure_hold_off(sentence) and not drains
 
 
-def _keeps_the_dont(text: str, rec: AnalysisRecord) -> str:
+def _keeps_the_dont(text: str, rec: AnalysisRecord, message: str = "") -> str:
     """The reply less any sentence that sets a watering routine while the answer says not to
     water, with our line in their place (once: not when a kept sentence already holds off).
-    Paragraphs, bullets and numbered lists keep their breaks."""
+    Asked how often, it then says how often, in words that agree with the card. Paragraphs,
+    bullets and numbered lists keep their breaks."""
     line = _hold_line(rec)
     if not text or line is None:
         return text
+    kept = _without_routines(text, line)
+    asks = _ASKS_HOW_OFTEN.search(message) and re.search(r"\bwater", message, re.I)
+    if asks and (after := _after_that(rec)) not in kept:  # never on a feeding or misting question
+        return f"{kept}\n\n{after}" if "\n" in kept else f"{kept} {after}"
+    return kept
+
+
+# a bracketed source after a sentence's full stop, "… in summer. (RHS) Pick off …", split off
+# with the next sentence: it goes back to the one it closed, to be kept or dropped with it
+# (live, 24 Oct: "(RHS) For now, water only if…" once its sentence was dropped)
+_LEADING_NOTE = re.compile(r"(\([^()\n]{1,60}\))(?:[ \t]+(?=\S)|\s*$)")
+
+
+def _without_routines(text: str, line: str) -> str:
+    """_keeps_the_dont's sentence filter: `line` is our hold-off line."""
     # a sentence ends at . ! ? (never "1." opening a numbered item) or at a line break
     pieces = re.split(r"((?<=[.!?])(?<!^\d\.)(?<!\n\d\.)(?<!\be\.g\.)(?<!\bi\.e\.)\s+|\n+)", text)
     pairs = [
         (pieces[i], pieces[i + 1] if i + 1 < len(pieces) else "") for i in range(0, len(pieces), 2)
     ]
+    for i in range(1, len(pairs)):
+        note = _LEADING_NOTE.match(pairs[i][0])
+        if note and "\n" not in pairs[i - 1][1]:
+            rest = pairs[i][0][note.end() :]
+            # a note that was the whole piece hands its gap on: "(RHS)\n\n" closed a paragraph
+            gap = pairs[i - 1][1] if rest else pairs[i][1]
+            pairs[i - 1] = (f"{pairs[i - 1][0]} {note[1]}", gap)
+            pairs[i] = (rest, pairs[i][1])
+    # a note that was the whole piece ("Water it daily. (RHS)") leaves nothing behind
+    pairs = [(x, gap) for x, gap in pairs if x.strip()] or pairs
     kept: list[tuple[str, str]] = []
     after_water = last_kept = False  # the sentence before spoke of water / was kept
     for x, gap in pairs:
@@ -400,9 +441,11 @@ _CAUTION = tuple(
 
 def _ours_only(text: str) -> bool:
     """Nothing of the model's own is left: only our spray and water lines."""
-    ours = [NO_SPRAYS, HOLD_WATER, HOLD_WATER_ADVISED] + [
-        HOLD_WATER_IF_DRY.format(check=dont_if_dry(c).lower()) for c in ("pot", "ground")
-    ]
+    ours = (
+        [NO_SPRAYS, HOLD_WATER, HOLD_WATER_ADVISED]
+        + [HOLD_WATER_IF_DRY.format(check=dont_if_dry(c).lower()) for c in ("pot", "ground")]
+        + [AFTER_THAT.format(where=w) for w in ("compost", "soil")]
+    )
     for line in ours:
         text = text.replace(line, "")
     return not text.strip()
@@ -1377,7 +1420,7 @@ def reply(
         text = _within(text, said)
     # after every rewrite, before the fact handling: none brings a spray back, and the
     # thanks, the pointer and the listed pages are judged on the cleaned text
-    text = _keeps_the_dont(_no_sprays(text), rec)
+    text = _keeps_the_dont(_no_sprays(text), rec, message)
     ours_only = bool(text) and _ours_only(text)  # no claim of the model's own to be less sure of
     fact = said_a_fact(message) and not leaked
     thanks = False

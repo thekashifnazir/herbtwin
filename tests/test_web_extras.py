@@ -213,3 +213,64 @@ def test_the_slot_says_when_there_is_nothing_to_buy_and_the_rater_text_skips_it(
     from herbtwin.web.answer_text import SKIP_CLASSES
 
     assert "extras" in SKIP_CLASSES and "Where to get it" not in plan_text(page)
+
+
+def test_nothing_to_buy_links_the_trusted_pages_tavily_found(tmp_path):
+    # 24 Oct, Kash: judges look for Tavily in "Where to get it"; on the rosemary beetle sample
+    # it said "Nothing you need to buy" with no link. Now: the answer's own trusted pages, one
+    # a site, at most two, with no new search
+    from herbtwin.schemas import TrustedCheck
+
+    c, _, rid = _answer(tmp_path, {})
+    rec = c.app.state.answers.get_for(rid, None).latest
+    first = "https://www.rhs.org.uk/biodiversity/rosemary-beetle"
+    rec.trusted = TrustedCheck(
+        url=first,
+        found_with="tavily",
+        sentences=[],
+        quote="Pick off the adult beetles and larvae by hand.",  # as on the beetle sample
+        pages=[
+            "https://www.rhs.org.uk/herbs/basil/grow-your-own",  # same site: once
+            "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil/",
+            "https://www.gardenorganic.org.uk/basil",  # a third: at most two
+        ],
+    )
+    got = c.get(f"/answers/{rid}/extras")
+    assert got.status_code == 200
+    assert "Nothing you need to buy for this one." in got.text
+    assert "<h3>How gardeners deal with it</h3>" in got.text
+    assert re.findall(r'<a href="([^"]+)"', got.text) == [
+        first,
+        "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-basil/",
+    ]
+    assert ">rhs.org.uk</a>" in got.text and ">gardenersworld.com</a>" in got.text
+    assert "Found with Tavily on trusted gardening sites." in got.text
+
+
+def test_a_rough_read_gets_no_guides(tmp_path):
+    from herbtwin.schemas import TrustedCheck
+
+    c, _, rid = _answer(tmp_path, {})
+    rec = c.app.state.answers.get_for(rid, None).latest
+    rec.trusted = TrustedCheck(url="https://www.rhs.org.uk/x", found_with="tavily", sentences=[])
+    rec.answer.photo_issue = "blurry"
+    assert c.get(f"/answers/{rid}/extras").status_code == 204
+
+
+def test_guides_only_link_pages_about_this_plant(tmp_path):
+    # review of #520: an unquoted page whose address names another plant (sage, for a basil
+    # answer) is never linked; a quoted one backs this answer, so it is; www. is one site
+    from herbtwin.schemas import TrustedCheck
+
+    c, _, rid = _answer(tmp_path, {})
+    rec = c.app.state.answers.get_for(rid, None).latest
+    sage = "https://www.rhs.org.uk/herbs/sage/grow-your-own"
+    basil = "https://rhs.org.uk/herbs/basil/grow-your-own"
+    rec.trusted = TrustedCheck(url=sage, found_with="tavily", sentences=[], pages=[basil])
+    got = c.get(f"/answers/{rid}/extras")
+    assert sage not in got.text and re.findall(r'<a href="([^"]+)"', got.text) == [basil]
+    rec.trusted = TrustedCheck(
+        url=sage, found_with="tavily", sentences=[], pages=[basil], quote="Pick them off."
+    )
+    links = re.findall(r'<a href="([^"]+)"', c.get(f"/answers/{rid}/extras").text)
+    assert links == [sage]  # quoted first; the basil page is the same site

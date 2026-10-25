@@ -1,5 +1,6 @@
 from datetime import UTC, date, datetime
 
+import httpx
 import pytest
 
 from herbtwin import reminders
@@ -202,8 +203,11 @@ ENV = {
 @pytest.fixture
 def wired(monkeypatch):
     """main() with the fake admin and outbox in place of Supabase and Resend."""
-    parts = {"admin": FakeAdmin(), "outbox": Outbox()}
+    parts = {"admin": FakeAdmin(), "outbox": Outbox(), "purges": []}
     monkeypatch.setattr(reminders, "_admin_from", lambda settings, client: parts["admin"])
+    monkeypatch.setattr(
+        reminders, "_purge_answers", lambda settings, client: parts["purges"].append(1)
+    )
     monkeypatch.setattr(reminders, "_sender_from", lambda settings, client: parts["outbox"])
     monkeypatch.setattr(reminders, "_today", lambda: TODAY)
     return parts
@@ -247,6 +251,7 @@ def test_python_dash_m_catches_the_admin_stores_errors(monkeypatch):
     # admin store raises herbtwin.reminders.AdminError: that copy must still catch it
     import runpy
 
+    from herbtwin import answer_cache
     from herbtwin.adapters import reminder_admin
 
     class Down:
@@ -259,6 +264,42 @@ def test_python_dash_m_catches_the_admin_stores_errors(monkeypatch):
     for k, v in ENV.items():
         monkeypatch.setenv(k, v)
     monkeypatch.setattr(reminder_admin, "SupabaseReminderAdmin", Down)
+    monkeypatch.setattr(answer_cache.SupabaseAnswerCache, "purge", lambda self: 0)
     with pytest.raises(SystemExit) as stop:
         runpy.run_module("herbtwin.reminders", run_name="__main__")
     assert stop.value.code == 2
+
+
+def test_each_run_purges_the_expired_answers_once(wired):
+    wired["admin"] = FakeAdmin(_due("a1"))
+    assert reminders.main(ENV) == 0
+    assert wired["purges"] == [1]
+
+
+def _purge_client(reply: httpx.Response | Exception, seen: list[httpx.Request]) -> httpx.Client:
+    def handle(request: httpx.Request) -> httpx.Response:
+        seen.append(request)
+        if isinstance(reply, Exception):
+            raise reply
+        return reply
+
+    return httpx.Client(transport=httpx.MockTransport(handle))
+
+
+def test_the_purge_calls_purge_answer_cache_and_logs_the_count(caplog):
+    seen: list[httpx.Request] = []
+    client = _purge_client(httpx.Response(200, json=3), seen)
+    with caplog.at_level("INFO"):
+        reminders._purge_answers(reminders.load_settings(ENV), client)
+    assert [r.url.path for r in seen] == ["/rest/v1/rpc/purge_answer_cache"]
+    assert seen[0].headers["authorization"] == "Bearer sb_secret_x"
+    assert "purged 3 expired answers" in caplog.text
+
+
+@pytest.mark.parametrize(
+    "reply", [httpx.Response(500, json={}), httpx.ConnectError("down")], ids=["500", "down"]
+)
+def test_a_failed_purge_is_logged_and_never_raises(caplog, reply):
+    reminders._purge_answers(reminders.load_settings(ENV), _purge_client(reply, []))
+    assert "could not purge the expired answers" in caplog.text
+    assert "sb_secret_x" not in caplog.text

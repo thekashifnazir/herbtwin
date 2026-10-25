@@ -7,6 +7,9 @@
 <link rel="preload" href="/static/fonts/alegreya-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/static/fonts/fira-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/static/fonts/alegreya-700.woff2" as="font" type="font/woff2" crossorigin>
+{# every wait that searches or re-checks: a pulsing dot, a plant word, the seconds since it
+   began, and what is really happening (web/waiting_words.py; 24 Oct, Kash) #}
+<script>{{ wait_js }}</script>
 {% block head %}{% endblock %}
 <style>{{ site_css }}</style>
 </head>

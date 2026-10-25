@@ -227,6 +227,24 @@ def _sender_from(settings: Settings, client: httpx.Client) -> Send:
     return send
 
 
+def _purge_answers(settings: Settings, client: httpx.Client) -> None:
+    """Delete the answers past their 24 hours (answer_cache), once a run. Best effort: a
+    failure is logged and never stops or reddens the reminders."""
+    from herbtwin.answer_cache import SupabaseAnswerCache
+
+    cache = SupabaseAnswerCache(
+        settings.supabase_url or "",
+        settings.supabase_secret_key or "",
+        lambda: datetime.now(UK),
+        client,
+    )
+    gone = cache.purge()
+    if gone is None:
+        log.error("reminders: could not purge the expired answers")
+    else:
+        log.info("reminders: purged %d expired answers", gone)
+
+
 def main(env: Mapping[str, str] | None = None) -> int:
     """The daily job: 0 all sent, 1 some failed (the run shows red), 2 could not start."""
     try:
@@ -239,6 +257,7 @@ def main(env: Mapping[str, str] | None = None) -> int:
         log.error("reminders: not set: %s", ", ".join(missing))
         return 2
     with httpx.Client(timeout=10) as client:
+        _purge_answers(settings, client)
         admin, send = _admin_from(settings, client), _sender_from(settings, client)
         try:
             result = run(

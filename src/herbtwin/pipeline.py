@@ -279,7 +279,7 @@ def evidence_of(reading: Reading) -> Evidence:
 
 
 def reading_from(stored: StoredAnswer) -> Reading:
-    """A stored answer's Reading, rebuilt for a refine after the 1-hour cache."""
+    """A stored answer's Reading, rebuilt for a refine once the answer cache has let it go."""
     e, obs = stored.evidence, stored.observation
     if stored.told is not None:  # "Wrong? Switch", and where their note says it grows
         obs = told_observation(obs, stored.told)

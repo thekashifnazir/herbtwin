@@ -184,6 +184,20 @@ def row_why(r: CompareRow, a: Answer) -> str:
     return plain_why(r.why)
 
 
+def twin_off_job(a: Answer) -> bool:
+    """The card's main job is one the twin does not compare (pick off the beetles): the twin
+    only weighs water and frost around it."""
+    main = a.do[0].action if a.do else None
+    return main is not None and main not in {"leave_normal", "dont_water"} | {
+        r.action for r in a.compare
+    }
+
+
+# under "Pick the beetles off by hand", "Nothing beats leaving it" read as "leave it alone":
+# 3 of 11 Toloka workers gave a watering instruction as the answer (site study, 23 Oct)
+NOTHING_ELSE = "Nothing else is needed for water or frost"
+
+
 def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
     """The Compare fold: which choice beat leaving it on the twin, then what did nothing extra
     or made it worse. Falls back to the old title with no verdict to report."""
@@ -204,16 +218,14 @@ def compare_title(a: Answer, no_cure: bool) -> FoldTitle:
         return FoldTitle(kind, "Compare all choices (next 2 weeks)", found=False)
     # the main job is not one the twin compares (pick off the beetles): a better choice is an
     # extra, never the title's lead (site walk 2, r3: "Watering beats leaving it")
-    main = a.do[0].action if a.do else None
-    extra = bool(better) and main not in {"leave_normal", "dont_water"} | {
-        r.action for r in a.compare
-    }
+    off_job = twin_off_job(a)
+    extra = bool(better) and off_job
     if extra:
         title = f"{_cap(_join(better))} {'helps' if len(better) == 1 else 'help'} too"
     elif better:
         title = f"{_cap(better[0])} beats leaving it"
     else:
-        title = "Nothing beats leaving it"
+        title = NOTHING_ELSE if off_job else "Nothing beats leaving it"
     more = []
     if len(better) > 1 and not extra:
         more.append(f"{_join(better[1:])} {'helps' if len(better) == 2 else 'help'} too")

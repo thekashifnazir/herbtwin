@@ -204,5 +204,6 @@ def test_the_judges_notes_match_the_menu_and_say_answers_follow_the_weather():
     notes = Path(__file__).parents[1].joinpath("JUDGES.md").read_text()
     nav = Path(__file__).parents[1].joinpath("src/herbtwin/web/templates/_nav.html").read_text()
     assert "What can I grow here" not in nav
-    assert "from the menu at the top" not in notes and "it is not in the menu" in notes
+    # 23 Oct: the answer is switched off, so the notes say so rather than say where it is
+    assert "from the menu at the top" not in notes and "switched off on the live" in notes
     assert "Answers change with the date and the weather." in notes

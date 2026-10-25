@@ -72,9 +72,7 @@ def test_make_this_surer_jumps_to_the_questions_when_low_or_medium(tmp_path):
     # phones: nothing left to answer in the fold, so it is not lifted under the headline
     assert 'class="answer-cols ask-up"' not in page
     rec.answer.tell_me_key = "soil_feel"
-    button = (
-        '<a class="button primary" href="#refine">Make this surer: answer 2 quick questions</a>'
-    )
+    button = '<a class="button quiet" href="#refine">Make this surer: answer 2 quick questions</a>'
     assert button in _render(rec)  # soil feel and last watered
     one = _render(rec, asks=["soil_feel", "question"])
     assert "Make this surer: answer 1 quick question</a>" in one

@@ -29,7 +29,9 @@ SKIP_TAGS = {"script", "style", "button", "audio", "figure", "svg", "template"}
 SKIP_CLASSES = {
     "make-surer", "next-step", "by-part", "extras", "reported", "told-echo", "indoor-light",
     "sure-open", "sure-body", "strip-h", "strip-go", "ts-h", "ts-what", "ts-find", "compare",
+    "answer-ends",
 }  # fmt: skip
+MONTH_CARDS = {"indoor-now", "outdoor-now"}
 VOID = {"img", "br", "hr", "input", "meta", "link", "source"}
 BLOCKS = {"p", "h2", "h3", "li", "ul", "div", "section"}  # each starts a new paragraph
 
@@ -43,6 +45,7 @@ class _Plan(HTMLParser):
         self.skip: list[str] = []  # the open tags of a skipped subtree
         self.inline: list[str] = []  # what each open span/strong closes with
         self.prefix = ""  # the open block's markdown lead: "## ", "### " or "- "
+        self.month = False  # inside the month's card, read from beside the plan
 
     def flush(self, prefix: str = "") -> None:
         text = " ".join("".join(self.buf).split())
@@ -56,6 +59,11 @@ class _Plan(HTMLParser):
         if not self.depth:
             if tag == "div" and "plan" in classes:
                 self.depth = 1
+            # "Indoors/Outdoors in <Month>" sits beside the plan since 24 Oct; still advice,
+            # read after the plan, where it came last before (no section nests inside it)
+            elif tag == "section" and classes & MONTH_CARDS:
+                self.depth, self.month = 1, True
+                self.handle_starttag(tag, attrs)
             return
         if self.skip:
             if tag == self.skip[0] and tag not in VOID:
@@ -88,6 +96,13 @@ class _Plan(HTMLParser):
 
     def handle_endtag(self, tag):
         if not self.depth:
+            return
+        # the month card's own end stops the reading even when the card was skipped whole
+        # (hidden, say): no section nests in it, so the next side content is never read
+        if self.month and tag == "section" and self.skip in ([], ["section"]):
+            if not self.skip:
+                self.flush(self.prefix)
+            self.skip, self.prefix, self.depth, self.month = [], "", 0, False
             return
         if self.skip:
             if tag == self.skip[0]:

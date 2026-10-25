@@ -15,10 +15,16 @@
   if (!s || !window.fetch) return;
   const said = s.querySelector(".extras-said"), found = s.querySelector(".extras-found");
   s.hidden = false;
-  const none = () => { said.textContent = "Nothing you need to buy for this one."; };
+  const still = window.herbtwinWait(said, [
+    [0, "looking for shops for this"],
+    [8, "still searching UK garden shops"],
+    [20, "taking longer than usual: the shops' sites are slow to answer"],
+  ]);
+  const none = () => { still(); said.textContent = "Nothing you need to buy for this one."; };
   fetch(s.dataset.src, {headers: {"X-Herbtwin-Fetch": "1"}})
     .then((r) => (r.status === 200 ? r.text() : ""))
     .then((html) => {
+      still();
       if (!html.trim()) return none();
       found.innerHTML = html;
       // gardeners alone: a hand, not something to get (22 Oct site walk)

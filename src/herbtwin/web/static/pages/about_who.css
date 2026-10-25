@@ -32,4 +32,4 @@
 /* the public card after the strip: its own width, not the page's */
 .about-page :is(.who-strip, .who-strip-note) + .about-close { max-width: 40rem; }
 /* where the pull requests are (23 Oct, Kash): the public repo is a curated copy */
-.about-page .about section > p.who-strip-note { margin: 8px 0 24px; color: var(--muted-fg); font-size: 16px; }
+.about-page .about section > p.who-strip-note { margin: 8px 0 24px; font-size: 16px; }

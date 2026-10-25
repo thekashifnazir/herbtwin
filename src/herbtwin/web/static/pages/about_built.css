@@ -1,24 +1,20 @@
 /* About, "How it's built", round 4 (22 Oct, Kash's notes: "boxes after boxes"). This sheet
    sorts after about.css ("_" after "."), so its rules win on order. Theme tokens only. */
 
-/* the weather's path says what it carries (round 4): a sky label, the weather's colour, ringed
-   in the path's green. On a phone it sits under the weather box, the green arrow below it into
-   the twin */
-.about-page .flow-built > li.turn > .flow-feed { margin: 0; align-self: center; text-align: center; }
-.about-page .flow-built .flow-feed > span { display: inline-block; max-width: 15rem; padding: 6px 14px;
-  border: 2px solid var(--ok); border-radius: 999px; background: var(--sky); color: var(--sky-fg);
-  font: 600 16px/1.35 var(--sans); }
-.about-page .flow-built .flow-feed > span > b { display: block; font-weight: 700; }
+/* the weather's green path into the twin. 23 Oct, Kash: its "Day by day" label meant nothing
+   to a reader, so the path carries no words */
+.about-page .flow-built > li.turn > .flow-feed { margin: 0; align-self: center; }
+/* a phone has no wire, so the empty path would only add a gap under the weather (review) */
+@media (max-width: 959px) { .about-page .flow-built > li.turn > .flow-feed { display: none; } }
 @media (min-width: 960px) {
-  /* on a wide screen the label sits on the green line down from the weather, which then turns
-     along the gap between the rows to the twin (about-built.css). 23 Oct: row two reads left
-     to right again, so the line stops at the gap's middle and turns, as before round 4 */
+  /* on a wide screen the green line runs down from the weather, then turns along the gap
+     between the rows to the twin (about-built.css). 23 Oct: row two reads left to right
+     again, so the line stops at the gap's middle and turns, as before round 4 */
   .about-page .flow-built > li.turn > .flow-feed { flex: 1 0 auto; display: flex; flex-direction: column;
     align-items: center; margin: -14px 0 -33px; }  /* overlaps the 3px run: no gap at the corner */
   .about-page .flow-built > li.turn > .flow-feed::before,
   .about-page .flow-built > li.turn > .flow-feed::after { content: ""; flex: 1 0 12px; width: 3px;
     background: var(--ok); }
-  .about-page .flow-built .flow-feed > span { max-width: 14rem; border-radius: var(--surface); }
 }
 
 /* what hangs off the answer is joined to it, not ruled off (23 Oct, Kash: "it was the dotted

@@ -22,7 +22,7 @@ is in the submission form; it is not in this repository.
    **Use somewhere else** and type a UK town or postcode. A photo of your own that has its
    location says "Using your photo's location"; without one, type a town, or there is no
    weather and no test on the plant's twin. Press **What does my plant need?**
-   (the big green button; **Analyse** on a site without the spot answer).
+   (the big green button).
 2. **Watch it work.** The page names the step it is on at the top and lists each step as it happens ("Reading the photo",
    "Found …", "Looking up how … likes to grow", "Checking the weather where you are",
    "Thinking about what it needs"), with what comes next under the step it is on and a rough
@@ -104,7 +104,7 @@ is in the submission form; it is not in this repository.
      nothing new; then **What next**, a short line of steps: **Today**, **I did it** for an
      action you can carry out; **In a few days**, send a new photo (**Send another photo**);
      **For a surer answer**, **Add 1 or 2 more photos** of the same plant (when that is on);
-     then one link, **See what grows here** (outdoors, with a place, where the spot answer is on), and **Where to get
+     then **Where to get
      it**, a short strip of shops for what the answer asks you to do (when found); under
      **Remove it. There is no cure for this.**
      it says to bag it and bin it, not the compost, and to check the plants beside it; it
@@ -174,15 +174,10 @@ is in the submission form; it is not in this repository.
 8. **Reminder email.** Signed in, an answer whose main action has a check window shows
    "Email me when it's time to check again". Ticked, one email is sent halfway through
    that window. The email has a link to stop it.
-9. **What can I grow here?** Press the button of that name on the home page, beside
-   **What does my plant need?** (it is not in the menu, and does not show on a site without the spot
-   answer). Choose a photo of a bed, pot or border with the soil in view. Sample 7 in section 3 (`7-pea-bed.jpg`) is a bed; the others are close-ups of one plant, not spots. Type a UK
-   town or postcode and send it. The page first says what it read
-   (setting, month, place, sun). It then lists crops under **Good now** and **Worth a
-   try**, with **Coming up** and **Not here** folded under **The details**. It may ask up to two quick questions, which way the
-   spot faces and a soil squeeze test, to make the list surer. If it asks "Is it in a pot
-   or in the ground?", tap one; otherwise, if the setting is wrong, change it under "Not
-   right? Change the setting".
+
+**What can I grow here?**, a second door for a photo of a bed, is switched off on the live
+site so the plant check gets your full attention. It was built and tested (it matched the
+RHS's monthly picks 0.90 of the time); About says why under **What's next**.
 
 The [privacy page](https://herbtwin.kashifnazir.com/privacy) says what is kept and who
 processes what. You can delete your account from My plants.
@@ -205,7 +200,7 @@ authors and licences are in [`CREDITS.md`](docs/judges/samples/CREDITS.md).
 | `4-rosemary-beetles.jpg` | Rosemary | Rosemary beetles on the shoot tips (a pest) |
 | `5-coriander-flowering.jpg` | Coriander | Gone to flower (bolted) |
 | `6-basil-downy-mildew.jpg` | Basil | Two leaves with downy mildew, top and underside: yellow patches and grey-purple fuzz. In our runs with GLM reading the photo (live on 14 Oct, and the 17 Oct problem-check eval) it was named as basil downy mildew, and the answer shows "Could be basil downy mildew". The backup photo model (DeepSeek) missed it in its test, so a read that falls back can miss it |
-| `7-pea-bed.jpg` | A raised bed | A raised bed of mostly bare soil with young pea plants, in late November. For **What can I grow here?** (the home page's tile for it loads the photo for that button); it is not a plant photo |
+| `7-pea-bed.jpg` | A raised bed | A raised bed of mostly bare soil with young pea plants, in late November. For **What can I grow here?**, which is switched off on the live site; it is not a plant photo |
 
 Your own photo of a herb works too. A photo straight from a phone camera carries its date
 and, if location is on, its place; the app rounds the place to about 1 km and does not

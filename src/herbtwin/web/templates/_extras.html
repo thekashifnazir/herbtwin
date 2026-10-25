@@ -34,3 +34,11 @@
   <li><a href="{{ rhs_hiring }}" rel="noopener noreferrer" target="_blank">How to hire a gardener: RHS advice</a></li>
 </ul>
 <p class="muted"><small>Directory pages found with Tavily, not checked by us.</small></p>{% endif %}
+{# nothing to buy and no one to hire: the trusted pages Tavily found for this answer
+   (trusted_page.guide_pages), named by their site, never by a page's own words (24 Oct) #}
+{% if guides %}<p class="extras-none muted">Nothing you need to buy for this one.</p>
+<h3>How gardeners deal with it</h3>
+<ul class="shop-links guide-links">{% for url in guides %}
+  <li><a href="{{ url }}" rel="noopener noreferrer" target="_blank">{{ url.split("/")[2]|replace("www.", "", 1) }}</a></li>{% endfor %}
+</ul>
+<p class="muted"><small>Found with Tavily on trusted gardening sites. Not checked by us.</small></p>{% endif %}

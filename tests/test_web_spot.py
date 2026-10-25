@@ -51,7 +51,9 @@ def _archive():
 
 def test_off_no_entry_and_no_routes(tmp_path):
     c, _ = _client(tmp_path, spot=False)
-    assert "/spots" not in c.get("/").text and "Analyse" in c.get("/").text
+    home = c.get("/").text
+    # 23 Oct: the Toloka task and the docs name the button, so it keeps its name with spot off
+    assert "/spots" not in home and ">What does my plant need?</button>" in home
     assert c.post("/spots", files={"photo": ("b.jpg", JPEG, "image/jpeg")}).status_code == 404
     assert c.get("/spots/" + "a" * 32).status_code == 404
 

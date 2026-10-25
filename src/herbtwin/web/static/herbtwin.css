@@ -401,9 +401,10 @@ th { background: var(--muted); font-weight: 700; }
    card stands off the paper. Lime is for the one thing to press on the band. */
 :root { --lime: #C9F27B; --lime-fg: #12291C; --ink-shadow: var(--fg);
   --sky: #E3EEF6; --sky-fg: #2F6690;
-  --lilac: #EEE8F7; --lilac-fg: #5B3F8F; }  /* Tavily search, wherever it shows (About, 22 Oct) */
+  --lilac: #EEE8F7; --lilac-fg: #5B3F8F;  /* Tavily search, wherever it shows (About, 22 Oct) */
+  --stone: #E3DACA; }  /* oat: About's diagram panels, a colour no box uses (25 Oct, Kash) */
 @media (prefers-color-scheme: dark) { :root { --ink-shadow: #000; --sky: #1B2B3A; --sky-fg: #8CC2EE;
-  --lilac: #251E33; --lilac-fg: #C4B2EE; } }
+  --lilac: #251E33; --lilac-fg: #C4B2EE; --stone: #221F1A; } }
 .has-band { overflow-x: clip; }   /* a band never scrolls the page sideways */
 .has-band main { padding-top: 0; }
 /* the band's full bleed (50% - 50cqw) holds only in a centred column: a page that keeps the
@@ -429,3 +430,17 @@ main .wrap:has(> .page-band) { padding-right: 16px; }
 .page-band .button.primary:hover { background: #B8E866; border-color: #B8E866; }
 .page-band .button:not(.primary) { background: transparent; border: 2px solid var(--band-line); color: var(--band-fg); }
 .page-band .button:not(.primary):hover { background: rgb(255 255 255 / .08); }
+
+/* a wait at work (web/waiting_words.py; 24 Oct, Kash: "like you do for Claude … but plant
+   related"): a pulsing dot in the text's colour, the plant word and seconds, then what is
+   really happening, quieter. Still for anyone who asks for less motion */
+.wait-fun { font-weight: 700; font-variant-numeric: tabular-nums; }
+.wait-fun::before { content: ""; display: inline-block; width: 0.55em; height: 0.55em; margin-right: 0.45em;
+  border-radius: 50%; background: currentColor; vertical-align: 0.08em; animation: wait-pulse 1.2s ease-in-out infinite; }
+@keyframes wait-pulse { 50% { transform: scale(0.55); opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .wait-fun::before { animation: none; } }
+/* the status keeps its panel's own colour (no fading: on the lilac shops strip a faded grey
+   fell under 4.5:1, review of #523); the word takes the panel's accent */
+.answer-page :is(.chatwait, .chatnote) .wait-fun { color: var(--primary); }
+.answer-page .extras-said .wait-fun { color: var(--lilac-fg); }
+.page-band .wait-tick { margin: 6px 0 0; color: var(--band-fg); font-size: 18px; }

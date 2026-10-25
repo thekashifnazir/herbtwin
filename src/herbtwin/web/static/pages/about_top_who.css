@@ -2,10 +2,9 @@
    "about_" sorts after about.css and the about-*.css sheets, so it wins their ties. Theme
    tokens only; nothing under 16px. */
 
-/* What it does: a short lead, clear of the band above (23 Oct, Kash: the cost moved under
-   How it's built) */
-.about-page .about .about-what { margin-top: 40px; }
-.about-page .about section > p.about-lead { max-width: 46rem; margin: 0; font-size: 20px; line-height: 1.5; }
+/* How it's built opens the page, clear of the band above (25 Oct, Kash: What it does went;
+   the band says it) */
+.about-page .about #made-with { margin-top: 40px; }
 
 /* What each answer costs: the mint card straight after the flow it prices */
 .about-page .about .about-costs { margin-top: -12px; }

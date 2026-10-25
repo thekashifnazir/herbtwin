@@ -7,7 +7,13 @@ import re
 from datetime import date
 
 from herbtwin.answer import NO_CURE_HEADLINE
-from herbtwin.fold_titles import compare_title, fold_titles, weather_title, why_title
+from herbtwin.fold_titles import (
+    NOTHING_ELSE,
+    compare_title,
+    fold_titles,
+    weather_title,
+    why_title,
+)
 from herbtwin.schemas import CompareRow, Factor, KnowledgePack
 from herbtwin.stages.twin import simulate
 from herbtwin.twin_chart import twin_chart
@@ -210,6 +216,29 @@ def test_compare_with_nothing_better_says_so_and_names_what_harms(tmp_path):
     t = compare_title(a, no_cure=False)
     assert t.title == "Nothing beats leaving it"
     assert t.peek == "Watering and feeding make it worse"
+
+
+def test_a_pest_job_the_twin_cannot_weigh_never_reads_leave_it_alone(tmp_path):
+    # 23 Oct Toloka study: under "Pick the beetles off by hand", "Nothing beats leaving it"
+    # read as the answer; 3 of 11 workers gave a watering instruction instead of the job
+    a = _unsure_record(tmp_path).answer
+    a.do = [_card("treat_or_remove", when="today")]
+    a.compare = _rows(("leave_normal", "same"), ("water", "worse"), ("shelter", "same"))
+    t = compare_title(a, no_cure=False)
+    assert t.title == NOTHING_ELSE == "Nothing else is needed for water or frost"
+    assert t.peek == "Protecting it does nothing extra; watering makes it worse"
+    page = _render(_unsure_record_with(tmp_path, a))
+    what = page.split('<p class="ts-what">', 1)[1].split("</p>", 1)[0]
+    assert what.endswith(
+        "It can't model pests or diseases, so it only checks water and frost around the job above."
+    )
+    assert "<strong>Nothing beats leaving it.</strong>" not in page
+
+
+def _unsure_record_with(tmp_path, a):
+    rec = _unsure_record(tmp_path)
+    rec.answer = a
+    return rec
 
 
 def test_compare_names_a_second_better_choice_under_the_title(tmp_path):

@@ -15,8 +15,6 @@ INCLUDE_PATTERNS would not reach the public repo) and centre them like finalchec
    did each step" strip (a box per step, with its time and cost), with its all-Ultra
    estimate.
 4. "More", beside the story link: the About page.
-5. "Try it in 60 seconds", after the second door line: the "What can I grow here?" spot
-   page for the raised bed sample (Good now, Worth a try, Coming up; sun hours; soil).
 
 Video slots, as centred badges in the row under "Try it live" (finalcheck's "Demo video"
 pill), or link lines under the pitch:
@@ -56,8 +54,7 @@ with herbs outdoors.
    each step**, with its time and cost.
 
 Then ask a what-if ("what if I bring it in?"). Signed in, it emails you when it is time to
-check, and your next photo asks "Did you do it?". A second door, **What can I grow here?**,
-reads a photo of a bed or pot and suggests what to sow there this month.
+check, and your next photo asks "Did you do it?".
 
 Judges: [JUDGES.md](JUDGES.md) has the five-minute tour and the known limits. The judges'
 code is in the submission form, not in this repo.

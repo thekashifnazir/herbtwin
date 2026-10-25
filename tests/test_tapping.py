@@ -112,6 +112,16 @@ def test_a_tap_is_taken_once_and_expires():
     assert store.get(tid) is None
 
 
+def test_a_photo_past_its_hour_leaves_memory_when_the_next_one_comes():
+    # a photo past its hour leaves memory with the next one, not when 32 newer push it out
+    now = [datetime(2026, 10, 19, 9, tzinfo=UTC)]
+    store = TapStore(lambda: now[0])
+    old = store.put(_wait())
+    now[0] += timedelta(hours=1, seconds=1)
+    new = store.put(_wait())
+    assert old not in store._waits and new in store._waits
+
+
 def test_the_store_keeps_only_the_newest_photos():
     store = TapStore(lambda: datetime(2026, 10, 19, tzinfo=UTC), size=2)
     first, *_ = [store.put(_wait()) for _ in range(3)]

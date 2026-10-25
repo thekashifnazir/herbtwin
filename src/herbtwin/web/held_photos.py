@@ -1,9 +1,10 @@
-"""The photo a plant answer was read from, held for its hour so "Add photos for a surer
+"""The photo a plant answer was read from, held for an hour so "Add photos for a surer
 answer" can read it again with one or two more (21 Oct, Kash: "not an option in the results
 screen to ask us for more photos"). Only the copy the photo model was sent is held: metadata
-stripped (no GPS, no date) and at most 1600 px, in memory, never on disk, for the same hour
-the answer itself stays (answer_cache.TTL), newest kept within a byte cap. Signed in or out,
-the same rule: the offer and the route both need the held copy (Kash chose this, 21 Oct).
+stripped (no GPS, no date) and at most 1600 px, in memory, never on disk, for an hour
+(the answer itself stays 24 hours on the live site, without its photo), newest kept within
+a byte cap. Signed in or out, the same rule: the offer and the route both need the held
+copy (Kash chose this, 21 Oct).
 """
 
 from __future__ import annotations
@@ -14,8 +15,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from herbtwin.answer_cache import TTL
-
+HOLD_FOR = timedelta(hours=1)  # privacy.html: "can no longer be used after an hour"
 KEEP_BYTES = 64 * 1024 * 1024  # a model copy is about 0.2 to 0.5 MB: room for over a hundred
 
 
@@ -28,7 +28,7 @@ class Held:
 
 class HeldPhotos:
     def __init__(
-        self, clock: Callable[[], datetime], ttl: timedelta = TTL, max_bytes: int = KEEP_BYTES
+        self, clock: Callable[[], datetime], ttl: timedelta = HOLD_FOR, max_bytes: int = KEEP_BYTES
     ) -> None:
         self._clock, self._ttl, self._max = clock, ttl, max_bytes
         self._held: OrderedDict[str, Held] = OrderedDict()

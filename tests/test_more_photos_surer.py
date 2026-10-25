@@ -135,9 +135,34 @@ def test_the_page_offers_more_photos_only_while_the_first_is_held(tmp_path):
     assert c.get(f"/answers/{rid}").context["more_photos_on"] is False
 
 
-def test_the_privacy_page_says_the_photo_stays_for_the_hour(tmp_path):
-    page = _client(tmp_path, [], []).get("/privacy").text
-    assert "the photo as the AI\n    saw it (no location data), stay in the server's memory" in page
+def test_the_privacy_page_says_answers_stay_a_day_and_the_photo_an_hour(tmp_path):
+    page = " ".join(_client(tmp_path, [], []).get("/privacy").text.split())
+    assert (
+        "<strong>Signed out:</strong> the answer, what the AI read from your photo (not the"
+        " photo itself) and any questions you ask under it are kept in Supabase, hosted in the"
+        " EU (or, if Supabase can't be reached, in the server's memory), for 24 hours, so the"
+        " link keeps working" in page
+    )
+    assert "Then they can no longer be opened, and the daily clean-up deletes them." in page
+    assert (
+        "The photo itself is held only in the server's memory, while you pick out the plant"
+        " you mean or add more photos, and can no longer be used after an hour." in page
+    )
+    assert "nothing is kept on disk" not in page
+    assert "Map positions are rounded to about 1 km before anything uses or keeps them." in page
+    assert "a typed place as you wrote it, and the spot found from it rounded to about 1 km" in (
+        page
+    )
+
+
+def test_the_privacy_page_names_the_signed_out_claim_cookie(tmp_path):
+    from herbtwin.web import claims
+
+    page = " ".join(_client(tmp_path, [], []).get("/privacy").text.split())
+    assert claims.MAX_AGE_S == 24 * 3600  # the page's "for 24 hours"
+    assert "<strong>Signed out:</strong> sending a photo sets one cookie for 24 hours." in page
+    assert "It is not used for tracking and says nothing about you." in page
+    assert "Signed out and without the code, the site sets no cookies." not in page
 
 
 def test_a_held_photo_is_dropped_after_its_hour_even_if_never_asked_for():

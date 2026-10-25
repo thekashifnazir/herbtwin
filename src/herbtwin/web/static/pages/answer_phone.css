@@ -17,6 +17,8 @@
   .answer-page .answer-cols.ask-up > :is(.your-photo, .your-more) { order: 3; }
   .answer-page .answer-cols > .plan > :is(.seen-problem, .twin-sec) { order: 3; }
   .answer-page .answer-cols > .plan > :is(.this-week, .reported) { order: 5; }
+  /* the month's card sits beside the plan on a wide screen; here it follows This week */
+  .answer-page .answer-cols > .side > :is(.indoor-now, .outdoor-now) { order: 5; }
   .answer-page .answer-cols > .side > #chat { order: 6; margin-bottom: 28px; }
   /* asked low: the questions stay right under the card, before your photo */
   .answer-page .answer-cols.ask-up > .side > #chat { order: 1; }

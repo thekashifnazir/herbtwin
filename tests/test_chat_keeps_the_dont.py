@@ -7,7 +7,7 @@ only hold-offs on watering the plant or its soil, and facts with no watering, st
 import pytest
 
 from herbtwin.adapters.mock import MockAdapter
-from herbtwin.chat import HOLD_WATER, HOLD_WATER_ADVISED, LESS_SURE, NO_SPRAYS, reply
+from herbtwin.chat import AFTER_THAT, HOLD_WATER, HOLD_WATER_ADVISED, LESS_SURE, NO_SPRAYS, reply
 from herbtwin.schemas import ActionCard
 from tests.test_chat import _answered
 from tests.test_scenarios import _env, _rec
@@ -27,10 +27,9 @@ def _held(tmp_path, *, if_dry=False):
     return rec
 
 
-def _said(rec, draft):
+def _said(rec, draft, message="Should I water it now?"):
     m = MockAdapter([draft])
-    return reply(m, rec, message="How often should I water it now?", past=[], history=None,
-                 search=None).text  # fmt: skip
+    return reply(m, rec, message=message, past=[], history=None, search=None).text
 
 
 @pytest.mark.parametrize(
@@ -211,3 +210,87 @@ def test_pouring_off_stays_and_the_card_line_still_comes(tmp_path):
     draft = "Pour off any excess from the saucer. Water it every day."
     text = _said(_held(tmp_path), draft)
     assert text.startswith(f"Pour off any excess from the saucer. {HOLD_WATER}")
+
+
+@pytest.mark.parametrize(
+    "asked",
+    [
+        "how often do i need to water my plant",  # the Toloka worker's own question, 23 Oct
+        "How often should I water it now?",
+        "When should I water it next?",
+        "How much water does it need?",
+        "What's a good watering schedule?",
+    ],
+)
+def test_asked_how_often_it_says_how_often_after_the_hold_off(tmp_path, asked):
+    # 23 Oct Toloka study: "how often do i need to water my plant" got the hold-off line alone
+    # and read as not answered; the frequency now follows it, in words that agree with the card
+    text = _said(_held(tmp_path), "Water it every two days.", message=asked)
+    assert text == f"{HOLD_WATER} {AFTER_THAT.format(where='compost')}"
+
+
+def test_how_often_in_the_ground_says_soil(tmp_path):
+    rec = _held(tmp_path, if_dry=True)
+    rec.observation.container = "ground"
+    text = _said(rec, "Water it weekly.", message="How often do I water it?")
+    assert text.endswith(AFTER_THAT.format(where="soil")) and "compost" not in text
+
+
+@pytest.mark.parametrize(
+    "asked",
+    ["What if I water it?", "How often should I feed it?", "How often do I need to mist it?"],
+)
+def test_a_question_not_about_how_often_to_water_gets_no_schedule_line(tmp_path, asked):
+    # review: "how often" alone matched feeding and misting questions
+    text = _said(_held(tmp_path), "Water it every day.", message=asked)
+    assert "no fixed schedule" not in text
+
+
+def test_no_hold_off_means_no_schedule_line(tmp_path):
+    rec = _answered(_rec(tmp_path, env=_env()))
+    draft = "Water it when the top of the compost is dry."
+    text = _said(rec, draft, message="How often should I water it?")
+    assert "no fixed schedule" not in text
+
+
+def test_a_source_note_goes_with_the_watering_sentence_it_closed(tmp_path):
+    # live, 24 Oct: "(RHS) For now, water only if…" once the sentence before "(RHS)" was
+    # dropped. Judged on the filter itself: later steps strip an unlisted site's note anyway
+    from herbtwin.chat import _keeps_the_dont
+
+    draft = "Water it about once a week in summer. (RHS) Pick off the beetles by hand."
+    text = _keeps_the_dont(draft, _held(tmp_path))
+    assert text == f"Pick off the beetles by hand. {HOLD_WATER}"
+
+
+def test_a_source_note_after_a_kept_sentence_stays(tmp_path):
+    from herbtwin.chat import _keeps_the_dont
+
+    text = _keeps_the_dont("Pick off the beetles by hand. (RHS) Water it daily.", _held(tmp_path))
+    assert text == f"Pick off the beetles by hand. (RHS) {HOLD_WATER}"
+
+
+@pytest.mark.parametrize("draft", ["Water it daily. (RHS)", "Water it daily. (RHS) "])
+def test_a_source_note_ending_the_reply_goes_with_its_sentence(tmp_path, draft):
+    # review of #518: a note with nothing after it stayed alone
+    from herbtwin.chat import _keeps_the_dont
+
+    assert _keeps_the_dont(draft, _held(tmp_path)) == HOLD_WATER
+
+
+def test_a_source_note_on_its_own_line_is_not_moved(tmp_path):
+    from herbtwin.chat import _keeps_the_dont
+
+    text = _keeps_the_dont("Pick off the beetles.\n(RHS) Water it daily.", _held(tmp_path))
+    assert text == f"Pick off the beetles.\n\n{HOLD_WATER}"
+
+
+def test_a_note_closing_a_paragraph_keeps_the_paragraph_break(tmp_path):
+    # review of #518: "(RHS)\n\n" was emptied and its break lost, joining two paragraphs
+    from herbtwin.chat import _keeps_the_dont
+
+    rec = _held(tmp_path)
+    text = _keeps_the_dont("Good light. (RHS)\n\nPick off leaves. Water weekly.", rec)
+    assert text == f"Good light. (RHS)\n\nPick off leaves.\n\n{HOLD_WATER}"
+    text = _keeps_the_dont("Light is bright. Water it daily. (RHS)\n\nPick off dead leaves.", rec)
+    assert text == f"Light is bright.\n\nPick off dead leaves.\n\n{HOLD_WATER}"
