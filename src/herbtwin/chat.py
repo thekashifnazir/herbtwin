@@ -1115,10 +1115,16 @@ _RHS_RECORD = re.compile(r"/plants/\d+/([a-z0-9-]+)/details")
 
 # other plants whose names hold one of ours: "Russian sage (Perovskia)" was cited for sage
 # (18 Oct, Kash's sage photo). Cow parsley and fool's parsley are poisonous look-alikes
+# other plants whose names hold a herb's word: a page on one is not about the herb (25 Oct,
+# the video recording: a parsley reply cited Garden Organic's "Parsley piert", a weed). Never
+# a pest or disease of the herb ("rosemary beetle", "mint rust"): those pages are about it
 _LOOK_ALIKES = (
     "russian sage", "jerusalem sage", "wood sage", "cow parsley", "fool's parsley", "fool’s parsley",
     "hedge parsley", "bog rosemary", "bee balm", "holy basil", "cat mint", "mexican oregano",
     "cuban oregano", "vietnamese coriander", "mexican tarragon",
+    "parsley piert", "milk parsley", "stone parsley", "mint bush", "vietnamese mint", "korean mint",
+    "mexican mint", "basil thyme", "wild basil", "sage-leaved", "sage leaved", "wild rosemary",
+    "mexican coriander", "bolivian coriander", "bastard balm",
 )  # fmt: skip
 
 

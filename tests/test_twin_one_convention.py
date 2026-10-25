@@ -51,7 +51,7 @@ def test_on_a_leave_it_answer_the_charts_dashed_line_is_the_green_one(tmp_path):
     (tmp_path / "w").mkdir(), (tmp_path / "l").mkdir()
     water = _render(_outdoor(tmp_path / "w"))
     assert _figure(water).startswith('" id="twin-chart"')  # no leave-leads: as before
-    assert "Green: if you water it. Dashed: if you leave it." in _figure(water)
+    assert "Green: if you water it. Grey, dashed: if you leave it." in _figure(water)
     leave = _render(_leave(_outdoor(tmp_path / "l")))
     fig = _figure(leave)
     assert fig.startswith(' leave-leads" id="twin-chart"')

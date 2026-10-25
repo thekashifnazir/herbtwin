@@ -368,7 +368,8 @@
 .answer-page .twin-chart .cold { fill: var(--cold); }
 /* the wash alone is 1.18:1 on the card: an edge on top of each cold night carries the 3:1 */
 .answer-page .twin-chart .cold-edge { stroke: var(--cold-fg); stroke-width: 3; }
-.answer-page .twin-chart .base-cold .cold-edge { stroke-dasharray: 5 4; }  /* leaving it: dashed, as its line */
+/* leaving it's cold edge is solid like the shown line's: the one dashed line is leaving it's,
+   as the key says (25 Oct re-walk: the dashed blue edge read as a second dashed line) */
 .answer-page .twin-chart .cold-label { font: 700 14px/1 var(--sans); fill: var(--cold-fg); }
 .answer-page .twin-chart .twin-line { opacity: 0; visibility: hidden; }
 /* leaving it's cold nights stay faintly in view; the faint label gives way to the shown line's own */

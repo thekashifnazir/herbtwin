@@ -467,6 +467,44 @@ def _plain_letters(sentence: str) -> str:
     return _SPACED.sub(lambda m: re.sub(r"[ .\-]", "", m.group()), text)
 
 
+# what the person felt 2 cm down outranks the advisor's guess about the soil: a reason that
+# says the opposite never shows (25 Oct, the video recording: a coriander told "dry" showed
+# "the soil moisture is adequate from recent rain"). Claims about the soil now, never advice
+# ("water it to keep the soil moist" stays)
+_SOIL = r"(?:soil|compost|root zone)"
+_NOW = r"(?:is|looks|remains|stays|seems|appears|feels|should be|will stay|will be)"
+_WET_WORD = r"(?:moist|damp|wet|soggy|waterlogged|sodden)"
+_ENOUGH_WORD = r"(?:adequate|sufficient|fine|ok|okay|good|enough)"
+_SAYS_WET = re.compile(
+    rf"\b{_SOIL}(?:\s+moisture)?\s+{_NOW}\s+(?:still\s+|already\s+|quite\s+|very\s+)?{_WET_WORD}\b|"
+    rf"\b{_SOIL}\s+(?:is|are)\s+still\s+{_WET_WORD}\b|\bstill\s+{_WET_WORD}\b",
+    re.I,
+)
+_SAYS_ENOUGH = re.compile(
+    rf"\b(?:{_SOIL}\s+)?moisture(?:\s+levels?)?\s+(?:is|are|looks|seems|remains)\s+"
+    rf"(?:still\s+)?{_ENOUGH_WORD}\b|"
+    r"\b(?:adequate|sufficient|enough|plenty of|good)\s+(?:soil\s+)?moisture\b",
+    re.I,
+)
+_SAYS_DRY = re.compile(
+    rf"\b{_SOIL}\s+(?:{_NOW}|has|have)\s+(?:\w+\s+)?(?:dry|dried out|drying out|parched)\b",
+    re.I,
+)
+
+
+def against_told_soil(sentence: str, soil: str | None) -> bool:
+    """Whether a sentence says the soil is the opposite of what the person felt: moist or
+    with enough water after "dry" ("cool but not moist": moist or wet only), dry after
+    "damp" or "wet". Nothing told, nothing against."""
+    if soil == "dry":
+        return bool(_SAYS_WET.search(sentence) or _SAYS_ENOUGH.search(sentence))
+    if soil == "cool":
+        return bool(_SAYS_WET.search(sentence))
+    if soil in ("damp", "wet"):
+        return bool(_SAYS_DRY.search(sentence))
+    return False
+
+
 def _unsafe(sentence: str, rest: bool, primary: str | None = None) -> bool:
     """A line of the advisor's that never stands on the page as ours: a chemical, a pest
     product or a home-made spray; for a resting herb a cut that is no tidy; and, given the
@@ -1163,15 +1201,19 @@ def _reason(
     rest: bool = False,
     primary: str | None = None,
     safe: bool = True,
+    soil: str | None = None,
 ) -> str:
     """The advisor's first sentence, unless it only repeats what the person told us (it
-    did, live), names the wrong season or is `_unsafe` for the card's job (`primary`): then
-    the next one, or none. Their words are never shown as our reason. `safe=False` skips
-    that check, to tell a line it took from one that was never there."""
+    did, live), names the wrong season, is `_unsafe` for the card's job (`primary`) or says
+    the opposite of the soil they felt (`soil`, against_told_soil): then the next one, or
+    none. Their words are never shown as our reason. `safe=False` skips those checks, to
+    tell a line it took from one that was never there."""
     said = _plain(told_question or "")
     for part in _sentences(answer):
         sentence = _said_now(part, month, rest)
-        if not sentence or (safe and _unsafe(sentence, rest, primary)):
+        if not sentence or (
+            safe and (_unsafe(sentence, rest, primary) or against_told_soil(sentence, soil))
+        ):
             continue
         if (why := why_not_a_reason(sentence)) is not None:
             # the kind and length only: the advisor's text can echo the person's own note
@@ -1327,6 +1369,7 @@ def _main_reason(
     month: int,
     rest: bool = False,
     tidy: bool = False,
+    soil: str | None = None,
 ) -> str:
     """The main card's reason: the chosen advisor's, else another ask's that chose the same,
     else what the twin found, else our own line for the action; never a placeholder. `rest`
@@ -1336,7 +1379,9 @@ def _main_reason(
         r for r in panel.runs if r is not panel.chosen and r.advice.primary == panel.primary
     ]
     job = panel.primary
-    first = _reason(panel.chosen.advice.answer, told_question, month, rest=rest, primary=job)
+    first = _reason(
+        panel.chosen.advice.answer, told_question, month, rest=rest, primary=job, soil=soil
+    )
     # the rest rule or the safety check took every line (a cut for growth, a spray, another
     # job's command): look further, as for a placeholder
     raw = _reason(panel.chosen.advice.answer, told_question, month, safe=False)
@@ -1344,7 +1389,9 @@ def _main_reason(
     if first or not (_has_placeholder(panel.chosen.advice.answer) or cut):
         return first  # a reason, or none on purpose (it only echoed the person's note)
     for run in runs[1:]:
-        if said := _reason(run.advice.answer, told_question, month, rest=rest, primary=job):
+        if said := _reason(
+            run.advice.answer, told_question, month, rest=rest, primary=job, soil=soil
+        ):
             return said
     view = views.get(panel.primary)
     if view is not None and view.why:
@@ -1503,6 +1550,7 @@ def build_answer(
     month: int,
     views: dict[CareAction, ModelView],
     told_question: str | None = None,
+    told_soil: str | None = None,  # Told.soil_feel: outranks the advisor's word on the soil
     problem: ProblemSeen | None = None,
     setting: str = "unknown",
     seedlings: bool = False,
@@ -1600,7 +1648,9 @@ def build_answer(
             else "so this comes first",
         )
     else:
-        reason = _main_reason(panel, views, told_question, month, no_cut, tidy=resting)
+        reason = _main_reason(
+            panel, views, told_question, month, no_cut, tidy=resting, soil=told_soil
+        )
     if roots_crowded and reason == ALSO_BECAUSE["repot"]:  # only the stock line: say what was seen
         reason = CROWDED_BECAUSE
     if container == "ground" and _APART.search(reason or ""):
@@ -1613,7 +1663,13 @@ def build_answer(
         )
     said = {
         _reason(
-            r.advice.answer, told_question, month, quiet=True, rest=no_cut, primary=panel.primary
+            r.advice.answer,
+            told_question,
+            month,
+            quiet=True,
+            rest=no_cut,
+            primary=panel.primary,
+            soil=told_soil,
         )
         for r in panel.runs
     }

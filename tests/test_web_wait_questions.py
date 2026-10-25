@@ -638,3 +638,26 @@ def test_a_refused_crop_lets_a_reply_meanwhile_into_the_retry(tmp_path, monkeypa
     page = c.post(f"/taps/{tap}", data=box).text
     answer = re.search(r'<a id="next" href="/answers/([0-9a-f]+)"', page)[1]
     assert c.app.state.answers.get_for(answer, None).latest.told == Told(last_watered="today")
+
+
+@respx.mock
+def test_a_sample_photo_is_set_in_london_so_the_wait_never_asks_where(tmp_path):
+    # 25 Oct re-walk of rev 00115: after a sample tap (home says "Sample photo: set in
+    # London") the wait page still asked "Where is it?"; a town typed there would fight it
+    from herbtwin.where import SAMPLES
+
+    respx.get(OPEN_METEO_URL).mock(return_value=httpx.Response(200, json=SAMPLE))
+    sample = (SAMPLES / "1-parsley-healthy.jpg").read_bytes()
+    page = (
+        _placeless(tmp_path / "s")
+        .post("/analyse", files={"photo": ("1-parsley-healthy.jpg", sample, "image/jpeg")})
+        .text
+    )
+    assert '<fieldset class="wait-place" id="wait-place" hidden>' in page
+    assert '<h2 id="wait-asks-h">While you wait: two quick questions</h2>' in page
+    assert 'name="soil_feel"' in page and 'name="last_watered"' in page  # the others stay
+    # the control: a photo of the user's own, with no place, is still asked where it is
+    own = _placeless(tmp_path / "o").post(
+        "/analyse", files={"photo": ("b.jpg", JPEG, "image/jpeg")}
+    )
+    assert '<fieldset class="wait-place" id="wait-place">' in own.text

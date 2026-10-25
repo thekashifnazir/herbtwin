@@ -189,7 +189,8 @@ def _how(
     else:
         said = f"Green: {_you(name)}."
         if base_name and base_name != name:
-            said += f" Dashed: {_you(base_name)}."
+            # its colour too: the key names one line, never "dashed" alone (25 Oct re-walk)
+            said += f" Grey, dashed: {_you(base_name)}."
     said += " Below the dotted line, it needs water."
     # one snowflake a run of cold nights, so a spell, as the fold counts them (#441)
     return said + (f" \u2744\ufe0e marks each {spell}." if snow else "")

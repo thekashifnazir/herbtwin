@@ -222,8 +222,8 @@ def test_each_cold_night_has_an_edge_that_can_be_seen():
             assert _contrast(_tokens("sky-fg")[i], under) >= 3, (i, under)
     css = style.CSS
     assert re.search(r"\.twin-chart \.cold-edge \{[^}]*stroke: var\(--cold-fg\)", css)
-    # leaving it's edge is dashed like its line, and never faded with its wash
-    assert re.search(r"\.twin-chart \.base-cold \.cold-edge \{[^}]*stroke-dasharray", css)
+    # leaving it's edge is never faded with its wash; since the 25 Oct re-walk it is solid,
+    # so the only dashed line is leaving it's own (test_one_dashed_line_and_the_key_names_it)
     assert ".base-cold rect {" in css and ".base-cold line" not in css
 
 
@@ -424,12 +424,12 @@ def test_under_the_title_it_says_how_to_read_the_lines_drawn(tmp_path):
     assert chart is not None
     by = {ln.action: ln for ln in chart.lines}
     assert by["shelter"].how == (
-        "Green: if you protect it. Dashed: if you leave it. Below the dotted line, it needs "
+        "Green: if you protect it. Grey, dashed: if you leave it. Below the dotted line, it needs "
         "water. \u2744\ufe0e marks each cold spell."
     )
     # leaving it drawn: its green line is the dashed one, so the dashed one is not named twice
     assert by["leave_normal"].how.startswith("Green: if you leave it. Below the dotted line")
-    assert "Dashed" not in by["leave_normal"].how
+    assert "dashed" not in by["leave_normal"].how.lower()
     # no cold night on any line: no snowflakes drawn, so none explained
     assert rec.state is not None
     for s in rec.state.strips:
@@ -565,3 +565,17 @@ def test_a_hardy_plants_snowflakes_are_frosty_spells_as_the_fold_counts_them(tmp
     assert ">frosty spells</text>" in _render(rec)
     weather = fold_titles(rec, LABELS, {})["weather"]
     assert "frosty spell" in f"{weather.title} {weather.weather}", weather
+
+
+def test_one_dashed_line_and_the_key_names_it(tmp_path):
+    # 25 Oct re-walk of rev 00115: the key said "Dashed: if you leave it" over two dashed
+    # lines, leaving it's grey one and the blue edge of "Cold risk Sun if left out". Now the
+    # cold edge is solid, leaving it's line the one dashed line, and the key says its colour
+    css = style.CSS
+    dashed = re.findall(r"(\.answer-page \.twin-chart[^{]*)\{[^}]*stroke-dasharray: 5 4", css)
+    assert [sel.strip() for sel in dashed] == [".answer-page .twin-chart polyline.base"], dashed
+    rec = _cold_basil(_record(tmp_path))
+    page = _render(rec)
+    how = page.split('<p class="twin-chart-how">', 1)[1].split("</p>", 1)[0]
+    assert "Grey, dashed: if you leave it." in how and "Dashed:" not in how
+    assert '<g class="base-cold">' in page  # the left-out cold band is still drawn

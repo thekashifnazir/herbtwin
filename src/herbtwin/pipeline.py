@@ -1445,6 +1445,7 @@ def decide(
         month=month,
         views=views,
         told_question=told.question if told else None,
+        told_soil=told.soil_feel if told else None,
         problem=rec.problem,
         setting=obs.setting,
         seedlings=is_seedlings(obs),

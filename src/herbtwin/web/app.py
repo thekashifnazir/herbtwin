@@ -173,7 +173,7 @@ from herbtwin.web.progress import (
 )
 from herbtwin.web.traces import FlushTraces
 from herbtwin.web.waiting_words import WAIT_JS
-from herbtwin.where import GeocodeError, for_model, in_uk, sample_files, strip_metadata
+from herbtwin.where import GeocodeError, for_model, in_uk, is_sample, sample_files, strip_metadata
 
 log = logging.getLogger(__name__)
 
@@ -1519,8 +1519,11 @@ def create_app(
         traces = app.state.deps.traces
         settle = traces.settle if traces is not None else None
         head = SIGNED_OUT_HEAD if person is None else HEAD
-        # no place typed and none from the phone: ask where it is (the photo may still hold one)
-        asks = asks_card(wait_id, ask_place=where is None and device is None)
+        # no place typed and none from the phone: ask where it is (the photo may still hold
+        # one). Never for a sample: it is set in London, as home says (25 Oct re-walk)
+        asks = asks_card(
+            wait_id, ask_place=where is None and device is None and not is_sample(data)
+        )
         return _with_cookies(
             progress_response(work, settle, asks, head=head, advisor=_advised_by(settings)),
             holder,
