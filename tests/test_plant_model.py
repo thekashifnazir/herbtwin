@@ -32,7 +32,7 @@ def test_watering_better_when_leaving_it_dries_out():
 
 def test_watering_worse_when_it_never_dries():
     v = compare_actions(_state())
-    assert v["water"].vs_leaving_it == "worse" and "waterlogged" in v["water"].why
+    assert v["water"].vs_leaving_it == "worse" and "isn't needed" in v["water"].why
     assert v["leave_normal"].tip_day is None
 
 

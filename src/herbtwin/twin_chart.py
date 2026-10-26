@@ -234,7 +234,7 @@ _PLAIN = (
     (r"less drying than leaving it( out)?", "It dries out less than leaving it{0}"),
     (r"dries faster than leaving it", "It dries out faster than leaving it"),
     (r"stays moist without watering", "It stays moist without watering"),
-    (r"extra water risks waterlogged roots", "Extra water could waterlog the roots"),
+    (r"extra water isn't needed", "Extra water isn't needed"),
 )
 
 

@@ -34,7 +34,7 @@ from tests.test_pipeline import JPEG, OBS, SAMPLE, WHEN, _deps
 
 NORMS = Path(__file__).parents[1] / "data/seasonal/norms_uk.json"
 ASSESS = Assessment("sure", 7, 0.1, [], [Chip(name="Season", effect="raises")], None)
-WORSE = "stays moist without watering; extra water risks waterlogged roots"
+WORSE = "stays moist without watering; extra water isn't needed"
 COLD = ModelView("shelter", "better", "cold risk Saturday if left out; shelter avoids it", 4)
 COLD = ModelView(COLD.action, COLD.vs_leaving_it, COLD.why, 4, cold=True, cold_on="Saturday")
 # s012, word for word: the oregano's reason line

@@ -148,6 +148,19 @@ def test_the_missing_page_only_points_at_what_the_menu_has(tmp_path):
     assert ">Check a plant</a>" in nav and "grow" not in nav.lower()
     assert "menu above to check a plant or see what you can grow" not in NOT_FOUND
     assert "Check a plant from the menu above" in NOT_FOUND
+    assert "grow" not in NOT_FOUND  # "What can I grow here?" is switched off (close-out walk)
+
+
+def test_a_shared_link_shows_a_picture_and_a_line_about_the_app(tmp_path):
+    # LinkedIn and Slack read og: tags; without them a share was a bare "herbtwin" (26 Oct)
+    c = _client(tmp_path, [], [])
+    page = c.get("/").text
+    image = re.search(r'<meta property="og:image" content="([^"]+)"', page)
+    assert image and image[1] == "https://herbtwin.kashifnazir.com/static/og.jpg"
+    assert '<meta property="og:title" content="herbtwin' in page
+    assert 'name="twitter:card" content="summary_large_image"' in page
+    served = c.get("/static/og.jpg")
+    assert served.status_code == 200 and served.headers["content-type"] == "image/jpeg"
 
 
 def test_an_unsubscribe_link_with_reminders_off_does_not_talk_about_answers(tmp_path):

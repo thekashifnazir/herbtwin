@@ -24,7 +24,9 @@ STEP = 0.1  # peak risk must differ by this much to count as better or worse
 
 Verdict = Literal["better", "same", "worse"]
 NO_DRY_DAY = "no dry days in the next 2 weeks without watering"
-STAYS_MOIST = "stays moist without watering; extra water risks waterlogged roots"
+# the twin caps the soil at full and drains the rest, so it can say watering is not needed,
+# never that it waterlogs the roots
+STAYS_MOIST = "stays moist without watering; extra water isn't needed"
 
 
 @dataclass(frozen=True)

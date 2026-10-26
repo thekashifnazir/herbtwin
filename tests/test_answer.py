@@ -26,7 +26,7 @@ ASSESS = Assessment(
     [Chip(name="Season", effect="raises")],
     "Tell us how the soil feels 2 cm down and we'll say whether it needs water.",
 )
-WORSE = "stays moist without watering; extra water risks waterlogged roots"
+WORSE = "stays moist without watering; extra water isn't needed"
 VIEWS = {
     "leave_normal": ModelView("leave_normal", "same", "no dry days or frost", None),
     "dont_water": ModelView("dont_water", "same", "no dry days or frost", None),
@@ -60,7 +60,7 @@ def test_secondary_cards_are_this_week_and_dont_water_appears():
     a = build()
     assert [c.when for c in a.do[1:]] == ["this_week"] * (len(a.do) - 1)
     assert a.dont is not None and a.dont.action == "water"
-    assert "waterlogged" in a.dont.if_you_do
+    assert "isn't needed" in a.dont.if_you_do
 
 
 def test_watch_comes_from_the_problem_signs():
@@ -145,7 +145,7 @@ def test_a_do_card_the_plant_model_rates_worse_says_check_first():
     assert card.action == "water"
     assert "check" in card.if_you_do and not card.if_you_do.startswith("stays moist")
     assert card.if_you_do.startswith("worse than leaving it (")  # no "plant model" jargon
-    assert "waterlogged" in build().dont.if_you_do  # the Don't card keeps the plain line
+    assert "isn't needed" in build().dont.if_you_do  # the Don't card keeps the plain line
 
 
 def test_the_dont_card_says_why_in_plain_words():

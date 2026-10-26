@@ -457,8 +457,8 @@ def test_the_reasons_read_as_plain_sentences():
     assert plain_why("dry by Friday if left; watering keeps it moist") == (
         "It dries out by Friday if left alone. Watering keeps it moist."
     )
-    assert plain_why("stays moist without watering; extra water risks waterlogged roots") == (
-        "It stays moist without watering. Extra water could waterlog the roots."
+    assert plain_why("stays moist without watering; extra water isn't needed") == (
+        "It stays moist without watering. Extra water isn't needed."
     )
     assert plain_why("no cold nights forecast") == "No cold nights forecast."
     assert plain_why("Already a sentence.") == "Already a sentence."
@@ -578,3 +578,12 @@ def test_one_dashed_line_and_the_key_names_it(tmp_path):
     # one line a mark: the dashed swatch beside leaving it, never a word that names two lines
     assert '<span class="key-mark km-base"' in key and "dashed" not in key.lower()
     assert '<g class="base-cold">' in page  # the left-out cold band is still drawn
+
+
+def test_the_twin_never_claims_waterlogging_it_cannot_model():
+    # the bucket twin drains whatever is over full, so it can say watering isn't needed,
+    # never that extra water waterlogs the roots (Kash's video review, 26 Oct)
+    from herbtwin.plant_model import STAYS_MOIST
+
+    assert "waterlog" not in STAYS_MOIST
+    assert "waterlog" not in plain_why(STAYS_MOIST)

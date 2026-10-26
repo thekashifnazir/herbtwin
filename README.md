@@ -1,30 +1,16 @@
-<!--
-Screenshots to add when the design is final (Kash, 22 Oct: not yet). Put the files in
-docs/reference/img/ (the public export carries docs/reference/**; a folder outside its
-INCLUDE_PATTERNS would not reach the public repo) and centre them like finalcheck:
-<p align="center"><img src="docs/reference/img/x.png" alt="long, descriptive alt" width="720"></p>
-
-1. Hero, between the pitch and "Try it in 60 seconds": the answer page for a sample
-   photo, headline first ("Leave it. This is normal for October") with the plant's face,
-   how sure it is, and the This week panel. A short GIF of a read (home, sample tap, wait
-   screen, answer) could replace it.
-2. "Try it in 60 seconds", after step 2: the wait screen mid-read: the steps as they
-   happen, the photo and advisor models named, the "Next:" line, the plant's care facts,
-   the twin's verdicts and "Advisor 2 of 3".
-3. "Why it's different", after "Every answer shows its bill": the answer's "Which model
-   did each step" strip (a box per step, with its time and cost), with its all-Ultra
-   estimate.
-4. "More", beside the story link: the About page.
-
-Video slots, as centred badges in the row under "Try it live" (finalcheck's "Demo video"
-pill), or link lines under the pitch:
-- 30-second demo: Watch it in 30 seconds <URL>
-- 3-minute Devpost video: The 3-minute tour <URL>
--->
-
 <p align="center"><img src="docs/reference/img/herbtwin-logo.svg" alt="herbtwin" width="380"></p>
 
 <h3 align="center">Is your herb thirsty, cold, or just having a bad month?</h3>
+
+<p align="center">From one photo of a herb to the one thing to do now, tested first on the plant's twin.</p>
+
+<p align="center">
+  <a href="https://herbtwin.kashifnazir.com"><b>Live demo</b></a> ·
+  <a href="https://youtu.be/7cybxZiDPuE"><b>3-min demo</b></a> ·
+  <a href="https://devpost.com/software/herbtwin"><b>Devpost</b></a>
+</p>
+
+https://github.com/user-attachments/assets/978a2f3b-66b0-4d93-89af-a46f7a7d67f2
 
 <p align="center">
   <a href="https://herbtwin.kashifnazir.com"><img src="https://img.shields.io/badge/%E2%96%B6%20Try%20it%20live-herbtwin.kashifnazir.com-1A7A48?style=for-the-badge" alt="Try it live: herbtwin.kashifnazir.com" height="44"></a>
@@ -35,15 +21,26 @@ pill), or link lines under the pitch:
   <a href="#models-and-platform"><img src="https://img.shields.io/badge/Search-Tavily-2B4C7E?style=for-the-badge" alt="Search: Tavily"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.12"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/FastAPI-web-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI"></a>
-  <a href="tests"><img src="https://img.shields.io/badge/tests-3%2C900%2B%20offline-5C5850?style=for-the-badge" alt="Over 3,900 offline tests"></a>
+  <a href="tests"><img src="https://img.shields.io/badge/tests-4%2C800%2B%20offline-5C5850?style=for-the-badge" alt="Over 4,800 offline tests"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/licence-MIT-5C5850?style=for-the-badge" alt="Licence: MIT"></a>
 </p>
 
-**Nebius × NVIDIA Global AI Hackathon** · track: Best Apps and Agents · built solo, October 2026
+**Nebius × NVIDIA Global AI Hackathon** · track: Best Apps and Agents · built solo,
+October 2026 · submitted 26 Oct 2026
+
+**Built with** NVIDIA Nemotron 3 Super, Nano and Ultra on Nebius Token Factory · Nebius AI
+Cloud Serverless Job · Tavily · FastAPI
 
 Send one photo of a herb and say where it is. herbtwin tells you the one thing to do now,
 how sure it is, and when the right answer is to leave it alone. It is for UK gardeners
 with herbs outdoors.
+
+| Headline result | |
+|---|---|
+| Says "treat it" when the expert did not (150 expert questions) | **2%** with Nemotron 3 Super, against 12.7% with Ultra |
+| False alarms from the photo check | **0** on 149 healthy plants |
+| Chat answers right, with Tavily search vs without (30 questions) | **25 vs 15** |
+| Cost of one example read: photo model + three Super asks (one read, not an average; trusted-page check not counted) | **$0.0040**, against about $0.0177 on Ultra |
 
 <p align="center"><img src="docs/reference/img/pipeline.png" alt="How herbtwin answers one photo: photo, read, evidence, plant model, three asks of Nemotron 3 Super, how sure, the answer, then chat, reminder email and the follow-up photo" width="900"></p>
 
@@ -160,8 +157,9 @@ and open http://localhost:8000 (the address `HERBTWIN_SITE_URL` expects). The de
 backend, `mock`, is for the tests only and answers nothing on its own; `ollama` runs against local models. Everything else in
 `.env.example` is optional: search (`HERBTWIN_SEARCH_ENABLED=1` plus a Tavily, Exa or
 TinyFish key; Tavily also needs `HERBTWIN_TAVILY_ENABLED=1`), Supabase sign-in and
-history, Resend email, "What can I grow
-here?" (`HERBTWIN_SPOT_ENABLED=1`), LangSmith tracing, and the site caps.
+history, Resend email, the "What can I grow
+here?" page (`HERBTWIN_SPOT_ENABLED=1`; switched off on the live site), LangSmith tracing,
+and the site caps.
 
 To run your own copy online: [docs/reference/deploy-your-own.md](docs/reference/deploy-your-own.md).
 
