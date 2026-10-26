@@ -35,27 +35,32 @@
       press); the answer across the page; the days after under it, dashed arrows. Every word
       and figure is one the detailed flow or the reports give. The detailed flow folds under
       it, one tap away #}
-  <figure class="pipe" aria-labelledby="pipe-cap">
-    <figcaption id="pipe-cap"><strong>How herbtwin answers one photo</strong>
-      <span>The tag on each box says where it runs. Tinted: NVIDIA Nemotron.</span></figcaption>
+  {#- 25 Oct, Kash on rev 00119: no title of its own ("How it's built" and the Nebius line
+      above say it), arrows down into the answer and out of it as on the GitHub figure, the
+      answer as short as the figure's, the tags in the services panel's pill colours #}
+  <figure class="pipe" aria-label="How herbtwin answers one photo">
     <ol class="pipe-steps" role="list" aria-label="How one answer is made">
       <li><div class="node"><strong>Your photo and place</strong><span>Up to 3 photos of a herb, and a UK town or postcode</span></div></li>
-      <li><div class="node"><strong>Read the photo</strong><em>GLM-5.3-Flash</em><span>Names the plant and what's wrong</span><i class="pipe-tag">Token Factory</i></div></li>
-      <li><div class="node"><strong>Gather evidence</strong><span>Care facts, a Tavily search and, outdoors, the 2-week forecast</span><i class="pipe-tag">Tavily</i></div></li>
+      <li><div class="node"><strong>Read the photo</strong><em>GLM-5.3-Flash</em><span>Names the plant and what's wrong</span><i class="pipe-tag tf">Token Factory</i></div></li>
+      <li><div class="node"><strong>Gather evidence</strong><span>Care facts, a Tavily search and, outdoors, the 2-week forecast</span><i class="pipe-tag tavily">Tavily</i></div></li>
       <li><div class="node"><strong>The plant's twin</strong><span>Outdoors, tries each choice against that weather. Indoors: no twin yet</span></div></li>
-      <li><div class="node advisors"><strong>Advise</strong><em>NVIDIA Nemotron 3 Super</em><span>Asked 3 times</span><i class="pipe-tag">Token Factory</i></div></li>
+      <li><div class="node advisors"><strong>Advise</strong><em>NVIDIA Nemotron 3 Super</em><span>Asked 3 times</span><i class="pipe-tag tf">Token Factory</i></div></li>
       <li><div class="node"><strong>How sure?</strong><span>How far the 3 answers agree, plus other factors</span></div></li>
     </ol>
-    <p class="pipe-answer"><strong>The answer: one thing to do today, and how sure we are.</strong>
-      <span>Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <b>$0.0040</b> of model time, against <b>about $0.0177</b> with every step on Nemotron 3 Ultra. One example, not an average; the Ultra figure is an estimate: the same tokens at Ultra's listed price.</span></p>
+    <p class="pipe-answer"><strong>Answer: one thing to do today, how sure, and &ldquo;leave it&rdquo; when that is right</strong>
+      {%- if check_on %}<span>Plus a trusted page's own sentence, quoted only if it says the same</span>{% endif %}</p>
     <ol class="pipe-loop" role="list" aria-label="The days after an answer">
-      <li><div class="node advisors"><strong>Ask</strong><em>NVIDIA Nemotron 3 Nano</em><span>Chats about your plant, with Tavily search</span><i class="pipe-tag">Token Factory</i></div></li>
-      <li><div class="node"><strong>Reminder email</strong><span>A small daily job</span><i class="pipe-tag">Nebius AI Cloud</i></div></li>
-      <li><div class="node"><strong>Did you do it?</strong><span>For a kept plant, your next photo asks, and compares the two</span><i class="pipe-tag">Token Factory</i></div></li>
+      <li><div class="node advisors"><strong>Ask</strong><em>NVIDIA Nemotron 3 Nano</em><span>Chats about your plant, with Tavily search</span><i class="pipe-tag tf">Token Factory</i></div></li>
+      <li><div class="node"><strong>Reminder email</strong><span>A small daily job</span><i class="pipe-tag cloud">Nebius AI Cloud</i></div></li>
+      <li><div class="node"><strong>Did you do it?</strong><span>For a kept plant, your next photo asks, and compares the two</span><i class="pipe-tag tf">Token Factory</i></div></li>
     </ol>
+    <figcaption class="pipe-key">Tinted: NVIDIA Nemotron. Dashed arrows: the days after.</figcaption>
   </figure>
+  {#- the cost, out of the answer bar but on the page: judges score each step's model and its
+      cost against a baseline (25 Oct, Kash: the bar had "far too much text") #}
+  <p class="pipe-cost">Every answer lists each step's model, time and cost. One example read (basil, 21 Oct): <b>$0.0040</b> of model time, against <b>about $0.0177</b> with every step on Nemotron 3 Ultra. One example, not an average; the Ultra figure is an estimate: the same tokens at Ultra's listed price.</p>
   <details class="pipe-more">
-    <summary>See every step</summary>
+    <summary>See every step: what each one does, its model and its cost</summary>
   <figure class="flow-panel">
     <ol class="flow-built" data-reveal="stagger" role="list" aria-label="How one answer is made, step by step">
       <li><div class="node">

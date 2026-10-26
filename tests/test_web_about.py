@@ -51,9 +51,10 @@ def test_old_credits_links_land_on_the_credits_section(tmp_path):
 
 
 def test_the_answers_example_cost_is_labelled_one_example_and_an_estimate(tmp_path):
-    # 25 Oct (the About audit): the cost card became the pipeline's answer bar, word for word
+    # 25 Oct (the About audit): the cost card became the pipeline's answer bar, word for word;
+    # then (Kash on rev 00119: the bar had "far too much text") a line under the figure
     page = _about(tmp_path)
-    cost = page.split('<p class="pipe-answer">', 1)[1].split("</p>", 1)[0]
+    cost = page.split('<p class="pipe-cost">', 1)[1].split("</p>", 1)[0]
     assert "<b>$0.0040</b>" in cost and "<b>about $0.0177</b>" in cost
     assert "One example read (basil, 21 Oct)" in cost and "every step on Nemotron 3 Ultra" in cost
     assert "One example, not an average;" in cost
@@ -203,7 +204,9 @@ def test_how_its_built_is_the_stack_then_one_coloured_flow(tmp_path, monkeypatch
     assert "about-chips" not in built
     assert built.index('<figure class="pipe"') < built.index('<details class="pipe-more">')
     fold = built.split('<details class="pipe-more">', 1)[1].split("</details>", 1)[0]
-    assert fold.lstrip().startswith("<summary>See every step</summary>")
+    assert fold.lstrip().startswith(
+        "<summary>See every step: what each one does, its model and its cost</summary>"
+    )
     assert '<ol class="flow-built"' in fold
     flow = built.split('<ol class="flow-built"', 1)[1].split("</figure>", 1)[0]
     # eight steps (round 3: our rules in the main row, the weather a step of its own), then
@@ -584,7 +587,7 @@ def test_round_three_joined_up(tmp_path):
     # 25 Oct (the About audit): the chips went; the job's platform is in the pipeline's loop
     assert (
         "<strong>Reminder email</strong><span>A small daily job</span>"
-        '<i class="pipe-tag">Nebius AI Cloud</i>' in page
+        '<i class="pipe-tag cloud">Nebius AI Cloud</i>' in page
     )
     assert "Reminder emails come from a small daily job on Nebius AI Cloud." in page
     css = style.CSS

@@ -254,8 +254,9 @@ def test_the_weather_path_label_counts_in_few_words(tmp_path, monkeypatch):
     # grown on purpose on 25 Oct to 545 (537 measured) for Kash's "What each service did" panel,
     # then to 560 (551) when its LangSmith row said truly what a trace carries; the audit's
     # pipeline, open, with the flow folded, and the twin said to be outdoors (review): 460
-    # (448 measured)
-    assert len(words) <= 460
+    # (448 measured); Kash's round on rev 00119 (the trusted-page line under the answer, the
+    # key and the cost line under the figure, its title gone): 475 (465 measured)
+    assert len(words) <= 475
 
 
 @pytest.mark.parametrize(

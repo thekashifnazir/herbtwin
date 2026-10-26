@@ -4,11 +4,13 @@ walk: the strip drew Leave it solid green and Water it dashed, while the chart's
 the card's job is always the green one, so on a leave-it answer the dashed line is green.
 And a line's name never sits on the other line."""
 
+import re
+
 from herbtwin.twin_chart import (
     BELOW,
     RIGHT,
     TOP,
-    _how,
+    _legend,
     _names,
     _span,
     short_name,
@@ -51,16 +53,16 @@ def test_on_a_leave_it_answer_the_charts_dashed_line_is_the_green_one(tmp_path):
     (tmp_path / "w").mkdir(), (tmp_path / "l").mkdir()
     water = _render(_outdoor(tmp_path / "w"))
     assert _figure(water).startswith('" id="twin-chart"')  # no leave-leads: as before
-    assert "Green: if you water it. Grey, dashed: if you leave it." in _figure(water)
+    plain = _figure(water).split('twin-how on" data-line="water">', 1)[1].split("</ul>", 1)[0]
+    assert re.findall(r'class="key-mark km-([\w-]+)"', plain)[:2] == ["line", "base"]
     leave = _render(_leave(_outdoor(tmp_path / "l")))
     fig = _figure(leave)
     assert fig.startswith(' leave-leads" id="twin-chart"')
-    how = fig.split('<p class="twin-chart-how">', 1)[1].split("</p>", 1)[0]
-    shown = how.split('twin-how on"', 1)[1].split("</span>", 1)[0]
-    assert shown.startswith(
-        ' data-line="water">Green, dashed: if you leave it. Grey: if you water it.'
-    )
-    assert "Green: if you water it" not in how
+    how = fig.split('<div class="twin-chart-how">', 1)[1].split("</div>", 1)[0]
+    shown = how.split('twin-how on" data-line="water">', 1)[1].split("</ul>", 1)[0]
+    # leaving it's line is the green dashed one, the water line grey
+    assert re.findall(r'class="key-mark km-([\w-]+)"', shown)[:2] == ["base-lead", "other"]
+    assert "<strong>Leave it</strong>" in shown.split("km-other", 1)[0]
     rules = {sel: body for at, sel, body in _rules(open(ANSWER_CSS).read()) if not at}
     base = rules[".answer-page .twin-chart.leave-leads polyline.base"]
     assert "stroke: var(--primary)" in base
@@ -101,11 +103,11 @@ def test_the_leave_it_key_names_each_compared_choice(tmp_path):
     # review nit: on a leave-it answer the key says the grey line's own name, whichever
     # choice it is: Protect it on the page, Move it to better light from the same code
     page = _render(_leave(_outdoor(tmp_path)))
-    how = _figure(page).split('<p class="twin-chart-how">', 1)[1].split("</p>", 1)[0]
-    shelter = how.split('data-line="shelter">', 1)[1].split("</span>", 1)[0]
-    assert shelter.startswith("Green, dashed: if you leave it. Grey: if you protect it.")
+    how = _figure(page).split('<div class="twin-chart-how">', 1)[1].split("</div>", 1)[0]
+    shelter = how.split('data-line="shelter">', 1)[1].split("</ul>", 1)[0]
+    assert re.findall(r"<strong>([^<]+)</strong>", shelter)[:2] == ["Leave it", "Protect it"]
     light = short_name("Move it to better light (a brighter spot)")  # the card's own words
-    assert _how(light, "Leave it", False, leave_leads=True) == (
-        "Green, dashed: if you leave it. Grey: if you move it to better light."
-        " Below the dotted line, it needs water."
+    assert _legend(light, "Leave it", False, leave_leads=True)[:2] == (
+        ("base-lead", "Leave it", "the soil's water if you leave it."),
+        ("other", "Move it to better light", "the soil's water if you move it to better light."),
     )

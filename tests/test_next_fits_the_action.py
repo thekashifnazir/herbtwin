@@ -207,7 +207,10 @@ def test_a_remove_it_answer_never_offers_how_to_treat_it(tmp_path, setting):
     assert asked == ["Can I eat the healthy leaves?", "Will it spread to my other plants?"]
     page = _render(rec)
     assert "How do I treat" not in page
-    assert '<button type="button" class="starter">Can I eat the healthy leaves?</button>' in page
+    assert (
+        'class="starter" data-covers="\\beat\\b|\\bedible\\b|\\beating\\b">Can I eat the healthy leaves?</button>'
+        in page
+    )
 
 
 def test_a_remove_it_answer_from_a_rough_photo_asks_neither_eat_nor_what_if(tmp_path):

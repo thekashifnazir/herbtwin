@@ -423,23 +423,21 @@ def test_under_the_title_it_says_how_to_read_the_lines_drawn(tmp_path):
     chart = twin_chart(rec, {**LABELS, "shelter": "Protect it (shelter or bring in)"})
     assert chart is not None
     by = {ln.action: ln for ln in chart.lines}
-    assert by["shelter"].how == (
-        "Green: if you protect it. Grey, dashed: if you leave it. Below the dotted line, it needs "
-        "water. \u2744\ufe0e marks each cold spell."
-    )
+    # one line a mark since 25 Oct (Kash: "have each on a different line"), test_twin_chart_key_lines
+    assert [m for m, _, _ in by["shelter"].legend] == ["line", "base", "needs", "cold"]
+    assert by["shelter"].legend[-1][2].endswith("\u2744\ufe0e marks each cold spell.")
     # leaving it drawn: its green line is the dashed one, so the dashed one is not named twice
-    assert by["leave_normal"].how.startswith("Green: if you leave it. Below the dotted line")
-    assert "dashed" not in by["leave_normal"].how.lower()
+    assert [m for m, _, _ in by["leave_normal"].legend] == ["line", "needs", "cold"]
     # no cold night on any line: no snowflakes drawn, so none explained
     assert rec.state is not None
     for s in rec.state.strips:
         for d in s.days:
             d.frost = 0.0
-    assert all("\u2744" not in ln.how for ln in twin_chart(rec, LABELS).lines)
+    assert all("\u2744" not in w for ln in twin_chart(rec, LABELS).lines for _, _, w in ln.legend)
     # on the page: one sentence per drawn line, the shown one's visible, swapped by the tap
     fig = _render(_cold_basil(_record(tmp_path))).split('<figure class="twin-chart"', 1)[1]
-    how = fig.split('<p class="twin-chart-how">', 1)[1].split("</p>", 1)[0]
-    spans = re.findall(r'<span class="twin-line twin-how( on)?" data-line="(\w+)">', how)
+    key = fig.split('<div class="twin-chart-how">', 1)[1].split("</div>", 1)[0]
+    spans = re.findall(r'<ul class="twin-line twin-how( on)?" data-line="(\w+)">', key)
     assert {a for _, a in spans} == {"leave_normal", "water", "shelter"}
     assert [a for on, a in spans if on] == ["shelter"]
     assert fig.index("twin-chart-how") < fig.index("<svg")
@@ -561,7 +559,7 @@ def test_a_hardy_plants_snowflakes_are_frosty_spells_as_the_fold_counts_them(tmp
     assert chart is not None
     base = next(ln for ln in chart.lines if ln.action == "leave_normal")
     assert base.marks and base.spell == "frosty spell"
-    assert base.how.endswith("❄︎ marks each frosty spell.")
+    assert base.legend[-1][2].endswith("❄︎ marks each frosty spell.")
     assert ">frosty spells</text>" in _render(rec)
     weather = fold_titles(rec, LABELS, {})["weather"]
     assert "frosty spell" in f"{weather.title} {weather.weather}", weather
@@ -576,6 +574,7 @@ def test_one_dashed_line_and_the_key_names_it(tmp_path):
     assert [sel.strip() for sel in dashed] == [".answer-page .twin-chart polyline.base"], dashed
     rec = _cold_basil(_record(tmp_path))
     page = _render(rec)
-    how = page.split('<p class="twin-chart-how">', 1)[1].split("</p>", 1)[0]
-    assert "Grey, dashed: if you leave it." in how and "Dashed:" not in how
+    key = page.split('<div class="twin-chart-how">', 1)[1].split("</div>", 1)[0]
+    # one line a mark: the dashed swatch beside leaving it, never a word that names two lines
+    assert '<span class="key-mark km-base"' in key and "dashed" not in key.lower()
     assert '<g class="base-cold">' in page  # the left-out cold band is still drawn

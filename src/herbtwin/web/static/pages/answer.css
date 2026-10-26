@@ -349,6 +349,22 @@
 /* how to read it: one sentence per drawn line, the tapped one's shown (round 2, 22 Oct) */
 .answer-page .twin-chart-how { margin: 0 0 8px; font-size: 16px; line-height: 1.4; color: var(--muted-fg); }
 .answer-page .twin-chart .twin-how:not(.on) { display: none; }
+/* one line a mark, each beside a swatch drawn as the chart draws it (25 Oct, Kash: "have each
+   on a different line for green, grey and dotted line") */
+.answer-page .twin-chart ul.twin-how { margin: 0; padding: 0; list-style: none; }
+.answer-page .twin-chart ul.twin-how li { display: flex; align-items: flex-start; gap: 10px; }
+.answer-page .twin-chart ul.twin-how li + li { margin-top: 4px; }
+/* a swatch is a 28 by 22 box, the mark drawn across its middle as the chart draws it: the
+   same colours, widths and dash lengths (polyline, polyline.base, .needs, .cold) */
+.answer-page .twin-chart .key-mark { flex: none; width: 28px; height: 22px; background-repeat: no-repeat;
+  background-position: left center; }
+.answer-page .twin-chart .key-mark.km-line { background-image: linear-gradient(var(--primary), var(--primary)); background-size: 100% 3px; }
+.answer-page .twin-chart .key-mark.km-base { background-image: repeating-linear-gradient(90deg, var(--muted-fg) 0 5px, transparent 5px 9px); background-size: 100% 1.5px; }
+.answer-page .twin-chart .key-mark.km-base-lead { background-image: repeating-linear-gradient(90deg, var(--primary) 0 5px, transparent 5px 9px); background-size: 100% 3px; }
+.answer-page .twin-chart .key-mark.km-other { background-image: linear-gradient(var(--muted-fg), var(--muted-fg)); background-size: 100% 1.5px; }
+.answer-page .twin-chart .key-mark.km-needs { background-image: repeating-linear-gradient(90deg, var(--warn) 0 2px, transparent 2px 5px); background-size: 100% 1.5px; }
+.answer-page .twin-chart .key-mark.km-cold { background-image: linear-gradient(var(--cold-fg) 0 3px, var(--cold) 3px); background-size: 100% 14px; }
+.answer-page .twin-chart ul.twin-how strong { color: var(--fg); }
 .answer-page .twin-chart :is(.needs-label, .line-name, .cold-key) { paint-order: stroke;
   stroke: var(--card); stroke-width: 4px; stroke-linejoin: round; }
 .answer-page .twin-chart .line-name { font: 700 14px/1 var(--sans); fill: var(--primary); }

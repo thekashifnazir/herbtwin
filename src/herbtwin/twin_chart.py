@@ -56,9 +56,11 @@ class Line:
     marks: tuple[float, ...] = ()  # a snowflake under the centre of each cold window
     key: tuple[float, str] | None = None  # the one "cold spells" word: x, anchor
     spell: str = "cold spell"  # "frosty spell" for a hardy plant, as the fold says (#441)
-    how: str = ""  # how to read the chart while this line is drawn, under the title
+    # how to read the chart while this line is drawn, under the title: one line a mark drawn,
+    # each (its mark, a name or "", the words), the mark drawn as a small swatch beside it
+    legend: tuple[tuple[str, str, str], ...] = ()
     # the same, on a leave-it answer: leaving it is the advice, green and still dashed
-    how_leave: str = ""
+    legend_leave: tuple[tuple[str, str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -176,24 +178,45 @@ def _you(name: str) -> str:
     return f"if you {name[:1].lower()}{name[1:]}"
 
 
-def _how(
-    name: str, base_name: str, snow: bool, spell: str = "cold spell", leave_leads: bool = False
-) -> str:
-    """How to read the chart, from the lines actually drawn: the green one, leaving it's
-    dashed one (when it is not the green one), the dotted line, and the snowflakes when
-    any show (round 2, 22 Oct, Kash: "explanations"). Leaving it is always the dashed line;
-    on a leave-it answer it is the green one too, the other line grey (25 Oct final walk:
-    the card's strip and this chart drew the two the opposite ways)."""
+def _legend(
+    name: str,
+    base_name: str,
+    snow: bool,
+    spell: str = "cold spell",
+    leave_leads: bool = False,
+    no_rain: bool = False,
+) -> tuple[tuple[str, str, str], ...]:
+    """How to read the chart, one line a mark actually drawn, each beside a swatch of it
+    (25 Oct, Kash: "have each on a different line for green, grey and dotted line"; it was
+    one sentence). The green line, then leaving it's dashed one when it is not the green one:
+    leaving it is always the dashed line; on a leave-it answer it is the green one too, the
+    other line grey (25 Oct final walk). A brought-in line that ends drier than leaving it's
+    says why. The dotted line says higher is wetter, not better (Kash: "I thought higher
+    meant better"), and the cold bands what their gaps are ("what do the gaps mean?")."""
+
+    def soil(n: str, dry: bool = False) -> str:
+        return f"the soil's water {_you(n)}." + (
+            " It runs drier: no rain reaches it." if dry else ""
+        )
+
     if leave_leads and base_name and base_name != name:
-        said = f"Green, dashed: {_you(base_name)}. Grey: {_you(name)}."
+        lines = [("base-lead", base_name, soil(base_name)), ("other", name, soil(name, no_rain))]
     else:
-        said = f"Green: {_you(name)}."
+        lines = [("line", name, soil(name, no_rain))]
         if base_name and base_name != name:
-            # its colour too: the key names one line, never "dashed" alone (25 Oct re-walk)
-            said += f" Grey, dashed: {_you(base_name)}."
-    said += " Below the dotted line, it needs water."
-    # one snowflake a run of cold nights, so a spell, as the fold counts them (#441)
-    return said + (f" \u2744\ufe0e marks each {spell}." if snow else "")
+            lines.append(("base", base_name, soil(base_name)))
+    lines.append(("needs", "", "Below this line, it needs water. Higher is wetter, not better."))
+    if snow:
+        # one snowflake a run of cold nights, so a spell, as the fold counts them (#441)
+        night = spell.split()[0]
+        lines.append(
+            (
+                "cold",
+                "",
+                f"A {night} night; the gaps are milder nights. \u2744\ufe0e marks each {spell}.",
+            )
+        )
+    return tuple(lines)
 
 
 # the twin's reasons in plain sentences, for the Compare table only: the twin's own strings
@@ -299,6 +322,14 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
     for row, strip, pts, cold, marks, first, name in raw:
         short = short_name(name)
         here = _span(pts, short)
+        snow = bool(marks or (left and left[4]))
+        # brought in, no rain reaches it: drier than leaving it out on a wet fortnight
+        dry = (
+            strip.action == "bring_indoors"
+            and base_pts is not None
+            and row.action != "leave_normal"
+            and pts[-1][1] > base_pts[-1][1] + 0.5
+        )
         if row.action == "leave_normal" or base_pts is None:
             name_y = here[0] - ABOVE if here[0] - ABOVE >= NAME_TOP else here[1] + BELOW
             base_y = None
@@ -327,10 +358,8 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
                 marks=marks,
                 key=_key(marks, spell),
                 spell=spell,
-                how=_how(short, base_name, bool(marks or (left and left[4])), spell),
-                how_leave=_how(
-                    short, base_name, bool(marks or (left and left[4])), spell, leave_leads=True
-                ),
+                legend=_legend(short, base_name, snow, spell, no_rain=dry),
+                legend_leave=_legend(short, base_name, snow, spell, leave_leads=True, no_rain=dry),
             )
         )
     if not lines:

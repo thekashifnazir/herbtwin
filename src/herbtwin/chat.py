@@ -1096,6 +1096,25 @@ def starters(rec: AnalysisRecord) -> list[str]:
     return ["Is it safe to eat?", "When should I harvest it?", what_if]
 
 
+# what asking a starter covers, in other words, so it is not offered again under the reply
+# (25 Oct re-walk: after "Should I bring it in at night?" the follow-ups still offered "What
+# if I move it inside?"); the page tests each asked question against it
+_COVERS = (
+    ("move it inside", r"\binside\b|\bindoors?\b|\bbring (?:it )?in\b|\bmove it in\b"),
+    ("harvest", r"\bharvest|\bpick (?:the |some )?leaves\b"),
+    ("treat", r"\btreat|\bget rid of\b|\bcure\b|\bkill\b"),  # before "eat": tr-eat
+    ("eat", r"\beat\b|\bedible\b|\beating\b"),
+    ("don't water", r"\bwater"),
+    ("spread", r"\bspread"),
+)
+
+
+def starter_covers(question: str) -> str:
+    """A pattern for the questions that ask this starter in other words; "" for none."""
+    q = question.casefold()
+    return next((covers for key, covers in _COVERS if key in q), "")
+
+
 def _plant(rec: AnalysisRecord) -> str:
     obs = rec.observation
     return obs.species[0].common_name if obs is not None and obs.species else "the plant"
@@ -1110,7 +1129,8 @@ def _words(name: str) -> str:
 
 
 # an RHS plant record: its address names the one plant it is about
-_RHS_RECORD = re.compile(r"/plants/\d+/([a-z0-9-]+)/details")
+# any case: RHS writes them "/Plants/70637/Hedera-helix-Parsley-Crested/Details" (rev 00118)
+_RHS_RECORD = re.compile(r"/plants/\d+/([a-z0-9-]+)/details", re.IGNORECASE)
 
 
 # other plants whose names hold one of ours: "Russian sage (Perovskia)" was cited for sage
@@ -1168,11 +1188,15 @@ def _names_the_plant(
             return found is not None and _kin(found, {key})
     record = _RHS_RECORD.fullmatch(url.path.rstrip("/"))
     if record is not None and url.netloc.endswith("rhs.org.uk"):
-        slug = record[1]
+        slug = record[1].lower()
         # the matched key, and the read's Latin name only when it is a binomial: a read of
         # "Salvia" alone must not keep salvia-rosmarinus as sage
         own = {key} | {n for n in latin if " " in n}
         return any(slug == s or slug.startswith(f"{s}-") for s in map(_slug, own) if s)
+    # the plant's name only inside a cultivar's quoted name is another plant's cultivar: an
+    # ivy called 'Parsley Crested' is not parsley (rev 00118, a parsley reply cited it)
+    if word.search(hit["title"]) and not word.search(_CULTIVAR.sub(" ", hit["title"])):
+        return False
     title = _without(other, word, hit["title"])
     if title != hit["title"] and not word.search(title):
         return False

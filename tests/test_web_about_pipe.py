@@ -41,9 +41,9 @@ def _boxes(ol: str) -> list[tuple[str, str, str | None]]:
 
 def test_the_pipeline_leads_with_six_steps_the_answer_then_the_days_after(tmp_path):
     built = _built(tmp_path)
-    pipe = built.split('<figure class="pipe" aria-labelledby="pipe-cap">', 1)[1].split(
-        "</figure>", 1
-    )[0]
+    pipe = built.split('<figure class="pipe" aria-label="How herbtwin answers one photo">', 1)[
+        1
+    ].split("</figure>", 1)[0]
     steps = pipe.split('<ol class="pipe-steps" role="list"', 1)[1].split("</ol>", 1)[0]
     loop = pipe.split('<ol class="pipe-loop" role="list"', 1)[1].split("</ol>", 1)[0]
     assert _boxes(steps) == STEPS and _boxes(loop) == LOOP
@@ -54,7 +54,12 @@ def test_the_pipeline_leads_with_six_steps_the_answer_then_the_days_after(tmp_pa
         < pipe.index('<ol class="pipe-loop"')
     )
     answer = pipe.split('<p class="pipe-answer">', 1)[1].split("</p>", 1)[0]
-    assert "<strong>The answer: one thing to do today, and how sure we are.</strong>" in answer
+    # the GitHub figure's line, short (25 Oct, Kash: "far too much text in the answer")
+    assert answer.startswith(
+        "<strong>Answer: one thing to do today, how sure, and &ldquo;leave it&rdquo; when that"
+        " is right</strong>"
+    )
+    assert "$" not in answer and len(re.sub(r"<[^>]+>", " ", answer).split()) <= 30
     # it leads: under the Nebius line, before the fold and the services panel
     assert (
         built.index('<p class="about-nebius">')
@@ -63,11 +68,13 @@ def test_the_pipeline_leads_with_six_steps_the_answer_then_the_days_after(tmp_pa
         < built.index('<div class="about-services ink">')
         < built.index("A few decisions I'd call out")
     )
-    # its title and key at the top, as on the Devpost figure (25 Oct, Kash: "sure")
-    assert pipe.lstrip().startswith(
-        '<figcaption id="pipe-cap"><strong>How herbtwin answers one photo</strong>'
+    # no title of its own: "How it's built" and the Nebius line say it (25 Oct, Kash); the
+    # one useful bit of its caption stays as a small key under the figure
+    assert "How herbtwin answers one photo</" not in built
+    assert pipe.rstrip().endswith(
+        '<figcaption class="pipe-key">Tinted: NVIDIA Nemotron. Dashed arrows: the days after.'
+        "</figcaption>"
     )
-    assert "Tinted: NVIDIA Nemotron." in pipe.split("</figcaption>", 1)[0]
 
 
 def test_the_pipelines_figures_are_the_codes(tmp_path):
@@ -101,7 +108,9 @@ def test_the_detailed_flow_folds_and_the_services_stay_open(tmp_path):
     built = _built(tmp_path)
     fold = built.split('<details class="pipe-more">', 1)[1].split("</details>", 1)[0]
     assert '<details class="pipe-more" open' not in built
-    assert fold.lstrip().startswith("<summary>See every step</summary>")
+    assert fold.lstrip().startswith(
+        "<summary>See every step: what each one does, its model and its cost</summary>"
+    )
     assert '<figure class="flow-panel">' in fold and '<ol class="flow-built"' in fold
     # Kash (25 Oct): sponsor use super clear, so What each service did is never folded
     assert '<div class="about-services ink">' not in fold
@@ -170,7 +179,7 @@ def test_each_box_reads_step_model_line_then_where_it_runs(tmp_path):
     for box in boxes:
         name = re.match(r"<strong>([^<]+)</strong>", box)[1].replace("&#39;", "'")
         parts = re.findall(r"<(strong|em|span|i)\b", box)
-        tag = re.search(r'<i class="pipe-tag">([^<]+)</i>$', box)
+        tag = re.search(r'<i class="pipe-tag [a-z]+">([^<]+)</i>$', box)
         assert parts[0] == "strong" and "span" in parts, name
         assert (tag[1] if tag else None) == TAGS[name], name
         if tag:
@@ -192,3 +201,66 @@ def test_the_boxes_are_flat_and_only_nemotron_is_tinted(tmp_path):
     assert "margin-top: auto" in tag and "16px" in tag  # pinned at the foot; never under 16px
     # the heading centred over the centred Nebius line
     assert "text-align: center" in rules[".about-page .about h2#built"]
+
+
+def test_arrows_run_down_into_the_answer_and_out_of_it(tmp_path):
+    # 25 Oct, Kash: "should have arrows down same as one in github", "same with the 3 down
+    # arrows": How sure? into the answer, the answer into each of the days after
+    rules = _rules(SHEET.read_text("utf-8"))
+    flat = {sel: body for at, sel, body in rules if not at}
+    down = flat[
+        ".about-page .pipe .pipe-steps > li:last-child::after, "
+        ".about-page .pipe .pipe-loop > li::after"
+    ]
+    assert 'content: "\\2193" / ""' in down  # silent to a screen reader
+    assert "bottom:" in flat[".about-page .pipe .pipe-steps > li:last-child::after"]
+    assert "top:" in flat[".about-page .pipe .pipe-loop > li::after"]
+    # one column: only the first of the days after keeps its own arrow from the answer
+    phone = {sel: body for at, sel, body in rules if at == ("@media (max-width: 720px)",)}
+    assert "content: none" in phone[".about-page .pipe .pipe-loop > li + li::after"]
+
+
+def test_the_tags_wear_the_services_panels_pill_colours(tmp_path):
+    # 25 Oct, Kash: "the same pill colours as we have in the each service did it"
+    pipe = _built(tmp_path).split('<figure class="pipe"', 1)[1].split("</figure>", 1)[0]
+    for name, cls in (("Token Factory", "tf"), ("Tavily", "tavily"), ("Nebius AI Cloud", "cloud")):
+        assert f'<i class="pipe-tag {cls}">{name}</i>' in pipe, name
+    services = {
+        sel: body
+        for at, sel, body in _rules((SHEET.parent / "about_services.css").read_text("utf-8"))
+        if not at
+    }
+    tags = {sel: body for at, sel, body in _rules(SHEET.read_text("utf-8")) if not at}
+    for svc, tag in (
+        (".about-page .about-services .tf .svc-name", ".about-page .pipe .pipe-tag.tf"),
+        (".about-page .about-services .tavily .svc-name", ".about-page .pipe .pipe-tag.tavily"),
+    ):
+        colours = re.findall(r"(?:background|color): var\(--[a-z-]+\)", services[svc])
+        assert colours and all(c in tags[tag] for c in colours), (svc, colours)
+    plain = re.findall(
+        r"(?:background|color): var\(--[a-z-]+\)", services[".about-page .about-services .svc-name"]
+    )
+    assert all(c in tags[".about-page .pipe .pipe-tag"] for c in plain)
+
+
+def test_see_every_step_is_an_obvious_button(tmp_path):
+    # 25 Oct, Kash: "completely hidden now let's make people want to click it": still a
+    # <details>, closed, its summary a pill that says what's inside, with the chevron
+    built = _built(tmp_path)
+    assert '<details class="pipe-more">' in built and '<details class="pipe-more" open' not in built
+    rules = {sel: body for at, sel, body in _rules(SHEET.read_text("utf-8")) if not at}
+    summary = rules[".about-page .pipe-more > summary"]
+    for say in (
+        "border: 1.5px solid var(--ok)",
+        "border-radius: var(--pill)",
+        "background: var(--soft)",
+        "cursor: pointer",
+    ):
+        assert say in summary, say
+    assert "border: 0" in rules[".about-page .pipe-more"]  # no box around the closed button
+    # the cost left the bar but not the page: right under the figure
+    assert (
+        built.index("</figure>")
+        < built.index('<p class="pipe-cost">')
+        < built.index('<details class="pipe-more">')
+    )

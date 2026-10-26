@@ -130,7 +130,9 @@ def test_starters_are_tapped_into_the_chat_and_enter_sends(tmp_path):
     page = _render(rec)
     box = page.split('<div class="starters" hidden><h4>Try one of these</h4>', 1)[1]
     box = box.split("</div></div>", 1)[0]
-    assert re.findall(r'<button type="button" class="starter">(.*?)</button>', box) == [
+    assert re.findall(
+        r'<button type="button" class="starter" data-covers="[^"]*">(.*?)</button>', box
+    ) == [
         "Is it safe to eat?",
         "When should I harvest it?",
         "What if I move it inside?",

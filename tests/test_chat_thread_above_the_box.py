@@ -71,7 +71,8 @@ def test_starters_go_once_asked_and_two_follow_ups_wait_under_the_latest_answer(
     assert 'starters.hidden = Boolean(log.querySelector(".msg"))' in script
     # after each answer: the suggestions not yet asked, at most 2, else none
     assert "const offer = () => {" in script
-    assert ".filter((q) => !asked.has(q.toLowerCase())).slice(0, 2)" in script
+    # not yet asked, word for word or in other words (chat.starter_covers, 25 Oct re-walk)
+    assert "asks.filter((a) => !covered(a)).map(([q]) => q).slice(0, 2)" in script
     assert "follow.hidden = !left.length;" in script
     css = style.CSS
     assert ".answer-page .starters { margin: 0 0 16px; }" in css

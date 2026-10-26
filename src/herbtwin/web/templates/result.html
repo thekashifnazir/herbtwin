@@ -540,8 +540,11 @@
         {%- set leave_leads = ts and ts.lead == "leave_normal" %}
         {% if tc %}<figure class="twin-chart{{ ' leave-leads' if leave_leads else '' }}" id="twin-chart" data-shown="{{ shown }}" data-reveal="draw">
           <p class="twin-chart-title" id="twin-chart-title">{{ tc.title }}</p>
-          {# how to read it, naming only the lines drawn: it follows the tap like the lines #}
-          <p class="twin-chart-how">{% for ln in tc.lines %}<span class="twin-line twin-how{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">{{ ln.how_leave if leave_leads and ln.how_leave else ln.how }}</span>{% endfor %}</p>
+          {# how to read it, naming only the marks drawn, one a line beside a swatch of it (25 Oct,
+             Kash: "have each on a different line"): it follows the tap like the lines #}
+          {% set swatch = {"line": "km-line", "base": "km-base", "base-lead": "km-base-lead", "other": "km-other", "needs": "km-needs", "cold": "km-cold"} %}
+          <div class="twin-chart-how">{% for ln in tc.lines %}<ul class="twin-line twin-how{{ ' on' if ln.action == shown else '' }}" data-line="{{ ln.action }}">
+            {%- for mark, name, words in (ln.legend_leave if leave_leads and ln.legend_leave else ln.legend) %}<li><span class="key-mark {{ swatch[mark] }}" aria-hidden="true"></span><span>{% if name %}<strong>{{ name }}</strong>: {% endif %}{{ words }}</span></li>{% endfor %}</ul>{% endfor %}</div>
           <svg viewBox="0 0 340 {{ tc.height }}" role="img" aria-labelledby="twin-chart-title">
             <text class="axis" x="4" y="26">wet</text><text class="axis" x="4" y="126">dry</text>
             <line class="frame" x1="34" y1="22" x2="34" y2="122"/><line class="frame" x1="34" y1="122" x2="332" y2="122"/>
@@ -842,7 +845,7 @@
          over the box as starters until the first question, when the thread takes their
          place (25 Oct, Kash: nothing under the box should move) #}
       <div class="starters" hidden><h4>Try one of these</h4>
-        <div class="actions">{% for q in starters(rec) %}<button type="button" class="starter">{{ q }}</button>{% endfor %}</div></div>
+        <div class="actions">{% for q in starters(rec) %}<button type="button" class="starter" data-covers="{{ starter_covers(q) }}">{{ q }}</button>{% endfor %}</div></div>
       {# one rounded box with its send inside, as a chat app has (22 Oct, Kash on A3: a
          full-width "Ask about this plant" did not say what it does). Ask needs the script;
          without one the text goes with "Check the advice again" #}
@@ -937,13 +940,15 @@
       // not yet asked under the latest answer, or none (25 Oct, Kash: nothing should move
       // down the page as they go)
       const starters = box.querySelector(".starters"), follow = box.querySelector(".followups");
-      const asks = [...starters.querySelectorAll(".starter")].map((b) => b.textContent);
+      // each with what asking it in other words looks like (chat.starter_covers)
+      const asks = [...starters.querySelectorAll(".starter")].map((b) => [b.textContent, b.dataset.covers ? new RegExp(b.dataset.covers, "i") : null]);
       const tap = (q) => () => { form.question.value = q; ask.click(); };
       for (const b of starters.querySelectorAll(".starter")) b.addEventListener("click", tap(b.textContent));
       let remaining = Infinity;  // questions left today: none to offer once the chat refuses
       const offer = () => {
-        const asked = new Set([...log.querySelectorAll(".msg.user")].map((p) => p.textContent.trim().toLowerCase()));
-        const left = log.querySelector(".msg") && remaining > 0 ? asks.filter((q) => !asked.has(q.toLowerCase())).slice(0, 2) : [];
+        const said = [...log.querySelectorAll(".msg.user")].map((p) => p.textContent.trim().toLowerCase());
+        const covered = ([q, re]) => said.includes(q.toLowerCase()) || (re !== null && said.some((s) => re.test(s)));
+        const left = log.querySelector(".msg") && remaining > 0 ? asks.filter((a) => !covered(a)).map(([q]) => q).slice(0, 2) : [];
         follow.querySelector(".actions").replaceChildren(...left.map((q) => {
           const b = document.createElement("button");
           b.type = "button"; b.className = "starter"; b.textContent = q;

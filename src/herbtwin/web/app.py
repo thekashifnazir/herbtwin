@@ -61,6 +61,7 @@ from herbtwin.chat import (
     OnStep,
     clean_message,
     shown_links,
+    starter_covers,
     starters,
 )
 from herbtwin.chat import links_from as chat_links
@@ -244,6 +245,7 @@ TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what i
 TEMPLATES.env.globals["twin_off_job"] = twin_off_job  # a job the twin cannot weigh
 TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the year
 TEMPLATES.env.globals["starters"] = starters  # "Ask about this plant": 3 to tap
+TEMPLATES.env.globals["starter_covers"] = starter_covers  # what asks each in other words
 TEMPLATES.env.globals["watch_list"] = watch_list  # Keep an eye on, one sign a line
 TEMPLATES.env.globals["by_part"] = by_part  # See it by part: the plan sorted, nothing new
 TEMPLATES.env.globals["season_sources"] = season_sources  # the season line's "from ..."
