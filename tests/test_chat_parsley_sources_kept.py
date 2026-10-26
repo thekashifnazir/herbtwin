@@ -68,3 +68,23 @@ def test_each_search_logs_what_came_in_what_was_kept_and_what_was_left_out(tmp_p
     assert said["kept"] == [GW.url]
     assert said["left_out"] == [{"title": IVY.title, "url": IVY.url, "why": "not about parsley"}]
     assert "How often should I water" not in line.getMessage()
+
+
+def test_the_search_line_keeps_titles_short_and_never_breaks_the_reply(
+    tmp_path, caplog, monkeypatch
+):
+    long = Hit("Ivy " + "x" * 300, IVY.url, "")
+    with caplog.at_level(logging.INFO, logger="herbtwin.chat"):
+        _ask(tmp_path, [long, GW])
+    line = next(r for r in caplog.records if r.getMessage().startswith("chat search "))
+    said = json.loads(line.getMessage().split(" ", 3)[3])
+    assert len(said["left_out"][0]["title"]) <= 120
+    # a logging fault is logged and the reply still comes, with its sources
+    from herbtwin import chat
+
+    def broken(*a, **k):
+        raise ValueError("a logging fault")
+
+    monkeypatch.setattr(chat.log, "info", broken)
+    r = _ask(tmp_path, [IVY, GW])
+    assert [s["url"] for s in r.sources] == [GW.url]

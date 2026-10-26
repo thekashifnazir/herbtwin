@@ -23,6 +23,10 @@ from herbtwin.web.app import TEMPLATES
         ("How do I treat rosemary beetle?", "How do I get rid of the beetles?"),
         ("What if I don't water it this week?", "What happens if I stop watering it?"),
         ("What if I don't water it this week?", "Can I skip watering this week?"),
+        (
+            "What if I don't water it this week?",
+            "What if I don\u2019t water it?",
+        ),  # an iPhone's \u2019
         ("Will it spread to my other plants?", "Could it spread to the mint?"),
     ],
 )
@@ -55,6 +59,7 @@ CASES = [
     ("What if I move it inside?", ["is it safe to eat?"], False),
     ("Is it safe to eat?", ["is it safe to eat?"], True),  # word for word, as before
     ("What if I don't water it this week?", ["how often should i water it?"], False),
+    ("What if I don't water it this week?", ["what if i don\u2019t water it?"], True),  # \u2019 in JS too
     ("When should I harvest it?", [], False),
 ]
 

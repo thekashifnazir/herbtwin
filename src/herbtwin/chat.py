@@ -1105,7 +1105,10 @@ _COVERS = (
     ("treat", r"\btreat|\bget rid of\b|\bcure\b|\bkill\b"),  # before "eat": tr-eat
     ("eat", r"\beat\b|\bedible\b|\beating\b"),
     # not watering only: "How often should I water it?" is not the twin's what-if (#554 review)
-    ("don't water", r"\b(?:don'?t|do not|not|stop|skip|without|no)\s+(?:\w+\s+)?water"),
+    (
+        "don't water",
+        r"\b(?:don['\u2019]?t|do not|not|stop|skip|without|no)\s+(?:\w+\s+)?water",
+    ),  # ’: iPhones
     ("spread", r"\bspread"),
 )
 
@@ -1317,28 +1320,29 @@ def _call(
     return args, {"error": f"no such tool: {call.name}"}, False
 
 
+TITLE_LOG = 120  # a logged title's most characters
+
+
 def _log_search(
     rec: AnalysisRecord, provider: str | None, hits: list[dict], about: list[dict], kept: list[dict]
 ) -> None:
     """One line a search: how many hits came in, the addresses kept, and each one left out
     with why, so a reply with no sources can be told apart from the logs: the search found no
     page on the plant, or our filter dropped one (rev 00122: a parsley reply came back with
-    none). Titles and addresses only, never the question."""
-    named, shown = {h["url"] for h in about}, {h["url"] for h in kept}
-    why = {"why": f"not about {_plant(rec)}"}
-    out = [{"title": h["title"], "url": h["url"], **why} for h in hits if h["url"] not in named]
-    out += [
-        {"title": h["title"], "url": h["url"], "why": "past the first few"}
-        for h in about
-        if h["url"] not in shown
-    ]
-    said = {
-        "provider": provider,
-        "in": len(hits),
-        "kept": [h["url"] for h in kept],
-        "left_out": out,
-    }
-    log.info("chat search run=%s %s", rec.record_id, json.dumps(said, ensure_ascii=False))
+    none). Titles (cut to TITLE_LOG) and addresses only, never the question. A fault here is
+    logged and never reaches the reply."""
+    try:
+        named, shown = {h["url"] for h in about}, {h["url"] for h in kept}
+
+        def out(h: dict, why: str) -> dict:
+            return {"title": str(h["title"])[:TITLE_LOG], "url": h["url"], "why": why}
+
+        left = [out(h, f"not about {_plant(rec)}") for h in hits if h["url"] not in named]
+        left += [out(h, "past the first few") for h in about if h["url"] not in shown]
+        said = {"provider": provider, "in": len(hits), "kept": [h["url"] for h in kept]}
+        log.info("chat search run=%s %s", rec.record_id, json.dumps({**said, "left_out": left}))
+    except Exception:  # noqa: BLE001 - a log line must never break the chat
+        log.exception("chat search log failed run=%s", rec.record_id)
 
 
 def _mark_listed(used: list[dict], text: str, rec: AnalysisRecord) -> None:
