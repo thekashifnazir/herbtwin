@@ -101,6 +101,8 @@ def test_a_cultivar_named_after_the_herb_is_not_the_herb(tmp_path, title, url):
         ("Petroselinum crispum 'Moss Curled' | RHS", "https://www.rhs.org.uk/Plants/12345/Petroselinum-crispum-Moss-Curled/Details"),
         ("Parsley 'Moss Curled'", "https://www.gardenersworld.com/x"),
         ("How to Grow Parsley", "https://www.gardenersworld.com/how-to/grow-plants/how-to-grow-parsley"),
+        # the herb's own name in scare quotes is not a cultivar (review of #554)
+        ("Best 'parsley' substitutes for winter", "https://www.gardenersworld.com/y"),
     ],
 )  # fmt: skip
 def test_the_herbs_own_cultivars_are_kept(tmp_path, title, url):

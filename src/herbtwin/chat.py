@@ -1104,7 +1104,8 @@ _COVERS = (
     ("harvest", r"\bharvest|\bpick (?:the |some )?leaves\b"),
     ("treat", r"\btreat|\bget rid of\b|\bcure\b|\bkill\b"),  # before "eat": tr-eat
     ("eat", r"\beat\b|\bedible\b|\beating\b"),
-    ("don't water", r"\bwater"),
+    # not watering only: "How often should I water it?" is not the twin's what-if (#554 review)
+    ("don't water", r"\b(?:don'?t|do not|not|stop|skip|without|no)\s+(?:\w+\s+)?water"),
     ("spread", r"\bspread"),
 )
 
@@ -1193,9 +1194,14 @@ def _names_the_plant(
         # "Salvia" alone must not keep salvia-rosmarinus as sage
         own = {key} | {n for n in latin if " " in n}
         return any(slug == s or slug.startswith(f"{s}-") for s in map(_slug, own) if s)
+
     # the plant's name only inside a cultivar's quoted name is another plant's cultivar: an
     # ivy called 'Parsley Crested' is not parsley (rev 00118, a parsley reply cited it)
-    if word.search(hit["title"]) and not word.search(_CULTIVAR.sub(" ", hit["title"])):
+    # (the herb's name alone in quotes is scare quotes, not a cultivar: "Best 'parsley' swaps")
+    def cultivar(m: re.Match) -> str:
+        return m.group(0) if word.fullmatch(m.group(0).strip(" '\u2018\u2019")) else " "
+
+    if word.search(hit["title"]) and not word.search(_CULTIVAR.sub(cultivar, hit["title"])):
         return False
     title = _without(other, word, hit["title"])
     if title != hit["title"] and not word.search(title):
@@ -1305,9 +1311,34 @@ def _call(
         if len(about) < len(hits):
             dropped = f"{len(hits) - len(about)} result(s) not about {_plant(rec)} were left out"
             note = f"{note}; {dropped}" if note else dropped
-        about = about[:MAX_HITS]  # the search asks for more, so enough are left once filtered
-        return args, {"provider": found.provider, "results": about, "note": note}, bool(about)
+        kept = about[:MAX_HITS]  # the search asks for more, so enough are left once filtered
+        _log_search(rec, found.provider, hits, about, kept)
+        return args, {"provider": found.provider, "results": kept, "note": note}, bool(kept)
     return args, {"error": f"no such tool: {call.name}"}, False
+
+
+def _log_search(
+    rec: AnalysisRecord, provider: str | None, hits: list[dict], about: list[dict], kept: list[dict]
+) -> None:
+    """One line a search: how many hits came in, the addresses kept, and each one left out
+    with why, so a reply with no sources can be told apart from the logs: the search found no
+    page on the plant, or our filter dropped one (rev 00122: a parsley reply came back with
+    none). Titles and addresses only, never the question."""
+    named, shown = {h["url"] for h in about}, {h["url"] for h in kept}
+    why = {"why": f"not about {_plant(rec)}"}
+    out = [{"title": h["title"], "url": h["url"], **why} for h in hits if h["url"] not in named]
+    out += [
+        {"title": h["title"], "url": h["url"], "why": "past the first few"}
+        for h in about
+        if h["url"] not in shown
+    ]
+    said = {
+        "provider": provider,
+        "in": len(hits),
+        "kept": [h["url"] for h in kept],
+        "left_out": out,
+    }
+    log.info("chat search run=%s %s", rec.record_id, json.dumps(said, ensure_ascii=False))
 
 
 def _mark_listed(used: list[dict], text: str, rec: AnalysisRecord) -> None:
