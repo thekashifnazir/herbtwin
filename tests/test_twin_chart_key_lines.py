@@ -47,14 +47,15 @@ def test_the_key_is_one_line_per_mark_with_why_protect_runs_drier(tmp_path):
     assert chart is not None and chart.shown == "shelter"
     by = {ln.action: ln for ln in chart.lines}
     assert by["shelter"].legend == (
-        ("line", "Protect it", "the soil's water if you protect it. It runs drier: no rain reaches it."),
+        ("line", "Protect it", "the soil's water if you protect it (better than leaving it). It runs drier: no rain reaches it."),
         ("base", "Leave it", "the soil's water if you leave it."),
         NEEDS,
         COLD,
     )  # fmt: skip
     # moving it to the light gets the rain: nothing to explain
     assert by["move_light"].legend[0] == (
-        "line", "Move it to better light", "the soil's water if you move it to better light."
+        "line", "Move it to better light",
+        "the soil's water if you move it to better light.",
     )  # fmt: skip
     # leaving it drawn: one line for it, then the dotted line and the cold
     assert by["leave_normal"].legend == (
@@ -69,7 +70,7 @@ def test_on_a_leave_it_answer_the_green_dashed_line_is_leaving_it(tmp_path):
     shelter = next(ln for ln in chart.lines if ln.action == "shelter")
     assert shelter.legend_leave[:2] == (
         ("base-lead", "Leave it", "the soil's water if you leave it."),
-        ("other", "Protect it", "the soil's water if you protect it. It runs drier: no rain reaches it."),
+        ("other", "Protect it", "the soil's water if you protect it (better than leaving it). It runs drier: no rain reaches it."),
     )  # fmt: skip
 
 

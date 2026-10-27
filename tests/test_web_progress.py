@@ -778,13 +778,35 @@ def test_the_step_now_line_says_ready_and_goes_on_a_failure():
     end = _done("/answers/abc")
     assert (
         "const nw=document.getElementById('wait-now');if(nw){nw.classList.add('finished');"
-        "nw.querySelector('.wait-now-label').textContent='Done';"
-        "document.getElementById('wait-now-step').textContent=s}" in end
+        "nw.querySelector('.wait-now-label').hidden=true;"
+        "document.getElementById('wait-now-step').textContent='Done'}" in end
     )
     assert end.index("document.getElementById('wait-now')") < end.index("r.classList.add('docked')")
     failed = _failed("the photo read took too long")
     assert "document.getElementById('wait-now')" in failed and ".hidden=true" in failed
     assert failed.index("wait-now") < failed.index('class="err"')
+
+
+def test_a_ready_answer_is_said_once_on_screen_and_once_to_a_screen_reader():
+    # 27 Oct: the band, the step line and the card's heading all said "Your answer is
+    # ready". The band keeps it; the step line says Done; the card is the button alone
+    from herbtwin.web.progress import _done
+
+    end = _done("/answers/abc")
+    script = end.split("<script>", 1)[1]
+    # the words reach the page only through `s`: the band, the status line and the title
+    assert script.count('"Your answer is ready"') == 1
+    assert "if(h)h.textContent=s;" in script
+    assert "document.getElementById('wait-now-step').textContent=s" not in script
+    assert script.count("w.textContent=s+'.'") == 1  # a screen reader hears it once
+    # the card's heading goes before the bar is measured for docking, so it never jumps
+    hide = "const rt=r&&r.querySelector('h2');if(rt)rt.hidden=true;"
+    assert hide in script and script.index(hide) < script.index("getBoundingClientRect")
+    # without script the band never changes: the heading stays in the markup for it
+    assert "<h2>Your answer is ready</h2>" in end
+    # a question first keeps its heading: the button alone does not say why
+    assert "rt.hidden=true" not in _done("/taps/abc")
+    assert "rt.hidden=true" not in _done("/answers/abc/plant")
 
 
 def test_without_script_a_missed_weather_line_that_is_last_stays_amber_and_still():

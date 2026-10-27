@@ -288,3 +288,43 @@ def test_a_backup_that_raced_and_lost_says_it_was_not_used(tmp_path):
             "Raced as our backup; GLM-5.3 Flash answered first, so not used"
         ),
     }
+
+
+def test_the_backups_row_says_when_it_started_so_the_times_add_up(tmp_path):
+    # 27 Oct: a coriander read showed "GLM-5.3 Flash 25.9 s, answered first" beside
+    # "DeepSeek V4.1 Flash 13.4 s, not used", true but read as a contradiction: the backup
+    # only started at 14 s, when GLM had no reading yet. Its row now says so
+    from herbtwin.schemas import BackupRead
+
+    glm, deepseek = "zai-org/GLM-5.3-Flash", "deepseek-ai/DeepSeek-V4.1-Flash"
+    rec = _full_plan(tmp_path)
+    rows = [_row(1, "observe", glm, 2000, 300, ms=25900), _row(2, "observe", deepseek, 2000, 300)]
+    rec.receipt = receipt.assemble([], receipt.from_rows(rows, receipt.MODEL_STAGES))
+    rec.photo_raced, rec.photo_backup_started_ms = deepseek, 14012
+
+    def notes() -> dict[str, str]:
+        mm = receipt.model_map(rec)
+        return {r.model: r.note for r in mm.rows if r.step == "Read the photo"}
+
+    assert notes() == {
+        "GLM-5.3 Flash on Nebius Token Factory": "",
+        "DeepSeek V4.1 Flash on Nebius Token Factory": (
+            "Raced as our backup; GLM-5.3 Flash answered first, so not used. "
+            "Started at 14.0 s, when GLM-5.3 Flash had no reading yet"
+        ),
+    }
+    # the backup won: GLM's row keeps its words, the backup's says when it started
+    rec.photo_raced, rec.photo_backup = None, BackupRead(first=glm, backup=deepseek, why="slow")
+    assert notes() == {
+        "GLM-5.3 Flash on Nebius Token Factory": "Too slow, so not used",
+        "DeepSeek V4.1 Flash on Nebius Token Factory": (
+            "Our backup read it: GLM-5.3 Flash was slow. "
+            "Started at 14.0 s, when GLM-5.3 Flash had no reading yet"
+        ),
+    }
+    assert "Started at 14.0 s, when GLM-5.3 Flash had no reading yet" in _render(rec)
+    # an answer kept before the start was recorded reads as it did
+    rec.photo_backup_started_ms = None
+    assert notes()["DeepSeek V4.1 Flash on Nebius Token Factory"] == (
+        "Our backup read it: GLM-5.3 Flash was slow"
+    )

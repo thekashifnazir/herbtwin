@@ -919,5 +919,8 @@ class AnalysisRecord(BaseModel):
     photo_backup: BackupRead | None = None  # the backup photo model read it, and why
     # the backup raced a slow first model and lost: both were billed, the first's read used
     photo_raced: str | None = None
+    # how far into the photo read the backup started racing, so its time adds up beside the
+    # first model's (27 Oct: "13.4 s, not used" beside GLM's 25.9 s). None: it never raced
+    photo_backup_started_ms: int | None = None
     notes: list[str] = Field(default_factory=list)  # plain-words notes for the page
     failures: list[StageFailure] = Field(default_factory=list)

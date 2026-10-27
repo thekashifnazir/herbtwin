@@ -59,7 +59,8 @@ def test_on_a_leave_it_answer_the_charts_dashed_line_is_the_green_one(tmp_path):
     fig = _figure(leave)
     assert fig.startswith(' leave-leads" id="twin-chart"')
     how = fig.split('<div class="twin-chart-how">', 1)[1].split("</div>", 1)[0]
-    shown = how.split('twin-how on" data-line="water">', 1)[1].split("</ul>", 1)[0]
+    # nothing beats leaving it here, so the chart opens on it (27 Oct); tapped, Water it's key
+    shown = how.split('twin-how" data-line="water">', 1)[1].split("</ul>", 1)[0]
     # leaving it's line is the green dashed one, the water line grey
     assert re.findall(r'class="key-mark km-([\w-]+)"', shown)[:2] == ["base-lead", "other"]
     assert "<strong>Leave it</strong>" in shown.split("km-other", 1)[0]

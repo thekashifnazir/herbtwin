@@ -59,7 +59,7 @@ repository.
      soil water and cannot show the cold. The strip, "Your plant's twin · today to 2 weeks",
      draws the twin's soil water for the advice as a green line against leaving it (for a
      "Leave it" answer, against the choice rated better, else the one whose line differs
-     most), with the dotted "needs water" line. Its caption is the card's twin line
+     most, for contrast), with the dotted "needs water" line. Its caption is the card's twin line
      ("Tested on your plant's twin: …"), and a **Compare all choices** link goes down to
      the twin's section. Then short ruled rows: why, and, without the strip, what
      happens if you do it, led by where that comes from ("Tested on your plant's twin: …";
@@ -89,7 +89,9 @@ repository.
      sample photo **Your plant in ~7 days** (two pictures of the plant if you do it and if
      you don't, each captioned in a deep-green chip), then
      **Compare all choices (next 2 weeks)**: the twin's chart (each choice's soil water, cold nights in blue, starting on
-     the choice the card's strip drew; tap a choice to draw its line) and each action against
+     the choice the card's strip drew, or on "Leave it" itself when that is the advice and no
+     choice is rated better than leaving it; tap a choice to draw its line, its key naming its
+     verdict, such as "if you water it (worse than leaving it)") and each action against
      leaving it, tested on the plant's twin, in a row of its own (the twin can't model light:
      where the advice sends the plant to the light, the finding and the "Move it to better
      light" row say so, not "does nothing extra"). Then one **This week**

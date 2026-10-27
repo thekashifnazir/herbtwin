@@ -89,10 +89,28 @@ def dry_level_mm(trigger_mm: float) -> float:
     return trigger_mm * (1 - TIP)
 
 
-def _said(name: str, strip: RiskStrip, cold: str, word: str) -> str:
+# a choice's verdict against leaving it, in words, beside its name wherever its line is
+# captioned: "Water it: soil stays moist enough" read as praise for a choice rated worse
+# (27 Oct live walk, the coriander sample). "unknown" says nothing rather than guess
+VS_WORDS = {
+    "better": "better than leaving it",
+    "same": "the same as leaving it",
+    "worse": "worse than leaving it",
+}
+
+
+def _said(name: str, strip: RiskStrip, cold: str, word: str, vs: str = "", why: str = "") -> str:
+    """The line in words. A choice rated against leaving it says its verdict beside its name,
+    then what its line does, then the twin's own reason as Compare's row says it: "Water it
+    (worse than leaving it): soil stays moist enough; no frost risk. It stays moist without
+    watering. Extra water isn't needed." Leaving it says what its line does."""
+    tag = f" ({VS_WORDS[vs]})" if vs in VS_WORDS else ""
     low = next((d for d in strip.days if d.water_stress >= TIP), None)
     water = f"needs water by {low.date:%A}" if low else "soil stays moist enough"
-    return f"{name}: {water}; " + (f"{word} risk {cold}." if cold else f"no {word} risk.")
+    said = f"{name}{tag}: {water}; " + (f"{word} risk {cold}." if cold else f"no {word} risk.")
+    if tag and why.strip() and why.strip().lower() != "baseline":
+        said += " " + plain_why(why)
+    return said
 
 
 def short_name(label: str) -> str:
@@ -185,6 +203,7 @@ def _legend(
     spell: str = "cold spell",
     leave_leads: bool = False,
     no_rain: bool = False,
+    vs: str = "",
 ) -> tuple[tuple[str, str, str], ...]:
     """How to read the chart, one line a mark actually drawn, each beside a swatch of it
     (25 Oct, Kash: "have each on a different line for green, grey and dotted line"; it was
@@ -194,15 +213,23 @@ def _legend(
     says why. The dotted line says higher is wetter, not better (Kash: "I thought higher
     meant better"), and the cold bands what their gaps are ("what do the gaps mean?")."""
 
-    def soil(n: str, dry: bool = False) -> str:
-        return f"the soil's water {_you(n)}." + (
+    def soil(n: str, dry: bool = False, verdict: str = "") -> str:
+        said = f" ({VS_WORDS[verdict]})" if verdict in VS_WORDS else ""
+        return f"the soil's water {_you(n)}{said}." + (
             " It runs drier: no rain reaches it." if dry else ""
         )
 
     if leave_leads and base_name and base_name != name:
-        lines = [("base-lead", base_name, soil(base_name)), ("other", name, soil(name, no_rain))]
+        lines = [
+            ("base-lead", base_name, soil(base_name)),
+            ("other", name, soil(name, no_rain, vs)),
+        ]
+    elif leave_leads and base_name:
+        # leaving it's own line on a leave-it answer: the green dashed one (27 Oct: the chart
+        # now opens on it when no choice beats it)
+        lines = [("base-lead", name, soil(name))]
     else:
-        lines = [("line", name, soil(name, no_rain))]
+        lines = [("line", name, soil(name, no_rain, vs))]
         if base_name and base_name != name:
             lines.append(("base", base_name, soil(base_name)))
     lines.append(("needs", "", "Below this line, it needs water. Higher is wetter, not better."))
@@ -321,6 +348,10 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
     lines: list[Line] = []
     for row, strip, pts, cold, marks, first, name in raw:
         short = short_name(name)
+        # the twin can't model light, so a move-to-light line gets no verdict and no twin
+        # reason in its caption (Compare's row says so in words; the 27 Oct review)
+        judged = row.action not in ("leave_normal", "move_light")
+        vs = row.vs_leaving_it if judged else ""
         here = _span(pts, short)
         snow = bool(marks or (left and left[4]))
         # brought in, no rain reaches it: drier than leaving it out on a wet fortnight
@@ -351,15 +382,24 @@ def twin_chart(rec: AnalysisRecord, labels: dict[str, str]) -> TwinChart | None:
                     if cold and cold[0].x <= LEFT_OUT_START_MAX_X
                     else (RIGHT, "end")
                 ),
-                said=_said(name, strip, f"{first.date:%A}" if first else "", word),
+                said=_said(
+                    name,
+                    strip,
+                    f"{first.date:%A}" if first else "",
+                    word,
+                    vs=vs,
+                    why=(row.why or "") if judged else "",
+                ),
                 name=short,
                 name_y=name_y,
                 base_name_y=base_y,
                 marks=marks,
                 key=_key(marks, spell),
                 spell=spell,
-                legend=_legend(short, base_name, snow, spell, no_rain=dry),
-                legend_leave=_legend(short, base_name, snow, spell, leave_leads=True, no_rain=dry),
+                legend=_legend(short, base_name, snow, spell, no_rain=dry, vs=vs),
+                legend_leave=_legend(
+                    short, base_name, snow, spell, leave_leads=True, no_rain=dry, vs=vs
+                ),
             )
         )
     if not lines:
@@ -506,6 +546,20 @@ def twin_strip(chart: TwinChart | None, answer: Answer) -> TwinStrip | None:
         # soil water only: the strip draws no cold nights, whatever the chart's own title says
         title=f"Soil water over the next {chart.weeks[-1][1]}: {first.name} and {second.name}",
     )
+
+
+def chart_opens_on(strip: TwinStrip, answer: Answer) -> CareAction:
+    """The line the twin's chart is drawn on first: the strip's pair, so the card and the
+    chart agree, except on a leave-it answer where no choice is rated better than leaving it.
+    That chart opens on leaving it, the advice's own line, not on a worse choice the strip
+    drew for contrast (27 Oct live walk: the coriander's "Leave it" opened on "Water it ▼
+    Worse")."""
+    pick = strip.other.action
+    if strip.lead != "leave_normal":
+        return pick
+    if any(r.action == pick and r.vs_leaving_it == "better" for r in answer.compare):
+        return pick
+    return "leave_normal"
 
 
 def starting_on(chart: TwinChart, action: CareAction) -> TwinChart:

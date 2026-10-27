@@ -277,10 +277,11 @@
        (twin_chart.twin_strip). The strip only when the twin ran outdoors, the card's line is
        the twin's own (its caption) and the twin backs the card's job, never a job against the
        cold, which soil water cannot show (twin_chart.cold_job); its green line is that job.
-       Else the card is as it was. The chart then starts on the strip's pair #}
+       Else the card is as it was. The chart then starts on the strip's pair, but on leaving
+       it for a leave-it answer no choice beats (twin_chart.chart_opens_on) #}
     {% set tc = twin_chart(rec, label) if a.compare else none %}
     {% set ts = twin_strip(tc, a) if tc and obs.setting == "outdoor" and first and first.if_you_do_from == "plant_model" and first.if_you_do != no_data else none %}
-    {% if ts %}{% set tc = starting_on(tc, ts.other.action) %}{% endif %}
+    {% if ts %}{% set tc = starting_on(tc, chart_opens_on(ts, a)) %}{% endif %}
     {# the plant's mood for its face: its own answer, never a new judgement. Every action is
        named here, so none falls to "unsure" by accident (21 Oct, Kash: "why is the plant
        face cross?"); a small good job is content #}
@@ -529,7 +530,8 @@
       <div class="compare ts-panel">
         <p class="ts-kind">{{ fc.kind }}</p>
         {#- the chart starts on the choice the card's strip drew, so the two agree
-            (twin_chart.starting_on); else the better choice, else leaving it #}
+            (twin_chart.starting_on), or on leaving it when that is the advice and no choice
+            beats it (chart_opens_on); else the better choice, else leaving it #}
         {% set shown = tc.shown if tc else none %}
         {# the twin drawn: each choice's soil water over the 2 weeks, cold nights in blue;
            a tap on a choice shows its line (idea 3, 18 Oct). 22 Oct, Kash: not obvious to

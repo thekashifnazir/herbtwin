@@ -320,12 +320,15 @@ def test_compare_lives_in_the_twin_section_once(tmp_path):
 
 
 def test_the_chart_starts_on_the_choice_the_strip_drew(tmp_path):
-    # a "Leave it" card with none rated better: the chart alone would start on leaving it; it
-    # starts on the strip's choice, so the card and the section draw the same pair
-    rec = _leave(_outdoor(tmp_path))
+    # a "Water it" card with Protect it listed first among the better choices: the chart alone
+    # would start on Protect it; it starts on the strip's choice, the card's own job, so the
+    # card and the section draw the same pair
+    rec = _outdoor(tmp_path)
+    by = {r.action: r for r in rec.answer.compare}
+    rec.answer.compare = [by["leave_normal"], by["shelter"], by["water"]]
     chart = twin_chart(rec, LABELS)
     pick = strip_pick(chart, rec.answer)
-    assert chart.shown == "leave_normal" and pick != "leave_normal"
+    assert chart.shown == "shelter" and pick == "water"
     sec = _sec(_render(rec))
     assert f'data-shown="{pick}"' in sec
     assert re.findall(r'class="twin-pick" data-line="(\w+)"[^>]*aria-pressed="true"', sec) == [pick]

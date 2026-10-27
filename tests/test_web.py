@@ -683,6 +683,13 @@ def test_a_missing_page_is_a_page_for_a_browser_and_json_for_the_api(tmp_path):
     assert unknown.status_code == 404 and unknown.json() == {"detail": "Not Found"}
 
 
+@pytest.mark.parametrize("path", ["/docs", "/redoc", "/openapi.json"])
+def test_fastapis_developer_pages_are_not_public(tmp_path, path):
+    # were live: Swagger, ReDoc and the schema listed every route to any visitor
+    r = _client(tmp_path, [], []).get(path, headers={"accept": "text/html,*/*"})
+    assert r.status_code == 404 and "We can&#39;t find that page" in r.text
+
+
 @pytest.mark.usefixtures("open_meteo_down")
 def test_an_answer_for_one_of_several_plants_says_which(tmp_path):
     shared = {**OBS, "photo_quality": "poor", "quality_note": "several plants share the frame"}

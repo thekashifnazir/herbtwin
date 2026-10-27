@@ -255,9 +255,17 @@ def test_no_i_did_it_no_sign_in_line(tmp_path):
 def test_the_sign_in_line_is_16px_in_the_themes_colours():
     # the line sits in What next, never inside "I did it": that rule went as dead (23 Oct)
     assert (
-        ".answer-page .next-step > p.keep { margin: 0; font-size: 16px; color: var(--muted-fg); }"
-        in style.CSS
+        ".answer-page .next-step > p.keep { margin: 0; padding-bottom: 12px; font-size: 16px;"
+        " color: var(--muted-fg); }" in style.CSS
     )
+
+
+def test_the_sign_in_line_leaves_room_above_where_to_get_it():
+    # 27 Oct walk at 390px: the shops strip sat right against the sign-in line. The line
+    # leaves the room the stops' list does (12px) as padding, which neither collapses
+    # through the borderless What next on a wide screen nor is undone by its 22px rise
+    keep = [b for _, s, b in _rules(style.CSS) if s == ".answer-page .next-step > p.keep"]
+    assert keep and "padding-bottom: 12px" in keep[-1] and "margin: 0" in keep[-1]
 
 
 def test_the_dry_face_is_thirsty_not_grumpy(tmp_path):

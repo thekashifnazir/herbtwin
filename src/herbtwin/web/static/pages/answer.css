@@ -381,6 +381,11 @@
 .answer-page .twin-chart.leave-leads .twin-line polyline { stroke: var(--muted-fg); stroke-width: 1.5; }
 .answer-page .twin-chart.leave-leads .line-name { font-weight: 600; fill: var(--muted-fg); }
 .answer-page .twin-chart.leave-leads .line-name.base-name { font-weight: 700; fill: var(--primary); }
+/* leaving it's own line there is the green dashed one already drawn: its solid twin under
+   it would show grey in the gaps, and its name is the green one (27 Oct: the chart opens on
+   it when no choice beats leaving it) */
+.answer-page .twin-chart.leave-leads .twin-line[data-line="leave_normal"] polyline { display: none; }
+.answer-page .twin-chart.leave-leads .twin-names[data-line="leave_normal"] .line-name { font-weight: 700; fill: var(--primary); }
 .answer-page .twin-chart .cold { fill: var(--cold); }
 /* the wash alone is 1.18:1 on the card: an edge on top of each cold night carries the 3:1 */
 .answer-page .twin-chart .cold-edge { stroke: var(--cold-fg); stroke-width: 3; }

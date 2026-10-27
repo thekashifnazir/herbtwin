@@ -131,7 +131,7 @@ from herbtwin.stages.trusted_page import guide_pages, read_more
 from herbtwin.sun_arc import sun_arc
 from herbtwin.tracing import trace_root, traced
 from herbtwin.twin_bank import figure as twin_figure
-from herbtwin.twin_chart import starting_on, twin_chart, twin_strip
+from herbtwin.twin_chart import chart_opens_on, starting_on, twin_chart, twin_strip
 from herbtwin.usage import SupabaseUsage, UsageError, UsageStore, Verdict, uk_day, visitor_key
 from herbtwin.voice import UNAVAILABLE as VOICE_UNAVAILABLE
 from herbtwin.voice import Spoken, SpokenCache, VoiceError, persona_for, speak, voice_basis
@@ -240,6 +240,7 @@ TEMPLATES.env.globals["picture"] = picture  # a shown JPEG as right-sized WebP c
 TEMPLATES.env.globals["twin_chart"] = twin_chart  # Compare's 14-day line
 TEMPLATES.env.globals["twin_strip"] = twin_strip  # the main card's twin strip (23 Oct)
 TEMPLATES.env.globals["starting_on"] = starting_on  # the chart starts on the strip's pair
+TEMPLATES.env.globals["chart_opens_on"] = chart_opens_on  # or on Leave it, when nothing beats it
 TEMPLATES.env.globals["row_why"] = row_why  # Compare's reasons as plain sentences
 TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
 TEMPLATES.env.globals["twin_off_job"] = twin_off_job  # a job the twin cannot weigh
@@ -648,7 +649,10 @@ def create_app(
     """The app. Tests pass `deps` and with it everything else (accounts, usage, mail,
     `site_url`, the site's own address, and the answer store, else in memory); without
     `deps` all of it comes from settings."""
-    app = FastAPI(title="herbtwin", lifespan=_lifespan)
+    # no Swagger, ReDoc or schema: they are developer pages, and they listed every route
+    app = FastAPI(
+        title="herbtwin", lifespan=_lifespan, docs_url=None, redoc_url=None, openapi_url=None
+    )
     if deps is None:
         settings = load_settings()
         app.state.deps = build_deps(settings)

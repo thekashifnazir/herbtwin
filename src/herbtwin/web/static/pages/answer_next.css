@@ -39,8 +39,11 @@
 .answer-page .next-more[open] > summary { margin-bottom: 10px; }
 .answer-page .next-more > :not(summary) { margin: 0; }
 .answer-page .next-more .more-photos { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
-/* the sign-in: one plain line under the stops */
-.answer-page .next-step > p.keep { margin: 0; font-size: 16px; color: var(--muted-fg); }
+/* the sign-in: one plain line under the stops. It leaves the room the stops' list does
+   (12px, then the section's 20px) before Where to get it's strip: as padding, not margin, so
+   it can't collapse through the borderless section on a wide screen, and the rise of What
+   next (22px) never lands the line on the strip (27 Oct walk at 390px: no gap) */
+.answer-page .next-step > p.keep { margin: 0; padding-bottom: 12px; font-size: 16px; color: var(--muted-fg); }
 
 /* ---------- What could grow here: one sky line, the whole of it a link ---------- */
 .answer-page p.spot-line { margin: 0 0 20px; }

@@ -676,6 +676,7 @@ def read_photo(
     reader, answered = bind(deps.observe_adapter, "observe", tracer), []
     won: list[str | None] = []
     failed_first: list[bool] = []  # the backup won the race after the first model failed
+    backup_at: list[float] = []  # seconds into the read the backup started racing
 
     def traced(call: CallRecord) -> None:
         answered.append(call.model)  # a reply, not a failure: only answered calls are traced
@@ -691,6 +692,7 @@ def read_photo(
             more=cleaned,
             won_by=won.append,
             first_failed=lambda: failed_first.append(True),
+            backup_started=backup_at.append,
         )
     except ObserveError as e:
         log.exception("observe failed run=%s", record_id)
@@ -713,6 +715,7 @@ def read_photo(
     read_by = won[-1] if won else answered[-1] if answered else None
     rec.photo_backup = backup_read(reader, read_by, raced=bool(won) and not failed_first)
     rec.photo_raced = raced_and_lost(reader, won)
+    rec.photo_backup_started_ms = round(backup_at[-1] * 1000) if backup_at else None
     # a rough read (blurry, dark, …) of a plant it can't name surely: the wait says the name
     # is a guess and shows no season card for it (22 Oct walk: a blurred parsley was
     # "Found garden mint", then "Normal for garden mint in October")

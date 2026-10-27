@@ -62,6 +62,10 @@ BACKUP_NOTE = {
 }
 RACED_NOTE = "Raced as our backup; {first} answered first, so not used"
 FIRST_NOTE = {"slow": "Too slow, so not used", "failed": "No usable reading"}
+# the backup races only once the first model has no reading after a while (observe's
+# HEDGE_AFTER_S), and each row's time is its own call's: said on the backup's row, so its
+# time adds up beside the first's (27 Oct: "13.4 s, not used" beside GLM's 25.9 s)
+STARTED_NOTE = "{note}. Started at {at}, when {first} had no reading yet"
 
 
 def plain_name(model: str) -> str:
@@ -190,11 +194,21 @@ def _note(rec: AnalysisRecord, s: StepCost) -> str:
                 (x.model for x in rec.receipt or [] if x.stage == "observe" and x.model != s.model),
                 "",
             )
-            return RACED_NOTE.format(first=plain_name(first)) if first else ""
+            return _started(rec, RACED_NOTE, first) if first else ""
         return ""
     if s.model == b.backup:
-        return BACKUP_NOTE[b.why].format(first=plain_name(b.first))
+        return _started(rec, BACKUP_NOTE[b.why], b.first)
     return FIRST_NOTE.get(b.why, "") if s.model == b.first else ""
+
+
+def _started(rec: AnalysisRecord, note: str, first: str) -> str:
+    """The backup's note, and when it started racing when it raced (an answer kept before
+    the start was recorded reads as it did)."""
+    said = note.format(first=plain_name(first))
+    ms = rec.photo_backup_started_ms
+    if ms is None:
+        return said
+    return STARTED_NOTE.format(note=said, at=seconds(ms), first=plain_name(first))
 
 
 def model_map(rec: AnalysisRecord) -> ModelMap | None:

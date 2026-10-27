@@ -718,12 +718,17 @@ def _done(target: str) -> str:
         + f"const s={json.dumps(said)},h=document.querySelector('.page-band h1'),"
         + "l=document.querySelector('.page-band .lead'),w=document.getElementById('wait-said');"
         + "if(h)h.textContent=s;if(l)l.hidden=true;if(w)w.textContent=s+'.';"
-        # the line at the top of the card says it too, and stops pulsing
+        # the line at the top of the card says just Done, and stops pulsing: the band
+        # already says what is ready (27 Oct: the page said it three times)
         + "const nw=document.getElementById('wait-now');if(nw){nw.classList.add('finished');"
-        + "nw.querySelector('.wait-now-label').textContent='Done';"
-        + "document.getElementById('wait-now-step').textContent=s}"
+        + "nw.querySelector('.wait-now-label').hidden=true;"
+        + "document.getElementById('wait-now-step').textContent='Done'}"
         + "const nx=document.getElementById('wait-next');if(nx)nx.hidden=true;"
         + "const r=document.getElementById('ready');"
+        # an answer: the band says it, so the card is the button alone. Without script the
+        # band never changes and the card's heading is the only place it is said; a
+        # question first keeps it, as the button alone does not say why
+        + ("const rt=r&&r.querySelector('h2');if(rt)rt.hidden=true;" if kind == "answer" else "")
         # docked, the page's foot clears the bar at its height now, as its lines come and go
         + "const pad=()=>{if(r&&r.classList.contains('docked'))"
         + "document.body.style.paddingBottom=r.offsetHeight+'px'};"

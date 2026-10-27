@@ -187,6 +187,7 @@ def observe(
     hedge_after_s: float | None = HEDGE_AFTER_S,
     won_by: Callable[[str | None], None] | None = None,
     first_failed: Callable[[], None] | None = None,
+    backup_started: Callable[[float], None] | None = None,
 ) -> Observation:
     """One vision call (plus one repair). `more`: up to two more photos of the same plant,
     sent with the main one in that same call, with more room to answer; a provider that
@@ -199,7 +200,9 @@ def observe(
     never do, so an eval scores the model it names. `won_by` hears the model whose
     reading won a race (the loser's call is traced too, and may be traced after it);
     `first_failed` hears that the backup won it after the first model had failed, not only
-    been slow (the wait says which: pipeline.backup_read)."""
+    been slow (the wait says which: pipeline.backup_read). `backup_started` hears how many
+    seconds into the read the backup was asked to race, so the model map can say when it
+    started (27 Oct: "13.4 s, not used" beside GLM's 25.9 s read as a contradiction)."""
     start = clock()
     if more and not _takes_several(adapter):
         log.warning("%s takes one image per call: reading the main photo only", adapter.name)
@@ -208,7 +211,9 @@ def observe(
     try:
         if hedge_after_s is None or strict:
             return _read(adapter, photos, few_shot, strict)
-        return _race(adapter, photos, few_shot, strict, hedge_after_s, won_by, first_failed)
+        return _race(
+            adapter, photos, few_shot, strict, hedge_after_s, won_by, first_failed, backup_started
+        )
     except ObserveError as e:
         several = len(photos) > 1
         raced = isinstance(e, _NeitherRead)  # the backup has had its call already
@@ -237,6 +242,7 @@ def _race(
     hedge_after_s: float,
     won_by: Callable[[str | None], None] | None = None,
     first_failed: Callable[[], None] | None = None,
+    backup_started: Callable[[float], None] | None = None,
 ) -> Observation:
     """The first model's read (with its repair) and, when it has no reading after
     `hedge_after_s`, the backup's one call on the same photos: the first usable reading
@@ -246,6 +252,7 @@ def _race(
     several photos observe() then reads the main photo alone, as it always did)."""
     if type(adapter).backup_to_race is ModelAdapter.backup_to_race:
         return _read(adapter, photos, few_shot, strict)  # no backup to race
+    began = time.monotonic()
     first = _start(_read, adapter, photos, few_shot, strict)
     if first is None:  # every slot busy: one model after the other, as before
         return _read(adapter, photos, few_shot, strict)
@@ -261,6 +268,8 @@ def _race(
             second = _submit(_read, backup, photos, few_shot, strict, repair=False)
             if second is None:  # the pool is shutting down: the backup was never asked
                 adapter.racing = adapter.used_backup = False
+            elif backup_started is not None:
+                backup_started(time.monotonic() - began)
     if second is None:  # read in time, no backup to race, or no room for it
         return first.result()
     errors: dict[Future, ObserveError] = {}

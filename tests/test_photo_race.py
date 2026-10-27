@@ -103,6 +103,28 @@ def test_a_slow_first_model_loses_to_the_backup_soon_after_the_threshold(tmp_pat
     assert {r["stage"] for r in rows} == {"observe"}
 
 
+def test_the_race_says_how_far_into_the_read_the_backup_started(tmp_path):
+    # 27 Oct: "DeepSeek 13.4 s, not used" beside "GLM 25.9 s, answered first" read as a
+    # contradiction; the backup had started at 14 s. The read now says when it started
+    held = threading.Event()
+    first, backup = Timed("glm", BASIL, cue=held), Timed("deepseek", MINT)
+    started: list[float] = []
+    try:
+        _read(first, backup, tmp_path, hedge=0.2, backup_started=started.append)
+    finally:
+        held.set()
+    assert first.answered.wait(CUE_S)
+    [at] = started
+    assert 0.2 <= at < CUE_S
+
+
+def test_a_read_with_no_race_says_no_backup_started(tmp_path):
+    started: list[float] = []
+    _read(Timed("glm", BASIL), Timed("deepseek", MINT), tmp_path, hedge=0.2,
+          backup_started=started.append)  # fmt: skip
+    assert started == []
+
+
 def test_a_fast_usable_first_model_never_starts_the_backup(tmp_path):
     first, backup = Timed("glm", BASIL), Timed("deepseek", MINT)
     obs, _, store = _read(first, backup, tmp_path, hedge=0.2)
@@ -255,11 +277,17 @@ def test_the_wait_names_the_winner_even_when_the_losers_call_is_traced_after_it(
     pl._note_models(deps, rec, receipt.MODEL_STAGES)
     calls = {s.model: s.calls for s in rec.receipt if s.stage == "observe"}
     assert calls == {glm_id: 2, deepseek_id: 1}
-    # the map says which read was used, and why the other was not
+    # the map says which read was used, and why the other was not, and when the backup
+    # started, so its time adds up beside GLM's (27 Oct)
+    started = rec.photo_backup_started_ms
+    assert started is not None and HEDGE * 1000 <= started < CUE_S * 1000
     notes = {r.model: r.note for r in receipt.model_map(rec).rows if r.step == "Read the photo"}
     assert notes == {
         "GLM-5.3 Flash on Nebius Token Factory": "Too slow, so not used",
-        "DeepSeek V4.1 Flash on Nebius Token Factory": "Our backup read it: GLM-5.3 Flash was slow",
+        "DeepSeek V4.1 Flash on Nebius Token Factory": (
+            "Our backup read it: GLM-5.3 Flash was slow. Started at "
+            f"{receipt.seconds(started)}, when GLM-5.3 Flash had no reading yet"
+        ),
     }
 
 
