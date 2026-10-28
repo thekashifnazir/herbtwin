@@ -5,9 +5,11 @@ unsubscribe and privacy wording matching what the site does."""
 
 import json
 import re
+from pathlib import Path
 
 import pytest
 import respx
+from PIL import Image, ImageChops
 
 from herbtwin.stages import climate
 from herbtwin.stages.climate import ARCHIVE_URL
@@ -19,6 +21,8 @@ from tests.test_web import ADV, OBS, _client
 from tests.test_web_reminders import _client as _reminder_client
 from tests.test_web_spot import JPEG, WALLED, _archive
 from tests.test_web_spot import _client as _spot_client
+
+OG_JPG = Path(accounts.__file__).parent / "static" / "og.jpg"
 
 
 def _home(tmp_path):
@@ -156,11 +160,26 @@ def test_a_shared_link_shows_a_picture_and_a_line_about_the_app(tmp_path):
     c = _client(tmp_path, [], [])
     page = c.get("/").text
     image = re.search(r'<meta property="og:image" content="([^"]+)"', page)
-    assert image and image[1] == "https://herbtwin.kashifnazir.com/static/og.jpg"
+    # a new picture needs a new address: the edge cache and LinkedIn keep the old one for
+    # weeks under the same URL (28 Oct: the fixed og.jpg went live, the edge kept the old)
+    assert image and image[1] == "https://herbtwin.kashifnazir.com/static/og.jpg?v=2"
     assert '<meta property="og:title" content="herbtwin' in page
     assert 'name="twitter:card" content="summary_large_image"' in page
     served = c.get("/static/og.jpg")
     assert served.status_code == 200 and served.headers["content-type"] == "image/jpeg"
+
+
+def test_the_shared_picture_is_1200_by_630_with_nothing_near_its_edges():
+    # 28 Oct site walk: the first og.jpg cropped a 16:9 frame and cut the URL off at the
+    # bottom right. Every word and box now sits at least 48 px in from each edge
+    with Image.open(OG_JPG) as im:
+        assert im.format == "JPEG" and im.size == (1200, 630)
+        rgb = im.convert("RGB")
+    plain = Image.new("RGB", rgb.size, rgb.getpixel((0, 0)))
+    ink = ImageChops.difference(rgb, plain).convert("L").point(lambda v: 255 if v > 20 else 0)
+    left, top, right, bottom = ink.getbbox()
+    assert min(left, top, 1200 - right, 630 - bottom) >= 48
+    assert OG_JPG.stat().st_size < 200_000
 
 
 def test_an_unsubscribe_link_with_reminders_off_does_not_talk_about_answers(tmp_path):

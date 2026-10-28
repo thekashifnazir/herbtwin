@@ -257,3 +257,54 @@ def test_off_unless_tavily_is_on():
     assert reported_from(load_settings({"HERBTWIN_TAVILY_API_KEY": "k"})) is None  # switch off
     on = {"HERBTWIN_TAVILY_API_KEY": "k", "HERBTWIN_TAVILY_ENABLED": "1"}
     assert isinstance(reported_from(load_settings(on)), Reported)
+
+
+def test_a_section_or_listing_page_is_never_shown():
+    # rev 00126 walk: the Guardian's Country diary series page came second, under the diary
+    # itself (its snippet named the beetle); a listing is not a report
+    def shown(title, url):
+        hit = _hit(title, url, snippet=DIARY.snippet)
+        return report_of(hit, "rosemary beetle", TODAY) is not None
+
+    series = "https://www.theguardian.com/environment/series/country-diary"
+    assert not shown("Country diary | Environment | The Guardian", series)
+    assert not shown("Country diary | Environment", "https://www.theguardian.com/environment/x")
+    assert not shown("Rosemary beetle", series)  # a series, by its address alone
+    for url in (
+        "https://www.theguardian.com/profile/susie-white",
+        "https://www.bbc.co.uk/news/topics/c0abc123",
+        "https://www.gardenersworld.com/tag/pests/",
+        "https://www.hortweek.com/category/news",
+        "https://www.rhs.org.uk/",
+    ):
+        assert not shown("Rosemary beetle news", url), url
+    # articles still are, with a byline, a section in the address or the pest in a short title
+    assert shown(DIARY.title + " | Susie White", DIARY.url)
+    assert shown("Rosemary beetle | Pest and disease", "https://www.rhs.org.uk/biodiversity/rb")
+    assert shown("Rosemary beetle", "https://www.rhs.org.uk/news/series-of-sightings")
+
+
+def test_the_same_page_or_story_is_shown_once():
+    hits = [
+        DIARY,
+        _hit(DIARY.title, "https://theguardian.com/environment/2026/oct/07/other-address"),
+        _hit("Rosemary beetle sightings rise", DIARY.url.replace("www.", "amp.") + "/?utm=x#top"),
+        _hit("Rosemary beetle season ends", "https://www.rhs.org.uk/news/a"),
+    ]
+    finder, _ = _finder(hits)
+    got = finder.reports(Subject("sage", ("rosemary beetle",)))
+    # the same headline elsewhere, and the same page at another address, are dropped
+    assert [r.title for r in got] == [DIARY.title, "Rosemary beetle season ends"]
+
+
+def test_the_series_page_under_its_diary_leaves_the_diary_alone():
+    series = _hit(
+        "Country diary | Environment | The Guardian",
+        "https://www.theguardian.com/environment/series/country-diary",
+        snippet=DIARY.snippet,
+    )
+    finder, _ = _finder([DIARY, series])
+    got = finder.reports(Subject("sage", ("rosemary beetle",)))
+    assert [r.url for r in got] == [DIARY.url]
+    finder, _ = _finder([series])
+    assert finder.reports(Subject("sage", ("rosemary beetle",))) == []

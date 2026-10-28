@@ -582,7 +582,8 @@
         {# each row a choice, a small tinted tag (like home's 2-week outlook, never a button),
            and the reason; on a phone the three stack, the reason on its own line (22 Oct,
            Kash). Leaving it is the yardstick: its tag says "Starting point", never "baseline";
-           the reasons are the twin's, said as plain sentences (fold_titles.row_why) #}
+           the reasons are the twin's, said as plain sentences (fold_titles.row_why). Moving it to
+           better light rated the same says "Not modelled": the twin can't model light (28 Oct) #}
         {#- what to do with the chart, said before the choices and in the colour of a thing to
             try, not a muted caption under the chart (23 Oct, Kash on rev 00089: "the
             instruction is tiny and could be missed") #}
@@ -590,7 +591,7 @@
         <div class="scroll"><table class="compare-table"><thead><tr><th>If you…</th><th>vs leaving it</th><th>Why</th></tr></thead><tbody>
         {% set drawn = tc.lines|map(attribute="action")|list if tc else [] %}
         {% set verdict = {"better": ("▲", "Better"), "same": ("=", "Same"), "worse": ("▼", "Worse"), "unknown": ("?", "Not sure")} %}
-        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-describedby="twin-try" aria-pressed="{{ 'true' if r.action == shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ row_why(r, a) }}{% endif %}</td></tr>{% endfor %}
+        {% for r in a.compare %}<tr><td class="pick">{% if r.action in drawn %}<button type="button" class="twin-pick" data-line="{{ r.action }}" aria-controls="twin-chart" aria-describedby="twin-try" aria-pressed="{{ 'true' if r.action == shown else 'false' }}">{{ label[r.action] }}</button>{% else %}{{ label[r.action] }}{% endif %}</td><td class="vs">{% if r.action == "leave_normal" %}<span class="verdict start">Starting point</span>{% elif row_unmodelled(r) %}<span class="verdict unmodelled">Not modelled</span>{% else %}{% set g, w = verdict[r.vs_leaving_it] %}<span class="verdict {{ r.vs_leaving_it }}"><span aria-hidden="true">{{ g }}</span> {{ w }}</span>{% endif %}</td><td class="why">{% if r.action == "leave_normal" and (not r.why or r.why|lower == "baseline") %}What happens if you do nothing.{% else %}{{ row_why(r, a) }}{% endif %}</td></tr>{% endfor %}
         </tbody></table></div>
       </div>
       {% if tc %}<script>

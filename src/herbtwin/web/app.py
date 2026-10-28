@@ -68,7 +68,7 @@ from herbtwin.chat import links_from as chat_links
 from herbtwin.compass import tap_from_sensor
 from herbtwin.config import Settings, load_settings, parse_coordinate
 from herbtwin.consequences import NO_DATA
-from herbtwin.fold_titles import fold_titles, row_why, twin_off_job
+from herbtwin.fold_titles import fold_titles, row_unmodelled, row_why, twin_off_job
 from herbtwin.history import HistoryError
 from herbtwin.light import light_said
 from herbtwin.local_help import local_help_from
@@ -110,7 +110,7 @@ from herbtwin.schemas import (
 )
 from herbtwin.scoring import score_lines
 from herbtwin.seasonal import season_sources
-from herbtwin.shops import DailyCap, products_for, shops_from
+from herbtwin.shops import DailyCap, comes_indoors, products_for, shops_from
 from herbtwin.sightings import sightings_from
 from herbtwin.species import display_name, name_in_sentence, name_parts
 from herbtwin.spot import (
@@ -242,6 +242,7 @@ TEMPLATES.env.globals["twin_strip"] = twin_strip  # the main card's twin strip (
 TEMPLATES.env.globals["starting_on"] = starting_on  # the chart starts on the strip's pair
 TEMPLATES.env.globals["chart_opens_on"] = chart_opens_on  # or on Leave it, when nothing beats it
 TEMPLATES.env.globals["row_why"] = row_why  # Compare's reasons as plain sentences
+TEMPLATES.env.globals["row_unmodelled"] = row_unmodelled  # light: no verdict in its tag
 TEMPLATES.env.globals["fold_titles"] = fold_titles  # each shut fold says what it found
 TEMPLATES.env.globals["twin_off_job"] = twin_off_job  # a job the twin cannot weigh
 TEMPLATES.env.globals["sun_arc"] = sun_arc  # the spot's clear-day sun over the year
@@ -1656,7 +1657,12 @@ def create_app(
             return _with_cookies(Response(status_code=204), holder)  # UK only
         # the town the person typed: for the garden centres link, and for local help when on
         typed_town = local_help.town_of(loc)
-        outdoor = rec.observation is not None and rec.observation.setting == "outdoor"
+        # a plant the answer brings indoors is no longer out: no fleece (shops.comes_indoors)
+        outdoor = (
+            rec.observation is not None
+            and rec.observation.setting == "outdoor"
+            and not comes_indoors(rec.answer.headline)
+        )
         indoor = rec.observation is not None and rec.observation.setting == "indoor"
         # no gardener to hire for a pot indoors (22 Oct site walk: "Gardeners near London"
         # under the Indoors switch), nor for a small job (the same walk: under Leave it)

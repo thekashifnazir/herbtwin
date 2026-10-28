@@ -255,7 +255,8 @@ def test_the_map_counts_the_advisors_asks_not_a_reply_asked_again(tmp_path):
     [advise] = [s for s in rec.receipt if s.stage == "advise"]
     assert (advise.calls, advise.asks) == (4, 3)
     steps = [r.step for r in receipt.model_map(rec).rows]
-    assert "Three advisors, one asked again" in steps and "Advisors (4 asks)" not in steps
+    assert "Three advisors, one had to answer twice" in steps and "Advisors (4 asks)" not in steps
+    assert not any("asked again" in step for step in steps)  # 28 Oct site walk: unclear
     # an answer kept before asks were counted reads as it did
     old = rec.model_copy(deep=True)
     for s in old.receipt:

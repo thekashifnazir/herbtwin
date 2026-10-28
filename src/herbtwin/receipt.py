@@ -166,14 +166,16 @@ def _step_words(s: StepCost) -> str:
     if s.stage != "advise":
         return STEP.get(s.stage, s.stage)
     # the asks, not the calls: a reply asked again (its repair) is one more call, not one
-    # more advisor (25 Oct site walk: "Advisors (4 asks)" beside "asked ... three times")
+    # more advisor (25 Oct site walk: "Advisors (4 asks)" beside "asked ... three times").
+    # An ask is repaired at most once, so each extra call is an advisor that answered twice;
+    # said so, since "asked again" told a reader nothing (28 Oct site walk)
     n = s.asks if s.asks is not None else s.calls
     if n not in WORDS:
         return f"Advisors ({n} asks)"
     said = f"{WORDS[n]} advisor{'s' if n != 1 else ''}"
     again = s.calls - n if s.asks is not None else 0
     if again > 0:
-        said += f", {WORDS[again].lower() if again in WORDS else again} asked again"
+        said += f", {WORDS[again].lower() if again in WORDS else again} had to answer twice"
     return said
 
 

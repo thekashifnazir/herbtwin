@@ -59,7 +59,11 @@ CASES = [
     ("What if I move it inside?", ["is it safe to eat?"], False),
     ("Is it safe to eat?", ["is it safe to eat?"], True),  # word for word, as before
     ("What if I don't water it this week?", ["how often should i water it?"], False),
-    ("What if I don't water it this week?", ["what if i don\u2019t water it?"], True),  # \u2019 in JS too
+    (
+        "What if I don't water it this week?",
+        ["what if i don\u2019t water it?"],
+        True,
+    ),  # \u2019 in JS too
     ("When should I harvest it?", [], False),
 ]
 

@@ -12,9 +12,9 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass
 
-from herbtwin.answer import NO_CURE_HEADLINE, TENDER_HEADLINE, shown_call
+from herbtwin.answer import NO_CURE_HEADLINE, shown_call
 from herbtwin.confidence import RULE_LED
-from herbtwin.plant_model import TIP, is_tender
+from herbtwin.plant_model import NO_LIGHT, TIP, is_tender
 from herbtwin.schemas import AnalysisRecord, Answer, CompareRow
 from herbtwin.twin_chart import _windows, plain_why
 
@@ -164,25 +164,25 @@ def _join(xs: list[str]) -> str:
     return " and ".join(xs[:2])
 
 
-# the twin models moving it to better light as a little faster drying (stages/twin.py), never
-# the light itself: under "Bring it indoors to a bright windowsill." its "Moving it to better
-# light does nothing extra" read as against the advice (23 Oct judge walk, a flowering basil)
-NO_LIGHT = "the twin can't model light, so moving it shows no change here"
+def row_unmodelled(r: CompareRow) -> bool:
+    """A Compare row for moving it to better light that the twin rates the same as leaving
+    it: no verdict on light, so its tag says "Not modelled", never "= Same" beside "the twin
+    can't model light" (28 Oct), as the chart's caption gives it none."""
+    return r.action == "move_light" and r.vs_leaving_it == "same"
 
 
 def light_unmodelled(a: Answer) -> bool:
-    """The advice sends it to the light (our bright windowsill, or a Move it to better light
-    card) and the twin rates moving it the same as leaving it. Only then: other answers read
-    as before (the rosemary beetle sample is in a rater study, 23 Oct)."""
-    to_light = a.headline == TENDER_HEADLINE or any(c.action == "move_light" for c in a.do)
-    same = any(r.action == "move_light" and r.vs_leaving_it == "same" for r in a.compare)
-    return to_light and same
+    """The twin rates moving it to better light the same as leaving it: it can't model light,
+    so every answer showing the choice says so (NO_LIGHT, from plant_model). Only advice that
+    sent it to the light did until the 28 Oct live walk, where the coriander and rosemary
+    rows said "Makes no difference" beside the basil's honest line."""
+    return any(row_unmodelled(r) for r in a.compare)
 
 
 def row_why(r: CompareRow, a: Answer) -> str:
     """A Compare row's reason as a plain sentence; moving it to better light says the twin
-    can't model light where light_unmodelled."""
-    if r.action == "move_light" and light_unmodelled(a):
+    can't model light where row_unmodelled."""
+    if row_unmodelled(r):
         return _cap(NO_LIGHT) + "."
     return plain_why(r.why)
 

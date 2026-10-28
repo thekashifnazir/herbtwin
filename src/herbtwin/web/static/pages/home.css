@@ -199,6 +199,8 @@
 .home-page .home-example-in img { width: 56px; height: 42px; object-fit: cover; border-radius: 8px;
   border: 1.5px solid var(--fg); }
 .home-page .home-example-arrow { font-weight: 700; }
+/* text and arrow are one item: it stays beside the thumbnail and wraps inside itself */
+.home-page .home-example-what { flex: 1 1 0; min-width: 0; }
 .home-page .home-example .home-bento { margin-bottom: 8px; }
 
 /* how it works: 4 numbered photo cards, each with one chip of the example's real output */

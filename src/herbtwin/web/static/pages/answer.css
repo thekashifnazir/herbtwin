@@ -403,7 +403,7 @@
 .answer-page .twin-chart figcaption { font-size: 16px; color: var(--muted-fg); }
 /* the verdict as a small tinted tag, as on home's 2-week outlook (#430): no border, no
    shadow, tight, never the primary green of a press; leaving it, the yardstick, "Starting
-   point" in the neutral tint of Same */
+   point" in the neutral tint of Same, as is light's "Not modelled" */
 .answer-page .compare-table td { vertical-align: middle; }
 .answer-page .verdict { display: inline-block; padding: 2px 10px; border-radius: var(--pill);
   font: 700 14px/1.5 var(--sans); white-space: nowrap; background: var(--muted); color: var(--fg); }

@@ -18,7 +18,7 @@ from functools import cache
 from pathlib import Path
 from typing import Literal
 
-from herbtwin.plant_model import ModelView
+from herbtwin.plant_model import NO_LIGHT, ModelView, no_light_verdict
 from herbtwin.schemas import (
     SOIL_FEEL_TEXT,
     CareAction,
@@ -382,7 +382,13 @@ def _plant_model(acc: _Acc, i: FactorInputs) -> None:
             i.view.vs_leaving_it
         ]
         vs = {"better": "better than", "worse": "worse than", "same": "no different from"}
-        acc.add("plant_model", effect, f"{vs[i.view.vs_leaving_it]} leaving it: {i.view.why}")
+        # the twin can't model light: its "same" for moving it is no verdict on light
+        said = (
+            NO_LIGHT
+            if no_light_verdict(i.view)
+            else f"{vs[i.view.vs_leaving_it]} leaving it: {i.view.why}"
+        )
+        acc.add("plant_model", effect, said)
     tip = i.view.tip_day
     if tip is not None and tip <= 2:
         acc.add("plant_model_margin", "lowers", "harm could come within 2 days, so timing is tight")

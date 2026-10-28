@@ -376,6 +376,20 @@ def test_the_home_example_is_one_framed_example_with_its_input_and_no_date(tmp_p
     assert "Try this example" not in home
 
 
+def test_the_example_arrow_stays_with_its_last_word_on_a_phone(tmp_path):
+    # 28 Oct site walk: at 390 px the arrow was its own flex item and wrapped onto a line
+    # of its own. Text and arrow are one item, joined by a no-break space
+    frame = _home(tmp_path).split('<section class="home-example"', 1)[1].split("</section>", 1)[0]
+    head = frame.split('<p class="home-example-in" data-reveal="rise">', 1)[1].split("</p>", 1)[0]
+    assert (
+        '<span class="home-example-what"><strong>A basil photo, a cold week in London</strong>'
+        '&nbsp;<span class="home-example-arrow" aria-hidden="true">→</span></span>'
+    ) in head
+    # and that item grows from zero, so it wraps beside the thumbnail, not under it
+    what = style.CSS.split(".home-page .home-example-what {", 1)[1].split("}", 1)[0]
+    assert "flex: 1 1 0" in what and "min-width: 0" in what
+
+
 def test_the_example_frame_keeps_its_tab_on_the_edge_and_a_small_thumbnail():
     frame = style.CSS.split(".home-page .home-example {", 1)[1].split("}", 1)[0]
     assert "dashed" in frame and "position: relative" in frame

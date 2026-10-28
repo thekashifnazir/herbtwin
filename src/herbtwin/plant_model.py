@@ -27,6 +27,10 @@ NO_DRY_DAY = "no dry days in the next 2 weeks without watering"
 # the twin caps the soil at full and drains the rest, so it can say watering is not needed,
 # never that it waterlogs the roots
 STAYS_MOIST = "stays moist without watering; extra water isn't needed"
+# the twin models moving it to better light as a little faster drying (stages/twin.py), never
+# the light itself: under "Bring it indoors to a bright windowsill." its "Moving it to better
+# light does nothing extra" read as against the advice (23 Oct judge walk, a flowering basil)
+NO_LIGHT = "the twin can't model light, so moving it shows no change here"
 
 
 @dataclass(frozen=True)
@@ -37,6 +41,12 @@ class ModelView:
     tip_day: int | None  # days until leaving it crosses a tipping point; None: not within 2 weeks
     cold: bool = False  # shelter only: better because it avoids a cold or frost day ahead
     cold_on: str | None = None  # ...and that day ("Saturday"), when cold
+
+
+def no_light_verdict(view: ModelView | None) -> bool:
+    """The twin rates moving it to better light the same as leaving it: that is the drying it
+    models, never a verdict on light, so the page says NO_LIGHT, not "no difference"."""
+    return view is not None and view.action == "move_light" and view.vs_leaving_it == "same"
 
 
 def shelters_from_cold(view: ModelView | None) -> bool:

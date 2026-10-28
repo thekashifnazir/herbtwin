@@ -9,7 +9,7 @@ import re
 
 import pytest
 
-from herbtwin.answer import FROST_SIGN, LEAVE_BUT_PROTECT
+from herbtwin.answer import FROST_SIGN, HEADLINES, LEAVE_BUT_PROTECT, TENDER_HEADLINE
 from herbtwin.schemas import Location, ProblemSeen
 from herbtwin.shops import (
     CHECK_METER,
@@ -21,6 +21,7 @@ from herbtwin.shops import (
     STICKY_TRAPS,
     WEEVIL_NEMATODES,
     ShopFinder,
+    comes_indoors,
     handy_for,
     listed_price,
     plain_title,
@@ -129,6 +130,55 @@ def test_handy_is_never_offered_beside_things_the_job_needs(tmp_path):
     text = c.get(f"/answers/{rid}/extras").text
     assert "<h3>Shops we found for this</h3>" in text and "Handy to have" not in text
     assert "Nothing you need to buy" not in text  # it does need something
+
+
+def test_no_fleece_for_a_plant_the_answer_brings_indoors(tmp_path):
+    # 28 Oct live walk, rev 00126: an outdoor basil told "Bring it indoors to a bright
+    # windowsill." showed horticultural fleece under Where to get it, as a job and as handy
+    pages = {"horticultural fleece": [("Garden Fleeces", FLEECE_PAGE)]}
+    c, rid = _leave_it(tmp_path, pages)  # the watch keeps the twin's cold night (COLD)
+    rec = c.app.state.answers.get_for(rid, None).latest
+    rec.answer.do, rec.answer.headline = [_card("shelter", "today")], TENDER_HEADLINE
+    assert c.get(f"/answers/{rid}/extras").status_code == 204
+    assert c.app.state.shops._tavily.asked == []  # no fleece search at all
+    # a plant left out to protect keeps its fleece
+    c, rid = _leave_it(tmp_path / "b", pages)
+    rec = c.app.state.answers.get_for(rid, None).latest
+    rec.answer.do, rec.answer.headline = [_card("shelter", "today")], HEADLINES["shelter"]
+    assert "Horticultural fleece" in c.get(f"/answers/{rid}/extras").text
+
+
+def test_what_brings_a_plant_indoors():
+    for line in (
+        TENDER_HEADLINE,
+        "Bring it in overnight.",
+        "Move them inside before Saturday.",
+        "Take it in.",
+        "Bring it in for the winter.",
+        "Bring it inside tonight.",
+        "Water it, then bring it in",
+    ):
+        assert comes_indoors(line), line
+    for line in (
+        HEADLINES["shelter"],
+        LEAVE_BUT_PROTECT.format(day="Saturday"),
+        "Bring it in a sheltered spot by the wall.",
+        "Leave it for now and keep an eye on it.",
+        # a bare "in" that does not end its clause (#571 review)
+        "Take it in hand and cut it back.",
+        "Move it in full sun.",
+        "Move it in front of the window.",
+        "Bring it in to dry.",
+        # told not to
+        "Don't bring it indoors yet.",
+        "Don’t bring it in.",
+        "Do not move it inside.",
+        "Never take them in.",
+        # still outside, under cover: fleece helps there too
+        "Bring it inside a greenhouse.",
+        "Move it inside a cold frame.",
+    ):
+        assert not comes_indoors(line), line
 
 
 def test_two_handy_things_for_a_wet_pot_outdoors(tmp_path):

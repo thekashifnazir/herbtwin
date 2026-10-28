@@ -29,7 +29,13 @@ from herbtwin.confidence import (
 from herbtwin.consequences import NO_DATA, consequence_for, named_problem
 from herbtwin.indoor_care import IndoorCare
 from herbtwin.outcomes import load_outcomes, problems_for
-from herbtwin.plant_model import ModelView, shelters_from_cold, worth_doing
+from herbtwin.plant_model import (
+    NO_LIGHT,
+    ModelView,
+    no_light_verdict,
+    shelters_from_cold,
+    worth_doing,
+)
 from herbtwin.schemas import (
     ActionCard,
     AnalysisRecord,
@@ -1599,6 +1605,10 @@ def build_answer(
             # a sourced line for the growing season ("keeps mint bushy"): not while it rests
             text, source, less_sure = NO_DATA, "none", False
         v = views.get(action)
+        if source == "plant_model" and no_light_verdict(v):
+            # the twin can't model light: "no difference over the next 2 weeks" under a Move
+            # it to better light card is no verdict on light (28 Oct live walk)
+            text = NO_LIGHT
         if do and v is not None and v.vs_leaving_it == "worse":
             # the advisor overruled the plant model (confidence already drops for it): say
             # so, rather than a line that argues against the card's own action

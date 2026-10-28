@@ -71,6 +71,14 @@ _TAIL = re.compile(
     r"bbc news|the guardian|gardeners'? ?world.*|horticulture week)$",
     re.I,
 )
+# a listing, not a report: a site's front page, or an address ending in a series, tag, topic or
+# author's page ("/environment/series/country-diary", "/news/topics/c0…", "/profile/susie-white").
+# The rev 00126 walk showed the Guardian's Country diary series page under the diary itself
+_LISTING_PARTS = frozenset(
+    "archive author authors categories category contributor contributors profile search "
+    "section sections series tag tags topic topics".split()
+)
+SECTION_WORDS = 3  # "Country diary | Environment": a section's name and its parent's
 
 
 @dataclass(frozen=True)
@@ -110,6 +118,21 @@ def site_of(url: object) -> str | None:
     return None
 
 
+def is_listing(url: str) -> bool:
+    """True for a site's front page or a listing: the last or second-last part of the address
+    is one of _LISTING_PARTS. An article's own address ends in its slug."""
+    parts = [p.casefold() for p in urlsplit(url).path.split("/") if p]
+    return not parts or not _LISTING_PARTS.isdisjoint(parts[-2:])
+
+
+def page_key(url: str) -> str:
+    """One page's address, however it was linked: no scheme, "www.", "amp." or "m.", query,
+    fragment or closing slash."""
+    parts = urlsplit(url)
+    host = re.sub(r"^(?:www|amp|m)\.", "", (parts.hostname or "").lower())
+    return host + parts.path.rstrip("/")
+
+
 def names_of(pest: str) -> tuple[str, ...]:
     """What a page may call the pest: its name, its other names and its scientific names."""
     sp = species_table().get(pest)
@@ -132,7 +155,17 @@ def report_of(hit: Hit, pest: str, today: date) -> Report | None:
     # undated: an evergreen guide, not something reported now
     if when is None or not (today - timedelta(days=WINDOW_DAYS) <= when <= today + timedelta(1)):
         return None
+    if is_listing(hit.url):
+        return None
     title = _TAIL.sub("", " ".join(hit.title.split())).strip()
+    names = names_of(pest)
+    sections = title.split(" | ")
+    # "Country diary | Environment": only section names, none of them the pest (its snippet
+    # named it), so a section's page; a headline with its byline is longer
+    if len(sections) > 1 and all(
+        len(s.split()) <= SECTION_WORDS and not _mentions(names, s) for s in sections
+    ):
+        return None
     if site == "The Guardian" and " | " in title:  # "Country diary: … | Susie White": the byline
         title = title.rsplit(" | ", 1)[0].strip()
     if not title:
@@ -140,7 +173,7 @@ def report_of(hit: Hit, pest: str, today: date) -> Report | None:
     if names_a_chemical(title) or names_a_pest_product(title) or SOLD_AGAINST_PESTS.search(title):
         return None
     path = re.sub(r"[^A-Za-z0-9]+", " ", unquote(urlsplit(hit.url).path))
-    if not _mentions(names_of(pest), f"{title} {path} {hit.snippet}"):
+    if not _mentions(names, f"{title} {path} {hit.snippet}"):
         return None
     if len(title) > TITLE_CHARS:
         title = title[:TITLE_CHARS].rsplit(" ", 1)[0].rstrip(",;:-") + "…"
@@ -207,7 +240,8 @@ class Reported:
         out: list[Report] = []
         # each pest's first, then the rest: one pest's pages never fill the card alone
         for r in [f[0] for f in found if f] + [r for f in found for r in f[1:]]:
-            if r.url in {o.url for o in out} or r.title.casefold() in {
+            # the same page at another address, or the same headline on another page
+            if page_key(r.url) in {page_key(o.url) for o in out} or r.title.casefold() in {
                 o.title.casefold() for o in out
             }:
                 continue

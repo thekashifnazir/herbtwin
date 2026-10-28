@@ -311,6 +311,25 @@ class Handy:
     control: bool = False  # a pest control: the card says why it is there (Kash, 22 Oct)
 
 
+# the answer brings the plant in: "Bring it indoors to a bright windowsill." (answer.
+# TENDER_HEADLINE), or an advisor's or a page's "bring it in overnight". Fleece, pot feet and
+# mesh are for a plant left out, and argue with it (28 Oct live walk, rev 00126: a basil
+# brought in showed horticultural fleece), so the shops treat it as not outdoors. A bare
+# "in" only ends its clause ("in hand", "in full sun", "in to dry" are not indoors), and
+# "inside a greenhouse" or a cold frame is still a place fleece helps (#571 review)
+_BRINGS_IN = re.compile(
+    r"\b(?:bring|move|take)\s+(?:it|them)\s+(?:indoors\b|inside\b(?!\s+(?:a|an|the)\b)|"
+    r"in(?=\s*(?:[.,;!]|$)|\s+(?:overnight|for|at|before|until|tonight)\b))",
+    re.I,
+)
+_NOT = re.compile(r"\b(?:don['’]?t|do\s+not|never)\s+$", re.I)  # "Don't bring it in."
+
+
+def comes_indoors(headline: str) -> bool:
+    """Whether the answer's headline brings the plant indoors (never when it says not to)."""
+    return any(not _NOT.search(headline[: m.start()]) for m in _BRINGS_IN.finditer(headline))
+
+
 def products_for(actions: list[str], outdoor: bool = False) -> list[Product]:
     """The kinds of thing that help with the answer's actions, first action first, each
     once, at most MAX_PRODUCTS. Fleece only for a plant outdoors: indoors "shelter" means
